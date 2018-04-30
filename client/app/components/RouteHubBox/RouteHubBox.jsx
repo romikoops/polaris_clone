@@ -77,10 +77,10 @@ export class RouteHubBox extends Component {
             <p className="flex-none">With Pickup From:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
-            {`${origin.street_number} ${origin.street}`}, <br />
-            {`${origin.city}, ${' '} `}
-            {`${origin.zip_code}, `}
-            {`${origin.country}`} <br />
+            {`${origin.street_number || ''} ${origin.street || ''}`}, <br />
+            {`${origin.city || ''}, ${' '} `}
+            {`${origin.zip_code || ''}, `}
+            {`${origin.country || ''}`} <br />
           </address>
         </div>
       ) : (
@@ -90,13 +90,13 @@ export class RouteHubBox extends Component {
       destination && destination.location_type !== 'nexus' ? (
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center">
-            <p className="flex-none">With Pickup From:</p>
+            <p className="flex-none">With Delivery To:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
-            {`${destination.street_number} ${destination.street}`}, <br />
-            {`${destination.city}, ${' '} `}
-            {`${destination.zip_code}, `}
-            {`${destination.country}`} <br />
+            {`${destination.street_number || ''} ${destination.street || ''}`}, <br />
+            {`${destination.city || ''}, ${' '} `}
+            {`${destination.zip_code || ''}, `}
+            {`${destination.country || ''}`} <br />
           </address>
         </div>
       ) : (

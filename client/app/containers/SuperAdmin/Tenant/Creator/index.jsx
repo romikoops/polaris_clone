@@ -1,17 +1,21 @@
 import React from 'react'
-// import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Promise } from 'es6-promise-promise'
 import Toggle from 'react-toggle'
 import '../../../../styles/react-toggle.scss'
 import PropTypes from '../../../../prop-types'
 import SquareButton from '../../../../components/SquareButton'
-// import styles from './index.scss'
-import { authHeader, BASE_URL } from '../../../../helpers'
-
+import styles from './index.scss'
+import { authHeader } from '../../../../helpers'
+import { appActions } from '../../../../actions'
 import FileUploader from '../../../../components/FileUploader/FileUploader'
 import { NamedSelect } from '../../../../components/NamedSelect/NamedSelect'
 
+const SA_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.itsmycargo.com/subdomain/demo'
+    : 'http://localhost:3000/subdomain/demo'
 const { fetch } = window
 class SuperAdminTenantCreator extends React.Component {
   static handleResponse (response) {
@@ -31,10 +35,8 @@ class SuperAdminTenantCreator extends React.Component {
             rail: {}
           },
           carriage_options: {
-            on_carriage: {
-            },
-            pre_carriage: {
-            }
+            on_carriage: {},
+            pre_carriage: {}
           },
           terms: ['', '', '']
         },
@@ -49,6 +51,15 @@ class SuperAdminTenantCreator extends React.Component {
       }
     }
   }
+  componentWillMount () {
+    const { appDispatch } = this.props
+    appDispatch.fetchTenants()
+  }
+  setTheme (selection) {
+    const { value } = selection
+    const { appDispatch } = this.props
+    appDispatch.setTheme(value.theme)
+  }
   uploadImages (file, key) {
     const { newTenant } = this.state
     const formData = new window.FormData()
@@ -60,10 +71,18 @@ class SuperAdminTenantCreator extends React.Component {
       headers: { ...authHeader() },
       body: formData
     }
-    const uploadUrl = `${BASE_URL}/super_admin/uplaod_image`
+    const uploadUrl = `${SA_BASE_URL}/super_admins/upload_image`
     fetch(uploadUrl, requestOptions).then((promise) => {
       promise.json().then((response) => {
-        console.log(response.data)
+        this.setState({
+          newTenant: {
+            ...this.state.newTenant,
+            theme: {
+              ...this.state.newTenant.theme,
+              [key]: response.data.url
+            }
+          }
+        })
       })
     })
 
@@ -77,7 +96,7 @@ class SuperAdminTenantCreator extends React.Component {
           newTenant: {
             ...this.state.newTenant,
             scope: {
-              ...this.newTenant.scope,
+              ...this.state.newTenant.scope,
               [keys[0]]: ev
             }
           }
@@ -88,9 +107,9 @@ class SuperAdminTenantCreator extends React.Component {
           newTenant: {
             ...this.state.newTenant,
             scope: {
-              ...this.newTenant.scope,
+              ...this.state.newTenant.scope,
               [keys[0]]: {
-                ...this.state.newTenant[keys[0]],
+                ...this.state.newTenant.scope[keys[0]],
                 [keys[1]]: ev
               }
             }
@@ -102,11 +121,11 @@ class SuperAdminTenantCreator extends React.Component {
           newTenant: {
             ...this.state.newTenant,
             scope: {
-              ...this.newTenant.scope,
+              ...this.state.newTenant.scope,
               [keys[0]]: {
-                ...this.state.newTenant[keys[0]],
+                ...this.state.newTenant.scope[keys[0]],
                 [keys[1]]: {
-                  ...this.state.newTenant[keys[0]][keys[1]],
+                  ...this.state.newTenant.scope[keys[0]][keys[1]],
                   [keys[2]]: ev
                 }
               }
@@ -119,7 +138,7 @@ class SuperAdminTenantCreator extends React.Component {
           newTenant: {
             ...this.state.newTenant,
             scope: {
-              ...this.newTenant.scope,
+              ...this.state.newTenant.scope,
               [keys[0]]: ev
             }
           }
@@ -197,24 +216,54 @@ class SuperAdminTenantCreator extends React.Component {
       }
     })
   }
+
   render () {
-    const { theme } = this.props
-    const { newTenant } = this.state
+    const { theme, tenants } = this.props
+    const tenantsArr = tenants || []
+    const { newTenant, selectedTenant } = this.state
     const incoOptions = [{ value: 'simple', label: 'Simple' }, { value: 'text', label: 'Label' }]
     const carriageOptions = [
       { value: 'mandatory', label: 'Mandatory' },
       { value: 'optional', label: 'Optional' }
     ]
+    const toggleCSS = `
+      .react-toggle--checked .react-toggle-track {
+        background: 
+          ${theme.colors.brightPrimary} !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: #686868 !important;
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    `
+    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start ">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <h2 className="flex-100">Set Theme</h2>
+          <div className="flex-50 layout-row layout-align-start-center layout-wrap">
+            <p className="flex-100">Choose Theme</p>
+            <NamedSelect
+              className="flex-100"
+              theme={theme}
+              value={selectedTenant}
+              options={tenantsArr}
+              onChange={e => this.setTheme(e)}
+              name="incoterm_info_level"
+            />
+          </div>
+        </div>
         <div className="flex-80 layout-row layout-align-start-start layout-wrap">
           <div className="flex-100 layout-row layout-align-start-center">
             <h1 className="flex-none">Tenant Creator</h1>
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Basic Info</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.subdomain}
@@ -224,7 +273,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.name}
@@ -237,7 +286,7 @@ class SuperAdminTenantCreator extends React.Component {
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Theme</h4>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.theme.colors.primary}
@@ -246,8 +295,12 @@ class SuperAdminTenantCreator extends React.Component {
                 placeholder="Primary Color"
                 className="flex-none"
               />
+              <div
+                className={`${styles.demo_color} flex-20`}
+                style={{ background: newTenant.theme.colors.primary }}
+              />
             </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.theme.colors.secondary}
@@ -256,8 +309,12 @@ class SuperAdminTenantCreator extends React.Component {
                 placeholder="Secondary Color"
                 className="flex-none"
               />
+              <div
+                className={`${styles.demo_color} flex-20`}
+                style={{ background: newTenant.theme.colors.secondary }}
+              />
             </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.theme.colors.brightPrimary}
@@ -266,8 +323,12 @@ class SuperAdminTenantCreator extends React.Component {
                 placeholder="Bright Primary Color"
                 className="flex-none"
               />
+              <div
+                className={`${styles.demo_color} flex-20`}
+                style={{ background: newTenant.theme.colors.brightPrimary }}
+              />
             </div>
-            <div className="flex-40 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box">
               <input
                 type="text"
                 value={newTenant.theme.colors.brightSecondary}
@@ -276,51 +337,97 @@ class SuperAdminTenantCreator extends React.Component {
                 placeholder="Bright Secondary Color"
                 className="flex-none"
               />
-            </div>
-            <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <p className="flex-100">Logo - Large</p>
-              <FileUploader
-                dispatchFn={file => this.uploadImages(file, 'logoLarge')}
-                theme={theme}
-              />
-            </div>
-            <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <p className="flex-100">Logo - Small</p>
-              <FileUploader
-                dispatchFn={file => this.uploadImages(file, 'logoSmall')}
-                theme={theme}
-              />
-            </div>
-            <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap "
-            >
-              <p className="flex-100">Logo - White</p>
-              <FileUploader
-                dispatchFn={file => this.uploadImages(file, 'logoWhite')}
-                theme={theme}
+              <div
+                className={`${styles.demo_color} flex-20`}
+                style={{ background: newTenant.theme.colors.brightSecondary }}
               />
             </div>
             <div
-              className="flex-50 layout-row layout-align-start-center layout-wrap "
-            >
-              <p className="flex-100">Logo - Wide</p>
-              <FileUploader
-                dispatchFn={file => this.uploadImages(file, 'logoWide')}
-                theme={theme}
-              />
-            </div>
-            <div className="flex-50 layout-row
+              className="flex-50 layout-row
               layout-align-start-center layout-wrap "
             >
-              <p className="flex-100">Background</p>
-              <FileUploader
-                dispatchFn={file => this.uploadImages(file, 'background')}
-                theme={theme}
-              />
+              <div className="flex-50 layout-row layout-wrap">
+                <p className="flex-100">Logo - Large</p>
+                <FileUploader
+                  dispatchFn={file => this.uploadImages(file, 'logoLarge')}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-wrap">
+                <div
+                  className={`${styles.demo_img} flex-none`}
+                  style={{ background: newTenant.theme.logoLarge }}
+                />
+              </div>
+            </div>
+            <div
+              className="flex-50 layout-row
+              layout-align-start-center layout-wrap "
+            >
+              <div className="flex-50 layout-row layout-wrap">
+                <p className="flex-100">Logo - Small</p>
+                <FileUploader
+                  dispatchFn={file => this.uploadImages(file, 'logoSmall')}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-wrap">
+                <div
+                  className={`${styles.demo_img} flex-none`}
+                  style={{ background: newTenant.theme.logoSmall }}
+                />
+              </div>
+            </div>
+            <div
+              className="flex-50 layout-row
+              layout-align-start-center layout-wrap "
+            >
+              <div className="flex-50 layout-row layout-wrap">
+                <p className="flex-100">Logo - White</p>
+                <FileUploader
+                  dispatchFn={file => this.uploadImages(file, 'logoWhite')}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-wrap">
+                <div
+                  className={`${styles.demo_img} flex-none`}
+                  style={{ background: newTenant.theme.logoWhite }}
+                />
+              </div>
+            </div>
+            <div className="flex-50 layout-row layout-align-start-center layout-wrap ">
+              <div className="flex-50 layout-row layout-wrap">
+                <p className="flex-100">Logo - Wide</p>
+                <FileUploader
+                  dispatchFn={file => this.uploadImages(file, 'logoWide')}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-wrap">
+                <div
+                  className={`${styles.demo_img} flex-none`}
+                  style={{ background: newTenant.theme.logoWide }}
+                />
+              </div>
+            </div>
+            <div
+              className="flex-50 layout-row
+              layout-align-start-center layout-wrap "
+            >
+              <div className="flex-50 layout-row layout-wrap">
+                <p className="flex-100">Background</p>
+                <FileUploader
+                  dispatchFn={file => this.uploadImages(file, 'background')}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-wrap">
+                <div
+                  className={`${styles.demo_img} flex-none`}
+                  style={{ background: newTenant.theme.background }}
+                />
+              </div>
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -586,34 +693,39 @@ class SuperAdminTenantCreator extends React.Component {
             <SquareButton theme={theme} handleNext={() => this.saveTenant()} text="Save" />
           </div>
         </div>
+        {styleTagJSX}
       </div>
     )
   }
 }
 
 SuperAdminTenantCreator.propTypes = {
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  tenants: PropTypes.arrayOf(PropTypes.any),
+  appDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 SuperAdminTenantCreator.defaultProps = {
-  theme: null
+  theme: null,
+  tenants: []
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant } = state
+  const { authentication, tenant, app } = state
   const { user, loggedIn } = authentication
   const { theme } = tenant.data
+  const { tenants } = app
   return {
     user,
     tenant,
     loggedIn,
-    theme
-
+    theme,
+    tenants
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
-    // documentDispatch: bindActionCreators(documentActions, dispatch)
+    appDispatch: bindActionCreators(appActions, dispatch)
   }
 }
 

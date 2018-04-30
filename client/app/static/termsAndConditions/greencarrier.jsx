@@ -3,13 +3,8 @@ import React from 'react'
 const greencarrier = (
   <div>
     <h3> Terms and conditions </h3>
-    <h5>
-      Fiata general conditions should apply together with existing freight forwarder associationfor
-      specific county.
-    </h5>
-
     <p>
-      NSAB
+      <b>NSAB</b>
       <br />
       All assignments will be performed in accordance with the General Conditions of the Nordic
       Association of Freight Forwarders (NSAB 2015) with the exclusion of § 25 A, first section.
@@ -29,7 +24,7 @@ const greencarrier = (
       laid down in FIATA General Conditions.
       <br />
       <br />
-      FIATA
+      <b>FIATA</b>
       <br />
       Fiata general conditions should apply together with existing freight forwarder association for
       specific country. To the extent that the forwarders liability is not subject to any compulsory

@@ -187,10 +187,6 @@ export class CargoDetails extends Component {
             How insurance premium is calculated:
             <br />
             <br />
-            Basis of premium calculation CIF + 10% X the actual premium rate (The actual premium
-            rate applied on the total sum of cost of goods + freight + 10% margin)
-            <br />
-            <br />
             Please contact your local Greencarrier office for more info.
           </p>
         </div>
