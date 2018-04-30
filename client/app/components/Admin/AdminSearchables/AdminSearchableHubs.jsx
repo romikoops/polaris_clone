@@ -10,6 +10,9 @@ import { adminClicked as clickTip, adminTrucking as truckTip } from '../../../co
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class AdminSearchableHubs extends Component {
+  static limitArray (hubs, limit) {
+    return limit ? hubs.slice(0, limit) : hubs
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -76,10 +79,14 @@ export class AdminSearchableHubs extends Component {
 
   filterHubsByType (array) {
     const { selectedMot } = this.state
+    const { limit } = this.props
+    let toLimitArray
     if (selectedMot && selectedMot.value) {
-      return array.filter(x => x.data.hub_type === selectedMot.value)
+      toLimitArray = array.filter(x => x.data.hub_type === selectedMot.value)
+    } else {
+      toLimitArray = array
     }
-    return array
+    return limit === 0 ? toLimitArray : AdminSearchableHubs.limitArray(toLimitArray, limit)
   }
   render () {
     const {
@@ -205,7 +212,8 @@ AdminSearchableHubs.propTypes = {
   icon: PropTypes.string,
   tooltip: PropTypes.string,
   hideFilters: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
+  limit: PropTypes.number
 }
 
 AdminSearchableHubs.defaultProps = {
@@ -217,7 +225,8 @@ AdminSearchableHubs.defaultProps = {
   tooltip: '',
   sideScroll: false,
   hideFilters: false,
-  title: 'Hubs'
+  title: 'Hubs',
+  limit: 0
 }
 
 export default AdminSearchableHubs

@@ -199,12 +199,12 @@ export class ShipmentLocationBox extends Component {
     let tmpDest = {}
 
     this.props.allNexuses.origins.forEach((nx) => {
-      if (nx.value.id === route.originNexusId) {
+      if (nx.value.id === route.firstStop.hub.nexus.id) {
         tmpOrigin = nx.value
       }
     })
     this.props.allNexuses.destinations.forEach((nx) => {
-      if (nx.value.id === route.destinationNexusId) {
+      if (nx.value.id === route.lastStop.hub.nexus.id) {
         tmpDest = nx.value
       }
     })

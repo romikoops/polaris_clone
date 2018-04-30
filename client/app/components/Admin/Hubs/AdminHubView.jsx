@@ -477,43 +477,44 @@ export class AdminHubView extends Component {
               loadType={currentCustomsLoadType.value}
             />
           </div>
-          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <TextHeading theme={theme} text="Mandatory Charges" size={3} />
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none">Import Fees</p>
-                <Toggle
-                  value={mandatoryCharge.import_fees}
-                  onChange={e => this.handleToggle(e, 'import_charges')}
-                />
+          { mandatoryCharge
+            ? <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+              <div className="flex-100 layout-row layout-align-start-center">
+                <TextHeading theme={theme} text="Mandatory Charges" size={3} />
               </div>
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none">Import Fees</p>
-                <Toggle
-                  value={mandatoryCharge.export_fees}
-                  onChange={e => this.handleToggle(e, 'export_charges')}
-                />
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-align-end-center">
-              {mandatoryCharge !== this.props.hubData.mandatoryCharge ? (
-                <div className={`${styles.action_btn} flex-none layout-row`}>
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="Save"
-                    active
-                    handleNext={() => this.saveMandatoryChargeEdit()}
-                    iconClass="fa-floppy-o"
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div className="flex-50 layout-row layout-align-space-around-center">
+                  <p className="flex-none">Import Fees</p>
+                  <Toggle
+                    value={mandatoryCharge.import_fees || false}
+                    onChange={e => this.handleToggle(e, 'import_charges')}
                   />
                 </div>
-              ) : (
-                ''
-              )}
-            </div>
-          </div>
+                <div className="flex-50 layout-row layout-align-space-around-center">
+                  <p className="flex-none">Import Fees</p>
+                  <Toggle
+                    value={mandatoryCharge.export_fees || false}
+                    onChange={e => this.handleToggle(e, 'export_charges')}
+                  />
+                </div>
+              </div>
+              <div className="flex-100 layout-row layout-align-end-center">
+                {mandatoryCharge !== this.props.hubData.mandatoryCharge ? (
+                  <div className={`${styles.action_btn} flex-none layout-row`}>
+                    <RoundButton
+                      theme={theme}
+                      size="small"
+                      text="Save"
+                      active
+                      handleNext={() => this.saveMandatoryChargeEdit()}
+                      iconClass="fa-floppy-o"
+                    />
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            </div> : '' }
           <AdminSearchableRoutes
             itineraries={routes}
             theme={theme}
@@ -582,7 +583,7 @@ AdminHubView.propTypes = {
 
 AdminHubView.defaultProps = {
   theme: null,
-  hubData: null,
+  hubData: {},
   hubHash: {},
   hubs: []
 }

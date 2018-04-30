@@ -45,7 +45,7 @@ export class ChooseShipment extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const directionButtons = ['import', 'export'].map((dir) => {
+    const directionButtons = ['export', 'import'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       const commercialAction = { import: 'Buying', export: 'Selling' }
       return (
