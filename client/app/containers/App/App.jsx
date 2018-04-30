@@ -14,10 +14,9 @@ import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
 import { appActions } from '../../actions'
-import { PrivateRoute, AdminPrivateRoute, SuperAdminPrivateRoute } from '../../routes/index'
+import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
-import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 
 class App extends Component {
   componentDidMount () {
@@ -74,13 +73,6 @@ class App extends Component {
             <AdminPrivateRoute
               path="/admin"
               component={Admin}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-            <SuperAdminPrivateRoute
-              path="/superadmin"
-              component={SuperAdminTenantCreator}
               user={user}
               loggedIn={loggedIn}
               theme={theme}

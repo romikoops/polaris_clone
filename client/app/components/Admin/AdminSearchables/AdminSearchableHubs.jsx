@@ -83,7 +83,7 @@ export class AdminSearchableHubs extends Component {
   }
   render () {
     const {
-      theme, seeAll, showTooltip, icon, tooltip, sideScroll, hideFilters
+      theme, seeAll, showTooltip, icon, tooltip, sideScroll, hideFilters, title
     } = this.props
     const { hubs, selectedMot } = this.state
     let hubsArr
@@ -144,7 +144,9 @@ export class AdminSearchableHubs extends Component {
           />
         </div>
       </div>
-    ) : ''
+    ) : (
+      ''
+    )
     return (
       <div
         className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
@@ -158,7 +160,7 @@ export class AdminSearchableHubs extends Component {
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none">
-                  <TextHeading theme={theme} size={1} text="Hubs" />
+                  <TextHeading theme={theme} size={1} text={title || 'Hubs'} />
                 </div>
                 {showTooltip ? (
                   <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} />
@@ -202,7 +204,8 @@ AdminSearchableHubs.propTypes = {
   sideScroll: PropTypes.bool,
   icon: PropTypes.string,
   tooltip: PropTypes.string,
-  hideFilters: PropTypes.bool
+  hideFilters: PropTypes.bool,
+  title: PropTypes.string
 }
 
 AdminSearchableHubs.defaultProps = {
@@ -213,7 +216,8 @@ AdminSearchableHubs.defaultProps = {
   icon: '',
   tooltip: '',
   sideScroll: false,
-  hideFilters: false
+  hideFilters: false,
+  title: 'Hubs'
 }
 
 export default AdminSearchableHubs

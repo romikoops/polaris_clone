@@ -7,11 +7,12 @@ const isSuperAdmin = user => (user && user.role_id === 3)
 export default function SuperAdminPrivateRoute ({
   component: Component, user, loggedIn, ...rest
 }) {
+  console.log(user)
   return (
     <Route
       {...rest}
       render={({ location, ...props }) =>
-        (isSuperAdmin(user) && loggedIn ? (
+        (isSuperAdmin(user) ? (
           <Component location={location} {...props} />
         ) : (
           <Redirect to={{ pathname: '/', state: { from: location } }} />

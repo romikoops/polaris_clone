@@ -38,7 +38,7 @@ export * from './AdminRoutesIndex'
 
 export * from './AdminClientTile'
 export { default as AdminClients } from './AdminClients'
-export * from './AdminClientsIndex'
+export { default as AdminClientsIndex } from './AdminClientsIndex'
 export * from './AdminClientView'
 
 // export * from './AdminSchedules'

@@ -244,7 +244,7 @@ export default class CardPricingIndex extends Component {
                 </div>
               </div>
             </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            {/* <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${
                   adminStyles.action_header
@@ -273,10 +273,10 @@ export default class CardPricingIndex extends Component {
                     adminStyles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  {/* {newButton} */}
+                  {newButton}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { adminHubs as hubsTip } from '../../../constants'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import DocumentsDownloader from '../../../components/Documents/Downloader'
 import { Checkbox } from '../../Checkbox/Checkbox'
-import { capitalize } from '../../../helpers'
+import { capitalize, filters } from '../../../helpers'
 
 export class AdminHubsIndex extends Component {
   // export function AdminHubsIndex ({
@@ -57,7 +57,7 @@ export class AdminHubsIndex extends Component {
   }
   prepFilters () {
     const { hubs } = this.props
-    const filters = {
+    const tmpFilters = {
       hubType: {},
       countries: {},
       status: {
@@ -67,12 +67,21 @@ export class AdminHubsIndex extends Component {
       expander: {}
     }
     hubs.forEach((hub) => {
-      filters.hubType[hub.data.hub_type] = true
-      filters.countries[hub.location.country] = true
+      tmpFilters.hubType[hub.data.hub_type] = true
+      tmpFilters.countries[hub.location.country] = true
     })
     this.setState({
-      searchFilters: filters,
+      searchFilters: tmpFilters,
       searchResults: hubs
+    })
+  }
+  handleSearchQuery (e) {
+    const { value } = e.target
+    this.setState({
+      searchFilters: {
+        ...this.state.searchFilters,
+        query: value
+      }
     })
   }
 
@@ -92,7 +101,13 @@ export class AdminHubsIndex extends Component {
     const statusFilterKeys = Object.keys(searchFilters.status)
       .filter(key => searchFilters.status[key])
     const filter3 = filter2.filter(a => statusFilterKeys.includes(a.data.hub_status))
-    return filter3
+    let filter4
+    if (searchFilters.query && searchFilters.query !== '') {
+      filter4 = filters.handleSearchChange(searchFilters.query, ['data.name', 'data.hub_type', 'location.country'], filter3)
+    } else {
+      filter4 = filter3
+    }
+    return filter4
   }
   render () {
     const { searchResults, searchFilters, expander } = this.state
@@ -195,6 +210,17 @@ export class AdminHubsIndex extends Component {
               <i className="flex-none fa fa-filter" />
               <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
             </div>
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+            >
+              <input
+                type="text"
+                className="flex-100"
+                value={searchFilters.query}
+                placeholder="Type something..."
+                onChange={e => this.handleSearchQuery(e)}
+              />
+            </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
@@ -276,7 +302,10 @@ export class AdminHubsIndex extends Component {
               styles.action_box
             } flex-95 layout-row layout-wrap layout-align-center-start`}
           >
-            <div className={`${styles.side_title} flex-100 layout-row layout-align-start-center`} style={sectionStyle}>
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
               <i className="flex-none fa fa-bolt" />
               <h2 className="flex-none letter_3 no_m"> Actions </h2>
             </div>

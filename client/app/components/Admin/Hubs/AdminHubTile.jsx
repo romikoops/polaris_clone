@@ -69,7 +69,7 @@ export class AdminHubTile extends Component {
           <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-center`}>
             <h1 className="flex-none"> {hubName} </h1>
           </div>
-          <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-end-start`}>
+          <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-start-start`}>
             <p className="flex-none">{hubType}</p>
           </div>
         </div>

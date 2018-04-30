@@ -84,7 +84,7 @@ export default class AdminItineraryRow extends Component {
         >
           <i style={iconStyle} className={`clip fa fa-flag ${styles.icon_buffer}`} />
           <div className="flex-5" />
-          <p className="flex-none">{itinerary.name} hello</p>
+          <p className="flex-none">{itinerary.name}</p>
         </div>
         <div className="flex-none layout-row layout-align-end-center">
           <div className="flex-none layout-row layout-align-center-center">

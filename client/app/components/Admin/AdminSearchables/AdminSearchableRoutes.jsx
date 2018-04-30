@@ -84,7 +84,8 @@ export class AdminSearchableRoutes extends Component {
       icon,
       adminDispatch,
       heading,
-      showDelete
+      showDelete,
+      hideFilters
     } = this.props
     const { itineraries } = this.state
     let itinerariesArr = []
@@ -158,14 +159,15 @@ export class AdminSearchableRoutes extends Component {
               </div>
             </div>
           </div>
-          <div className="flex-35 layput-row layout-align-start-center input_box_full">
-            <input
-              type="text"
-              name="search"
-              placeholder="Search routes"
-              onChange={this.handleSearchChange}
-            />
-          </div>
+          { !hideFilters
+            ? <div className="flex-35 layput-row layout-align-start-center input_box_full">
+              <input
+                type="text"
+                name="search"
+                placeholder="Search routes"
+                onChange={this.handleSearchChange}
+              />
+            </div> : '' }
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
           {viewType}
@@ -201,7 +203,8 @@ AdminSearchableRoutes.propTypes = {
   icon: PropTypes.string,
   tooltip: PropTypes.string,
   heading: PropTypes.string,
-  showDelete: PropTypes.bool
+  showDelete: PropTypes.bool,
+  hideFilters: PropTypes.bool
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -214,7 +217,8 @@ AdminSearchableRoutes.defaultProps = {
   tooltip: '',
   showTooltip: false,
   heading: 'Routes',
-  showDelete: false
+  showDelete: false,
+  hideFilters: false
 }
 
 export default AdminSearchableRoutes

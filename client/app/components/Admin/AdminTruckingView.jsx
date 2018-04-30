@@ -38,7 +38,8 @@ export class AdminTruckingView extends Component {
       loadTypeBool: true,
       directionBool: true,
       filteredTruckingPricings: [],
-      searchFilter: ''
+      searchFilter: '',
+      expander: {}
     }
   }
   componentWillMount () {
@@ -62,6 +63,14 @@ export class AdminTruckingView extends Component {
   selectTruckingPricing (truckingPricing) {
     this.setState({ currentTruckingPricing: truckingPricing.truckingPricing.id })
   }
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
+  }
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
@@ -69,13 +78,11 @@ export class AdminTruckingView extends Component {
     adminDispatch.uploadTrucking(url, file, dir)
   }
   handleLoadTypeToggle (value) {
-    // const { searchFilter } = this.state
     this.setState({ loadTypeBool: !this.state.loadTypeBool }, function () {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
   handleDirectionToggle (value) {
-    // const { searchFilter } = this.state
     this.setState({ directionBool: !this.state.directionBool }, function () {
       this.handleSearchChange({ target: { value: '' } })
     })
@@ -139,7 +146,6 @@ export class AdminTruckingView extends Component {
       ''
     )
     const { hub } = truckingDetail
-    // const nexus = truckingHub ? nexuses.filter(n => n.id === truckingHub.nexus_id)[0] : {}
     const textStyle = {
       background:
         theme && theme.colors
@@ -177,11 +183,11 @@ export class AdminTruckingView extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const truckView = currentTruckingPricing ? displayPanel : nothingSelected
 
-    // const uploadOptions = [
-    //   { value: 'import', label: 'Import Only' },
-    //   { value: 'export', label: 'Export Only' },
-    //   { value: 'either', label: 'Import/Export' }
-    // ]
+    const { expander } = this.state
+    const sectionStyle =
+      theme && theme.colors
+        ? { background: theme.colors.secondary, color: 'white' }
+        : { background: 'darkslategrey', color: 'white' }
     const searchResults =
       filteredTruckingPricings.length > 0 ? (
         filteredTruckingPricings.map(tp => (
@@ -206,14 +212,18 @@ export class AdminTruckingView extends Component {
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div
-              className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_title
+              }`}
             >
               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
                 {hub.name}
               </p>
             </div>
             <div
-              className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_header
+              }`}
             >
               <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
             </div>
@@ -278,17 +288,35 @@ export class AdminTruckingView extends Component {
               styles.action_box
             } flex-95 layout-row layout-wrap layout-align-center-start`}
           >
-            <div className="flex-100 layout-row layout-align-center-center">
-              <h2 className="flex-none letter_3"> Actions </h2>
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-bolt" />
+              <h2 className="flex-none letter_3 no_m"> Actions </h2>
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('upload')}
               >
-                <i className="flex-none fa fa-cloud-upload" />
-                <p className="flex-none">Upload Data</p>
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-upload" />
+                  <p className="flex-none">Upload Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.upload ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${
+                  expander.upload ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
                 <div
                   className={`${
                     styles.action_section
@@ -307,18 +335,36 @@ export class AdminTruckingView extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('download')}
               >
-                <i className="flex-none fa fa-cloud-download" />
-                <p className="flex-none">Download Data</p>
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-download" />
+                  <p className="flex-none">Download Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.download ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-space-around">
+              <div
+                className={`${
+                  expander.download ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
                 <div
                   className={`${
                     styles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
                   <p className="flex-100 center">Download Cargo Item Sheet</p>
-                  <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'cargo_item' }} />
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="trucking"
+                    options={{ hub_id: hub.id, load_type: 'cargo_item' }}
+                  />
                 </div>
                 <div
                   className={`${
@@ -326,11 +372,14 @@ export class AdminTruckingView extends Component {
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
                   <p className="flex-100 center">Download Container Sheet</p>
-                  <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'container' }} />
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="trucking"
+                    options={{ hub_id: hub.id, load_type: 'container' }}
+                  />
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

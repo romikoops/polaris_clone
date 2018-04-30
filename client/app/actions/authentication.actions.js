@@ -38,7 +38,11 @@ function login (data) {
         if (shipmentReq) {
           shipmentReq.shipment.user_id = response.data.id
           dispatch(shipmentActions.chooseOffer(shipmentReq))
-        } else if (response.data.role_id === 1 && !data.noRedirect) {
+        } else if (
+          (response.data.role_id === 1 && !data.noRedirect) ||
+          (response.data.role_id === 3 && !data.noRedirect) ||
+          (response.data.role_id === 4 && !data.noRedirect)
+        ) {
           dispatch(push('/admin/dashboard'))
         } else if (response.data.role_id === 2 && !data.noRedirect) {
           dispatch(push('/account'))

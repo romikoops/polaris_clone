@@ -6,11 +6,7 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
-import {
-  AdminDashboard,
-  AdminServiceCharges,
-  SuperAdmin
-} from '../../components/Admin'
+import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
@@ -25,6 +21,8 @@ import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
 import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
+import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
+import { SuperAdminPrivateRoute } from '../../routes/index'
 
 class Admin extends Component {
   constructor (props) {
@@ -139,6 +137,12 @@ class Admin extends Component {
                   render={props => (
                     <AdminPricings theme={theme} {...props} hubs={hubs} pricingData={pricingData} />
                   )}
+                />
+                <SuperAdminPrivateRoute
+                  path="/admin/superadmin"
+                  component={SuperAdminTenantCreator}
+                  user={user}
+                  theme={theme}
                 />
                 <Route
                   exact
@@ -278,9 +282,7 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch),
-    user: null,
-    loggedIn: false
+    adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }
 

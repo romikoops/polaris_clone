@@ -9,6 +9,7 @@ const cookieKey = `${subdomainKey}_user`
 function logout () {
   // remove user from local storage to log user out
   localStorage.removeItem(cookieKey)
+  localStorage.removeItem('authHeader')
 }
 
 function login (data) {
