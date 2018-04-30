@@ -16,6 +16,7 @@ import { appActions } from '../../actions'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
+import ResetPasswordForm from '../../components/ResetPasswordForm'
 
 class App extends Component {
   componentDidMount () {
@@ -53,11 +54,22 @@ class App extends Component {
             <Route
               exact
               path="/terms_and_conditions"
-              render={props => (
+              render={() => (
                 <TermsAndConditions
                   tenant={tenant}
                   user={user}
                   theme={theme}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/password_reset"
+              render={props => (
+                <ResetPasswordForm
+                  user={user}
+                  theme={theme}
+                  {...props}
                 />
               )}
             />
