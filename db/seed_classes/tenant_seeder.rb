@@ -109,7 +109,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+        main: 'Torgny Segerstedtsgatan 80 426 77 Västra Frölunda'
       },
       phones:{
         main:"+46 31-85 32 00",
@@ -884,8 +884,271 @@ class TenantSeeder
           "Barrel"
         ]
       }
+    },
+     {
+      theme: {
+        colors: {
+          primary: "#0053a0",
+          secondary: "#ffffff",
+          brightPrimary: "#eaf2fc",
+          brightSecondary: "#99c1e5"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.jpg",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg",
+        background: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg"
+      },
+      addresses: {
+        main: "Wahlerstr. 20 40472 Düsseldorf"
+      },
+      phones:{
+        main:"+49-(0)211 4188 30",
+        support: "+49-(0)40 5005 810"
+      },
+      emails: {
+        sales: "sales@mol-logistics.com",
+        support: {
+          general: "support@mol-logistics.com",
+          air: "air@mol-logistics.com",
+          ocean: "sea@mol-logistics.com"
+        }
+      },
+      subdomain: "mol-logistics",
+      name: "MOL Logistics",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#223b7a",
+          secondary: "#fc0d1b",
+          brightPrimary: "#ffffff",
+          brightSecondary: "#ccd4df"
+        },
+         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.jpg",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg",
+        background: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg"
+      },
+      addresses: {
+        main: "Martinistraße 58 28195 Bremen"
+      },
+      phones:{
+        main:"+49 (0)421 1760-282",
+        support: "+49 (0)421 1760-280"
+      },
+      emails: {
+        sales: "sales@gs-logistics.com",
+        support: {
+          general: "support@gs-logistics.com",
+          air: "air@@gs-logistics.com",
+          ocean: "sea@@gs-logistics.com"
+        }
+      },
+      subdomain: "gs-logistics",
+      name: "Geuther & Schnitger Logistic",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#585878",
+          secondary: "#d82e38",
+          brightPrimary: "#ffffff",
+          brightSecondary: "#4eacd5"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.jpg",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg",
+        background: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg"
+      },
+      addresses: {
+        main: "Nagelsweg 26 20097 Hamburg"
+      },
+      phones:{
+        main:"+49 40 524 766 880",
+        support: "+49 40 524 766 881"
+      },
+      emails: {
+        sales: "sales@gtg-seefracht.com",
+        support: {
+          general: "support@gtg-seefracht.com",
+          air: "",
+          ocean: ""
+        }
+      },
+      subdomain: "gtg-seefracht",
+      name: "GTG Seefracht",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
     }
-  ]
+]
 
 
   def self.exec(tenant_data = TENANT_DATA)
