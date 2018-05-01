@@ -893,10 +893,10 @@ class TenantSeeder
           brightPrimary: "#eaf2fc",
           brightSecondary: "#99c1e5"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.jpg",
         logoSmall: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg",
-        background: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg"
+        background: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg"
       },
       addresses: {
         main: "Wahlerstr. 20 40472 Düsseldorf"
@@ -981,10 +981,10 @@ class TenantSeeder
           brightPrimary: "#ffffff",
           brightSecondary: "#ccd4df"
         },
-         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg",
+         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.jpg",
         logoSmall: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg",
-        background: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg"
+        background: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg"
       },
       addresses: {
         main: "Martinistraße 58 28195 Bremen"
@@ -1069,10 +1069,10 @@ class TenantSeeder
           brightPrimary: "#ffffff",
           brightSecondary: "#4eacd5"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.jpg",
         logoSmall: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg",
-        background: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg"
+        background: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg"
       },
       addresses: {
         main: "Nagelsweg 26 20097 Hamburg"
