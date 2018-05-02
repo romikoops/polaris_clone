@@ -38,7 +38,9 @@ class AdminSchedules extends Component {
       showList: true,
       panelViewer: {},
       expander: {},
-      searchFilters: {},
+      searchFilters: {
+        mot: {}
+      },
       searchResults: []
     }
     this.toggleView = this.toggleView.bind(this)

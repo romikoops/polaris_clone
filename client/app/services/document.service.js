@@ -82,7 +82,7 @@ function downloadLocalCharges () {
     method: 'GET',
     headers: { ...authHeader() }
   }
-  return fetch(`${BASE_URL}/admin/service_charges/download`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/download`, requestOptions).then(handleResponse)
 }
 
 function downloadHubs () {
