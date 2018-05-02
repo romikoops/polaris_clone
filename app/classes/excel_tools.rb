@@ -7,7 +7,7 @@ module ExcelTools
   include PricingTools
 
   def handle_zipcode_sections(rows, _user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, meta)
-    courier = Courier.find_or_create_by(name: courier_name)
+    courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
     rows.each do |row_data|
       zip_code_range_array = row_data.shift.split(' - ')
       zip_code_range = (zip_code_range_array[0].to_i...zip_code_range_array[1].to_i)
@@ -180,7 +180,7 @@ module ExcelTools
       trucking_pricings: []
     }
 
-    courier = Courier.find_or_create_by(name: courier_name)
+    courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
     defaults = []
     load_type = 'cargo_item'
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
@@ -287,7 +287,7 @@ module ExcelTools
   end
 
   def overwrite_distance_trucking_rates_by_hub(params, _user = current_user, hub_id, courier_name, direction, country_code)
-    courier = Courier.find_or_create_by(name: courier_name)
+    courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
     p direction
 
     stats = {
@@ -467,7 +467,7 @@ module ExcelTools
     base = zone_sheet.row(8)[7]
     load_type = zone_sheet.row(9)[7] == 'container' ? 'container' : 'cargo_item'
     identifier_type = zone_sheet.row(10)[7] == 'city' ? 'city_name' : zone_sheet.row(10)[7]
-    courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7])
+    courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7], tenant: tenant)
     num_rows = zone_sheet.last_row
 
     # START Load Zones ------------------------
@@ -673,8 +673,7 @@ module ExcelTools
 
         new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
         new_cols.delete("cbm_ratio") if load_type == "container"
-        #  
-        
+
         # Find or update trucking_destinations
         td_query = <<-eos
           WITH  
@@ -769,7 +768,7 @@ module ExcelTools
   end
 
   def overwrite_city_trucking_rates_by_hub(params, _user = current_user, hub_id, courier_name, direction)
-    courier = Courier.find_or_create_by(name: courier_name)
+    courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
     p direction
     defaults = []
     stats = {
