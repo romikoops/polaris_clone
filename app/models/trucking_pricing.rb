@@ -112,10 +112,10 @@ class TruckingPricing < ApplicationRecord
     ")
 
     result.map do |row|
-      filter = parse_sql_array(row["filter"])
+      filter = parse_sql_record(row["filter"])
       {
-        "truckingPricing"  => find(row["id"]),
-        filter.first => filter[1..-1]
+        "truckingPricing" => find(row["id"]),
+        filter.first      => filter[1..-1]
       }
     end
   end
@@ -167,7 +167,7 @@ class TruckingPricing < ApplicationRecord
     args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
   end
 
-  def self.parse_sql_array(str)
+  def self.parse_sql_record(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
 

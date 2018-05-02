@@ -12,5 +12,11 @@ FactoryBot.define do
   	trait :distance do
   		distance 179
   	end
+
+    trait :zipcode_sequence do
+      sequence(:zipcode) do |n|
+        (15000 + n - 1).to_s
+      end
+    end
   end
 end
