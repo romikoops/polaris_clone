@@ -1,8 +1,8 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-# subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(mol-logistics gs-logistics gtg-seefracht)
+subdomains = %w(demo)
+# subdomains = %w(mol-logistics gs-logistics gtg-seefracht)
 subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -13,10 +13,10 @@ subdomains.each do |sub|
   # tenant.customs_fees.destroy_all
 	# tenant.hubs.destroy_all
   # # #Overwrite hubs from excel sheet
-  puts "# Overwrite hubs from excel sheet"
-  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  req = {"xlsx" => hubs}
-  overwrite_hubs(req, shipper)
+  # puts "# Overwrite hubs from excel sheet"
+  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  # req = {"xlsx" => hubs}
+  # overwrite_hubs(req, shipper)
 
   # # puts "# Overwrite public pricings from excel sheet"
 
@@ -33,41 +33,41 @@ subdomains.each do |sub|
   # # local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
   # # req = {"xlsx" => local_charges}
   # # overwrite_local_charges(req, shipper)
-   puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
-  req = {"xlsx" => local_charges}
-  overwrite_local_charges(req, shipper)
+  #  puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  # req = {"xlsx" => local_charges}
+  # overwrite_local_charges(req, shipper)
 
 
   # # # # # # Overwrite trucking data from excel sheet
 
  
-  hub = tenant.hubs.find_by_name("Shanghai Port")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  awesome_print "City rates done"
-  hub = tenant.hubs.find_by_name("Gothenburg Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  awesome_print "Zip rates done"
-  hub = tenant.hubs.find_by_name("Malmo Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  awesome_print "Zip rates done"
+  # hub = tenant.hubs.find_by_name("Shanghai Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "City rates done"
+  # hub = tenant.hubs.find_by_name("Gothenburg Airport")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "Zip rates done"
+  # hub = tenant.hubs.find_by_name("Malmo Airport")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "Zip rates done"
   
-  hub = tenant.hubs.find_by_name("Gothenburg Port")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  awesome_print "All rates done"
+  # hub = tenant.hubs.find_by_name("Gothenburg Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "All rates done"
 
-  hub = tenant.hubs.find_by_name("Stockholm Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_stockholm.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # hub = tenant.hubs.find_by_name("Stockholm Airport")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_stockholm.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
 
     # hub = tenant.hubs.find_by_name("Antwerpen Port")
