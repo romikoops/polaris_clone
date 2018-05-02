@@ -1,7 +1,14 @@
+/**
+ * Selectors defining end of navigation change
+ */
 const BOOKING_LOADED = '.flex-85'
 const DETAILS_LOADED = 'i.fa-truck'
+const OFFERS_LOADED = 'input[type="range"]'
+
 const EXPORT_IMPORT = 'p.flex-none'
 const ITEMS_OR_CONTAINERS = 'div.layout-column'
+const DATE_INPUT = 'input[placeholder="DD/MM/YYYY"]'
+const CONFIRM = { selector: 'i.fa-check', index: 'last' }
 
 export default async function order (puppeteer, expect) {
   const {
@@ -10,6 +17,7 @@ export default async function order (puppeteer, expect) {
     focus,
     page,
     selectWithTab,
+    selectFirstAvailableDay,
     url,
     waitFor
   } = puppeteer
@@ -45,4 +53,29 @@ export default async function order (puppeteer, expect) {
   await focus('body')
   await selectWithTab(3)
   await selectWithTab(7)
+
+  /**
+   * Select date
+   */
+  expect(await selectFirstAvailableDay(DATE_INPUT)).toBeTruthy()
+
+  /**
+   * Set net weight
+   */
+  await focus('body')
+  await selectWithTab(14, 'Up')
+
+  /**
+   * Click on confirm no dangereous goods
+   */
+  expect(await click(CONFIRM)).toBeTruthy()
+
+  /**
+   * Click on 'Get Offers' and wait for navigation change
+   */
+  expect(await clickWithText('p', 'Get Offers')).toBeTruthy()
+  await page.waitForSelector(OFFERS_LOADED)
+
+  const offersURL = await url()
+  expect(offersURL.endsWith('choose_offer')).toBeTruthy()
 }

@@ -1,19 +1,32 @@
 import { initPuppeteer } from 'init-puppeteer'
 import { delay } from './delay'
 
-const DELAY = Number(process.env.STEP_DELAY || '0')
+const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
+const DELAY = 200
+
+function log (input) {
+  // eslint-disable-next-line
+  if (input._type === 'log' && !input._text.startsWith('%')) {
+    // eslint-disable-next-line
+    console.log(input._text)
+  }
+}
 
 export default async function init (options) {
   const { page, browser, catchError } = await initPuppeteer(options)
   let selectorHolder
   let operationHolder
 
+  if (options.log) {
+    page.on('console', log)
+  }
+
   const $ = async (...input) => {
     // eslint-disable-next-line
     selectorHolder = input[0]
 
     const result = await page.$eval(...input)
-    await delay(DELAY)
+    await delay(STEP_DELAY)
 
     return result
   }
@@ -23,7 +36,7 @@ export default async function init (options) {
     selectorHolder = input[0]
 
     const result = await page.$$eval(...input)
-    await delay(DELAY)
+    await delay(STEP_DELAY)
 
     return result
   }
@@ -43,7 +56,7 @@ export default async function init (options) {
     while (!found && counter > 0) {
       counter -= 1
       // eslint-disable-next-line
-      await delay(200)
+      await delay(DELAY)
       // eslint-disable-next-line
       found = await countFn
     }
@@ -86,13 +99,14 @@ export default async function init (options) {
     return page.$$eval(selector, els => els.length > 0)
   }
 
-  const click = async (selector, index) => {
+  const click = async (selectorInput, indexInput) => {
     operationHolder = 'click'
+    const { selector, index } = typeof selectorInput === 'object'
+      ? selectorInput
+      : { selector: selectorInput, index: indexInput }
 
     if (index === undefined) {
-      const ok = await exists(selector)
-
-      if (!ok) {
+      if (await exists(selector) === false) {
         return false
       }
       await $(selector, el => el.click())
@@ -103,8 +117,7 @@ export default async function init (options) {
     return $$(selector, clickWhichSelector, index)
   }
   const clickWithText = async (selector, text) => {
-    const ok = await exists(selector)
-    if (!ok) {
+    if (await exists(selector) === false) {
       return false
     }
 
@@ -117,24 +130,54 @@ export default async function init (options) {
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
   }
+  const setInput = async (selector, newValue) => {
+    selectorHolder = selector
+    operationHolder = 'setInput'
 
-  const selectWithTab = async (tabCount) => {
+    if (await exists(selector) === false) {
+      return false
+    }
+
+    await page.$eval(selector, setInputFn, newValue)
+
+    return true
+  }
+
+  const selectWithTab = async (tabCount, arrowToPressInput) => {
+    const arrowToPress = arrowToPressInput === undefined
+      ? 'ArrowDown'
+      : `Arrow${arrowToPressInput}`
+
     // eslint-disable-next-line
     for (const _ of Array(tabCount).fill('')) {
       // eslint-disable-next-line
       await page.keyboard.press('Tab')
       // eslint-disable-next-line
-      await delay(200)
+      await delay(DELAY)
     }
 
-    await page.keyboard.press('ArrowDown')
-    await delay(200)
+    await page.keyboard.press(arrowToPress)
+    await delay(DELAY)
     await page.keyboard.press('Enter')
-    await delay(200)
+    await delay(DELAY)
+  }
+  const selectFirstAvailableDay = async (selector) => {
+    if (await exists(selector) === false) {
+      return false
+    }
+
+    await $(selector, el => el.click())
+    await delay(DELAY)
+
+    return page.evaluate(selectFirstAvailableDayFn)
   }
 
-  const onError = () =>
-    `Latest operation - '${operationHolder}' | Latest selector - '${selectorHolder}'`
+  const onError = () => {
+    const head = `Latest operation - '${operationHolder}'`
+    const tail = `Latest selector - '${selectorHolder}'`
+
+    return `${head} | ${tail}`
+  }
 
   return {
     $$,
@@ -151,6 +194,8 @@ export default async function init (options) {
     page,
     url,
     selectWithTab,
+    selectFirstAvailableDay,
+    setInput,
     waitFor,
     waitForSelectors
   }
@@ -177,6 +222,23 @@ function clickWhichSelector (els, i) {
 
 function clickWithTextFn (els, text) {
   const filtered = els.filter(x => x.textContent.includes(text))
+
+  if (filtered.length === 0) {
+    return false
+  }
+  filtered[0].click()
+
+  return true
+}
+
+function setInputFn (el, newValue) {
+  // eslint-disable-next-line
+  el.value = newValue
+}
+
+function selectFirstAvailableDayFn () {
+  const els = Array.from(document.querySelectorAll('.DayPicker-Day'))
+  const filtered = els.filter(x => x.classList.length === 1)
 
   if (filtered.length === 0) {
     return false

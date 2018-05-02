@@ -9,7 +9,7 @@ import order from './steps/order'
 
 const options = {
   headless: false,
-  logFlag: false,
+  log: true,
   screenOnError: 'LOCAL',
   url: BASE_URL
 }
