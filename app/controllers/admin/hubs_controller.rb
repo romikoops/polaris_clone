@@ -20,6 +20,17 @@ class Admin::HubsController < ApplicationController
     new_hub = Hub.create!(hub)
     response_handler({data: new_hub, location: new_loc})
   end
+  def update_mandatory_charges
+    hub = Hub.find(params[:id])
+    nmc = params[:mandatoryCharge].as_json
+    nmc.delete("id")
+    nmc.delete("created_at")
+    nmc.delete("updated_at")
+    new_mandatory_charge = MandatoryCharge.find_by(nmc)
+    hub.mandatory_charge = new_mandatory_charge
+    hub.save!
+    response_handler({hub: hub, mandatoryCharge: hub.mandatory_charge})
+  end
   def show
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
@@ -28,9 +39,19 @@ class Admin::HubsController < ApplicationController
     routes = hub.stops.map(&:itinerary).map(&:as_options_json)
     customs = hub.customs_fees
     charges = hub.local_charges
+    mandatory_charges = hub.mandatory_charge
     # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
-    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
+    resp = {
+      hub: hub,
+      routes: routes,
+      relatedHubs: related_hubs,
+      schedules: layovers,
+      charges: charges,
+      customs: customs,
+      location: hub.location,
+      madatoryCharges: mandatory_charges
+    }
     response_handler(resp)
   end
 

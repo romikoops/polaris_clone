@@ -12,6 +12,7 @@ import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
 import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
+import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
 import { appActions } from '../../actions'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
@@ -43,23 +44,24 @@ class App extends Component {
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
           {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
-          {user && user.id && tenant && tenant.data && user.tenant_id !== tenant.data.id ? (
-            <Redirect to="/signout" />
-          ) : (
-            ''
-          )}
+          {user && user.id && tenant && tenant.data &&
+            user.tenant_id !== tenant.data.id && user.role_id !== 3
+            ? (
+              <Redirect to="/signout" />
+            ) : (
+              ''
+            )}
           <Switch className="flex">
             <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
             <Route
               exact
               path="/terms_and_conditions"
-              render={props => (
-                <TermsAndConditions
-                  tenant={tenant}
-                  user={user}
-                  theme={theme}
-                />
-              )}
+              render={props => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
+            />
+            <Route
+              exact
+              path="/insurance"
+              render={props => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
             />
             <PrivateRoute
               path="/booking"

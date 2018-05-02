@@ -4,12 +4,8 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
-// import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { history } from '../../helpers'
-import { Tooltip } from '../Tooltip/Tooltip'
-import { adminTrucking as truckTip } from '../../constants'
-import { TextHeading } from '../TextHeading/TextHeading'
 
 class AdminTrucking extends Component {
   static backToIndex () {
@@ -18,7 +14,6 @@ class AdminTrucking extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedRoute: false,
       creatorView: false
     }
     this.viewTrucking = this.viewTrucking.bind(this)
@@ -27,14 +22,12 @@ class AdminTrucking extends Component {
   viewTrucking (hub) {
     const { adminDispatch } = this.props
     adminDispatch.viewTrucking(hub.id)
-    this.setState({ selectedRoute: true })
   }
   toggleCreator () {
     this.setState({ creatorView: !this.state.creatorView })
   }
 
   render () {
-    const { selectedRoute } = this.state
     const {
       theme, adminDispatch, trucking, loading, truckingDetail, hubs
     } = this.props
@@ -42,18 +35,8 @@ class AdminTrucking extends Component {
       return ''
     }
     const { truckingNexuses, nexuses } = trucking
-
-    const title = selectedRoute ? 'Trucking Overview' : 'Trucking'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-none layout-row layout-align-start-center">
-            <div className="flex-none">
-              <TextHeading theme={theme} size={1} text={title} />
-            </div>
-            <Tooltip icon="fa-info-circle" theme={theme} toolText={truckTip.manage} />
-          </div>
-        </div>
         <Switch className="flex">
           <Route
             exact

@@ -199,12 +199,12 @@ export class ShipmentLocationBox extends Component {
     let tmpDest = {}
 
     this.props.allNexuses.origins.forEach((nx) => {
-      if (nx.value.id === route.originNexusId) {
+      if (nx.value.id === route.firstStop.hub.nexus.id) {
         tmpOrigin = nx.value
       }
     })
     this.props.allNexuses.destinations.forEach((nx) => {
-      if (nx.value.id === route.destinationNexusId) {
+      if (nx.value.id === route.lastStop.hub.nexus.id) {
         tmpDest = nx.value
       }
     })
@@ -300,6 +300,7 @@ export class ShipmentLocationBox extends Component {
       this.props.setTargetAddress('origin', {})
     }
   }
+
   setMarker (location, name, target) {
     const { markers, map } = this.state
     const { theme } = this.props
@@ -1057,7 +1058,6 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                   }
                 >
-
                   <TruckingTooltip
                     truckingOptions={truckingOptions}
                     carriage="preCarriage"

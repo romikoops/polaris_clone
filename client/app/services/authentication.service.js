@@ -9,6 +9,7 @@ const cookieKey = `${subdomainKey}_user`
 function logout () {
   // remove user from local storage to log user out
   localStorage.removeItem(cookieKey)
+  localStorage.removeItem('authHeader')
 }
 
 function login (data) {
@@ -118,7 +119,7 @@ function updateUser (user, req) {
         }
         // store user details and jwt token in local storage to keep
         // user logged in between page refreshes
-        localStorage.setItem(cookieKey, JSON.stringify(response.data))
+        localStorage.setItem(cookieKey, JSON.stringify(response.data.user))
       }
       return response
     })

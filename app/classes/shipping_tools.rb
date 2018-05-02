@@ -50,7 +50,7 @@ module ShippingTools
         label: itinerary.last_nexus.name
       }
 
-      itinerary = itinerary.as_json
+      itinerary = itinerary.as_options_json
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
     end

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
-import ReactTooltip from 'react-tooltip'
 import { AdminPriceCreator } from './'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { AdminSearchableRoutes, AdminSearchableClients } from './AdminSearchables'
-import FileUploader from '../../components/FileUploader/FileUploader'
-import DocumentsDownloader from '../../components/Documents/Downloader'
+import { AdminSearchableClients } from './AdminSearchables'
+// import FileUploader from '../../components/FileUploader/FileUploader'
+// import DocumentsDownloader from '../../components/Documents/Downloader'
 import { adminPricing as priceTip } from '../../constants'
+import CardPricingIndex from './CardPricingIndex'
 
-import styles from './Admin.scss'
+// import styles from './Admin.scss'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
@@ -51,7 +50,7 @@ export class AdminPricingsIndex extends Component {
   }
   render () {
     const {
-      theme, hubs, pricingData, clients, adminDispatch
+      theme, pricingData, clients, adminDispatch, scope
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -64,65 +63,33 @@ export class AdminPricingsIndex extends Component {
     if (this.state.redirectClients) {
       return <Redirect push to="/admin/pricings/clients" />
     }
-    const newButton = (
-      <div className={styles.btn_wrapper}>
-        <p data-tip={priceTip.new} data-for="newPriceTip">
-          <RoundButton
-            text="New Pricing"
-            theme={theme}
-            size="small"
-            handleNext={this.toggleCreator}
-            iconClass="fa-plus"
-            active
-          />
-        </p>
-        <ReactTooltip id="newPriceTip" className={styles.tooltip} effect="solid" />
-      </div>
-    )
+    // const newButton = (
+    //   <div className={styles.btn_wrapper}>
+    //     <p data-tip={priceTip.new} data-for="newPriceTip">
+    //       <RoundButton
+    //         text="New Pricing"
+    //         theme={theme}
+    //         size="small"
+    //         handleNext={this.toggleCreator}
+    //         iconClass="fa-plus"
+    //         active
+    //       />
+    //     </p>
+    //     <ReactTooltip id="newPriceTip" className={styles.tooltip} effect="solid" />
+    //   </div>
+    // )
     const { itineraries, detailedItineraries, transportCategories } = pricingData
-    const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv'
-    // const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv'
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
-              styles.sec_upload
-            }`}
-          >
-            <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
-            <FileUploader
-              theme={theme}
-              url={lclUrl}
-              dispatchFn={e => this.lclUpload(e)}
-              tooltip={priceTip.upload_lcl}
-              type="xlsx"
-              text="Dedicated Pricings .xlsx"
-            />
-          </div>
-
-          <div
-            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
-              styles.sec_upload
-            }`}
-          >
-            <p className={`${styles.new_margin} flex-100`}>New Pricing Creator</p>
-            {newButton}
-          </div>
-          <div
-            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
-              styles.sec_upload
-            }`}
-          >
-            <p className="flex-100">Download Pricings Sheet</p>
-            <DocumentsDownloader
-              theme={theme}
-              target="pricing"
-            />
-          </div>
-        </div>
-        <AdminSearchableRoutes
+        <CardPricingIndex
+          itineraries={detailedItineraries}
+          theme={theme}
+          scope={scope}
+          adminDispatch={adminDispatch}
+          toggleCreator={this.toggleCreator}
+        />
+        {/* <AdminSearchableRoutes
           itineraries={detailedItineraries}
           theme={theme}
           hubs={hubs}
@@ -130,7 +97,7 @@ export class AdminPricingsIndex extends Component {
           seeAll={() => adminDispatch.goTo('/admin/pricings/routes')}
           tooltip={priceTip.routes}
           showTooltip
-        />
+        /> */}
         <AdminSearchableClients
           theme={theme}
           clients={clients}
@@ -158,7 +125,6 @@ export class AdminPricingsIndex extends Component {
 }
 AdminPricingsIndex.propTypes = {
   theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
   clients: PropTypes.arrayOf(PropTypes.client),
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
@@ -170,14 +136,15 @@ AdminPricingsIndex.propTypes = {
   }).isRequired,
   pricingData: PropTypes.shape({
     routes: PropTypes.array
-  })
+  }),
+  scope: PropTypes.scope
 }
 
 AdminPricingsIndex.defaultProps = {
   theme: null,
-  hubs: [],
   clients: [],
-  pricingData: null
+  pricingData: null,
+  scope: null
 }
 
 export default AdminPricingsIndex

@@ -31,13 +31,13 @@
     height: 50px;
     min-width: 167px;
     font-size: 18px;
-    padding-left: 17px;
-    padding-right: 17px;
+    // padding-left: 17px;
+    // padding-right: 17px;
   }
 
   .full {
     height: 50px;
-    width: 100%;
+    width: calc(100% - 6px);
     font-size: 18px;
   }
 
@@ -68,5 +68,30 @@
   }
   .icon_margin {
     margin-left: 8px;
+  }
+  .show_border {
+    padding: 3px;
+  }
+  .hide_border {
+    padding: 0;
+    background: transparent !important;
+  }
+  .large_wrapper {
+    height: 76px;
+    width: 323px;
+  }
+
+  .small_wrapper {
+    height: 56px;
+    min-width: 173px;
+    font-size: 18px;
+    margin-left: 17px;
+    margin-right: 17px;
+  }
+
+  .full_wrapper {
+    height: 56px;
+    width: 100%;
+    font-size: 18px;
   }
 }

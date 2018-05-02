@@ -236,6 +236,11 @@ export class BookingDetails extends Component {
       this.setState({ finishBookingAttempted: true })
       return
     }
+    if (cargoNotes === '' || !cargoNotes) {
+      BookingDetails.scrollTo('cargo_notes')
+      this.setState({ finishBookingAttempted: true })
+      return
+    }
 
     const data = {
       shipment: {

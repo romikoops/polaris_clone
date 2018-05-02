@@ -85,16 +85,10 @@ export class AdminSearchableShipments extends Component {
   }
   render () {
     const {
-      hubs,
-      theme,
-      handleShipmentAction,
-      title,
-      userView,
-      seeAll,
-      tooltip
+      hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip, user
     } = this.props
     const { shipments } = this.state
-
+    console.log(this.props.shipments)
     let shipmentsArr
     if (shipments.length) {
       shipmentsArr = this.limitArray(shipments).map(ship =>
@@ -104,6 +98,7 @@ export class AdminSearchableShipments extends Component {
             shipment={ship}
             hubs={hubs}
             theme={theme}
+            user={user}
             handleSelect={this.handleClick}
             handleAction={handleShipmentAction}
           />
@@ -125,6 +120,7 @@ export class AdminSearchableShipments extends Component {
             shipment={ship}
             hubs={hubs}
             theme={theme}
+            user={user}
             handleSelect={this.handleClick}
             handleAction={handleShipmentAction}
           />
@@ -153,17 +149,22 @@ export class AdminSearchableShipments extends Component {
       </div>
     )
     return (
-      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+      <div
+        className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
+      >
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${
+            styles.searchable_header
+          }`}
+        >
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
-                <div className="flex-none" >
+                <div className="flex-none">
                   <TextHeading theme={theme} size={2} text={title || 'Shipments'} />
                 </div>
                 <Tooltip theme={theme} icon="fa-info-circle" toolText={tooltip} />
               </div>
-
             </div>
           </div>
           <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
@@ -207,6 +208,7 @@ AdminSearchableShipments.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   userView: PropTypes.bool,
   tooltip: PropTypes.string,
+  user: PropTypes.objectOf(PropTypes.any),
   handleShipmentAction: PropTypes.func.isRequired
 }
 
@@ -218,6 +220,7 @@ AdminSearchableShipments.defaultProps = {
   limit: 0,
   tooltip: '',
   hubs: [],
+  user: {},
   userView: false,
   title: 'shipment'
 }

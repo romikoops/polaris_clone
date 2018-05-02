@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import {
+  formatDate,
+  parseDate
+} from 'react-day-picker/moment'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-// import 'react-select/dist/react-select.css';
-// import styled from 'styled-components';
+import '../../styles/day-picker-custom.css'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { currencyOptions } from '../../constants/admin.constants'
 import AdminPromptConfirm from './Prompt/Confirm'
@@ -14,7 +18,8 @@ import {
   rateBasises,
   lclPricingSchema,
   fclPricingSchema,
-  rateBasisSchema
+  rateBasisSchema,
+  moment
 } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
@@ -137,6 +142,14 @@ export class AdminPriceEditor extends Component {
       }
     })
   }
+  handleDayChange (date, target) {
+    this.setState({
+      pricing: {
+        ...this.state.pricing,
+        [target]: date
+      }
+    })
+  }
   handleSelect (selection) {
     const nameKeys = selection.name.split('-')
     if (nameKeys[1] === 'rate_basis') {
@@ -229,6 +242,21 @@ export class AdminPriceEditor extends Component {
       gloss = lclChargeGloss
     } else {
       gloss = fclChargeGloss
+    }
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days'))
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
     }
     console.log(this.state.pricing)
     Object.keys(pricing.data).forEach((key) => {
@@ -378,6 +406,42 @@ export class AdminPriceEditor extends Component {
               <div className="flex-60 layout-row layout-align-start-center">
                 <i className="fa fa-map-signs clip" style={textStyle} />
                 <p className="flex-none offset-5">{hubRoute.name}</p>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-100 layout-row layout-align-start-center">
+                <i className="fa fa-calendar-check-o clip" style={textStyle} />
+                <p className="flex-none offset-5">Applicable Period</p>
+              </div>
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div className={`flex-40 layout-row layout-align-start-center layout-wrap ${styles.dpb}`}>
+                  <p className="flex-100">Effective Date</p>
+                  <DayPickerInput
+                    name="dayPicker"
+                    // placeholder="DD/MM/YYYY"
+                    format="LL"
+                    formatDate={formatDate}
+                    parseDate={parseDate}
+                    placeholder={`${formatDate(new Date())}`}
+                    value={moment(pricing.effective_date).format('DD/MM/YYYY')}
+                    onDayChange={e => this.handleDayChange(e, 'effective_date')}
+                    dayPickerProps={dayPickerProps}
+                  />
+                </div>
+                <div className={`flex-40 layout-row layout-align-start-center layout-wrap ${styles.dpb}`}>
+                  <p className="flex-100">Expiration Date</p>
+                  <DayPickerInput
+                    name="dayPicker"
+                    // placeholder="DD/MM/YYYY"
+                    format="LL"
+                    formatDate={formatDate}
+                    parseDate={parseDate}
+                    placeholder={`${formatDate(new Date())}`}
+                    value={moment(pricing.expiration_date).format('DD/MM/YYYY')}
+                    onDayChange={e => this.handleDayChange(e, 'expiration_date')}
+                    dayPickerProps={dayPickerProps}
+                  />
+                </div>
               </div>
             </div>
             {panel}

@@ -121,18 +121,6 @@ class AdminClients extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="New"
-          active
-          handleNext={this.toggleNewClient}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
     const newClientBox = (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -389,7 +377,6 @@ class AdminClients extends Component {
               </div>
               <Tooltip icon="fa-info-circle" theme={theme} toolText={clientTip.change} />
             </div>
-            {newButton}
           </div>
         </div>
         {newClientBool ? newClientBox : ''}
@@ -405,6 +392,7 @@ class AdminClients extends Component {
                 hubs={hubs}
                 adminDispatch={adminDispatch}
                 viewClient={this.viewClient}
+                toggleNewClient={() => this.toggleNewClient()}
                 {...props}
               />
             )}

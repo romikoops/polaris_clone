@@ -187,6 +187,7 @@ class Shop extends Component {
         <ShopStageView
           shopType={this.state.shopType}
           theme={theme}
+          tenant={tenant}
           currentStage={this.state.stageTracker.stage}
           setStage={this.selectShipmentStageAndGo}
           disabledClick={Shop.statusRequested(this.props)}
