@@ -889,9 +889,9 @@ class TenantSeeder
       theme: {
         colors: {
           primary: "#0053a0",
-          secondary: "#ffffff",
-          brightPrimary: "#eaf2fc",
-          brightSecondary: "#99c1e5"
+          secondary: "#00AACC",
+          brightPrimary: "#1491FF",
+          brightSecondary: "#77E6FC"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.png",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.png",
@@ -978,8 +978,8 @@ class TenantSeeder
         colors: {
           primary: "#223b7a",
           secondary: "#fc0d1b",
-          brightPrimary: "#ffffff",
-          brightSecondary: "#ccd4df"
+          brightPrimary: "#238BDB",
+          brightSecondary: "#FF4C55"
         },
          logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.png",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.png",
@@ -1066,8 +1066,8 @@ class TenantSeeder
         colors: {
           primary: "#585878",
           secondary: "#d82e38",
-          brightPrimary: "#ffffff",
-          brightSecondary: "#4eacd5"
+          brightPrimary: "#8C93DD",
+          brightSecondary: "#FD8187"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.png",
         logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.png",
