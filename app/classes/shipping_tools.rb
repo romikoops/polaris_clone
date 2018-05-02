@@ -41,6 +41,7 @@ module ShippingTools
     origins = []
     destinations = []
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
+      begin
       origins << {
         value: Location.find(itinerary.first_nexus.id),
         label: itinerary.first_nexus.name
@@ -49,8 +50,11 @@ module ShippingTools
         value: Location.find(itinerary.last_nexus.id),
         label: itinerary.last_nexus.name
       }
-
-      itinerary = itinerary.as_options_json
+      
+        itinerary = itinerary.as_options_json
+      rescue
+        byebug
+      end
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
     end

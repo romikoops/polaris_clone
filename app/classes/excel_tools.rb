@@ -467,7 +467,7 @@ module ExcelTools
     base = zone_sheet.row(8)[7]
     load_type = zone_sheet.row(9)[7] == 'container' ? 'container' : 'cargo_item'
     identifier_type = zone_sheet.row(10)[7] == 'city' ? 'city_name' : zone_sheet.row(10)[7]
-    courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7])
+    courier = Courier.find_or_create_by(name: zone_sheet.row(11)[7])
     num_rows = zone_sheet.last_row
 
     # START Load Zones ------------------------
@@ -1385,6 +1385,9 @@ module ExcelTools
         results[:stops] << temp_stop
         temp_stop
       end
+      # if row[:destination] == 'Singapore'
+      #   byebug
+      # end
 
       steps_in_order = []
       aux_data[pricing_key][:stops_in_order].length.times do

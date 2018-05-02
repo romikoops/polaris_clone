@@ -168,6 +168,12 @@ module PricingTools
       end
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
       return [value, min].max
+    when 'PER_CONTAINER_RANGE'
+      fee_range = fee["range"].find do |range|
+        weight_kg >= range["min"] && weight_kg <= range["max"]
+      end
+      value = fee_range.nil? ? 0 : fee_range["rate"]
+      return [value, min].max
     end
 
     nil
