@@ -893,9 +893,9 @@ class TenantSeeder
           brightPrimary: "#eaf2fc",
           brightSecondary: "#99c1e5"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg",
-        logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.jpg",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.jpg",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.png",
         background: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg"
       },
       addresses: {
@@ -981,9 +981,9 @@ class TenantSeeder
           brightPrimary: "#ffffff",
           brightSecondary: "#ccd4df"
         },
-         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg",
-        logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.jpg",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.jpg",
+         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.png",
         background: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg"
       },
       addresses: {
@@ -1069,9 +1069,9 @@ class TenantSeeder
           brightPrimary: "#ffffff",
           brightSecondary: "#4eacd5"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg",
-        logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.jpg",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.jpg",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.png",
         background: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg"
       },
       addresses: {
