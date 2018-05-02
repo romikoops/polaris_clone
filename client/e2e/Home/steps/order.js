@@ -3,6 +3,7 @@
  */
 const BOOKING_LOADED = '.flex-85'
 const DETAILS_LOADED = 'i.fa-truck'
+const FINAL_DETAILS_LOADED = 'h1'
 const OFFERS_LOADED = 'input[type="range"]'
 
 const EXPORT_IMPORT = 'p.flex-none'
@@ -13,6 +14,7 @@ const CONFIRM = { selector: 'i.fa-check', index: 'last' }
 export default async function order (puppeteer, expect) {
   const {
     click,
+    clickWithPartialText,
     clickWithText,
     focus,
     page,
@@ -31,12 +33,12 @@ export default async function order (puppeteer, expect) {
   /**
    * Click on 'Export'
    */
-  expect(await clickWithText(EXPORT_IMPORT, 'Export')).toBeTruthy()
+  expect(await clickWithPartialText(EXPORT_IMPORT, 'Export')).toBeTruthy()
 
   /**
    * Click on 'Ocean FCL & Rail FCL'
    */
-  expect(await clickWithText(ITEMS_OR_CONTAINERS, 'FCL')).toBeTruthy()
+  expect(await clickWithPartialText(ITEMS_OR_CONTAINERS, 'FCL')).toBeTruthy()
 
   /**
    * Click on 'Next Step' and wait for navagation change
@@ -78,4 +80,13 @@ export default async function order (puppeteer, expect) {
 
   const offersURL = await url()
   expect(offersURL.endsWith('choose_offer')).toBeTruthy()
+
+  /**
+   * Select first offer and wait for navigation change
+   */
+  expect(await clickWithText('p', 'Choose')).toBeTruthy()
+  await page.waitForSelector(FINAL_DETAILS_LOADED)
+
+  const finalDetailsURL = await url()
+  expect(finalDetailsURL.endsWith('final_details')).toBeTruthy()
 }

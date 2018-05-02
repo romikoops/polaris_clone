@@ -92,6 +92,7 @@ export default async function init (options) {
 
     return page.$$eval(selector, els => els.length)
   }
+
   const exists = (selector) => {
     selectorHolder = selector
     operationHolder = 'exists'
@@ -116,6 +117,7 @@ export default async function init (options) {
 
     return $$(selector, clickWhichSelector, index)
   }
+
   const clickWithText = async (selector, text) => {
     if (await exists(selector) === false) {
       return false
@@ -123,6 +125,15 @@ export default async function init (options) {
 
     return $$(selector, clickWithTextFn, text)
   }
+
+  const clickWithPartialText = async (selector, text) => {
+    if (await exists(selector) === false) {
+      return false
+    }
+
+    return $$(selector, clickWithPartialTextFn, text)
+  }
+
   const fill = async (selector, text) => {
     selectorHolder = selector
     operationHolder = 'fill'
@@ -130,6 +141,7 @@ export default async function init (options) {
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
   }
+
   const setInput = async (selector, newValue) => {
     selectorHolder = selector
     operationHolder = 'setInput'
@@ -186,6 +198,7 @@ export default async function init (options) {
     catchError,
     click,
     clickWithText,
+    clickWithPartialText,
     count,
     exists,
     fill,
@@ -221,6 +234,17 @@ function clickWhichSelector (els, i) {
 }
 
 function clickWithTextFn (els, text) {
+  const filtered = els.filter(x => x.textContent === text)
+
+  if (filtered.length === 0) {
+    return false
+  }
+  filtered[0].click()
+
+  return true
+}
+
+function clickWithPartialTextFn (els, text) {
   const filtered = els.filter(x => x.textContent.includes(text))
 
   if (filtered.length === 0) {
