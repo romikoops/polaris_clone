@@ -101,6 +101,10 @@ describe TruckingPricing, type: :model do
         end
       end
     end
+
+    describe '.find_by_hub_ids' do
+    end
+
   end
 
 end
