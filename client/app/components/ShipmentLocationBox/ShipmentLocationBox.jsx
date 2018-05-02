@@ -269,7 +269,7 @@ export class ShipmentLocationBox extends Component {
     }
   }
   setOriginHub (event) {
-    this.scopeNexusOptions(event && event.value ? event.value.id : '', 'destination')
+    this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'destination')
     if (event) {
       const origin = {
         ...this.state.origin,
@@ -404,7 +404,7 @@ export class ShipmentLocationBox extends Component {
     if (this.props.has_on_carriage) {
       this.initAutocomplete(map, 'destination')
       setTimeout(() => {
-        this.triggerPlaceChanged(this.state.autoText.origin, 'destination')
+        this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
       }, 750)
     }
   }
@@ -478,12 +478,25 @@ export class ShipmentLocationBox extends Component {
     this.selectLocation(place, target)
   }
 
+  updateAddressFieldsErrors (target) {
+    if (!this.props.nextStageAttempt) {
+      return
+    }
+    const counterpart = target === 'origin' ? 'destination' : 'origin'
+    const fieldsHaveErrors = !this.state[target].fullAddress
+    this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
+    const addressFormsHaveErrors =
+      fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
+    this.props.handleSelectLocation(addressFormsHaveErrors)
+  }
+
   handleTrucking (event) {
     const { name, checked } = event.target
 
     if (name === 'has_pre_carriage') {
       if (checked) {
         this.postToggleAutocomplete('origin')
+        this.updateAddressFieldsErrors('origin')
       }
       this.props.handleCarriageChange('has_pre_carriage', checked)
     }
@@ -491,6 +504,7 @@ export class ShipmentLocationBox extends Component {
     if (name === 'has_on_carriage') {
       if (checked) {
         this.postToggleAutocomplete('destination')
+        this.updateAddressFieldsErrors('destination')
       }
       this.props.handleCarriageChange('has_on_carriage', checked)
     }
