@@ -322,7 +322,11 @@ export class BookingDetails extends Component {
             finishBookingAttempted={this.state.finishBookingAttempted}
           />
         </div>
-        <Formsy onValidSubmit={this.toNextStage} onInvalidSubmit={this.handleInvalidSubmit}>
+        <Formsy
+          onValidSubmit={this.toNextStage}
+          onInvalidSubmit={this.handleInvalidSubmit}
+          className="flex-100"
+        >
           <CargoDetails
             theme={theme}
             handleChange={this.handleCargoInput}

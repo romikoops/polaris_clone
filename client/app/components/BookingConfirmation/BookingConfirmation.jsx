@@ -378,8 +378,8 @@ export class BookingConfirmation extends Component {
                       </p>
                       <p className="flex-none letter_3">
                         {shipment.has_pre_carriage
-                          ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`
-                          : `${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+                          ? `${moment(shipment.closing_date).subtract(3, 'days').format('DD/MM/YYYY')}`
+                          : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`}
                       </p>
                     </div>
                     {shipment.has_pre_carriage ? (
@@ -398,7 +398,7 @@ export class BookingConfirmation extends Component {
                   <div className="flex-40 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                       <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
+                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY')}`}</p>
                     </div>
                     {shipment.has_on_carriage ? (
                       <div className="flex-100 layout-row layout-align-center-start">

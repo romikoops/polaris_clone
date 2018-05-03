@@ -1,16 +1,24 @@
 @import '../../styles/defaults';
 :local {
+  .content_wrapper {
+     @media screen and (-ms-high-contrast: active),
+     (-ms-high-contrast: none) {
+       min-height: 700px;
+     }
+  }
   .tenant_logo_landing {
       width: 200px;
       margin-top: 130px;
+       @media screen and (-ms-high-contrast: active),
+       (-ms-high-contrast: none) {
+         margin-top: 90px;
+       }
     }
   .banner_text {
     color: white;
-    width: 451px;
-    @media screen and (-ms-high-contrast: active),
-    (-ms-high-contrast: none) {
-      min-height: 700px;
-    }
+    // width: 451px;
+    width: 75%;
+   
     
     h2 {
       font-size: 24px;

@@ -449,7 +449,7 @@ module ExcelTools
       trucking_pricings: [],
       trucking_destinations: []
     }
-
+    
     defaults = {}
     trucking_pricing_by_zone = {}
     hub = Hub.find(hub_id)
@@ -469,16 +469,22 @@ module ExcelTools
     identifier_type = zone_sheet.row(10)[7] == 'city' ? 'city_name' : zone_sheet.row(10)[7]
     courier = Courier.find_or_create_by(name: zone_sheet.row(11)[7], tenant: tenant)
     num_rows = zone_sheet.last_row
-
+    zip_char_length = nil
     # START Load Zones ------------------------
     zones = {}
     (2..num_rows).each do |line|
       row_data = zone_sheet.row(line)
       zones[row_data[0]] = [] unless zones[row_data[0]]
       if row_data[1] && !row_data[2]
+        if !zip_char_length
+          zip_char_length = row_data[1].length
+        end 
         zones[row_data[0]] << { id: row_data[1], country: row_data[3] }
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete(' ').split('-')
+        if !zip_char_length
+          zip_char_length = range[0].length
+        end 
         zones[row_data[0]] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
       end
     end
@@ -583,7 +589,14 @@ module ExcelTools
         if idents_and_country[:min] && idents_and_country[:max]
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
             stats[:trucking_destinations][:number_created] += 1
-            {id: ident, country: idents_and_country[:country]}
+            ident_value = nil
+            if identifier_type == 'zipcode'
+              ident_length = ident.to_s.length
+              ident_value = '0' * (zip_char_length - ident_length) + ident.to_s
+            else
+              ident_value = ident
+            end
+            {id: ident_value, country: idents_and_country[:country]}
           end
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
@@ -1389,10 +1402,10 @@ module ExcelTools
       # end
 
       steps_in_order = []
-      aux_data[pricing_key][:stops_in_order].length.times do
+      (aux_data[pricing_key][:stops_in_order].length - 1).times do
         steps_in_order << aux_data[pricing_key][:transit_time].to_i
       end
-
+      
       start_date = DateTime.now
       end_date = start_date + 60.days
 

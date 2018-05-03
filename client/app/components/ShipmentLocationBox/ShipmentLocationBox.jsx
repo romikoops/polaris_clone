@@ -485,8 +485,7 @@ export class ShipmentLocationBox extends Component {
     const counterpart = target === 'origin' ? 'destination' : 'origin'
     const fieldsHaveErrors = !this.state[target].fullAddress
     this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
-    const addressFormsHaveErrors =
-      fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
+    const addressFormsHaveErrors = fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
     this.props.handleSelectLocation(addressFormsHaveErrors)
   }
 
@@ -533,8 +532,6 @@ export class ShipmentLocationBox extends Component {
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
-        // eslint-disable-next-line no-debugger
-        debugger
         target === 'origin' ? this.setDestHub() : this.setOriginHub()
       }
     })
@@ -793,17 +790,21 @@ export class ShipmentLocationBox extends Component {
     let toggleLogic =
       this.props.has_pre_carriage && this.state.showOriginFields ? styles.visible : ''
     const originFields = (
-      <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
+      <div
+        className={`flex-100 layout-row layout-wrap ${styles.address_form_wrapper} ${toggleLogic}`}
+      >
         <div
-          className={`${styles.btn_address_form} ${
+          className={`flex-100 layout-row layout-align-center-center ${styles.btn_address_form} ${
             this.props.has_pre_carriage ? '' : styles.hidden
           }`}
           onClick={() => this.changeAddressFormVisibility('origin')}
         >
-          <i className={`${styles.down} fa fa-angle-double-down`} />
-          <i className={`${styles.up} fa fa-angle-double-up`} />
+          <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
         </div>
-        <div className={`${styles.address_form} flex-100 layout-row layout-wrap`}>
+        <div
+          className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
+        >
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
@@ -812,7 +813,7 @@ export class ShipmentLocationBox extends Component {
           <input
             id="not-auto"
             name="origin-number"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -822,7 +823,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="origin-street"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -832,7 +833,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="origin-zipCode"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -842,7 +843,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="origin-city"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -852,7 +853,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="origin-country"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -900,17 +901,19 @@ export class ShipmentLocationBox extends Component {
     toggleLogic =
       this.props.has_on_carriage && this.state.showDestinationFields ? styles.visible : ''
     const destFields = (
-      <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
+      <div
+        className={`flex-100 layout-row layout-wrap ${styles.address_form_wrapper} ${toggleLogic}`}
+      >
         <div
-          className={`${styles.btn_address_form} ${
+          className={`flex-100 layout-row layout-align-center-center ${styles.btn_address_form} ${
             this.props.has_on_carriage ? '' : styles.hidden
           }`}
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
-          <i className={`${styles.down} fa fa-angle-double-down`} />
-          <i className={`${styles.up} fa fa-angle-double-up`} />
+          <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
+          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
         </div>
-        <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
+        <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center`}>
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
@@ -918,7 +921,7 @@ export class ShipmentLocationBox extends Component {
           </div>
           <input
             name="destination-number"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -928,7 +931,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="destination-street"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -938,7 +941,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="destination-zipCode"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -948,7 +951,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="destination-city"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -958,7 +961,7 @@ export class ShipmentLocationBox extends Component {
           />
           <input
             name="destination-country"
-            className={`flex-none ${styles.input}`}
+            className={`flex-90 ${styles.input}`}
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}

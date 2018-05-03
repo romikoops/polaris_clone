@@ -211,7 +211,7 @@ export class CargoDetails extends Component {
     )
     const customsBox = (
       <div
-        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
+        className={`flex-100 layout-row layout-wrap ${styles.customs_box}  ${styles.box_content} ${
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
@@ -230,10 +230,10 @@ export class CargoDetails extends Component {
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-start-center" style={{ height: '36px' }}>
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap" style={{ height: '36px' }}>
               <div
                 className="flex-45 layout-row layout-align-space-around-center"
                 data-tip={tooltips.customs_pre_carriage}
@@ -336,9 +336,9 @@ export class CargoDetails extends Component {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
             <b>
-              A customs declaration is mandatory to pass a national border when exporting or
-              importing. If you choose to handle the customs clearance on your own, Greencarrier
-              will need a copy of the customs declaration.
+              {`A customs declaration is mandatory to pass a national border when exporting or
+              importing. If you choose to handle the customs clearance on your own, ${tenant.data.name}
+              will need a copy of the customs declaration.`}
             </b>
           </p>
           <p className="flex-100">
@@ -665,7 +665,7 @@ export class CargoDetails extends Component {
                   <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-100">
                       <b>
-                        Cargo Insurance provides cover on all rsk terms for physical loss or damage
+                        Cargo Insurance provides cover on all risk terms for physical loss or damage
                         to cargo during transport by land, sea or air.
                       </b>
                     </p>
