@@ -4,12 +4,18 @@
 const BOOKING_LOADED = '.flex-85'
 const DETAILS_LOADED = 'i.fa-truck'
 const FINAL_DETAILS_LOADED = 'h1'
+const FINISH_BOOKING_LOADED = 'i.fa-ship'
 const OFFERS_LOADED = 'input[type="range"]'
+const SENDER_LOADED = 'i.fa-pencil-square-o'
+const RECEIVER_LOADED = { selector: SENDER_LOADED, count: 2 }
 
 const EXPORT_IMPORT = 'p.flex-none'
 const ITEMS_OR_CONTAINERS = 'div.layout-column'
 const DATE_INPUT = 'input[placeholder="DD/MM/YYYY"]'
 const CONFIRM = { selector: 'i.fa-check', index: 'last' }
+const CHOOSE_SENDER = { selector: 'h3', index: 5 }
+const SELECT_RECEIVER_SENDER = { selector: 'div[style="padding: 15px;"] > div', index: 1 }
+const CHOOSE_RECEIVER = { selector: 'h3', index: 6 }
 
 export default async function order (puppeteer, expect) {
   const {
@@ -21,11 +27,12 @@ export default async function order (puppeteer, expect) {
     selectWithTab,
     selectFirstAvailableDay,
     url,
+    waitAndClick,
     waitFor
   } = puppeteer
 
   /**
-   * Click on 'Find Rates' and wait for navagation change
+   * Click and wait for next step
    */
   await click('button', 'last')
   expect(await waitFor(BOOKING_LOADED, 2)).toBeTruthy()
@@ -41,7 +48,7 @@ export default async function order (puppeteer, expect) {
   expect(await clickWithPartialText(ITEMS_OR_CONTAINERS, 'FCL')).toBeTruthy()
 
   /**
-   * Click on 'Next Step' and wait for navagation change
+   * Click and wait for next step
    */
   expect(await clickWithText('button', 'Next Step')).toBeTruthy()
   await page.waitForSelector(DETAILS_LOADED)
@@ -73,7 +80,7 @@ export default async function order (puppeteer, expect) {
   expect(await click(CONFIRM)).toBeTruthy()
 
   /**
-   * Click on 'Get Offers' and wait for navigation change
+   * Click and wait for next step
    */
   expect(await clickWithText('p', 'Get Offers')).toBeTruthy()
   await page.waitForSelector(OFFERS_LOADED)
@@ -89,4 +96,33 @@ export default async function order (puppeteer, expect) {
 
   const finalDetailsURL = await url()
   expect(finalDetailsURL.endsWith('final_details')).toBeTruthy()
+
+  /**
+   * Click on 'Choose a sender' and select first sender
+   */
+  expect(await click(CHOOSE_SENDER)).toBeTruthy()
+  expect(await waitAndClick(SELECT_RECEIVER_SENDER)).toBeTruthy()
+  expect(await waitFor(SENDER_LOADED)).toBeTruthy()
+
+  /**
+   * Click on 'Choose a receiver' and select first receiver
+   */
+  expect(await click(CHOOSE_RECEIVER)).toBeTruthy()
+  expect(await waitAndClick(SELECT_RECEIVER_SENDER)).toBeTruthy()
+  expect(await waitFor(RECEIVER_LOADED)).toBeTruthy()
+
+  /**
+   * Set price of goods
+   */
+  await focus('body')
+  await selectWithTab(1, 'Up')
+
+  /**
+   * Click and wait for next step
+   */
+  expect(await clickWithText('p', 'Review Booking')).toBeTruthy()
+  await page.waitForSelector(FINISH_BOOKING_LOADED)
+
+  const finishBookingURL = await url()
+  expect(finishBookingURL.endsWith('finish_booking')).toBeTruthy()
 }

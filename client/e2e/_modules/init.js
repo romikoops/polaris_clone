@@ -14,16 +14,26 @@ function log (input) {
 
 export default async function init (options) {
   const { page, browser, catchError } = await initPuppeteer(options)
-  let selectorHolder
-  let operationHolder
+  const holder = []
+
+  const mark = (operation, selector, additional) => {
+    if (holder.length === 10) {
+      holder.shift()
+    }
+
+    const x = additional === undefined
+      ? { selector, operation }
+      : { selector, operation, additional }
+
+    holder.push(x)
+  }
 
   if (options.log) {
     page.on('console', log)
   }
 
   const $ = async (...input) => {
-    // eslint-disable-next-line
-    selectorHolder = input[0]
+    mark('$', input[0])
 
     const result = await page.$eval(...input)
     await delay(STEP_DELAY)
@@ -32,8 +42,7 @@ export default async function init (options) {
   }
 
   const $$ = async (...input) => {
-    // eslint-disable-next-line
-    selectorHolder = input[0]
+    mark('$$', input[0])
 
     const result = await page.$$eval(...input)
     await delay(STEP_DELAY)
@@ -41,9 +50,12 @@ export default async function init (options) {
     return result
   }
 
-  const waitFor = async (selector, count = 1) => {
-    selectorHolder = selector
-    operationHolder = 'waitFor'
+  const waitFor = async (selectorInput, countInput = 1) => {
+    const { selector, count } = typeof selectorInput === 'object'
+      ? selectorInput
+      : { selector: selectorInput, count: countInput }
+
+    mark('waitFor', selector, count)
 
     let counter = 15
     const countFn = page.$$eval(
@@ -65,8 +77,7 @@ export default async function init (options) {
   }
 
   const waitForSelectors = async (...selectors) => {
-    selectorHolder = `[${selectors.toString()}]`
-    operationHolder = 'waitForSelectors'
+    mark('waitForSelectors', `[${selectors.toString()}]`)
 
     const promised = selectors.map(singleSelector => waitFor(singleSelector))
     const result = await Promise.all(promised)
@@ -75,36 +86,35 @@ export default async function init (options) {
   }
 
   const url = () => {
-    operationHolder = 'url'
+    mark('url')
 
     return page.evaluate(() => window.location.href)
   }
 
   const focus = (selector) => {
-    operationHolder = 'focus'
+    mark('focus', selector)
 
     return $(selector, el => el.focus())
   }
 
   const count = (selector) => {
-    selectorHolder = selector
-    operationHolder = 'count'
+    mark('count', selector)
 
     return page.$$eval(selector, els => els.length)
   }
 
   const exists = (selector) => {
-    selectorHolder = selector
-    operationHolder = 'exists'
+    mark('exists', selector)
 
     return page.$$eval(selector, els => els.length > 0)
   }
 
   const click = async (selectorInput, indexInput) => {
-    operationHolder = 'click'
     const { selector, index } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, index: indexInput }
+
+    mark('click', selector, index)
 
     if (index === undefined) {
       if (await exists(selector) === false) {
@@ -119,6 +129,8 @@ export default async function init (options) {
   }
 
   const clickWithText = async (selector, text) => {
+    mark('clickWithText', selector, text)
+
     if (await exists(selector) === false) {
       return false
     }
@@ -127,6 +139,8 @@ export default async function init (options) {
   }
 
   const clickWithPartialText = async (selector, text) => {
+    mark('clickWithPartialText', selector, text)
+
     if (await exists(selector) === false) {
       return false
     }
@@ -134,17 +148,25 @@ export default async function init (options) {
     return $$(selector, clickWithPartialTextFn, text)
   }
 
+  const waitAndClick = async (input) => {
+    mark('waitAndClick', input)
+
+    if (await waitFor(input.selector, input.index + 1) === false) {
+      return false
+    }
+
+    return click(input.selector, input.index)
+  }
+
   const fill = async (selector, text) => {
-    selectorHolder = selector
-    operationHolder = 'fill'
+    mark('fill', selector, text)
 
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
   }
 
   const setInput = async (selector, newValue) => {
-    selectorHolder = selector
-    operationHolder = 'setInput'
+    mark('setInput', selector, newValue)
 
     if (await exists(selector) === false) {
       return false
@@ -160,6 +182,8 @@ export default async function init (options) {
       ? 'ArrowDown'
       : `Arrow${arrowToPressInput}`
 
+    mark('selectWithTab', tabCount, arrowToPress)
+
     // eslint-disable-next-line
     for (const _ of Array(tabCount).fill('')) {
       // eslint-disable-next-line
@@ -173,7 +197,10 @@ export default async function init (options) {
     await page.keyboard.press('Enter')
     await delay(DELAY)
   }
+
   const selectFirstAvailableDay = async (selector) => {
+    mark('selectFirstAvailableDay', selector)
+
     if (await exists(selector) === false) {
       return false
     }
@@ -185,10 +212,8 @@ export default async function init (options) {
   }
 
   const onError = () => {
-    const head = `Latest operation - '${operationHolder}'`
-    const tail = `Latest selector - '${selectorHolder}'`
-
-    return `${head} | ${tail}`
+    // eslint-disable-next-line
+    holder.forEach(x => console.log(x))
   }
 
   return {
@@ -210,6 +235,7 @@ export default async function init (options) {
     selectFirstAvailableDay,
     setInput,
     waitFor,
+    waitAndClick,
     waitForSelectors
   }
 }
