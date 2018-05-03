@@ -251,6 +251,8 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
 
+    console.log(obj)
+
     this.setState({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
@@ -258,12 +260,12 @@ export class ShipmentDetails extends Component {
       containersErrors: newContainerErrors,
       selectedDay: obj.planned_pickup_date,
       origin: {
-        fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
-        hub_id: obj.origin_id
+        fullAddress: obj.origin_user_input || '',
+        hub_id: obj.origin_hub_id
       },
       destination: {
-        fullAddress: obj.destination_user_input ? obj.destination_user_input : '',
-        hub_id: obj.destination_id
+        fullAddress: obj.destination_user_input || '',
+        hub_id: obj.destination_hub_id
       },
       has_on_carriage: obj.has_on_carriage,
       has_pre_carriage: obj.has_pre_carriage,
@@ -450,10 +452,10 @@ export class ShipmentDetails extends Component {
     const shipment = {
       id: this.state.shipment.id,
       trucking: this.state.shipment.trucking,
-      origin_user_input: this.state.origin.fullAddress || '',
-      destination_user_input: this.state.destination.fullAddress || '',
-      origin_hub_id: this.state.origin.hub_id,
-      destination_hub_id: this.state.destination.hub_id,
+      origin: this.state.origin,
+      destination: this.state.destination,
+      origin_nexus_id: this.state.origin.hub_id,
+      destination_nexus_id: this.state.destination.hub_id,
       cargo_items_attributes: this.state.cargoItems,
       containers_attributes: this.state.containers,
       aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,

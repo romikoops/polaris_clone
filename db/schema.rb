@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426083300) do
+ActiveRecord::Schema.define(version: 20180503141414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,8 +356,6 @@ ActiveRecord::Schema.define(version: 20180426083300) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -394,6 +392,8 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 

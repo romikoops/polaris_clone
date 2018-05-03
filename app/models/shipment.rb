@@ -24,12 +24,10 @@ class Shipment < ApplicationRecord
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   
-  # validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
-  before_create :assign_uuid
-  before_create :generate_imc_reference
-  before_create :set_default_trucking
+  before_validation :assign_uuid, :generate_imc_reference, :set_default_trucking, on: :create
   before_validation :update_carriage_properties!
 
   # ActiveRecord associations
@@ -39,8 +37,8 @@ class Shipment < ApplicationRecord
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin, class_name: "Location", optional: true
-  belongs_to :destination, class_name: "Location", optional: true
+  belongs_to :origin_nexus, class_name: "Location", optional: true
+  belongs_to :destination_nexus, class_name: "Location", optional: true
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
@@ -110,9 +108,9 @@ class Shipment < ApplicationRecord
   end
 
   def trucking=(value)
-    update_carriage_properties!
-
     super
+
+    update_carriage_properties!
   end
 
   def has_on_carriage=(value)
@@ -223,7 +221,7 @@ class Shipment < ApplicationRecord
 
   def update_carriage_properties!
     %w(on_carriage pre_carriage).each do |carriage|
-      self["has_#{carriage}"] = !trucking.dig(carriage, "truck_type").blank?
+      self["has_#{carriage}"] = !trucking.dig(carriage, 'truck_type').blank?
     end
   end
 
