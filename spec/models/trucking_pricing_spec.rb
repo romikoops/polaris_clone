@@ -101,6 +101,50 @@ describe TruckingPricing, type: :model do
         end
       end
     end
-  end
 
+    describe '.find_by_hub_ids' do
+      let(:tenant) { create(:tenant) }
+      let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
+
+      let(:courier)          { create(:courier) }
+      let(:trucking_pricing) { create(:trucking_pricing, courier: courier, tenant: tenant) }
+
+      context 'basic tests' do
+        it 'raises an ArgumentError if no tenant_id is provided' do         
+          expect {
+            described_class.find_by_hub_ids(hub_ids: [hub.id])
+          }.to raise_error(ArgumentError)
+        end 
+
+        it 'raises an ArgumentError if no hub_ids are provided' do         
+          expect {
+            described_class.find_by_hub_ids(tenant_id: tenant.id)
+          }.to raise_error(ArgumentError)
+        end
+      end      
+
+      context 'main tests' do
+        it 'finds the correct pricing' do         
+          create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
+            create(:hub_trucking,
+              hub:                  hub,
+              trucking_destination: trucking_destination,
+              trucking_pricing:     trucking_pricing
+            )
+          end
+
+          trucking_pricings = described_class.find_by_hub_ids(
+            hub_ids: [hub.id], tenant_id: tenant.id
+          )
+
+          expect(trucking_pricings).to match([
+            {
+              "truckingPricing" => trucking_pricing,
+              "zipcode"         => ["15000", "15099"]          
+            }
+          ])
+        end
+      end      
+    end
+  end
 end

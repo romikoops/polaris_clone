@@ -211,69 +211,6 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.integer "buyer_incoterm_charge_id"
   end
 
-  create_table "incoterm_charges", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.boolean "freight", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "origin_warehousing"
-    t.boolean "origin_labour"
-    t.boolean "origin_packing"
-    t.boolean "origin_loading"
-    t.boolean "origin_customs"
-    t.boolean "origin_port_charges"
-    t.boolean "forwarders_fee"
-    t.boolean "origin_vessel_loading"
-    t.boolean "destination_port_charges"
-    t.boolean "destination_customs"
-    t.boolean "destination_loading"
-    t.boolean "destination_labour"
-    t.boolean "destination_warehousing"
-  end
-
-  create_table "incoterm_liabilities", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.boolean "freight", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "origin_warehousing"
-    t.boolean "origin_labour"
-    t.boolean "origin_packing"
-    t.boolean "origin_loading"
-    t.boolean "origin_customs"
-    t.boolean "origin_port_charges"
-    t.boolean "forwarders_fee"
-    t.boolean "origin_vessel_loading"
-    t.boolean "destination_port_charges"
-    t.boolean "destination_customs"
-    t.boolean "destination_loading"
-    t.boolean "destination_labour"
-    t.boolean "destination_warehousing"
-  end
-
-  create_table "incoterm_scopes", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "mode_of_transport"
-  end
-
-  create_table "incoterms", force: :cascade do |t|
-    t.string "code"
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "seller_incoterm_scope_id"
-    t.integer "seller_incoterm_liability_id"
-    t.integer "seller_incoterm_charge_id"
-    t.integer "buyer_incoterm_scope_id"
-    t.integer "buyer_incoterm_liability_id"
-    t.integer "buyer_incoterm_charge_id"
-  end
-
   create_table "itineraries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

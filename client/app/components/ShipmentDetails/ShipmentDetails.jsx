@@ -22,7 +22,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { isEmpty, camelize } from '../../helpers'
+import { camelize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -140,6 +140,7 @@ export class ShipmentDetails extends Component {
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
+
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
@@ -220,7 +221,7 @@ export class ShipmentDetails extends Component {
     this.setState({ noteIds })
   }
   setTargetAddress (target, address) {
-    this.setState({ [target]: { ...this.state[target], ...address } })
+    this.setState({ [target]: address })
   }
 
   setAggregatedCargo (bool) {
@@ -291,7 +292,7 @@ export class ShipmentDetails extends Component {
   }
   handleSelectLocation (bool) {
     this.setState({
-      AddressFormsHaveErrors: bool
+      addressFormsHaveErrors: bool
     })
   }
   handleAddressChange (event) {
@@ -405,9 +406,11 @@ export class ShipmentDetails extends Component {
 
   handleNextStage () {
     if (
-      isEmpty(this.state.origin) ||
-      isEmpty(this.state.destination) ||
-      this.state.AddressFormsHaveErrors
+      (!this.state.origin.hub_id && !this.state.has_pre_carriage) ||
+      (!this.state.destination.hub_id && !this.state.has_on_carriage) ||
+      (!this.state.origin.fullAddress && this.state.has_pre_carriage) ||
+      (!this.state.destination.fullAddress && this.state.has_on_carriage) ||
+      this.state.addressFormsHaveErrors
     ) {
       this.setState({ nextStageAttempt: true })
       ShipmentDetails.scrollTo('map')

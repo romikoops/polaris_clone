@@ -9,57 +9,6 @@ class TruckingPricing < ApplicationRecord
   # Validations
 
   # Class methods
-  def self.update_data
-    HubTrucking.where(hub_id: 258).each do |ht|
-      ht.hub_id = 411
-      ht.save!
-    end
-    # TruckingPricing.where(.each do |tp|
-    #   hub_id = tp.hub_id
-    #   if hub_id
-    #     hub = Hub.find(hub_id)
-    #     if hub
-    #       t = hub.tenant
-    #       tp.tenant_id = t.id
-    #     else
-    #       next
-    #     end
-    #   else
-    #     next
-    #   end
-    #   # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-    #   tp.export = tp.import if tp.export == {"table" => []}
-    #   tp.import = tp.export if tp.import == {"table" => []}
-    #   # tp.truck_type =  "default" if tp.load_type != 'container'
-    #   tp.truck_type = "chassis" if tp.truck_type == "chassi"
-    #   # if tp.export
-    #   #   tp.export["table"].each do |cell|
-    #   #     if cell && cell["fees"]["congestion"]
-    #   #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-    #   #       # cell["fees"].delete("type")
-    #   #       # cell["fees"].delete("direction")
-    #   #     end
-    #   #   end
-    #   # end
-    #   # if tp.import
-    #   #   tp.import["table"].each do |cell|
-    #   #     if cell && cell["fees"]["congestion"]
-    #   #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-    #   #       # cell["fees"].delete("type")
-    #   #       # cell["fees"].delete("direction")
-    #   #     end
-    #   #   end
-    #   # end
-    #   if tp.load_meterage
-    #     tp.load_meterage["ratio"] = 1950
-    #     tp.cbm_ratio = 280
-    #   else
-    #     tp.cbm_ratio = 250
-    #   end
-    #   tp.save!
-    # end
-  end
-
   def self.copy_to_tenant(from_tenant, to_tenant)
     ft = Tenant.find_by_subdomain(from_tenant)
     tt = Tenant.find_by_subdomain(to_tenant)
@@ -163,10 +112,10 @@ class TruckingPricing < ApplicationRecord
     ")
 
     result.map do |row|
-      filter = parse_sql_array(row["filter"])
+      filter = parse_sql_record(row["filter"])
       {
-        "truckingPricing"  => find(row["id"]),
-        filter.first => filter[1..-1]
+        "truckingPricing" => find(row["id"]),
+        filter.first      => filter[1..-1]
       }
     end
   end
@@ -218,7 +167,7 @@ class TruckingPricing < ApplicationRecord
     args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
   end
 
-  def self.parse_sql_array(str)
+  def self.parse_sql_record(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
 
