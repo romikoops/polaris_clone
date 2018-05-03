@@ -7,6 +7,11 @@
   .banner_text {
     color: white;
     width: 451px;
+    @media screen and (-ms-high-contrast: active),
+    (-ms-high-contrast: none) {
+      min-height: 700px;
+    }
+    
     h2 {
       font-size: 24px;
       font-weight: normal;
@@ -63,6 +68,19 @@
       }
       h4 {
         font-size: 17px;
+      }
+    }
+    @media (max-height: 600px) {
+      h2 {
+        font-size: 30px;
+      }
+
+      h3 {
+        font-size: 16px;
+      }
+
+      h4 {
+        font-size: 13.5px;
       }
     }
   }

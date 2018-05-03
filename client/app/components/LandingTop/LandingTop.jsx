@@ -4,11 +4,11 @@ import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import SquareButton from '../SquareButton'
 import Header from '../Header/Header'
+import { browserType } from '../../helpers'
 
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(${props => props.bg});
-
   height: 100vh;
   background-size: cover;
   background-position: center;
