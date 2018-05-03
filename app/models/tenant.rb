@@ -17,6 +17,8 @@ class Tenant < ApplicationRecord
   has_many :trips, through: :itineraries
   has_many :layovers, through: :stops
   has_many :trucking_pricings
+  has_many :hub_truckings, through: :hubs
+  has_many :trucking_destinations, through: :hub_truckings
   has_many :documents
   has_many :pricings
   has_many :pricing_exceptions

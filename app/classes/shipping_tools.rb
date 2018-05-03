@@ -53,7 +53,7 @@ module ShippingTools
       
         itinerary = itinerary.as_options_json
       rescue
-        byebug
+        
       end
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary

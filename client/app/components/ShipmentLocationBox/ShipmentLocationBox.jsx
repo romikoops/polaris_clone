@@ -528,9 +528,13 @@ export class ShipmentLocationBox extends Component {
 
   scopeNexusOptions (nexusIds, target) {
     getRequests.nexuses(nexusIds, target, this.props.routeIds, (data) => {
+      console.log('######TARGET@@@@@@@')
+      console.log(target)
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
+        // eslint-disable-next-line no-debugger
+        debugger
         target === 'origin' ? this.setDestHub() : this.setOriginHub()
       }
     })

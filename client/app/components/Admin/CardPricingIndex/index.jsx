@@ -122,7 +122,6 @@ export default class CardPricingIndex extends Component {
         ? { background: theme.colors.secondary, color: 'white' }
         : { background: 'darkslategrey', color: 'white' }
     const modesOfTransport = scope.modes_of_transport
-   
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
     const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
