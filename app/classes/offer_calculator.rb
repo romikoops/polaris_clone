@@ -12,9 +12,9 @@ class OfferCalculator
     @destination_hubs = []
     @itineraries      = []
     @itineraries_hash = {}
-    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
-    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
+
     @shipment.trucking = trucking_params(params).to_h
+
     @delay = params[:shipment][:delay]
     @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
@@ -44,14 +44,14 @@ class OfferCalculator
 
     @shipment.origin = Location.get_geocoded_location(
       params[:shipment][:origin_user_input],
-      params[:shipment][:origin_id],
+      params[:shipment][:origin_hub_id],
       shipment.has_pre_carriage
     )
     raise ApplicationError::NoOrigin unless @shipment.origin
     
     @shipment.destination = Location.get_geocoded_location(
       params[:shipment][:destination_user_input],
-      params[:shipment][:destination_id],
+      params[:shipment][:destination_hub_id],
       shipment.has_on_carriage
     )
     raise ApplicationError::NoDestination unless @shipment.destination

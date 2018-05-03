@@ -138,7 +138,7 @@ class Admin::ShipmentsController < ApplicationController
         @shipment.ignore!
         response_handler({})
       when "finished"
-        @shipment.finished!
+        @shipment.finish!
         response_handler(@shipment)
       else
         raise "Unknown action!"
