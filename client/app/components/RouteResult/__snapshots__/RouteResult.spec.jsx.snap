@@ -89,7 +89,7 @@ exports[`props.pickup is false 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -110,17 +110,10 @@ exports[`props.pickup is false 1`] = `
             28-03-2018
              
           </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            20:50
-             
-          </p>
         </div>
       </div>
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -128,7 +121,7 @@ exports[`props.pickup is false 1`] = `
           <h4
             className="date_title"
           >
-             Date of Departure
+            ETD 
           </h4>
         </div>
         <div
@@ -141,17 +134,10 @@ exports[`props.pickup is false 1`] = `
             28-03-2018
              
           </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            18:20
-             
-          </p>
         </div>
       </div>
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -159,7 +145,7 @@ exports[`props.pickup is false 1`] = `
           <h4
             className="date_title"
           >
-             ETA terminal
+            ETA  
           </h4>
         </div>
         <div
@@ -172,12 +158,32 @@ exports[`props.pickup is false 1`] = `
             28-03-2018
              
           </p>
+        </div>
+      </div>
+      <div
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             Estimated T/T 
+            <sup>
+              *
+            </sup>
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
           <p
             className="flex-none sched_elem"
           >
              
-            23:37
-             
+            0
+             Days
           </p>
         </div>
       </div>
@@ -325,7 +331,7 @@ exports[`shallow rendering 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -346,17 +352,10 @@ exports[`shallow rendering 1`] = `
             28-03-2018
              
           </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            20:50
-             
-          </p>
         </div>
       </div>
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -364,7 +363,7 @@ exports[`shallow rendering 1`] = `
           <h4
             className="date_title"
           >
-             Date of Departure
+            ETD 
           </h4>
         </div>
         <div
@@ -377,17 +376,10 @@ exports[`shallow rendering 1`] = `
             28-03-2018
              
           </p>
-          <p
-            className="flex-none sched_elem"
-          >
-             
-            18:20
-             
-          </p>
         </div>
       </div>
       <div
-        className="flex-33 layout-wrap layout-row layout-align-center-center"
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
       >
         <div
           className="flex-100 layout-row"
@@ -395,7 +387,7 @@ exports[`shallow rendering 1`] = `
           <h4
             className="date_title"
           >
-             ETA terminal
+            ETA  
           </h4>
         </div>
         <div
@@ -408,12 +400,32 @@ exports[`shallow rendering 1`] = `
             28-03-2018
              
           </p>
+        </div>
+      </div>
+      <div
+        className="flex-25 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             Estimated T/T 
+            <sup>
+              *
+            </sup>
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
           <p
             className="flex-none sched_elem"
           >
              
-            23:37
-             
+            0
+             Days
           </p>
         </div>
       </div>

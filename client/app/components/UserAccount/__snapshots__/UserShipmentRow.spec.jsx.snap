@@ -248,7 +248,7 @@ exports[`shallow render 1`] = `
           <h4
             className="date_title"
           >
-             Est. Transit Time 
+             Estimated Transit Time 
           </h4>
         </div>
         <div

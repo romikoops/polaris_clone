@@ -181,39 +181,18 @@ exports[`props.pickup is false 1`] = `
       </label>
     </div>
   </div>
-  <styled.div
-    className="transit_time"
-  >
-    <p>
-      <TextHeading
-        size={4}
-        text="Transit Time"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
+  <div>
+    <p
+      style={
+        Object {
+          "fontSize": "12px",
+          "marginTop": "0",
         }
-      />
-    </p>
-    <input
-      onChange={[Function]}
-      type="range"
-      value={1}
-    />
-    <div
-      className="transit_time_labels"
+      }
     >
-      <p>
-        20 days
-      </p>
-      <p>
-        100 days
-      </p>
-    </div>
-  </styled.div>
+      *  Transit time (T/T) not guaranteed
+    </p>
+  </div>
 </div>
 `;
 
@@ -398,38 +377,17 @@ exports[`shallow rendering 1`] = `
       </label>
     </div>
   </div>
-  <styled.div
-    className="transit_time"
-  >
-    <p>
-      <TextHeading
-        size={4}
-        text="Transit Time"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
+  <div>
+    <p
+      style={
+        Object {
+          "fontSize": "12px",
+          "marginTop": "0",
         }
-      />
-    </p>
-    <input
-      onChange={[Function]}
-      type="range"
-      value={1}
-    />
-    <div
-      className="transit_time_labels"
+      }
     >
-      <p>
-        20 days
-      </p>
-      <p>
-        100 days
-      </p>
-    </div>
-  </styled.div>
+      *  Transit time (T/T) not guaranteed
+    </p>
+  </div>
 </div>
 `;

@@ -9,9 +9,9 @@ jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../../constants', () => {
-  const moment = input => ({
-    format: () => input,
-    diff: () => input
+  const moment = () => ({
+    format: () => 19,
+    diff: () => 17
   })
   const documentTypes = x => x
 

@@ -45,9 +45,9 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
              I am 
-            Buying
+            Selling
              (
-            import
+            export
             )
           </p>
         </div>
@@ -63,9 +63,9 @@ exports[`shallow render 1`] = `
             className="flex-none"
           >
              I am 
-            Selling
+            Buying
              (
-            export
+            import
             )
           </p>
         </div>
@@ -96,7 +96,7 @@ exports[`shallow render 1`] = `
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg",
+              "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
               "name": Object {},
               "options": Object {
                 "contained": true,
@@ -105,7 +105,7 @@ exports[`shallow render 1`] = `
             Object {
               "code": "container",
               "handleClick": [Function],
-              "img": "https://assets.itsmycargo.com/assets/images/icons/container.svg",
+              "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
               "name": Object {},
               "options": Object {
                 "contained": true,

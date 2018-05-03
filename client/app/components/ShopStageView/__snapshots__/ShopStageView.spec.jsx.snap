@@ -204,6 +204,19 @@ exports[`shallow rendering 1`] = `
     <div
       className="stage_box flex-none layout-column layout-align-start-center"
     />
+    <div
+      className="help_btn flex-none layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <p
+        className="flex-none"
+      >
+        Need Help
+      </p>
+      <i
+        className="fa fa-question-circle"
+      />
+    </div>
   </div>
 </div>
 `;

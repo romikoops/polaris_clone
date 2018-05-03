@@ -5,33 +5,6 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start"
 >
   <div
-    className="flex-100 layout-row layout-align-end-center"
-  >
-    <div
-      className="flex-none layout-row"
-    >
-      <RoundButton
-        active={false}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-left"
-        size="small"
-        text="Back"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
-  </div>
-  <div
     className="flex-100 layout-row layout-wrap layout-align-start-start"
   >
     <AdminSearchableShipments
@@ -57,7 +30,8 @@ exports[`shallow render 1`] = `
       }
       title="FOO_TITLE Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      userView={false}
+      user={Object {}}
+      userView={true}
     />
     <div
       className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center"

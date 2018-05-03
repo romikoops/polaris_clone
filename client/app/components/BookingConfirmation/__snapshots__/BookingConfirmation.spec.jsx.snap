@@ -170,7 +170,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-100 center letter_3"
                 >
-                   Expected Time of Departure:
+                  Expected Time of Departure:
                 </p>
                 <p
                   className="flex-none letter_3"
@@ -327,7 +327,7 @@ exports[`shallow render 1`] = `
         <TextHeading
           color="white"
           size={3}
-          text="Extras"
+          text="Additional Services"
           theme={
             Object {
               "colors": Object {
@@ -855,7 +855,7 @@ exports[`shallow render 1`] = `
               icon=""
               iconClass=""
               size=""
-              text="Finish Booking"
+              text="Finish Booking Request"
               theme={
                 Object {
                   "colors": Object {

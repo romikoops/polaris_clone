@@ -98,6 +98,7 @@ exports[`user.role_id is 1 1`] = `
             <SquareButton
               active={true}
               back={false}
+              border={false}
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -241,6 +242,7 @@ exports[`user.role_id is 2 1`] = `
             <SquareButton
               active={true}
               back={false}
+              border={false}
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}
@@ -264,6 +266,7 @@ exports[`user.role_id is 2 1`] = `
             <SquareButton
               active={true}
               back={false}
+              border={false}
               disabled={false}
               handleDisabled={null}
               handleNext={[Function]}

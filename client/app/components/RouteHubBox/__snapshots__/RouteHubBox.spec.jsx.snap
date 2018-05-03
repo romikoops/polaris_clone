@@ -115,7 +115,7 @@ exports[`shallow rendering 1`] = `
               }
             >
                
-              Est. Transit Time
+              Estimated Transit Time
             </h4>
             <p
               className="flex-100 no_m center"
