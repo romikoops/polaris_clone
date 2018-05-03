@@ -39,7 +39,7 @@ export default function TermsAndConditionsSummary (props) {
         </div>
         <div className="flex">
           <p style={{ margin: 0, fontSize: '13px' }}>
-            I hereby indicate that I have read and agree to the{' '}
+            I hereby confirm that I have read and agree to the{' '}
             <span
               className="emulate_link blue_link"
               onClick={goToTermsAndConditions}

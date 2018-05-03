@@ -1,11 +1,11 @@
 export * from './AdminDashboard'
 
-export { default as AdminHubs } from './AdminHubs'
-export * from './AdminHubsIndex'
-export * from './AdminHubTile'
+export { default as AdminHubs } from './Hubs/AdminHubs'
+export * from './Hubs/AdminHubsIndex'
+export * from './Hubs/AdminHubTile'
 export * from './AdminNexusTile'
-export * from './AdminHubView'
-export * from './AdminHubForm'
+export * from './Hubs/AdminHubView'
+export * from './Hubs/AdminHubForm'
 
 export * from './AdminNav'
 export * from './AdminNavItem'
@@ -38,7 +38,7 @@ export * from './AdminRoutesIndex'
 
 export * from './AdminClientTile'
 export { default as AdminClients } from './AdminClients'
-export * from './AdminClientsIndex'
+export { default as AdminClientsIndex } from './AdminClientsIndex'
 export * from './AdminClientView'
 
 // export * from './AdminSchedules'

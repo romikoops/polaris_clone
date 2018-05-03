@@ -9,8 +9,10 @@ export const appConstants = {
 
   REQUEST_TENANT: 'REQUEST_TENANT',
   RECEIVE_TENANT: 'RECEIVE_TENANT',
+  RECEIVE_TENANTS: 'RECEIVE_TENANTS',
   RECEIVE_TENANT_ERROR: 'RECEIVE_TENANT_ERROR',
-  INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN'
+  INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN',
+  SET_THEME: 'SET_THEME'
 }
 
 export const tooltips = {
@@ -20,7 +22,8 @@ export const tooltips = {
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',
   planned_pickup_date: 'Date states when cargo is ready for pickup',
-  planned_dropoff_date: 'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
+  planned_dropoff_date:
+    'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
   shipper_name: 'Example: John Smith, ItsMyCargo IVS.',
   shipper_street:
     'Example Tranehavegaard, 15. Note the address of the shipper is not always the same as the pick up location.',

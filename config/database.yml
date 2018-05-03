@@ -60,7 +60,7 @@ test:
 #  database: imcr_production
 #  username: greencarrier4
 #  password: <%= ENV['IMC_DATABASE_PASSWORD'] %>
-  database: imcr_development
+  database: imcr_test
 
 #   adapter: postgresql
 #   encoding: utf8

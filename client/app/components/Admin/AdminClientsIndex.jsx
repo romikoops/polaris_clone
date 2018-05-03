@@ -1,33 +1,305 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { AdminSearchableClients } from './AdminSearchables'
 import styles from './Admin.scss'
 import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminClientsTooltips as clientTip } from '../../constants'
+import DocumentsDownloader from '../../components/Documents/Downloader'
+import { RoundButton } from '../RoundButton/RoundButton'
+import { filters, capitalize } from '../../helpers'
+import { Checkbox } from '../Checkbox/Checkbox'
+// export function AdminClientsIndex ({ theme, clients, adminDispatch }) {
+class AdminClientsIndex extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      expander: {},
+      searchFilters: {},
+      searchResults: []
+    }
+  }
+  componentWillMount () {
+    if (
+      this.props.clients &&
+      !this.state.searchResults.length
+    ) {
+      this.prepFilters()
+    }
+  }
 
-export function AdminClientsIndex ({ theme, clients, adminDispatch }) {
-  const hubUrl = '/admin/clients/process_csv'
-  return (
-    <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-        <p className="flex-none">Upload Clients Sheet</p>
-        <FileUploader
+  prepFilters () {
+    const { clients } = this.props
+    const tmpFilters = {
+      companies: {}
+    }
+    clients.forEach((user) => {
+      tmpFilters.companies[user.company_name] = true
+    })
+    this.setState({
+      searchFilters: tmpFilters,
+      searchResults: clients
+    })
+  }
+  toggleFilterValue (target, key) {
+    this.setState({
+      searchFilters: {
+        ...this.state.searchFilters,
+        [target]: {
+          ...this.state.searchFilters[target],
+          [key]: !this.state.searchFilters[target][key]
+        }
+      }
+    })
+  }
+  handleSearchQuery (e) {
+    const { value } = e.target
+    this.setState({
+      searchFilters: {
+        ...this.state.searchFilters,
+        query: value
+      }
+    })
+  }
+  applyFilters (array) {
+    const { searchFilters } = this.state
+    const motKeys = Object.keys(searchFilters.companies).filter(key => searchFilters.companies[key])
+    const filter1 = array.filter(a => motKeys.includes(a.company_name))
+    let filter2
+    if (searchFilters.query && searchFilters.query !== '') {
+      filter2 = filters.handleSearchChange(
+        searchFilters.query,
+        ['first_name', 'last_name', 'company_name', 'phone', 'email'],
+        filter1
+      )
+    } else {
+      filter2 = filter1
+    }
+    return filter2
+  }
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
+  }
+  render () {
+    const { theme, adminDispatch } = this.props
+    const { expander, searchFilters, searchResults } = this.state
+    const hubUrl = '/admin/clients/process_csv'
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
           theme={theme}
-          url={hubUrl}
-          type="xlsx"
-          text="Client .xlsx"
-          tooltip={clientTip.upload}
+          size="small"
+          text="New"
+          active
+          handleNext={this.props.toggleNewClient}
+          iconClass="fa-plus"
         />
       </div>
-      <AdminSearchableClients
-        theme={theme}
-        clients={clients}
-        adminDispatch={adminDispatch}
-        tooltip={clientTip.manage}
-        showTooltip
-      />
-    </div>
-  )
+    )
+    const results = this.applyFilters(searchResults)
+    const sectionStyle =
+      theme && theme.colors
+        ? { background: theme.colors.secondary, color: 'white' }
+        : { background: 'darkslategrey', color: 'white' }
+    const typeFilters = Object.keys(searchFilters.companies).map(htk => (
+      <div
+        className={`${
+          styles.action_section
+        } flex-100 layout-row layout-align-center-center layout-wrap`}
+      >
+        <p className="flex-70">{capitalize(htk)}</p>
+        <Checkbox
+          onChange={() => this.toggleFilterValue('companies', htk)}
+          checked={searchFilters.companies[htk]}
+          theme={theme}
+        />
+      </div>
+    ))
+    return (
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+        {/* {uploadStatus} */}
+        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+          <AdminSearchableClients
+            theme={theme}
+            clients={results}
+            adminDispatch={adminDispatch}
+            tooltip={clientTip.manage}
+            showTooltip
+            hideFilters
+          />
+        </div>
+        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-filter" />
+              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
+            </div>
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+            >
+              <input
+                type="text"
+                className="flex-100"
+                value={searchFilters.query}
+                placeholder="Search..."
+                onChange={e => this.handleSearchQuery(e)}
+              />
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('companies')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-ship" />
+                  <p className="flex-none">Company</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.companies ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.companies ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                {typeFilters}
+              </div>
+            </div>
+          </div>
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-bolt" />
+              <h2 className="flex-none letter_3 no_m"> Actions </h2>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('upload')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-upload" />
+                  <p className="flex-none">Upload Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.upload ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.upload ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  <p className="flex-none">Upload Clients Sheet</p>
+                  <FileUploader
+                    theme={theme}
+                    url={hubUrl}
+                    type="xlsx"
+                    text="Client .xlsx"
+                    tooltip={clientTip.upload}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('download')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-download" />
+                  <p className="flex-none">Download Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.download ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.download ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100 center">Download Clients Sheet</p>
+                  <DocumentsDownloader theme={theme} target="clients" />
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('new')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-plus-circle" />
+                  <p className="flex-none">New Client</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.new ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.new ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  {newButton}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 AdminClientsIndex.propTypes = {
@@ -35,7 +307,8 @@ AdminClientsIndex.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.clients),
   adminDispatch: PropTypes.shape({
     getClient: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  toggleNewClient: PropTypes.func.isRequired
 }
 
 AdminClientsIndex.defaultProps = {

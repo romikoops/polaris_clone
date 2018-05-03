@@ -204,6 +204,12 @@ class Itinerary < ApplicationRecord
   def first_nexus
     self.stops.find_by(index: 0).hub.nexus
   end
+  def users_with_pricing
+    self.pricings.where.not(user_id: nil).count 
+  end
+  def pricing_count
+    self.pricings.count
+  end
 
   def last_nexus
     self.stops.order(index: :desc)[0].hub.nexus
@@ -337,6 +343,7 @@ class Itinerary < ApplicationRecord
           },
           only: [:id]
         },
+        {
         last_stop: {
           include: {
             hub: {
@@ -348,8 +355,16 @@ class Itinerary < ApplicationRecord
           },
           only: [:id]
         }
+      }
       ]
     )
     as_json(new_options)
+  end
+  def as_pricing_json(options={})
+    new_options = {
+        users_with_pricing: users_with_pricing,
+        pricing_count: pricing_count
+    }.merge(attributes)
+    # as_json(new_options)
   end
 end

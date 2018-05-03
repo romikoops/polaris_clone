@@ -602,7 +602,8 @@ export default function admin (state = {}, action) {
       return state
     case adminConstants.UPDATE_PRICING_SUCCESS: {
       const exPricings = state.pricingData.pricings
-      exPricings[action.payload.id] = action.payload
+        .filter(pricing => pricing.id !== action.payload.id)
+      exPricings.push(action.payload)
       return {
         ...state,
         pricingData: {
@@ -1163,6 +1164,24 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.DELETE_TRIP_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+    case adminConstants.UPDATE_MANDATORY_CHARGE_REQUEST:
+      return state
+    case adminConstants.UPDATE_MANDATORY_CHARGE_SUCCESS:
+      return {
+        ...state,
+        hub: {
+          ...state.hub,
+          hub: action.payload.hub,
+          mandatoryCharge: action.payload.mandatoryCharge
+        },
+        loading: false
+      }
+    case adminConstants.UPDATE_MANDATORY_CHARGE_FAILURE:
       return {
         ...state,
         error: { hub: action.error },
