@@ -136,7 +136,6 @@ export class ShipmentDetails extends Component {
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
-    this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
@@ -448,34 +447,21 @@ export class ShipmentDetails extends Component {
       }
     }
 
-    const data = { shipment: this.state.shipment }
+    const shipment = {
+      id: this.state.shipment.id,
+      trucking: this.state.shipment.trucking,
+      origin_user_input: this.state.origin.fullAddress || '',
+      destination_user_input: this.state.destination.fullAddress || '',
+      origin_hub_id: this.state.origin.hub_id,
+      destination_hub_id: this.state.destination.hub_id,
+      cargo_items_attributes: this.state.cargoItems,
+      containers_attributes: this.state.containers,
+      aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,
+      planned_pickup_date: this.state.selectedDay,
+      incoterm: this.state.incoterm
+    }
 
-    data.shipment.origin_user_input = this.state.origin.fullAddress
-      ? this.state.origin.fullAddress
-      : ''
-    data.shipment.destination_user_input = this.state.destination.fullAddress
-      ? this.state.destination.fullAddress
-      : ''
-    data.shipment.origin_id = this.state.origin.hub_id
-    data.shipment.destination_id = this.state.destination.hub_id
-    data.shipment.cargo_items_attributes = this.state.cargoItems
-    data.shipment.containers_attributes = this.state.containers
-    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
-
-    data.shipment.has_on_carriage = this.state.has_on_carriage
-    data.shipment.has_pre_carriage = this.state.has_pre_carriage
-    data.shipment.planned_pickup_date = this.state.selectedDay
-    data.shipment.incoterm = this.state.incoterm
-    data.shipment.carriageNexuses = this.state.carriageNexuses
-    this.props.getOffers(data)
-  }
-  handleCarriageNexuses (target, id) {
-    this.setState({
-      carriageNexuses: {
-        ...this.state.carriageNexuses,
-        [target]: id
-      }
-    })
+    this.props.getOffers({ shipment })
   }
   returnToDashboard () {
     this.props.shipmentDispatch.getDashboard(true)
@@ -625,7 +611,6 @@ export class ShipmentDetails extends Component {
         shipmentData={shipmentData}
         routeIds={routeIds}
         setNotesIds={(e, t) => this.setNotesIds(e, t)}
-        handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}

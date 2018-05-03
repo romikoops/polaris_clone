@@ -1,8 +1,9 @@
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay, :trucking_data
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :delay, :trucking_data
   include CurrencyTools
   include PricingTools
   include TruckingTools
+
   def initialize(shipment, params, user)
     @mongo            = get_client
     @user             = user
@@ -11,7 +12,6 @@ class OfferCalculator
     @destination_hubs = []
     @itineraries      = []
     @itineraries_hash = {}
-    @carriage_nexuses = params[:shipment][:carriageNexuses]
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
     @shipment.trucking = trucking_params(params).to_h
