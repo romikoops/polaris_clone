@@ -122,8 +122,10 @@ export default class CardPricingIndex extends Component {
         ? { background: theme.colors.secondary, color: 'white' }
         : { background: 'darkslategrey', color: 'white' }
     const modesOfTransport = scope.modes_of_transport
+   
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+    const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
     return (
       <div className="flex-100 layout-row layout-align-space-around-start">
         <div
@@ -133,7 +135,7 @@ export default class CardPricingIndex extends Component {
         >
           {modeOfTransportNames.map(modeOfTransportName => (
             <div
-              className={`flex-30 flex-sm-45 flex-md-45 layout-row layout-wrap layout-align-center-start ${
+              className={`${columnFlex} flex-sm-45 flex-md-45 layout-row layout-wrap layout-align-center-start ${
                 styles.titles_btn
               }`}
             >

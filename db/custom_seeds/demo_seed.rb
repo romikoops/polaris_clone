@@ -15,10 +15,10 @@ subdomains.each do |sub|
  
 
   # # # # #Overwrite hubs from excel sheet
-  # puts "# Overwrite hubs from excel sheet"
-  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  # req = {"xlsx" => hubs}
-  # overwrite_hubs(req, shipper)
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
   # # # # puts "# Overwrite public pricings from excel sheet"
 

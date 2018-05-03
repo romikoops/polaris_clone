@@ -48,8 +48,7 @@ class AdminSchedules extends Component {
   componentWillMount () {
     if (
       this.props.scheduleData &&
-      this.props.scheduleData.itineraries &&
-      !this.state.searchResults.length
+      this.props.scheduleData.itineraries
     ) {
       this.prepFilters()
     }
@@ -223,6 +222,7 @@ class AdminSchedules extends Component {
     ))
 
     const results = this.applyFilters(searchResults)
+
     const listView = (
       <AdminSearchableRoutes
         itineraries={results}
