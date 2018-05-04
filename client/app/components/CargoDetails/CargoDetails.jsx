@@ -18,11 +18,15 @@ export class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs) {
     if (target === 'total') {
       let newTotal = 0
-      if (customsData.import.bool) {
+
+      if (customsData.import.bool && !customs.import.unknown) {
         newTotal += parseFloat(customs.import.total.value)
       }
-      if (customsData.export.bool) {
+      if (customsData.export.bool && !customs.export.unknown) {
         newTotal += parseFloat(customs.export.total.value)
+      }
+      if (newTotal === 0 && customs.import.unknown && customs.export.unknown) {
+        return 'Price subject to local regulations'
       }
       return `${newTotal.toFixed(2)} ${customs.total.total.currency}`
     }
@@ -206,9 +210,7 @@ export class CargoDetails extends Component {
     )
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
-    const textComp = (
-      <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>(if applicable)</b>
-    )
+    const textComp = <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>(if applicable)</b>
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.customs_box}  ${styles.box_content} ${
@@ -230,10 +232,16 @@ export class CargoDetails extends Component {
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center" style={{ height: '36px' }}>
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+              style={{ height: '36px' }}
+            >
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center layout-wrap" style={{ height: '36px' }}>
+            <div
+              className="flex-100 layout-row layout-align-start-center layout-wrap"
+              style={{ height: '36px' }}
+            >
               <div
                 className="flex-45 layout-row layout-align-space-around-center"
                 data-tip={tooltips.customs_pre_carriage}
@@ -337,7 +345,9 @@ export class CargoDetails extends Component {
           <p className="flex-100">
             <b>
               {`A customs declaration is mandatory to pass a national border when exporting or
-              importing. If you choose to handle the customs clearance on your own, ${tenant.data.name}
+              importing. If you choose to handle the customs clearance on your own, ${
+      tenant.data.name
+      }
               will need a copy of the customs declaration.`}
             </b>
           </p>
@@ -496,24 +506,23 @@ export class CargoDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
+                    <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
                       {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={4}
-                        text="Incoterms 2010 by the International
-                         Chamber of Commerce (ICC)  (Optional)"
-                      />
+                      {/* <TextHeading theme={theme} size={4} text="" /> */}
+                      <h4 className="no_m flex-100">Incoterms</h4>
+                      <p className="flex-90">
+                        2010 by the International Chamber of Commerce (ICC) (Optional)
+                      </p>
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
                     <textarea
                       className={styles.textarea_incoterm}
-                      name="incoterm"
+                      name="incotermText"
                       id=""
                       cols="30"
                       rows="6"
-                      value={this.props.incoterm}
+                      value={this.props.incotermText}
                       onChange={this.props.handleChange}
                     />
                   </div>
@@ -792,7 +801,7 @@ CargoDetails.propTypes = {
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
   notes: PropTypes.string,
-  incoterm: PropTypes.string
+  incotermText: PropTypes.string
 }
 
 CargoDetails.defaultProps = {
@@ -804,7 +813,7 @@ CargoDetails.defaultProps = {
   // customsCredit: false,
   eori: '',
   notes: '',
-  incoterm: ''
+  incotermText: ''
 }
 
 export default CargoDetails

@@ -378,7 +378,9 @@ export class BookingConfirmation extends Component {
                       </p>
                       <p className="flex-none letter_3">
                         {shipment.has_pre_carriage
-                          ? `${moment(shipment.closing_date).subtract(3, 'days').format('DD/MM/YYYY')}`
+                          ? `${moment(shipment.closing_date)
+                            .subtract(3, 'days')
+                            .format('DD/MM/YYYY')}`
                           : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`}
                       </p>
                     </div>
@@ -604,6 +606,110 @@ export class BookingConfirmation extends Component {
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                   {cargoView}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
+          >
+            <div
+              style={themeTitled}
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
+            >
+              <TextHeading theme={theme} color="white" size={3} text="Additional Information" />
+              <div
+                className="flex-10 layout-row layout-align-center-center"
+                onClick={() => this.handleCollapser('extraInfo')}
+              >
+                {collapser.extraInfo ? (
+                  <i className="fa fa-chevron-down pointy" />
+                ) : (
+                  <i className="fa fa-chevron-up pointy" />
+                )}
+              </div>
+            </div>
+            <div className={`${collapser.extraInfo ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div
+                className={`${
+                  styles.inner_wrapper
+                } flex-100 layout-row layout-wrap layout-align-start-start`}
+              >
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    {shipment.total_goods_value ? (
+                      <div
+                        className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Total Value of Goods:</b>
+                        </p>
+                        <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
+                          shipment.total_goods_value.value
+                        }`}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.eori ? (
+                      <div
+                        className="flex-45 offset-10 layout-row
+                        layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>EORI number:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.eori}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+
+                  </div>
+                  <div className="flex-100 layout-row layout-align-space-around-center">
+                    {shipment.cargo_notes ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Description of Goods:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.notes ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Notes:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.notes}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.incoterm_text ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Incoterm:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+
+                  </div>
                 </div>
               </div>
             </div>

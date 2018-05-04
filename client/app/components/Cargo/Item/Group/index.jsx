@@ -97,6 +97,7 @@ export class CargoItemGroup extends Component {
       </div>
     ))
     const unitStyle = unitView ? styles.open_panel : styles.closed_panel
+    const aggStyle = unitView ? styles.closed_panel : styles.open_panel
     const unitViewer = (
       <div
         className={`${unitStyle} ${
@@ -104,6 +105,15 @@ export class CargoItemGroup extends Component {
         } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
       >
         {unitArr}
+      </div>
+    )
+    const aggViewer = (
+      <div
+        className={`${aggStyle} ${
+          styles.panel
+        } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
+      >
+        <CargoItemGroupAggregated group={group} />
       </div>
     )
     return (
@@ -147,7 +157,7 @@ export class CargoItemGroup extends Component {
         </div>
         <div className="flex-100 layout-row layout-align-none-start layout-wrap">
           {unitViewer}
-          <CargoItemGroupAggregated group={group} />
+          {aggViewer}
         </div>
         <hr className="flex-100" />
         {viewHSCodes ? (

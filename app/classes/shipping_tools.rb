@@ -103,9 +103,9 @@ module ShippingTools
       cargo_notes: shipment_data[:cargoNotes]
     )
 
-    # if shipment_data[:incoterm]
-    #   shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
-    # end
+    if shipment_data[:incotermText]
+      shipment.incoterm_text = shipment_data[:incotermText]
+    end
 
     # Shipper
     resource = shipment_data.require(:shipper)
