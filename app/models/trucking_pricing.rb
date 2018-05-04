@@ -84,10 +84,10 @@ class TruckingPricing < ApplicationRecord
 
   def self.find_by_hub_ids(args = {})
     hub_ids = args[:hub_ids]
-    raise ArgumentError, "Must provide hub_ids" if hub_ids.nil?
+    raise ArgumentError, "Must provide hub_ids"   if hub_ids.nil?
     raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
 
-    result = ActiveRecord::Base.connection.exec_query("
+    sanitized_query = sanitize_sql(["
       SELECT trucking_pricings.id, (
         CASE
           WHEN MAX(trucking_destinations.zipcode) != '0'
@@ -104,13 +104,13 @@ class TruckingPricing < ApplicationRecord
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
       JOIN  locations             ON hubs.location_id                      = locations.id
       JOIN  tenants               ON hubs.tenant_id                        = tenants.id
-      WHERE tenants.id = #{args[:tenant_id]}
-      AND   hubs.id IN #{hub_ids.sql_format}
+      WHERE tenants.id = :tenant_id
+      AND   hubs.id IN (:hub_ids)
       GROUP BY trucking_pricings.id
       ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(trucking_destinations.city_name)
-    ")
+    ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
 
-    result.map do |row|
+    connection.exec_query(sanitized_query).map do |row|
       filter = parse_sql_record(row["filter"])
       {
         "truckingPricing" => find(row["id"]),
