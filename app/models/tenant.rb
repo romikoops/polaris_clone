@@ -33,6 +33,7 @@ class Tenant < ApplicationRecord
   has_many :buyer_incoterm_scopes, through: :incoterms
   has_many :seller_incoterm_charges, through: :incoterms
   has_many :buyer_incoterm_charges, through: :incoterms
+  has_many :conversations
     
   validates :scope, presence: true, scope: true
 

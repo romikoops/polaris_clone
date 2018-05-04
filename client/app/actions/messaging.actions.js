@@ -73,11 +73,10 @@ function sendUserMessage (message) {
 
     messagingService.sendUserMessage(message).then(
       (data) => {
-        dispatch(alertActions.success('Sending Message successful'))
         dispatch(success(data))
+        dispatch(alertActions.success('Sending Message successful'))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
