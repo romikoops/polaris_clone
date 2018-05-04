@@ -263,15 +263,15 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-            .permit(:street, :streetNumber, :zipCode, :city, :country)
-            .to_h.deep_transform_keys(&:underscore)
+      .permit(:street, :streetNumber, :zipCode, :city, :country)
+      .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
-            .permit(:companyName, :firstName, :lastName, :email, :phone)
-            .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+      .permit(:companyName, :firstName, :lastName, :email, :phone)
+      .to_h.deep_transform_keys(&:underscore)
+      .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)

@@ -22,7 +22,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { camelize } from '../../helpers'
+import { camelize, isEmpty } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -110,7 +110,8 @@ export class ShipmentDetails extends Component {
       shakeClass: {
         noDangerousGoodsConfirmed: '',
         stackableGoodsConfirmed: ''
-      }
+      },
+      prevRequestLoaded: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -140,7 +141,7 @@ export class ShipmentDetails extends Component {
   componentWillMount () {
     const { prevRequest, setStage } = this.props
 
-    if (prevRequest && prevRequest.shipment) {
+    if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -162,7 +163,9 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
+
     return !!(
+      (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -251,27 +254,20 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
 
-    console.log(obj)
-
     this.setState({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
       selectedDay: obj.planned_pickup_date,
-      origin: {
-        fullAddress: obj.origin_user_input || '',
-        hub_id: obj.origin_hub_id
-      },
-      destination: {
-        fullAddress: obj.destination_user_input || '',
-        hub_id: obj.destination_hub_id
-      },
-      has_on_carriage: obj.has_on_carriage,
-      has_pre_carriage: obj.has_pre_carriage,
+      origin: obj.origin,
+      destination: obj.destination,
+      has_on_carriage: !!obj.trucking.on_carriage.truck_type,
+      has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
       trucking: obj.trucking,
       incoterm: obj.incoterm,
-      routeSet: true
+      routeSet: true,
+      prevRequestLoaded: true
     })
   }
 
@@ -407,8 +403,8 @@ export class ShipmentDetails extends Component {
 
   handleNextStage () {
     if (
-      (!this.state.origin.hub_id && !this.state.has_pre_carriage) ||
-      (!this.state.destination.hub_id && !this.state.has_on_carriage) ||
+      (!this.state.origin.nexus_id && !this.state.has_pre_carriage) ||
+      (!this.state.destination.nexus_id && !this.state.has_on_carriage) ||
       (!this.state.origin.fullAddress && this.state.has_pre_carriage) ||
       (!this.state.destination.fullAddress && this.state.has_on_carriage) ||
       this.state.addressFormsHaveErrors
@@ -454,8 +450,6 @@ export class ShipmentDetails extends Component {
       trucking: this.state.shipment.trucking,
       origin: this.state.origin,
       destination: this.state.destination,
-      origin_nexus_id: this.state.origin.hub_id,
-      destination_nexus_id: this.state.destination.hub_id,
       cargo_items_attributes: this.state.cargoItems,
       containers_attributes: this.state.containers,
       aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,

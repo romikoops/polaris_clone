@@ -7,7 +7,6 @@ class Shipments::BookingProcessController < ApplicationController
 	end
 
 	def get_offers
-	  byebug
 	  resp = ShippingTools.get_offers(params, current_user)
 	  response_handler(resp)
 	end

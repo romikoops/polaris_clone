@@ -43,23 +43,18 @@ class OfferCalculator
     @shipment.planned_pickup_date = planned_date > date_limit ? planned_date : date_limit
 
 
-    # @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
-    @shipment.origin_nexus_id = params[:shipment][:origin_nexus_id]
-    raise ApplicationError::NoOrigin unless @shipment.origin_nexus
-    
+    @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
       @pickup_address = Location.create(location_params(params, :origin))
       raise ApplicationError::InvalidPickupAddress unless @pickup_address
-      @shipment.trucking[:pre_carriage][:location_id] = @pickup_address
+      @shipment.trucking['pre_carriage']['location_id'] = @pickup_address
     end
 
-    # @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
-    @shipment.destination_nexus_id = params[:shipment][:destination_nexus_id]
-    raise ApplicationError::NoDestination unless @shipment.destination_nexus
+    @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
     if @shipment.has_on_carriage?
       @delivery_address = Location.create(location_params(params, :destination))
       raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
-      @shipment.trucking[:on_carriage][:location_id] = @delivery_address.id
+      @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
     end
   end
 
@@ -68,7 +63,7 @@ class OfferCalculator
     determine_itinerary!
     determine_longest_trucking_time!
     determine_layovers!
-    add_trip_charges! 
+    add_trip_charges!
     convert_currencies!
     prep_schedules!
   end
@@ -254,7 +249,7 @@ class OfferCalculator
 
   def determine_trucking_options!
     load_type = @shipment.load_type 
-    if @shipment.has_pre_carriage
+    if @shipment.has_pre_carriage?
       trucking_pricings_by_hub = TruckingPricing.find_by_filter(
         location: @pickup_address, 
         load_type: load_type, 
@@ -270,7 +265,7 @@ class OfferCalculator
       end
     end
 
-    if @shipment.has_on_carriage
+    if @shipment.has_on_carriage?
       trucking_pricings_by_hub = TruckingPricing.find_by_filter(
         location: @delivery_address, 
         load_type: load_type, 
@@ -278,7 +273,6 @@ class OfferCalculator
         truck_type: @shipment.trucking["on_carriage"]["truck_type"],
         carriage: 'on'
       )
-      
       trucking_pricings_by_hub.each do |trucking_pricing|
         if !@trucking_data["on_carriage"]
           @trucking_data["on_carriage"] = {}
@@ -388,6 +382,6 @@ class OfferCalculator
     snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
     snakefied_location_params = ActionController::Parameters.new(snakefied_location_hash)
 
-    snakefied_location_params.permit(:street, :zip_code, :city, :country)
+    snakefied_location_params.permit(:street, :zip_code, :city, :country, :latitude, :longitude)
   end
 end
