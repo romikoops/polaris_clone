@@ -1161,8 +1161,8 @@ class TenantSeeder
           brightPrimary: "#FFFFF",
           brightSecondary: "#f94c43"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
         background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
       },
       addresses: {

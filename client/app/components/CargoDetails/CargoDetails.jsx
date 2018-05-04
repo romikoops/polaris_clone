@@ -191,7 +191,7 @@ export class CargoDetails extends Component {
             How insurance premium is calculated:
             <br />
             <br />
-            Please contact your local Greencarrier office for more info.
+            {`Please contact your local ${tenant.data.name} office for more info.`}
           </p>
         </div>
         {/* <div className={` ${styles.prices} flex-20
