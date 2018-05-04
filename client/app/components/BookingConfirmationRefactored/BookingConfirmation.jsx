@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import { pick, uniqWith } from 'lodash'
 import PropTypes from '../../prop-types'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
 import styles from './BookingConfirmation.scss'
@@ -16,7 +17,6 @@ import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
-import { pick, uniqWith } from '../../helpers/rambda'
 
 export class BookingConfirmation extends Component {
   constructor (props) {
@@ -672,8 +672,8 @@ BookingConfirmation.defaultProps = {
 
 function prepContainerGroups (cargos, props) {
   const uniqCargos = uniqWith(
-    (x, y) => x.id === y.id,
-    cargos
+    cargos,
+    (x, y) => x.id === y.id
   )
   const cargoGroups = {}
 
@@ -689,8 +689,8 @@ function prepContainerGroups (cargos, props) {
     const gross = parsedGross * parsedQuantity
 
     const base = pick(
-      'size_class,quantity',
-      singleCargo
+      singleCargo,
+      ['size_class', 'quantity']
     )
 
     cargoGroups[singleCargo.id] = {
@@ -717,8 +717,8 @@ function prepContainerGroups (cargos, props) {
 function prepCargoItemGroups (cargos, props) {
   const { cargoItemTypes, hsCodes } = props.shipmentData
   const uniqCargos = uniqWith(
-    (x, y) => x.id === y.id,
-    cargos
+    cargos,
+    (x, y) => x.id === y.id
   )
   const cargoGroups = {}
 
