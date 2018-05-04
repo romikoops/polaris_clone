@@ -123,6 +123,7 @@ class TenantSeeder
           ocean: "imc.sea.se@greencarrier.se"
         }
       },
+      
       subdomain: "greencarrier",
       name: "Greencarrier",
       currency: 'USD',
@@ -140,6 +141,10 @@ class TenantSeeder
             container: true,
             cargo_item: true
           }
+        },
+        links: {
+          about: "https://freightservices.greencarrier.com/about-us/",
+          legal: 'https://freightservices.greencarrier.com/contact/'
         },
         dangerous_goods: false,
         detailed_billing: false,

@@ -127,7 +127,7 @@ export class CargoItemGroup extends Component {
             } flex-100 layout-row layout-wrap layout-align-space-between-center`}
           >
             <div className=" flex-70 layout-row layout-wrap layout-align-start-center">
-              <p className="flex-none">Pallet Type</p>
+              <p className="flex-none">Cargo Type</p>
               <div className="flex-5" />
               <p className="flex-none">{group.cargoType.description}</p>
             </div>

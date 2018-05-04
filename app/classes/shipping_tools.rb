@@ -222,6 +222,7 @@ module ShippingTools
 
     shipment.planned_etd = shipment.schedule_set.first['etd']
     shipment.planned_eta = shipment.schedule_set.last['eta']
+    shipment.closing_date = shipment.schedule_set.first['closing_date']
     shipment.save!
 
     origin_hub      = Layover.find(shipment.schedule_set.first['origin_layover_id']).stop.hub

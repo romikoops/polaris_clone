@@ -333,7 +333,7 @@ module DocumentTools
       filename = "#{itinerary.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     else
       trips = Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
-      filename = "schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+      filename = "#{tenant.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     end
     
     dir = "tmp/#{filename}"

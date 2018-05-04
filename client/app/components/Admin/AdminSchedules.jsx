@@ -53,6 +53,15 @@ class AdminSchedules extends Component {
       this.prepFilters()
     }
   }
+  componentWillReceiveProps (nextProps) {
+    if (
+      nextProps.scheduleData &&
+      nextProps.scheduleData.itineraries &&
+      this.state.searchResults.length < 1
+    ) {
+      this.prepFilters()
+    }
+  }
 
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
