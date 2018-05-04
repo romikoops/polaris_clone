@@ -51,13 +51,12 @@ class TruckingPricing < ApplicationRecord
     longitude = args[:longitude] || args[:location].try(:longitude) || 0
     zipcode   = args[:zipcode]   || args[:location].try(:get_zip_code)
     city_name = args[:city_name] || args[:location].try(:city)
-    carriage  = args[:carriage]
-
 
     joins(hub_truckings: [:trucking_destination, hub: :nexus])
       .where('hubs.tenant_id': args[:tenant_id])
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
+      .where('trucking_destinations.country_code': args[:country_code])
       .where(truck_type_condition(args))
       .where(nexuses_condition(args))
       .where("
@@ -151,11 +150,14 @@ class TruckingPricing < ApplicationRecord
   private
 
   def self.find_by_filter_argument_errors(args)
-    raise ArgumentError, "Must provide load_type" if args[:load_type].nil?
-    raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
-    raise ArgumentError, "Must provide carriage"  if args[:carriage].nil?
-    if args.keys.size < 3
-      raise ArgumentError, "Must provide a valid filter besides load_type, carriage and tenant_id"
+    mandatory_args = [:load_type, :tenant_id, :carriage, :country_code]
+
+    mandatory_args.each do |mandatory_arg|
+      raise ArgumentError, "Must provide #{mandatory_arg}" if args[mandatory_arg].nil?
+    end
+
+    if args.keys.size <= mandatory_args.length
+      raise ArgumentError, "Must provide a valid filter besides #{mandatory_args.to_sentence}"
     end
   end
 
@@ -170,6 +172,4 @@ class TruckingPricing < ApplicationRecord
   def self.parse_sql_record(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
-
-
 end
