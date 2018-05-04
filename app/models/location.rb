@@ -14,6 +14,8 @@ class Location < ApplicationRecord
 
   scope :nexus, -> { where(location_type: "nexus") }
 
+  before_validation :sync_country_code
+
   # Geocoding
   geocoded_by :geocoded_address
 
@@ -143,6 +145,11 @@ class Location < ApplicationRecord
     end
   end
 
+  def self.country_code_for(country)
+    geocoder_results = Geocoder.search(country: country)
+    geocoder_results.first.data["address_components"].first["short_name"]
+  end
+
   # Instance methods
   def is_primary_for?(user)
     user_loc = UserLocation.find_by(location_id: self.id, user_id: user.id)
@@ -257,6 +264,10 @@ class Location < ApplicationRecord
   end
 
   private
+
+  def sync_country_code
+    self.country_code = Location.country_code_for(country)
+  end
 
   def self.location_params(raw_location_params)
     return if raw_location_params.try(:permit,
