@@ -13,12 +13,12 @@ export function Footer ({ theme, tenant }) {
   const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
   const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
   const tenantName = tenant ? tenant.name : ''
-  // const defaultLinks = {
-  //   privacy: 'https://itsmycargo.com/en/privacy',
-  //   about: 'https://www.itsmycargo.com/en/ourstory',
-  //   contact: 'https://www.itsmycargo.com/en/contact',
-  //   legal: 'https://www.itsmycargo.com/en/contact'
-  // }
+  const links = tenant && tenant.scope ? tenant.scope.links : {}
+  const defaultLinks = {
+    privacy: 'https://itsmycargo.com/en/privacy',
+    about: 'https://www.itsmycargo.com/en/ourstory',
+    legal: 'https://www.itsmycargo.com/en/contact'
+  }
   return (
     <div className="flex-100 layout-row layout-wrap">
       <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
@@ -59,12 +59,15 @@ export function Footer ({ theme, tenant }) {
           </div>
           <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/ourstory">
+              <a target="_blank" href={links && links.about ? links.about : defaultLinks.about}>
                 About Us
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/privacy">
+              <a
+                target="_blank"
+                href={links && links.privacy ? links.privacy : defaultLinks.privacy}
+              >
                 Privacy Policy
               </a>
             </div>
@@ -77,7 +80,7 @@ export function Footer ({ theme, tenant }) {
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/contact">
+              <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
                 Legal
               </a>
             </div>
@@ -103,8 +106,8 @@ Footer.propTypes = {
 }
 
 Footer.defaultProps = {
-  theme: null,
-  tenant: null
+  theme: {},
+  tenant: {}
 }
 
 export default Footer
