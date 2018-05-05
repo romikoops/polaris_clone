@@ -1,5 +1,9 @@
 # Notes
 
+## Commands
+
+jest app/components/BookingConfirmationRefactored/BookingConfirmation.jsx --watch --coverage
+
 ## TODO
 
 Update snapshots after all RoundButton mocks are the same

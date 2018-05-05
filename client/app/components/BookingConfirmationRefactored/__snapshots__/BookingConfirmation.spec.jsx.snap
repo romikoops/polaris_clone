@@ -5,7 +5,7 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
       className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
@@ -51,7 +51,7 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -64,24 +64,24 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -263,7 +263,7 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -356,7 +356,7 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -908,7 +908,7 @@ exports[`with cargo items 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
       className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
@@ -954,7 +954,7 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -967,24 +967,24 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -1166,7 +1166,7 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -1259,7 +1259,7 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -2026,7 +2026,7 @@ exports[`with containers 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
       className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
@@ -2072,7 +2072,7 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -2085,24 +2085,24 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -2284,7 +2284,7 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -2377,7 +2377,7 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-align-center-center"
           >
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none content_width_booking layout-row layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
