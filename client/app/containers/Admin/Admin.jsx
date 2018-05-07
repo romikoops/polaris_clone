@@ -76,7 +76,7 @@ class Admin extends Component {
   }
   render () {
     const {
-      theme, adminData, adminDispatch, user, documentLoading
+      theme, adminData, adminDispatch, user, documentLoading, tenant
     } = this.props
 
     const {
@@ -220,7 +220,7 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <Footer />
+          <Footer theme={theme} tenant={tenant.data} />
         </div>
       </div>
     )
@@ -242,7 +242,7 @@ Admin.propTypes = {
     dashboard: PropTypes.any,
     loading: PropTypes.bool
   }).isRequired,
-
+  tenant: PropTypes.tenant,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
@@ -260,6 +260,7 @@ Admin.propTypes = {
 Admin.defaultProps = {
   theme: {},
   user: {},
+  tenant: {},
   documentLoading: false,
   loggedIn: false
 }

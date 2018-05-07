@@ -321,6 +321,7 @@ export class AdminDashboard extends Component {
               adminDispatch={adminDispatch}
               tooltip={adminTip.hubs}
               icon="fa-info-circle"
+              limit={8}
               showTooltip
             />
           </div>

@@ -119,7 +119,7 @@ function fetchTenants () {
 }
 function shouldFetchTenant (state, subdomain) {
   const { tenant } = state
-  if (!tenant.data) {
+  if (!tenant.data || (Object.keys(tenant.data).length < 1)) {
     return true
   }
   if (tenant.isFetching) {

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
-import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
+// import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
 import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
 // import defaults from '../../styles/default_classes.scss';
@@ -21,14 +21,10 @@ class Landing extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      showCarousel: false,
       showLogin: false
     }
-    this.showCarousel = this.showCarousel.bind(this)
   }
-  componentDidMount () {
-    this.showCarousel()
-  }
+
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
     return loading || !(loggingIn || registering)
@@ -61,10 +57,6 @@ class Landing extends Component {
     }
   }
 
-  showCarousel () {
-    this.setState({ showCarousel: true })
-  }
-
   toggleShowLogin () {
     this.setState({
       showLogin: !this.state.showLogin
@@ -75,7 +67,6 @@ class Landing extends Component {
     const {
       loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
     } = this.props
-    const { showCarousel } = this.state
     const textStyle1 =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -153,7 +144,6 @@ class Landing extends Component {
             </div>
           </div>
         </div>
-        {showCarousel ? <ActiveRoutes className={styles.mc} theme={theme} /> : ''}
         <BlogPostHighlights theme={theme} />
         <div className={`${styles.btm_promo} flex-100 layout-row`}>
           <div className={`flex-50 ${styles.btm_promo_img}`} />

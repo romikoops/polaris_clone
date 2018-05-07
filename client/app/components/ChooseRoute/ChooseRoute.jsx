@@ -4,7 +4,7 @@ import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 // import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
-import { currencyOptions } from '../../constants'
+import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseRoute.scss'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
@@ -87,9 +87,22 @@ export class ChooseRoute extends Component {
   }
   showMore () {
     const { outerLimit } = this.state
-    this.setState({ outerLimit: outerLimit + 10 })
+    const dayFactor = 10
+    this.setState({ outerLimit: outerLimit + dayFactor })
     const { shipmentDispatch, req } = this.props
-    req.delay = outerLimit + 10
+    req.delay = outerLimit + dayFactor
+    shipmentDispatch.getOffers(req, false)
+  }
+  shiftDepartureDate (operator, days) {
+    const { shipmentDispatch, req } = this.props
+    let newDepartureDate
+    if (operator === 'add') {
+      newDepartureDate = moment(req.shipment.planned_pickup_date).add(days, 'days').format()
+    } else {
+      newDepartureDate = moment(req.shipment.planned_pickup_date).subtract(days, 'days').format()
+    }
+    req.shipment.planned_pickup_date = newDepartureDate
+
     shipmentDispatch.getOffers(req, false)
   }
 
@@ -110,7 +123,7 @@ export class ChooseRoute extends Component {
     if (!schedules) return ''
 
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
-    schedules.sort(ChooseRoute.dynamicSort('closing_date'))
+    schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
@@ -120,7 +133,7 @@ export class ChooseRoute extends Component {
     const scheduleObj = {}
     mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
-      scheduleObj[mk].sort(ChooseRoute.dynamicSort('closing_date'))
+      scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {
       const topSched = scheduleObj[key].shift()
@@ -132,21 +145,6 @@ export class ChooseRoute extends Component {
     noMotKeys.forEach((key) => {
       altRoutes.push(...scheduleObj[key])
     })
-    // const altRoutestoRender = altRoutes.map(s => (
-    //   <RouteResult
-    //     key={v4()}
-    //     selectResult={this.chooseResult}
-    //     theme={this.props.theme}
-    //     originHubs={originHubs}
-    //     destinationHubs={destinationHubs}
-    //     fees={shipment.schedules_charges}
-    //     schedule={s}
-    //     user={user}
-    //     pickup={shipment.has_pre_carriage}
-    //     loadType={shipment.load_type}
-    //     pickupDate={shipment.planned_pickup_date}
-    //   />
-    // ))
     const focusRoutestoRender = focusRoutes.map(s => (
       <RouteResult
         key={v4()}
@@ -179,7 +177,6 @@ export class ChooseRoute extends Component {
     ))
 
     const limitedFocus = limits.focus ? focusRoutes.slice(0, 5) : focusRoutes
-    // const limitedAlts = limits.alt ? altRoutes.slice(0, 5) : altRoutes
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     return (
       <div
@@ -203,6 +200,22 @@ export class ChooseRoute extends Component {
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
+              <div className="flex-100 layout-row layout-align-space-between-center">
+                <div
+                  className="flex-none layout-row layout-align-space-around-center pointy"
+                  onClick={() => this.shiftDepartureDate('subtract', 5)}
+                >
+                  <i className="flex-none fa fa-angle-double-left" style={{ margin: '0 5px' }} />
+                  <p className="flex-none no_m">Show earlier departures</p>
+                </div>
+                <div
+                  className="flex-none layout-row layout-align-space-around-center pointy"
+                  onClick={() => this.shiftDepartureDate('add', 5)}
+                >
+                  <p className="flex-none no_m">Show later departures</p>
+                  <i className="flex-none fa fa-angle-double-right"style={{ margin: '0 5px' }} />
+                </div>
+              </div>
               <div
                 className={`flex-100 layout-row layout-align-space-between-center ${
                   styles.route_header
@@ -220,6 +233,7 @@ export class ChooseRoute extends Component {
                     className="flex-100"
                     options={currencyOptions}
                     value={currentCurrency}
+                    placeholder="Select Currency"
                     onChange={e => this.handleCurrencyUpdate(e)}
                   />
                 </div>

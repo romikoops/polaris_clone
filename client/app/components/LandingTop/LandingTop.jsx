@@ -8,7 +8,6 @@ import Header from '../Header/Header'
 const StyledTop = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(${props => props.bg});
-
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -78,7 +77,7 @@ export class LandingTop extends Component {
             <Header user={user} theme={theme} scrollable invert noMessages />
           </div>
           <div className="flex-50 layout-row layout-align-center layout-wrap">
-            <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+            <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
               <div className={`flex-75 ${styles.banner_text}`}>
                 <img
                   src={whiteLogo}

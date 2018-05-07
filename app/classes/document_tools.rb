@@ -46,55 +46,60 @@ module DocumentTools
     header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format)}
     row = 1
     pricings.each_with_index do |pricing, i|
+      pricing.deep_symbolize_keys!
       if pricing[:expiration_date] < DateTime.now
         next
       end
-      pricing_key_components = pricing[:_id].split("_")
-      if !aux_data[:nexuses][pricing_key_components[0]]
-        aux_data[:nexuses][pricing_key_components[0]] = Stop.find(pricing_key_components[0]).hub.nexus
-        current_origin = aux_data[:nexuses][pricing_key_components[0]]
+       if !aux_data[:itineraries][pricing[:itinerary_id]]
+        aux_data[:itineraries][pricing[:itinerary_id]] = Itinerary.find(pricing[:itinerary_id]).as_options_json
+        current_itinerary = Itinerary.find(pricing[:itinerary_id])
       else
-        current_origin = aux_data[:nexuses][pricing_key_components[0]]
+        current_itinerary = Itinerary.find(pricing[:itinerary_id])
       end
-      if !aux_data[:nexuses][pricing_key_components[1]]
-        aux_data[:nexuses][pricing_key_components[1]] = Stop.find(pricing_key_components[1]).hub.nexus
-        current_destination = aux_data[:nexuses][pricing_key_components[1]]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]).hub.nexus
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       else
-        current_destination = aux_data[:nexuses][pricing_key_components[1]]
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       end
-      if !aux_data[:itineraries][pricing[:itinerary_id]]
-        aux_data[:itineraries][pricing[:itinerary_id]] = Itinerary.find(pricing[:itinerary_id])
-        current_itinerary = aux_data[:itineraries][pricing[:itinerary_id]]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]).hub.nexus
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       else
-        current_itinerary = aux_data[:itineraries][pricing[:itinerary_id]]
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       end
+     
       destination_layover = ''
       origin_layover = ''
-      if !aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
+      if !aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
         p current_itinerary
-        tmp_layovers = current_itinerary.trips.last.layovers
+        tmp_trip = current_itinerary.trips.last
+        if tmp_trip
+         tmp_layovers = current_itinerary.trips.last.layovers
         
-        tmp_layovers.each do |lay| 
-          if lay.stop_id == pricing_key_components[0].to_i
-            origin_layover = lay
+          tmp_layovers.each do |lay| 
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
+              origin_layover = lay
+            end
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
+              destination_layover = lay
+            end
+            
           end
-          if lay.stop_id == pricing_key_components[1].to_i
-            destination_layover = lay
-          end
-          
+          diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = diff
+        else
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = ''
         end
-        diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
-        aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"] = diff
-        current_transit_time = aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
-      else
-        current_transit_time = aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
       end
+        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
+
       
-      if !aux_data[:vehicle][pricing_key_components[2]]
-        aux_data[:vehicle][pricing_key_components[2]] = TransportCategory.find(pricing_key_components[2]).vehicle
-        current_vehicle = aux_data[:vehicle][pricing_key_components[2]]
+      if !aux_data[:vehicle][pricing[:transport_category_id]]
+        aux_data[:vehicle][pricing[:transport_category_id]] = TransportCategory.find(pricing[:transport_category_id]).vehicle
+        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
       else
-        current_vehicle = aux_data[:vehicle][pricing_key_components[2]]
+        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
       end
       pricing[:data].each do | key, fee |
         if fee[:range] && fee[:range].length > 0
@@ -328,7 +333,7 @@ module DocumentTools
       filename = "#{itinerary.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     else
       trips = Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
-      filename = "schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+      filename = "#{tenant.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     end
     
     dir = "tmp/#{filename}"

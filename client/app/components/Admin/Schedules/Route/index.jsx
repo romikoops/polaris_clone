@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
-import styled from 'styled-components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { documentActions } from '../../../../actions'
@@ -15,8 +13,8 @@ import { AdminTripPanel } from '../../AdminTripPanel'
 import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 import DocumentsDownloader from '../../../Documents/Downloader'
-// import { adminSchedulesRoute as schedTip } from '../../../../constants'
-import '../../../../styles/select-css-custom.css'
+import { filters } from '../../../../helpers'
+import { Checkbox } from '../../../Checkbox/Checkbox'
 
 class AdminSchedulesRoute extends Component {
   static dynamicSort (property) {
@@ -29,47 +27,30 @@ class AdminSchedulesRoute extends Component {
       prop = property
     }
     return (a, b) => {
-      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
-      const result2 = result1 ? 1 : 0
-      return result2 * sortOrder
+      const result1 = a[prop] < b[prop] ? -1 : 1
+      return result1 * sortOrder
     }
   }
   constructor (props) {
     super(props)
     this.state = {
       showList: true,
-      filters: {
-        hub: false,
-        mot: false,
-        sort: false
-      },
-      sortFilter: { value: false, label: false },
-      panelViewer: {}
+      expander: {},
+      panelViewer: {},
+      searchResults: []
     }
     this.toggleView = this.toggleView.bind(this)
-    this.setSortFilter = this.setSortFilter.bind(this)
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
     this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
-
-  setSortFilter (sorter) {
-    if (!sorter) {
-      this.setState({
-        sortFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          sort: false
-        }
-      })
-    } else {
-      this.setState({
-        sortFilter: sorter,
-        filters: {
-          ...this.state.filters,
-          sort: true
-        }
-      })
+  componentWillMount () {
+    if (
+      this.props.scheduleData &&
+      this.props.scheduleData.schedules &&
+      !this.state.searchResults.length
+    ) {
+      this.prepFilters()
     }
   }
 
@@ -103,6 +84,66 @@ class AdminSchedulesRoute extends Component {
       }
     })
   }
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
+  }
+  toggleFilterValue (key) {
+    const sort = {
+      start_date: false,
+      end_date: false,
+      closing_date: false
+    }
+    sort[key] = true
+    this.setState({
+      searchFilters: {
+        ...this.state.searchFilters,
+        sort
+      }
+    })
+  }
+  prepFilters () {
+    const { schedules } = this.props.scheduleData
+    const tmpFilters = {
+      sort: {
+        start_date: true,
+        end_date: false,
+        closing_date: false
+      },
+      query: ''
+    }
+    this.setState({
+      searchFilters: tmpFilters,
+      searchResults: schedules
+    })
+  }
+  handleSearchQuery (e) {
+    const { value } = e.target
+    this.setState({
+      searchFilters: {
+        ...this.state.searchFilters,
+        query: value
+      }
+    })
+  }
+  applyFilters (array) {
+    const { searchFilters } = this.state
+    const sortKey = Object.keys(searchFilters.sort).filter(key => searchFilters.sort[key])[0]
+
+    let filter1
+    if (searchFilters.query && searchFilters.query !== '') {
+      filter1 = filters.handleSearchChange(searchFilters.query, ['voyage_code', 'vessel'], array)
+    } else {
+      filter1 = array
+    }
+
+    const filter2 = filter1.sort((a, b) => new Date(a[sortKey]) - new Date(b[sortKey]))
+    return filter2
+  }
   render () {
     const {
       theme,
@@ -114,16 +155,11 @@ class AdminSchedulesRoute extends Component {
       documentDispatch
     } = this.props
     const {
-      filters, sortFilter, panelViewer, showList
+      panelViewer, showList, expander, searchResults, searchFilters
     } = this.state
     if (!scheduleData || !hubs) {
       return ''
     }
-
-    const filterSortOptions = [
-      { value: 'start_date', label: 'ETA' },
-      { value: 'end_date', label: 'ETD' }
-    ]
     const uploadStatus = document.viewer ? (
       <AdminUploadsSuccess
         theme={theme}
@@ -133,15 +169,15 @@ class AdminSchedulesRoute extends Component {
     ) : (
       ''
     )
-    const { itinerary, schedules, itineraryLayovers } = scheduleData
+    const { itinerary, itineraryLayovers } = scheduleData
     const tripArr = []
-    const slimit = limit || 10
+    const slimit = limit || 100
 
-    if (filters.sort) {
-      schedules.sort(AdminSchedulesRoute.dynamicSort(sortFilter.value))
-    }
-    const results = schedules
-
+    const results = this.applyFilters(searchResults)
+    const sectionStyle =
+      theme && theme.colors
+        ? { background: theme.colors.secondary, color: 'white' }
+        : { background: 'darkslategrey', color: 'white' }
     console.log(results)
     results.forEach((trip, i) => {
       if (i < slimit) {
@@ -165,45 +201,30 @@ class AdminSchedulesRoute extends Component {
       </div>
     )
 
-    const StyledSelect = styled(Select)`
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
     const listView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <div
-          className="flex-100 layout-row layout-align-start-center"
-          style={{ marginBottom: '25px' }}
-        >
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="sort-filter"
-              placeholder="Sort by: Time"
-              className={`${styles.select}`}
-              value={this.state.sortFilter}
-              options={filterSortOptions}
-              onChange={this.setSortFilter}
-            />
-          </div>
-        </div>
-        {tripArr}
-      </div>
+      <div className="layout-row flex-100 layout-wrap layout-align-start-center">{tripArr}</div>
     )
-
+    const typeFilters = Object.keys(searchFilters.sort).map((htk) => {
+      const typeNames = {
+        start_date: 'Expected Departure',
+        end_date: 'Expected Arrival',
+        closing_date: 'Closing Date'
+      }
+      return (
+        <div
+          className={`${
+            styles.action_section
+          } flex-100 layout-row layout-align-center-center layout-wrap`}
+        >
+          <p className="flex-70">{typeNames[htk]}</p>
+          <Checkbox
+            onChange={() => this.toggleFilterValue(htk)}
+            checked={searchFilters.sort[htk]}
+            theme={theme}
+          />
+        </div>
+      )
+    })
     const backButton = (
       <RoundButton
         theme={theme}
@@ -250,17 +271,84 @@ class AdminSchedulesRoute extends Component {
               styles.action_box
             } flex-95 layout-row layout-wrap layout-align-center-start`}
           >
-            <div className="flex-100 layout-row layout-align-center-center">
-              <h2 className="flex-none letter_3"> Actions </h2>
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-filter" />
+              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
+            </div>
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+            >
+              <input
+                type="text"
+                className="flex-100"
+                value={searchFilters.query}
+                placeholder="Type something..."
+                onChange={e => this.handleSearchQuery(e)}
+              />
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('sorter')}
               >
-                <i className="flex-none fa fa-cloud-upload" />
-                <p className="flex-none">Upload Data</p>
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-ship" />
+                  <p className="flex-none">Sort By</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.sorter ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${
+                  expander.sorter ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                {typeFilters}
+              </div>
+            </div>
+          </div>
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-bolt" />
+              <h2 className="flex-none letter_3 no_m"> Actions </h2>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('upload')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-upload" />
+                  <p className="flex-none">Upload Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.upload ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.upload ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
                 <div
                   className={`${
                     styles.action_section
@@ -269,23 +357,37 @@ class AdminSchedulesRoute extends Component {
                   <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
                   <FileUploader
                     theme={theme}
-                    dispatchFn={file => documentDispatch
-                      .uploadItinerarySchedules(file, itinerary.id)}
+                    dispatchFn={file =>
+                      documentDispatch.uploadItinerarySchedules(file, itinerary.id)
+                    }
                     type="xlsx"
                     text="Train Schedules .xlsx"
                   />
                 </div>
-
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('download')}
               >
-                <i className="flex-none fa fa-cloud-download" />
-                <p className="flex-none">Download Data</p>
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-cloud-download" />
+                  <p className="flex-none">Download Data</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.download ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-space-around">
+              <div
+                className={`${
+                  expander.download ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
                 <div
                   className={`${
                     styles.action_section
@@ -303,35 +405,37 @@ class AdminSchedulesRoute extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
                 className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('new')}
               >
-                <i className="flex-none fa fa-plus-circle" />
-                <p className="flex-none">Autogenerate Schedules</p>
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-plus-circle" />
+                  <p className="flex-none">Autogenerate Schedules</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.new ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
               </div>
               <div
                 className={`${
-                  styles.action_section
-                } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  expander.new ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
               >
-                {showList ? newButton : backButton}
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  {showList ? newButton : backButton}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      // //
-      // //
-      // <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      //   {uploadStatus}
-      //   <div
-      //     className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-      //   >
-      //     <TextHeading theme={theme} size={1} text="Schedules" />
-      //     {download}
-      //     {showList ? newButton : backButton}
-      //   </div>
-      //   {showList ? listView : genView}
-      // </div>
     )
   }
 }
@@ -340,9 +444,7 @@ AdminSchedulesRoute.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scheduleData: PropTypes.shape({
     routes: PropTypes.arrayOf(PropTypes.route),
-    air: PropTypes.arrayOf(PropTypes.schedule),
-    train: PropTypes.arrayOf(PropTypes.schedule),
-    ocean: PropTypes.arrayOf(PropTypes.schedule),
+    schedules: PropTypes.arrayOf(PropTypes.schedule),
     detailedItineraries: PropTypes.array.isRequired,
     itineraryIds: PropTypes.Array,
     itineraries: PropTypes.objectOf(PropTypes.any).isRequired
