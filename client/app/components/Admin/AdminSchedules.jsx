@@ -46,12 +46,12 @@ class AdminSchedules extends Component {
     this.toggleView = this.toggleView.bind(this)
   }
   componentWillMount () {
-    if (
-      this.props.scheduleData &&
-      this.props.scheduleData.itineraries
-    ) {
+    if (this.props.scheduleData && this.props.scheduleData.itineraries) {
       this.prepFilters()
     }
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
   }
   componentWillReceiveProps (nextProps) {
     if (

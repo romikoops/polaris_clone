@@ -22,6 +22,9 @@ export class AdminShipmentsIndex extends Component {
     super(props)
     this.viewShipment = this.viewShipment.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
@@ -30,7 +33,13 @@ export class AdminShipmentsIndex extends Component {
     console.log(this.props)
     // const {selectedShipment} = this.state;
     const {
-      theme, hubs, shipments, clients, handleShipmentAction, hubHash, adminDispatch
+      theme,
+      hubs,
+      shipments,
+      clients,
+      handleShipmentAction,
+      hubHash,
+      adminDispatch
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
@@ -83,24 +92,27 @@ export class AdminShipmentsIndex extends Component {
           tooltip={adminTip.finished}
           seeAll={false}
         />
-        { mergedOpenShipments.length === 0 &&
+        {mergedOpenShipments.length === 0 &&
         mergedReqShipments.length === 0 &&
-        mergedFinishedShipments.length === 0
-          ? <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-              <p className={` ${styles.sec_subheader_text} flex-none`} > No Shipments yet</p>
+        mergedFinishedShipments.length === 0 ? (
+            <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+              <div
+                className={`flex-100 layout-row layout-align-space-between-center ${
+                  styles.sec_subheader
+                }`}
+              >
+                <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+              </div>
+              <p className="flex-none"> As shipments are requested, they will appear here</p>
             </div>
-            <p className="flex-none" > As shipments are requested, they will appear here</p>
-          </div>
-          : ''
-        }
+          ) : (
+            ''
+          )}
       </div>
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        { listView }
-      </div>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">{listView}</div>
     )
   }
 }

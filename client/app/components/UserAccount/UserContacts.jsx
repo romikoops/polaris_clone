@@ -24,6 +24,9 @@ class UserContacts extends Component {
     this.handleFormChange = this.handleFormChange.bind(this)
     this.saveNewContact = this.saveNewContact.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   viewContact (contact) {
     const { userDispatch } = this.props
     userDispatch.getContact(contact.id, true)

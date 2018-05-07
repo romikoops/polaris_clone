@@ -6,10 +6,7 @@ class Admin::TruckingController < ApplicationController
   before_action :require_login_and_role_is_admin
 
   def index
-    client = get_client
-    all_trucking_hubs = get_items_fn(client, 'truckingHubs', "tenant_id", current_user.tenant_id)
-    all_trucking_nexuses = all_trucking_hubs.map {|th| {trucking: th, nexus: Location.find(th["nexus_id"])}}
-    response_handler({truckingNexuses: all_trucking_nexuses, nexuses: Location.where(location_type: "nexus")})
+    response_handler({})
   end
 
   def show

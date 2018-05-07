@@ -52,6 +52,7 @@ class Shipment < ApplicationRecord
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
   has_many :conversations
+  has_many :messages, through: :conversation
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

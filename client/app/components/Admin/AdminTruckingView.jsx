@@ -42,6 +42,9 @@ export class AdminTruckingView extends Component {
       expander: {}
     }
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   componentWillMount () {
     if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
       this.handleSearchChange({ target: { value: '' } })

@@ -29,6 +29,7 @@ export class AdminRoutesIndex extends Component {
     if (!itineraries && !loading) {
       adminDispatch.getItineraries(false)
     }
+    window.scrollTo(0, 0)
   }
   toggleExpander (key) {
     this.setState({

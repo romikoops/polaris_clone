@@ -26,7 +26,7 @@ class NotificationsController < ApplicationController
   end
   def mark_as_read
     shipment = Shipment.find_by_imc_reference(params[:shipmentRef])
-    shipment.conversation.messages.each do |message|
+    shipment.messages.each do |message|
       message.read = true
       message.save!
     end

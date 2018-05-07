@@ -387,10 +387,10 @@ export class BookingConfirmation extends Component {
                     {shipment.has_pre_carriage ? (
                       <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
-                          {`${locations.origin.street_number} ${locations.origin.street}`} <br />
-                          {`${locations.origin.city}`} <br />
-                          {`${locations.origin.zip_code}`} <br />
-                          {`${locations.origin.country}`} <br />
+                          {`${locations.origin.street_number} ${locations.origin.street}`},
+                          {`${locations.origin.city}`},
+                          {`${locations.origin.zip_code}`},
+                          {`${locations.origin.country}`}
                         </address>
                       </div>
                     ) : (
@@ -405,11 +405,10 @@ export class BookingConfirmation extends Component {
                     {shipment.has_on_carriage ? (
                       <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
-                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-                          <br />
-                          {`${locations.destination.city}`} <br />
-                          {`${locations.destination.zip_code}`} <br />
-                          {`${locations.destination.country}`} <br />
+                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '},
+                          {`${locations.destination.city}`},
+                          {`${locations.destination.zip_code}`},
+                          {`${locations.destination.country}`}
                         </address>
                       </div>
                     ) : (
@@ -669,9 +668,6 @@ export class BookingConfirmation extends Component {
                     ) : (
                       ''
                     )}
-
-                  </div>
-                  <div className="flex-100 layout-row layout-align-space-around-center">
                     {shipment.cargo_notes ? (
                       <div
                         className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"

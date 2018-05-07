@@ -53,6 +53,9 @@ class AdminSchedulesRoute extends Component {
       this.prepFilters()
     }
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
 
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]

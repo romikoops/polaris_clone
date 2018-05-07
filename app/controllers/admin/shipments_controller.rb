@@ -42,7 +42,7 @@ class Admin::ShipmentsController < ApplicationController
         end
       end
     end
-    hsCodes = get_hs_code_hash(hs_codes)
+    # hsCodes = get_hs_code_hash(hs_codes)
     @shipment_contacts = @shipment.shipment_contacts
     @contacts = []
     @shipment_contacts.each do |sc|
@@ -65,7 +65,7 @@ class Admin::ShipmentsController < ApplicationController
       contacts: @contacts,
       documents: @documents,
       schedules: @schedules,
-      hsCodes: hsCodes,
+      # hsCodes: hsCodes,
       locations: locations,
       cargoItemTypes: cargo_item_types,
       accountHolder: account_holder

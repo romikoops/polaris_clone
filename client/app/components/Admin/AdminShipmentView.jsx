@@ -74,6 +74,7 @@ export class AdminShipmentView extends Component {
     if (!shipmentData && !loading) {
       adminDispatch.getShipment(match.params.id, false)
     }
+    window.scrollTo(0, 0)
   }
   handleDeny () {
     const { shipmentData, handleShipmentAction } = this.props

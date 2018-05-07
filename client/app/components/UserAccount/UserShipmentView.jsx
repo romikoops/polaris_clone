@@ -74,6 +74,7 @@ export class UserShipmentView extends Component {
     ) {
       userDispatch.getShipment(parseInt(match.params.id, 10), false)
     }
+    window.scrollTo(0, 0)
   }
   setFileType (ev) {
     const shipmentId = this.props.shipmentData.shipment.id

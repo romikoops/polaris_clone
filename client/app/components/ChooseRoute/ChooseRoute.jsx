@@ -64,7 +64,7 @@ export class ChooseRoute extends Component {
   }
   setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
-    req.planned_pickup_date = date
+    req.shipment.planned_pickup_date = date
     shipmentDispatch.getOffers(req)
   }
   setMoT (val, target) {
@@ -97,9 +97,13 @@ export class ChooseRoute extends Component {
     const { shipmentDispatch, req } = this.props
     let newDepartureDate
     if (operator === 'add') {
-      newDepartureDate = moment(req.shipment.planned_pickup_date).add(days, 'days').format()
+      newDepartureDate = moment(req.shipment.planned_pickup_date)
+        .add(days, 'days')
+        .format()
     } else {
-      newDepartureDate = moment(req.shipment.planned_pickup_date).subtract(days, 'days').format()
+      newDepartureDate = moment(req.shipment.planned_pickup_date)
+        .subtract(days, 'days')
+        .format()
     }
     req.shipment.planned_pickup_date = newDepartureDate
 
@@ -124,6 +128,10 @@ export class ChooseRoute extends Component {
 
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
     schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
+    const availableMoTKeys = {}
+    schedules.forEach((s) => {
+      availableMoTKeys[s.mode_of_transport] = true
+    })
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
@@ -195,6 +203,7 @@ export class ChooseRoute extends Component {
               moT={this.state.selectedMoT}
               departureDate={depDay}
               shipment={shipment}
+              availableMotKeys={availableMoTKeys}
               setDepartureDate={this.setDepartureDate}
             />
           </div>
@@ -213,7 +222,7 @@ export class ChooseRoute extends Component {
                   onClick={() => this.shiftDepartureDate('add', 5)}
                 >
                   <p className="flex-none no_m">Show later departures</p>
-                  <i className="flex-none fa fa-angle-double-right"style={{ margin: '0 5px' }} />
+                  <i className="flex-none fa fa-angle-double-right" style={{ margin: '0 5px' }} />
                 </div>
               </div>
               <div

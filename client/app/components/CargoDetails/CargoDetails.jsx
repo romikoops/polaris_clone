@@ -188,9 +188,6 @@ export class CargoDetails extends Component {
             </strong>
           </p>
           <p className="flex-90">
-            How insurance premium is calculated:
-            <br />
-            <br />
             {`Please contact your local ${tenant.data.name} office for more info.`}
           </p>
         </div>

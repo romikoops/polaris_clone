@@ -27,6 +27,9 @@ export class AdminShipmentsGroup extends Component {
     super(props)
     this.viewShipment = this.viewShipment.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
@@ -102,9 +105,7 @@ export class AdminShipmentsGroup extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {listView}
-      </div>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">{listView}</div>
     )
   }
 }

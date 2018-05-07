@@ -21,6 +21,9 @@ export class AdminRouteView extends Component {
     }
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id, 'itinerary')
@@ -74,9 +77,7 @@ export class AdminRouteView extends Component {
     if (!itineraryData) {
       return ''
     }
-    const {
-      panelViewer, confirm, editNotes
-    } = this.state
+    const { panelViewer, confirm, editNotes } = this.state
     const {
       itinerary, hubs, schedules, layovers, notes
     } = itineraryData

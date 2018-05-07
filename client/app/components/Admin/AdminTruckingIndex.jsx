@@ -29,6 +29,7 @@ export class AdminTruckingIndex extends Component {
     if (!truckingNexuses && !loading) {
       adminDispatch.getTrucking(false)
     }
+    window.scrollTo(0, 0)
   }
   toggleExpander (key) {
     this.setState({

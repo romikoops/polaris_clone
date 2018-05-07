@@ -32,11 +32,18 @@ export class AdminDashboard extends Component {
   static dynamicSort (property) {
     let sortOrder = 1
     let prop
+    const timeKeys = [
+      'updated_at', 'created_at', 'planned_pickup_date',
+      'planned_eta', 'planned_etd', 'booking_placed_at', 'eta', 'etd'
+    ]
     if (property[0] === '-') {
       sortOrder = -1
       prop = property.substr(1)
     } else {
       prop = property
+    }
+    if (timeKeys.includes(prop)) {
+      return (a, b) => new Date(a[prop]) - new Date(b[prop])
     }
     return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
@@ -64,6 +71,7 @@ export class AdminDashboard extends Component {
     if (!hubs && !loading) {
       adminDispatch.getHubs(false)
     }
+    window.scrollTo(0, 0)
   }
   viewShipment (shipment) {
     const { adminDispatch } = this.props
@@ -101,21 +109,21 @@ export class AdminDashboard extends Component {
     const mergedOpenShipments =
       shipments && shipments.open
         ? shipments.open
-          .sort(AdminDashboard.dynamicSort('-updated_at'))
+          .sort(AdminDashboard.dynamicSort('-booking_placed_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedFinishedShipments =
       shipments && shipments.finished
         ? shipments.finished
-          .sort(AdminDashboard.dynamicSort('-updated_at'))
+          .sort(AdminDashboard.dynamicSort('-booking_placed_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
-          .sort(AdminDashboard.dynamicSort('-updated_at'))
+          .sort(AdminDashboard.dynamicSort('-booking_placed_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
@@ -190,7 +198,7 @@ export class AdminDashboard extends Component {
         />)
       })
     }
-    const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('etd')).slice(0, 5)
+    const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('closing_date')).slice(0, 5)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         <div
