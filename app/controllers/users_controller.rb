@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     @user.update_attributes(user_params)
 
     if @user.valid? && !@user.guest && params[:update][:location]
-      location = Location.create(location_params)
+      location = Location.create_from_raw_params(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
       @user.save

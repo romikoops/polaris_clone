@@ -43,11 +43,11 @@ module ShippingTools
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
       begin
       origins << {
-        value: Location.find(itinerary.first_nexus.id),
+        value: Location.find(itinerary.first_nexus.id).to_custom_hash,
         label: itinerary.first_nexus.name
       }
       destinations << {
-        value: Location.find(itinerary.last_nexus.id),
+        value: Location.find(itinerary.last_nexus.id).to_custom_hash,
         label: itinerary.last_nexus.name
       }
       
@@ -228,10 +228,10 @@ module ShippingTools
     origin_hub      = Layover.find(shipment.schedule_set.first['origin_layover_id']).stop.hub
     destination_hub = Layover.find(shipment.schedule_set.first['destination_layover_id']).stop.hub
     locations = {
-      startHub:    { data: origin_hub, location: origin_hub.nexus },
-      endHub:      { data: destination_hub, location: destination_hub.nexus },
-      origin:      shipment.origin,
-      destination: shipment.destination
+      startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
+      endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
+      origin:      shipment.origin.to_custom_hash,
+      destination: shipment.destination.to_custom_hash
     }
 
     {
@@ -268,28 +268,28 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-            .permit(:street, :streetNumber, :zipCode, :city, :country)
-            .to_h.deep_transform_keys(&:underscore)
+      .permit(:street, :streetNumber, :zipCode, :city, :country)
+      .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
-            .permit(:companyName, :firstName, :lastName, :email, :phone)
-            .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+      .permit(:companyName, :firstName, :lastName, :email, :phone)
+      .to_h.deep_transform_keys(&:underscore)
+      .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
     @user_locations = current_user.user_locations.map do |uloc|
       {
-        location: uloc.location.attributes,
+        location: uloc.location.to_custom_hash,
         contact:  current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       {
-        location: contact.location.try(:attributes) || {},
+        location: contact.location.try(:to_custom_hash) || {},
         contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
@@ -358,6 +358,7 @@ module ShippingTools
       startHub: { data: @origin,      location: @origin.nexus },
       endHub:   { data: @destination, location: @destination.nexus }
     }
+
     {
       shipment:       shipment,
       hubs:           hubs,
@@ -369,7 +370,9 @@ module ShippingTools
       containers:     containers,
       cargoItems:     cargo_items,
       customs:        customs_fee,
-      locations:      { origin: shipment.origin, destination: shipment.destination }
+      locations: {
+        origin: shipment.origin.to_custom_hash, destination: shipment.destination.to_custom_hash
+      }
     }
   end
 

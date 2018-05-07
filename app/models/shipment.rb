@@ -7,7 +7,7 @@ class Shipment < ApplicationRecord
     pending
     confirmed
     declined
-    ignored,
+    ignored
     finished
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES

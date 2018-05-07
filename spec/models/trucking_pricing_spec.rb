@@ -24,6 +24,10 @@ describe TruckingPricing, type: :model do
       let(:carriage)     { 'pre' }
       let(:country_code) { 'SE' }
 
+      let(:location) {
+        create(:location, zip_code: zipcode, latitude: latitude, longitude: longitude)
+      }
+
       context 'basic tests' do
         it 'raises an ArgumentError if no load_type is provided' do         
           expect {
@@ -75,11 +79,22 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
         }
-        it 'finds the correct trucking_pricing' do
+
+        it 'finds the correct trucking_pricing with avulsed filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
             zipcode: zipcode,
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'finds the correct trucking_pricing with location filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
@@ -94,11 +109,21 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
         }
-        it 'finds the correct trucking_pricing' do
+        it 'finds the correct trucking_pricing with avulsed filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
             city_name: city_name
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'finds the correct trucking_pricing with location filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
@@ -113,11 +138,21 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
         }
-        it 'finds the correct trucking_pricing' do
+        it 'finds the correct trucking_pricing with avulsed filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
             latitude: latitude,   longitude: longitude
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'finds the correct trucking_pricing with location filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
