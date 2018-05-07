@@ -1,22 +1,29 @@
 Tenant.all.each do |tenant|
   # Create shipper
   tld = tenant.web && tenant.web["tld"] ? tenant.web["tld"] : 'com'
-  shipper = tenant.users.new(
-    role: Role.find_by_name('shipper'),
+   user_check = tenant.users.find_by(email: "demo@#{tenant.subdomain}.#{tld}")
+  if !user_check
+      shipper = tenant.users.new(
+        role: Role.find_by_name('shipper'),
 
-    company_name: "Example Shipper Company",
-    first_name: "John",
-    last_name: "Smith",
-    phone: "123456789",
+        company_name: "Example Shipper Company",
+        first_name: "John",
+        last_name: "Smith",
+        phone: "123456789",
 
-    email: "demo@#{tenant.subdomain}.#{tld}",
-    password: "demo123456789",
-    password_confirmation: "demo123456789",
+        email: "demo@#{tenant.subdomain}.#{tld}",
+        password: "demo123456789",
+        password_confirmation: "demo123456789",
 
-    confirmed_at: DateTime.new(2017, 1, 20)
-  )
-  # shipper.skip_confirmation!
-  shipper.save!
+        confirmed_at: DateTime.new(2017, 1, 20)
+      )
+      # shipper.skip_confirmation!
+      shipper.save!
+      else
+        next
+  end
+  
+ 
   # Create dummy locations for shipper
   dummy_locations = [
     {

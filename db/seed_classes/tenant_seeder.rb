@@ -1233,7 +1233,15 @@ class TenantSeeder
     }
 ]
 
+  def self.sandbox_exec(tenant_attr, other_data)
+    tenant_attr[:subdomain] = "#{tenant_attr[:subdomain]}-sandbox"
+    tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
+    tenant ? tenant.assign_attributes(tenant_attr) : tenant = Tenant.new(tenant_attr)
+    tenant.save!
 
+    update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+    update_tenant_incoterms!(tenant, other_data[:incoterms])
+  end
   def self.exec(tenant_data = TENANT_DATA)
     tenant_data.each do |tenant_attr|
       other_data = tenant_attr.delete(:other_data) || {}
@@ -1244,6 +1252,7 @@ class TenantSeeder
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
       update_tenant_incoterms!(tenant, other_data[:incoterms])
+      TenantSeeder.sandbox_exec(tenant_attr, other_data)
     end
   end
 
