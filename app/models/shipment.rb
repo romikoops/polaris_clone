@@ -51,6 +51,7 @@ class Shipment < ApplicationRecord
   has_one :aggregated_cargo
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
+  has_many :conversations
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

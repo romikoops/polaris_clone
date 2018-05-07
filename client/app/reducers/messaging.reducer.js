@@ -22,7 +22,7 @@ export default function messaging (state = {}, action) {
 
     case messagingConstants.SEND_USER_MESSAGE_SUCCESS: {
       const newMessages = state.conversations[action.payload.shipmentRef].messages
-      newMessages.push(action.payload)
+      newMessages.push(action.payload.message)
       return {
         ...state,
         conversations: {

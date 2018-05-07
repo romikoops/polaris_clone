@@ -84,6 +84,15 @@ ActiveRecord::Schema.define(version: 20180507072757) do
     t.jsonb "unit_price"
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.integer "tenant_id"
+    t.integer "user_id"
+    t.integer "manager_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "countries", force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -275,6 +284,17 @@ ActiveRecord::Schema.define(version: 20180507072757) do
     t.boolean "on_carriage"
     t.boolean "import_charges"
     t.boolean "export_charges"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "title"
+    t.string "message"
+    t.integer "conversation_id"
+    t.boolean "read"
+    t.datetime "read_at"
+    t.integer "sender_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
