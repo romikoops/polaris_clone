@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
+import { get } from 'lodash'
 import PropTypes from '../../prop-types'
 import styles from './BookingSummary.scss'
 import { dashedGradient, switchIcon } from '../../helpers'
-import path from '../../helpers/path'
 
 const ROW = 'layout-row layout-align-center'
 const HALF_ROW = 'flex-50 layout-row'
@@ -32,8 +32,8 @@ function BookingSummary (props) {
   const dashedLineStyles = getDashedLineStyles(theme)
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
 
-  const truckTypePre = path('pre_carriage.truck_type', trucking)
-  const truckTypeOn = path('on_carriage.truck_type', trucking)
+  const truckTypePre = get(trucking, 'pre_carriage.truck_type')
+  const truckTypeOn = get(trucking, 'on_carriage.truck_type')
 
   const origin = truckTypePre ? cities.origin : hubs.origin
   const destination = truckTypeOn ? cities.destination : hubs.destination
