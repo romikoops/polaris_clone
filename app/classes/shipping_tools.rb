@@ -41,6 +41,7 @@ module ShippingTools
     origins = []
     destinations = []
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
+      begin
       origins << {
         value: Location.find(itinerary.first_nexus.id),
         label: itinerary.first_nexus.name
@@ -49,8 +50,11 @@ module ShippingTools
         value: Location.find(itinerary.last_nexus.id),
         label: itinerary.last_nexus.name
       }
-
-      itinerary = itinerary.as_options_json
+      
+        itinerary = itinerary.as_options_json
+      rescue
+        
+      end
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
     end
@@ -99,9 +103,9 @@ module ShippingTools
       cargo_notes: shipment_data[:cargoNotes]
     )
 
-    # if shipment_data[:incoterm]
-    #   shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
-    # end
+    if shipment_data[:incotermText]
+      shipment.incoterm_text = shipment_data[:incotermText]
+    end
 
     # Shipper
     resource = shipment_data.require(:shipper)
@@ -218,6 +222,7 @@ module ShippingTools
 
     shipment.planned_etd = shipment.schedule_set.first['etd']
     shipment.planned_eta = shipment.schedule_set.last['eta']
+    shipment.closing_date = shipment.schedule_set.first['closing_date']
     shipment.save!
 
     origin_hub      = Layover.find(shipment.schedule_set.first['origin_layover_id']).stop.hub

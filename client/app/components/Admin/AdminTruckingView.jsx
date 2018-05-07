@@ -231,7 +231,7 @@ export class AdminTruckingView extends Component {
               <div className="flex-25 layout-row layout-align-center-start layout-wrap">
                 <div className="flex-100 layout-row layout-align-space-between-center">
                   <div className="flex-90 layout-row layout-align-space-between-center">
-                    <p className="flex-none">LCL</p>
+                    <p className="flex-none">LTL</p>
                     <div className="flex-5" />
                     <Toggle
                       className="flex-none"
@@ -241,7 +241,7 @@ export class AdminTruckingView extends Component {
                       onChange={e => this.handleLoadTypeToggle(e)}
                     />
                     <div className="flex-5" />
-                    <p className="flex-none">FCL</p>
+                    <p className="flex-none">FTL</p>
                   </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-space-between-center">

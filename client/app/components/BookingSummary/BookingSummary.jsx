@@ -46,13 +46,13 @@ function BookingSummary (props) {
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
-          <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4>
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
               <Truncate lines={1}>
                 {trucking.pre_carriage.truck_type ? cities.origin : hubs.origin}
               </Truncate>
             </h4>
-            <p className={styles.trucking_elem}>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
                   (cities.origin && trucking.pre_carriage.truck_type) ||
@@ -61,9 +61,11 @@ function BookingSummary (props) {
               }
             </p>
           </div>
-          <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {trucking.on_carriage.truck_type ? cities.destination : hubs.destination} </h4>
-            <p className={styles.trucking_elem}>
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
+              {trucking.on_carriage.truck_type ? cities.destination : hubs.destination}
+            </h4>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
                   (cities.destination && trucking.on_carriage.truck_type) ||

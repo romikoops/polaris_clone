@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426083300) do
+ActiveRecord::Schema.define(version: 20180504133146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,15 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "customs_text"
     t.integer "quantity"
     t.jsonb "unit_price"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.integer "tenant_id"
+    t.integer "user_id"
+    t.integer "manager_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "couriers", force: :cascade do |t|
@@ -271,6 +280,17 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.string "title"
+    t.string "message"
+    t.integer "conversation_id"
+    t.boolean "read"
+    t.datetime "read_at"
+    t.integer "sender_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mot_scopes", force: :cascade do |t|
     t.boolean "ocean_container"
     t.boolean "ocean_cargo_item"
@@ -394,6 +414,8 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -464,6 +486,7 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "voyage_code"
     t.string "vessel"
     t.integer "tenant_vehicle_id"
+    t.datetime "closing_date"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|

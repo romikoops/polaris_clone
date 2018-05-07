@@ -38,10 +38,9 @@ class CardRoutesPricing extends Component {
     } = this.props
     const disabledClass = disabled ? styles.disabled : ''
     const [originNexus, destinationNexus] = itinerary.name.split(' - ')
-    console.log(itinerary)
     return (
       <div
-        className={`${styles.card_route_pricing} ${disabledClass} flex-90`}
+        className={`${styles.card_route_pricing} ${disabledClass} flex-100`}
         onClick={disabled ? onDisabledClick : () => handleClick(itinerary.id)}
       >
         <div className={styles.top_routes}>

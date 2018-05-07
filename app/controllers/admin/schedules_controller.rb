@@ -15,7 +15,7 @@ class Admin::SchedulesController < ApplicationController
   end
   def show
     itinerary = Itinerary.find(params[:id])
-    schedules = itinerary.trips.limit(20).order(:start_date)
+    schedules = itinerary.trips.where('closing_date > ?', Date.today).limit(100).order(:start_date)
 
     response_handler({schedules: schedules, itinerary: itinerary})
   end

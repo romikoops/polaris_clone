@@ -73,23 +73,27 @@ module DocumentTools
       origin_layover = ''
       if !aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
         p current_itinerary
-        tmp_layovers = current_itinerary.trips.last.layovers
+        tmp_trip = current_itinerary.trips.last
+        if tmp_trip
+         tmp_layovers = current_itinerary.trips.last.layovers
         
-        tmp_layovers.each do |lay| 
-          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
-            origin_layover = lay
+          tmp_layovers.each do |lay| 
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
+              origin_layover = lay
+            end
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
+              destination_layover = lay
+            end
+            
           end
-          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
-            destination_layover = lay
-          end
-          
+          diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = diff
+        else
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = ''
         end
-        diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
-        aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = diff
-        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
-      else
-        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
       end
+        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
+
       
       if !aux_data[:vehicle][pricing[:transport_category_id]]
         aux_data[:vehicle][pricing[:transport_category_id]] = TransportCategory.find(pricing[:transport_category_id]).vehicle
@@ -329,7 +333,7 @@ module DocumentTools
       filename = "#{itinerary.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     else
       trips = Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
-      filename = "schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+      filename = "#{tenant.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     end
     
     dir = "tmp/#{filename}"
