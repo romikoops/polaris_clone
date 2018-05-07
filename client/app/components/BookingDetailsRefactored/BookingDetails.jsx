@@ -16,7 +16,7 @@ const nextStagePickProps = [
   'eori',
   'hsCodes',
   'hsTexts',
-  'incoterm',
+  'incotermText',
   'insurance',
   'notes',
   'notifyees',
@@ -76,7 +76,7 @@ export class BookingDetails extends Component {
       finishBookingAttempted: false,
       hsCodes: {},
       hsTexts: {},
-      incoterm: '',
+      incotermText: '',
       insurance: { bool: null, val: 0 },
       notifyees: [],
       shipper: {},
@@ -156,7 +156,7 @@ export class BookingDetails extends Component {
       customsCredit: obj.customsCredit,
       eori: obj.eori,
       hsCodes: obj.hsCodes,
-      incoterm: obj.incoterm,
+      incotermText: obj.incotermText,
       notes: obj.notes,
       notifyees: obj.notifyees,
       shipper: obj.shipper,
@@ -355,7 +355,11 @@ export class BookingDetails extends Component {
           />
         </div>
 
-        <Formsy onValidSubmit={this.toNextStage} onInvalidSubmit={this.handleInvalidSubmit}>
+        <Formsy
+          onValidSubmit={this.toNextStage}
+          onInvalidSubmit={this.handleInvalidSubmit}
+          className="flex-100"
+        >
           <CargoDetails
             theme={theme}
             handleChange={this.handleCargoInput}
@@ -379,7 +383,7 @@ export class BookingDetails extends Component {
             eori={eori}
             customsCredit={customsCredit}
             tenant={tenant}
-            incoterm={this.state.incoterm}
+            incotermText={this.state.incotermText}
             toggleCustomsCredit={this.toggleCustomsCredit}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />

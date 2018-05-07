@@ -52,6 +52,7 @@ exports[`shallow render 1`] = `
     />
   </div>
   <[object Object]
+    className="flex-100"
     onInvalidSubmit={[Function]}
     onValidSubmit={[Function]}
   >
