@@ -335,6 +335,8 @@ const createdDate = shipment
 
 ## Readability blank line
 
+> Within method bodies, sparingly to create logical groupings of statements. (https://google.github.io/styleguide/jsguide.html)
+
 Case 1:
 
 `
@@ -540,5 +542,39 @@ function getTotalPrice(shipment){
   const price = parseFloat(shipment.total_price.value).toFixed(2)
 
   return `${currency} ${price} `
+}
+`
+
+## Prefer positive over negative `if` evaluations
+
+`
+if (!bool) {
+  this.setState({ insurance: { bool: false, val: 0 } })
+} else if (bool) {
+  this.calcInsurance(false, true)
+}
+`
+
+`
+if (bool) {
+  this.calcInsurance(false, true)
+} else {
+  this.setState({ insurance: { bool: false, val: 0 } })
+}
+`
+
+## Deconstructing `state` before `setState`
+
+`
+handleInvalidSubmit () {
+  this.setState({ finishBookingAttempted: true })
+  const { shipper, consignee } = this.state
+}
+`
+
+`
+handleInvalidSubmit () {
+  const { shipper, consignee } = this.state
+  this.setState({ finishBookingAttempted: true })
 }
 `
