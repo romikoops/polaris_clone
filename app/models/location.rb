@@ -11,7 +11,7 @@ class Location < ApplicationRecord
   end
   has_many :routes
   has_many :stops, through: :hubs
-  belongs_to :country
+  belongs_to :country, optional: true
 
   scope :nexus, -> { where(location_type: "nexus") }
 
@@ -67,7 +67,7 @@ class Location < ApplicationRecord
   end
 
   def set_geocoded_address_from_fields!
-    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country.name}"
+    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country.try(:name)}"
     self.geocoded_address = rawAddress.remove_extra_spaces
   end
 

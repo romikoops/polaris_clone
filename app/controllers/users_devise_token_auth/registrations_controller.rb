@@ -12,7 +12,7 @@ module UsersDeviseTokenAuth
 
 				# Create Address for non-guest Users
 				unless resource.guest
-					location = Location.create(location_params)
+					location = Location.create_from_raw_params!(location_params)
 					location.geocode_from_address_fields!
 					resource.locations << location unless location.nil?
 				end
@@ -48,11 +48,8 @@ module UsersDeviseTokenAuth
 			unless params_h[:VAT_number].nil?
 				params_h[:vat_number] = params_h.delete(:VAT_number)
 			end
-			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
-		end
 
-		def send_confirmation_instructions
-			byebug
+			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
 		end
 
 		def provider
