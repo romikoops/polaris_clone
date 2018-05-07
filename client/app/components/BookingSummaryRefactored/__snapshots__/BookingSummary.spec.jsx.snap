@@ -61,9 +61,11 @@ exports[`shallow render 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center header_hub"
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
-        <h4>
+        <h4
+          className="flex-100"
+        >
           <Truncate
             ellipsis="…"
             lines={1}
@@ -73,21 +75,21 @@ exports[`shallow render 1`] = `
           </Truncate>
         </h4>
         <p
-          className="trucking_elem"
+          className="trucking_elem flex-none"
         >
           with pick-up
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center header_hub"
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
       >
-        <h4>
-           
+        <h4
+          className="flex-100"
+        >
           FOO_DESTINATION_CITY
-           
         </h4>
         <p
-          className="trucking_elem"
+          className="trucking_elem flex-none"
         >
           with delivery
         </p>

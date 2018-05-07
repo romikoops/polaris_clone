@@ -12,11 +12,11 @@ const HALF_ROW = 'flex-50 layout-row'
 const CENTER = 'layout-align-center-center'
 
 const BOOKING_SUMMARY = `${styles.booking_summary} ${HALF_ROW}`
-const ROUTE = `${styles.route_sec} flex-40 layout-column layout-align-stretch`
-const MAP_MARKER = `fa fa-map-marker ${styles.map_marker}`
 const FLAG = `fa fa-flag-o ${styles.flag}`
+const HEADER = `${HALF_ROW} ${CENTER} layout-wrap ${styles.header_hub}`
+const MAP_MARKER = `fa fa-map-marker ${styles.map_marker}`
 const MOT_WRAPPER = `${styles.mot_wrapper} layout-row ${CENTER}`
-const HEADER = `${HALF_ROW} ${CENTER} ${styles.header_hub}`
+const ROUTE = `${styles.route_sec} flex-40 layout-column layout-align-stretch`
 
 function BookingSummary (props) {
   const {
@@ -90,20 +90,22 @@ function BookingSummary (props) {
         </div>
 
         <div className={`${HALF_ROW} layout-align-space-between`}>
-          <div className={`${HALF_ROW} ${CENTER} ${styles.header_hub}`}>
-            <h4>
+          <div className={HEADER}>
+            <h4 className="flex-100">
               <Truncate lines={1}>
                 {origin}
               </Truncate>
             </h4>
-            <p className={styles.trucking_elem}>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {pickUpText}
             </p>
           </div>
 
           <div className={HEADER}>
-            <h4> {destination} </h4>
-            <p className={styles.trucking_elem}>
+            <h4 className="flex-100">
+              {destination}
+            </h4>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {deliveryText}
             </p>
           </div>
