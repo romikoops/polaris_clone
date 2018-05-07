@@ -12,6 +12,8 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
 
   puts 'drop_tables'
   require './drop_tables'
+  puts 'countries'
+  require './countries'
   puts 'mot_scopes'
   require './mot_scopes'
   puts 'roles'

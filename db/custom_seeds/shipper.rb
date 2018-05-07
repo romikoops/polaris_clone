@@ -31,28 +31,28 @@ Tenant.all.each do |tenant|
       street_number: "2",
       zip_code: "20457",
       city: "Hamburg",
-      country:"Germany"
+      country: Country.find_by(code: "DE")
     },
     {
       street: "Carer del Cid",
       street_number: "13",
       zip_code: "08001",
       city: "Barcelona",
-      country:"Spain"
+      country: Country.find_by(code: "ES")
     },
     {
       street: "College Rd",
       street_number: "1",
       zip_code: "PO1 3LX",
       city: "Portsmouth",
-      country:"United Kingdom"
+      country: Country.find_by(code: "GB")
     },
     {
       street: "Tuna St",
       street_number: "64",
       zip_code: "90731",
       city: "San Pedro",
-      country:"USA"
+      country: Country.find_by(code: "US")
     }
   ]
 

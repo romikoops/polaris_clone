@@ -5,13 +5,13 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
-		z-index: 100;
+		z-index: 1000;
 	}
 	.modal_background {
 		background: rgba(black, 0.4);
 	}
 	.modal {
-		z-index: 200;
+		z-index: 1500;
 		position: relative;
 		box-shadow: 0 0 50px rgba(black, 0.6);
 		background: white;

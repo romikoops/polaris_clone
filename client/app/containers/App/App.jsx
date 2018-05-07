@@ -17,6 +17,7 @@ import { appActions } from '../../actions'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
+import ResetPasswordForm from '../../components/ResetPasswordForm'
 
 class App extends Component {
   componentDidMount () {
@@ -53,15 +54,21 @@ class App extends Component {
             )}
           <Switch className="flex">
             <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+
             <Route
               exact
               path="/terms_and_conditions"
-              render={props => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
+              render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
             />
             <Route
               exact
               path="/insurance"
-              render={props => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
+              render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
+            />
+            <Route
+              exact
+              path="/password_reset"
+              render={props => (<ResetPasswordForm user={user} theme={theme} {...props} />)}
             />
             <PrivateRoute
               path="/booking"

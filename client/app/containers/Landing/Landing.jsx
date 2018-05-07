@@ -82,7 +82,7 @@ class Landing extends Component {
           <LoginRegistrationWrapper
             LoginPageProps={{ theme }}
             RegistrationPageProps={{ theme, tenant }}
-            initialCompName="RegistrationPage"
+            initialCompName="LoginPage"
           />
         }
         verticalPadding="30px"

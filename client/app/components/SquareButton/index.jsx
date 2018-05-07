@@ -79,7 +79,7 @@ export default function SquareButton ({
       wrapperSizeClass = styles.large_wrapper
       break
   }
-  const contentStyle = browserType() == 'IE' ? styles.ie_content : styles.content
+  const contentStyle = browserType() === 'IE' ? styles.ie_content : styles.content
   return (
     <div
       className={`flex-none ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
