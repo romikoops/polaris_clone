@@ -3,9 +3,14 @@
 exports[`shallow render 1`] = `
 <div
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  style={
+    Object {
+      "height": "105px",
+    }
+  }
 >
   <div
-    className="form_label flex-40 layout-row layout-align-start-center"
+    className="form_label flex-40 layout-row layout-align-start-start"
   >
     <p
       className="flex-none"

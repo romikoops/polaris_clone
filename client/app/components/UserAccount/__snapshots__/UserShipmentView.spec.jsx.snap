@@ -339,6 +339,37 @@ exports[`props.loading is true 1`] = `
   <Component
     content={
       <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          
+          
+          
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
         className="flex-100 layout-row layout-wrap"
       >
         <div
@@ -435,146 +466,6 @@ exports[`props.loading is true 1`] = `
             }
           }
         >
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
           <div
             className="flex-25 layout-row layout-align-start-center no_doc"
           >
@@ -971,6 +862,37 @@ exports[`shallow render 1`] = `
   <Component
     content={
       <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          
+          
+          
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
         className="flex-100 layout-row layout-wrap"
       >
         <div
@@ -1067,146 +989,6 @@ exports[`shallow render 1`] = `
             }
           }
         >
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
           <div
             className="flex-25 layout-row layout-align-start-center no_doc"
           >

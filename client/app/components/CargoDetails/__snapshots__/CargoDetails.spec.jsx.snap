@@ -342,21 +342,19 @@ exports[` 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none f_header"
+                className="flex-none layout-row layout-wrap f_header"
               >
                  
-                <TextHeading
-                  size={4}
-                  text="Incoterms 2010 by the International Chamber of Commerce (ICC)  (Optional)"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
               </div>
             </div>
             <div
@@ -366,10 +364,10 @@ exports[` 1`] = `
                 className="textarea_incoterm"
                 cols="30"
                 id=""
-                name="incoterm"
+                name="incotermText"
                 onChange={[Function]}
                 rows="6"
-                value="FOO_INCOTERM"
+                value=""
               />
             </div>
           </div>

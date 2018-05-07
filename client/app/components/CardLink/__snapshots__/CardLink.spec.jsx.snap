@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="card_link  layout-column flex-100 flex-gt-sm-30 unselected"
+  className="card_link  layout-column flex-none unselected"
   onClick={[Function]}
 >
   <div

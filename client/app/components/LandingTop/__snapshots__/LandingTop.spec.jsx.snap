@@ -40,7 +40,7 @@ exports[`user.role_id is 1 1`] = `
       className="flex-50 layout-row layout-align-center layout-wrap"
     >
       <div
-        className="flex-100 layout-row layout-wrap layout-align-center-center"
+        className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
       >
         <div
           className="flex-75 banner_text"
@@ -184,7 +184,7 @@ exports[`user.role_id is 2 1`] = `
       className="flex-50 layout-row layout-align-center layout-wrap"
     >
       <div
-        className="flex-100 layout-row layout-wrap layout-align-center-center"
+        className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
       >
         <div
           className="flex-75 banner_text"
