@@ -168,8 +168,10 @@ export class BookingConfirmation extends Component {
       : 'Expected Time of Departure:'
 
     const plannedTime = shipment.has_pre_carriage
-      ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`
-      : `${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`
+      ? `${moment(shipment.closing_date)
+        .subtract(3, 'days')
+        .format('DD/MM/YYYY')}`
+      : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`
 
     const TextHeadingFactory = TextHeadingFactoryFn(theme)
     const Terms = TermsFactory({ theme, terms })
@@ -349,13 +351,9 @@ export class BookingConfirmation extends Component {
           </div>
 
           <div className={SHIPMENT_CARD}>
-
             <div style={themeTitled} className={HEADING} >
               {TextHeadingFactory('Cargo Details')}
-              <div
-                className={COLLAPSER}
-                onClick={() => this.collapser('cargo')}
-              >
+              <div className={COLLAPSER} onClick={() => this.collapser('cargo')}>
                 {getChevronIcon(collapser.cargo)}
               </div>
             </div>
@@ -365,6 +363,37 @@ export class BookingConfirmation extends Component {
                 <div className={LAYOUT_WRAP}>
                   {cargoView}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={SHIPMENT_CARD}>
+            <div style={themeTitled} className={HEADING}>
+              {TextHeadingFactory('Additional Information')}
+              <div
+                className={`flex-10 layout-row ${ALIGN_CENTER}`}
+                onClick={() => this.collapser('extraInfo')}
+              >
+                {getChevronIcon(collapser.extraInfo)}
+              </div>
+            </div>
+
+            <div className={getPanelStyle(collapser.extraInfo)}>
+              <div className={INNER_WRAPPER}>
+
+                <div className={LAYOUT_WRAP}>
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    {TotalGoodsValue(shipment)}
+                    {Eori(shipment)}
+                  </div>
+
+                  <div className="flex-100 layout-row layout-align-space-around-center">
+                    {DescriptionGoods(shipment)}
+                    {Notes(shipment)}
+                    {Incoterm(shipment)}
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -762,6 +791,84 @@ function getTotalPrice (shipment) {
   const price = parseFloat(shipment.total_price.value).toFixed(2)
 
   return `${currency} ${price} `
+}
+
+function TotalGoodsValue (shipment) {
+  return shipment.total_goods_value ? (
+    <div
+      className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+    >
+      <p className="flex-100">
+        <b>Total Value of Goods:</b>
+      </p>
+      <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
+        shipment.total_goods_value.value
+      }`}</p>
+    </div>
+  ) : (
+    ''
+  )
+}
+
+function Eori (shipment) {
+  return shipment.eori ? (
+    <div
+      className="flex-45 offset-10 layout-row
+      layout-align-start-start layout-wrap"
+    >
+      <p className="flex-100">
+        <b>EORI number:</b>
+      </p>
+      <p className="flex-100 no_m">{shipment.eori}</p>
+    </div>
+  ) : (
+    ''
+  )
+}
+
+function DescriptionGoods (shipment) {
+  return shipment.cargo_notes ? (
+    <div
+      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+    >
+      <p className="flex-100">
+        <b>Description of Goods:</b>
+      </p>
+      <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+    </div>
+  ) : (
+    ''
+  )
+}
+
+function Notes (shipment) {
+  return shipment.notes ? (
+    <div
+      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+    >
+      <p className="flex-100">
+        <b>Notes:</b>
+      </p>
+      <p className="flex-100 no_m">{shipment.notes}</p>
+    </div>
+  ) : (
+    ''
+  )
+}
+
+function Incoterm (shipment) {
+  return shipment.incoterm_text ? (
+    <div
+      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+    >
+      <p className="flex-100">
+        <b>Incoterm:</b>
+      </p>
+      <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+    </div>
+  ) : (
+    ''
+  )
 }
 
 export default BookingConfirmation

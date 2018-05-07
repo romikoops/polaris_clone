@@ -522,6 +522,59 @@ exports[`shallow render 1`] = `
         <TextHeading
           color="white"
           size={3}
+          text="Additional Information"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            />
+            <div
+              className="flex-100 layout-row layout-align-space-around-center"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
           text="Documents"
           theme={
             Object {
@@ -1640,6 +1693,59 @@ exports[`with cargo items 1`] = `
         <TextHeading
           color="white"
           size={3}
+          text="Additional Information"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            />
+            <div
+              className="flex-100 layout-row layout-align-space-around-center"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
           text="Documents"
           theme={
             Object {
@@ -2574,6 +2680,59 @@ exports[`with containers 1`] = `
                 }
               }
               viewHSCodes={false}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Additional Information"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            />
+            <div
+              className="flex-100 layout-row layout-align-space-around-center"
             />
           </div>
         </div>
