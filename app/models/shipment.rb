@@ -20,12 +20,14 @@ class Shipment < ApplicationRecord
   end
 
   # validates_with MaxAggregateDimensionsValidator
+  validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+
 
   # ActiveRecord Callbacks
   before_validation :assign_uuid, :generate_imc_reference, :set_default_trucking, on: :create
