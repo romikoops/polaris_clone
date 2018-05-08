@@ -1,0 +1,24 @@
+:local {
+  .widecomp {
+    width: 100%;
+    margin: 15px 0;
+  }
+  .greyboxborder {
+    border: 5px solid lightgrey;
+  }
+  .tabdiv {
+    .tab {
+      display: inline-block;
+      padding: 5px 10px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  }
+  .tabcontent {
+    padding: 10px;
+  }
+  .selected {
+    background-color: lightgrey;
+  }
+}
