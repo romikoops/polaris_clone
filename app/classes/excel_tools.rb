@@ -549,7 +549,7 @@ module ExcelTools
         charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
       end
     end
-
+ 
 
     # END Load Fees & Charges ------------------------
 
@@ -597,7 +597,7 @@ module ExcelTools
       row_truck_type = 'default' if !row_truck_type || row_truck_type == ''
       awesome_print row_truck_type
       row_min_value = row_data.shift
-      row_key = "#{row_zone_name}_#{row_truck_type}"
+      
 
       single_ident_values_and_country = zones[row_zone_name].flat_map do |idents_and_country|
         if idents_and_country[:min] && idents_and_country[:max]
@@ -627,8 +627,7 @@ module ExcelTools
       single_country_values = single_ident_values_and_country.map { |h| h[:country] }
 
       %w[pre on].each do |direction|
-
-        trucking_pricing_by_zone[row_key] = TruckingPricing.new(
+        trucking_pricing_by_zone = TruckingPricing.new(
           rates: {},
           fees: {},
           carriage: direction,
@@ -645,7 +644,7 @@ module ExcelTools
         )
           stats[:trucking_pricings][:number_created] += 1
         modifier_position_objs.each do |mod_key, mod_indexes|
-          trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
+          trucking_pricing_by_zone.rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]
             next unless val
             w_min = weight_min_row[m_index] || 0
@@ -676,12 +675,18 @@ module ExcelTools
 
         charges.each do |k, fee|
           tmp_fee = fee.clone()
+          awesome_print tmp_fee
+          awesome_print direction
+          awesome_print row_truck_type
+          awesome_print tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type
+          awesome_print "!!!!!!!!!!!!!!!"
           next unless tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type
           
           tmp_fee.delete(:direction)
           tmp_fee.delete(:truck_type)
-          trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
+          trucking_pricing_by_zone[:fees][tmp_fee[:key]] = tmp_fee
         end
+        awesome_print trucking_pricing_by_zone
 
         
         
@@ -694,7 +699,7 @@ module ExcelTools
             "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
           end.join(", ")
 
-        tp = trucking_pricing_by_zone[row_key]
+        tp = trucking_pricing_by_zone
 
         new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
         new_cols.delete("cbm_ratio") if load_type == "container"
