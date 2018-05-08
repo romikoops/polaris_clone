@@ -4,7 +4,7 @@
   "description": "End-to-end tests",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "STEP_DELAY=200 jest",
     "dev": "STEP_DELAY=1000 jest"
   },
   "jest": {
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "init-puppeteer": "https://github.com/selfrefactor/init-puppeteer#3.0.0",
+    "open": "^0.0.5",
     "puppeteer": "^1.2.0"
   },
   "devDependencies": {

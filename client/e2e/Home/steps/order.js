@@ -1,11 +1,16 @@
+import bookingNextStep from './bookingNextStep'
+
 /**
  * Selectors defining end of navigation change
  */
-const BOOKING_LOADED = '.flex-85'
-const DETAILS_LOADED = 'i.fa-truck'
+const SHIPMENT_DETAILS_LOADED = 'i.fa-truck'
 const FINAL_DETAILS_LOADED = 'h1'
 const FINISH_BOOKING_LOADED = 'i.fa-ship'
-const OFFERS_LOADED = 'input[type="range"]'
+const CHOOSE_OFFER_LOADED = {
+  selector: 'h3.flex-none',
+  index: 4,
+  text: 'departure'
+}
 const SENDER_LOADED = 'i.fa-pencil-square-o'
 const RECEIVER_LOADED = { selector: SENDER_LOADED, count: 2 }
 
@@ -22,20 +27,21 @@ export default async function order (puppeteer, expect) {
     click,
     clickWithPartialText,
     clickWithText,
+    inputWithTab,
     focus,
     page,
     selectWithTab,
     selectFirstAvailableDay,
     url,
     waitAndClick,
-    waitFor
+    waitFor,
+    waitForText
   } = puppeteer
 
   /**
-   * Click and wait for next step
+   * Click booking's next step
    */
-  await click('button', 'last')
-  expect(await waitFor(BOOKING_LOADED, 2)).toBeTruthy()
+  await bookingNextStep(puppeteer, expect)
 
   /**
    * Click on 'Export'
@@ -51,7 +57,7 @@ export default async function order (puppeteer, expect) {
    * Click and wait for next step
    */
   expect(await clickWithText('button', 'Next Step')).toBeTruthy()
-  await page.waitForSelector(DETAILS_LOADED)
+  await page.waitForSelector(SHIPMENT_DETAILS_LOADED)
 
   const currentURL = await url()
   expect(currentURL.endsWith('shipment_details')).toBeTruthy()
@@ -75,7 +81,7 @@ export default async function order (puppeteer, expect) {
   await selectWithTab(14, 'Up')
 
   /**
-   * Click on confirm no dangereous goods
+   * Click on confirm no dangerous goods
    */
   expect(await click(CONFIRM)).toBeTruthy()
 
@@ -83,7 +89,7 @@ export default async function order (puppeteer, expect) {
    * Click and wait for next step
    */
   expect(await clickWithText('p', 'Get Offers')).toBeTruthy()
-  await page.waitForSelector(OFFERS_LOADED)
+  expect(await waitForText(CHOOSE_OFFER_LOADED)).toBeTruthy()
 
   const offersURL = await url()
   expect(offersURL.endsWith('choose_offer')).toBeTruthy()
@@ -116,6 +122,11 @@ export default async function order (puppeteer, expect) {
    */
   await focus('body')
   await selectWithTab(1, 'Up')
+
+  /**
+   * Set description of goods
+   */
+  await inputWithTab(2, 'foo')
 
   /**
    * Click and wait for next step

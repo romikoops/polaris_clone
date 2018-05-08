@@ -57,20 +57,23 @@ export default async function init (options) {
 
     mark('waitFor', selector, count)
 
-    let counter = 15
-    const countFn = page.$$eval(
+    let counter = 20
+    let found = await page.$$eval(
       selector,
       (els, countValue) => els.length >= countValue,
       count
     )
-    let found = await countFn
 
     while (!found && counter > 0) {
       counter -= 1
       // eslint-disable-next-line
       await delay(DELAY)
       // eslint-disable-next-line
-      found = await countFn
+      found = await page.$$eval(
+        selector,
+        (els, countValue) => els.length >= countValue,
+        count
+      )
     }
 
     return found
@@ -83,6 +86,42 @@ export default async function init (options) {
     const result = await Promise.all(promised)
 
     return !result.includes(false)
+  }
+
+  /**
+   * It waits 2 seconds for selector with specified index contains specified text
+   */
+  const waitForText = async (input) => {
+    mark('waitForText', input.selector)
+
+    let counter = 20
+    let found = false
+
+    while (!found && counter > 0) {
+      counter -= 1
+      // eslint-disable-next-line
+      await delay(DELAY)
+      // eslint-disable-next-line
+      const countResult = await page.$$eval(
+        input.selector,
+        els => els.length
+      )
+
+      if (countResult < input.index + 1) {
+        // eslint-disable-next-line
+        continue
+      }
+
+      // eslint-disable-next-line
+      const texts = await page.$$eval(
+        input.selector,
+        els => els.map(el => el.textContent)
+      )
+
+      found = texts[input.index].includes(input.text)
+    }
+
+    return found
   }
 
   const url = () => {
@@ -177,6 +216,20 @@ export default async function init (options) {
     return true
   }
 
+  const inputWithTab = async (tabCount, text) => {
+    mark('inputWithTab', tabCount, text)
+
+    // eslint-disable-next-line
+    for (const _ of Array(tabCount).fill('')) {
+      // eslint-disable-next-line
+      await page.keyboard.press('Tab')
+      // eslint-disable-next-line
+      await delay(DELAY)
+    }
+
+    await page.keyboard.type(text, { delay: 50 })
+  }
+
   const selectWithTab = async (tabCount, arrowToPressInput) => {
     const arrowToPress = arrowToPressInput === undefined
       ? 'ArrowDown'
@@ -216,6 +269,8 @@ export default async function init (options) {
     holder.forEach(x => console.log(x))
   }
 
+  const stop = async () => page.evaluate('.NON_EXISTING_SELECTOR', clickWhichSelector)
+
   return {
     $$,
     $,
@@ -231,10 +286,13 @@ export default async function init (options) {
     onError,
     page,
     url,
+    stop,
+    inputWithTab,
     selectWithTab,
     selectFirstAvailableDay,
     setInput,
     waitFor,
+    waitForText,
     waitAndClick,
     waitForSelectors
   }
