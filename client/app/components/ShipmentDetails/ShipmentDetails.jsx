@@ -474,7 +474,7 @@ export class ShipmentDetails extends Component {
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
-    // Upate trucking details according to toggle
+    // Update trucking details according to toggle
     const { shipment } = this.state
     const artificialEvent = { target: {} }
     if (!value) {

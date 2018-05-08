@@ -73,6 +73,14 @@ class Shipment < ApplicationRecord
 
   # Instance methods
 
+  def pickup_address
+    Location.where(id: trucking.dig("pre_carriage", "location_id")).first
+  end
+
+  def delivery_address
+    Location.where(id: trucking.dig("on_carriage", "location_id")).first
+  end
+
   def import?
     direction == "import"
   end

@@ -47,7 +47,7 @@ class OfferCalculator
     if @shipment.has_pre_carriage?
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
       raise ApplicationError::InvalidPickupAddress unless @pickup_address
-      @shipment.trucking['pre_carriage']['location_id'] = @pickup_address
+      @shipment.trucking['pre_carriage']['location_id'] = @pickup_address.id
     end
 
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
