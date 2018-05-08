@@ -420,10 +420,10 @@ ActiveRecord::Schema.define(version: 20180507072757) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 

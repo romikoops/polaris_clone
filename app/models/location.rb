@@ -262,13 +262,12 @@ class Location < ApplicationRecord
   end
 
   def get_zip_code
-    sanitize_zip_code!
-    if self.zip_code
-      self.zip_code
-    else
+    if self.zip_code.nil?
       self.reverse_geocode
-      self.zip_code
     end
+
+    sanitize_zip_code!
+    self.zip_code
   end
 
   def to_custom_hash
@@ -298,6 +297,8 @@ class Location < ApplicationRecord
   end
 
   def sanitize_zip_code!
+    return if zip_code.nil?
+
     self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
   end
 end
