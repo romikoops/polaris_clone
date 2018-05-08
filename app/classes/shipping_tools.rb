@@ -100,7 +100,7 @@ module ShippingTools
     hsTexts = shipment_data[:hsTexts].as_json
     shipment.assign_attributes(
       total_goods_value: shipment_data[:totalGoodsValue],
-      cargo_notes: shipment_data[:cargoNotes]
+      cargo_notes:       shipment_data[:cargoNotes]
     )
 
     if shipment_data[:incotermText]
@@ -230,8 +230,8 @@ module ShippingTools
     locations = {
       startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
       endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
-      origin:      shipment.origin.to_custom_hash,
-      destination: shipment.destination.to_custom_hash
+      origin:      shipment.origin_nexus.to_custom_hash,
+      destination: shipment.destination_nexus.to_custom_hash
     }
 
     {
