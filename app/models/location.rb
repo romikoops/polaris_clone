@@ -288,12 +288,12 @@ class Location < ApplicationRecord
   def self.location_params(raw_location_params)
     country = Country.geo_find_by_name(raw_location_params["country"])
 
-    raw_location_params.try(:permit,
+    filtered_params = raw_location_params.try(:permit,
       :latitude, :longitude, :geocoded_address, :street,
       :street_number, :zip_code, :city
-    )
+    ) || raw_location_params
 
-    raw_location_params.to_h.merge(country: country)
+    filtered_params.to_h.merge(country: country)
   end
 
   def sanitize_zip_code!
