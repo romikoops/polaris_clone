@@ -55,14 +55,14 @@ module TruckingTools
       result['currency'] = fee[:currency]
     end
     extra_fees_results = {}
+    
     total_fees.each do |tk, tfee|
-      
-      extra_fees_results[tk] = tfee[:value] * result['value']
+      extra_fees_results[tk] = tfee[:value] * fees[:rate][:value]
     end
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
     end
-
+    
     if !pricing['min_value'] || (pricing['min_value'] && result['value'] > pricing['min_value'])
 
       return { value: result['value'], currency: result['currency'] }

@@ -48,7 +48,7 @@ class Hub < ApplicationRecord
 
   def self.prepped(user)
     where(tenant_id: user.tenant_id).map do |hub|
-      { data: hub, location: hub.nexus }
+      { data: hub, location: hub.location.to_custom_hash }
     end
   end
 

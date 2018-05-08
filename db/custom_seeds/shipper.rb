@@ -19,7 +19,7 @@ Tenant.all.each do |tenant|
       )
       # shipper.skip_confirmation!
       shipper.save!
-      else
+    else
         next
   end
   
