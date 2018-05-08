@@ -238,7 +238,7 @@ module DocumentTools
               worksheet.write(row, 4, key)
               worksheet.write(row, 5, result[:load_type])
               worksheet.write(row, 6, dir)
-              worksheet.write(row, 7, result[:currency])
+              worksheet.write(row, 7, fee[:currency])
               worksheet.write(row, 8, fee[:rate_basis])
               case fee[:rate_basis]
               when 'PER_CONTAINER'
