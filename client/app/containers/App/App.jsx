@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import UserAccount from '../UserAccount/UserAccount'
-import './App.scss'
 import Landing from '../Landing/Landing'
 import Shop from '../Shop/Shop'
 import Admin from '../Admin/Admin'
@@ -18,6 +17,7 @@ import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
+import CookieConsentBar from '../../components/CookieConsentBar'
 
 class App extends Component {
   componentDidMount () {
@@ -41,7 +41,7 @@ class App extends Component {
     const { theme } = tenant.data
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
-        {/* <SideNav/> */}
+        <CookieConsentBar theme={theme} />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
           {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
