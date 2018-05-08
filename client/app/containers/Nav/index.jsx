@@ -224,7 +224,7 @@ class NavBar extends Component {
     if (pathPieces[0] === 'admin') {
       appDispatch.goTo('/admin/dashboard')
     } else {
-      appDispatch.goTo('/account/dashboard')
+      appDispatch.goTo('/account')
     }
   }
 

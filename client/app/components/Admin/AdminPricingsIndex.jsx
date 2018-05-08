@@ -88,6 +88,7 @@ export class AdminPricingsIndex extends Component {
           scope={scope}
           adminDispatch={adminDispatch}
           toggleCreator={this.toggleCreator}
+          documentDispatch={this.props.documentDispatch}
         />
         {/* <AdminSearchableRoutes
           itineraries={detailedItineraries}

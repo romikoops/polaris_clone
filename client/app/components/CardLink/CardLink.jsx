@@ -32,7 +32,7 @@ export class CardLink extends Component {
         : { color: 'black' }
     return (
       <div
-        className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30 ${buttonStyle}`}
+        className={`${styles.card_link}  layout-column flex-none ${buttonStyle}`}
         onClick={handleClick}
       >
         <div className={`${styles.card_img} flex-85`} style={imgStyles} />

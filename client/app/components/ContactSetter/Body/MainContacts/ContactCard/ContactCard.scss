@@ -7,7 +7,8 @@
     padding: 25px 20px;
   	i {
 		  -webkit-background-clip: text !important;
-		  -webkit-text-fill-color: transparent !important;
+			-webkit-text-fill-color: transparent !important;
+			
   	}
   	i.main_icon {
 		  font-size: 24px;
@@ -15,7 +16,12 @@
 		  width: 19px;  		
   	}
     i.edit_icon {
-      background: rgb(140, 140, 140);
+			background: rgb(140, 140, 140);
+			@media screen and (-ms-high-contrast: active),
+			(-ms-high-contrast: none) {
+				color: grey;
+				background: transparent;
+			}
       position: absolute;
       right: 15px;
       top: 15px;

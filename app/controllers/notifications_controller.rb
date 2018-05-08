@@ -20,30 +20,17 @@ class NotificationsController < ApplicationController
   def send_message
     message = params[:message].as_json
     isAdmin = current_user.role.name.include?("admin")
-    user = isAdmin ? Shipment.find_by_imc_reference(message["shipmentRef"]).shipper : current_user
+    user = isAdmin ? Shipment.find_by_imc_reference(message["shipmentRef"]).user : current_user
     resp = add_message_to_convo(user, message, isAdmin)
     response_handler(resp)
   end
   def mark_as_read
-     isAdmin = current_user.role.name.include?("admin")
-     if current_user && current_user.role.name == "shipper"
-      messages = get_messages_for_user(current_user)
-    elsif current_user && current_user.role.name == "admin"
-      messages = get_messages_for_admin(current_user)
-    elsif current_user && current_user.role.name == "sub_admin"
-      messages = get_messages_for_manager(current_user)
-    else
-      response_handler({conversations: {}})
+    shipment = Shipment.find_by_imc_reference(params[:shipmentRef])
+    shipment.conversation.messages.each do |message|
+      message.read = true
+      message.save!
     end
-    messages["conversations"][params[:shipmentRef]]["messages"].each do |msg|
-      msg["read"] = true
-    end
-    if isAdmin
-      update_admin_convo(params[:shipmentRef], messages)
-    else
-      update_convo(current_user, messages)
-    end
-    
+
     response_handler(messages)
 
   end

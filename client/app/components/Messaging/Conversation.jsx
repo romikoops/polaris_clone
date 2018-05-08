@@ -44,11 +44,11 @@ export class Conversation extends Component {
   reply (event) {
     event.preventDefault()
     const { message, title } = this.state
-    const { sendMessage, conversation } = this.props
+    const { sendMessage, shipmentRef } = this.props
     const msg = {
       title,
       message,
-      shipmentRef: conversation.messages[0].shipmentRef
+      shipmentRef
     }
     this.setState({
       message: '',
@@ -68,7 +68,7 @@ export class Conversation extends Component {
     const { Element } = Scroll
     const isAdmin = user.role_id === 1
     const messages = isAdmin
-      ? conversation.messages.map((msg) => {
+      ? conversation.map((msg) => {
         const client = clients.filter(c => c.id === msg.user_id)[0]
         return (
           <Message
@@ -81,7 +81,7 @@ export class Conversation extends Component {
           />
         )
       })
-      : conversation.messages.map(msg =>
+      : conversation.map(msg =>
         (<Message
           tenant={tenant}
           user={user}
@@ -176,7 +176,7 @@ export class Conversation extends Component {
            Shipment Reference:
             <div className="flex-5" />
             <b>
-              {conversation.messages[0].shipmentRef}
+              {conversation[0].shipmentRef}
             </b>
           </div>
           <div
@@ -207,13 +207,15 @@ Conversation.propTypes = {
   shipment: PropTypes.shipment,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.client)
+  clients: PropTypes.arrayOf(PropTypes.client),
+  shipmentRef: PropTypes.string
 }
 
 Conversation.defaultProps = {
   theme: null,
   clients: null,
-  shipment: null
+  shipment: null,
+  shipmentRef: ''
 }
 
 export default Conversation

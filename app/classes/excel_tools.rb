@@ -449,7 +449,7 @@ module ExcelTools
       trucking_pricings: [],
       trucking_destinations: []
     }
-
+    
     defaults = {}
     trucking_pricing_by_zone = {}
     hub = Hub.find(hub_id)
@@ -467,23 +467,34 @@ module ExcelTools
     base = zone_sheet.row(8)[7]
     load_type = zone_sheet.row(9)[7] == 'container' ? 'container' : 'cargo_item'
     identifier_type = zone_sheet.row(10)[7] == 'city' ? 'city_name' : zone_sheet.row(10)[7]
-    courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7], tenant: tenant)
+    courier = Courier.find_or_create_by(name: zone_sheet.row(11)[7], tenant: tenant)
     num_rows = zone_sheet.last_row
+    zip_char_length = nil
+
 
     # START Load Zones ------------------------
+    
     zones = {}
     (2..num_rows).each do |line|
       row_data = zone_sheet.row(line)
       zones[row_data[0]] = [] unless zones[row_data[0]]
       if row_data[1] && !row_data[2]
-        zones[row_data[0]] << { id: row_data[1], country: row_data[3] }
+        if !zip_char_length
+          zip_char_length = row_data[1].length
+        end 
+        zones[row_data[0]] << { ident: row_data[1], country: row_data[3] }
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete(' ').split('-')
+        if !zip_char_length
+          zip_char_length = range[0].length
+        end 
         zones[row_data[0]] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
       end
     end
+    
     # END Load Zones ------------------------
 
+    
     # START Load Fees & Charges ------------------------
     
     fees_sheet = xlsx.sheet(sheets[2])
@@ -537,9 +548,12 @@ module ExcelTools
         charges[row[:fee_code]] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
       end
     end
+
     # END Load Fees & Charges ------------------------
 
+
     # START Determine how many columns the modifiers span ------------------------
+
     rates_sheet = xlsx.sheet(sheets[1])
     rate_num_rows = rates_sheet.last_row
     modifier_position_objs = {}
@@ -568,9 +582,12 @@ module ExcelTools
         defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil}.symbolize_keys
       end
     end
+
     # END Determine how many columns the modifiers span ------------------------
 
+
     # START Rates ------------------------
+
     (4..rate_num_rows).each do |line|
       row_data = rates_sheet.row(line)
       row_zone_name = row_data.shift
@@ -583,20 +600,27 @@ module ExcelTools
         if idents_and_country[:min] && idents_and_country[:max]
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
             stats[:trucking_destinations][:number_created] += 1
-            {id: ident, country: idents_and_country[:country]}
+            ident_value = nil
+            if identifier_type == 'zipcode'
+              ident_length = ident.to_s.length
+              ident_value = '0' * (zip_char_length - ident_length) + ident.to_s
+            else
+              ident_value = ident
+            end
+            { ident: ident_value, country: idents_and_country[:country] }
           end
         elsif identifier_type == "city_name"
-          city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
+          city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
           stats[:trucking_destinations][:number_created] += 1
           stats[:hub_truckings][:number_created] += 1
           
-          { id: city, country: idents_and_country[:country] }
+          { ident: city, country: idents_and_country[:country] }
         else
           idents_and_country
         end
       end
 
-      single_ident_values = single_ident_values_and_country.map { |h| h[:id] }
+      single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
       single_country_values = single_ident_values_and_country.map { |h| h[:country] }
 
       %w[pre on].each do |direction|
@@ -647,11 +671,7 @@ module ExcelTools
           end
         end
         
-        charges.each do |k, fee|
-          
-          
-          
-          
+        charges.each do |k, fee|          
           next unless fee[:direction] == direction && fee[:truck_type] == row_truck_type
           tmp_fee = fee.clone()
           tmp_fee.delete(:direction)
@@ -663,10 +683,10 @@ module ExcelTools
         single_ident_values_and_country_with_timestamps =
           identifier_type == 'distance' ?
           single_ident_values_and_country.map do |h|
-            "(#{h[:id]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+            "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
           end.join(", ") :
           single_ident_values_and_country.map do |h|
-            "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+            "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
           end.join(", ")
 
         tp = trucking_pricing_by_zone[row_key]
@@ -1167,10 +1187,12 @@ module ExcelTools
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
+      country = Country.geo_find_by_name(hub_row[:country])
+      
       nexus = Location.find_by(
         name: hub_row[:hub_name],
         location_type: 'nexus',
-        country: hub_row[:country]
+        country: country
       )
       nexus ||= Location.create!(
         name: hub_row[:hub_name],
@@ -1178,7 +1200,7 @@ module ExcelTools
         latitude: hub_row[:latitude],
         longitude: hub_row[:longitude],
         photo: hub_row[:photo],
-        country: hub_row[:country],
+        country: country,
         city: hub_row[:hub_name],
         geocoded_address: hub_row[:geocoded_address]
       )
@@ -1187,7 +1209,7 @@ module ExcelTools
         name: hub_row[:hub_name],
         latitude: hub_row[:latitude],
         longitude: hub_row[:longitude],
-        country: hub_row[:country],
+        country: country,
         city: hub_row[:hub_name],
         geocoded_address: hub_row[:geocoded_address]
       )
@@ -1384,12 +1406,15 @@ module ExcelTools
         results[:stops] << temp_stop
         temp_stop
       end
+      # if row[:destination] == 'Singapore'
+      #   byebug
+      # end
 
       steps_in_order = []
-      aux_data[pricing_key][:stops_in_order].length.times do
+      (aux_data[pricing_key][:stops_in_order].length - 1).times do
         steps_in_order << aux_data[pricing_key][:transit_time].to_i
       end
-
+      
       start_date = DateTime.now
       end_date = start_date + 60.days
 

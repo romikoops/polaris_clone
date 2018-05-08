@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations',
+    confirmations: 'users_devise_token_auth/confirmations',
+    passwords:     'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
   
   resources :subdomain, only: [:show] do

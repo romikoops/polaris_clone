@@ -101,14 +101,14 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
+        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         if trip_check
           p "REJECTED"
           tmp_date += 1.day
           stats[:trips][:number_updated] += 1
           next
         end
-        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
+        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         p trip

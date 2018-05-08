@@ -5,7 +5,6 @@ import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
-import FileTile from '../FileTile/FileTile'
 import PropTypes from '../../prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
@@ -16,6 +15,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { IncotermRow } from '../Incoterm/Row'
 import ShipmentCard from '../ShipmentCard/ShipmentCard'
 import { IncotermExtras } from '../Incoterm/Extras'
+import DocumentsForm from '../Documents/Form'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -231,7 +231,7 @@ export class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients, adminDispatch, tenant
+      theme, hubs, shipmentData, clients, tenant
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -446,24 +446,36 @@ export class AdminShipmentView extends Component {
 
     const docChecker = {
       packing_sheet: false,
-      commercial_invoice: false,
-      customs_declaration: false,
-      customs_value_declaration: false,
-      eori: false,
-      certificate_of_origin: false,
-      dangerous_goods: false,
-      bill_of_lading: false,
-      invoice: false
+      commercial_invoice: false
+      // ,
+      // customs_declaration: false,
+      // customs_value_declaration: false,
+      // eori: false,
+      // certificate_of_origin: false,
+      // dangerous_goods: false,
+      // bill_of_lading: false,
+      // invoice: false
     }
+    const missingDocs = []
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<FileTile doc={doc} theme={theme} adminDispatch={adminDispatch} isAdmin />)
+        docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
+          <DocumentsForm
+            theme={theme}
+            type={doc.doc_type}
+            dispatchFn={file => this.fileFn(file)}
+            text={documentTypes[doc.doc_type]}
+            doc={doc}
+            viewer
+            deleteFn={file => this.deleteDoc(file)}
+          />
+        </div>)
       })
     }
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
-        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
           <div className="flex-none layout-row layout-align-center-center">
             <i className="flex-none fa fa-ban" />
           </div>
@@ -473,6 +485,7 @@ export class AdminShipmentView extends Component {
         </div>)
       }
     })
+
     const actionsBox =
       shipment && shipment.status === 'requested' ? (
         <div className="flex-100 layout-row layout-align-space-between-center">
@@ -819,13 +832,93 @@ export class AdminShipmentView extends Component {
           }
         />
         <ShipmentCard
+          headingText="Additional Info"
+          theme={theme}
+          collapsed={collapser.extra_info}
+          handleCollapser={() => this.handleCollapser('extra_info')}
+          content={
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+              <div className="flex-100 layout-row layout-align-start-center">
+                {shipment.total_goods_value ? (
+                  <div className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Total Value of Goods:</b>
+                    </p>
+                    <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
+                      shipment.total_goods_value.value
+                    }`}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.eori ? (
+                  <div
+                    className="flex-45 offset-10 layout-row
+                        layout-align-start-start layout-wrap"
+                  >
+                    <p className="flex-100">
+                      <b>EORI number:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.eori}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="flex-100 layout-row layout-align-space-around-center">
+                {shipment.cargo_notes ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Description of Goods:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.notes ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Notes:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.incoterm_text ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Incoterm:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
+          }
+        />
+        <ShipmentCard
           headingText="Documents"
           theme={theme}
           collapsed={collapser.documents}
           handleCollapser={() => this.handleCollapser('documents')}
           content={
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              {docView}
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
+                {docView}
+              </div>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
+                {missingDocs}
+              </div>
             </div>
           }
         />

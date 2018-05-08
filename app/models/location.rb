@@ -11,6 +11,7 @@ class Location < ApplicationRecord
   end
   has_many :routes
   has_many :stops, through: :hubs
+  belongs_to :country, optional: true
 
   scope :nexus, -> { where(location_type: "nexus") }
 
@@ -29,9 +30,10 @@ class Location < ApplicationRecord
       location.street           = geo.route
       location.street_address   = geo.street_number.to_s + " " + geo.route.to_s
       location.geocoded_address = geo.address
-      location.country          = geo.country
       location.city             = geo.city
       location.zip_code         = geo.postal_code
+
+      location.country          = Country.find_by(code: geo.country_code)
     end
     location
   end
@@ -46,7 +48,8 @@ class Location < ApplicationRecord
   end
 
   def self.from_short_name(input, location_type)
-    city, country = *input.split(" ,")
+    city, country_name = *input.split(" ,")
+    country = 
     location = Location.find_by(city: city, country: country, location_type: location_type) 
     return location unless location.nil?
 
@@ -66,7 +69,7 @@ class Location < ApplicationRecord
   end
 
   def set_geocoded_address_from_fields!
-    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country}"
+    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country.try(:name)}"
     self.geocoded_address = rawAddress.remove_extra_spaces
   end
 
@@ -98,8 +101,7 @@ class Location < ApplicationRecord
   end
 
   def self.create_and_geocode(raw_location_params)
-    location_params = location_params(raw_location_params)
-    location = Location.find_or_create_by(location_params)
+    location = Location.find_or_create_by(location_params(raw_location_params))
     location.geocode_from_address_fields! if location.geocoded_address.nil?
     
     location
@@ -113,12 +115,12 @@ class Location < ApplicationRecord
     location
   end
 
-  def self.end_ports
-    Location.where("location_type = ?", "end_port")
+  def self.new_from_raw_params(raw_location_params)
+    new(location_params(raw_location_params))
   end
 
-  def self.new_from_raw_params(raw_location_params)
-    Location.new(location_params(raw_location_params))
+  def self.create_from_raw_params!(raw_location_params)
+    create!(location_params(raw_location_params))
   end
 
   def self.nexuses
@@ -145,7 +147,17 @@ class Location < ApplicationRecord
     end
   end
 
+
   # Instance methods
+
+  def set_country_by_name!(name)
+    self.country = Country.geo_find_by_name(name)
+  end
+
+  def set_country_by_code!(code)
+    self.country = Country.find_by(code: code)
+  end
+
   def is_primary_for?(user)
     user_loc = UserLocation.find_by(location_id: self.id, user_id: user.id)
     if user_loc.nil?
@@ -191,12 +203,12 @@ class Location < ApplicationRecord
   end
 
   def city_country
-    "#{city}, #{country}"
+    "#{city}, #{country.name}"
   end
 
   def full_address
     part1 = [street, street_number].delete_if(&:blank?).join(" ")
-    part2 = [zip_code, city, country].delete_if(&:blank?).join(", ")
+    part2 = [zip_code, city, country.name].delete_if(&:blank?).join(", ")
     [part1, part2].delete_if(&:blank?).join(", ")
   end
 
@@ -259,15 +271,30 @@ class Location < ApplicationRecord
     end
   end
 
+  def to_custom_hash
+    custom_hash = { country: country.try(:name) }
+    [
+      :id, :city, :street, :street_number, :zip_code,
+      :geocoded_address, :latitude, :longitude,
+      :location_type, :name
+    ].each do |attribute|
+      custom_hash[attribute] = self[attribute]
+    end
+
+    custom_hash
+  end
+
   private
 
   def self.location_params(raw_location_params)
-    return if raw_location_params.try(:permit,
+    country = Country.geo_find_by_name(raw_location_params["country"])
+
+    raw_location_params.try(:permit,
       :latitude, :longitude, :geocoded_address, :street,
-      :street_number, :zip_code, :city, :country
+      :street_number, :zip_code, :city
     )
 
-    raw_location_params.try(:symbolize_keys)
+    raw_location_params.to_h.merge(country: country)
   end
 
   def sanitize_zip_code!

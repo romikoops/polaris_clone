@@ -123,6 +123,7 @@ class TenantSeeder
           ocean: "imc.sea.se@greencarrier.se"
         }
       },
+      
       subdomain: "greencarrier",
       name: "Greencarrier",
       currency: 'USD',
@@ -140,6 +141,10 @@ class TenantSeeder
             container: true,
             cargo_item: true
           }
+        },
+        links: {
+          about: "https://freightservices.greencarrier.com/about-us/",
+          legal: 'https://freightservices.greencarrier.com/contact/'
         },
         dangerous_goods: false,
         detailed_billing: false,
@@ -1145,6 +1150,84 @@ class TenantSeeder
           "CFR",
           "DDP",
           "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#FEF937",
+          secondary: "#E14C43",
+          brightPrimary: "#FFFFF",
+          brightSecondary: "#f94c43"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+      },
+      addresses: {
+        main:"Afrikastraße 3, 20457 Hamburg"
+      },
+      phones:{
+        main:"+49 40 74 0020",
+        support: "49 40 74 0020"
+      },
+      emails: {
+        sales: "sales@igs-intermodal.de",
+        support: "support@igs-intermodal.de"
+      },
+      subdomain: "igs-logistics",
+      name: "IGS Logistics Group GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "IGS Logistics is to discuss the validity of the presented prices with the product owners."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
         ]
       }
     }

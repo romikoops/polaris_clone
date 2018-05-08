@@ -315,14 +315,14 @@ export class UserShipmentView extends Component {
 
     const docChecker = {
       packing_sheet: false,
-      commercial_invoice: false,
-      customs_declaration: false,
-      customs_value_declaration: false,
-      eori: false,
-      certificate_of_origin: false,
-      dangerous_goods: false,
-      bill_of_lading: false,
-      invoice: false
+      commercial_invoice: false
+      // , customs_declaration: false,
+      // customs_value_declaration: false,
+      // eori: false,
+      // certificate_of_origin: false,
+      // dangerous_goods: false,
+      // bill_of_lading: false,
+      // invoice: false
     }
 
     if (documents) {
@@ -410,7 +410,7 @@ export class UserShipmentView extends Component {
                     </p>
                   </div>
                   {shipment.has_pre_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start">
+                    <div className="flex-100 layout-row layout-align-center-start">
                       <address className="flex-none">
                         {`${locations.origin.street_number} ${locations.origin.street}`} <br />
                         {`${locations.origin.city}`} <br />
@@ -428,7 +428,7 @@ export class UserShipmentView extends Component {
                     <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
                   </div>
                   {shipment.has_on_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start">
+                    <div className="flex-100 layout-row layout-align-center-start">
                       <address className="flex-none">
                         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
                         <br />
@@ -540,6 +540,75 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
+        <ShipmentCard
+          headingText="Additional Info"
+          theme={theme}
+          collapsed={collapser.extra_info}
+          handleCollapser={() => this.handleCollapser('extra_info')}
+          content={
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+              <div className="flex-100 layout-row layout-align-start-center">
+                {shipment.total_goods_value ? (
+                  <div className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Total Value of Goods:</b>
+                    </p>
+                    <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
+                      shipment.total_goods_value.value
+                    }`}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.eori ? (
+                  <div
+                    className="flex-45 offset-10 layout-row
+                        layout-align-start-start layout-wrap"
+                  >
+                    <p className="flex-100">
+                      <b>EORI number:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.eori}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="flex-100 layout-row layout-align-space-around-center">
+                {shipment.cargo_notes ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Description of Goods:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.notes ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Notes:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.incoterm_text ? (
+                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">
+                      <b>Incoterm:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            </div>
+          }
+        />
 
         <ShipmentCard
           headingText="Documents"
@@ -578,10 +647,16 @@ export class UserShipmentView extends Component {
                   />
                 </div>
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={{ marginTop: '5px' }}>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
                 {docView}
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={{ marginTop: '5px' }}>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
                 {missingDocs}
               </div>
             </div>

@@ -8,6 +8,7 @@ import { Alert } from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
 import styles from './LoginPage.scss'
 import FormsyInput from '../../components/FormsyInput/FormsyInput'
+import ForgotPassword from './ForgotPassword'
 
 class LoginPage extends React.Component {
   constructor (props) {
@@ -28,7 +29,6 @@ class LoginPage extends React.Component {
     if (this.props.loginAttempt && !this.state.alertVisible) {
       this.setState({ alertVisible: true })
     }
-    console.log('MOUNTED')
   }
 
   componentWillReceiveProps (nextProps) {
@@ -64,6 +64,10 @@ class LoginPage extends React.Component {
     })
   }
 
+  renderForgotPassword () {
+    this.setState({ forgotPassword: true })
+  }
+
   render () {
     const { loggingIn, theme } = this.props
     const focusStyles = {
@@ -71,6 +75,9 @@ class LoginPage extends React.Component {
       borderWidth: '1.5px',
       borderRadius: '2px',
       margin: '-1px 0 29px 0'
+    }
+    if (this.state.forgotPassword) {
+      return <ForgotPassword focusStyles={focusStyles} theme={theme} />
     }
     const alert = this.state.alertVisible ? (
       <Alert
@@ -81,13 +88,11 @@ class LoginPage extends React.Component {
     ) : (
       ''
     )
-    const formPosition =
-      navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true
-        ? `${styles.login_form} ${styles.login_ie_11}`
-        : styles.login_form
+    const ie11Positioning =
+      navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
     return (
       <Formsy
-        className={formPosition}
+        className={`${styles.login_form} ${ie11Positioning}`}
         name="form"
         onValidSubmit={this.handleSubmit}
         onInvalidSubmit={this.handleInvalidSubmit}
@@ -120,7 +125,7 @@ class LoginPage extends React.Component {
             required
           />
           <hr style={this.state.focus.password ? focusStyles : {}} />
-          <a href="#" className={styles.forget_password_link}>
+          <a onClick={() => this.renderForgotPassword()} className={styles.forget_password_link}>
             forgot password?
           </a>
         </div>
@@ -148,7 +153,6 @@ LoginPage.propTypes = {
   theme: PropTypes.theme,
   loginAttempt: PropTypes.bool,
   noRedirect: PropTypes.bool,
-
   // eslint-disable-next-line react/forbid-prop-types
   req: PropTypes.object
 }

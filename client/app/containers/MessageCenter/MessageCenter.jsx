@@ -54,15 +54,15 @@ class MessageCenter extends Component {
     this.setState({ key })
   }
   viewConvo (convParam) {
-    console.log(convParam.convoKey)
-    this.setSelected(convParam.convoKey)
+    this.setSelected(convParam)
     const { conversations } = this.props
     const selectedConvo = conversations[convParam]
-    selectedConvo.shipmentRef = selectedConvo.messages[0].shipmentRef
+
+    selectedConvo.shipmentRef = convParam
     this.setState({ selectedConvo: convParam })
     const { messageDispatch } = this.props
-    messageDispatch.markAsRead(selectedConvo.shipmentRef)
-    messageDispatch.getShipment(selectedConvo.shipmentRef)
+    messageDispatch.markAsRead(convParam)
+    messageDispatch.getShipment(convParam)
   }
   sendMessage (msg) {
     const { messageDispatch } = this.props
@@ -116,7 +116,7 @@ class MessageCenter extends Component {
         origin: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[0])[0],
         destination: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[1])[0],
         eta: moment(tmpShipment.planned_eta).format('YYYY-MM-DD'),
-        etd: moment(tmpShipment.planned_et).format('YYYY-MM-DD'),
+        etd: moment(tmpShipment.planned_etd).format('YYYY-MM-DD'),
         totalPrice: Number.parseFloat(tmpShipment[0].total_price, 10).toFixed(2),
         status: tmpShipment[0].status
       })
@@ -170,6 +170,7 @@ class MessageCenter extends Component {
         messageDispatch={messageDispatch}
         sendMessage={this.sendMessage}
         shipment={shipment}
+        shipmentRef={selectedConvo}
         user={user}
       />
     ) : (

@@ -41,16 +41,20 @@ module ShippingTools
     origins = []
     destinations = []
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
+      begin
       origins << {
-        value: Location.find(itinerary.first_nexus.id),
+        value: Location.find(itinerary.first_nexus.id).to_custom_hash,
         label: itinerary.first_nexus.name
       }
       destinations << {
-        value: Location.find(itinerary.last_nexus.id),
+        value: Location.find(itinerary.last_nexus.id).to_custom_hash,
         label: itinerary.last_nexus.name
       }
-
-      itinerary = itinerary.as_options_json
+      
+        itinerary = itinerary.as_options_json
+      rescue
+        
+      end
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
     end
@@ -99,9 +103,9 @@ module ShippingTools
       cargo_notes: shipment_data[:cargoNotes]
     )
 
-    # if shipment_data[:incoterm]
-    #   shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
-    # end
+    if shipment_data[:incotermText]
+      shipment.incoterm_text = shipment_data[:incotermText]
+    end
 
     # Shipper
     resource = shipment_data.require(:shipper)
@@ -218,15 +222,16 @@ module ShippingTools
 
     shipment.planned_etd = shipment.schedule_set.first['etd']
     shipment.planned_eta = shipment.schedule_set.last['eta']
+    shipment.closing_date = shipment.schedule_set.first['closing_date']
     shipment.save!
 
     origin_hub      = Layover.find(shipment.schedule_set.first['origin_layover_id']).stop.hub
     destination_hub = Layover.find(shipment.schedule_set.first['destination_layover_id']).stop.hub
     locations = {
-      startHub:    { data: origin_hub, location: origin_hub.nexus },
-      endHub:      { data: destination_hub, location: destination_hub.nexus },
-      origin:      shipment.origin,
-      destination: shipment.destination
+      startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
+      endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
+      origin:      shipment.origin.to_custom_hash,
+      destination: shipment.destination.to_custom_hash
     }
 
     {
@@ -246,19 +251,34 @@ module ShippingTools
 
   def self.request_shipment(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
-    shipment.status = 'requested'
+    shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
-    message = {
-      title: 'Booking Received',
-      message: "
-        Thank you for making your booking through #{current_user.tenant.name}.
-        You will be notified upon confirmation of the order.
-      ",
-      shipmentRef: shipment.imc_reference
-    }
+    message = build_request_shipment_message(current_user, shipment)
     add_message_to_convo(current_user, message, true)
     shipment
+  end
+
+  def self.build_request_shipment_message(current_user, shipment)
+    message = "
+      Thank you for making your booking through #{current_user.tenant.name}.
+      You will be notified upon confirmation of the order.
+    "
+    unless current_user.confirmed?
+      message += "\n
+        Please note that your order is pending Email Confirmation.
+        #{current_user.tenant.name} will not confirm your order until the
+        email associated with this account is validated.
+        To confirm your email, please follow the link sent to your email.
+      "
+    end
+
+
+    {
+      title: 'Booking Received',
+      message: message,
+      shipmentRef: shipment.imc_reference
+    }
   end
 
   def self.contact_location_params(resource)
@@ -277,14 +297,14 @@ module ShippingTools
   def self.choose_offer(params, current_user)
     @user_locations = current_user.user_locations.map do |uloc|
       {
-        location: uloc.location.attributes,
+        location: uloc.location.to_custom_hash,
         contact:  current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       {
-        location: contact.location.try(:attributes) || {},
+        location: contact.location.try(:to_custom_hash) || {},
         contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
@@ -353,6 +373,7 @@ module ShippingTools
       startHub: { data: @origin,      location: @origin.nexus },
       endHub:   { data: @destination, location: @destination.nexus }
     }
+
     {
       shipment:       shipment,
       hubs:           hubs,
@@ -364,7 +385,9 @@ module ShippingTools
       containers:     containers,
       cargoItems:     cargo_items,
       customs:        customs_fee,
-      locations:      { origin: shipment.origin, destination: shipment.destination }
+      locations: {
+        origin: shipment.origin.to_custom_hash, destination: shipment.destination.to_custom_hash
+      }
     }
   end
 

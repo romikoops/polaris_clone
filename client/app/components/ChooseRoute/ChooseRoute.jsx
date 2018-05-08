@@ -123,7 +123,7 @@ export class ChooseRoute extends Component {
     if (!schedules) return ''
 
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
-    schedules.sort(ChooseRoute.dynamicSort('closing_date'))
+    schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
@@ -133,7 +133,7 @@ export class ChooseRoute extends Component {
     const scheduleObj = {}
     mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
-      scheduleObj[mk].sort(ChooseRoute.dynamicSort('closing_date'))
+      scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {
       const topSched = scheduleObj[key].shift()

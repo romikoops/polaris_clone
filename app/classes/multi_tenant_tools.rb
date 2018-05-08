@@ -114,7 +114,7 @@ module MultiTenantTools
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Wollkämmereistraße 1, 21107 Hamburg"
+        main: "Wollkämmereistraße 1, 21107 Hamburg"
       },
       phones:{
         main:"+49 40 311706-0",
