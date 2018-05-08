@@ -42,7 +42,7 @@ module TruckingTools
         total_fees[k] = fee
       end
     end
-
+    
     fees[:rate] = fee_calculator('rate', pricing[:rate], cargo, km)
 
     fees.each do |_k, fee|
@@ -62,6 +62,7 @@ module TruckingTools
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
     end
+    
     
     if !pricing['min_value'] || (pricing['min_value'] && result['value'] > pricing['min_value'])
 
@@ -216,7 +217,7 @@ module TruckingTools
 
   def calc_trucking_price(trucking_pricing, cargos, km, direction)
     cargo_object = trucking_pricing.load_type == 'container' ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
-
+    awesome_print trucking_pricing
     trucking_pricings = {}
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
