@@ -51,9 +51,9 @@ function update (data) {
     origin: data.origin.city,
     destination: data.destination.city
   }
-  payload.hubs = {
-    origin: data.origin.hub_name,
-    destination: data.destination.hub_name
+  payload.nexuses = {
+    origin: data.origin.nexus_name,
+    destination: data.destination.nexus_name
   }
   payload.trucking = data.shipment.trucking
   payload.loadType = data.shipment.load_type
