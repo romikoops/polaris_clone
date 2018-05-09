@@ -423,6 +423,7 @@ module ExcelTools
   end
 
   def overwrite_zonal_trucking_rates_by_hub(params, _user = current_user, hub_id)
+    start_time = DateTime.now
     stats = {
       type: 'trucking',
       trucking_hubs: {
@@ -484,6 +485,33 @@ module ExcelTools
         zones[row_data[0]] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
       end
     end
+    all_ident_values_and_countries = {} 
+    zones.each do |zone_name, idents_and_countries|
+      all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
+        if idents_and_country[:min] && idents_and_country[:max]
+          (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+            stats[:trucking_destinations][:number_created] += 1
+            ident_value = nil
+            if identifier_type == 'zipcode'
+              ident_length = ident.to_s.length
+              ident_value = '0' * (zip_char_length - ident_length) + ident.to_s
+            else
+              ident_value = ident
+            end
+            { ident: ident_value, country: idents_and_country[:country] }
+          end
+        elsif identifier_type == "city_name"
+          city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
+          stats[:trucking_destinations][:number_created] += 1
+          stats[:hub_truckings][:number_created] += 1
+          
+          { ident: city, country: idents_and_country[:country] }
+        else
+          idents_and_country
+        end
+      end
+    end
+    byebug
     
     # END Load Zones ------------------------
 
@@ -563,7 +591,7 @@ module ExcelTools
       row_truck_type = 'default' if !row_truck_type || row_truck_type == ''
       load_type = meta[:load_type] == 'container' ? 'container' : 'cargo_item'
       cargo_class = meta[:cargo_class]
-      
+      awesome_print meta
       courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
       rate_num_rows = rates_sheet.last_row
       modifier_position_objs = {}
@@ -598,34 +626,12 @@ module ExcelTools
       (6..rate_num_rows).each do |line|
         row_data = rates_sheet.row(line)
         row_zone_name = row_data.shift
-        
+        awesome_print row_zone_name
         
         row_min_value = row_data.shift
         row_key = "#{row_zone_name}_#{row_truck_type}"
-
-        single_ident_values_and_country = zones[row_zone_name].flat_map do |idents_and_country|
-          if idents_and_country[:min] && idents_and_country[:max]
-            (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
-              stats[:trucking_destinations][:number_created] += 1
-              ident_value = nil
-              if identifier_type == 'zipcode'
-                ident_length = ident.to_s.length
-                ident_value = '0' * (zip_char_length - ident_length) + ident.to_s
-              else
-                ident_value = ident
-              end
-              { ident: ident_value, country: idents_and_country[:country] }
-            end
-          elsif identifier_type == "city_name"
-            city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
-            stats[:trucking_destinations][:number_created] += 1
-            stats[:hub_truckings][:number_created] += 1
-            
-            { ident: city, country: idents_and_country[:country] }
-          else
-            idents_and_country
-          end
-        end
+        
+        single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
 
         single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
         single_country_values = single_ident_values_and_country.map { |h| h[:country] }
@@ -795,7 +801,10 @@ module ExcelTools
       end
     end
     # END Rates ------------------------
+  end_time = DateTime.now
+  diff = (end_time - start_time) / 86400
 
+  awesome_print diff
     { results: results, stats: stats }
   end
 
