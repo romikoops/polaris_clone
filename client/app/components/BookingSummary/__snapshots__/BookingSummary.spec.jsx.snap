@@ -111,20 +111,5 @@ exports[`shallow render 1`] = `
        kg
     </p>
   </div>
-  <div
-    className="flex layout-column layout-align-stretch"
-  >
-    <h4
-      className="flex-50 layout-row layout-align-center-center"
-    >
-      Total Volume
-    </h4>
-    <p
-      className="flex-50 layout-row layout-align-center-start"
-    >
-      200.000
-       m³
-    </p>
-  </div>
 </div>
 `;

@@ -26,7 +26,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
         }
       >
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -64,12 +64,12 @@ exports[`props.containers has dangerous_goods as true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
           >
-             Net Weight 
+             Cargo Gross Weight 
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -97,55 +97,14 @@ exports[`props.containers has dangerous_goods as true 1`] = `
               wrapperClassName="flex-80"
             />
             <div
-              className="flex-20 layout-row layout-align-center-center"
+              className="flex layout-row layout-align-center-center"
             >
               kg
             </div>
           </div>
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
-        >
-          <div
-            className="layout-row flex-100 layout-wrap layout-align-start-center"
-          >
-            <p
-              className="input_label flex-none"
-            >
-               Gross Weight 
-            </p>
-            <Tooltip
-              icon="fa-info-circle"
-              text="gross_weight"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-95 layout-row input_box"
-          >
-            <input
-              className="flex-80"
-              disabled={true}
-              name="0-payload_in_kg"
-              type="number"
-              value={26}
-            />
-            <div
-              className="flex-20 layout-row layout-align-center-center"
-            >
-              kg
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
@@ -245,7 +204,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -333,7 +292,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
           }
         >
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -366,12 +325,12 @@ exports[`props.containers has dangerous_goods as true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
             >
-               Net Weight 
+               Cargo Gross Weight 
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -381,55 +340,14 @@ exports[`props.containers has dangerous_goods as true 1`] = `
                 type="number"
               />
               <div
-                className="flex-20 layout-row layout-align-center-center"
+                className="flex layout-row layout-align-center-center"
               >
                 kg
               </div>
             </div>
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
-          >
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center"
-            >
-              <p
-                className="input_label flex-none"
-              >
-                 Gross Weight 
-              </p>
-              <Tooltip
-                icon="fa-info-circle"
-                text="gross_weight"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-            <div
-              className="flex-95 layout-row input_box"
-            >
-              <input
-                className="flex-80"
-                disabled={true}
-                name="-1-payload_in_kg"
-                type="number"
-                value=""
-              />
-              <div
-                className="flex-20 layout-row layout-align-center-center"
-              >
-                kg
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
@@ -529,7 +447,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -601,7 +519,7 @@ exports[`props.nextStageAttempt is true 1`] = `
         }
       >
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -639,12 +557,12 @@ exports[`props.nextStageAttempt is true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
           >
-             Net Weight 
+             Cargo Gross Weight 
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -672,55 +590,14 @@ exports[`props.nextStageAttempt is true 1`] = `
               wrapperClassName="flex-80"
             />
             <div
-              className="flex-20 layout-row layout-align-center-center"
+              className="flex layout-row layout-align-center-center"
             >
               kg
             </div>
           </div>
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
-        >
-          <div
-            className="layout-row flex-100 layout-wrap layout-align-start-center"
-          >
-            <p
-              className="input_label flex-none"
-            >
-               Gross Weight 
-            </p>
-            <Tooltip
-              icon="fa-info-circle"
-              text="gross_weight"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-95 layout-row input_box"
-          >
-            <input
-              className="flex-80"
-              disabled={true}
-              name="0-payload_in_kg"
-              type="number"
-              value={26}
-            />
-            <div
-              className="flex-20 layout-row layout-align-center-center"
-            >
-              kg
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
@@ -820,7 +697,7 @@ exports[`props.nextStageAttempt is true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -908,7 +785,7 @@ exports[`props.nextStageAttempt is true 1`] = `
           }
         >
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -941,12 +818,12 @@ exports[`props.nextStageAttempt is true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
             >
-               Net Weight 
+               Cargo Gross Weight 
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -956,55 +833,14 @@ exports[`props.nextStageAttempt is true 1`] = `
                 type="number"
               />
               <div
-                className="flex-20 layout-row layout-align-center-center"
+                className="flex layout-row layout-align-center-center"
               >
                 kg
               </div>
             </div>
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
-          >
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center"
-            >
-              <p
-                className="input_label flex-none"
-              >
-                 Gross Weight 
-              </p>
-              <Tooltip
-                icon="fa-info-circle"
-                text="gross_weight"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-            <div
-              className="flex-95 layout-row input_box"
-            >
-              <input
-                className="flex-80"
-                disabled={true}
-                name="-1-payload_in_kg"
-                type="number"
-                value=""
-              />
-              <div
-                className="flex-20 layout-row layout-align-center-center"
-              >
-                kg
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
@@ -1104,7 +940,7 @@ exports[`props.nextStageAttempt is true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1176,7 +1012,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
         }
       >
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1214,12 +1050,12 @@ exports[`props.scope.dangerous_goods is true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
           >
-             Net Weight 
+             Cargo Gross Weight 
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -1247,55 +1083,14 @@ exports[`props.scope.dangerous_goods is true 1`] = `
               wrapperClassName="flex-80"
             />
             <div
-              className="flex-20 layout-row layout-align-center-center"
+              className="flex layout-row layout-align-center-center"
             >
               kg
             </div>
           </div>
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
-        >
-          <div
-            className="layout-row flex-100 layout-wrap layout-align-start-center"
-          >
-            <p
-              className="input_label flex-none"
-            >
-               Gross Weight 
-            </p>
-            <Tooltip
-              icon="fa-info-circle"
-              text="gross_weight"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-95 layout-row input_box"
-          >
-            <input
-              className="flex-80"
-              disabled={true}
-              name="0-payload_in_kg"
-              type="number"
-              value={26}
-            />
-            <div
-              className="flex-20 layout-row layout-align-center-center"
-            >
-              kg
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
@@ -1395,7 +1190,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1483,7 +1278,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
           }
         >
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1516,12 +1311,12 @@ exports[`props.scope.dangerous_goods is true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
             >
-               Net Weight 
+               Cargo Gross Weight 
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -1531,55 +1326,14 @@ exports[`props.scope.dangerous_goods is true 1`] = `
                 type="number"
               />
               <div
-                className="flex-20 layout-row layout-align-center-center"
+                className="flex layout-row layout-align-center-center"
               >
                 kg
               </div>
             </div>
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
-          >
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center"
-            >
-              <p
-                className="input_label flex-none"
-              >
-                 Gross Weight 
-              </p>
-              <Tooltip
-                icon="fa-info-circle"
-                text="gross_weight"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-            <div
-              className="flex-95 layout-row input_box"
-            >
-              <input
-                className="flex-80"
-                disabled={true}
-                name="-1-payload_in_kg"
-                type="number"
-                value=""
-              />
-              <div
-                className="flex-20 layout-row layout-align-center-center"
-              >
-                kg
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
@@ -1679,7 +1433,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1751,7 +1505,7 @@ exports[`shallow rendering 1`] = `
         }
       >
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -1789,12 +1543,12 @@ exports[`shallow rendering 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
           >
-             Net Weight 
+             Cargo Gross Weight 
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -1822,55 +1576,14 @@ exports[`shallow rendering 1`] = `
               wrapperClassName="flex-80"
             />
             <div
-              className="flex-20 layout-row layout-align-center-center"
+              className="flex layout-row layout-align-center-center"
             >
               kg
             </div>
           </div>
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
-        >
-          <div
-            className="layout-row flex-100 layout-wrap layout-align-start-center"
-          >
-            <p
-              className="input_label flex-none"
-            >
-               Gross Weight 
-            </p>
-            <Tooltip
-              icon="fa-info-circle"
-              text="gross_weight"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-95 layout-row input_box"
-          >
-            <input
-              className="flex-80"
-              disabled={true}
-              name="0-payload_in_kg"
-              type="number"
-              value={26}
-            />
-            <div
-              className="flex-20 layout-row layout-align-center-center"
-            >
-              kg
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <p
             className="input_label flex-none"
@@ -1970,7 +1683,7 @@ exports[`shallow rendering 1`] = `
           />
         </div>
         <div
-          className="layout-row flex-20 layout-wrap layout-align-start-center"
+          className="layout-row flex layout-wrap layout-align-start-center"
         >
           <div
             className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -2058,7 +1771,7 @@ exports[`shallow rendering 1`] = `
           }
         >
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
@@ -2091,12 +1804,12 @@ exports[`shallow rendering 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
             >
-               Net Weight 
+               Cargo Gross Weight 
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -2106,55 +1819,14 @@ exports[`shallow rendering 1`] = `
                 type="number"
               />
               <div
-                className="flex-20 layout-row layout-align-center-center"
+                className="flex layout-row layout-align-center-center"
               >
                 kg
               </div>
             </div>
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
-          >
-            <div
-              className="layout-row flex-100 layout-wrap layout-align-start-center"
-            >
-              <p
-                className="input_label flex-none"
-              >
-                 Gross Weight 
-              </p>
-              <Tooltip
-                icon="fa-info-circle"
-                text="gross_weight"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-            <div
-              className="flex-95 layout-row input_box"
-            >
-              <input
-                className="flex-80"
-                disabled={true}
-                name="-1-payload_in_kg"
-                type="number"
-                value=""
-              />
-              <div
-                className="flex-20 layout-row layout-align-center-center"
-              >
-                kg
-              </div>
-            </div>
-          </div>
-          <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <p
               className="input_label flex-none"
@@ -2254,7 +1926,7 @@ exports[`shallow rendering 1`] = `
             />
           </div>
           <div
-            className="layout-row flex-20 layout-wrap layout-align-start-center"
+            className="layout-row flex layout-wrap layout-align-start-center"
           >
             <div
               className="layout-row flex-100 layout-wrap layout-align-start-center"
