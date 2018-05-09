@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`props.shipment.hubs is {} 1`] = `""`;
+
+exports[`props.shipment.schedule_set.length < 1 1`] = `""`;
+
 exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row pointy route_result"

@@ -2,6 +2,12 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, shipment } from '../../mocks'
 
+/**
+ * ISSUE
+ * `UserShipmentRow.switchIcon(schedule, gradientFontStyle)`
+ * but `static switchIcon (sched) {`
+ */
+
 jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
@@ -49,4 +55,24 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<UserShipmentRow {...propsBase} />)).toMatchSnapshot()
+})
+
+test('props.shipment.schedule_set.length < 1', () => {
+  const shipmentValue = {
+    ...editedShipment,
+    schedule_set: []
+  }
+  const props = {
+    ...propsBase,
+    shipment: shipmentValue
+  }
+  expect(shallow(<UserShipmentRow {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipment.hubs is {}', () => {
+  const props = {
+    ...propsBase,
+    hubs: {}
+  }
+  expect(shallow(<UserShipmentRow {...props} />)).toMatchSnapshot()
 })
