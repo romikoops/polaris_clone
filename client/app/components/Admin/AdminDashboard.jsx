@@ -94,7 +94,7 @@ export class AdminDashboard extends Component {
       return <Loading theme={theme} />
     }
     const {
-      routes, shipments, air, ocean, itineraries
+      shipments, air, ocean, itineraries
     } = dashData
     const clientHash = {}
 
@@ -301,7 +301,7 @@ export class AdminDashboard extends Component {
             }`}
           >
             <AdminSearchableRoutes
-              routes={routes}
+              itineraries={itineraries}
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
