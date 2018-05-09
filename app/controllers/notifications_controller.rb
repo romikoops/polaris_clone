@@ -24,6 +24,7 @@ class NotificationsController < ApplicationController
     resp = add_message_to_convo(user, message, isAdmin)
     response_handler(resp)
   end
+  
   def mark_as_read
     shipment = Shipment.find_by_imc_reference(params[:shipmentRef])
     shipment.conversation.messages.each do |message|

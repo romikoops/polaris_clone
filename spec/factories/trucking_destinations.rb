@@ -18,5 +18,7 @@ FactoryBot.define do
         (15000 + n - 1).to_s
       end
     end
+
+    country_code "SE"
   end
 end

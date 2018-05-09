@@ -69,6 +69,7 @@ function register (user) {
       if (!response.ok) {
         return Promise.reject(response.statusText)
       }
+
       if (response.headers.get('access-token')) {
         const accessToken = response.headers.get('access-token')
         const client = response.headers.get('client')

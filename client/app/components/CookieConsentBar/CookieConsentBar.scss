@@ -1,0 +1,15 @@
+:local {
+	p.cookie_text {
+		text-shadow: 1px 1px rgba(100, 100, 100, 0.3);
+		margin: 0;
+		display: inline-block;
+	}
+	i.cookie_exit_icon {
+		transition: all 0.3s ease;
+		color: rgba(white, 0.8);
+		
+		&:hover {
+			color: rgba(white, 1);
+		}
+	}
+}

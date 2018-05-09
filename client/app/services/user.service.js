@@ -74,16 +74,6 @@ function getById (id) {
   return fetch(`${BASE_URL}/users/${id}`, requestOptions).then(handleResponse)
 }
 
-function update (user) {
-  const requestOptions = {
-    method: 'PUT',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ update: user })
-  }
-
-  return fetch(`${BASE_URL}/users/${user.id}/update`, requestOptions).then(handleResponse)
-}
-
 function editUserLocation (userId, data) {
   const formData = new FormData()
   formData.append('edit_location', JSON.stringify(data))
@@ -250,7 +240,6 @@ export const userService = {
   uploadDocument,
   getAll,
   getById,
-  update,
   getStoredUser,
   getContact,
   updateContact,

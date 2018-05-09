@@ -2,12 +2,13 @@ class Shipment < ApplicationRecord
   extend ShippingTools
   include ActiveModel::Validations
   STATUSES = %w( 
-    requested
     booking_process_started
+    requested_by_unconfirmed_account
+    requested
     pending
     confirmed
     declined
-    ignored,
+    ignored
     finished
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
@@ -249,7 +250,7 @@ class Shipment < ApplicationRecord
     self.status == "booked"    
   end
 
-  def accept!
+  def confirm!
     self.update_attributes(status: "confirmed")
     self.save!
   end
@@ -317,29 +318,30 @@ class Shipment < ApplicationRecord
     ShipmentMailer.shipper_notification(user, shipment).deliver_now
     shipper_confirmation_email(user, shipment)
   end
+
   def self.update_hubs_on_shipments
-    ss = Shipment.all
-    ss.each do |s|
+    Shipment.all.each do |s|
       if s.origin_id != nil && s.destination_id != nil && s.origin && s.destination
-      if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
-        hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
-        if s.origin.location_type
-          s.origin_hub_id = s.origin.id
-        else
-          s.origin_hub_id = hub_keys[0].to_i
-          s.destination_hub_id = hub_keys[1].to_i
+        if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
+          hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
+          if s.origin.location_type
+            s.origin_hub_id = s.origin.id
+          else
+            s.origin_hub_id = hub_keys[0].to_i
+            s.destination_hub_id = hub_keys[1].to_i
+          end
+          if s.destination.location_type
+            s.destination_hub_id = s.destination.id
+          else
+            
+            s.destination_hub_id = hub_keys[1].to_i
+          end
+          s.save!
         end
-        if s.destination.location_type
-          s.destination_hub_id = s.destination.id
-        else
-          
-          s.destination_hub_id = hub_keys[1].to_i
-        end
-        s.save!
       end
     end
-    end
   end
+
   private
 
   def generate_imc_reference

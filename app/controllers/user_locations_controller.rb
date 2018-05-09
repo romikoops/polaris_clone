@@ -11,7 +11,7 @@ class UserLocationsController < ApplicationController
 
   def create
     user = User.find(params[:user_id])
-    location = Location.create!(JSON.parse(params[:new_location]))
+    location = Location.create_from_raw_params!(JSON.parse(params[:new_location]))
     new_user_loc = user.user_locations.create!(primary: false, location_id: location.id)
     resp = []
     user_locs = user.user_locations

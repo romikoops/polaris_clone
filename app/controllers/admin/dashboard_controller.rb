@@ -2,9 +2,17 @@ class Admin::DashboardController < ApplicationController
   include ItineraryTools
   before_action :require_login_and_role_is_admin
   def index
-    @requested_shipments = Shipment.where(status: "requested", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
-    @open_shipments = Shipment.where(status: ["accepted", "in_progress", "confirmed"], tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
-    @finished_shipments = Shipment.where(status: ["declined", "finished"], tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
+    @requested_shipments = Shipment.where(
+      status: %w(requested requested_by_unconfirmed_account), tenant_id: current_user.tenant_id
+    ).order(booking_placed_at: :desc)
+    @open_shipments = Shipment.where(
+      status: %w(in_progress confirmed),
+      tenant_id: current_user.tenant_id
+    ).order(booking_placed_at: :desc)
+    @finished_shipments = Shipment.where(
+      status: 'finished',
+      tenant_id: current_user.tenant_id
+    ).order(booking_placed_at: :desc)
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     @detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
     @hubs = Hub.prepped(current_user)
