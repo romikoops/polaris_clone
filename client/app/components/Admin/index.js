@@ -28,7 +28,7 @@ export * from './AdminPricingRouteView'
 
 export { default as AdminTrucking } from './AdminTrucking'
 export * from './AdminTruckingCreator'
-export * from './AdminTruckingView'
+export { default as AdminTruckingView } from './AdminTruckingView'
 export * from './AdminTruckingIndex'
 
 export * from './AdminRouteForm'

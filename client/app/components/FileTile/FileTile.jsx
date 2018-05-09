@@ -68,6 +68,9 @@ class FileTile extends React.Component {
       headers: { ...authHeader() },
       body: formData
     }
+    if (this.uploaderInput.files.length) {
+      this.uploaderInput.value = ''
+    }
     const uploadUrl = BASE_URL + url
     return fetch(uploadUrl, requestOptions).then(FileTile.handleResponse)
   }
@@ -226,11 +229,7 @@ class FileTile extends React.Component {
     )
     const bottomRow = isAdmin ? adminRow : userRow
     return (
-      <div
-        className={`flex-none layout-row layout-wrap layout-align-center-start ${
-          styles.tile
-        } `}
-      >
+      <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} `}>
         {showDenialDetails ? denyDetails : ''}
         <div className="flex-100 layout-row layout-wrap layout-align-center-center">
           <div className="flex-100 layout-row layout-wrap layout-align-center-start">
