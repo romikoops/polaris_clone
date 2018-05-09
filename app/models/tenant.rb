@@ -104,5 +104,15 @@ class Tenant < ApplicationRecord
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
   end
-  
+
+
+  # Shortcuts to find_by_subdomain to use in the console
+
+  def self.method_missing(name, *args)
+    where(subdomain: name.try(:to_s)).first.clone || super
+  end
+
+  def self.respond_to_missing?(name, include_private = false)
+    where(subdomain: name.try(:to_s)).first || super
+  end
 end

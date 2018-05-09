@@ -527,8 +527,6 @@ export class ShipmentLocationBox extends Component {
 
   scopeNexusOptions (nexusIds, target) {
     getRequests.nexuses(nexusIds, target, this.props.routeIds, (data) => {
-      console.log('######TARGET@@@@@@@')
-      console.log(target)
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
@@ -611,12 +609,13 @@ export class ShipmentLocationBox extends Component {
       }
     )
 
-    const address = addressFromPlace(place)
-    this.setState({
-      [target]: address,
-      autoText: { [target]: place.formatted_address }
+    addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
+      this.setState({
+        [target]: address,
+        autoText: { [target]: place.formatted_address }
+      })
+      this.props.setTargetAddress(target, address)
     })
-    this.props.setTargetAddress(target, address)
   }
 
   resetAuto (target) {
