@@ -43,5 +43,37 @@ FactoryBot.define do
         }
       }
     end
+    
+    trait :with_mot_emails do
+      emails do
+        {
+          sales: {
+            air: "sales.air@demo.com",
+            ocean: "sales.ocean@demo.com",
+            rail: "sales.rail@demo.com",
+            general: "sales.general@demo.com"
+          },
+          support: {
+            general: "support@demo.com",
+            air: "support.air@demo.com",
+            ocean: "support.sea@demo.com",
+            rail: "support.rail@demo.com"
+          }
+        }
+      end
+    end
+
+    trait :with_general_emails do
+      emails do
+        {
+          sales: {
+            general: "sales.general@demo.com"
+          },
+          support: {
+            general: "support@demo.com",
+          }
+        }
+      end
+    end  
   end
 end

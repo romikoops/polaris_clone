@@ -116,7 +116,10 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@greencarrier.com",
+        sales: {
+          air: "imc.air.se@greencarrier.se",
+          ocean: "imc.sea.se@greencarrier.se"
+        },
         support: {
           general: "support@greencarrier.com",
           air: "imc.air.se@greencarrier.se",
@@ -212,11 +215,17 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@demo.com",
+        sales: {
+          general: "sales@demo.com",
+          air: "sales@demo.com",
+          ocean: "sales@demo.com",
+          rail: "sales@demo.com"
+        },
         support: {
           general: "support@demo.com",
           air: "imc.air@demo.com",
-          ocean: "imc.sea@demo.com"
+          ocean: "imc.sea@demo.com",
+          rail: "imc.rail@demo.com"
         }
       },
       subdomain: "demo",
@@ -293,7 +302,9 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@nordicconsolidators.com",
+        sales: {
+          general: "sales@nordicconsolidators.com"
+        },
         support:{
           general: "info@nordicconsolidators.com"
         }
@@ -357,7 +368,9 @@ class TenantSeeder
         support: "+45 5353 0300"
       },
       emails: {
-        sales: "sales@easyshipping.dk",
+        sales: {
+          general: "sales@easyshipping.dk"
+        },
         support: {
           general: "support@easyshipping.dk"
         }
@@ -424,7 +437,9 @@ class TenantSeeder
         support: "+36 1 270 9330"
       },
       emails: {
-        sales: "sales@integrail.hu",
+        sales: {
+          general: "sales@integrail.hu"
+        },
         support: {
           general: "info@tantumshipping.com"
         }
@@ -488,7 +503,9 @@ class TenantSeeder
         support: "0045 32 51 60 22"
       },
       emails: {
-        sales: "info@isa.dk",
+        sales: {
+          general: "info@isa.dk"
+        },
         support: {
           general: "info@isa.dk"
         }
@@ -556,7 +573,9 @@ class TenantSeeder
         support: "+354 525 - 7000"
       },
       emails: {
-        sales: "service@eimskip.is",
+        sales: {
+          general: "service@eimskip.is"
+        },
         support: {
           general: "service@eimskip.is"
         }
@@ -619,7 +638,9 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "info@belglobe.com",
+        sales: {
+          general: "info@belglobe.com"
+        },
         support: {
           general: "info@belglobe.com"
         }
@@ -700,9 +721,9 @@ class TenantSeeder
             cargo_item: true
           },
           rail: {
-              container: false,
-              cargo_item: false
-            }
+            container: false,
+            cargo_item: false
+          }
         },
         dangerous_goods: false,
         detailed_billing: false,
@@ -747,7 +768,9 @@ class TenantSeeder
         support: "+49 172 4203 1020"
       },
       emails: {
-        sales: "sales@hartrodt.com",
+        sales: {
+          general: "sales@hartrodt.com"
+        },
         support: {
           general: "ah_ham@hartrodt.com"
         }
@@ -829,7 +852,9 @@ class TenantSeeder
         support: "+49 173 4203 1020"
       },
       emails: {
-        sales: "sales@saco.de",
+        sales: {
+          general: "sales@saco.de"
+        },
         support: {
           general: "support@saco.de"
         }
@@ -911,7 +936,9 @@ class TenantSeeder
         support: "+49-(0)40 5005 810"
       },
       emails: {
-        sales: "sales@mol-logistics.com",
+        sales: {
+          general: "sales@mol-logistics.com"
+        },
         support: {
           general: "support@mol-logistics.com",
           air: "air@mol-logistics.com",
@@ -999,7 +1026,9 @@ class TenantSeeder
         support: "+49 (0)421 1760-280"
       },
       emails: {
-        sales: "sales@gs-logistics.com",
+        sales: {
+          general: "sales@gs-logistics.com"
+        },
         support: {
           general: "support@gs-logistics.com",
           air: "air@@gs-logistics.com",
@@ -1087,7 +1116,9 @@ class TenantSeeder
         support: "+49 40 524 766 881"
       },
       emails: {
-        sales: "sales@gtg-seefracht.com",
+        sales: {
+          general: "sales@gtg-seefracht.com"
+        },
         support: {
           general: "support@gtg-seefracht.com",
           air: "",
@@ -1173,8 +1204,12 @@ class TenantSeeder
         support: "49 40 74 0020"
       },
       emails: {
-        sales: "sales@igs-intermodal.de",
-        support: "support@igs-intermodal.de"
+        sales: {
+          general: "sales@igs-intermodal.de"
+        },
+        support: {
+          general: "sales@igs-intermodal.de"
+        }
       },
       subdomain: "igs-logistics",
       name: "IGS Logistics Group GmbH",

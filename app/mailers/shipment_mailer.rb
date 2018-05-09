@@ -20,7 +20,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
     mail(
-      to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
+      to: tenant.email_for(:sales, shipment.mode_of_transport), 
       # to: TESTING_EMAIL,
       bcc: 'bookings@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
