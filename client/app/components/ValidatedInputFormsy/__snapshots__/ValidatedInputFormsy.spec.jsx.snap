@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="wrapper_input"
+>
+  <input
+    className="FOO_CLASSNAME"
+    disabled={false}
+    min="FOO_MIN"
+    name="FOO_NAME"
+    onChange={[Function]}
+    onKeyDown={[Function]}
+    placeholder="FOO_PLACEHOLDER"
+    style={
+      Object {
+        "boxSizing": "border-box",
+        "height": "100%",
+        "width": "100%",
+      }
+    }
+    type="FOO_TYPE"
+  />
+  <span
+    className="error_message"
+    style={Object {}}
+  />
+</div>
+`;
