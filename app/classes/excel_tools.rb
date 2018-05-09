@@ -556,7 +556,7 @@ module ExcelTools
       load_meterage_ratio = meta[:load_meterage_ratio]
       load_meterage_limit = meta[:load_meterage_limit]
       cbm_ratio = meta[:cbm_ratio]
-      modifier = meta[:modifier]
+      modifier = meta[:scale]
       rate_basis = meta[:rate_basis]
       base = meta[:base]
       row_truck_type = meta[:truck_type]

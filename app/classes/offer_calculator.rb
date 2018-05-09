@@ -328,6 +328,7 @@ class OfferCalculator
     km = google_directions.distance_in_km
     carriage = direction == "import" ? "on_carriage" : "pre_carriage"
     trucking_pricing = @trucking_data[carriage][hub.id]
+    byebug
     price_results = calc_trucking_price(trucking_pricing, @cargo_units, km, direction)
   end
   
