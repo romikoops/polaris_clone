@@ -1,12 +1,14 @@
-import {
-  BUTTONS,
-  LOGIN_LINK_FORM,
-  LOGIN_LINK_HOME,
-  ACCOUNT_PAGE_LOADED,
-  USER, PASSWORD,
-  LOGIN_BUTTON
-} from '../selectors'
-import { DEMO_USER, DEMO_PASSWORD } from '../../_modules/constants'
+import { DEMO_USER, DEMO_PASSWORD } from '../_modules/constants'
+
+const loginButton = 'layout-fill layout-row layout-align-space-around-center'
+
+const BUTTONS = 'button > div'
+const LOGIN_BUTTON = `div[class="${loginButton}"]`
+const LOGIN_LINK_FORM = '.layout-align-space-between div'
+const LOGIN_LINK_HOME = 'div.flex-70 a'
+const PASSWORD = 'input[name="password"]'
+const USER = 'input[name="email"]'
+const ACCOUNT_PAGE_LOADED = `i.fa-tachometer`
 
 export default async function login (puppeteer, expect) {
   const {
