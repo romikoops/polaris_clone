@@ -118,7 +118,8 @@ class TenantSeeder
       emails: {
         sales: {
           air: "imc.air.se@greencarrier.se",
-          ocean: "imc.sea.se@greencarrier.se"
+          ocean: "imc.sea.se@greencarrier.se",
+          general: "imc.sea.se@greencarrier.se",
         },
         support: {
           general: "support@greencarrier.com",
@@ -703,7 +704,9 @@ class TenantSeeder
         support: "+ 49 172 543 0 576"
       },
       emails: {
-        sales: "jan.glembocki@gw-freight.com",
+        sales: {
+          general: "jan.glembocki@gw-freight.com"
+        },
         support: {
           general: "support@gw-freight.com"
         }
@@ -1277,6 +1280,7 @@ class TenantSeeder
     update_cargo_item_types!(tenant, other_data[:cargo_item_types])
     update_tenant_incoterms!(tenant, other_data[:incoterms])
   end
+
   def self.exec(tenant_data = TENANT_DATA)
     tenant_data.each do |tenant_attr|
       other_data = tenant_attr.delete(:other_data) || {}

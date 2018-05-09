@@ -36,6 +36,7 @@ class Tenant < ApplicationRecord
   has_many :conversations
     
   validates :scope, presence: true, scope: true
+  validates :emails, presence: true, emails: true
 
   def get_admin
     self.users.joins(:role).where('roles.name': 'admin').first
