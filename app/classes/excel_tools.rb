@@ -455,14 +455,14 @@ module ExcelTools
     hub = Hub.find(hub_id)
     tenant = hub.tenant
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    sheets = xlsx.sheets
-    sheets.shift
-    sheets.shift
-    zone_sheet = xlsx.sheet('Zones')
+    sheets = xlsx.sheets.clone()
+    zone_sheet = xlsx.sheet(sheets[0]).clone()
+    fees_sheet = xlsx.sheet(sheets[1]).clone()
 
+    
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-
+    identifier_type = zone_sheet.row(2)[4] == 'city' ? 'city_name' : zone_sheet.row(2)[4]
 
     # START Load Zones ------------------------
     
@@ -476,6 +476,7 @@ module ExcelTools
         end 
         zones[row_data[0]] << { ident: row_data[1], country: row_data[3] }
       elsif !row_data[1] && row_data[2]
+        
         range = row_data[2].delete(' ').split('-')
         if !zip_char_length
           zip_char_length = range[0].length
@@ -489,7 +490,7 @@ module ExcelTools
     
     # START Load Fees & Charges ------------------------
     
-    fees_sheet = xlsx.sheet('Fees')
+    
 
     rows = fees_sheet.parse(
       fee: 'FEE',
@@ -547,7 +548,8 @@ module ExcelTools
 
 
     # START Determine how many columns the modifiers span ------------------------
-    sheets.each do |sheet|
+    
+    sheets.slice(2, sheets.length - 1).each do |sheet|
       rates_sheet = xlsx.sheet(sheet)
       meta = generate_meta_from_sheet(rates_sheet)
       currency = meta[:currency]
@@ -557,8 +559,11 @@ module ExcelTools
       modifier = meta[:modifier]
       rate_basis = meta[:rate_basis]
       base = meta[:base]
+      row_truck_type = meta[:truck_type]
+      row_truck_type = 'default' if !row_truck_type || row_truck_type == ''
       load_type = meta[:load_type] == 'container' ? 'container' : 'cargo_item'
-      identifier_type = meta[:identifier] == 'city' ? 'city_name' : meta[:identifier]
+      cargo_class = meta[:cargo_class]
+      
       courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
       rate_num_rows = rates_sheet.last_row
       modifier_position_objs = {}
@@ -593,9 +598,8 @@ module ExcelTools
       (6..rate_num_rows).each do |line|
         row_data = rates_sheet.row(line)
         row_zone_name = row_data.shift
-        row_truck_type = row_data.shift
-        row_truck_type = 'default' if !row_truck_type || row_truck_type == ''
-        awesome_print row_truck_type
+        
+        
         row_min_value = row_data.shift
         row_key = "#{row_zone_name}_#{row_truck_type}"
 
@@ -632,6 +636,7 @@ module ExcelTools
             rates: {},
             fees: {},
             carriage: direction,
+            cargo_class: cargo_class,
             load_type: load_type,
             load_meterage: {
               ratio: load_meterage_ratio,
@@ -695,9 +700,10 @@ module ExcelTools
             end.join(", ")
 
           tp = trucking_pricing_by_zone[row_key]
-
-          new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
+            
+          new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
           new_cols.delete("cbm_ratio") if load_type == "container"
+          new_cols.delete("load_meterage") if load_type == "container"
 
           # Find or update trucking_destinations
           td_query = <<-eos
@@ -767,7 +773,7 @@ module ExcelTools
             ELSE
               #{with_statement},
               tp_ids AS (
-                INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+                INSERT INTO trucking_pricings(cargo_class, carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
                   VALUES #{tp.to_postgres_insertable}
                 RETURNING id
               )
