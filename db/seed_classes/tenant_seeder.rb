@@ -1034,8 +1034,8 @@ class TenantSeeder
         },
         support: {
           general: "support@gs-logistics.com",
-          air: "air@@gs-logistics.com",
-          ocean: "sea@@gs-logistics.com"
+          air: "air@gs-logistics.com",
+          ocean: "sea@gs-logistics.com"
         }
       },
       subdomain: "gs-logistics",
@@ -1123,9 +1123,7 @@ class TenantSeeder
           general: "sales@gtg-seefracht.com"
         },
         support: {
-          general: "support@gtg-seefracht.com",
-          air: "",
-          ocean: ""
+          general: "support@gtg-seefracht.com"
         }
       },
       subdomain: "gtg-seefracht",

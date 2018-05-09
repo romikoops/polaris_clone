@@ -12,10 +12,6 @@ class EmailsValidator < ActiveModel::EachValidator
     
     value.deep_stringify_keys!
     
-    unless value.deep_values.all? { |value| value.is_a?(String) }
-      add_error 'last level values must be a String'
-    end
-
     missing_branches = BRANCHES - value.keys
   	unless missing_branches.empty?
       add_error "is missing the following keys: #{missing_branches.log_format}"
@@ -29,6 +25,16 @@ class EmailsValidator < ActiveModel::EachValidator
 
       unless value[branch]['general']
         add_error "'#{branch}' branch must have a general email"
+      end
+
+      value[branch].each do |mode_of_transport, email|
+      	unless email.is_a?(String)
+      		add_error "'#{branch} - #{mode_of_transport}' email must be a string"
+      	end
+
+      	unless email.match(/\A[^@\s]+@[^@\s]+\z/)
+      		add_error "'#{branch} - #{mode_of_transport}' email is invalid"
+      	end
       end
     end
   end
