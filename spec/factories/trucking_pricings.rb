@@ -158,6 +158,7 @@ FactoryBot.define do
   factory :trucking_pricing do
   	load_type "cargo_item"
   	cbm_ratio 460
+  	cargo_class 'fcl_20f'
   	modifier "kg"
   	truck_type "default"
   	carriage "pre"

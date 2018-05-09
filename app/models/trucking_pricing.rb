@@ -58,6 +58,7 @@ class TruckingPricing < ApplicationRecord
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
       .where('trucking_destinations.country_code': country_code)
+      .where(cargo_class_condition(args))
       .where(truck_type_condition(args))
       .where(nexuses_condition(args))
       .where("
@@ -168,6 +169,10 @@ class TruckingPricing < ApplicationRecord
 
   def self.truck_type_condition(args)
     args[:truck_type] ? { 'trucking_pricings.truck_type': args[:truck_type] } : {}
+  end
+
+  def self.cargo_class_condition(args)
+    args[:cargo_class] ? { 'trucking_pricings.cargo_class': args[:cargo_class] } : {}
   end
 
   def self.nexuses_condition(args)

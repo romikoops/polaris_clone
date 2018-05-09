@@ -80,7 +80,7 @@ describe TruckingPricing, type: :model do
           )
         }
 
-        it 'finds the correct trucking_pricing with avulsed filters' do
+        it 'finds the correct trucking_pricing with avulsed location filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -90,7 +90,7 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([trucking_pricing])
         end
 
-        it 'finds the correct trucking_pricing with location filter' do
+        it 'finds the correct trucking_pricing with location object filter' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -98,6 +98,26 @@ describe TruckingPricing, type: :model do
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'finds the correct trucking_pricing with cargo_class filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'fcl_20f'
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'return empty collection if cargo_class filter does not match any item in db' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'some_string'
+          )
+
+          expect(trucking_pricings).to match([])
         end
       end
 
@@ -109,7 +129,7 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
         }
-        it 'finds the correct trucking_pricing with avulsed filters' do
+        it 'finds the correct trucking_pricing with avulsed location filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -119,7 +139,7 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([trucking_pricing])
         end
 
-        it 'finds the correct trucking_pricing with location filter' do
+        it 'finds the correct trucking_pricing with location object filter' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -127,6 +147,26 @@ describe TruckingPricing, type: :model do
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'finds the correct trucking_pricing with cargo_class filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'fcl_20f'
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'return empty collection if cargo_class filter does not match any item in db' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'some_string'
+          )
+
+          expect(trucking_pricings).to match([])
         end
       end
 
@@ -138,7 +178,7 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
         }
-        it 'finds the correct trucking_pricing with avulsed filters' do
+        it 'finds the correct trucking_pricing with avulsed location filters' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -148,7 +188,7 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([trucking_pricing])
         end
 
-        it 'finds the correct trucking_pricing with location filter' do
+        it 'finds the correct trucking_pricing with location object filter' do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
@@ -156,6 +196,26 @@ describe TruckingPricing, type: :model do
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
+        end
+        
+        it 'finds the correct trucking_pricing with cargo_class filter' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'fcl_20f'
+          )
+
+          expect(trucking_pricings).to match([trucking_pricing])
+        end
+
+        it 'return empty collection if cargo_class filter does not match any item in db' do
+          trucking_pricings = described_class.find_by_filter(
+            tenant_id: tenant.id, load_type: load_type,
+            carriage: carriage,   country_code: country_code,
+            location: location,   cargo_class: 'some_string'
+          )
+
+          expect(trucking_pricings).to match([])
         end
       end
     end
