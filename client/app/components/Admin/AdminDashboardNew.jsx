@@ -4,6 +4,8 @@ import { TabBox as TBox } from '../TabBox/TabBox'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import { AdminShipmentStatus as AShipStat } from './AdminShipmentStatus'
 import { AdminRequestedShipments as AReqShip } from './AdminRequestedShipments'
+import { AdminCustomers as ACust } from './AdminCustomers'
+import { AdminAffluency as AAffl } from './AdminAffluency'
 import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
@@ -51,10 +53,18 @@ export class AdminDashboardNew extends Component {
       />
     )
 
+    const Customers = (
+      <ACust />
+    )
+
+    const Affluency = (
+      <AAffl />
+    )
+
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`}>
         <TextHeading theme={theme} size={1} text="Dashboard" />
-        <section className={`layout-row flex-100 layout-wrap layout-align-center-center ${astyles.section}`}>
+        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
           <GBox
             title="Something"
             subtitle="Sub"
@@ -70,7 +80,7 @@ export class AdminDashboardNew extends Component {
             component={RequestedShipments}
           />
         </section>
-        <section className={`layout-row flex-100 layout-wrap layout-align-center-start ${astyles.section}`}>
+        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
           <GBox
             title="Something"
             subtitle="Sub"
@@ -78,20 +88,22 @@ export class AdminDashboardNew extends Component {
             padding
             component={fcl}
           />
-          <div className={`layout-column flex-40 layout-wrap layout-align-start-center ${astyles.sectionpart}`}>
-            <GBox
-              title="Something"
-              subtitle="Sub"
-              flex={30}
-              fullWidth
-              padding
-            />
+          <div className={`layout-column flex-40 layout-wrap layout-align-space-between-stretch ${astyles.sectionpart}`}>
             <GBox
               title="Something"
               subtitle="Sub"
               flex={65}
               fullWidth
               padding
+              component={Customers}
+            />
+            <GBox
+              title="Something"
+              subtitle="Sub"
+              flex={30}
+              fullWidth
+              padding
+              component={Affluency}
             />
           </div>
         </section>
