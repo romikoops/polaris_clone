@@ -70,7 +70,7 @@ class DocumentsSelector extends React.Component {
         }
         dispatchFn(file, selected)
         if (this.uploaderInput.files.length) {
-          this.uploaderInput.files[0] = ''
+          this.uploaderInput.value = ''
         }
         return null
       }
@@ -88,7 +88,7 @@ class DocumentsSelector extends React.Component {
       const uploadUrl = BASE_URL + url
       fetch(uploadUrl, requestOptions).then(DocumentsSelector.handleResponse)
       if (this.uploaderInput.files.length) {
-        this.uploaderInput.files[0] = ''
+        this.uploaderInput.value = ''
       }
       return null
     }

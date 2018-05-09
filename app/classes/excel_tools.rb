@@ -425,14 +425,6 @@ module ExcelTools
   def overwrite_zonal_trucking_rates_by_hub(params, _user = current_user, hub_id)
     stats = {
       type: 'trucking',
-      trucking_hubs: {
-        number_updated: 0,
-        number_created: 0
-      },
-      hub_truckings: {
-        number_updated: 0,
-        number_created: 0
-      },
       trucking_pricings: {
         number_updated: 0,
         number_created: 0,
@@ -440,12 +432,10 @@ module ExcelTools
       trucking_destinations: {
         number_updated: 0,
         number_created: 0,
-      },
+      }
     }
 
     results = {
-      trucking_hubs: [],
-      hub_truckings: [],
       trucking_pricings: [],
       trucking_destinations: []
     }
@@ -615,7 +605,7 @@ module ExcelTools
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
           stats[:trucking_destinations][:number_created] += 1
-          stats[:hub_truckings][:number_created] += 1
+          
           
           { ident: city, country: idents_and_country[:country] }
         else
@@ -701,7 +691,7 @@ module ExcelTools
 
         tp = trucking_pricing_by_zone
 
-        new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
+        new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
         new_cols.delete("cbm_ratio") if load_type == "container"
 
         # Find or update trucking_destinations
@@ -772,7 +762,7 @@ module ExcelTools
           ELSE
             #{with_statement},
             tp_ids AS (
-              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+              INSERT INTO trucking_pricings(cargo_class, carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
                 VALUES #{tp.to_postgres_insertable}
               RETURNING id
             )

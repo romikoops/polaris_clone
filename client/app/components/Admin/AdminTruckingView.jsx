@@ -42,15 +42,15 @@ export class AdminTruckingView extends Component {
       expander: {}
     }
   }
-  componentDidMount () {
-    window.scrollTo(0, 0)
-  }
+
   componentWillMount () {
     if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
       this.handleSearchChange({ target: { value: '' } })
     }
   }
-
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   filterTruckingPricingsByType (pricings) {
     const { loadTypeBool, directionBool } = this.state
     const loadTypeKey = loadTypeBool ? 'container' : 'cargo_item'
@@ -139,6 +139,7 @@ export class AdminTruckingView extends Component {
       loadTypeBool,
       directionBool
     } = this.state
+
     const uploadStatus = document.viewer ? (
       <AdminUploadsSuccess
         theme={theme}
@@ -155,8 +156,11 @@ export class AdminTruckingView extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    const truckingPricingToDisplay = truckingDetail.truckingPricings
-      .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
+    console.log('DOCUMENT!!!!!!')
+    console.log(document)
+    const truckingPricingToDisplay =
+      truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
     const displayPanel = (
       <TruckingDisplayPanel
         theme={theme}

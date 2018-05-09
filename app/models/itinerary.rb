@@ -335,7 +335,8 @@ class Itinerary < ApplicationRecord
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i[id name] }
+                  nexus: { only: %i[id name] },
+                  location: { only: %i[longitude latitude] }
                 },
                 only: %i[id name]
               }
@@ -348,7 +349,8 @@ class Itinerary < ApplicationRecord
           include: {
             hub: {
               include: {
-                nexus: { only: %i[id name] }
+                nexus: { only: %i[id name] },
+                location: { only: %i[longitude latitude] }
               },
               only: %i[id name]
             }
