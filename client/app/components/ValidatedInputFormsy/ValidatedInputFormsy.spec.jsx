@@ -29,10 +29,13 @@ const propsBase = {
   errorStyles: {}
 }
 
-/**
- * props.shipment should be array of `shipment` object but
- * shipments[target].map leads to other conclusion
- */
 test('shallow render', () => {
   expect(shallow(<ValidatedInputFormsy {...propsBase} />)).toMatchSnapshot()
+})
+test('props.nextStageAttempt is true', () => {
+  const props = {
+    ...propsBase,
+    nextStageAttempt: true
+  }
+  expect(shallow(<ValidatedInputFormsy {...props} />)).toMatchSnapshot()
 })
