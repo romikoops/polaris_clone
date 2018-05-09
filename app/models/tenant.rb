@@ -44,11 +44,21 @@ class Tenant < ApplicationRecord
   def update_route_details
     itineraries.map(&:set_scope!)
   end
+
   def mot_scope(args)
     mot = scope["modes_of_transport"]
     mot = load_type_filter("container", mot)  if args[:only_container]
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
+  end
+
+  def email_for(branch_raw, mode_of_transport = nil)
+    return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
+    branch = branch_raw.to_s
+
+    return "itsmycargodev@gmail.com" if emails[branch].blank?
+
+    emails[branch][mode_of_transport] || emails[branch]['general']
   end
 
   def self.update_hs_codes
@@ -109,10 +119,6 @@ class Tenant < ApplicationRecord
   # Shortcuts to find_by_subdomain to use in the console
 
   def self.method_missing(name, *args)
-    where(subdomain: name.try(:to_s)).first.clone || super
-  end
-
-  def self.respond_to_missing?(name, include_private = false)
     where(subdomain: name.try(:to_s)).first || super
   end
 end

@@ -19,6 +19,7 @@ module NotificationTools
     resp = {"conversations" => conversations, "unread" => unread}
     return resp
   end
+
   def get_messages_for_admin(user)
     conversations = user.tenant.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
       if conversation.shipment

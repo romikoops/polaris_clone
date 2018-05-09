@@ -331,7 +331,6 @@ module ShippingTools
     shipment.origin_hub = @origin
     shipment.destination_hub = @destination
     shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
-    shipment.save!
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -349,8 +348,9 @@ module ShippingTools
       customsKey = 'lcl'
       cargos = cargo_items
     end
-    transportKey = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
-    priceKey = "#{@schedules.first['itinerary_id']}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
+    shipment.transport_category = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
+    shipment.save!
+
     origin_customs_fee = @origin.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
     destination_customs_fee = @destination.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
 
