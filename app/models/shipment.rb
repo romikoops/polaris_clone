@@ -125,6 +125,10 @@ class Shipment < ApplicationRecord
     update_carriage_properties!
   end
 
+  def mode_of_transport
+    itinerary.try(:mode_of_transport)
+  end
+
   def has_on_carriage=(value)
     raise "This property is read only. Please write to trucking property instead."
   end
