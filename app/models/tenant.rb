@@ -109,10 +109,11 @@ class Tenant < ApplicationRecord
   # Shortcuts to find_by_subdomain to use in the console
 
   def self.method_missing(name, *args)
-    where(subdomain: name.try(:to_s)).first.clone || super
+    where(subdomain: name.try(:to_s)).first || super
   end
 
   def self.respond_to_missing?(name, include_private = false)
-    where(subdomain: name.try(:to_s)).first || super
+    # Checks first if activerecord method exists
+    super || where(subdomain: name.try(:to_s)).first
   end
 end
