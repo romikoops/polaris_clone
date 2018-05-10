@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510090120) do
+ActiveRecord::Schema.define(version: 20180510125036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,48 @@ ActiveRecord::Schema.define(version: 20180510090120) do
     t.string "approved"
     t.jsonb "approval_details"
     t.integer "tenant_id"
+  end
+
+  create_table "function_errors", force: :cascade do |t|
+    t.string "code"
+    t.string "http_code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_logs", force: :cascade do |t|
+    t.integer "meta_data_store_id"
+    t.integer "function_id"
+    t.integer "user_id"
+    t.integer "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_warnings", force: :cascade do |t|
+    t.string "code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "functions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "geometries", force: :cascade do |t|
+    t.string "name_1"
+    t.string "name_2"
+    t.string "name_3"
+    t.string "name_4"
+    t.geometry "data", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -302,6 +344,12 @@ ActiveRecord::Schema.define(version: 20180510090120) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "meta_data_stores", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mot_scopes", force: :cascade do |t|
     t.boolean "ocean_container"
     t.boolean "ocean_cargo_item"
@@ -320,6 +368,13 @@ ActiveRecord::Schema.define(version: 20180510090120) do
     t.string "body"
     t.string "header"
     t.string "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "name"
+    t.string "path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -500,8 +555,19 @@ ActiveRecord::Schema.define(version: 20180510090120) do
     t.datetime "closing_date"
   end
 
-# Could not dump table "trucking_destinations" because of following StandardError
-#   Unknown type 'geometry' for column 'geometry'
+  create_table "trucking_destinations", force: :cascade do |t|
+    t.string "zipcode"
+    t.string "country_code"
+    t.string "city_name"
+    t.integer "distance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.geometry "geometry", limit: {:srid=>0, :type=>"geometry"}
+    t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
+    t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
+    t.index ["distance"], name: "index_trucking_destinations_on_distance"
+    t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
+  end
 
   create_table "trucking_pricings", force: :cascade do |t|
     t.integer "courier_id"

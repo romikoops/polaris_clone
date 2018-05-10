@@ -5,7 +5,7 @@ class CreateGeometries < ActiveRecord::Migration[5.1]
       t.string :name_2
       t.string :name_3
       t.string :name_4
-      t.geometry :geometry
+      t.geometry :data
       t.timestamps
     end
   end
