@@ -66,22 +66,10 @@ export class AdminPricingsIndex extends Component {
     if (this.state.redirectClients) {
       return <Redirect push to="/admin/pricings/clients" />
     }
-    // const newButton = (
-    //   <div className={styles.btn_wrapper}>
-    //     <p data-tip={priceTip.new} data-for="newPriceTip">
-    //       <RoundButton
-    //         text="New Pricing"
-    //         theme={theme}
-    //         size="small"
-    //         handleNext={this.toggleCreator}
-    //         iconClass="fa-plus"
-    //         active
-    //       />
-    //     </p>
-    //     <ReactTooltip id="newPriceTip" className={styles.tooltip} effect="solid" />
-    //   </div>
-    // )
-    const { itineraries, detailedItineraries, transportCategories } = pricingData
+
+    const {
+      itineraries, detailedItineraries, transportCategories, lastUpdate
+    } = pricingData
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -92,16 +80,9 @@ export class AdminPricingsIndex extends Component {
           adminDispatch={adminDispatch}
           toggleCreator={this.toggleCreator}
           documentDispatch={this.props.documentDispatch}
+          lastUpdate={lastUpdate}
         />
-        {/* <AdminSearchableRoutes
-          itineraries={detailedItineraries}
-          theme={theme}
-          hubs={hubs}
-          handleClick={this.viewRoute}
-          seeAll={() => adminDispatch.goTo('/admin/pricings/routes')}
-          tooltip={priceTip.routes}
-          showTooltip
-        /> */}
+
         <AdminSearchableClients
           theme={theme}
           clients={clients}
@@ -139,9 +120,11 @@ AdminPricingsIndex.propTypes = {
     uploadPricings: PropTypes.func
   }).isRequired,
   pricingData: PropTypes.shape({
-    routes: PropTypes.array
+    routes: PropTypes.array,
+    lastUpdate: PropTypes.string
   }),
   scope: PropTypes.scope
+
 }
 
 AdminPricingsIndex.defaultProps = {

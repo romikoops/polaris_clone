@@ -87,23 +87,27 @@ export class AdminHubsIndex extends Component {
 
   applyFilters (array) {
     const { searchFilters } = this.state
-    const hubFilterKeys = Object.keys(searchFilters.hubType)
-      .filter(key => searchFilters.hubType[key])
+    const hubFilterKeys =
+      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
     const filter1 = array.filter(a => hubFilterKeys.includes(a.data.hub_type))
     let filter2 = []
-    const countryKeys = Object.keys(searchFilters.countries)
-      .filter(key => searchFilters.countries[key])
+    const countryKeys =
+      Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
     if (countryKeys.length > 0) {
       filter2 = filter1.filter(a => countryKeys.includes(a.location.country))
     } else {
       filter2 = filter1
     }
-    const statusFilterKeys = Object.keys(searchFilters.status)
-      .filter(key => searchFilters.status[key])
+    const statusFilterKeys =
+      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
     const filter3 = filter2.filter(a => statusFilterKeys.includes(a.data.hub_status))
     let filter4
     if (searchFilters.query && searchFilters.query !== '') {
-      filter4 = filters.handleSearchChange(searchFilters.query, ['data.name', 'data.hub_type', 'location.country'], filter3)
+      filter4 = filters.handleSearchChange(
+        searchFilters.query,
+        ['data.name', 'data.hub_type', 'location.country'],
+        filter3
+      )
     } else {
       filter4 = filter3
     }
@@ -396,8 +400,24 @@ export class AdminHubsIndex extends Component {
                     styles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  <p className="flex-100 center">Download Local Charges Sheet</p>
-                  <DocumentsDownloader theme={theme} target="local_charges" />
+                  <p className="flex-100 center">Download Ocean Local Charges Sheet</p>
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="local_charges"
+                    options={{ mot: 'ocean' }}
+                  />
+                </div>
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100 center">Download Air Local Charges Sheet</p>
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="local_charges"
+                    options={{ mot: 'air' }}
+                  />
                 </div>
               </div>
             </div>

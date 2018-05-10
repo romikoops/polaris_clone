@@ -114,6 +114,9 @@ module PricingTools
   def get_tenant_pricings(tenant_id)
     Tenant.find(tenant_id).pricings.map(&:as_json)
   end
+  def get_tenant_pricings_by_mot(tenant_id, mot)
+    Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).flat_map {|it| it.pricings.map(&:as_json)}
+  end
 
   def get_tenant_pricings_hash(tenant_id)
     pricings = get_tenant_pricings(tenant_id)

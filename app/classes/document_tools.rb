@@ -29,14 +29,14 @@ module DocumentTools
   end
   def write_pricings_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    pricings = get_tenant_pricings(tenant.id)
+    pricings = options[:mot] ? get_tenant_pricings_by_mot(tenant.id, options[:mot]) : get_tenant_pricings(tenant.id)
     aux_data = {
       itineraries: {},
       nexuses: {},
       vehicle: {},
       transit_times: {}
     }
-    filename = "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
@@ -202,7 +202,8 @@ module DocumentTools
 
   def write_local_charges_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    hubs = tenant.hubs
+    
+    hubs = options[:mot] ? tenant.hubs.where(hub_type: options[:mot]) : tenant.hubs
     results_by_hub = {}
     hubs.each do |hub|
       results_by_hub[hub.name] = []
@@ -216,7 +217,7 @@ module DocumentTools
       vehicle: {},
       transit_times: {}
     }
-    filename = "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     
