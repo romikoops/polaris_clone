@@ -9,7 +9,7 @@ describe TruckingPricing, type: :model do
     	let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
     	let(:trucking_destination_zipcode) 	 { create(:trucking_destination, :zipcode) }
-    	let(:trucking_destination_city_name) { create(:trucking_destination, :city_name) }
+    	let(:trucking_destination_geometry)  { create(:trucking_destination, :with_geometry) }
     	let(:trucking_destination_distance)  { create(:trucking_destination, :distance) }
 
     	let(:courier)          { create(:courier) }
@@ -17,7 +17,6 @@ describe TruckingPricing, type: :model do
 
 
       let(:zipcode)      { '15211' }
-      let(:city_name)    { 'Gothenburg' }
       let(:latitude)     { '57.000000' }
       let(:longitude)    { '11.100000' }
       let(:load_type)    { 'cargo_item' }
@@ -121,11 +120,11 @@ describe TruckingPricing, type: :model do
         end
       end
 
-      context 'city_name identifier' do
-        let!(:hub_trucking_city_name) {
+      context 'geometry identifier' do
+        let!(:hub_trucking_geometry) {
           create(:hub_trucking,
             hub:                  hub,
-            trucking_destination: trucking_destination_city_name,
+            trucking_destination: trucking_destination_geometry,
             trucking_pricing:     trucking_pricing
           )
         }
@@ -133,7 +132,7 @@ describe TruckingPricing, type: :model do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            city_name: city_name
+            latitude: latitude,   longitude: longitude
           )
 
           expect(trucking_pricings).to match([trucking_pricing])

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510125036) do
+ActiveRecord::Schema.define(version: 20180510164848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -321,7 +321,6 @@ ActiveRecord::Schema.define(version: 20180510125036) do
     t.string "photo"
     t.string "premise"
     t.integer "country_id"
-    t.string "sublocality"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -562,7 +561,7 @@ ActiveRecord::Schema.define(version: 20180510125036) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.geometry "geometry", limit: {:srid=>0, :type=>"geometry"}
+    t.integer "geometry_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"

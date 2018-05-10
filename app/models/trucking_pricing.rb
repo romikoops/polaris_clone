@@ -66,8 +66,13 @@ class TruckingPricing < ApplicationRecord
           (trucking_destinations.zipcode IS NOT NULL)
           AND (trucking_destinations.zipcode = :zipcode)
         ) OR (
-          (trucking_destinations.city_name IS NOT NULL)
-          AND (trucking_destinations.city_name = :city_name)
+          (trucking_destinations.geometry_id IS NOT NULL)
+          AND (
+            SELECT ST_Contains(
+              (SELECT data::geometry FROM geometries WHERE id = trucking_destinations.geometry_id),
+              (SELECT ST_Point(:longitude, :latitude)::geometry)
+            ) AS contains
+          )          
         ) OR (
           (trucking_destinations.distance IS NOT NULL)
           AND (

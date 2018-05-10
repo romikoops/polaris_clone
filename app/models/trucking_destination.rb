@@ -5,6 +5,8 @@ class TruckingDestination < ApplicationRecord
       message: 'is a duplicate (all attributes match an existing record in the DB)'
     }
 
+  belongs_to :geometry, optional: true
+  
   def self.find_via_distance_to_hub(args = {})
     raise ArgumentError, "Must provide hub"       if args[:hub].nil?
     raise ArgumentError, "Must provide latitude"  if args[:latitude].nil?
