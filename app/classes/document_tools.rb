@@ -261,7 +261,9 @@ module DocumentTools
                 worksheet.write(row, 16, fee[:min])
               when 'PER_WM'
                 worksheet.write(row, 17, fee[:value])
-             
+              when 'PER_KG'
+                worksheet.write(row, 11, fee[:kg])
+                worksheet.write(row, 16, fee[:min])
               end
                row += 1
           end

@@ -83,7 +83,7 @@ class Location < ApplicationRecord
     l.geocode
     l.reverse_geocode
     
-    return l.sublocality
+    return l.city
   end
 
   def self.geocode_all_from_address_fields!(options = {})
