@@ -287,7 +287,9 @@ export default class CardPricingIndex extends Component {
               </div>
             </div> */}
           </div>
-          <p className="flex-100">{`Last updated at: ${moment(lastUpdate).format('lll')} `}</p>
+          {lastUpdate !== ''
+            ? <p className="flex-100">{`Last updated at: ${moment(lastUpdate).format('lll')} `}</p>
+            : '' }
         </div>
       </div>
     )
