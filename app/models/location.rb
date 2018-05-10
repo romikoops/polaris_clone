@@ -203,7 +203,7 @@ class Location < ApplicationRecord
   end
 
   def city_country
-    "#{city}, #{country.name}"
+    "#{self.city}, #{self.country.name}"
   end
 
   def full_address
