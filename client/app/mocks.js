@@ -139,13 +139,28 @@ export const locations = {
   destination: {}
 }
 
+class MapMock {
+  constructor (x) {
+    this.x = x
+  }
+  bindTo () {
+    return this.x
+  }
+  setContent () {
+    return this.x
+  }
+  addListener () {
+    return this.x
+  }
+}
+
 export const gMaps = {
-  Point: identity,
-  Size: identity,
-  Marker: identity,
-  LatLngBounds: identity,
-  MapTypeId: {},
-  Map: identity,
-  places: {},
-  InfoWindow: identity
+  InfoWindow: MapMock,
+  LatLngBounds: MapMock,
+  Map: MapMock,
+  MapTypeId: { ROADMAP: '' },
+  Marker: MapMock,
+  Point: MapMock,
+  Size: MapMock,
+  places: { Autocomplete: MapMock }
 }
