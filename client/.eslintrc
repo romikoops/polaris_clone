@@ -2,7 +2,10 @@
   "plugins": ["json", "jest"],
   "extends": ["airbnb", "standard", "plugin:jest/recommended"],
   "rules": {
-    
+    "padding-line-between-statements": [
+      1,
+      { "blankLine": "always", "prev": "var", "next": "return" }
+    ],
     "react/no-typos": ["warn"],
     "react/jsx-closing-tag-location": 0,
     "no-plusplus": [
