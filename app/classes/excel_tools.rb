@@ -762,7 +762,7 @@ module ExcelTools
             IF (
               SELECT EXISTS(
                 SELECT 1 FROM trucking_pricings
-                JOIN hub_truckings ON hub_truckings.trucking_pricing_id = trucking_pricing.id
+                JOIN hub_truckings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
                 JOIN hubs ON hubs.id = hub_truckings.hub_id
                 WHERE hubs.id = #{hub_id}
               )
