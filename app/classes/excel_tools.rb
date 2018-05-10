@@ -691,7 +691,7 @@ module ExcelTools
 
         tp = trucking_pricing_by_zone
 
-        new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
+        new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
         new_cols.delete("cbm_ratio") if load_type == "container"
 
         # Find or update trucking_destinations
@@ -762,7 +762,7 @@ module ExcelTools
           ELSE
             #{with_statement},
             tp_ids AS (
-              INSERT INTO trucking_pricings(cargo_class, carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
                 VALUES #{tp.to_postgres_insertable}
               RETURNING id
             )
