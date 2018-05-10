@@ -1,0 +1,2 @@
+class Geometry < ApplicationRecord
+end
