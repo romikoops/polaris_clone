@@ -50,11 +50,7 @@ subdomains.each do |sub|
   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
   req = {"xlsx" => trucking}
   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  if sub == 'greencarrier'
-    trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, 439)
-  end
+
 #   # awesome_print "City rates done"
 #   hub = tenant.hubs.find_by_name("Gothenburg Port")
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
