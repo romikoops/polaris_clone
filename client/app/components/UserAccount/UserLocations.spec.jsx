@@ -60,11 +60,7 @@ test('props.setNav is called', () => {
   expect(props.setNav).toHaveBeenCalled()
 })
 
-/**
- * It fails for unknown reason
- */
-// eslint-disable-next-line
-test.skip('props.userDispatch.makePrimary is called', () => {
+test('props.userDispatch.makePrimary is called', () => {
   const props = {
     ...propsBase,
     userDispatch: {
@@ -72,12 +68,11 @@ test.skip('props.userDispatch.makePrimary is called', () => {
       makePrimary: jest.fn()
     }
   }
-  const selector = 'div[className="layout-row flex-20 layout-align-end"]'
+  const selector = 'div[className="layout-row flex-20 layout-align-end"] > div'
 
   const wrapper = createWrapper(props)
   const clickableDiv = wrapper.find(selector).first()
 
-  expect(props.userDispatch.makePrimary).not.toHaveBeenCalled()
   clickableDiv.simulate('click')
   expect(props.userDispatch.makePrimary).toHaveBeenCalled()
 })
