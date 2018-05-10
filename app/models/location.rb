@@ -30,7 +30,8 @@ class Location < ApplicationRecord
       location.geocoded_address = geo.address
       location.city             = geo.city
       location.zip_code         = geo.postal_code
-
+      location.sublocality        = geo.address_components_of_type('sublocality').first["long_name"]
+      
       location.country          = Country.find_by(code: geo.country_code)
     end
     location
@@ -82,7 +83,8 @@ class Location < ApplicationRecord
     l = new(geocoded_address: string)
     l.geocode
     l.reverse_geocode
-    return l.city
+    
+    return l.sublocality
   end
 
   def self.geocode_all_from_address_fields!(options = {})

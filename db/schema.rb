@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180508163134) do
+ActiveRecord::Schema.define(version: 20180510090120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(version: 20180508163134) do
     t.string "photo"
     t.string "premise"
     t.integer "country_id"
+    t.string "sublocality"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -499,18 +500,8 @@ ActiveRecord::Schema.define(version: 20180508163134) do
     t.datetime "closing_date"
   end
 
-  create_table "trucking_destinations", force: :cascade do |t|
-    t.string "zipcode"
-    t.string "country_code"
-    t.string "city_name"
-    t.integer "distance"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
-    t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
-    t.index ["distance"], name: "index_trucking_destinations_on_distance"
-    t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
-  end
+# Could not dump table "trucking_destinations" because of following StandardError
+#   Unknown type 'geometry' for column 'geometry'
 
   create_table "trucking_pricings", force: :cascade do |t|
     t.integer "courier_id"

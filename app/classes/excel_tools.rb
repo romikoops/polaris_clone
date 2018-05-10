@@ -502,6 +502,8 @@ module ExcelTools
           end
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
+          awesome_print idents_and_country
+          awesome_print city
           stats[:trucking_destinations][:number_created] += 1
           stats[:hub_truckings][:number_created] += 1
           
@@ -511,8 +513,8 @@ module ExcelTools
         end
       end
     end
-    byebug
     
+    byebug
     # END Load Zones ------------------------
 
     
@@ -659,6 +661,7 @@ module ExcelTools
             trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
+              awesome_print "#{row_zone_name} "
               w_min = weight_min_row[m_index] || 0
               r_min = row_min_value || 0
               if defaults[mod_key]
@@ -684,6 +687,8 @@ module ExcelTools
               end
             end
           end
+          # awesome_print single_ident_values_and_country
+          # awesome_print trucking_pricing_by_zone[row_key]
 
           charges.each do |k, fee|
             tmp_fee = fee.clone()
@@ -706,7 +711,7 @@ module ExcelTools
             end.join(", ")
 
           tp = trucking_pricing_by_zone[row_key]
-            
+          
           new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
           new_cols.delete("cbm_ratio") if load_type == "container"
           new_cols.delete("load_meterage") if load_type == "container"
