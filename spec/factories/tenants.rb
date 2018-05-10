@@ -43,6 +43,17 @@ FactoryBot.define do
         }
       }
     end
+
+    emails do
+      {
+        sales: {
+          general: "sales.general@demo.com"
+        },
+        support: {
+          general: "support@demo.com",
+        }
+      }
+    end
     
     trait :with_mot_emails do
       emails do
@@ -62,18 +73,5 @@ FactoryBot.define do
         }
       end
     end
-
-    trait :with_general_emails do
-      emails do
-        {
-          sales: {
-            general: "sales.general@demo.com"
-          },
-          support: {
-            general: "support@demo.com",
-          }
-        }
-      end
-    end  
   end
 end
