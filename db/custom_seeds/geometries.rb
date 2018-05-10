@@ -7,16 +7,15 @@ geometries.each do |geo|
 	puts names.join(' | ')
   
   polygons = [geo['MultiGeometry']['Polygon']].flatten
-
-	polygons_raw_coordinates_str = polygons.map do |polygon|
+	polygons_serialized_coordinate_pairs = polygons.map do |polygon|
 		polygon['outerBoundaryIs']['LinearRing']['coordinates']
 	end
 
-  raw_points_str = polygons_raw_coordinates_str.join(" ")
-
-  raw_points = raw_points_str.split
-
-  points = raw_points.map { |raw_point| RGeo::Cartesian.factory.point(*raw_point.split(",")) }
+  serialized_coordinate_pairs = polygons_serialized_coordinate_pairs.join(" ")
+  serialized_coordinate_pairs = serialized_coordinate_pairs.split
+  points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
+  	RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(","))
+  end
   multi_point = RGeo::Cartesian.factory.multi_point(points)
 
   geometry = Geometry.new(data: multi_point)

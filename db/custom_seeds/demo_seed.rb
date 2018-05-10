@@ -229,10 +229,12 @@ geom_s = '
   res2 = ActiveRecord::Base.connection.execute("
     SELECT ST_Within(smallc, bigc) As smallinbig
     FROM (
-      SELECT ST_Buffer(ST_Point(71.1666,42.2615)::geography::geometry As smallc,
+      SELECT ST_Point(71.1666,42.2615)::geography::geometry As smallc,
       ST_GeomFromKML('#{geom_s}')::geometry As bigc
     ) AS foo
   ")
+
+
 
 	byebug 
 puts res
