@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow rendering 1`] = `
+exports[`props.locations is falsy 1`] = `
 <div
   className=" outer_box flex-100 layout-row layout-align-center-center"
 >
@@ -180,6 +180,240 @@ exports[`shallow rendering 1`] = `
             </p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className=" outer_box flex-100 layout-row layout-align-center-center"
+>
+  <div
+    className="flex-none content_width layout-row layout-align-start-start"
+  >
+    <div
+      className="flex layout-row layout-wrap layout-align-center-start"
+    >
+      <h3
+        className="flex-100 rhb_header"
+      >
+        ORIGIN
+      </h3>
+      <div
+        className="flex-100 hub_card layout-row"
+        style={
+          Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
+          }
+        }
+      >
+        <div
+          className="fade"
+        />
+        <div
+          className="content layout-row"
+        >
+          <div
+            className="flex-15 layout-column layout-align-start-center"
+          >
+            <i
+              className="fa fa-map-marker"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-85 layout-row layout-wrap layout-align-start-start"
+          >
+            <h6
+              className="flex-100"
+            >
+               
+              FOO
+               
+            </h6>
+            <p
+              className="flex-100"
+            >
+              FOO_ADDRESS
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-center-start layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+          >
+            With Pickup From:
+          </p>
+        </div>
+        <address
+          className=" itinerary_address flex-none"
+        >
+           
+          , 
+          <br />
+          ,   
+          , 
+           
+          <br />
+        </address>
+      </div>
+    </div>
+    <div
+      className="connection_graphics flex-25 layout-row layout-align-center-center"
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-75 height_100 layout-column layout-align-end-center"
+          style={
+            Object {
+              "marginTop": "100px",
+            }
+          }
+        >
+          <div
+            className="flex-none width_100 layout-row layout-align-center-center"
+          >
+            <div
+              className="flex-33 layout-row layout-align-center"
+            >
+              <i
+                className="flex-none fa fa-undefined"
+              />
+            </div>
+          </div>
+          <div
+            className="flex"
+            style={
+              Object {
+                "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+                "backgroundSize": "16px 2px, 100% 2px",
+                "height": "2px",
+                "marginTop": "6px",
+                "width": "100%",
+              }
+            }
+          />
+          <br />
+          <div
+            className="flex-65 layout-row layout-wrap layout-align-center-stretch"
+            style={
+              Object {
+                "marginTop": "25px",
+              }
+            }
+          >
+            <h4
+              className="no_m center"
+              style={
+                Object {
+                  "marginBottom": "10px",
+                }
+              }
+            >
+               
+              Estimated Transit Time
+            </h4>
+            <p
+              className="flex-100 no_m center"
+            >
+               
+              0
+               days
+               
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex layout-row layout-wrap layout-align-center-start"
+    >
+      <h3
+        className="flex-100 rhb_header"
+      >
+         DESTINATION
+      </h3>
+      <div
+        className="flex-100 hub_card layout-row"
+        style={
+          Object {
+            "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+          }
+        }
+      >
+        <div
+          className="fade"
+        />
+        <div
+          className="content layout-row"
+        >
+          <div
+            className="flex-15 layout-column layout-align-start-center"
+          >
+            <i
+              className="fa fa-flag"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-85 layout-row layout-wrap layout-align-start-start"
+          >
+            <h6
+              className="flex-100"
+            >
+               
+              BAR
+               
+            </h6>
+            <p
+              className="flex-100"
+            >
+              BAR_ADDRESS
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-center-start layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+          >
+            With Delivery To:
+          </p>
+        </div>
+        <address
+          className=" itinerary_address flex-none"
+        >
+           
+          , 
+          <br />
+          ,   
+          , 
+           
+          <br />
+        </address>
       </div>
     </div>
   </div>
