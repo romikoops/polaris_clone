@@ -41,3 +41,11 @@ test('props.fade is true', () => {
   }
   expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
 })
+
+test('props.slides is falsy', () => {
+  const props = {
+    ...propsBase,
+    slides: false
+  }
+  expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
+})

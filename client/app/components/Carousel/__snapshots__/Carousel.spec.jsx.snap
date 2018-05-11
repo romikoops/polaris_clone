@@ -78,6 +78,8 @@ exports[`props.fade is true 1`] = `
 </styled.div>
 `;
 
+exports[`props.slides is falsy 1`] = `""`;
+
 exports[`shallow render 1`] = `
 <styled.div
   className="flex-100 layout-row slider_container one_slide"
