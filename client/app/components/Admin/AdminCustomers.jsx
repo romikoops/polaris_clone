@@ -48,7 +48,7 @@ export class AdminCustomers extends Component {
     const chartCanvas = this.chart
 
     return new Chart(chartCanvas, {
-      type: 'bar',
+      type: 'line',
       data: chartData,
       options: chartOptions
     })
@@ -56,11 +56,11 @@ export class AdminCustomers extends Component {
 
   render () {
     return (
-      <div className="layout-column flex-100 layout-align-space-start-center">
-        <div className="layout-row flex-10 layout-wrap layout-align-space-start-start">
+      <div className="layout-column flex-100 layout-align-start-stretch">
+        <div className="layout-row flex-10 layout-wrap layout-align-start-start">
           <span className={`${styles.title}`}>Pending bookings</span>
         </div>
-        <div className="layout-column flex-90 layout-align-space-start-center">
+        <div className="layout-column flex-90 layout-align-start-center">
           <canvas ref={this.setChart} className="flex-100" />
         </div>
       </div>

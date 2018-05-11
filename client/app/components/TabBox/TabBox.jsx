@@ -25,11 +25,11 @@ export class TabBox extends Component {
 
   render () {
     return (
-      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.widecomp}`}>
+      <div className={`layout-column flex-100 layout-wrap layout-align-start-stretch ${styles.widecomp}`}>
         <div className={`${styles.tabdiv}`}>
-          {this.state.tabs.map((t, i) => <div onClick={() => this.changeTab(i)} className={`${this.state.tab === i ? styles.selected : ''} ${styles.tab} ${styles.greyboxborder}`}>{t}</div>)}
+          {this.state.tabs.map((t, i) => <div onClick={() => this.changeTab(i)} className={`${this.state.tab === i ? styles.selected : ''} ${styles.tab}`}>{t}</div>)}
         </div>
-        <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.greyboxborder} ${styles.tabcontent}`}>
+        <div className={`layout-row flex-90 layout-wrap layout-align-start-stretch ${styles.greyboxborder} ${styles.tabcontent}`}>
           {this.showTab()}
         </div>
       </div>

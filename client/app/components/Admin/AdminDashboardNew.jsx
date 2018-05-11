@@ -6,6 +6,7 @@ import { AdminShipmentStatus as AShipStat } from './AdminShipmentStatus'
 import { AdminRequestedShipments as AReqShip } from './AdminRequestedShipments'
 import { AdminCustomers as ACust } from './AdminCustomers'
 import { AdminAffluency as AAffl } from './AdminAffluency'
+import { AdminFCL as Fcl } from './AdminFCL'
 import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
@@ -26,8 +27,6 @@ const lcl = (<span>In elementum lorem sed ante venenatis, at sollicitudin velit 
   nisi nec neque. Ut interdum porttitor magna at varius. Donec varius ipsum purus, et
   semper odio malesuada at. Vivamus turpis elit, sollicitudin a aliquet vitae, pharetra
   et justo.</span>)
-
-const tabs = [fcl, lcl]
 
 export class AdminDashboardNew extends Component {
   constructor (props) {
@@ -60,6 +59,12 @@ export class AdminDashboardNew extends Component {
     const Affluency = (
       <AAffl />
     )
+
+    const FclComp = (
+      <Fcl />
+    )
+
+    const tabs = [FclComp, lcl]
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`}>
@@ -107,7 +112,7 @@ export class AdminDashboardNew extends Component {
             />
           </div>
         </section>
-        <section className={`layout-row flex-100 layout-wrap layout-align-start-start ${astyles.section}`}>
+        <section className={`layout-row flex-100 layout-wrap layout-align-start-stretch ${astyles.section}`}>
           <TBox
             tabs={['FCL', 'LCL']}
             components={tabs}
