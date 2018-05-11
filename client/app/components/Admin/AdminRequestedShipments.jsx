@@ -46,7 +46,7 @@ export class AdminRequestedShipments extends Component {
           <span className={`${styles.title}`}>Pending bookings</span>
         </div>
         <div className="layout-column layout-align-space-start-center">
-          <div className={`layout-column layout-align-start-stretch ${styles.shipments}`}>
+          <div className={`layout-align-start-stretch ${styles.shipments}`}>
             {this.showShipments()}
           </div>
         </div>
