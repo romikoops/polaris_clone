@@ -4,7 +4,7 @@
   "rules": {
     "padding-line-between-statements": [
       1,
-      { "blankLine": "always", "prev": "var", "next": "return" }
+      { "blankLine": "always", "prev": "*", "next": "return" }
     ],
     "react/no-typos": ["warn"],
     "react/jsx-closing-tag-location": 0,

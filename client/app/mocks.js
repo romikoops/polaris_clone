@@ -50,9 +50,38 @@ const shipmentInShipmentData = {
   }
 }
 
+const editedShipmentInShipmentData = {
+  schedules_charges: {
+    [schedulesInShipmentData[0].hub_route_key]: {
+      foo: 'FOO_ROUTE_KEY'
+    }
+  },
+  total_goods_value: {
+    value: 15,
+    currency: 'USD'
+  },
+  total_price: {
+    value: 12,
+    currency: 'USD'
+  }
+}
+
 export const shipmentData = {
   contacts: [],
   shipment: shipmentInShipmentData,
+  documents: [],
+  cargoItems: [],
+  containers: [],
+  schedules: schedulesInShipmentData,
+  locations: {
+    startHub: 'FOO_START_HUB',
+    endHub: 'FOO_END_HUB'
+  }
+}
+
+export const editedShipmentData = {
+  contacts: [],
+  shipment: editedShipmentInShipmentData,
   documents: [],
   cargoItems: [],
   containers: [],

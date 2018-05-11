@@ -552,7 +552,24 @@ exports[`shallow render 1`] = `
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
-            />
+            >
+              <div
+                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Total Value of Goods:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  USD 15
+                </p>
+              </div>
+            </div>
             <div
               className="flex-100 layout-row layout-align-space-around-center"
             />
@@ -1723,7 +1740,24 @@ exports[`with cargo items 1`] = `
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
-            />
+            >
+              <div
+                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Total Value of Goods:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  USD 15
+                </p>
+              </div>
+            </div>
             <div
               className="flex-100 layout-row layout-align-space-around-center"
             />
@@ -2730,7 +2764,24 @@ exports[`with containers 1`] = `
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
-            />
+            >
+              <div
+                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Total Value of Goods:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  USD 15
+                </p>
+              </div>
+            </div>
             <div
               className="flex-100 layout-row layout-align-space-around-center"
             />

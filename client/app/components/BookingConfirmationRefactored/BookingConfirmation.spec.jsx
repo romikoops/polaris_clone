@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipmentData, identity, tenant } from '../../mocks'
+import { theme, editedShipmentData, identity, tenant } from '../../mocks'
 
 jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
@@ -103,7 +103,7 @@ const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
 
 const propsBase = {
   theme,
-  shipmentData: { ...shipmentData, cargoItemTypes },
+  shipmentData: { ...editedShipmentData, cargoItemTypes },
   setStage: identity,
   tenant: editedTenant,
   shipmentDispatch: {
@@ -119,7 +119,7 @@ test('with containers', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
+      ...editedShipmentData,
       cargoItemTypes,
       containers
     }
@@ -131,7 +131,7 @@ test('with cargo items', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
+      ...editedShipmentData,
       cargoItemTypes,
       cargoItems
     }

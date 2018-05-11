@@ -18,31 +18,38 @@ import Contact from '../Contact/Contact'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
-const ALIGN_CENTER = 'layout-align-center-center'
-const ALIGN_START = 'layout-align-center-start'
-const ROW = 'flex-100 layout-row'
-const ROW_ALIGN = `${ROW} layout-align-space-between-center`
-const START_CENTER = 'flex-none content-width layout-row layout-align-start-center'
-const WRAP_ROW = 'layout-row layout-wrap'
+import {
+  ALIGN_BETWEEN,
+  ALIGN_CENTER,
+  ALIGN_CENTER_START,
+  ALIGN_START,
+  ALIGN_START_CENTER,
+  ROW_100,
+  ALIGN_END,
+  ROW_CONTENT,
+  ROW_NONE,
+  WRAP_ROW,
+  WRAP_START
+} from '../../classNames'
 
 const ACCEPT = 'flex-33 layout-row layout-align-end-end height_100'
-const AFTER_CONTAINER = `flex-none ${WRAP_ROW} ${ALIGN_START} content_width_booking`
+const AFTER_CONTAINER = `flex-none ${WRAP_ROW} ${ALIGN_CENTER_START} content_width_booking`
 const BACK_TO_DASHBOARD = `${styles.back_to_dash_sec} flex-100 ${WRAP_ROW} layout-align-center`
-const BACK_TO_DASHBOARD_CELL = `${defaults.content_width} ${START_CENTER}`
+const BACK_TO_DASHBOARD_CELL = `${defaults.content_width} flex-none ${ROW_CONTENT} ${ALIGN_START_CENTER}`
 const BOOKING = `flex-none content_width_booking layout-row ${ALIGN_CENTER}`
-const BUTTON = 'flex-none layout-row layout-align-end-end'
+const BUTTON = `${ROW_NONE} ${ALIGN_END}`
 const CHECKBOX = 'flex-65 layout-row layout-align-start-center'
 const CHECKBOX_CELL = `flex-15 layout-row ${ALIGN_CENTER}`
 const COLLAPSER = `flex-10 layout-row ${ALIGN_CENTER}`
-const CONTAINER = `flex-100 ${WRAP_ROW} ${ALIGN_START}`
-const HEADING = `${styles.heading_style} ${ROW_ALIGN}`
+const CONTAINER = `flex-100 ${WRAP_ROW} ${ALIGN_CENTER_START}`
+const HEADING = `${styles.heading_style} ${ROW_100} ${ALIGN_BETWEEN}`
 const INNER_WRAPPER = `${styles.inner_wrapper} flex-100 ${WRAP_ROW} layout-align-start-start`
-const INNER_WRAPPER_CELL = `${ROW} layout-wrap layout-align-space-between-start`
-const ITINERARY = `${styles.shipment_card_itinerary} ${ROW_ALIGN} layout-wrap`
+const INNER_WRAPPER_CELL = `${ROW_100} layout-wrap layout-align-space-between-start`
+const ITINERARY = `${styles.shipment_card_itinerary} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
 const LAYOUT_WRAP = `flex-100 ${WRAP_ROW} layout-align-start-center`
 const MISSING_DOCS = `flex-25 layout-row layout-align-start-center ${styles.no_doc}`
-const SHIPMENT_CARD = `${styles.shipment_card} ${ROW_ALIGN} layout-wrap`
-const SHIPMENT_CARD_CONTAINER = `${styles.shipment_card} ${ROW_ALIGN} layout-wrap`
+const SHIPMENT_CARD = `${styles.shipment_card} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
+const SHIPMENT_CARD_CONTAINER = `${styles.shipment_card} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
 const SUBTITLE = `${styles.sec_subtitle_text} flex-none offset-5`
 const SUBTITLE_NORMAL = `${styles.sec_subtitle_text_normal} flex-none`
 const SUMM_TOP = `${styles.b_summ_top} flex-100 layout-row layout-align-space-around-stretch`
@@ -235,10 +242,13 @@ export class BookingConfirmation extends Component {
 
                 <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
 
-                <div className={ROW_ALIGN} style={{ position: 'relative' }}>
+                <div
+                  className={`${ROW_100} ${ALIGN_BETWEEN}`}
+                  style={{ position: 'relative' }}
+                >
 
                   <div className={`flex-40 ${WRAP_ROW} ${ALIGN_CENTER}`}>
-                    <div className={`${ROW} ${ALIGN_START} layout-wrap`}>
+                    <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
                       <p className="flex-100 center letter_3">
                         {expectedTime}
                       </p>
@@ -250,7 +260,7 @@ export class BookingConfirmation extends Component {
                   </div>
 
                   <div className={`flex-40 ${WRAP_ROW} ${ALIGN_CENTER}`}>
-                    <div className={`${ROW} ${ALIGN_START} layout-wrap`}>
+                    <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
                       <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
                       <p className="flex-none letter_3">
                         {arrivalTime}
@@ -284,7 +294,7 @@ export class BookingConfirmation extends Component {
 
             <div className={getPanelStyle(collapser.charges)}>
               <div className={INNER_WRAPPER}>
-                <div className={`${ROW} ${ALIGN_CENTER}`}>
+                <div className={`${ROW_100} ${ALIGN_CENTER}`}>
                   <div className={BOOKING}>
                     <IncotermRow
                       theme={theme}
@@ -313,7 +323,7 @@ export class BookingConfirmation extends Component {
 
             <div className={getPanelStyle(collapser.extras)}>
               <div className={INNER_WRAPPER}>
-                <div className={`${ROW} ${ALIGN_CENTER}`}>
+                <div className={`${ROW_100} ${ALIGN_CENTER}`}>
                   <div className={BOOKING}>
                     <IncotermExtras
                       theme={theme}
@@ -341,7 +351,7 @@ export class BookingConfirmation extends Component {
                 <div className={SUMM_TOP}>
                   {shipperAndConsignee}
                 </div>
-                <div className={`${ROW} layout-align-space-around-center layout-wrap`}>
+                <div className={`${ROW_100} layout-align-space-around-center layout-wrap`}>
                   {' '}
                   {notifyeesJSX}{' '}
                 </div>
@@ -735,10 +745,10 @@ function TermsFactory ({ theme, terms }) {
     <div className="flex layout-row layout-align-start-center">
       <div className="flex-5" />
       <div className="flex-95 layout-row layout-wrap layout-align-start-center">
-        <div className={`${ROW} layout-align-start-center`}>
+        <div className={`${ROW_100} layout-align-start-center`}>
           <TextHeading theme={theme} text="By checking this box" size={4} />
         </div>
-        <div className={`${ROW} layout-align-start-start`}>
+        <div className={`${ROW_100} layout-align-start-start`}>
           <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
         </div>
       </div>
@@ -748,7 +758,7 @@ function TermsFactory ({ theme, terms }) {
 
 function LocationsDestinationFactory ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
-    <div className={`${ROW} ${ALIGN_START}`}>
+    <div className={`${ROW_100} ${ALIGN_START}`}>
       <address className="flex-none">
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
         <br />
@@ -763,7 +773,7 @@ function LocationsDestinationFactory ({ shipment, locations }) {
 }
 function LocationsOriginFactory ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
-    <div className={`${ROW} ${ALIGN_START}`}>
+    <div className={`${ROW_100} ${ALIGN_START}`}>
       <address className="flex-none">
         {`${locations.origin.street_number} ${locations.origin.street}`} <br />
         {`${locations.origin.city}`} <br />
@@ -796,7 +806,7 @@ function getTotalPrice (shipment) {
 function TotalGoodsValue (shipment) {
   return shipment.total_goods_value ? (
     <div
-      className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+      className={`flex-45 layout-row offset-5 ${WRAP_START}`}
     >
       <p className="flex-100">
         <b>Total Value of Goods:</b>
@@ -813,8 +823,7 @@ function TotalGoodsValue (shipment) {
 function Eori (shipment) {
   return shipment.eori ? (
     <div
-      className="flex-45 offset-10 layout-row
-      layout-align-start-start layout-wrap"
+      className={`flex-45 layout-row offset-10 ${WRAP_START}`}
     >
       <p className="flex-100">
         <b>EORI number:</b>
