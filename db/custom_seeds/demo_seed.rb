@@ -33,10 +33,10 @@ subdomains.each do |sub|
 
 # # #   # # # # # Overwrite public pricings from excel sheet
 
-  # puts "# Overwrite Local Charges From Sheet"
-    # local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-    # req = {"xlsx" => local_charges}
-    # overwrite_local_charges(req, shipper)
+  puts "# Overwrite Local Charges From Sheet"
+    local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
+    req = {"xlsx" => local_charges}
+    overwrite_local_charges(req, shipper)
 # #   #  puts "# Overwrite Local Charges From Sheet"
 # #   local_charges = File.open("#{Rails.root}/db/dummydata/ht_local_charges.xlsx")
 # #   req = {"xlsx" => local_charges}
@@ -46,10 +46,10 @@ subdomains.each do |sub|
 #   # # # # # # Overwrite trucking data from excel sheet
 
  
-  hub = tenant.hubs.find_by_name("Shanghai Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # hub = tenant.hubs.find_by_name("Shanghai Airport")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
 #   # awesome_print "City rates done"
 #   hub = tenant.hubs.find_by_name("Gothenburg Port")

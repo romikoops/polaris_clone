@@ -33,6 +33,7 @@ class Location < ApplicationRecord
       
       location.country          = Country.find_by(code: geo.country_code)
     end
+    
     location
   end
 

@@ -571,6 +571,7 @@ module ExcelTools
         next if !cell || !mod_indexes.include?(i)
         defaults[mod_key] = {} unless defaults[mod_key]
         min_max_arr = cell.split(" - ")
+        awesome_print min_max_arr
         defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil}.symbolize_keys
       end
     end
@@ -965,7 +966,9 @@ module ExcelTools
           minimum: 'MINIMUM',
           wm: 'WM',
           effective_date: 'EFFECTIVE_DATE',
-          expiration_date: 'EXPIRATION_DATE'
+          expiration_date: 'EXPIRATION_DATE',
+          range_min: 'RANGE_MIN',
+          range_max: 'RANGE_MAX'
         )
         if rows.length < 1
           next 
@@ -1015,6 +1018,8 @@ module ExcelTools
             charge = {currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_CBM_KG"
             charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            when "PER_KG_RANGE"
+           charge = {currency: row[:currency],  kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max]}
           end
 
           charge[:expiration_date] = row[:expiration_date]
@@ -1599,9 +1604,32 @@ module ExcelTools
     debug_message(charge)
     debug_message(all_charges)
 
-    if load_type === 'fcl'
+    if charge[:rate_basis].include? 'RANGE'
+      if load_type === 'fcl'
       %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
         debug_message(test)
+        debug_message(all_charges[lt])
+        debug_message(all_charges[lt][direction])
+        debug_message(charge)
+
+       set_range_fee(all_charges, charge, lt, direction)
+      end
+    else
+      set_range_fee(all_charges, charge, load_type, direction)
+    end
+      
+    else
+      set_regular_fee(all_charges, charge, load_type, direction)
+    end
+    all_charges
+  end
+
+  def debug_message(message)
+    puts message if DEBUG
+  end
+  def set_regular_fee(all_charges, charge, load_type, direction)
+    if load_type === 'fcl'
+      %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
         debug_message(all_charges[lt])
         debug_message(all_charges[lt][direction])
         debug_message(charge)
@@ -1613,8 +1641,39 @@ module ExcelTools
     end
     all_charges
   end
-
-  def debug_message(message)
-    puts message if DEBUG
+  def set_range_fee(all_charges, charge, load_type, direction)
+    
+    case charge[:rate_basis]
+    when 'PER_KG_RANGE'
+      rate_value = charge[:kg]
+    end
+    existing_charge = all_charges[load_type][direction][charge[:key]]
+    if existing_charge && existing_charge[:range]
+      all_charges[load_type][direction][charge[:key]][:range] << {
+        currency: charge[:currency],
+        rate_basis: charge[:rate_basis],
+         min: charge[:range_min],
+         max: charge[:range_max],
+        rate: rate_value
+        }
+      else
+      all_charges[load_type][direction][charge[:key]] =  {
+        currency: charge[:currency],
+        rate_basis: charge[:rate_basis],
+         min: charge[:min],
+         range: [
+           {
+            currency: charge[:currency],
+            min: charge[:range_min],
+            max: charge[:range_max],
+            rate: rate_value
+            }
+         ],
+         key: charge[:key],
+         name: charge[:name]
+        } 
+    end
+    awesome_print all_charges
+    all_charges
   end
 end

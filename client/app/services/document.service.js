@@ -98,7 +98,7 @@ function downloadSchedules (options) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: { options }
+    body: JSON.stringify({ options })
   }
 
   return fetch(`${BASE_URL}/admin/schedules/download`, requestOptions).then(handleResponse)
@@ -107,7 +107,7 @@ function downloadSchedules (options) {
 function downloadTrucking (options) {
   const requestOptions = {
     method: 'POST',
-    headers: { ...authHeader() },
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ options })
   }
   return fetch(`${BASE_URL}/admin/trucking/download`, requestOptions).then(handleResponse)

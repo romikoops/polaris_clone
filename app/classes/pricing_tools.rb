@@ -171,6 +171,7 @@ module PricingTools
         weight_kg >= range["min"] && weight_kg <= range["max"]
       end
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
+      
       return [value, min].max
     when 'PER_CONTAINER_RANGE'
       fee_range = fee["range"].find do |range|
@@ -245,9 +246,10 @@ module PricingTools
   end
 
   def get_cargo_hash(cargo)
+    cargo.set_chargeable_weight!
     {    
       volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
-      weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
+      weight: (cargo.try(:weight) || cargo.chargeable_weight) * (cargo.try(:quantity) || 1),
       quantity: cargo.try(:quantity) || 1  
     }
   end
