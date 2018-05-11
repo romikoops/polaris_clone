@@ -1364,7 +1364,7 @@ module ExcelTools
 
       effective_date = DateTime.parse(row[:effective_date].to_s)
       expiration_date = DateTime.parse(row[:expiration_date].to_s)
-      cargo_type = row[:cargo_type]
+      cargo_type = row[:cargo_type] == 'cargo_item' ? 'lcl' : row[:cargo_type]
 
       new_pricings[pricing_key][cargo_type] ||= {
         data: {},
