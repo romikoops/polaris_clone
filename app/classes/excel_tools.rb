@@ -749,7 +749,7 @@ module ExcelTools
             )
         eos
 
-        insertion_query = <<-eos
+         insertion_query = <<-eos
           DO
           $do$
           BEGIN
@@ -760,29 +760,6 @@ module ExcelTools
             #{with_statement}
             UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w(fees rates))}
             WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
-            IF (
-              SELECT EXISTS(
-                SELECT 1 FROM trucking_pricings
-                JOIN hub_truckings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
-                JOIN hubs ON hubs.id = hub_truckings.hub_id
-                WHERE hubs.id = #{hub_id}
-              )
-            ) THEN
-              #{with_statement},
-              tp_ids AS (
-                SELECT id FROM trucking_pricings
-                WHERE id = (SELECT id FROM matching_tp_id_table)
-              )          
-              INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-                (
-                  SELECT * FROM hub_ids
-                  CROSS JOIN tp_ids
-                  CROSS JOIN td_ids
-                  CROSS JOIN t_stamps AS created_ats
-                  CROSS JOIN t_stamps AS updated_ats
-                );    
-            END IF;
-
           ELSE
             #{with_statement},
             tp_ids AS (
@@ -802,6 +779,7 @@ module ExcelTools
           END
           $do$
         eos
+
 
         ActiveRecord::Base.connection.execute(insertion_query)
       end
