@@ -24,10 +24,10 @@ class NexusesController < ApplicationController
 		#      target #=> "origin",      stop_target #=> "last_stops" 
 		#  or  target #=> "destination", stop_target #=> "first_stop" 
 
-		nexus_ids 			= params[:nexus_ids].split(",").map(&:to_i)
-		target 					= params[:target]
-		stop_target 		= target == "destination" ? "first_stop" : "last_stop"
-		stop_counterpart 		= target == "destination" ? "last_stop" : "first_stop"
+		nexus_ids 			 = params[:nexus_ids].split(",").map(&:to_i)
+		target 					 = params[:target]
+		stop_target 		 = target == "destination" ? "first_stop" : "last_stop"
+		stop_counterpart = target == "destination" ? "last_stop"  : "first_stop"
 
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
 		itineraries   = Itinerary.where(tenant_id: current_user.tenant_id, id: itinerary_ids).map(&:as_options_json)

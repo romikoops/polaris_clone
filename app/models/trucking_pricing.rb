@@ -167,7 +167,7 @@ class TruckingPricing < ApplicationRecord
       raise ArgumentError, "Must provide country_code"
     end
 
-    if args.keys.size <= mandatory_args.length + 1
+    if args.keys.size <= mandatory_args.length
       raise ArgumentError, "Must provide a valid filter besides #{mandatory_args.to_sentence}"
     end
   end

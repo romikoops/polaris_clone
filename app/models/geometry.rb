@@ -5,6 +5,22 @@ class Geometry < ApplicationRecord
 		message: -> obj, _ { "is a duplicate for the names: #{obj.names.log_format}" }
 	}
 
+	# Class Methods
+
+	def self.cascading_find_by_name(raw_name)
+		name = raw_name.capitalize
+
+		(1..4).to_a.reverse.each do |i|
+			result = where("name_#{i}" => name).first
+			return result unless result.nil?
+		end
+
+		nil
+	end
+
+
+	# Instance Methods
+
 	def names
 		[name_1, name_2, name_3, name_4]
 	end

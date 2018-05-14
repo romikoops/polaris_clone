@@ -463,7 +463,7 @@ module ExcelTools
     
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type = zone_sheet.row(2)[4] == 'city' ? 'city_name' : zone_sheet.row(2)[4]
+    identifier_type = zone_sheet.row(2)[4] == 'city' ? 'geometry_id' : zone_sheet.row(2)[4]
 
     # START Load Zones ------------------------
     
@@ -500,28 +500,29 @@ module ExcelTools
             end
             { ident: ident_value, country: idents_and_country[:country] }
           end
-        elsif identifier_type == "city_name"
-          city = Location.get_trucking_city("#{idents_and_country[:ident].to_s}, #{idents_and_country[:country]}")
+        elsif identifier_type == "geometry_id"
+          geometry = Geometry.cascading_find_by_name(idents_and_country[:ident].to_s)
           awesome_print idents_and_country
-          awesome_print city
+          if geometry.nil?
+            puts "skipped #{idents_and_country[:ident].to_s}"
+            next
+          end
+          awesome_print geometry.names.log_format
           stats[:trucking_destinations][:number_created] += 1
           stats[:hub_truckings][:number_created] += 1
           
-          { ident: city, country: idents_and_country[:country] }
+          { ident: geometry.id, country: idents_and_country[:country] }
         else
           idents_and_country
         end
       end
     end
     
-    byebug
     # END Load Zones ------------------------
 
     
     # START Load Fees & Charges ------------------------
     
-    
-
     rows = fees_sheet.parse(
       fee: 'FEE',
       mot: 'MOT',
@@ -635,6 +636,8 @@ module ExcelTools
         
         single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
 
+        next if single_ident_values_and_country.first.nil?
+
         single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
         single_country_values = single_ident_values_and_country.map { |h| h[:country] }
 
@@ -699,16 +702,18 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
           end
 
+          byebug unless single_ident_values_and_country.first
           
-          
-          single_ident_values_and_country_with_timestamps =
-            identifier_type == 'distance' ?
-            single_ident_values_and_country.map do |h|
-              "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
-            end.join(", ") :
-            single_ident_values_and_country.map do |h|
-              "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
-            end.join(", ")
+          single_ident_values_and_country_with_timestamps = case identifier_type
+            when 'distance', 'geometry_id'
+              single_ident_values_and_country.map do |h|
+                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+              end.join(", ")
+            else
+              single_ident_values_and_country.map do |h|
+                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+              end.join(", ")
+            end
 
           tp = trucking_pricing_by_zone[row_key]
           
@@ -730,8 +735,8 @@ module ExcelTools
                   SELECT ident_value, country_code::text, cr_at, up_at
                   FROM (VALUES #{single_ident_values_and_country_with_timestamps})
                     AS t(ident_value, country_code, cr_at, up_at)
-                  WHERE ident_value NOT IN (
-                    SELECT #{identifier_type}
+                  WHERE ident_value::text NOT IN (
+                    SELECT #{identifier_type}::text
                     FROM existing_identifiers
                     WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
                   )
@@ -806,10 +811,10 @@ module ExcelTools
       end
     end
     # END Rates ------------------------
-  end_time = DateTime.now
-  diff = (end_time - start_time) / 86400
+    end_time = DateTime.now
+    diff = (end_time - start_time) / 86400
 
-  awesome_print diff
+    awesome_print diff
     { results: results, stats: stats }
   end
 
@@ -1620,6 +1625,7 @@ module ExcelTools
   def debug_message(message)
     puts message if DEBUG
   end
+  
   def generate_meta_from_sheet(sheet)
     meta = {}
     sheet.row(1).each_with_index do |key, i|

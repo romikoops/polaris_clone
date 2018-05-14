@@ -59,15 +59,6 @@ describe TruckingPricing, type: :model do
             )
           }.to raise_error(ArgumentError)
         end
-
-        it 'raises an ArgumentError if no filter besides mandatory arguments is provided' do
-          expect {
-            trucking_pricings = described_class.find_by_filter(
-              tenant_id: tenant.id, load_type: load_type,
-              carriage: carriage,   country_code: country_code,
-            )
-          }.to raise_error(ArgumentError)
-        end
       end
 
       context 'zipcode identifier' do

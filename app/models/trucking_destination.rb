@@ -6,6 +6,8 @@ class TruckingDestination < ApplicationRecord
     }
 
   belongs_to :geometry, optional: true
+  has_many :hub_truckings
+  has_many :trucking_pricings, through: :hub_truckings
   
   def self.find_via_distance_to_hub(args = {})
     raise ArgumentError, "Must provide hub"       if args[:hub].nil?
