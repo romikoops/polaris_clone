@@ -14,7 +14,7 @@ describe Tenant, type: :model do
     	let(:general_sales_email) { 'sales.general@demo.com' }
     	let(:ocean_sales_email) { 'sales.ocean@demo.com' }
 
-    	let(:tenant) { create(:tenant, :with_general_emails) }
+    	let(:tenant) { create(:tenant) }
     	let(:tenant_with_mot_emails) { create(:tenant, :with_mot_emails) }
 
       context 'wrong argument for branch param' do
