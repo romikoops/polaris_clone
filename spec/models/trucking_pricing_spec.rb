@@ -120,6 +120,7 @@ describe TruckingPricing, type: :model do
           )
         }
         it 'finds the correct trucking_pricing with avulsed location filters' do
+          byebug
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,

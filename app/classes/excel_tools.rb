@@ -499,7 +499,7 @@ module ExcelTools
           end
           awesome_print geometry.names.log_format
           stats[:trucking_destinations][:number_created] += 1
-          stats[:hub_truckings][:number_created] += 1
+          # stats[:hub_truckings][:number_created] += 1
           
           { ident: geometry.id, country: idents_and_country[:country] }
         else
@@ -1624,7 +1624,6 @@ module ExcelTools
   def debug_message(message)
     puts message if DEBUG
   end
-<<<<<<< HEAD
   def set_regular_fee(all_charges, charge, load_type, direction)
     if load_type === 'fcl'
       %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
@@ -1673,14 +1672,12 @@ module ExcelTools
     end
     awesome_print all_charges
     all_charges
-=======
-  
+  end
   def generate_meta_from_sheet(sheet)
     meta = {}
     sheet.row(1).each_with_index do |key, i|
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!
->>>>>>> acef8389cbc905ad638d97bdd227599a01739f72
   end
 end
