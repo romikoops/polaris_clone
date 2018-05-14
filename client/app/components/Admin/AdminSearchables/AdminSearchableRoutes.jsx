@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
-import { AdminItineraryRow } from '../'
 import { Tooltip } from '../../Tooltip/Tooltip'
+import WorldMap from '../DashboardMap/WorldMap'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
@@ -75,16 +74,13 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs,
       theme,
       seeAll,
       limit,
       showTooltip,
       tooltip,
       icon,
-      adminDispatch,
       heading,
-      showDelete,
       hideFilters
     } = this.props
     const { itineraries } = this.state
@@ -94,15 +90,8 @@ export class AdminSearchableRoutes extends Component {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (
-            <AdminItineraryRow
-              key={v4()}
-              hubs={hubs}
-              itinerary={rt}
-              theme={theme}
-              showDelete={showDelete}
-              adminDispatch={adminDispatch}
-              handleClick={this.handleClick}
-            />
+
+            <p></p>
           )
         }
         return ''
@@ -111,14 +100,7 @@ export class AdminSearchableRoutes extends Component {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (
-            <AdminItineraryRow
-              key={v4()}
-              hubs={hubs}
-              itinerary={rt}
-              theme={theme}
-              showDelete={showDelete}
-              handleClick={this.handleClick}
-            />
+          <p></p>
           )
         }
         return ''
@@ -171,6 +153,7 @@ export class AdminSearchableRoutes extends Component {
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
           {viewType}
+          <WorldMap itineraries={itineraries} />
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">

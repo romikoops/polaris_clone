@@ -27,6 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.39",
+    "d3-geo": "^1.10.0",
     "es6-promise-promise": "^1.0.0",
     "formsy-react": "^1.1.1",
     "fuse.js": "^3.2.0",
@@ -36,6 +37,7 @@
     "moment": "^2.19.2",
     "moment-range": "^3.0.3",
     "node-uuid": "^1.4.8",
+    "npm": "^6.0.0",
     "parse-domain": "^2.0.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.4.0",
@@ -68,7 +70,8 @@
     "resolve-url-loader": "^2.1.1",
     "slick-carousel": "^1.8.1",
     "style-it": "^1.6.13",
-    "styled-components": "^2.2.4"
+    "styled-components": "^2.2.4",
+    "topojson-client": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.39",
