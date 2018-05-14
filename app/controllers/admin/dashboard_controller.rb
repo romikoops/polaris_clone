@@ -17,10 +17,12 @@ class Admin::DashboardController < ApplicationController
     @detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
     @hubs = Hub.prepped(current_user)
     tenant = Tenant.find(current_user.tenant_id)
-    @train_schedules = tenant.itineraries.where(mode_of_transport: 'train').limit(10).flat_map{|it| it.prep_schedules(5)}
+    @train_schedules = tenant.itineraries.where(mode_of_transport: 'rail').limit(10).flat_map{|it| it.prep_schedules(5)}
     @ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').limit(10).flat_map{|it| it.prep_schedules(5)}
     @air_schedules = tenant.itineraries.where(mode_of_transport: 'air').limit(10).flat_map{|it| it.prep_schedules(5)}
-    # 
+    # schedules = @train_schedules + @air_schedules + @ocean_schedules
+    # byebug
+    # schedules.sort! {|x,y| x}
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, itineraries: @detailed_itineraries, hubs: @hubs, shipments: {requested: @requested_shipments, open: @open_shipments, finished: @finished_shipments}})
   end
 

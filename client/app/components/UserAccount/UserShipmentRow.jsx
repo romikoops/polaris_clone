@@ -48,6 +48,9 @@ export class UserShipmentRow extends Component {
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   selectShipment () {
     const { shipment, handleSelect } = this.props
     handleSelect(shipment)

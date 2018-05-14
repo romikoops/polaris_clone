@@ -22,7 +22,7 @@ module.exports = {
   entry: NodeEnvPlugin.isProduction
     ? ['@babel/polyfill', path.join(__dirname, 'app/index.jsx')]
     : [
-      // 'react-hot-loader/patch',
+      'react-hot-loader/patch',
       '@babel/polyfill',
       'webpack-dev-server/client?http://localhost:8080',
       'webpack/hot/only-dev-server',

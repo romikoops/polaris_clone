@@ -19,12 +19,12 @@ class AdminClientsIndex extends Component {
     }
   }
   componentWillMount () {
-    if (
-      this.props.clients &&
-      !this.state.searchResults.length
-    ) {
+    if (this.props.clients && !this.state.searchResults.length) {
       this.prepFilters()
     }
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
   }
 
   prepFilters () {

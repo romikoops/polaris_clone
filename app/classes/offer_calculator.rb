@@ -39,6 +39,7 @@ class OfferCalculator
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
     )
+    
     date_limit = Date.today() + 5.days
     @shipment.planned_pickup_date = planned_date > date_limit ? planned_date : date_limit
 
@@ -59,6 +60,7 @@ class OfferCalculator
 
   def calc_offer!
     determine_trucking_options!
+    
     determine_itinerary!
     # determine_route! 
     determine_hubs!
@@ -70,6 +72,7 @@ class OfferCalculator
     #   "pre_carriage" => { "truck_type" => "side_lifter"}
     # }
     determine_longest_trucking_time!
+    
     determine_layovers!
     
     

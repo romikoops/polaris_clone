@@ -7,15 +7,27 @@ module NotificationTools
   #   return resp.to_a
   # end
   def get_messages_for_user(user)
-    conversations = user.conversations
-    unread = conversations.flat_map {|c| c.messages.where(read:false)}.count
+    conversations = user.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
+      if conversation.shipment
+        return_h[conversation.shipment.imc_reference] = {
+          messages: conversation.messages.order(:updated_at),
+          conversation:conversation
+        }
+      end
+    end
+    unread = user.conversations.flat_map {|c| c.messages.where(read:false)}.count
     resp = {"conversations" => conversations, "unread" => unread}
     return resp
   end
 
   def get_messages_for_admin(user)
     conversations = user.tenant.conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
-      return_h[conversation.shipment.imc_reference] = conversation.messages.order(:updated_at)
+      if conversation.shipment
+         return_h[conversation.shipment.imc_reference] = {
+          messages: conversation.messages.order(:updated_at),
+          conversation: conversation
+        }
+      end
     end
     unread = user.tenant.conversations.flat_map {|c| c.messages.where(read:false)}.count
     
@@ -23,8 +35,14 @@ module NotificationTools
     return master_resp
   end
   def get_messages_for_manager(user)
-    conversations = Conversation.where(manager_id: user.id)
-    unread = conversations.flat_map {|c| c.messages.where(read:false)}.count
+    mananger_conversations = Conversation.where(manager_id: user.id)
+    converstaions = mananger_conversations.each_with_object(Hash.new(0)) do |conversation, return_h|
+      return_h[conversation.shipment.imc_reference] = {
+          messages: conversation.messages.order(:updated_at),
+          conversation: conversation
+        }
+    end
+    unread = mananger_conversations.flat_map {|c| c.messages.where(read:false)}.count
 
     resp = {"conversations" => conversations, "unread" => unread}
     return resp
@@ -59,6 +77,8 @@ module NotificationTools
     data[:sender_id] = shipment.user.id
     conversation = shipment.conversations.find_or_create_by!(user_id: shipment.user.id, tenant_id: user.tenant_id, shipment_id: shipment.id)
     new_message = conversation.messages.create!(data)
+    conversation.update_unreads
+    conversation.update_timestamp
     return {message: new_message, shipmentRef: ref}
   end
 end

@@ -230,6 +230,7 @@ export class UserContactsView extends Component {
     if (!contactData && !loading) {
       userDispatch.getContact(match.params.id, false)
     }
+    window.scrollTo(0, 0)
   }
   goBack () {
     const { userDispatch } = this.props

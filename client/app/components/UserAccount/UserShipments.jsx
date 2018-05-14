@@ -45,6 +45,7 @@ export class UserShipments extends Component {
       userDispatch.getShipments(false)
     }
     this.props.setNav('shipments')
+    window.scrollTo(0, 0)
   }
   viewShipment (shipment) {
     const { userDispatch } = this.props

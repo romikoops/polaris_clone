@@ -19,6 +19,9 @@ class AdminTrucking extends Component {
     this.viewTrucking = this.viewTrucking.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   viewTrucking (hub) {
     const { adminDispatch } = this.props
     adminDispatch.viewTrucking(hub.id)

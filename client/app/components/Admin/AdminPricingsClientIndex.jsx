@@ -18,6 +18,9 @@ export class AdminPricingsClientIndex extends Component {
     }
     this.viewClient = this.viewClient.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
 
   viewClient (client) {
     const { adminTools } = this.props

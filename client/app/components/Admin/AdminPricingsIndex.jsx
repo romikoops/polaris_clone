@@ -23,6 +23,9 @@ export class AdminPricingsIndex extends Component {
     this.viewRoute = this.viewRoute.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   toggleCreator () {
     this.setState({ newPricing: !this.state.newPricing })
   }

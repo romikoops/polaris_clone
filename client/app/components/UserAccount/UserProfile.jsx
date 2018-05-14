@@ -230,6 +230,7 @@ export class UserProfile extends Component {
   }
   componentDidMount () {
     this.props.setNav('profile')
+    window.scrollTo(0, 0)
   }
 
   setCurrency (event) {

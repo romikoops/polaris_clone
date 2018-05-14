@@ -23,6 +23,9 @@ export class AdminClientView extends Component {
     this.toggleNewManager = this.toggleNewManager.bind(this)
     this.assignNewManager = this.assignNewManager.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   handleManagerAssigment (event) {
     this.setState({ selectedManager: event })
   }

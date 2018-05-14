@@ -21,5 +21,7 @@ RDS_HOSTNAME=ebdb.cvwyyvbuvazx.us-east-1.rds.amazonaws.com
 RDS_PORT=5432
 FIXER_API_KEY=6985c41eadad14bbab851c518745c236
 TEST=test
+MONGO_USER=imcdbadmin
+MONGO_PASSWORD=DZYKIdOZk3vP6erN
 
 # RAILS_SERVE_STATIC_FILES=true
