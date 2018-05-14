@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180510164848) do
+ActiveRecord::Schema.define(version: 20180514134957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20180510164848) do
     t.geometry "data", limit: {:srid=>0, :type=>"geometry"}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name_1", "name_2", "name_3", "name_4"], name: "index_geometries_on_name_1_and_name_2_and_name_3_and_name_4", unique: true
   end
 
   create_table "hub_truckings", force: :cascade do |t|

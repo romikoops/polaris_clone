@@ -3,18 +3,27 @@ puts "Reading from kml..."
 geometry_hash = Hash.from_xml(File.open('db/dummydata/china.kml'))
 geometries = geometry_hash['kml']['Document']['Folder']['Placemark']
 
-puts "Seeding Geometries..."
+puts
+puts "Preparing Geometries attributes..."
 total = geometries.size
 completion_percentage = 0
 new_completion_percentage = 0
-puts
 puts "PROGRESS BAR"
 puts "_" * 100
 
-geometries.each_with_index do |geo, i|
-	# puts '-' * 50
+geometries_data = geometries.map.with_index do |geo, i|
+  # Progress bar
+
+  new_completion_percentage = i * 100 / total
+  if new_completion_percentage > completion_percentage
+    completion_percentage = new_completion_percentage
+    print "-"
+  end
+
+
+  # Geometry Data
+
   names = geo['ExtendedData']['SchemaData']['SimpleData']
-	# puts names.join(' | ')
 
   polygons_raw_data = [geo['MultiGeometry']['Polygon']].flatten
     
@@ -30,16 +39,18 @@ geometries.each_with_index do |geo, i|
   end
   multi_polygon = RGeo::Cartesian.factory.multi_polygon(polygons)
 
-  name_attributes = names.map.with_index { |name, i| ["name_#{i + 1}", name] }.to_h
-
-  geometry = Geometry.find_or_initialize_by(name_attributes)
-  geometry.assign_attributes(data: multi_polygon)
-
-  puts geometry.errors.full_messages unless geometry.save
-
-  new_completion_percentage = i * 100 / total
-  if new_completion_percentage > completion_percentage
-    completion_percentage = new_completion_percentage
-    print "-"
-  end
+  attributes = { data: multi_polygon }
+  names.each_with_index { |name, i| attributes["name_#{i + 1}"] = name }
+  attributes
 end
+
+puts
+puts "Writing Geometries to DB..."
+
+Geometry.import geometries_data,
+  on_duplicate_key_update: {
+    conflict_target: [:name_1, :name_2, :name_3, :name_4],
+    columns:         [:data]
+  }
+
+puts "Geometries seeded..."
