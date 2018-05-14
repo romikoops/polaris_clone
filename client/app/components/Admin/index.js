@@ -1,4 +1,5 @@
 export * from './AdminDashboard'
+export * from './AdminDashboardNew'
 
 export { default as AdminHubs } from './Hubs/AdminHubs'
 export * from './Hubs/AdminHubsIndex'

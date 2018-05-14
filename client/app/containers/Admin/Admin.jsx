@@ -7,7 +7,7 @@ import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
 import {
-  AdminDashboard,
+  AdminDashboardNew,
   AdminServiceCharges,
   SuperAdmin
 } from '../../components/Admin'
@@ -117,10 +117,11 @@ class Admin extends Component {
                 <Route
                   path="/admin/dashboard"
                   render={props => (
-                    <AdminDashboard
+                    <AdminDashboardNew
                       theme={theme}
                       {...props}
                       clients={clients}
+                      shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}
                       dashData={dashboard}
