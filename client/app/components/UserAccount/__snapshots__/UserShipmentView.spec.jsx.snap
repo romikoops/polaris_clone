@@ -184,15 +184,15 @@ exports[`props.loading is true 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -346,15 +346,90 @@ exports[`props.loading is true 1`] = `
         <div
           className="flex-100 layout-row layout-align-start-center"
         >
-          
-          
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
         </div>
         <div
           className="flex-100 layout-row layout-align-space-around-center"
         >
-          
-          
-          
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
         </div>
       </div>
     }
@@ -707,15 +782,15 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -926,15 +1001,90 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
         <div
           className="flex-100 layout-row layout-align-start-center"
         >
-          
-          
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
         </div>
         <div
           className="flex-100 layout-row layout-align-space-around-center"
         >
-          
-          
-          
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
         </div>
       </div>
     }
@@ -1287,15 +1437,15 @@ exports[`props.shipmentData.contacts is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -1592,15 +1742,90 @@ exports[`props.shipmentData.contacts is present 1`] = `
         <div
           className="flex-100 layout-row layout-align-start-center"
         >
-          
-          
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
         </div>
         <div
           className="flex-100 layout-row layout-align-space-around-center"
         >
-          
-          
-          
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
         </div>
       </div>
     }
@@ -1953,15 +2178,15 @@ exports[`props.shipmentData.documents is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -2115,15 +2340,90 @@ exports[`props.shipmentData.documents is present 1`] = `
         <div
           className="flex-100 layout-row layout-align-start-center"
         >
-          
-          
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
         </div>
         <div
           className="flex-100 layout-row layout-align-space-around-center"
         >
-          
-          
-          
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
         </div>
       </div>
     }
@@ -2547,15 +2847,15 @@ exports[`shallow render 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -2709,15 +3009,90 @@ exports[`shallow render 1`] = `
         <div
           className="flex-100 layout-row layout-align-start-center"
         >
-          
-          
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
         </div>
         <div
           className="flex-100 layout-row layout-align-space-around-center"
         >
-          
-          
-          
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
         </div>
       </div>
     }

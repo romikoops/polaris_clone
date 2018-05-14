@@ -13,7 +13,21 @@ exports[`shallow render 1`] = `
     hubs={Object {}}
     locations={
       Object {
+        "destination": Object {
+          "city": "BAR_CITY",
+          "country": "China",
+          "street": "BAR_STREET",
+          "street_number": 9,
+          "zip_code": 845321,
+        },
         "endHub": "FOO_END_HUB",
+        "origin": Object {
+          "city": "FOO_CITY",
+          "country": "Germany",
+          "street": "FOO_STREET",
+          "street_number": 7,
+          "zip_code": 21177,
+        },
         "startHub": "FOO_START_HUB",
       }
     }
@@ -103,7 +117,21 @@ exports[`shallow render 1`] = `
           "documents": Array [],
           "hubs": Object {},
           "locations": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
             "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
             "startHub": "FOO_START_HUB",
           },
           "schedules": Array [
@@ -112,10 +140,20 @@ exports[`shallow render 1`] = `
             },
           ],
           "shipment": Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "notes": "FOO_NOTES",
             "schedules_charges": Object {
               "FOO_HUB_ROUTE_KEY": Object {
                 "foo": "FOO_ROUTE_KEY",
               },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
             },
             "total_price": Object {
               "currency": "USD",

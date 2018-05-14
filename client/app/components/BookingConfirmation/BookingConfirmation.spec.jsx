@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import {
   theme,
-  editedShipmentData,
+  shipmentData,
   identity,
   tenant
 } from '../../mocks'
@@ -110,7 +110,7 @@ const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
 
 const propsBase = {
   theme,
-  shipmentData: { ...editedShipmentData, cargoItemTypes },
+  shipmentData: { ...shipmentData, cargoItemTypes },
   setStage: identity,
   tenant: editedTenant,
   shipmentDispatch: {
@@ -126,7 +126,7 @@ test('with containers', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
       containers
     }
@@ -138,7 +138,7 @@ test('with cargo items', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
       cargoItems
     }
@@ -157,7 +157,7 @@ test('props.shipmentData is falsy', () => {
 test('props.shipmentData.cargoItemTypes is falsy', () => {
   const props = {
     ...propsBase,
-    shipmentData: editedShipmentData
+    shipmentData
   }
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
@@ -166,7 +166,7 @@ test('props.shipmentData.aggregatedCargo is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
       aggregatedCargo: { foo: 1 }
     }
@@ -178,7 +178,7 @@ test('props.shipmentData.documents is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
       documents: [
         { id: 0, doc_type: 'FOO_DOC_TYPE' },
@@ -193,7 +193,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
       notifyees: [
         { first_name: 'John', last_name: 'Doe' },
@@ -206,24 +206,13 @@ test('props.shipmentData.notifyees is truthy', () => {
 })
 
 test('props.shipmentData.shipment.has_pre_carriage is true', () => {
-  const locations = {
-    ...editedShipmentData.locations,
-    origin: {
-      street_number: 7,
-      street: 'FOO_STREET',
-      city: 'FOO_CITY',
-      country: 'Germany',
-      zip_code: 21177
-    }
-  }
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
-      locations,
       shipment: {
-        ...editedShipmentData.shipment,
+        ...shipmentData.shipment,
         has_pre_carriage: true
       }
     }
@@ -232,24 +221,13 @@ test('props.shipmentData.shipment.has_pre_carriage is true', () => {
 })
 
 test('props.shipmentData.shipment.has_on_carriage is true', () => {
-  const locations = {
-    ...editedShipmentData.locations,
-    destination: {
-      street_number: 9,
-      street: 'BAR_STREET',
-      city: 'BAR_CITY',
-      country: 'China',
-      zip_code: 845321
-    }
-  }
   const props = {
     ...propsBase,
     shipmentData: {
-      ...editedShipmentData,
+      ...shipmentData,
       cargoItemTypes,
-      locations,
       shipment: {
-        ...editedShipmentData.shipment,
+        ...shipmentData.shipment,
         has_on_carriage: true
       }
     }

@@ -38,19 +38,7 @@ const schedulesInShipmentData = [
   { hub_route_key: 'FOO_HUB_ROUTE_KEY' }
 ]
 
-const shipmentInShipmentData = {
-  schedules_charges: {
-    [schedulesInShipmentData[0].hub_route_key]: {
-      foo: 'FOO_ROUTE_KEY'
-    }
-  },
-  total_price: {
-    value: 12,
-    currency: 'USD'
-  }
-}
-
-export const editedShipmentInShipmentData = {
+export const shipmentInShipmentData = {
   schedules_charges: {
     [schedulesInShipmentData[0].hub_route_key]: {
       foo: 'FOO_ROUTE_KEY'
@@ -81,27 +69,21 @@ export const shipmentData = {
   schedules: schedulesInShipmentData,
   locations: {
     startHub: 'FOO_START_HUB',
-    endHub: 'FOO_END_HUB'
-  }
-}
-
-export const editedShipmentData = {
-  contacts: [],
-  shipment: editedShipmentInShipmentData,
-  documents: [],
-  cargoItems: [],
-  containers: [],
-  schedules: schedulesInShipmentData,
-  locations: {
+    endHub: 'FOO_END_HUB',
+    destination: {
+      street_number: 9,
+      street: 'BAR_STREET',
+      city: 'BAR_CITY',
+      country: 'China',
+      zip_code: 845321
+    },
     origin: {
       street_number: 7,
       street: 'FOO_STREET',
       city: 'FOO_CITY',
       country: 'Germany',
       zip_code: 21177
-    },
-    startHub: 'FOO_START_HUB',
-    endHub: 'FOO_END_HUB'
+    }
   }
 }
 
