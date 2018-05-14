@@ -12,15 +12,16 @@ serialized_coordinate_pairs = [
 ]
 
 points = serialized_coordinate_pairs.map do |serialized_coordinate_pair|
-  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(","))
+  RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(",").map(&:to_f))
 end
-line_string = RGeo::Cartesian.factory.line_string(points)
-polygon     = RGeo::Cartesian.factory.polygon(line_string)
+line_string   = RGeo::Cartesian.factory.line_string(points)
+polygon       = RGeo::Cartesian.factory.polygon(line_string)
+multi_polygon = RGeo::Cartesian.factory.multi_polygon([polygon])
 
 
 FactoryBot.define do
   factory :geometry do
-  	data polygon
+  	data multi_polygon
 		name_1 "Sweden"    
 		name_2 "Gothenburg"    
 		name_3 "Testname3"    
