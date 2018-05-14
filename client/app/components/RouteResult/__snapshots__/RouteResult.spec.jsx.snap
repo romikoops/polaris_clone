@@ -202,16 +202,6 @@ exports[`props.pickup is false 1`] = `
       </p>
       <Price
         scale=""
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-          }
-        }
         value={12}
       />
     </div>
@@ -444,16 +434,6 @@ exports[`shallow rendering 1`] = `
       </p>
       <Price
         scale=""
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-          }
-        }
         value={12}
       />
     </div>

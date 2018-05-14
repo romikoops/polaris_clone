@@ -122,64 +122,6 @@ exports[`props.pickup is false 1`] = `
         }
       />
     </div>
-    <div
-      className="radio layout-row layout-align-none-center"
-      style={
-        Object {
-          "margin": "2px 0",
-        }
-      }
-    >
-      <Checkbox
-        checked={true}
-        onChange={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-      <label
-        className="flex-none"
-      >
-        <i
-          className="fa fa-plane"
-        />
-        Air
-      </label>
-    </div>
-    <div
-      className="radio layout-row layout-align-none-center"
-      style={
-        Object {
-          "margin": "2px 0",
-        }
-      }
-    >
-      <Checkbox
-        checked={true}
-        onChange={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-      <label
-        className="flex-none"
-      >
-        <i
-          className="fa fa-ship"
-        />
-        Ocean
-      </label>
-    </div>
   </div>
   <div>
     <p
@@ -190,7 +132,7 @@ exports[`props.pickup is false 1`] = `
         }
       }
     >
-      *  Transit time (T/T) not guaranteed
+      * Transit time (T/T) not guaranteed
     </p>
   </div>
 </div>
@@ -318,64 +260,6 @@ exports[`shallow rendering 1`] = `
         }
       />
     </div>
-    <div
-      className="radio layout-row layout-align-none-center"
-      style={
-        Object {
-          "margin": "2px 0",
-        }
-      }
-    >
-      <Checkbox
-        checked={true}
-        onChange={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-      <label
-        className="flex-none"
-      >
-        <i
-          className="fa fa-plane"
-        />
-        Air
-      </label>
-    </div>
-    <div
-      className="radio layout-row layout-align-none-center"
-      style={
-        Object {
-          "margin": "2px 0",
-        }
-      }
-    >
-      <Checkbox
-        checked={true}
-        onChange={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-      <label
-        className="flex-none"
-      >
-        <i
-          className="fa fa-ship"
-        />
-        Ocean
-      </label>
-    </div>
   </div>
   <div>
     <p
@@ -386,7 +270,7 @@ exports[`shallow rendering 1`] = `
         }
       }
     >
-      *  Transit time (T/T) not guaranteed
+      * Transit time (T/T) not guaranteed
     </p>
   </div>
 </div>

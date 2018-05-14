@@ -32,7 +32,7 @@ const regularUser = {
 
 const propsBase = {
   sendMessage: identity,
-  conversation: ['FOO_MESSAGE', 'BAR_MESSAGE'],
+  conversation: { messages: ['FOO_MESSAGE', 'BAR_MESSAGE'] },
   theme,
   shipment,
   user: regularUser,

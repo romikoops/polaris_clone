@@ -599,10 +599,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -1643,10 +1639,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -2878,10 +2870,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -3535,16 +3523,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 >
                   9 BAR_STREET
                    
-                  <br />
+                  ,
                   BAR_CITY
-                   
-                  <br />
+                  ,
                   845321
-                   
-                  <br />
+                  ,
                   China
-                   
-                  <br />
                 </address>
               </div>
             </div>
@@ -3936,10 +3920,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -4574,17 +4554,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-none"
                 >
                   7 FOO_STREET
-                   
-                  <br />
+                  ,
                   FOO_CITY
-                   
-                  <br />
+                  ,
                   21177
-                   
-                  <br />
+                  ,
                   Germany
-                   
-                  <br />
                 </address>
               </div>
             </div>
@@ -4994,10 +4969,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -6032,10 +6003,6 @@ exports[`shallow render 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -7285,10 +7252,6 @@ exports[`with cargo items 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >
@@ -8374,10 +8337,6 @@ exports[`with containers 1`] = `
                   1234
                 </p>
               </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-space-around-center"
-            >
               <div
                 className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
               >

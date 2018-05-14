@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-90layout-row layout-wrap layout-align-center-start 
+  className="flex-90 layout-row layout-wrap layout-align-center-start 
         data_overlay "
 >
   <div
@@ -381,16 +381,6 @@ exports[`shallow render 1`] = `
         />
         <Price
           scale=""
-          user={
-            Object {
-              "company_name": "FOO_COMPANY",
-              "email": "foo@bar.baz",
-              "first_name": "John",
-              "guest": false,
-              "last_name": "Doe",
-              "phone": "6345789",
-            }
-          }
           value={12}
         />
       </div>

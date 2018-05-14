@@ -17,6 +17,11 @@ exports[`shallow render 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
+        availableMotKeys={
+          Object {
+            "undefined": true,
+          }
+        }
         durationFilter={40}
         moT={
           Object {
