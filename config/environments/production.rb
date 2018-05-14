@@ -82,13 +82,13 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
-  # if ENV["WORKER_MODE"] == 1
-  #   Raven.configure do |config|
-  #     config.dsn = 'http://6d3b102312b84a62a8f6d982e2676152:79f79cc3abf14a4f94cd84397e28f658@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/5'
-  #   end
-  # else
-    Raven.configure do |config|
-      config.dsn = 'http://e38fa6c168f64dec8070b81ba26694cc:2516c99c0be842c99e3b2cc6884f2e99@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/3'
-      # config.environments = ['staging', 'production']
-    end
-  # end
+if ENV['WORKER_MODE'] == 1
+  Raven.configure do |config|
+    config.dsn = 'http://6d3b102312b84a62a8f6d982e2676152:79f79cc3abf14a4f94cd84397e28f658@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/5'
+  end
+else
+  Raven.configure do |config|
+    config.dsn = 'http://e38fa6c168f64dec8070b81ba26694cc:2516c99c0be842c99e3b2cc6884f2e99@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/3'
+    # config.environments = ['staging', 'production']
+  end
+end

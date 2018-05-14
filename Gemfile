@@ -26,6 +26,9 @@ gem 'rufo'
 gem 'awesome_print'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'
+
+gem 'activerecord-postgis-adapter'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 

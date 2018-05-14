@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180507123704) do
+ActiveRecord::Schema.define(version: 20180510164848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,48 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.string "approved"
     t.jsonb "approval_details"
     t.integer "tenant_id"
+  end
+
+  create_table "function_errors", force: :cascade do |t|
+    t.string "code"
+    t.string "http_code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_logs", force: :cascade do |t|
+    t.integer "meta_data_store_id"
+    t.integer "function_id"
+    t.integer "user_id"
+    t.integer "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_warnings", force: :cascade do |t|
+    t.string "code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "functions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "geometries", force: :cascade do |t|
+    t.string "name_1"
+    t.string "name_2"
+    t.string "name_3"
+    t.string "name_4"
+    t.geometry "data", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -301,6 +343,12 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "meta_data_stores", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mot_scopes", force: :cascade do |t|
     t.boolean "ocean_container"
     t.boolean "ocean_cargo_item"
@@ -319,6 +367,13 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.string "body"
     t.string "header"
     t.string "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "name"
+    t.string "path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -506,6 +561,7 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "geometry_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
@@ -525,6 +581,7 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
+    t.string "cargo_class"
   end
 
   create_table "user_locations", force: :cascade do |t|

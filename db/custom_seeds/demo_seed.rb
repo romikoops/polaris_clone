@@ -31,7 +31,7 @@ subdomains.each do |sub|
   # req = {"xlsx" => public_pricings}
   # overwrite_freight_rates(req, shipper, true)
 
-# # #   # # # # # Overwrite public pricings from excel sheet
+# # # #   # # # # # Overwrite public pricings from excel sheet
 
   puts "# Overwrite Local Charges From Sheet"
     local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
@@ -43,7 +43,7 @@ subdomains.each do |sub|
 # #   overwrite_local_charges(req, shipper)
 
 
-#   # # # # # # Overwrite trucking data from excel sheet
+# #   # # # # # # Overwrite trucking data from excel sheet
 
  
   # hub = tenant.hubs.find_by_name("Shanghai Airport")

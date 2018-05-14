@@ -31,7 +31,6 @@ module TruckingTools
     fees = {}
     result = {}
     total_fees = {}
-
     return {} if pricing.empty?
     pricing.deep_symbolize_keys!
     pricing[:fees].each do |k, fee|
@@ -103,14 +102,36 @@ module TruckingTools
       kg_value = cargo['weight'] * fee[:kg]
       return_value = [kg_value, cbm_value].max
       return { currency: fee[:currency], value: return_value, key: key }
+    when /RANGE/
+      handle_range_fee(fee, cargo)
     end
+  end
+
+  def handle_range_fee(fee, cargo)
+    weight_kg = cargo[:weight]
+    min = fee["min"] || 0
+    case fee["rate_basis"]
+    when 'PER_KG_RANGE'
+      fee_range = fee["range"].find do |range|
+        weight_kg >= range["min"] && weight_kg <= range["max"]
+      end
+      value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
+      return [value, min].max
+    when 'PER_CONTAINER_RANGE'
+      fee_range = fee["range"].find do |range|
+        weight_kg >= range["min"] && weight_kg <= range["max"]
+      end
+      value = fee_range.nil? ? 0 : fee_range["rate"]
+      return [value, min].max
+    end
+
+    nil
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
     return {} if cargo_values['weight'] == 0
     # 
     # trucking_pricing['rates'].each do |_tr|
-      
       case trucking_pricing.modifier
       when 'kg'
         trucking_pricing['rates']['kg'].each do |rate|
@@ -162,7 +183,7 @@ module TruckingTools
     }
     # cargo_total_items = cargos.map {|c| c.quantity}.sum
     cargos.each do |cargo|
-      if trucking_pricing.load_meterage
+      if trucking_pricing.load_meterage && trucking_pricing.load_meterage['ratio']
         if cargo.is_a? AggregatedCargo
           load_meterage = (cargo.volume / 1.3) / 2.4
           load_meter_weight = load_meterage * trucking_pricing.load_meterage['ratio']
@@ -222,7 +243,6 @@ module TruckingTools
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
-
     fees = {}
     trucking_pricings.each do |key, tp|
       if tp
