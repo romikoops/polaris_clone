@@ -13,12 +13,14 @@ geometries.each do |geo|
   serialized_coordinate_pairs = polygons_serialized_coordinate_pairs.join(" ")
   coordinate_pairs = serialized_coordinate_pairs.split
   points = coordinate_pairs.map do |serialized_coordinate_pair|
-    RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(","))
+    RGeo::Cartesian.factory.point(*serialized_coordinate_pair.split(",").map(&:to_f))
   end
   line_string = RGeo::Cartesian.factory.line_string(points)
   polygon     = RGeo::Cartesian.factory.polygon(line_string)
 
-
+  if names[3] == 'Huangyan'
+    byebug
+  end
   name_attributes = names.map.with_index { |name, i| ["name_#{i + 1}", name] }.to_h
 
   geometry = Geometry.find_or_initialize_by(name_attributes)
