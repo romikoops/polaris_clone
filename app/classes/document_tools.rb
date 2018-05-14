@@ -104,7 +104,7 @@ module DocumentTools
       end
       pricing[:data].each do | key, fee |
         if fee[:range] && fee[:range].length > 0
-         fee[:range].each do |range_fee|
+          fee[:range].each do |range_fee|
             worksheet.write(row, 3, current_itinerary.mode_of_transport)
             worksheet.write(row, 4, pricing[:load_type])
             worksheet.write(row, 5, pricing[:effective_date])
