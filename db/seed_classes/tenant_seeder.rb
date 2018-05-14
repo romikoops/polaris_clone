@@ -134,7 +134,7 @@ class TenantSeeder
       scope: {
         modes_of_transport: {
           ocean: {
-            container: true,
+            container: false,
             cargo_item: true
           },
           rail: {
@@ -142,14 +142,15 @@ class TenantSeeder
             cargo_item: false
           },
           air: {
-            container: true,
-            cargo_item: true
+            container: false,
+            cargo_item: false
           }
         },
         links: {
           about: "https://freightservices.greencarrier.com/about-us/",
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
+        fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -246,6 +247,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -327,6 +329,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -396,6 +399,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -462,6 +466,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -531,6 +536,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -598,6 +604,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -663,6 +670,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -728,6 +736,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -796,6 +805,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -880,6 +890,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -966,6 +977,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1056,6 +1068,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1144,6 +1157,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1230,6 +1244,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1281,6 +1296,7 @@ class TenantSeeder
 
   def self.exec(tenant_data = TENANT_DATA)
     tenant_data.each do |tenant_attr|
+      awesome_print tenant_attr[:subdomain]
       other_data = tenant_attr.delete(:other_data) || {}
 
       tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
