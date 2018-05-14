@@ -232,7 +232,46 @@ module DocumentTools
         %w(import export).each do |dir|
           result[dir].deep_symbolize_keys!
           result[dir].each do |key, fee|
-            
+            if fee[:range] && fee[:range].length > 0
+              fee[:range].each do |range_fee|
+                worksheet.write(row, 0, fee[:effective_date])
+                worksheet.write(row, 1, fee[:expiration_date])
+                worksheet.write(row, 2, fee[:name])
+                worksheet.write(row, 3, result[:mode_of_transport])
+                worksheet.write(row, 4, key)
+                worksheet.write(row, 5, result[:load_type])
+                worksheet.write(row, 6, dir)
+                worksheet.write(row, 7, fee[:currency])
+                worksheet.write(row, 8, fee[:rate_basis])
+                case fee[:rate_basis]
+                when 'PER_CONTAINER'
+                  worksheet.write(row, 15, fee[:value])
+                when 'PER_ITEM'
+                  worksheet.write(row, 12, fee[:value])
+                when 'PER_BILL'
+                  worksheet.write(row, 14, fee[:value])
+                when 'PER_SHIPMENT'
+                  worksheet.write(row, 13, fee[:value])
+                when 'PER_CBM_TON'
+                  worksheet.write(row, 9, fee[:ton])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_CBM_KG'
+                  worksheet.write(row, 11, fee[:kg])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_WM'
+                  worksheet.write(row, 17, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_KG'
+                  worksheet.write(row, 11, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                end
+                worksheet.write(row, 18, range_fee[:min])
+                worksheet.write(row, 19, range_fee[:max])
+                row += 1
+              end
+            else
               worksheet.write(row, 0, fee[:effective_date])
               worksheet.write(row, 1, fee[:expiration_date])
               worksheet.write(row, 2, fee[:name])
@@ -266,6 +305,7 @@ module DocumentTools
                 worksheet.write(row, 16, fee[:min])
               end
                row += 1
+            end
           end
         end
       end

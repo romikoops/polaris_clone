@@ -30,6 +30,11 @@ export class CardLink extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+        // const inActive = (
+        //   <div className="flex-none layout-row layout-align-center-center">
+        //     <h3 className="flex-none">Coming Soon</h3>
+        //   </div>
+        // )
     return (
       <div
         className={`${styles.card_link}  layout-column flex-none ${buttonStyle}`}

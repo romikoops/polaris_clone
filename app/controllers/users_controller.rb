@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   # skip_before_action :require_authentication! # TODO: why skip?
-  skip_before_action :require_non_guest_authentication!, only: :update
+  skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency]
 
   def home
     @shipper = current_user
