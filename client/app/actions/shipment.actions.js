@@ -402,7 +402,7 @@ function updateCurrency (currency, req) {
     setTimeout(() => {
       dispatch(getOffers(req, false))
       dispatch(alertActions.success('Updating Currency successful'))
-    }, 100)
+    }, 500)
   }
 }
 
