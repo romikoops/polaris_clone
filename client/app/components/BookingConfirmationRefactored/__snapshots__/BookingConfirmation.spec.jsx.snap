@@ -8,7 +8,7 @@ exports[`props.shipmentData is falsy 1`] = `
 
 exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -1060,7 +1060,7 @@ exports[`props.shipmentData.cargoItemTypes is falsy 1`] = `
 
 exports[`props.shipmentData.documents is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -2169,7 +2169,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
 
 exports[`props.shipmentData.notifyees is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -3333,7 +3333,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
 
 exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -4391,7 +4391,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
 
 exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -5449,7 +5449,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -6487,7 +6487,7 @@ exports[`shallow render 1`] = `
 
 exports[`with cargo items 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
@@ -7740,7 +7740,7 @@ exports[`with cargo items 1`] = `
 
 exports[`with containers 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
     className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"

@@ -3,11 +3,16 @@
 ## Camel case
 
 `
-Source: 'XML HTTP request' Option1: 'XmlHttpRequest'	Option2: 'XMLHTTPRequest'
+Source: 'XML HTTP request'
 `
 
+`
+Output: 'XmlHttpRequest'
+`
 
 ## Single vs multiline
+
+multiline if more than one attribute and longer than 80 chars
 
 `
 <div className={CONTAINER} onClick={onClick}>
@@ -23,11 +28,15 @@ Source: 'XML HTTP request' Option1: 'XmlHttpRequest'	Option2: 'XMLHTTPRequest'
 
 ## Handle long classNames
 
+Refactor using constants.
+
 ## No static methods
 
 It makes testing harder or imposible
 
 ## Handle long template strings
+
+> Case 2
 
 Case 1:
 
@@ -55,7 +64,7 @@ const blue = `{styles.base} {styles.blueBackground}`
 const CONTAINER = `${wide} ${centered} ${blue}`
 `
 
-## Descriptive or generic counter
+## Prefer generic over descriptive counter
 
 `
 // BookingConfirmation
@@ -89,6 +98,8 @@ prepCargoItemGroups (cargos) {
 
 ## Usage of generic variable names
 
+> Generic is fine if the context is clear
+
 `
 cargos.forEach(c => {
 
@@ -110,6 +121,8 @@ cargos.forEach(singleCargo => {
 `
 
 ## Blank lines around if/else
+
+> No Blank Lines
 
 ### No blank lines
 
@@ -199,6 +212,8 @@ cargoGroups[singleCargo.id] = {
 
 ## Redundant creation of new variables
 
+> Stay with first option
+
 `
 requestShipment () {
   const { shipmentData, shipmentDispatch } = this.props
@@ -238,7 +253,7 @@ fileFn (file) {
 }
 `
 
-## One or multiline for object destructuring
+## Multiline for object destructuring
 
 When we have three or more variables
 
@@ -269,6 +284,8 @@ const {
 `
 
 ## One line if statement
+
+> One line
 
 `
 if (!shipmentData) return <h1>Loading</h1>
@@ -335,7 +352,9 @@ const createdDate = shipment
 
 ## Readability blank line
 
-> Within method bodies, sparingly to create logical groupings of statements. (https://google.github.io/styleguide/jsguide.html)
+> Sparingly usage
+
+Within method bodies, sparingly to create logical groupings of statements. (https://google.github.io/styleguide/jsguide.html)
 
 Case 1:
 
@@ -383,6 +402,8 @@ const termBullets = getTermBullets(terms)
 
 ## Unnecessary creation of closure
 
+We have been moving our code into the first format after binding too much in the constructor (a previous dev recommended we move away from it. We will have to make an adjustments back towards this then if the performance bump is worthwhile).
+
 https://ryanfunduk.com/articles/never-bind-in-render/
 
 `
@@ -404,6 +425,8 @@ https://ryanfunduk.com/articles/never-bind-in-render/
 `
 
 ## Use strict naming pattern for looping over lists
+
+> notifyee
 
 `
 notifyees.map(notifyee => (
@@ -428,6 +451,8 @@ const mainPanel = `${collapser.overview ? styles.collapsed : ''} ${styles.main_p
 `
 
 ## Use shorter names if that can turn multiple multiline statements to single line
+
+For the moment we want to focus on readibility so we will keep the names longer but try and cut down the length if possible
 
 `
 <div 
@@ -512,6 +537,8 @@ const status = shipmentStatii[shipment.status]
 
 ## Use function to reduce repeated DOM element declaration
 
+Rather not have the factory, as long as there is absolutely no point in carrying over the repeated props. Decide case by case, but lean towards not doing it.
+
 `TextHeading` is used multiple times with only `text` as different property.
 
 `
@@ -562,7 +589,6 @@ if (bool) {
   this.setState({ insurance: { bool: false, val: 0 } })
 }
 `
-
 ## Deconstructing `state` before `setState`
 
 `

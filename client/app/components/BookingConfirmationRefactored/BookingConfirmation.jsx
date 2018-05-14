@@ -62,7 +62,12 @@ const BUTTON = `${ROW_NONE} ${ALIGN_END}`
 const CHECKBOX = `${ROW_65} ${ALIGN_START_CENTER}`
 const CHECKBOX_CELL = `${ROW_15} ${ALIGN_CENTER}`
 const COLLAPSER = `${ROW_10} ${ALIGN_CENTER}`
-const CONTAINER = `${WRAP_ROW_100} ${ALIGN_CENTER_START}`
+
+/**
+ * Prepend with `BOOKING_CONFIRMATION` to make e2e test easier to write
+ */
+const CONTAINER = `BOOKING_CONFIRMATION ${WRAP_ROW_100} ${ALIGN_CENTER_START}`
+
 const HEADING = `${styles.heading_style} ${ROW_100} ${ALIGN_BETWEEN_CENTER}`
 const INNER_WRAPPER = `${styles.inner_wrapper} ${WRAP_ROW_100} ${ALIGN_START}`
 const INNER_WRAPPER_CELL = `${WRAP_ROW_100} ${ALIGN_BETWEEN_START}`
