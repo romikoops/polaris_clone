@@ -1,6 +1,11 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, editedShipmentData, identity, tenant } from '../../mocks'
+import {
+  theme,
+  editedShipmentData,
+  identity,
+  tenant
+} from '../../mocks'
 
 jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
@@ -10,9 +15,11 @@ jest.mock('../../helpers', () => ({
 }))
 jest.mock('../../constants', () => {
   const format = () => 19
+  const subtract = () => ({ format })
 
   const moment = () => ({
-    format
+    format,
+    subtract
   })
   const shipmentStatii = {
     booking_process_started: 'Booking Process Started',
@@ -134,6 +141,117 @@ test('with cargo items', () => {
       ...editedShipmentData,
       cargoItemTypes,
       cargoItems
+    }
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: false
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.cargoItemTypes is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: editedShipmentData
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.aggregatedCargo is truthy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      cargoItemTypes,
+      aggregatedCargo: { foo: 1 }
+    }
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.documents is truthy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      cargoItemTypes,
+      documents: [
+        { id: 0, doc_type: 'FOO_DOC_TYPE' },
+        { id: 1, doc_type: 'BAR_DOC_TYPE' }
+      ]
+    }
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.notifyees is truthy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      cargoItemTypes,
+      notifyees: [
+        { first_name: 'John', last_name: 'Doe' },
+        { first_name: 'Robert', last_name: 'Plant' },
+        { first_name: 'Starling', last_name: 'Archer' }
+      ]
+    }
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.shipment.has_pre_carriage is true', () => {
+  const locations = {
+    ...editedShipmentData.locations,
+    origin: {
+      street_number: 7,
+      street: 'FOO_STREET',
+      city: 'FOO_CITY',
+      country: 'Germany',
+      zip_code: 21177
+    }
+  }
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      cargoItemTypes,
+      locations,
+      shipment: {
+        ...editedShipmentData.shipment,
+        has_pre_carriage: true
+      }
+    }
+  }
+  expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.shipment.has_on_carriage is true', () => {
+  const locations = {
+    ...editedShipmentData.locations,
+    destination: {
+      street_number: 9,
+      street: 'BAR_STREET',
+      city: 'BAR_CITY',
+      country: 'China',
+      zip_code: 845321
+    }
+  }
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      cargoItemTypes,
+      locations,
+      shipment: {
+        ...editedShipmentData.shipment,
+        has_on_carriage: true
+      }
     }
   }
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()

@@ -50,7 +50,7 @@ const shipmentInShipmentData = {
   }
 }
 
-const editedShipmentInShipmentData = {
+export const editedShipmentInShipmentData = {
   schedules_charges: {
     [schedulesInShipmentData[0].hub_route_key]: {
       foo: 'FOO_ROUTE_KEY'
@@ -60,6 +60,12 @@ const editedShipmentInShipmentData = {
     value: 15,
     currency: 'USD'
   },
+  has_on_carriage: false,
+  has_pre_carriage: false,
+  notes: 'FOO_NOTES',
+  cargo_notes: 'FOO_CARGO_NOTES',
+  eori: 1234,
+  incoterm_text: 'FOO_INCOTERM_TEXT',
   total_price: {
     value: 12,
     currency: 'USD'
@@ -87,6 +93,13 @@ export const editedShipmentData = {
   containers: [],
   schedules: schedulesInShipmentData,
   locations: {
+    origin: {
+      street_number: 7,
+      street: 'FOO_STREET',
+      city: 'FOO_CITY',
+      country: 'Germany',
+      zip_code: 21177
+    },
     startHub: 'FOO_START_HUB',
     endHub: 'FOO_END_HUB'
   }

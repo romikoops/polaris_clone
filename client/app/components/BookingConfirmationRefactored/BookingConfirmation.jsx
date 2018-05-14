@@ -19,41 +19,65 @@ import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
 import {
-  ALIGN_BETWEEN,
+  ALIGN_AROUND_CENTER,
+  ALIGN_AROUND_STRETCH,
+  ALIGN_BETWEEN_CENTER,
+  ALIGN_BETWEEN_START,
   ALIGN_CENTER,
   ALIGN_CENTER_START,
+  ALIGN_END,
   ALIGN_START,
   ALIGN_START_CENTER,
+  COLUMN_15,
+  ROW,
+  ROW_10,
   ROW_100,
-  ALIGN_END,
+  ROW_15,
+  ROW_25,
+  ROW_30,
+  ROW_33,
+  ROW_40,
+  ROW_45,
+  ROW_65,
   ROW_CONTENT,
   ROW_NONE,
   WRAP_ROW,
-  WRAP_START
+  WRAP_ROW_100,
+  WRAP_ROW_45,
+  WRAP_ROW_40,
+  WRAP_ROW_85,
+  WRAP_ROW_95,
+  WRAP_ROW_NONE
 } from '../../classNames'
 
-const ACCEPT = 'flex-33 layout-row layout-align-end-end height_100'
-const AFTER_CONTAINER = `flex-none ${WRAP_ROW} ${ALIGN_CENTER_START} content_width_booking`
-const BACK_TO_DASHBOARD = `${styles.back_to_dash_sec} flex-100 ${WRAP_ROW} layout-align-center`
+const ACCEPT = `${ROW_33} ${ALIGN_END} height_100`
+// eslint-disable-next-line
+const AFTER_CONTAINER = `${WRAP_ROW_NONE} ${ALIGN_CENTER_START} content_width_booking`
+// eslint-disable-next-line
+const BACK_TO_DASHBOARD = `${styles.back_to_dash_sec} ${WRAP_ROW_100} layout-align-center`
+// eslint-disable-next-line
 const BACK_TO_DASHBOARD_CELL = `${defaults.content_width} flex-none ${ROW_CONTENT} ${ALIGN_START_CENTER}`
-const BOOKING = `flex-none content_width_booking layout-row ${ALIGN_CENTER}`
+const BOOKING = `${ROW_NONE} content_width_booking ${ALIGN_CENTER}`
 const BUTTON = `${ROW_NONE} ${ALIGN_END}`
-const CHECKBOX = 'flex-65 layout-row layout-align-start-center'
-const CHECKBOX_CELL = `flex-15 layout-row ${ALIGN_CENTER}`
-const COLLAPSER = `flex-10 layout-row ${ALIGN_CENTER}`
-const CONTAINER = `flex-100 ${WRAP_ROW} ${ALIGN_CENTER_START}`
-const HEADING = `${styles.heading_style} ${ROW_100} ${ALIGN_BETWEEN}`
-const INNER_WRAPPER = `${styles.inner_wrapper} flex-100 ${WRAP_ROW} layout-align-start-start`
-const INNER_WRAPPER_CELL = `${ROW_100} layout-wrap layout-align-space-between-start`
-const ITINERARY = `${styles.shipment_card_itinerary} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
-const LAYOUT_WRAP = `flex-100 ${WRAP_ROW} layout-align-start-center`
-const MISSING_DOCS = `flex-25 layout-row layout-align-start-center ${styles.no_doc}`
-const SHIPMENT_CARD = `${styles.shipment_card} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
-const SHIPMENT_CARD_CONTAINER = `${styles.shipment_card} ${ROW_100} ${ALIGN_BETWEEN} layout-wrap`
+const CHECKBOX = `${ROW_65} ${ALIGN_START_CENTER}`
+const CHECKBOX_CELL = `${ROW_15} ${ALIGN_CENTER}`
+const COLLAPSER = `${ROW_10} ${ALIGN_CENTER}`
+const CONTAINER = `${WRAP_ROW_100} ${ALIGN_CENTER_START}`
+const HEADING = `${styles.heading_style} ${ROW_100} ${ALIGN_BETWEEN_CENTER}`
+const INNER_WRAPPER = `${styles.inner_wrapper} ${WRAP_ROW_100} ${ALIGN_START}`
+const INNER_WRAPPER_CELL = `${WRAP_ROW_100} ${ALIGN_BETWEEN_START}`
+// eslint-disable-next-line
+const ITINERARY = `${styles.shipment_card_itinerary} ${WRAP_ROW_100} ${ALIGN_BETWEEN_CENTER}`
+const LAYOUT_WRAP = `${WRAP_ROW_100} ${ALIGN_START_CENTER}`
+const MISSING_DOCS = `${ROW_25} ${ALIGN_START_CENTER} ${styles.no_doc}`
+// eslint-disable-next-line
+const SHIPMENT_CARD = `${styles.shipment_card} ${WRAP_ROW_100} ${ALIGN_BETWEEN_CENTER}`
+// eslint-disable-next-line
+const SHIPMENT_CARD_CONTAINER = `${styles.shipment_card} ${WRAP_ROW_100} ${ALIGN_BETWEEN_CENTER}`
 const SUBTITLE = `${styles.sec_subtitle_text} flex-none offset-5`
 const SUBTITLE_NORMAL = `${styles.sec_subtitle_text_normal} flex-none`
-const SUMM_TOP = `${styles.b_summ_top} flex-100 layout-row layout-align-space-around-stretch`
-const TOTAL_ROW = `${styles.total_row} flex-100 ${WRAP_ROW} layout-align-space-around-center`
+const SUMM_TOP = `${styles.b_summ_top} ${ROW_100} ${ALIGN_AROUND_STRETCH}`
+const TOTAL_ROW = `${styles.total_row} ${WRAP_ROW_100} ${ALIGN_AROUND_CENTER}`
 
 const acceptStyle = { height: '150px', marginBottom: '15px' }
 
@@ -73,14 +97,13 @@ export class BookingConfirmation extends Component {
     setStage(5)
     window.scrollTo(0, 0)
   }
-  toggleAcceptTerms () {
-    this.setState({ acceptTerms: !this.state.acceptTerms })
-  }
-  deleteDoc (doc) {
-    this.props.shipmentDispatch.deleteDocument(doc.id)
-  }
-  requestShipment () {
-    this.props.shipmentDispatch.requestShipment(this.props.shipmentData.shipment.id)
+  setCollapser (key) {
+    this.setState({
+      collapser: {
+        ...this.state.collapser,
+        [key]: !this.state.collapser[key]
+      }
+    })
   }
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
@@ -90,13 +113,14 @@ export class BookingConfirmation extends Component {
 
     shipmentDispatch.uploadDocument(file, type, url)
   }
-  collapser (key) {
-    this.setState({
-      collapser: {
-        ...this.state.collapser,
-        [key]: !this.state.collapser[key]
-      }
-    })
+  deleteDoc (doc) {
+    this.props.shipmentDispatch.deleteDocument(doc.id)
+  }
+  toggleAcceptTerms () {
+    this.setState({ acceptTerms: !this.state.acceptTerms })
+  }
+  requestShipment () {
+    this.props.shipmentDispatch.requestShipment(this.props.shipmentData.shipment.id)
   }
   render () {
     const {
@@ -106,9 +130,7 @@ export class BookingConfirmation extends Component {
       tenant
     } = this.props
 
-    if (!shipmentData) {
-      return <h1>Loading</h1>
-    }
+    if (!shipmentData) return <h1>Loading</h1>
 
     const {
       aggregatedCargo,
@@ -124,14 +146,11 @@ export class BookingConfirmation extends Component {
       shipper
     } = shipmentData
 
-    if (!shipment || !locations || !cargoItemTypes) {
-      return <h1> Loading</h1>
-    }
+    if (!shipment || !locations || !cargoItemTypes) return <h1> Loading</h1>
 
     const { acceptTerms, collapser } = this.state
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
-
-    const terms = getTerms(tenant)
+    const terms = getTenantTerms(tenant)
     const textStyle = getTextStyle(theme)
     const createdDate = getCreatedDate(shipment)
 
@@ -153,7 +172,6 @@ export class BookingConfirmation extends Component {
       shipper, consignee, textStyle, shipment
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle })
-
     const nonAcceptedBtn = getNonAcceptedBtn(theme)
     const acceptedBtn = getAcceptedBtn({
       theme,
@@ -180,281 +198,364 @@ export class BookingConfirmation extends Component {
         .format('DD/MM/YYYY')}`
       : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`
 
-    const TextHeadingFactory = TextHeadingFactoryFn(theme)
-    const Terms = TermsFactory({ theme, terms })
-    const LocationsOrigin = LocationsOriginFactory({ shipment, locations })
-    const LocationsDestination = LocationsDestinationFactory({ shipment, locations })
+    const OverviewHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Overview"
+    />)
+    const ItineraryHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Itinerary"
+    />)
+    const FaresAndFeesHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Fares & Fees"
+    />)
+    const AdditionalServicesHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Additional Services"
+    />)
+    const ContactDetailsHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Contact Details"
+    />)
+    const CargoDetailsHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Cargo Details"
+    />)
+    const AdditionalInformationHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Additional Information"
+    />)
+    const DocumentsHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Documents"
+    />)
+    const AgreeAndSubmitHeading = (<TextHeading
+      theme={theme}
+      color="white"
+      size={3}
+      text="Agree and Submit"
+    />)
 
-    const arrivalTime = `${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`
+    const Terms = getTerms({ theme, terms })
+    const LocationsOrigin = getLocationsOrigin({ shipment, locations })
+    const LocationsDestination = getLocationsDestination({ shipment, locations })
+    const arrivalTime = getArrivalTime(shipment)
     const totalPrice = getTotalPrice(shipment)
+
+    const ShipmentCard = (
+      <div className={SHIPMENT_CARD_CONTAINER}>
+        <div style={themeTitled} className={HEADING}>
+          {OverviewHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('overview')}>
+            {getChevronIcon(collapser.overview)}
+          </div>
+        </div>
+        <div className={getPanelStyle(collapser.overview)}>
+          <div className={INNER_WRAPPER}>
+
+            <div className={INNER_WRAPPER_CELL}>
+              <h4 className="flex-none">Shipment Reference:</h4>
+              <h4 className="clip flex-none offset-5" style={textStyle}>
+                {shipment.imc_reference}
+              </h4>
+            </div>
+
+            <div className={INNER_WRAPPER_CELL}>
+              <p className={SUBTITLE_NORMAL}>Status:</p>
+              <p className={SUBTITLE}>
+                {status}
+              </p>
+            </div>
+
+            <div className={INNER_WRAPPER_CELL}>
+              <p className={SUBTITLE_NORMAL}>Created at:</p>
+              <p className={SUBTITLE}>
+                {createdDate}
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    )
+
+    const Itenerary = (
+      <div className={ITINERARY}>
+        <div style={themeTitled} className={HEADING}>
+          {ItineraryHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('itinerary')}>
+            {getChevronIcon(collapser.itinerary)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.itinerary)}>
+          <div className={INNER_WRAPPER}>
+            <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+            <div
+              className={`${ROW_100} ${ALIGN_BETWEEN_CENTER}`}
+              style={{ position: 'relative' }}
+            >
+              <div className={`flex-40 ${WRAP_ROW} ${ALIGN_CENTER}`}>
+                <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
+                  <p className="flex-100 center letter_3">
+                    {expectedTime}
+                  </p>
+                  <p className="flex-none letter_3">
+                    {plannedTime}
+                  </p>
+                </div>
+                {LocationsOrigin}
+              </div>
+              <div className={`${WRAP_ROW_40} ${ALIGN_CENTER}`}>
+                <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
+                  <p
+                    className="flex-100 center letter_3"
+                  > Expected Time of Arrival:</p>
+                  <p className="flex-none letter_3">
+                    {arrivalTime}
+                  </p>
+                </div>
+                {LocationsDestination}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    const FaresAndFees = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING}>
+          {FaresAndFeesHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('charges')}>
+            {getChevronIcon(collapser.charges)}
+          </div>
+        </div>
+
+        <div className={TOTAL_ROW}>
+          <h3 className="flex-70 letter_3">Shipment Total:</h3>
+          <div className={`${ROW_30} layout-align-end-center`}>
+            <h3 className="flex-none letter_3">
+              {totalPrice}
+            </h3>
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.charges)}>
+          <div className={INNER_WRAPPER}>
+            <div className={`${ROW_100} ${ALIGN_CENTER}`}>
+              <div className={BOOKING}>
+                <IncotermRow
+                  theme={theme}
+                  preCarriage={shipment.has_pre_carriage}
+                  onCarriage={shipment.has_on_carriage}
+                  originFees={shipment.has_pre_carriage}
+                  destinationFees={shipment.has_on_carriage}
+                  feeHash={feeHash}
+                  tenant={{ data: tenant }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const AdditionalServices = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING}>
+          {AdditionalServicesHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('extras')}>
+            {getChevronIcon(collapser.extras)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.extras)}>
+          <div className={INNER_WRAPPER}>
+            <div className={`${ROW_100} ${ALIGN_CENTER}`}>
+              <div className={BOOKING}>
+                <IncotermExtras
+                  theme={theme}
+                  feeHash={feeHash}
+                  tenant={{ data: tenant }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const ContactDetails = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING} >
+          {ContactDetailsHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('contacts')}>
+            {getChevronIcon(collapser.contacts)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.contacts)}>
+          <div className={INNER_WRAPPER}>
+            <div className={SUMM_TOP}>
+              {shipperAndConsignee}
+            </div>
+            <div className={`${WRAP_ROW_100} ${ALIGN_AROUND_CENTER}`}>
+              {' '}
+              {notifyeesJSX}{' '}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const CargoDetails = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING} >
+          {CargoDetailsHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('cargo')}>
+            {getChevronIcon(collapser.cargo)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.cargo)}>
+          <div className={INNER_WRAPPER}>
+            <div className={LAYOUT_WRAP}>
+              {cargoView}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const AdditionalInformation = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING}>
+          {AdditionalInformationHeading}
+          <div
+            className={`${ROW_10} ${ALIGN_CENTER}`}
+            onClick={() => this.setCollapser('extraInfo')}
+          >
+            {getChevronIcon(collapser.extraInfo)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.extraInfo)}>
+          <div className={INNER_WRAPPER}>
+            <div className={LAYOUT_WRAP}>
+              <div className={`${ROW_100} ${ALIGN_START_CENTER}`}>
+                {TotalGoodsValue(shipment)}
+                {Eori(shipment)}
+              </div>
+              <div className={`${ROW_100} ${ALIGN_AROUND_CENTER}`}>
+                {DescriptionGoods(shipment)}
+                {Notes(shipment)}
+                {Incoterm(shipment)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const Documents = (
+      <div className={SHIPMENT_CARD}>
+
+        <div style={themeTitled} className={HEADING}>
+          {DocumentsHeading}
+          <div className={COLLAPSER} onClick={() => this.setCollapser('documents')}>
+            {getChevronIcon(collapser.documents)}
+          </div>
+        </div>
+
+        <div className={getPanelStyle(collapser.documents)}>
+          <div className={INNER_WRAPPER}>
+            <div className={LAYOUT_WRAP}>
+              {docView}
+            </div>
+            <div className={LAYOUT_WRAP}>
+              {missingDocs}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    )
+
+    const AgreeAndSubmit = (
+      <div className={SHIPMENT_CARD}>
+        <div className={LAYOUT_WRAP}>
+
+          <div style={themeTitled} className={HEADING}>
+            {AgreeAndSubmitHeading}
+          </div>
+
+          <div className={CHECKBOX}>
+            <div className={CHECKBOX_CELL}>
+              <Checkbox
+                onChange={this.toggleAcceptTerms}
+                checked={this.state.acceptTerms}
+                theme={theme}
+              />
+            </div>
+            {Terms}
+          </div>
+
+          <div className={ACCEPT} style={acceptStyle}>
+            {acceptTerms ? acceptedBtn : nonAcceptedBtn}
+          </div>
+
+        </div>
+      </div>
+    )
 
     return (
       <div className={CONTAINER}>
         <div className={AFTER_CONTAINER}>
-          <div className={SHIPMENT_CARD_CONTAINER}>
+          {ShipmentCard}
 
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Overview')}
-              <div className={COLLAPSER} onClick={() => this.collapser('overview')}>
-                {getChevronIcon(collapser.overview)}
-              </div>
-            </div>
+          {Itenerary}
 
-            <div className={getPanelStyle(collapser.overview)}>
-              <div className={INNER_WRAPPER}>
+          {FaresAndFees}
 
-                <div className={INNER_WRAPPER_CELL}>
-                  <h4 className="flex-none">Shipment Reference:</h4>
-                  <h4 className="clip flex-none offset-5" style={textStyle}>
-                    {shipment.imc_reference}
-                  </h4>
-                </div>
+          {AdditionalServices}
 
-                <div className={INNER_WRAPPER_CELL}>
-                  <p className={SUBTITLE_NORMAL}>Status:</p>
-                  <p className={SUBTITLE}>
-                    {status}
-                  </p>
-                </div>
+          {ContactDetails}
 
-                <div className={INNER_WRAPPER_CELL}>
-                  <p className={SUBTITLE_NORMAL}>Created at:</p>
-                  <p className={SUBTITLE}>
-                    {createdDate}
-                  </p>
-                </div>
+          {CargoDetails}
 
-              </div>
-            </div>
-          </div>
+          {AdditionalInformation}
 
-          <div className={ITINERARY}>
+          {Documents}
 
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Itinerary')}
-              <div className={COLLAPSER} onClick={() => this.collapser('itinerary')}>
-                {getChevronIcon(collapser.itinerary)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.itinerary)}>
-              <div className={INNER_WRAPPER}>
-
-                <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-
-                <div
-                  className={`${ROW_100} ${ALIGN_BETWEEN}`}
-                  style={{ position: 'relative' }}
-                >
-
-                  <div className={`flex-40 ${WRAP_ROW} ${ALIGN_CENTER}`}>
-                    <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
-                      <p className="flex-100 center letter_3">
-                        {expectedTime}
-                      </p>
-                      <p className="flex-none letter_3">
-                        {plannedTime}
-                      </p>
-                    </div>
-                    {LocationsOrigin}
-                  </div>
-
-                  <div className={`flex-40 ${WRAP_ROW} ${ALIGN_CENTER}`}>
-                    <div className={`${ROW_100} ${ALIGN_CENTER_START} layout-wrap`}>
-                      <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                      <p className="flex-none letter_3">
-                        {arrivalTime}
-                      </p>
-                    </div>
-                    {LocationsDestination}
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Fares & Fees')}
-              <div className={COLLAPSER} onClick={() => this.collapser('charges')}>
-                {getChevronIcon(collapser.charges)}
-              </div>
-            </div>
-
-            <div className={TOTAL_ROW}>
-              <h3 className="flex-70 letter_3">Shipment Total:</h3>
-              <div className="flex-30 layout-row layout-align-end-center">
-                <h3 className="flex-none letter_3">
-                  {totalPrice}
-                </h3>
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.charges)}>
-              <div className={INNER_WRAPPER}>
-                <div className={`${ROW_100} ${ALIGN_CENTER}`}>
-                  <div className={BOOKING}>
-                    <IncotermRow
-                      theme={theme}
-                      preCarriage={shipment.has_pre_carriage}
-                      onCarriage={shipment.has_on_carriage}
-                      originFees={shipment.has_pre_carriage}
-                      destinationFees={shipment.has_on_carriage}
-                      feeHash={feeHash}
-                      tenant={{ data: tenant }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Additional Services')}
-              <div className={COLLAPSER} onClick={() => this.collapser('extras')}>
-                {getChevronIcon(collapser.extras)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.extras)}>
-              <div className={INNER_WRAPPER}>
-                <div className={`${ROW_100} ${ALIGN_CENTER}`}>
-                  <div className={BOOKING}>
-                    <IncotermExtras
-                      theme={theme}
-                      feeHash={feeHash}
-                      tenant={{ data: tenant }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-
-            <div style={themeTitled} className={HEADING} >
-              {TextHeadingFactory('Contact Details')}
-              <div className={COLLAPSER} onClick={() => this.collapser('contacts')}>
-                {getChevronIcon(collapser.contacts)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.contacts)}>
-              <div className={INNER_WRAPPER}>
-                <div className={SUMM_TOP}>
-                  {shipperAndConsignee}
-                </div>
-                <div className={`${ROW_100} layout-align-space-around-center layout-wrap`}>
-                  {' '}
-                  {notifyeesJSX}{' '}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-            <div style={themeTitled} className={HEADING} >
-              {TextHeadingFactory('Cargo Details')}
-              <div className={COLLAPSER} onClick={() => this.collapser('cargo')}>
-                {getChevronIcon(collapser.cargo)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.cargo)}>
-              <div className={INNER_WRAPPER}>
-                <div className={LAYOUT_WRAP}>
-                  {cargoView}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Additional Information')}
-              <div
-                className={`flex-10 layout-row ${ALIGN_CENTER}`}
-                onClick={() => this.collapser('extraInfo')}
-              >
-                {getChevronIcon(collapser.extraInfo)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.extraInfo)}>
-              <div className={INNER_WRAPPER}>
-
-                <div className={LAYOUT_WRAP}>
-                  <div className="flex-100 layout-row layout-align-start-center">
-                    {TotalGoodsValue(shipment)}
-                    {Eori(shipment)}
-                  </div>
-
-                  <div className="flex-100 layout-row layout-align-space-around-center">
-                    {DescriptionGoods(shipment)}
-                    {Notes(shipment)}
-                    {Incoterm(shipment)}
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-
-            <div style={themeTitled} className={HEADING}>
-              {TextHeadingFactory('Documents')}
-              <div className={COLLAPSER} onClick={() => this.collapser('documents')}>
-                {getChevronIcon(collapser.documents)}
-              </div>
-            </div>
-
-            <div className={getPanelStyle(collapser.documents)}>
-              <div className={INNER_WRAPPER}>
-                <div className={LAYOUT_WRAP}>
-                  {docView}
-                </div>
-                <div className={LAYOUT_WRAP}>
-                  {missingDocs}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div className={SHIPMENT_CARD}>
-            <div className={LAYOUT_WRAP}>
-
-              <div style={themeTitled} className={HEADING}>
-                {TextHeadingFactory('Agree and Submit')}
-              </div>
-
-              <div className={CHECKBOX}>
-                <div className={CHECKBOX_CELL}>
-                  <Checkbox
-                    onChange={this.toggleAcceptTerms}
-                    checked={this.state.acceptTerms}
-                    theme={theme}
-                  />
-                </div>
-                {Terms}
-              </div>
-
-              <div className={ACCEPT} style={acceptStyle}>
-                {acceptTerms ? acceptedBtn : nonAcceptedBtn}
-              </div>
-
-            </div>
-          </div>
+          {AgreeAndSubmit}
 
           <hr className={`${styles.sec_break} flex-100`} />
 
@@ -595,7 +696,7 @@ function getDocs ({
     documents.forEach((doc) => {
       docChecker[doc.doc_type] = true
 
-      docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
+      docView.push(<div className={ROW_45} style={{ padding: '10px' }}>
         <DocumentsForm
           theme={theme}
           type={doc.doc_type}
@@ -628,14 +729,16 @@ function getDocs ({
 function getDefaultTerms (tenant) {
   return [
     'You verify that all the information provided above is true',
+    // eslint-disable-next-line
     `You agree to our Terms and Conditions and the General Conditions of the
                         Nordic Association of Freight Forwarders (NSAB) and those of 
                         {tenant.name}`,
+    // eslint-disable-next-line
     'You agree to pay the price of the shipment as stated above upon arrival of the invoice'
   ]
 }
 
-function getTerms (tenant) {
+function getTenantTerms (tenant) {
   const defaultTerms = getDefaultTerms(tenant)
 
   return tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
@@ -653,10 +756,6 @@ function getCreatedDate (shipment) {
     : moment().format('DD-MM-YYYY | HH:mm A')
 }
 
-function getTermBullets (terms) {
-  return terms.map(singleTerm => <li> {singleTerm}</li>)
-}
-
 function getThemeTitled (theme) {
   return theme && theme.colors
     ? { background: theme.colors.primary, color: 'white' }
@@ -668,17 +767,20 @@ function getNotifyeesJSX ({ notifyees, textStyle }) {
     return []
   }
 
-  const notifyeesJSX = notifyees.map(singleNotifyee => (
-    <div key={v4()} className="flex-40 layout-row">
-      <div className="flex-15 layout-column layout-align-start-center">
-        <i className={`${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
+  const notifyeesJSX = notifyees.map(notifyee => (
+    <div key={v4()} className={ROW_40}>
+      <div className={`${COLUMN_15} ${ALIGN_START_CENTER}`}>
+        <i
+          className={`${styles.icon} fa fa-envelope-open-o flex-none`}
+          style={textStyle}
+        />
       </div>
-      <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+      <div className={`${WRAP_ROW_85} ${ALIGN_START}`}>
         <div className="flex-100">
           <h3 style={{ fontWeight: 'normal' }}>Notifyee</h3>
         </div>
         <p style={{ marginTop: 0 }}>
-          {singleNotifyee.first_name} {singleNotifyee.last_name}
+          {notifyee.first_name} {notifyee.last_name}
         </p>
       </div>
     </div>
@@ -734,21 +836,17 @@ function getShipperAndConsignee ({
   return els
 }
 
-function TextHeadingFactoryFn (theme) {
-  return text => <TextHeading theme={theme} color="white" size={3} text={text} />
-}
-
-function TermsFactory ({ theme, terms }) {
-  const termBullets = getTermBullets(terms)
+function getTerms ({ theme, terms }) {
+  const termBullets = terms.map(singleTerm => <li> {singleTerm}</li>)
 
   return (
-    <div className="flex layout-row layout-align-start-center">
+    <div className={`${ROW} ${ALIGN_START_CENTER}`}>
       <div className="flex-5" />
-      <div className="flex-95 layout-row layout-wrap layout-align-start-center">
-        <div className={`${ROW_100} layout-align-start-center`}>
+      <div className={`${WRAP_ROW_95} ${ALIGN_START_CENTER}`}>
+        <div className={`${ROW_100} ${ALIGN_START_CENTER}`}>
           <TextHeading theme={theme} text="By checking this box" size={4} />
         </div>
-        <div className={`${ROW_100} layout-align-start-start`}>
+        <div className={`${ROW_100} ${ALIGN_START}`}>
           <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
         </div>
       </div>
@@ -756,10 +854,11 @@ function TermsFactory ({ theme, terms }) {
   )
 }
 
-function LocationsDestinationFactory ({ shipment, locations }) {
+function getLocationsDestination ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
     <div className={`${ROW_100} ${ALIGN_START}`}>
       <address className="flex-none">
+        {/* eslint-disable-next-line */}
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
         <br />
         {`${locations.destination.city}`} <br />
@@ -771,7 +870,8 @@ function LocationsDestinationFactory ({ shipment, locations }) {
     ''
   )
 }
-function LocationsOriginFactory ({ shipment, locations }) {
+
+function getLocationsOrigin ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
     <div className={`${ROW_100} ${ALIGN_START}`}>
       <address className="flex-none">
@@ -796,6 +896,12 @@ function getPanelStyle (flag) {
   return `${flag ? styles.collapsed : ''} ${styles.main_panel}`
 }
 
+function getArrivalTime (shipment) {
+  const format = 'DD/MM/YYYY | HH:mm'
+
+  return `${moment(shipment.planned_eta).format(format)}`
+}
+
 function getTotalPrice (shipment) {
   const { currency } = shipment.total_price
   const price = parseFloat(shipment.total_price.value).toFixed(2)
@@ -805,9 +911,7 @@ function getTotalPrice (shipment) {
 
 function TotalGoodsValue (shipment) {
   return shipment.total_goods_value ? (
-    <div
-      className={`flex-45 layout-row offset-5 ${WRAP_START}`}
-    >
+    <div className={`${WRAP_ROW_45} offset-5 ${ALIGN_START}`}>
       <p className="flex-100">
         <b>Total Value of Goods:</b>
       </p>
@@ -822,9 +926,7 @@ function TotalGoodsValue (shipment) {
 
 function Eori (shipment) {
   return shipment.eori ? (
-    <div
-      className={`flex-45 layout-row offset-10 ${WRAP_START}`}
-    >
+    <div className={`${WRAP_ROW_45} offset-10 ${ALIGN_START}`}>
       <p className="flex-100">
         <b>EORI number:</b>
       </p>
@@ -837,9 +939,7 @@ function Eori (shipment) {
 
 function DescriptionGoods (shipment) {
   return shipment.cargo_notes ? (
-    <div
-      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
-    >
+    <div className={`${WRAP_ROW_45} offset-5 ${ALIGN_START}`}>
       <p className="flex-100">
         <b>Description of Goods:</b>
       </p>
@@ -852,9 +952,7 @@ function DescriptionGoods (shipment) {
 
 function Notes (shipment) {
   return shipment.notes ? (
-    <div
-      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
-    >
+    <div className={`${WRAP_ROW_45} offset-5 ${ALIGN_START}`}>
       <p className="flex-100">
         <b>Notes:</b>
       </p>
@@ -867,9 +965,7 @@ function Notes (shipment) {
 
 function Incoterm (shipment) {
   return shipment.incoterm_text ? (
-    <div
-      className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
-    >
+    <div className={`${WRAP_ROW_45} offset-5 ${ALIGN_START}`}>
       <p className="flex-100">
         <b>Incoterm:</b>
       </p>
@@ -879,5 +975,4 @@ function Incoterm (shipment) {
     ''
   )
 }
-
 export default BookingConfirmation

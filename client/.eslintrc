@@ -6,6 +6,7 @@
       1,
       { "blankLine": "always", "prev": "*", "next": "return" }
     ],
+    "max-len": ["warn", { "code": 85 }],
     "react/no-typos": ["warn"],
     "react/jsx-closing-tag-location": 0,
     "no-plusplus": [
