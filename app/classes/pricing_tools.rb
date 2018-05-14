@@ -246,7 +246,7 @@ module PricingTools
   end
 
   def get_cargo_hash(cargo)
-    if cargo.size_class
+    if cargo.is_a? Container
       {    
       volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
       weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
