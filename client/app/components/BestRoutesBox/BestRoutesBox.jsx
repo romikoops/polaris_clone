@@ -30,7 +30,7 @@ export class BestRoutesBox extends Component {
           <h4 className="flex-none">Fastest route</h4>
         </div>
         <div className="flex-100 layout-row">
-          <Price value={fastestFare} scale="0.75" user={this.props.user} />
+          <Price value={fastestFare} scale="0.75" currency={this.props.user.currency} />
         </div>
       </div>
     )
@@ -61,7 +61,7 @@ export class BestRoutesBox extends Component {
           <h4 className="flex-none">Cheapest Route</h4>
         </div>
         <div className="flex-100 layout-row">
-          <Price value={cheapestFare} scale="0.75" user={this.props.user} />
+          <Price value={cheapestFare} scale="0.75" currency={this.props.user.currency} />
         </div>
       </div>
     )
@@ -104,7 +104,7 @@ export class BestRoutesBox extends Component {
           <h4 className="flex-none">Best Deal</h4>
         </div>
         <div className="flex-100 layout-row">
-          <Price value={bestFare} scale="0.75" user={this.props.user} />
+          <Price value={bestFare} scale="0.75" currency={this.props.user.currency} />
         </div>
       </div>
     )

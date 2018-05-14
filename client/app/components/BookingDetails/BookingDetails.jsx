@@ -116,9 +116,18 @@ export class BookingDetails extends Component {
   }
   setCustomsFee (target, fee) {
     const { customs } = this.state
+    const customsData = this.props.shipmentData.customs[target]
+    const existsUnknown = customs.total.hasUnknown
     customs[target] = fee
-    const totalFee = customs.import.val + customs.export.val
+    console.log(`TARGET: ${target}, FEE:`)
+    console.log(fee)
+    const totalFee = parseFloat(customs.import.val) + parseFloat(customs.export.val)
     customs.total = { val: totalFee, currency: fee.currency }
+    if ((customsData.unknown && fee.bool) || existsUnknown) {
+      customs.total.hasUnknown = true
+    }
+    console.log(customs.total)
+
     this.setState({
       customs
     })
@@ -260,6 +269,7 @@ export class BookingDetails extends Component {
         customsCredit
       }
     }
+
     this.props.nextStage(data)
   }
   handleInvalidSubmit () {

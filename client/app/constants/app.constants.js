@@ -66,9 +66,9 @@ export const tooltips = {
   shipment_mots:
     'You will receive results for all available modes of transport. Simply select which applies best to your shipment',
   side_lifter:
-    'If you require a side-lifter (SIMA), where the container is lifted down on the ground for loading/unloading, an additional charge will be applied on top of the chassi price. Amount to be added depending on Port of loading/discharge and final stuffing/delivery location.',
+    'If you require the container to be lifted down on the ground for loading/unloading you order side lifter.',
   chassis:
-    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.',
+    'If you load/unload the container from ramp you order chassis. (Container is NOT lifted down on the ground).',
   customs_pre_carriage:
     'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:

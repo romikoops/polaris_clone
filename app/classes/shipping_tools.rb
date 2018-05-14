@@ -114,7 +114,7 @@ module ShippingTools
       contact_params(resource, contact_location.id).merge(alias: shipment.export?)
     )
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
-    shipper = { data: contact, location: contact_location }
+    shipper = { data: contact, location: contact_location.to_custom_hash }
     UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
     # Consignee
@@ -124,7 +124,7 @@ module ShippingTools
       contact_params(resource, contact_location.id).merge(alias: shipment.import?)
     )
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
-    consignee = { data: contact, location: contact_location }
+    consignee = { data: contact, location: contact_location.to_custom_hash }
     UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
@@ -155,7 +155,8 @@ module ShippingTools
         key = ss['hub_route_key']
         customs = {
           val: shipment_data[:customs][:total][:val].to_d,
-          currency: shipment_data[:customs][:total][:currency]
+          currency: shipment_data[:customs][:total][:currency],
+          hasUnknown: shipment_data[:customs][:total][:hasUnknown]
         }
         shipment.schedules_charges[key][:customs] = customs
         shipment.customs = customs
@@ -331,7 +332,6 @@ module ShippingTools
     shipment.origin_hub = @origin
     shipment.destination_hub = @destination
     shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
-    shipment.save!
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -349,8 +349,9 @@ module ShippingTools
       customsKey = 'lcl'
       cargos = cargo_items
     end
-    transportKey = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
-    priceKey = "#{@schedules.first['itinerary_id']}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
+    shipment.transport_category = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
+    shipment.save!
+
     origin_customs_fee = @origin.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
     destination_customs_fee = @destination.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
 

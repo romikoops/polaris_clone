@@ -29,14 +29,14 @@ module DocumentTools
   end
   def write_pricings_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    pricings = get_tenant_pricings(tenant.id)
+    pricings = options[:mot] ? get_tenant_pricings_by_mot(tenant.id, options[:mot]) : get_tenant_pricings(tenant.id)
     aux_data = {
       itineraries: {},
       nexuses: {},
       vehicle: {},
       transit_times: {}
     }
-    filename = "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
@@ -86,7 +86,8 @@ module DocumentTools
             end
             
           end
-          diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
+          diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
+          # diff = destination_layover && origin_layover ? ((destination_layover.eta - origin_layover.etd) / 86400).to_i : ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
           aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = diff
         else
           aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = ''
@@ -103,7 +104,7 @@ module DocumentTools
       end
       pricing[:data].each do | key, fee |
         if fee[:range] && fee[:range].length > 0
-         fee[:range].each do |range_fee|
+          fee[:range].each do |range_fee|
             worksheet.write(row, 3, current_itinerary.mode_of_transport)
             worksheet.write(row, 4, pricing[:load_type])
             worksheet.write(row, 5, pricing[:effective_date])
@@ -201,7 +202,8 @@ module DocumentTools
 
   def write_local_charges_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    hubs = tenant.hubs
+    
+    hubs = options[:mot] ? tenant.hubs.where(hub_type: options[:mot]) : tenant.hubs
     results_by_hub = {}
     hubs.each do |hub|
       results_by_hub[hub.name] = []
@@ -215,7 +217,7 @@ module DocumentTools
       vehicle: {},
       transit_times: {}
     }
-    filename = "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     
@@ -230,7 +232,46 @@ module DocumentTools
         %w(import export).each do |dir|
           result[dir].deep_symbolize_keys!
           result[dir].each do |key, fee|
-            
+            if fee[:range] && fee[:range].length > 0
+              fee[:range].each do |range_fee|
+                worksheet.write(row, 0, fee[:effective_date])
+                worksheet.write(row, 1, fee[:expiration_date])
+                worksheet.write(row, 2, fee[:name])
+                worksheet.write(row, 3, result[:mode_of_transport])
+                worksheet.write(row, 4, key)
+                worksheet.write(row, 5, result[:load_type])
+                worksheet.write(row, 6, dir)
+                worksheet.write(row, 7, fee[:currency])
+                worksheet.write(row, 8, fee[:rate_basis])
+                case fee[:rate_basis]
+                when 'PER_CONTAINER'
+                  worksheet.write(row, 15, fee[:value])
+                when 'PER_ITEM'
+                  worksheet.write(row, 12, fee[:value])
+                when 'PER_BILL'
+                  worksheet.write(row, 14, fee[:value])
+                when 'PER_SHIPMENT'
+                  worksheet.write(row, 13, fee[:value])
+                when 'PER_CBM_TON'
+                  worksheet.write(row, 9, fee[:ton])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_CBM_KG'
+                  worksheet.write(row, 11, fee[:kg])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_WM'
+                  worksheet.write(row, 17, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_KG'
+                  worksheet.write(row, 11, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                end
+                worksheet.write(row, 18, range_fee[:min])
+                worksheet.write(row, 19, range_fee[:max])
+                row += 1
+              end
+            else
               worksheet.write(row, 0, fee[:effective_date])
               worksheet.write(row, 1, fee[:expiration_date])
               worksheet.write(row, 2, fee[:name])
@@ -259,9 +300,12 @@ module DocumentTools
                 worksheet.write(row, 16, fee[:min])
               when 'PER_WM'
                 worksheet.write(row, 17, fee[:value])
-             
+              when 'PER_KG'
+                worksheet.write(row, 11, fee[:kg])
+                worksheet.write(row, 16, fee[:min])
               end
                row += 1
+            end
           end
         end
       end

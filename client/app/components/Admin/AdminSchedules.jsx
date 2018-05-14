@@ -56,8 +56,7 @@ class AdminSchedules extends Component {
   componentWillReceiveProps (nextProps) {
     if (
       nextProps.scheduleData &&
-      nextProps.scheduleData.itineraries &&
-      this.state.searchResults.length < 1
+      nextProps.scheduleData.itineraries
     ) {
       this.prepFilters()
     }
@@ -106,7 +105,11 @@ class AdminSchedules extends Component {
     })
   }
   prepFilters () {
-    const { itineraries } = this.props.scheduleData
+    const { scheduleData } = this.props
+    if (!scheduleData) {
+      return
+    }
+    const { itineraries } = scheduleData
     const tmpFilters = {
       mot: {}
     }

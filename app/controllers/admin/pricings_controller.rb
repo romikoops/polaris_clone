@@ -13,10 +13,12 @@ class Admin::PricingsController < ApplicationController
     @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    @pricings = Pricing.where(tenant_id: current_user.tenant_id).as_json
+    pricings = Pricing.where(tenant_id: current_user.tenant_id).order(updated_at: :desc)
     detailed_itineraries = itineraries.map(&:as_pricing_json)
+    @pricings = pricings.map {|pricing| pricing.as_json}
+    last_updated = pricings.first.updated_at
     
-    response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
+    response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, lastUpdate: last_updated })
   end
 
   def client
@@ -77,7 +79,9 @@ class Admin::PricingsController < ApplicationController
   end
 
   def download_pricings
-    url = write_pricings_to_sheet(tenant_id: current_user.tenant_id)
+    options = params[:options].as_json.deep_symbolize_keys!
+    options[:tenant_id] = current_user.tenant_id
+    url = write_pricings_to_sheet(options)
     response_handler({url: url, key: 'pricing'})
   end
 

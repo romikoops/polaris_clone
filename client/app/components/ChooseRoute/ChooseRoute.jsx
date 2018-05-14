@@ -115,10 +115,10 @@ export class ChooseRoute extends Component {
   }
   render () {
     const {
-      shipmentData, messages, user, shipmentDispatch, theme
+      shipmentData, messages, user, shipmentDispatch, theme, tenant
     } = this.props
     if (!shipmentData) return ''
-
+    const { scope } = tenant.data
     const { limits, currentCurrency } = this.state
 
     const {
@@ -238,13 +238,14 @@ export class ChooseRoute extends Component {
                   />
                 </div>
                 <div className="flex-30 layout-row layout-align-end-center">
-                  <NamedSelect
+                  { scope.fixed_currency ? '' : <NamedSelect
                     className="flex-100"
                     options={currencyOptions}
                     value={currentCurrency}
                     placeholder="Select Currency"
                     onChange={e => this.handleCurrencyUpdate(e)}
                   />
+                  }
                 </div>
               </div>
               {closestRoutestoRender}
@@ -360,14 +361,16 @@ ChooseRoute.propTypes = {
   }),
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  tenant: PropTypes.tenant
 }
 
 ChooseRoute.defaultProps = {
   theme: null,
   prevRequest: null,
   messages: [],
-  req: {}
+  req: {},
+  tenant: {}
 }
 
 export default ChooseRoute

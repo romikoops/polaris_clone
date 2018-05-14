@@ -31,7 +31,9 @@
       <p>
         <% if @shipment.has_pre_carriage? %>
           <% @shipment.origin.geocoded_address.split(", ").each do |address_elem| %>
-            <span><%= address_elem %></span><br/>
+            <% if address_elem %>
+              <span><%= address_elem %></span><br/>
+            <% end %>  
           <% end %>  
         <% else %>
           <span><%= @shipment.origin.city_country %></span>
@@ -45,7 +47,9 @@
       <p>
         <% if @shipment.has_on_carriage? %>
           <% @shipment.destination.geocoded_address.split(", ").each do |address_elem| %>
-            <span><%= address_elem %></span><br/>
+            <% if address_elem %>
+              <span><%= address_elem %></span><br/>
+            <% end %>  
           <% end %>  
         <% else %>
           <span><%= @shipment.destination.city_country %></span>
@@ -83,7 +87,7 @@
             </span>        
             <br/>
             <span>
-              <%= @shipment.transport_category.humanize %>
+              <%= @shipment.transport_category.try(:humanize) || 'N/A' %>
             </span>
           </p>
         </columns>

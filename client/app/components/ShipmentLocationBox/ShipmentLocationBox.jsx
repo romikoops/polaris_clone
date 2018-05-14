@@ -450,8 +450,6 @@ export class ShipmentLocationBox extends Component {
     // triggers a place change with the first result from google
     const service = new this.props.gMaps.places.AutocompleteService()
     service.getPlacePredictions({ input }, (_input) => {
-      // eslint-disable-next-line no-debugger
-      debugger
       this.getPlace(_input[0].place_id, (place) => {
         this.handlePlaceChange(this.state.map, place, target)
       })
@@ -611,12 +609,13 @@ export class ShipmentLocationBox extends Component {
       }
     )
 
-    const address = addressFromPlace(place)
-    this.setState({
-      [target]: address,
-      autoText: { [target]: place.formatted_address }
+    addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
+      this.setState({
+        [target]: address,
+        autoText: { [target]: place.formatted_address }
+      })
+      this.props.setTargetAddress(target, address)
     })
-    this.props.setTargetAddress(target, address)
   }
 
   resetAuto (target) {

@@ -7,7 +7,7 @@ import { CardTitle, CardRoutesPricing, PricingButton } from './SubComponents'
 // import { RoundButton } from '../../RoundButton/RoundButton'
 import FileUploader from '../../FileUploader/FileUploader'
 import DocumentsDownloader from '../../Documents/Downloader'
-import { adminPricing as priceTip } from '../../../constants'
+import { adminPricing as priceTip, moment } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import { filters } from '../../../helpers'
 
@@ -114,7 +114,7 @@ export default class CardPricingIndex extends Component {
   render () {
     const { expander, searchTexts } = this.state
     const {
-      theme, limit, scope, toggleCreator
+      theme, limit, scope, toggleCreator, lastUpdate
     } = this.props
     if (!scope) return ''
     const sectionStyle =
@@ -240,8 +240,16 @@ export default class CardPricingIndex extends Component {
                     adminStyles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  <p className="flex-100">Download Pricings Sheet</p>
-                  <DocumentsDownloader theme={theme} target="pricing" />
+                  <p className="flex-100">Download Ocean Pricings Sheet</p>
+                  <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
+                </div>
+                <div
+                  className={`${
+                    adminStyles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100">Download Air Pricings Sheet</p>
+                  <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
                 </div>
               </div>
             </div>
@@ -279,6 +287,9 @@ export default class CardPricingIndex extends Component {
               </div>
             </div> */}
           </div>
+          {lastUpdate !== ''
+            ? <p className="flex-100">{`Last updated at: ${moment(lastUpdate).format('lll')} `}</p>
+            : '' }
         </div>
       </div>
     )
@@ -298,7 +309,8 @@ CardPricingIndex.propTypes = {
     closeViewer: PropTypes.func,
     uploadPricings: PropTypes.func
   }).isRequired,
-  scope: PropTypes.scope
+  scope: PropTypes.scope,
+  lastUpdate: PropTypes.string
 }
 
 CardPricingIndex.defaultProps = {
@@ -307,5 +319,6 @@ CardPricingIndex.defaultProps = {
   itineraries: [],
   scope: null,
   limit: 4,
-  toggleCreator: null
+  toggleCreator: null,
+  lastUpdate: ''
 }

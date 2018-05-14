@@ -140,7 +140,7 @@ class Shipment < ApplicationRecord
   end
 
   def mode_of_transport
-    itinerary.mode_of_transport
+    itinerary.try(:mode_of_transport)
   end
 
   def has_customs?

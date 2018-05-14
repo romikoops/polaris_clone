@@ -111,7 +111,7 @@ production:
 #  password: <%= ENV['IMC_DATABASE_PASSWORD'] %>
   database: ebdb
 
-  adapter: postgresql
+  adapter: postgis
   encoding: utf8
   database: <%= ENV['RDS_DB_NAME'] %>
   username: <%= ENV['RDS_DB_USERNAME'] %>

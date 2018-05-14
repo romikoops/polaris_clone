@@ -63,7 +63,7 @@ class FileUploader extends React.Component {
       }
       dispatchFn(file)
       if (this.uploaderInput.files.length) {
-        this.uploaderInput.files[0] = ''
+        this.uploaderInput.value = ''
       }
       return null
     }
@@ -81,7 +81,7 @@ class FileUploader extends React.Component {
     const uploadUrl = BASE_URL + url
     fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
     if (this.uploaderInput.files.length) {
-      this.uploaderInput.files[0] = ''
+      this.uploaderInput.value = ''
     }
     return null
     // }

@@ -102,6 +102,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'dotenv-rails' # set environment variables
   gem 'factory_bot_rails'
+  gem 'rails-erd'
 end
 
 group :test do
