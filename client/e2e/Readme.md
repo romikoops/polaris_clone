@@ -1,8 +1,18 @@
 # End-to-end tests
 
+## How to run e2e tests
+
+1. `yarn install` or `npm install`
+
+2. Set include `testRegex: '.spec.jsx$'` in `/client/jest.config.js`
+
+3. Run `yarn test` for standard e2e test settings
+
+4. Or run `yarn dev` for e2e test with additional delay
+
 ## Helpers
 
-Declared in `_modules/init.js`
+They are declared in `_modules/init.js` file.
 
 ### click(selector: string, index?: number): boolean
 
