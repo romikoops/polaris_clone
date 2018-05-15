@@ -472,9 +472,10 @@ module ExcelTools
         zones[zone_name] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
       elsif row_data[1] && row_data[2]        
         zones[zone_name] << {
-          ident: row_data[1].gsub("’", "'"),
-          sub_ident: row_data[2].gsub("’", "'"),
-          country: row_data[3] }
+          ident: row_data[1],
+          sub_ident: row_data[2],
+          country: row_data[3]
+        }
       end
     end
 
@@ -494,11 +495,8 @@ module ExcelTools
             { ident: ident_value, country: idents_and_country[:country] }
           end
         elsif identifier_type == "geometry_id"
-          geometry = Geometry.cascading_find_by_names(
-            idents_and_country[:sub_ident],
-            idents_and_country[:ident]
-          )
           awesome_print idents_and_country
+          geometry = find_geometry(idents_and_country)
           if geometry.nil?
             puts "skipped #{idents_and_country[:ident]}"
             byebug
@@ -1688,5 +1686,20 @@ module ExcelTools
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!
+  end
+
+  def find_geometry(idents_and_country)
+    geometry = Geometry.cascading_find_by_names(
+      idents_and_country[:sub_ident],
+      idents_and_country[:ident]
+    )
+
+    if geometry.nil?
+      geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+      coordinates = geocoder_results.first.geometry["location"]
+      geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+    end
+
+    geometry
   end
 end
