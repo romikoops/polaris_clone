@@ -607,6 +607,9 @@ module ExcelTools
           next if !cell || !mod_indexes.include?(i)
           defaults[mod_key] = {} unless defaults[mod_key]
           min_max_arr = cell.split(" - ")
+          if !min_max_arr[1]
+            
+          end
           defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil}.symbolize_keys
         end
       end
