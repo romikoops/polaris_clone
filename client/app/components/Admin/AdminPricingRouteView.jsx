@@ -149,10 +149,19 @@ export class AdminPricingRouteView extends Component {
             const rangeCells = []
             pricing.data[key].range.forEach((rangeFee, i) => {
               Object.keys(rangeFee).forEach((rfKey) => {
-                rangeCells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-                  <p className="flex-none">{chargeGloss[rfKey]}</p>
-                  <p className="flex">{chargeGloss[pricing.data[key].range[i][rfKey]]}</p>
-                </div>)
+                if (rfKey !== 'currency' && rfKey !== 'max' && rfKey !== 'min') {
+                  rangeCells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+                    <p className="flex-none">{chargeGloss[rfKey]}</p>
+                    <p className="flex">
+                      {pricing.data[key].range[i][rfKey]} {pricing.data[key].currency}
+                    </p>
+                  </div>)
+                } else if (rfKey === 'min' || rfKey === 'max') {
+                  rangeCells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+                    <p className="flex-none">{chargeGloss[rfKey]}</p>
+                    <p className="flex">{pricing.data[key].range[i][rfKey]}</p>
+                  </div>)
+                }
               })
             })
             cells
@@ -169,7 +178,7 @@ export class AdminPricingRouteView extends Component {
               {key} - {gloss[key]}
             </p>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">{cells}</div>
         </div>)
       })
 
@@ -317,13 +326,13 @@ export class AdminPricingRouteView extends Component {
           </p>
         </div>
         <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Open Pricing </p>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+          <div className="flex-80 layout-row layout-wrap layout-align-space-between-center">
             <RoutePricingBox
               key={v4()}
               routeData={itinerary}
