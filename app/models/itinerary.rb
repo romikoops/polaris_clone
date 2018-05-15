@@ -301,6 +301,7 @@ class Itinerary < ApplicationRecord
       )
     "
     itineraries = Itinerary.find_by_sql(query)
+    byebug
     { itineraries: itineraries, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end
 
