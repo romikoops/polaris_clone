@@ -6,15 +6,7 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
-<<<<<<< HEAD
-import {
-  AdminDashboardNew,
-  AdminServiceCharges,
-  SuperAdmin
-} from '../../components/Admin'
-=======
-import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
->>>>>>> d307614b0bf1f6a0793a156c33352837da6372a9
+import { AdminDashboardNew, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
