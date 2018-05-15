@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514134957) do
+ActiveRecord::Schema.define(version: 20180515173037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,38 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.integer "tenant_id"
   end
 
+  create_table "function_errors", force: :cascade do |t|
+    t.string "code"
+    t.string "http_code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_logs", force: :cascade do |t|
+    t.integer "meta_data_store_id"
+    t.integer "function_id"
+    t.integer "user_id"
+    t.integer "page_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "function_warnings", force: :cascade do |t|
+    t.string "code"
+    t.string "message"
+    t.integer "function_log_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "functions", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "geometries", force: :cascade do |t|
     t.string "name_1"
     t.string "name_2"
@@ -159,6 +191,7 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.integer "trucking_pricing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["trucking_pricing_id", "trucking_destination_id", "hub_id"], name: "foreign_keys", unique: true
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -312,6 +345,12 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "meta_data_stores", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mot_scopes", force: :cascade do |t|
     t.boolean "ocean_container"
     t.boolean "ocean_cargo_item"
@@ -330,6 +369,13 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.string "body"
     t.string "header"
     t.string "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "name"
+    t.string "path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
