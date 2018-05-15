@@ -161,7 +161,6 @@ class TenantSeeder
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
           "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
-
         ],
         carriage_options: {
           on_carriage: {
