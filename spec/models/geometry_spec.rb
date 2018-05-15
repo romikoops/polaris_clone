@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe Geometry, type: :model do
 	context 'class methods' do
-    describe '.cascading_find_by_name' do
+    describe '.cascading_find_by_names' do
     	let(:geometry_1) { create(:geometry) }
     	let(:geometry_2) { create(:geometry, name_3: 'Anotherplace3') }
     	let(:geometry_3) { create(:geometry, name_3: 'Yetanotherplace3', name_4: 'Yetanotherplace4') }
@@ -18,10 +18,10 @@ describe Geometry, type: :model do
 	    # 	end
     	# end 
 
-      context 'main tests' do
+      context 'one name passed' do
 	      it 'finds the correct geometry if the city name is passed' do
 	      	geometry_1
-	    		found_geometry = described_class.cascading_find_by_name(name_broad)
+	    		found_geometry = described_class.cascading_find_by_names(name_broad)
 
 	        expect(found_geometry).to eq(geometry_1)
 	      end
@@ -30,7 +30,7 @@ describe Geometry, type: :model do
 	      	geometry_2
 	      	geometry_3
 	      	geometry_1
-	    		found_geometry = described_class.cascading_find_by_name(name_narrower)
+	    		found_geometry = described_class.cascading_find_by_names(name_narrower)
 
 	        expect(found_geometry).to eq(geometry_2)
 	      end
@@ -39,7 +39,27 @@ describe Geometry, type: :model do
 	      	geometry_3
 	      	geometry_2
 	      	geometry_1
-	    		found_geometry = described_class.cascading_find_by_name(name_narrowest)
+	    		found_geometry = described_class.cascading_find_by_names(name_narrowest)
+
+	        expect(found_geometry).to eq(geometry_3)
+	      end
+    	end 
+
+      context 'two names passed' do
+	      it 'finds the correct geometry if the city name and locality are passed' do
+	      	geometry_2
+	      	geometry_1
+	      	geometry_3
+	    		found_geometry = described_class.cascading_find_by_names(name_broad, name_narrower)
+
+	        expect(found_geometry).to eq(geometry_2)
+	      end
+
+	      it 'finds the correct geometry if the city name and sublocality are passed' do
+	      	geometry_3
+	      	geometry_1
+	      	geometry_2
+	    		found_geometry = described_class.cascading_find_by_names(name_broad, name_narrowest)
 
 	        expect(found_geometry).to eq(geometry_3)
 	      end

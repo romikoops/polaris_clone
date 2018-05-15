@@ -453,28 +453,32 @@ module ExcelTools
     
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type = zone_sheet.row(2)[4] == 'city' ? 'geometry_id' : zone_sheet.row(2)[4]
+    identifier_type = zone_sheet.row(1)[1] == 'CITY' ? 'geometry_id' : zone_sheet.row(1)[1].downcase
 
     # START Load Zones ------------------------
     
     zones = {}
     (2..num_rows).each do |line|
       row_data = zone_sheet.row(line)
-      zones[row_data[0]] = [] unless zones[row_data[0]]
+      zone_name = row_data[0]
+      zones[zone_name] = [] if zones[zone_name].nil?
+
       if row_data[1] && !row_data[2]
-        if !zip_char_length
-          zip_char_length = row_data[1].length
-        end 
-        zones[row_data[0]] << { ident: row_data[1], country: row_data[3] }
-      elsif !row_data[1] && row_data[2]
-        
+        zip_char_length ||= row_data[1].length
+        zones[zone_name] << { ident: row_data[1], country: row_data[3] }
+      elsif !row_data[1] && row_data[2]        
         range = row_data[2].delete(' ').split('-')
-        if !zip_char_length
-          zip_char_length = range[0].length
-        end 
-        zones[row_data[0]] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
+        zip_char_length ||= range[0].length
+        zones[zone_name] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
+      elsif row_data[1] && row_data[2]        
+        zones[zone_name] << {
+          ident: row_data[1],
+          sub_ident: row_data[2],
+          country: row_data[3]
+        }
       end
     end
+
     all_ident_values_and_countries = {} 
     zones.each do |zone_name, idents_and_countries|
       all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
@@ -491,10 +495,11 @@ module ExcelTools
             { ident: ident_value, country: idents_and_country[:country] }
           end
         elsif identifier_type == "geometry_id"
-          geometry = Geometry.cascading_find_by_name(idents_and_country[:ident].to_s)
           awesome_print idents_and_country
+          geometry = find_geometry(idents_and_country)
           if geometry.nil?
-            puts "skipped #{idents_and_country[:ident].to_s}"
+            puts "skipped #{idents_and_country[:ident]}"
+            byebug
             next
           end
           awesome_print geometry.names.log_format
@@ -1624,6 +1629,7 @@ module ExcelTools
   def debug_message(message)
     puts message if DEBUG
   end
+
   def set_regular_fee(all_charges, charge, load_type, direction)
     if load_type === 'fcl'
       %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
@@ -1673,11 +1679,28 @@ module ExcelTools
     awesome_print all_charges
     all_charges
   end
+
   def generate_meta_from_sheet(sheet)
     meta = {}
     sheet.row(1).each_with_index do |key, i|
+      next if key.nil?
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!
+  end
+
+  def find_geometry(idents_and_country)
+    geometry = Geometry.cascading_find_by_names(
+      idents_and_country[:sub_ident],
+      idents_and_country[:ident]
+    )
+
+    if geometry.nil?
+      geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+      coordinates = geocoder_results.first.geometry["location"]
+      geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+    end
+
+    geometry
   end
 end
