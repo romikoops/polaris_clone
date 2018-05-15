@@ -78,15 +78,21 @@ export class UserDashboard extends Component {
     const { shipments, contacts, locations } = dashboard
     const mergedOpenShipments =
       shipments && shipments.open
-        ? shipments.open.map(sh => UserDashboard.prepShipment(sh, user, hubs))
+        ? shipments.open
+          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
         : false
     const mergedRequestedShipments =
       shipments && shipments.requested
-        ? shipments.requested.map(sh => UserDashboard.prepShipment(sh, user, hubs))
+        ? shipments.requested
+          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
         : false
     const mergedFinishedShipments =
       shipments && shipments.finished
-        ? shipments.finished.map(sh => UserDashboard.prepShipment(sh, user, hubs))
+        ? shipments.finished
+          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
         : false
     const newReqShips =
       mergedRequestedShipments.length > 0 ? (

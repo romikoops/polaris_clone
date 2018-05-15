@@ -114,6 +114,9 @@ module PricingTools
   def get_tenant_pricings(tenant_id)
     Tenant.find(tenant_id).pricings.map(&:as_json)
   end
+  def get_tenant_pricings_by_mot(tenant_id, mot)
+    Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).flat_map {|it| it.pricings.map(&:as_json)}
+  end
 
   def get_tenant_pricings_hash(tenant_id)
     pricings = get_tenant_pricings(tenant_id)
@@ -168,6 +171,7 @@ module PricingTools
         weight_kg >= range["min"] && weight_kg <= range["max"]
       end
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
+      
       return [value, min].max
     when 'PER_CONTAINER_RANGE'
       fee_range = fee["range"].find do |range|
@@ -242,12 +246,23 @@ module PricingTools
   end
 
   def get_cargo_hash(cargo)
-    {    
+    if cargo.is_a? Container
+      {    
       volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
       weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
       quantity: cargo.try(:quantity) || 1  
     }
+    else
+      cargo.set_chargeable_weight!
+    {    
+      volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
+      weight: (cargo.try(:weight) || cargo.chargeable_weight) * (cargo.try(:quantity) || 1),
+      quantity: cargo.try(:quantity) || 1  
+    }
+    end
+    
   end
+  
 end
 
 

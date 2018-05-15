@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
-      get  "pricings/download",  to: "pricings#download_pricings"
+      post  "pricings/download",  to: "pricings#download_pricings"
       post "pricings/update/:id", to: "pricings#update_price"
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
         to: "local_charges#overwrite", as: :local_charges_overwrite
       post "local_charges/:id/edit", to: "local_charges#edit"
       post "customs_fees/:id/edit", to: "local_charges#edit_customs"
-      get  "local_charges/download",  to: "local_charges#download_local_charges"
+      post  "local_charges/download",  to: "local_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple

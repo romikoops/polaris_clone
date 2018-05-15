@@ -28,7 +28,7 @@ export default function Contact (props) {
 
             <address className={` ${styles.address} flex-100 center`}>
               {contact.location
-                ? `${contact.location.street} ${contact.location.street_number}`
+                ? `${contact.location.street || ''} ${contact.location.street_number || ''}`
                 : ''}{' '}
               <br />
               {contact.location ? `${contact.location.zip_code} ${contact.location.city}` : ''}

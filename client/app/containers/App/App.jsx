@@ -86,7 +86,8 @@ class App extends Component {
             />
             <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
             <Route
-              path="/redirects/shipment/:uuid"
+              exact
+              path="/redirects/shipments/:uuid"
               render={props => <AdminShipmentAction theme={theme} {...props} />}
             />
             <PrivateRoute

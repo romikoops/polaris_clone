@@ -58,7 +58,7 @@ function uploadHubs (file) {
     )
   }
 }
-function downloadPricings () {
+function downloadPricings (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
   }
@@ -71,7 +71,7 @@ function downloadPricings () {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.downloadPricings().then(
+    documentService.downloadPricings(options).then(
       (data) => {
         dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
@@ -84,7 +84,7 @@ function downloadPricings () {
     )
   }
 }
-function downloadLocalCharges () {
+function downloadLocalCharges (options) {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
   }
@@ -97,7 +97,7 @@ function downloadLocalCharges () {
   return (dispatch) => {
     dispatch(request())
 
-    documentService.downloadLocalCharges().then(
+    documentService.downloadLocalCharges(options).then(
       (data) => {
         dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))

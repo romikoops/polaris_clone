@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.4.3"
+ruby "2.5.1"
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -26,6 +26,9 @@ gem 'rufo'
 gem 'awesome_print'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'
+
+gem 'activerecord-postgis-adapter'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 

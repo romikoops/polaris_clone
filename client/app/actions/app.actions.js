@@ -41,7 +41,7 @@ function fetchCurrencies (type) {
   }
 }
 
-function setCurrency (type) {
+function setCurrency (type, req) {
   function request (currencyReq) {
     return { type: appConstants.SET_CURRENCY_REQUEST, payload: currencyReq }
   }
@@ -55,9 +55,12 @@ function setCurrency (type) {
     dispatch(request(type))
     appService.setCurrency(type).then(
       (resp) => {
-        dispatch(alertActions.success('Fetching Currency successful'))
         dispatch(success(resp.data.rates))
         dispatch(authenticationActions.setUser({ data: resp.data.user }))
+        if (req) {
+          dispatch(shipmentActions.getOffers(req, false))
+        }
+        dispatch(alertActions.success('Fetching Currency successful'))
       },
       (error) => {
         error.then((data) => {

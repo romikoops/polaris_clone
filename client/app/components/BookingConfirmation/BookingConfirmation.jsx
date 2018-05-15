@@ -17,6 +17,30 @@ import Contact from '../Contact/Contact'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
+export function calcFareTotals (feeHash) {
+  let res1 = feeHash.total.value
+  let res2 = 0
+  if (feeHash && feeHash.customs && feeHash.customs.val) {
+    res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
+  }
+  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
+    res2 = parseFloat(res1) - parseFloat(feeHash.insurance.val)
+  } else {
+    res2 = res1
+  }
+  return res2.toFixed(2)
+}
+export function calcExtraTotals (feeHash) {
+  let res1 = 0
+  if (feeHash && feeHash.customs && feeHash.customs.val) {
+    res1 += parseFloat(feeHash.customs.val)
+  }
+  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
+    res1 += parseFloat(feeHash.insurance.val)
+  }
+  return res1.toFixed(2)
+}
+
 export class BookingConfirmation extends Component {
   constructor (props) {
     super(props)
@@ -370,13 +394,13 @@ export class BookingConfirmation extends Component {
                   style={{ position: 'relative' }}
                 >
                   <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                      <p className="flex-100 center letter_3">
+                    <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+                      <p className="flex-100  letter_3">
                         {shipment.has_pre_carriage
                           ? 'Expected Time of Collection:'
                           : 'Expected Time of Departure:'}
                       </p>
-                      <p className="flex-none letter_3">
+                      <p className="flex-90 offset-10 margin_5">
                         {shipment.has_pre_carriage
                           ? `${moment(shipment.closing_date)
                             .subtract(3, 'days')
@@ -385,8 +409,9 @@ export class BookingConfirmation extends Component {
                       </p>
                     </div>
                     {shipment.has_pre_carriage ? (
-                      <div className="flex-100 layout-row layout-align-center-start">
-                        <address className="flex-none">
+                      <div className="flex-80 layout-row layout-align-center-start layout-wrap">
+                        <p className="flex-100 letter_3">With Pickup from:</p>
+                        <address className="flex-90">
                           {`${locations.origin.street_number} ${locations.origin.street}`},
                           {`${locations.origin.city}`},
                           {`${locations.origin.zip_code}`},
@@ -398,14 +423,16 @@ export class BookingConfirmation extends Component {
                     )}
                   </div>
                   <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                      <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY')}`}</p>
+                    <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+                      <p className="flex-100  letter_3"> Expected Time of Arrival:</p>
+                      <p className="flex-90 offset-10 margin_5">{`${moment(shipment.planned_eta).format('DD/MM/YYYY')}`}</p>
                     </div>
                     {shipment.has_on_carriage ? (
-                      <div className="flex-100 layout-row layout-align-center-start">
-                        <address className="flex-none">
-                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '},
+                      <div className="flex-80 layout-row layout-align-center-start layout-wrap">
+                        <p className="flex-100 letter_3">With Delivery to:</p>
+                        <address className="flex-90">
+                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
+                          ,
                           {`${locations.destination.city}`},
                           {`${locations.destination.zip_code}`},
                           {`${locations.destination.country}`}
@@ -443,16 +470,7 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${
-                styles.total_row
-              } flex-100 layout-row layout-wrap layout-align-space-around-center`}
-            >
-              <h3 className="flex-70 letter_3">Shipment Total:</h3>
-              <div className="flex-30 layout-row layout-align-end-center">
-                <h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
-              </div>
-            </div>
+
             <div className={`${collapser.charges ? styles.collapsed : ''} ${styles.main_panel}`}>
               <div
                 className={
@@ -460,7 +478,22 @@ export class BookingConfirmation extends Component {
                   'layout-row layout-wrap layout-align-start-start'
                 }
               >
-                <div className="flex-100 layout-row layout-align-center-center">
+                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-70 layout-row layout-align-start-center">
+                      <TextHeading
+                        theme={theme}
+                        color="white"
+                        size={4}
+                        text="Freight, Duties & Carriage: "
+                      />
+                    </div>
+                    <div className="flex-30 layout-row layout-align-end-center">
+                      <h5 className="flex-none letter_3">{`${
+                        shipment.total_price.currency
+                      } ${calcFareTotals(feeHash)} `}</h5>
+                    </div>
+                  </div>
                   <div
                     className="
                     flex-none
@@ -478,6 +511,60 @@ export class BookingConfirmation extends Component {
                       tenant={{ data: tenant }}
                     />
                   </div>
+                </div>
+                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-70 layout-row layout-align-start-center">
+                      <TextHeading
+                        theme={theme}
+                        color="white"
+                        size={4}
+                        text="Additional Services: "
+                      />
+                    </div>
+                    <div className="flex-30 layout-row layout-align-end-center layout-wrap">
+                      <h5 className="flex-none letter_3">{`${
+                        shipment.total_price.currency
+                      } ${calcExtraTotals(feeHash)} `}</h5>
+                      { feeHash.customs.hasUnknown
+                        ? (
+                          <div className="flex-100 layout-row layout-align-end-center">
+                            <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
+                              {' '}
+                          ( excl. charges subject to local regulations )
+                            </p>
+                          </div>)
+                        : ''}
+                    </div>
+                  </div>
+                  <div
+                    className="
+                    flex-none
+                     content_width_booking
+                     layout-row
+                     layout-align-center-center"
+                  >
+                    <IncotermExtras theme={theme} feeHash={feeHash} tenant={{ data: tenant }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`${
+                styles.total_row
+              } flex-100 layout-row layout-wrap layout-align-space-around-center`}
+            >
+              <div className="flex-70 layout-row layout-align-start-center">
+                <h3 className="flex-none letter_3">Shipment Total: </h3>
+
+              </div>
+              <div className="flex-30 layout-row layout-align-end-center layout-wrap">
+                <h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
+                <div className="flex-100 layout-row layout-align-end-center">
+                  <p className="flex-none center no_m" style={{ fontSize: '12px' }}>
+                    {' '}
+                    ( incl. Quoted Additional Services )
+                  </p>
                 </div>
               </div>
             </div>
@@ -648,9 +735,9 @@ export class BookingConfirmation extends Component {
                         <p className="flex-100">
                           <b>Total Value of Goods:</b>
                         </p>
-                        <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
-                          shipment.total_goods_value.value
-                        }`}</p>
+                        <p className="flex-100 no_m">{`${
+                          shipment.total_goods_value.currency
+                        } ${parseFloat(shipment.total_goods_value.value).toFixed(2)}`}</p>
                       </div>
                     ) : (
                       ''
@@ -704,7 +791,6 @@ export class BookingConfirmation extends Component {
                     ) : (
                       ''
                     )}
-
                   </div>
                 </div>
               </div>

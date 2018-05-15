@@ -36,10 +36,11 @@ function uploadHubs (file) {
   }
   return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
-function downloadPricings () {
+function downloadPricings (options) {
   const requestOptions = {
-    method: 'GET',
-    headers: { ...authHeader() }
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ options })
   }
   return fetch(`${BASE_URL}/admin/pricings/download`, requestOptions).then(handleResponse)
 }
@@ -77,10 +78,11 @@ function uploadLocalCharges (file) {
   return fetch(`${BASE_URL}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
-function downloadLocalCharges () {
+function downloadLocalCharges (options) {
   const requestOptions = {
-    method: 'GET',
-    headers: { ...authHeader() }
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ options })
   }
   return fetch(`${BASE_URL}/admin/local_charges/download`, requestOptions).then(handleResponse)
 }
@@ -98,6 +100,7 @@ function downloadSchedules (options) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ options })
   }
+
   return fetch(`${BASE_URL}/admin/schedules/download`, requestOptions).then(handleResponse)
 }
 

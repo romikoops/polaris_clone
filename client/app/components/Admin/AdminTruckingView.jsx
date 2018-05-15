@@ -98,7 +98,7 @@ export class AdminTruckingView extends Component {
     if (event.target.value === '') {
       this.setState({
         filteredTruckingPricings:
-          this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
+        this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
       })
       return
     }

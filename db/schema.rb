@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180507123704) do
+ActiveRecord::Schema.define(version: 20180514134957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,17 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.string "approved"
     t.jsonb "approval_details"
     t.integer "tenant_id"
+  end
+
+  create_table "geometries", force: :cascade do |t|
+    t.string "name_1"
+    t.string "name_2"
+    t.string "name_3"
+    t.string "name_4"
+    t.geometry "data", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name_1", "name_2", "name_3", "name_4"], name: "index_geometries_on_name_1_and_name_2_and_name_3_and_name_4", unique: true
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -506,6 +517,7 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "geometry_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
@@ -525,6 +537,7 @@ ActiveRecord::Schema.define(version: 20180507123704) do
     t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
+    t.string "cargo_class"
   end
 
   create_table "user_locations", force: :cascade do |t|

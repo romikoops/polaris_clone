@@ -114,7 +114,7 @@ module ShippingTools
       contact_params(resource, contact_location.id).merge(alias: shipment.export?)
     )
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
-    shipper = { data: contact, location: contact_location }
+    shipper = { data: contact, location: contact_location.to_custom_hash }
     UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
     # Consignee
@@ -124,7 +124,7 @@ module ShippingTools
       contact_params(resource, contact_location.id).merge(alias: shipment.import?)
     )
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
-    consignee = { data: contact, location: contact_location }
+    consignee = { data: contact, location: contact_location.to_custom_hash }
     UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
@@ -155,7 +155,8 @@ module ShippingTools
         key = ss['hub_route_key']
         customs = {
           val: shipment_data[:customs][:total][:val].to_d,
-          currency: shipment_data[:customs][:total][:currency]
+          currency: shipment_data[:customs][:total][:currency],
+          hasUnknown: shipment_data[:customs][:total][:hasUnknown]
         }
         shipment.schedules_charges[key][:customs] = customs
         shipment.customs = customs

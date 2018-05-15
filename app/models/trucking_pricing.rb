@@ -58,6 +58,7 @@ class TruckingPricing < ApplicationRecord
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
       .where('trucking_destinations.country_code': country_code)
+      .where(cargo_class_condition(args))
       .where(truck_type_condition(args))
       .where(nexuses_condition(args))
       .where("
@@ -65,8 +66,13 @@ class TruckingPricing < ApplicationRecord
           (trucking_destinations.zipcode IS NOT NULL)
           AND (trucking_destinations.zipcode = :zipcode)
         ) OR (
-          (trucking_destinations.city_name IS NOT NULL)
-          AND (trucking_destinations.city_name = :city_name)
+          (trucking_destinations.geometry_id IS NOT NULL)
+          AND (
+            SELECT ST_Contains(
+              (SELECT data::geometry FROM geometries WHERE id = trucking_destinations.geometry_id),
+              (SELECT ST_Point(:longitude, :latitude)::geometry)
+            ) AS contains
+          )          
         ) OR (
           (trucking_destinations.distance IS NOT NULL)
           AND (
@@ -96,7 +102,7 @@ class TruckingPricing < ApplicationRecord
           WHEN MAX(trucking_destinations.distance) != '0'
             THEN ('distance', MIN(trucking_destinations.distance), MAX(trucking_destinations.distance))
           ELSE
-            ('city', MAX(trucking_destinations.city_name))
+            ('city', MAX(geometries.name_2), MAX(geometries.name_4))
         END
       ) AS filter
       FROM  trucking_pricings
@@ -105,6 +111,7 @@ class TruckingPricing < ApplicationRecord
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
       JOIN  locations             ON hubs.location_id                      = locations.id
       JOIN  tenants               ON hubs.tenant_id                        = tenants.id
+      JOIN  geometries            ON trucking_destinations.geometry_id     = geometries.id                           
       WHERE tenants.id = :tenant_id
       AND   hubs.id IN (:hub_ids)
       GROUP BY trucking_pricings.id
@@ -113,9 +120,13 @@ class TruckingPricing < ApplicationRecord
 
     connection.exec_query(sanitized_query).map do |row|
       filter = parse_sql_record(row["filter"])
+
+      ident_type  = filter.first
+      ident_value = ident_type == "city" ? filter[1..-1].join(", ") : filter[1..-1]
+
       {
         "truckingPricing" => find(row["id"]),
-        filter.first      => filter[1..-1]
+        ident_type        => ident_value
       }
     end
   end
@@ -161,13 +172,17 @@ class TruckingPricing < ApplicationRecord
       raise ArgumentError, "Must provide country_code"
     end
 
-    if args.keys.size <= mandatory_args.length + 1
+    if args.keys.size <= mandatory_args.length
       raise ArgumentError, "Must provide a valid filter besides #{mandatory_args.to_sentence}"
     end
   end
 
   def self.truck_type_condition(args)
     args[:truck_type] ? { 'trucking_pricings.truck_type': args[:truck_type] } : {}
+  end
+
+  def self.cargo_class_condition(args)
+    args[:cargo_class] ? { 'trucking_pricings.cargo_class': args[:cargo_class] } : {}
   end
 
   def self.nexuses_condition(args)
