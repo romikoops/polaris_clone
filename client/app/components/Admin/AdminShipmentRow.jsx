@@ -301,7 +301,7 @@ AdminShipmentRow.propTypes = {
   handleSelect: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,
   shipment: PropTypes.shipment.isRequired,
-  hubs: PropTypes.arrayOf(PropTypes.hub)
+  hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
 AdminShipmentRow.defaultProps = {
