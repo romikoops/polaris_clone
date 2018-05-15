@@ -26,6 +26,29 @@ test('text content of component is based on props.text', () => {
   expect(wrapper.text()).toBe(`${propsBase.text} `)
 })
 
+test('props.theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: false
+  }
+  expect(shallow(<CardLink {...props} />)).toMatchSnapshot()
+})
+
+test('code && selectedType === code', () => {
+  const props = {
+    ...propsBase,
+    code: propsBase.selectedType
+  }
+  expect(shallow(<CardLink {...props} />)).toMatchSnapshot()
+})
+
+test('state.redirect is true', () => {
+  const wrapper = shallow(<CardLink {...propsBase} />)
+  wrapper.setState({ redirect: true })
+
+  expect(wrapper).toMatchSnapshot()
+})
+
 test('props.handleClick is called', () => {
   const props = {
     ...propsBase,
