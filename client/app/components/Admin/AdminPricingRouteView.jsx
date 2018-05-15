@@ -145,6 +145,20 @@ export class AdminPricingRouteView extends Component {
               <p className="flex-none">{chargeGloss[chargeKey]}</p>
               <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
             </div>)
+          } else if (chargeKey === 'range') {
+            const rangeCells = []
+            pricing.data[key].range.forEach((rangeFee, i) => {
+              Object.keys(rangeFee).forEach((rfKey) => {
+                rangeCells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+                  <p className="flex-none">{chargeGloss[rfKey]}</p>
+                  <p className="flex">{chargeGloss[pricing.data[key].range[i][rfKey]]}</p>
+                </div>)
+              })
+            })
+            cells
+              .push(<div className="flex-100 layout-row layout-align-start-center">
+                {rangeCells}
+              </div>)
           }
         })
         panel.push(<div className="flex-100 layout-row layout-align-none-center layout-wrap">
