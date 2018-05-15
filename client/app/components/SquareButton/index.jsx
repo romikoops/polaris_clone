@@ -1,9 +1,20 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
 import styles from './SquareButton.scss'
+import { gradientGenerator, browserType } from '../../helpers'
 
 export default function SquareButton ({
-  text, theme, active, back, icon, iconClass, size, disabled, handleNext, handleDisabled
+  text,
+  theme,
+  active,
+  back,
+  icon,
+  iconClass,
+  size,
+  disabled,
+  handleNext,
+  handleDisabled,
+  border
 }) {
   const btnStyle = active ? { background: 'white' } : {}
 
@@ -24,7 +35,16 @@ export default function SquareButton ({
     const classStr = `flex-none icon_f fa ${iconClass}`
     iconC = <i className={classStr} />
   }
-
+  let borderClass
+  if (border) {
+    borderClass = styles.show_border
+  } else {
+    borderClass = styles.hide_border
+  }
+  const borderGradient =
+    theme && theme.colors
+      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: 'black' }
   let sizeClass
 
   switch (size) {
@@ -42,19 +62,42 @@ export default function SquareButton ({
       sizeClass = styles.large
       break
   }
+  let wrapperSizeClass
+
+  switch (size) {
+    case 'large':
+      wrapperSizeClass = styles.large_wrapper
+      break
+    case 'small':
+      wrapperSizeClass = styles.small_wrapper
+      break
+    case 'full':
+      wrapperSizeClass = styles.full_wrapper
+      break
+
+    default:
+      wrapperSizeClass = styles.large_wrapper
+      break
+  }
+  const contentStyle = browserType() === 'IE' ? styles.ie_content : styles.content
   return (
-    <button
-      className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
-      onClick={disabled ? handleDisabled : handleNext}
-      style={btnStyle}
+    <div
+      className={`flex-none ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
+      style={borderGradient}
     >
-      <div className="layout-fill layout-row layout-align-space-around-center">
-        <p className={styles.content}>
-          <span className={styles.icon}>{iconC}</span>
-          {text}
-        </p>
-      </div>
-    </button>
+      <button
+        className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
+        onClick={disabled ? handleDisabled : handleNext}
+        style={btnStyle}
+      >
+        <div className="layout-fill layout-row layout-align-space-around-center">
+          <p className={contentStyle}>
+            <span className={styles.icon}>{iconC}</span>
+            {text}
+          </p>
+        </div>
+      </button>
+    </div>
   )
 }
 
@@ -68,7 +111,8 @@ SquareButton.propTypes = {
   icon: PropTypes.string,
   iconClass: PropTypes.string,
   size: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  border: PropTypes.bool
 }
 
 SquareButton.defaultProps = {
@@ -80,5 +124,6 @@ SquareButton.defaultProps = {
   size: '',
   handleNext: null,
   handleDisabled: null,
-  disabled: false
+  disabled: false,
+  border: false
 }

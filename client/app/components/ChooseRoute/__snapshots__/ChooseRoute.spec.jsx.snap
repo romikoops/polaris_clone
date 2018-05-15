@@ -17,6 +17,11 @@ exports[`shallow render 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
+        availableMotKeys={
+          Object {
+            "undefined": true,
+          }
+        }
         durationFilter={40}
         moT={
           Object {
@@ -24,15 +29,26 @@ exports[`shallow render 1`] = `
             "ocean": true,
           }
         }
+        pickup={false}
         setDepartureDate={[Function]}
         setDurationFilter={[Function]}
         setMoT={[Function]}
         shipment={
           Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "notes": "FOO_NOTES",
             "schedules_charges": Object {
               "FOO_HUB_ROUTE_KEY": Object {
                 "foo": "FOO_ROUTE_KEY",
               },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
             },
             "total_price": Object {
               "currency": "USD",
@@ -56,6 +72,46 @@ exports[`shallow render 1`] = `
       <div
         className="flex-100 layout-row layout-wrap"
       >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-left"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+            <p
+              className="flex-none no_m"
+            >
+              Show earlier departures
+            </p>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none no_m"
+            >
+              Show later departures
+            </p>
+            <i
+              className="flex-none fa fa-angle-double-right"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+          </div>
+        </div>
         <div
           className="flex-100 layout-row layout-align-space-between-center route_header"
         >
@@ -86,6 +142,7 @@ exports[`shallow render 1`] = `
                   "fooKey": "FOO_CURRENCY_OPTIONS",
                 }
               }
+              placeholder="Select Currency"
             />
           </div>
         </div>

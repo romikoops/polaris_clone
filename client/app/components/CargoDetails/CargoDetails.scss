@@ -56,10 +56,13 @@
   .no_customs_box.show {
     visibility: visible;
     opacity: 1;
-    height: 140px;
+    height: 230px;
   }
   .show {
     height: 250px;
+  }
+  .customs_box.show {
+    height: 400px;
   }
   .customs_prices{
     margin: 10px 0;

@@ -7,6 +7,7 @@ import PropTypes from '../../prop-types'
 import { BASE_URL } from '../../constants'
 import { authHeader } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
+import SquareButton from '../SquareButton'
 import styles from './FileUploader.scss'
 
 class FileUploader extends React.Component {
@@ -62,7 +63,7 @@ class FileUploader extends React.Component {
       }
       dispatchFn(file)
       if (this.uploaderInput.files.length) {
-        this.uploaderInput.files[0] = ''
+        this.uploaderInput.value = ''
       }
       return null
     }
@@ -80,7 +81,7 @@ class FileUploader extends React.Component {
     const uploadUrl = BASE_URL + url
     fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
     if (this.uploaderInput.files.length) {
-      this.uploaderInput.files[0] = ''
+      this.uploaderInput.value = ''
     }
     return null
     // }
@@ -95,7 +96,9 @@ class FileUploader extends React.Component {
     this.uploaderInput.click()
   }
   render () {
-    const { theme, type, tooltip } = this.props
+    const {
+      theme, type, tooltip, square
+    } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
     console.log(errorStyle)
@@ -106,13 +109,25 @@ class FileUploader extends React.Component {
         data-for={tooltipId}
       >
         <form>
-          <RoundButton
-            text="Upload"
-            theme={theme}
-            size="small"
-            handleNext={e => this.clickUploaderInput(e)}
-            active
-          />
+          {square ? (
+            <SquareButton
+              text="Upload"
+              theme={theme}
+              size="small"
+              handleNext={e => this.clickUploaderInput(e)}
+              active
+              border
+            />
+          ) : (
+            <RoundButton
+              text="Upload"
+              theme={theme}
+              size="small"
+              handleNext={e => this.clickUploaderInput(e)}
+              active
+            />
+          )}
+
           <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
           <input
             type="file"
@@ -133,6 +148,7 @@ class FileUploader extends React.Component {
 
 FileUploader.propTypes = {
   url: PropTypes.string.isRequired,
+  square: PropTypes.bool,
   type: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
@@ -142,6 +158,7 @@ FileUploader.propTypes = {
 
 FileUploader.defaultProps = {
   uploadFn: null,
+  square: false,
   dispatchFn: null,
   theme: null,
   tooltip: ''

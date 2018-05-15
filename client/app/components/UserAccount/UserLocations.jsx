@@ -94,6 +94,7 @@ export class UserLocations extends Component {
 
   componentDidMount () {
     this.props.setNav('locations')
+    window.scrollTo(0, 0)
   }
 
   destroyLocation (locationId) {

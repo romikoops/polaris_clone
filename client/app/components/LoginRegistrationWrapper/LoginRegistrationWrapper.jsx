@@ -22,18 +22,19 @@ export class LoginRegistrationWrapper extends Component {
     }
   }
 
-  render () {
-    const toggleComp = (CurrentComp) => {
-      if (this.props.updateDimensions != null) this.props.updateDimensions()
+  toggleComp (currentCompName) {
+    if (this.props.updateDimensions != null) this.props.updateDimensions()
 
-      const nextComp = CurrentComp === 'LoginPage' ? 'RegistrationPage' : 'LoginPage'
-      this.setState({
-        compName: nextComp
-      })
-    }
+    const nextCompName = currentCompName === 'LoginPage' ? 'RegistrationPage' : 'LoginPage'
+    this.setState({
+      compName: nextCompName
+    })
+  }
+  render () {
     const compName = this.state.compName ? this.state.compName : this.props.initialCompName
     const Comp = this.components[compName]
     const compProps = this.props[`${compName}Props`]
+
     const textStyling =
       navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true
         ? `${styles.ie_11} layout-row layout-align-space-between`
@@ -46,7 +47,7 @@ export class LoginRegistrationWrapper extends Component {
         <hr className={styles.toggle_prompt_separator} />
         <div className={textStyling}>
           <div>{this.togglePrompt[compName].promptText}</div>
-          <div className={`${defs.emulate_link}`} onClick={() => toggleComp(compName)}>
+          <div className={`${defs.emulate_link}`} onClick={() => this.toggleComp(compName)}>
             {this.togglePrompt[compName].linkText}
           </div>
         </div>

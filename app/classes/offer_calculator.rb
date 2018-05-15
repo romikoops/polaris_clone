@@ -16,7 +16,7 @@ class OfferCalculator
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
     @shipment.trucking = trucking_params(params).to_h
     @delay = params[:shipment][:delay]
-    # @shipment.incoterm = params[:shipment][:incoterm]
+    @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
     @truck_seconds_pre_carriage = 0
     @pricing = nil
@@ -35,12 +35,14 @@ class OfferCalculator
       @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
       @shipment.send("#{plural_load_type}=", @cargo_units)
     end
-
-
-    @shipment.planned_pickup_date = Chronic.parse(
+    planned_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
     )
+    
+    date_limit = Date.today() + 5.days
+    @shipment.planned_pickup_date = planned_date > date_limit ? planned_date : date_limit
+
     @shipment.origin = Location.get_geocoded_location(
       params[:shipment][:origin_user_input],
       params[:shipment][:origin_id],
@@ -58,6 +60,7 @@ class OfferCalculator
 
   def calc_offer!
     determine_trucking_options!
+    
     determine_itinerary!
     # determine_route! 
     determine_hubs!
@@ -69,6 +72,7 @@ class OfferCalculator
     #   "pre_carriage" => { "truck_type" => "side_lifter"}
     # }
     determine_longest_trucking_time!
+    
     determine_layovers!
     
     
@@ -186,7 +190,7 @@ class OfferCalculator
   end
 
   def set_trucking_charges!(charges, trip, sched_key)
-    if @shipment.has_pre_carriage
+    if @shipment.has_pre_carriage 
       charges[sched_key][:trucking_pre] = determine_trucking_fees(
         @shipment.origin,
         trip[0].stop.hub,
@@ -195,7 +199,7 @@ class OfferCalculator
       )
     end
     
-    if @shipment.has_on_carriage
+    if @shipment.has_on_carriage 
       charges[sched_key][:trucking_on] = determine_trucking_fees(
         @shipment.destination, 
         trip[1].stop.hub,
@@ -206,7 +210,7 @@ class OfferCalculator
   end
 
   def set_local_charges!(charges, trip, sched_key)
-    if @shipment.has_pre_carriage
+    if @shipment.has_pre_carriage || trip[0].stop.hub.mandatory_charge.export_charges
       charges[sched_key][:export] = determine_local_charges(
         trip[0].stop.hub,
         @shipment.load_type,
@@ -218,7 +222,7 @@ class OfferCalculator
       
     end
     
-    if @shipment.has_on_carriage
+    if @shipment.has_on_carriage || trip[1].stop.hub.mandatory_charge.import_charges
       charges[sched_key][:import] = determine_local_charges(
         trip[1].stop.hub,
         @shipment.load_type,
@@ -309,7 +313,7 @@ class OfferCalculator
         truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default',
         carriage: 'on'
       )
-      byebug
+      
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]
           @trucking_data["on_carriage"] = {}

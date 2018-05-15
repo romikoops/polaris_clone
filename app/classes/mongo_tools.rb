@@ -132,6 +132,6 @@ module MongoTools
   private
 
   def init
-    return $db
+    return Mongo::Client.new("mongodb://#{ENV['MONGO_USER']}:#{ENV['MONGO_PASSWORD']}@staging-shard-00-00-sco92.mongodb.net:27017,staging-shard-00-01-sco92.mongodb.net:27017,staging-shard-00-02-sco92.mongodb.net:27017/test?ssl=true&replicaSet=Staging-shard-0&authSource=admin")
   end
 end

@@ -6,7 +6,7 @@ function format2Digit (n) {
   return `0${n}`.slice(-2)
 }
 
-export function Price ({ value, scale, user }) {
+export function Price ({ value, scale, currency }) {
   const scaleTransformation = scale
     ? { transform: `scale(${scale})`, transformOrigin: `0 ${35.5 * scale / 2}px` }
     : {}
@@ -15,7 +15,7 @@ export function Price ({ value, scale, user }) {
   return (
     <p className={`flex-none ${styles.price}`} style={scaleTransformation}>
       {priceUnits}
-      <sup>.{priceCents}</sup> <span className={styles.price_currency}>{user.currency}</span>
+      <sup>.{priceCents}</sup> <span className={styles.price_currency}>{currency}</span>
     </p>
   )
 }
@@ -23,7 +23,7 @@ export function Price ({ value, scale, user }) {
 Price.propTypes = {
   value: PropTypes.number.isRequired,
   scale: PropTypes.string,
-  user: PropTypes.user.isRequired
+  currency: PropTypes.string.isRequired
 }
 Price.defaultProps = {
   scale: ''

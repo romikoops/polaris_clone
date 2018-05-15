@@ -20,8 +20,9 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
     mail(
-      # to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
-      to: TESTING_EMAIL,
+      to: tenant.email_for(:sales, shipment.mode_of_transport), 
+      # to: TESTING_EMAIL,
+      bcc: 'bookings@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -35,8 +36,9 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
 
     mail(
-      # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: TESTING_EMAIL,
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      # to: TESTING_EMAIL,
+      bcc: 'bookings@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -49,14 +51,15 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
     
-    bill_of_lading = generate_and_upload_bill_of_lading
-    attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read
+    # bill_of_lading = generate_and_upload_bill_of_lading
+    # attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read
 
-    FileUtils.rm(bill_of_lading.path)
+    # FileUtils.rm(bill_of_lading.path)
 
     mail(
-      # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: TESTING_EMAIL,
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      # to: TESTING_EMAIL,
+      bcc: 'bookings@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end

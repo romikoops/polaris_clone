@@ -39,6 +39,7 @@ export class AdminPricingRouteView extends Component {
     if (!routePricings && !loading) {
       adminActions.getItineraryPricings(parseInt(match.params.id, 10), false)
     }
+    window.scrollTo(0, 0)
   }
 
   editThis (pricing, hubRoute, transport) {
@@ -103,7 +104,11 @@ export class AdminPricingRouteView extends Component {
     console.log(itineraryPricings)
     const { transportCategories } = pricingData
     const {
-      itinerary, itineraryPricingData, stops, detailedItineraries, userPricings
+      itinerary,
+      itineraryPricingData,
+      stops,
+      detailedItineraries,
+      userPricings
     } = itineraryPricings
     if (!itinerary || !itineraryPricingData) {
       return ''
@@ -218,20 +223,18 @@ export class AdminPricingRouteView extends Component {
     ) : (
       ''
     )
-    const RoutePricingBox = ({
-      routeData, pricingsArr, userId
-    }) => {
-      const filteredPricingsArr = userId === 'open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
+    const RoutePricingBox = ({ routeData, pricingsArr, userId }) => {
+      const filteredPricingsArr =
+        userId === 'open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
       const inner = filteredPricingsArr.map((pricingObj) => {
         const innerInner = []
-        innerInner
-          .push(<RPBInner
-            key={v4()}
-            hubRoute={routeData}
-            transport={pricingObj.transport_category}
-            pricing={pricingObj.pricing}
-            theme={theme}
-          />)
+        innerInner.push(<RPBInner
+          key={v4()}
+          hubRoute={routeData}
+          transport={pricingObj.transport_category}
+          pricing={pricingObj.pricing}
+          theme={theme}
+        />)
         return innerInner
       })
       return (

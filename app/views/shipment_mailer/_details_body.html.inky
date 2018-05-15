@@ -83,7 +83,7 @@
             </span>        
             <br/>
             <span>
-              <%= @shipment.transport_category.humanize %>
+              <%= @shipment.transport_category.try(:humanize) || 'N/A' %>
             </span>
           </p>
         </columns>

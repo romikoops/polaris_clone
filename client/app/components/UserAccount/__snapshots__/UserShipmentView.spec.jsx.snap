@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`props.hubs is false 1`] = `""`;
+
 exports[`props.loading is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start"
@@ -44,7 +46,9 @@ exports[`props.loading is true 1`] = `
           </p>
           <p
             className="sec_subtitle_text flex-none offset-5"
-          />
+          >
+            19
+          </p>
         </div>
       </div>
     }
@@ -104,12 +108,13 @@ exports[`props.loading is true 1`] = `
               <p
                 className="flex-100 center letter_3"
               >
-                 Expected Time of Departure:
+                 
+                Expected Time of Departure:
               </p>
               <p
                 className="flex-none letter_3"
               >
-                 undefined
+                19
               </p>
             </div>
             
@@ -128,7 +133,7 @@ exports[`props.loading is true 1`] = `
               <p
                 className="flex-none letter_3"
               >
-                undefined
+                19
               </p>
             </div>
             
@@ -179,15 +184,15 @@ exports[`props.loading is true 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -271,7 +276,7 @@ exports[`props.loading is true 1`] = `
       </div>
     }
     handleCollapser={[Function]}
-    headingText="Extras"
+    headingText="Additional Services"
     theme={
       Object {
         "colors": Object {
@@ -336,192 +341,114 @@ exports[`props.loading is true 1`] = `
   <Component
     content={
       <div
-        className="flex-100 layout-row layout-wrap"
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          className="flex-100 layout-row layout-align-start-center"
         >
           <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
           >
-            <div
-              className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex-100"
             >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
             >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
+              USD 15
+            </p>
           </div>
           <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
           >
-            <div
-              className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex-100"
             >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
             >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
+              1234
+            </p>
           </div>
         </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
@@ -596,8 +523,2130 @@ exports[`props.loading is true 1`] = `
               }
               type="packing_sheet"
               uploadFn={undefined}
-              url={undefined}
+              url="/shipments/undefined/upload/packing_sheet"
             />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Documents"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`props.shipmentData.cargoItems is present 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_title_text_normal flex-none"
+          >
+            Shipment:
+          </p>
+          <p
+            className="sec_title_text flex-none offset-5"
+            style="#333"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Status:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5 "
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Created at:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Overview"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <RouteHubBox
+          hubs={
+            Object {
+              "endHub": Object {},
+              "startHub": Object {},
+            }
+          }
+          route={
+            Array [
+              Object {
+                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              },
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 
+                Expected Time of Departure:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Arrival:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Itinerary"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+        >
+          <h3
+            className="flex-70 letter_3"
+          >
+            Shipment Total:
+          </h3>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              12.00
+               
+              USD
+            </h3>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermRow
+              destinationFees={false}
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermExtras
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Services"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="layout-row layout-align-start-center b_summ_top flex-100 "
+        >
+          
+        </div>
+        <div
+          className="layout-row layout-align-space-around-center b_summ_top flex-100 "
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+        >
+           
+           
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Contact Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <CargoItemGroup
+          group={
+            Object {
+              "cargoType": "FOO_CARGO_TYPE",
+              "cargo_group_id": 0,
+              "chargeable_weight": NaN,
+              "dimension_x": NaN,
+              "dimension_y": NaN,
+              "dimension_z": NaN,
+              "groupAlias": 1,
+              "hsCodes": undefined,
+              "hsText": undefined,
+              "items": Array [],
+              "payload_in_kg": NaN,
+              "quantity": 1,
+              "volume": NaN,
+            }
+          }
+          hsCodes={undefined}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <CargoItemGroup
+          group={
+            Object {
+              "cargoType": "BAR_CARGO_TYPE",
+              "cargo_group_id": 1,
+              "chargeable_weight": NaN,
+              "dimension_x": NaN,
+              "dimension_y": NaN,
+              "dimension_z": NaN,
+              "groupAlias": 2,
+              "hsCodes": undefined,
+              "hsText": undefined,
+              "items": Array [],
+              "payload_in_kg": NaN,
+              "quantity": 1,
+              "volume": NaN,
+            }
+          }
+          hsCodes={undefined}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Cargo Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-100 sec_subheader layout-row layout-align-space-between-center"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+          </div>
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <Styled(Component)
+              className="select"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <Unknown
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              type="packing_sheet"
+              uploadFn={undefined}
+              url="/shipments/undefined/upload/packing_sheet"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Documents"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`props.shipmentData.contacts is present 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_title_text_normal flex-none"
+          >
+            Shipment:
+          </p>
+          <p
+            className="sec_title_text flex-none offset-5"
+            style="#333"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Status:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5 "
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Created at:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Overview"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <RouteHubBox
+          hubs={
+            Object {
+              "endHub": Object {},
+              "startHub": Object {},
+            }
+          }
+          route={
+            Array [
+              Object {
+                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              },
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 
+                Expected Time of Departure:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Arrival:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Itinerary"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+        >
+          <h3
+            className="flex-70 letter_3"
+          >
+            Shipment Total:
+          </h3>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              12.00
+               
+              USD
+            </h3>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermRow
+              destinationFees={false}
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermExtras
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Services"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="layout-row layout-align-start-center b_summ_top flex-100 "
+        >
+          
+        </div>
+        <div
+          className="layout-row layout-align-space-around-center b_summ_top flex-100 "
+        >
+          <div
+            className="flex-33 layout-row"
+          >
+            <div
+              className="flex-15 layout-column layout-align-start-center"
+            >
+              <i
+                className="icon fa fa-user-circle-o flex-none"
+                style="#333"
+              />
+            </div>
+            <div
+              className="flex-85 layout-row layout-wrap layout-align-start-start"
+            >
+              <div
+                className="flex-100"
+              >
+                <TextHeading
+                  size={3}
+                  text="Shipper"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <p
+                className="address flex-100"
+              >
+                BAR_FIRST_NAME
+                 
+                BAR_LAST_NAME
+                 
+                <br />
+                FOO_STREET
+                 
+                579
+                 
+                <br />
+                22456
+                 
+                FOO_CITY
+                 
+                <br />
+                Germany
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row"
+          >
+            <div
+              className="flex-15 layout-column layout-align-start-center"
+            >
+              <i
+                className="icon fa fa-envelope-open-o flex-none"
+                style="#333"
+              />
+            </div>
+            <div
+              className="flex-85 layout-row layout-wrap layout-align-start-start"
+            >
+              <div
+                className="flex-100"
+              >
+                <TextHeading
+                  size={3}
+                  text="Receiver"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <p
+                className="address flex-100"
+              >
+                BAZ_FIRST_NAME
+                 
+                BAZ_LAST_NAME
+                 
+                <br />
+                FOO_STREET
+                 
+                579
+                 
+                <br />
+                22456
+                 
+                FOO_CITY
+                 
+                <br />
+                Germany
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+        >
+           
+          <div
+            className="flex-33 layout-row"
+          >
+            <div
+              className="flex-15 layout-column layout-align-start-center"
+            >
+              <i
+                className=" icon fa fa-user-circle-o flex-none"
+                style="#333"
+              />
+            </div>
+            <div
+              className="flex-85 layout-row layout-wrap layout-align-start-start"
+            >
+              <div
+                className="flex-100"
+              >
+                <TextHeading
+                  size={3}
+                  text="Notifyee"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <p
+                className=" address flex-100"
+              >
+                FOO_FIRST_NAME
+                 
+                FOO_LAST_NAME
+                 
+                <br />
+              </p>
+            </div>
+          </div>
+           
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Contact Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      />
+    }
+    handleCollapser={[Function]}
+    headingText="Cargo Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-100 sec_subheader layout-row layout-align-space-between-center"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+          </div>
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <Styled(Component)
+              className="select"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <Unknown
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              type="packing_sheet"
+              uploadFn={undefined}
+              url="/shipments/undefined/upload/packing_sheet"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Documents"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`props.shipmentData.documents is present 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_title_text_normal flex-none"
+          >
+            Shipment:
+          </p>
+          <p
+            className="sec_title_text flex-none offset-5"
+            style="#333"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Status:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5 "
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Created at:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5"
+          >
+            19
+          </p>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Overview"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <RouteHubBox
+          hubs={
+            Object {
+              "endHub": Object {},
+              "startHub": Object {},
+            }
+          }
+          route={
+            Array [
+              Object {
+                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              },
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 
+                Expected Time of Departure:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Arrival:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                19
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Itinerary"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+        >
+          <h3
+            className="flex-70 letter_3"
+          >
+            Shipment Total:
+          </h3>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              12.00
+               
+              USD
+            </h3>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermRow
+              destinationFees={false}
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermExtras
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Services"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="layout-row layout-align-start-center b_summ_top flex-100 "
+        >
+          
+        </div>
+        <div
+          className="layout-row layout-align-space-around-center b_summ_top flex-100 "
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+        >
+           
+           
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Contact Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      />
+    }
+    handleCollapser={[Function]}
+    headingText="Cargo Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              USD 15
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              1234
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-100 sec_subheader layout-row layout-align-space-between-center"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+          </div>
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <Styled(Component)
+              className="select"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <Unknown
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              type="packing_sheet"
+              uploadFn={undefined}
+              url="/shipments/undefined/upload/packing_sheet"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-45 layout-row"
+            style={
+              Object {
+                "padding": "10px",
+              }
+            }
+          >
+            <DocumentsForm
+              deleteFn={[Function]}
+              dispatchFn={[Function]}
+              displayOnly={false}
+              doc={
+                Object {
+                  "doc_type": "foo",
+                  "id": 0,
+                }
+              }
+              isRequired={false}
+              multiple={false}
+              text=""
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="foo"
+              uploadFn={null}
+              viewer={true}
+            />
+          </div>
+          <div
+            className="flex-45 layout-row"
+            style={
+              Object {
+                "padding": "10px",
+              }
+            }
+          >
+            <DocumentsForm
+              deleteFn={[Function]}
+              dispatchFn={[Function]}
+              displayOnly={false}
+              doc={
+                Object {
+                  "doc_type": "bar",
+                  "id": 1,
+                }
+              }
+              isRequired={false}
+              multiple={false}
+              text=""
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="bar"
+              uploadFn={null}
+              viewer={true}
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -660,7 +2709,9 @@ exports[`shallow render 1`] = `
           </p>
           <p
             className="sec_subtitle_text flex-none offset-5"
-          />
+          >
+            19
+          </p>
         </div>
       </div>
     }
@@ -720,12 +2771,13 @@ exports[`shallow render 1`] = `
               <p
                 className="flex-100 center letter_3"
               >
-                 Expected Time of Departure:
+                 
+                Expected Time of Departure:
               </p>
               <p
                 className="flex-none letter_3"
               >
-                 undefined
+                19
               </p>
             </div>
             
@@ -744,7 +2796,7 @@ exports[`shallow render 1`] = `
               <p
                 className="flex-none letter_3"
               >
-                undefined
+                19
               </p>
             </div>
             
@@ -795,15 +2847,15 @@ exports[`shallow render 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermRow
-              destinationFees={undefined}
+              destinationFees={false}
               feeHash={
                 Object {
                   "foo": "FOO_ROUTE_KEY",
                 }
               }
-              onCarriage={undefined}
-              originFees={undefined}
-              preCarriage={undefined}
+              onCarriage={false}
+              originFees={false}
+              preCarriage={false}
               tenant={
                 Object {
                   "data": Object {
@@ -887,7 +2939,7 @@ exports[`shallow render 1`] = `
       </div>
     }
     handleCollapser={[Function]}
-    headingText="Extras"
+    headingText="Additional Services"
     theme={
       Object {
         "colors": Object {
@@ -952,192 +3004,114 @@ exports[`shallow render 1`] = `
   <Component
     content={
       <div
-        className="flex-100 layout-row layout-wrap"
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          className="flex-100 layout-row layout-align-start-center"
         >
           <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
+            className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
           >
-            <div
-              className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex-100"
             >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
+              <b>
+                Total Value of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
             >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
+              USD 15
+            </p>
           </div>
           <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
+            className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
           >
-            <div
-              className="flex-none layout-row layout-align-center-center"
+            <p
+              className="flex-100"
             >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
+              <b>
+                EORI number:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
             >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-25 layout-row layout-align-start-center no_doc"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <i
-                className="flex-none fa fa-ban"
-              />
-            </div>
-            <div
-              className="flex layout-align-start-center layout-row"
-            >
-              <p
-                className="flex-none"
-              >
-                undefined: Not Uploaded
-              </p>
-            </div>
+              1234
+            </p>
           </div>
         </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center"
+        >
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Description of Goods:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_CARGO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Notes:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_NOTES
+            </p>
+          </div>
+          <div
+            className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+          >
+            <p
+              className="flex-100"
+            >
+              <b>
+                Incoterm:
+              </b>
+            </p>
+            <p
+              className="flex-100 no_m"
+            >
+              FOO_INCOTERM_TEXT
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Additional Info"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
         <div
           className="flex-100 layout-row layout-wrap layout-align-start-center"
         >
@@ -1212,8 +3186,65 @@ exports[`shallow render 1`] = `
               }
               type="packing_sheet"
               uploadFn={undefined}
-              url={undefined}
+              url="/shipments/undefined/upload/packing_sheet"
             />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+          style={
+            Object {
+              "marginTop": "5px",
+            }
+          }
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
           </div>
         </div>
       </div>

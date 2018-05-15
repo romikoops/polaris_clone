@@ -279,7 +279,7 @@ export class AdminShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> Est. Transit Time </h4>
+                <h4 className={styles.date_title}> Estimated Transit Time </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>

@@ -4,8 +4,8 @@ import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
 import { capitalizeAndDashifyCamelCase } from '../../helpers'
 
-function showTootip (truckingOption, directionConstraint) {
-  return !truckingOption || ['mandatory', 'disabled'].includes(directionConstraint)
+function showTootip (truckingOption, directionConstraint, hubName) {
+  return (!truckingOption || ['mandatory', 'disabled'].includes(directionConstraint)) && hubName
 }
 
 export default function TruckingTooltip ({
@@ -16,7 +16,7 @@ export default function TruckingTooltip ({
     preCarriage: scope.carriage_options.pre_carriage[direction]
   }
 
-  if (!showTootip(truckingOptions[carriage], directionConstraints[carriage])) return ''
+  if (!showTootip(truckingOptions[carriage], directionConstraints[carriage], hubName)) return ''
 
   let dataTip
   const carriageText = capitalizeAndDashifyCamelCase(carriage)

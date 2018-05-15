@@ -8,6 +8,6 @@ FactoryBot.define do
     longitude '11.854048'
     geocoded_address 'Port 4, Indiska Oceanen 11, 418 34 Göteborg, Sverige'
     city 'Gothenburg'
-    country 'Sweden'
+    association :country
   end
 end

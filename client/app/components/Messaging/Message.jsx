@@ -69,24 +69,25 @@ export class Message extends Component {
         margin-left: -20px;
       }
     `
+
     const adminMeta =
       client && message.sender_id !== user.id ? (
         <p className={`flex-none ${styles.timestamp}`}>
-          {client.first_name} {client.last_name} @ {moment.unix(message.timestamp).format('lll')}
+          {client.first_name} {client.last_name} @ {moment(message.updated_at).format('lll')}
         </p>
       ) : (
         <p className={`flex-none ${styles.timestamp}`}>
-          You @ {moment.unix(message.timestamp).format('lll')}
+          You @ {moment(message.updated_at).format('lll')}
         </p>
       )
     const userMeta =
       message.sender_id === user.id ? (
         <p className={`flex-none ${styles.timestamp}`}>
-          You @ {moment.unix(message.timestamp).format('lll')}
+          You @ {moment(message.updated_at).format('lll')}
         </p>
       ) : (
         <p className={`flex-none ${styles.timestamp}`}>
-          {tenant.data.name} Admin @ {moment.unix(message.timestamp).format('lll')}
+          {tenant.data.name} Admin @ {moment(message.updated_at).format('lll')}
         </p>
       )
     const meta = isAdmin ? adminMeta : userMeta

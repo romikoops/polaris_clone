@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+// import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-import { UserShipmentRow } from './'
-import styles from '../Admin/Admin.scss'
+// import { UserShipmentRow } from './'
+// import styles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminSearchableShipments } from '../Admin/AdminSearchables'
 
 export class UserShipments extends Component {
   static dynamicSort (property) {
@@ -22,6 +23,18 @@ export class UserShipments extends Component {
       return result2 * sortOrder
     }
   }
+  static prepShipment (baseShipment, client, hubsObj) {
+    const shipment = Object.assign({}, baseShipment)
+    shipment.clientName = client
+      ? `${client.first_name} ${client.last_name}`
+      : ''
+    shipment.companyName = client
+      ? `${client.company_name}`
+      : ''
+    shipment.originHub = hubsObj[shipment.origin_hub_id] ? hubsObj[shipment.origin_hub_id].data.name : ''
+    shipment.destinationHub = hubsObj[shipment.destination_hub_id] ? hubsObj[shipment.destination_hub_id].data.name : ''
+    return shipment
+  }
   constructor (props) {
     super(props)
     this.viewShipment = this.viewShipment.bind(this)
@@ -32,10 +45,15 @@ export class UserShipments extends Component {
       userDispatch.getShipments(false)
     }
     this.props.setNav('shipments')
+    window.scrollTo(0, 0)
   }
   viewShipment (shipment) {
     const { userDispatch } = this.props
     userDispatch.getShipment(shipment.id, true)
+  }
+  gotToShipmentGroup (type) {
+    const { userDispatch } = this.props
+    userDispatch.goTo(`/account/shipments/${type}`)
   }
 
   render () {
@@ -46,51 +64,52 @@ export class UserShipments extends Component {
     if (!user) {
       return <h1>NO DATA</h1>
     }
+
     const openShipments =
       shipments && shipments.open.length !== 0 ? (
-        shipments.open.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
-          <UserShipmentRow
-            key={v4()}
-            shipment={ship}
-            hubs={hubs}
-            theme={theme}
-            handleSelect={this.viewShipment}
-            handleAction={this.handleShipmentAction}
-            user={user}
-          />
-        ))
+        <AdminSearchableShipments
+          userView
+          shipments={shipments.open.map(shipment => UserShipments.prepShipment(shipment, user, hubs)).sort(UserShipments.dynamicSort('booking_placed_at'))}
+          hubs={hubs}
+          theme={theme}
+          user={user}
+          title="Open Shipments"
+          seeAll={() => this.gotToShipmentGroup('open')}
+          handleClick={this.viewShipment}
+          handleShipmentAction={this.handleShipmentAction}
+        />
       ) : (
         <div>No open shipments available</div>
       )
     const reqShipments =
       shipments && shipments.requested.length !== 0 ? (
-        shipments.requested.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
-          <UserShipmentRow
-            key={v4()}
-            shipment={ship}
-            hubs={hubs}
-            theme={theme}
-            handleSelect={this.viewShipment}
-            handleAction={this.handleShipmentAction}
-            user={user}
-          />
-        ))
+        <AdminSearchableShipments
+          userView
+          shipments={shipments.requested.map(shipment => UserShipments.prepShipment(shipment, user, hubs)).sort(UserShipments.dynamicSort('booking_placed_at'))}
+          hubs={hubs}
+          theme={theme}
+          user={user}
+          title="Requested Shipments"
+          handleClick={this.viewShipment}
+          seeAll={() => this.gotToShipmentGroup('requested')}
+          handleShipmentAction={this.handleShipmentAction}
+        />
       ) : (
         <div>No requested shipments available</div>
       )
     const finishedShipments =
       shipments && shipments.finished.length !== 0 ? (
-        shipments.finished.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
-          <UserShipmentRow
-            key={v4()}
-            shipment={ship}
-            hubs={hubs}
-            theme={theme}
-            handleSelect={this.viewShipment}
-            handleAction={this.handleShipmentAction}
-            user={user}
-          />
-        ))
+        <AdminSearchableShipments
+          userView
+          shipments={shipments.finished.map(shipment => UserShipments.prepShipment(shipment, user, hubs)).sort(UserShipments.dynamicSort('booking_placed_at'))}
+          hubs={hubs}
+          theme={theme}
+          user={user}
+          title="Finished Shipments"
+          handleClick={this.viewShipment}
+          seeAll={() => this.gotToShipmentGroup('finished')}
+          handleShipmentAction={this.handleShipmentAction}
+        />
       ) : (
         <div>No finished shipments available</div>
       )
@@ -104,33 +123,33 @@ export class UserShipments extends Component {
             defaults.border_divider
           }`}
         >
-          <div
+          {/* <div
             className={`flex-100 layout-row layout-align-space-between-center section_padding ${
               styles.sec_header
             }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Open Shipments</p>
-          </div>
+          </div> */}
           {openShipments}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-          <div
+          {/* <div
             className={`flex-100 layout-row layout-align-space-between-center section_padding ${
               styles.sec_header
             }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Requested Shipments</p>
-          </div>
+          </div> */}
           {reqShipments}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-          <div
+          {/* <div
             className={`flex-100 layout-row layout-align-space-between-center section_padding ${
               styles.sec_header
             }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Finished Shipments</p>
-          </div>
+          </div> */}
           {finishedShipments}
         </div>
       </div>

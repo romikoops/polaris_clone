@@ -54,16 +54,16 @@ class TenantSeeder
   #   # Cargo item types can be set in one of the 3 following ways:
   #   #   1. Choose a default option (Either :all, or :no_dimensions)
   #   #   2. An array (a list) of categories with no dimensions or area.
-  #   #   3. An array (a list) of hashes (key/value pair groups) 
-  #    
-  #    
+  #   #   3. An array (a list) of hashes (key/value pair groups)
+  #
+  #
   #   # Method 1:
-  #   
+  #
   #   cargo_item_types: :all
-  #   
-  #   
+  #
+  #
   #   # Method 2:
-  #    
+  #
   #   cargo_item_types: [
   #     "Pallet",
   #     "Carton",
@@ -74,21 +74,21 @@ class TenantSeeder
   #     "Skid",
   #     "Barrel"
   #   ]
-  #   
-  #   
+  #
+  #
   #   # Method 3:
-  #   
+  #
   #   cargo_item_types: [
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 101.6, 
-  #       dimension_y: 121.9, 
+  #       dimension_x: 101.6,
+  #       dimension_y: 121.9,
   #       area: 'North America'
   #     },
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 100.0, 
-  #       dimension_y: 120.0, 
+  #       dimension_x: 100.0,
+  #       dimension_y: 120.0,
   #       area: 'Europe, Asia'
   #     }
   #   ]
@@ -109,16 +109,25 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+        main: 'Torgny Segerstedtsgatan 80 426 77 Västra Frölunda'
       },
       phones:{
         main:"+46 31-85 32 00",
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@greencarrier.com",
-        support: "support@greencarrier.com"
+        sales: {
+          air: "imc.air.se@greencarrier.se",
+          ocean: "imc.sea.se@greencarrier.se",
+          general: "imc.sea.se@greencarrier.se",
+        },
+        support: {
+          general: "support@greencarrier.com",
+          air: "imc.air.se@greencarrier.se",
+          ocean: "imc.sea.se@greencarrier.se"
+        }
       },
+      
       subdomain: "greencarrier",
       name: "Greencarrier",
       currency: 'USD',
@@ -137,6 +146,10 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        links: {
+          about: "https://freightservices.greencarrier.com/about-us/",
+          legal: 'https://freightservices.greencarrier.com/contact/'
+        },
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -146,7 +159,7 @@ class TenantSeeder
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
-          "Greencarrier is to discuss the validity of the presented prices with the product owners."
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
 
         ],
         carriage_options: {
@@ -156,7 +169,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -172,6 +185,12 @@ class TenantSeeder
           "Drum",
           "Skid",
           "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
         ]
       }
     },
@@ -197,8 +216,18 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@demo.com",
-        support: "support@demo.com"
+        sales: {
+          general: "sales@demo.com",
+          air: "sales@demo.com",
+          ocean: "sales@demo.com",
+          rail: "sales@demo.com"
+        },
+        support: {
+          general: "support@demo.com",
+          air: "imc.air@demo.com",
+          ocean: "imc.sea@demo.com",
+          rail: "imc.rail@demo.com"
+        }
       },
       subdomain: "demo",
       name: "Demo",
@@ -235,7 +264,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -274,8 +303,12 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "sales@nordicconsolidators.com",
-        support: "info@nordicconsolidators.com"
+        sales: {
+          general: "sales@nordicconsolidators.com"
+        },
+        support:{
+          general: "info@nordicconsolidators.com"
+        }
       },
       subdomain: "nordicconsolidators",
       name: "Nordic Consolidators",
@@ -308,7 +341,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -336,8 +369,12 @@ class TenantSeeder
         support: "+45 5353 0300"
       },
       emails: {
-        sales: "sales@easyshipping.dk",
-        support: "support@easyshipping.dk"
+        sales: {
+          general: "sales@easyshipping.dk"
+        },
+        support: {
+          general: "support@easyshipping.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -373,7 +410,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'disabled',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -401,8 +438,12 @@ class TenantSeeder
         support: "+36 1 270 9330"
       },
       emails: {
-        sales: "sales@integrail.hu",
-        support: "info@tantumshipping.com"
+        sales: {
+          general: "sales@integrail.hu"
+        },
+        support: {
+          general: "info@tantumshipping.com"
+        }
       },
       subdomain: "integrail",
       name: "Integrail",
@@ -435,7 +476,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -463,8 +504,12 @@ class TenantSeeder
         support: "0045 32 51 60 22"
       },
       emails: {
-        sales: "info@isa.dk",
-        support: "info@isa.dk"
+        sales: {
+          general: "info@isa.dk"
+        },
+        support: {
+          general: "info@isa.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -500,7 +545,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -529,8 +574,12 @@ class TenantSeeder
         support: "+354 525 - 7000"
       },
       emails: {
-        sales: "service@eimskip.is",
-        support: "service@eimskip.is"
+        sales: {
+          general: "service@eimskip.is"
+        },
+        support: {
+          general: "service@eimskip.is"
+        }
       },
       subdomain: "eimskip",
       name: "Eimskip",
@@ -563,7 +612,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -590,8 +639,12 @@ class TenantSeeder
         support: "0173042031020"
       },
       emails: {
-        sales: "info@belglobe.com",
-        support: "info@belglobe.com"
+        sales: {
+          general: "info@belglobe.com"
+        },
+        support: {
+          general: "info@belglobe.com"
+        }
       },
       subdomain: "belglobe",
       name: "Belglobe",
@@ -624,7 +677,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -651,8 +704,12 @@ class TenantSeeder
         support: "+ 49 172 543 0 576"
       },
       emails: {
-        sales: "jan.glembocki@gw-freight.com",
-        support: "support@gw-freight.com"
+        sales: {
+          general: "jan.glembocki@gw-freight.com"
+        },
+        support: {
+          general: "support@gw-freight.com"
+        }
       },
       subdomain: "gwforwarding",
       name: "GW Forwarding",
@@ -667,9 +724,9 @@ class TenantSeeder
             cargo_item: true
           },
           rail: {
-              container: false,
-              cargo_item: false
-            }
+            container: false,
+            cargo_item: false
+          }
         },
         dangerous_goods: false,
         detailed_billing: false,
@@ -685,7 +742,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -714,8 +771,12 @@ class TenantSeeder
         support: "+49 172 4203 1020"
       },
       emails: {
-        sales: "sales@hartrodt.com",
-        support: " ah_ham@hartrodt.com"
+        sales: {
+          general: "sales@hartrodt.com"
+        },
+        support: {
+          general: "ah_ham@hartrodt.com"
+        }
       },
       subdomain: "hartrodt",
       name: "a.hartrodt",
@@ -794,8 +855,12 @@ class TenantSeeder
         support: "+49 173 4203 1020"
       },
       emails: {
-        sales: "sales@saco.de",
-        support: "support@saco.de"
+        sales: {
+          general: "sales@saco.de"
+        },
+        support: {
+          general: "support@saco.de"
+        }
       },
       subdomain: "saco",
       name: "SACO Shipping GmbH",
@@ -852,9 +917,367 @@ class TenantSeeder
           "Barrel"
         ]
       }
-    }
-  ]
+    },
+     {
+      theme: {
+        colors: {
+          primary: "#0053a0",
+          secondary: "#00AACC",
+          brightPrimary: "#1491FF",
+          brightSecondary: "#77E6FC"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg"
+      },
+      addresses: {
+        main: "Wahlerstr. 20 40472 Düsseldorf"
+      },
+      phones:{
+        main:"+49-(0)211 4188 30",
+        support: "+49-(0)40 5005 810"
+      },
+      emails: {
+        sales: {
+          general: "sales@mol-logistics.com"
+        },
+        support: {
+          general: "support@mol-logistics.com",
+          air: "air@mol-logistics.com",
+          ocean: "sea@mol-logistics.com"
+        }
+      },
+      subdomain: "mol-logistics",
+      name: "MOL Logistics",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
 
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#223b7a",
+          secondary: "#fc0d1b",
+          brightPrimary: "#238BDB",
+          brightSecondary: "#FF4C55"
+        },
+         logoLarge: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg"
+      },
+      addresses: {
+        main: "Martinistraße 58 28195 Bremen"
+      },
+      phones:{
+        main:"+49 (0)421 1760-282",
+        support: "+49 (0)421 1760-280"
+      },
+      emails: {
+        sales: {
+          general: "sales@gs-logistics.com"
+        },
+        support: {
+          general: "support@gs-logistics.com",
+          air: "air@gs-logistics.com",
+          ocean: "sea@gs-logistics.com"
+        }
+      },
+      subdomain: "gs-logistics",
+      name: "Geuther & Schnitger Logistic",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#585878",
+          secondary: "#d82e38",
+          brightPrimary: "#8C93DD",
+          brightSecondary: "#FD8187"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg"
+      },
+      addresses: {
+        main: "Nagelsweg 26 20097 Hamburg"
+      },
+      phones:{
+        main:"+49 40 524 766 880",
+        support: "+49 40 524 766 881"
+      },
+      emails: {
+        sales: {
+          general: "sales@gtg-seefracht.com"
+        },
+        support: {
+          general: "support@gtg-seefracht.com"
+        }
+      },
+      subdomain: "gtg-seefracht",
+      name: "GTG Seefracht",
+      currency: 'EUR',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#FEF937",
+          secondary: "#E14C43",
+          brightPrimary: "#FFFFF",
+          brightSecondary: "#f94c43"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+      },
+      addresses: {
+        main:"Afrikastraße 3, 20457 Hamburg"
+      },
+      phones:{
+        main:"+49 40 74 0020",
+        support: "49 40 74 0020"
+      },
+      emails: {
+        sales: {
+          general: "sales@igs-intermodal.de"
+        },
+        support: {
+          general: "sales@igs-intermodal.de"
+        }
+      },
+      subdomain: "igs-logistics",
+      name: "IGS Logistics Group GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "IGS Logistics is to discuss the validity of the presented prices with the product owners."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ]
+      }
+    }
+]
+
+  def self.sandbox_exec(tenant_attr, other_data)
+    tenant_attr[:subdomain] = "#{tenant_attr[:subdomain]}-sandbox"
+    tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
+    tenant ? tenant.assign_attributes(tenant_attr) : tenant = Tenant.new(tenant_attr)
+    tenant.save!
+
+    update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+    update_tenant_incoterms!(tenant, other_data[:incoterms])
+  end
 
   def self.exec(tenant_data = TENANT_DATA)
     tenant_data.each do |tenant_attr|
@@ -865,6 +1288,8 @@ class TenantSeeder
       tenant.save!
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+      update_tenant_incoterms!(tenant, other_data[:incoterms])
+      TenantSeeder.sandbox_exec(tenant_attr, other_data)
     end
   end
 
@@ -883,14 +1308,14 @@ class TenantSeeder
 
     if cargo_item_types_attr == :all
       CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     if cargo_item_types_attr == :no_dimensions
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
@@ -908,6 +1333,21 @@ class TenantSeeder
         )
       end
       TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+    end
+  end
+  def self.update_tenant_incoterms!(tenant, incoterm_array)
+    tenant.tenant_incoterms.destroy_all
+    if incoterm_array
+      incoterm_array.each do |code|
+        incoterm = Incoterm.find_by_code(code)
+        awesome_print code
+        awesome_print incoterm
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    else
+      Incoterm.all.each do |incoterm|
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
     end
   end
 end

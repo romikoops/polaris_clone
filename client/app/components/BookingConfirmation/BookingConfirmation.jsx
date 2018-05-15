@@ -209,7 +209,7 @@ export class BookingConfirmation extends Component {
       <div className="flex-none layout-row layout-align-end-end">
         <RoundButton
           theme={theme}
-          text="Finish Booking"
+          text="Finish Booking Request"
           handleNext={() => this.requestShipment()}
           active
         />
@@ -217,7 +217,11 @@ export class BookingConfirmation extends Component {
     )
     const nonAcceptedBtn = (
       <div className="flex-none layout-row layout-align-end-end">
-        <RoundButton theme={theme} text="Finish Booking" handleNext={e => e.preventDefault()} />
+        <RoundButton
+          theme={theme}
+          text="Finish Booking Request"
+          handleNext={e => e.preventDefault()}
+        />
       </div>
     )
 
@@ -367,18 +371,26 @@ export class BookingConfirmation extends Component {
                 >
                   <div className="flex-40 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                      <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
+                      <p className="flex-100 center letter_3">
+                        {shipment.has_pre_carriage
+                          ? 'Expected Time of Collection:'
+                          : 'Expected Time of Departure:'}
+                      </p>
                       <p className="flex-none letter_3">
-                        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+                        {shipment.has_pre_carriage
+                          ? `${moment(shipment.closing_date)
+                            .subtract(3, 'days')
+                            .format('DD/MM/YYYY')}`
+                          : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`}
                       </p>
                     </div>
                     {shipment.has_pre_carriage ? (
                       <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
-                          {`${locations.origin.street_number} ${locations.origin.street}`} <br />
-                          {`${locations.origin.city}`} <br />
-                          {`${locations.origin.zip_code}`} <br />
-                          {`${locations.origin.country}`} <br />
+                          {`${locations.origin.street_number} ${locations.origin.street}`},
+                          {`${locations.origin.city}`},
+                          {`${locations.origin.zip_code}`},
+                          {`${locations.origin.country}`}
                         </address>
                       </div>
                     ) : (
@@ -388,16 +400,15 @@ export class BookingConfirmation extends Component {
                   <div className="flex-40 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                       <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
+                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY')}`}</p>
                     </div>
                     {shipment.has_on_carriage ? (
                       <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
-                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-                          <br />
-                          {`${locations.destination.city}`} <br />
-                          {`${locations.destination.zip_code}`} <br />
-                          {`${locations.destination.country}`} <br />
+                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '},
+                          {`${locations.destination.city}`},
+                          {`${locations.destination.zip_code}`},
+                          {`${locations.destination.country}`}
                         </address>
                       </div>
                     ) : (
@@ -483,7 +494,7 @@ export class BookingConfirmation extends Component {
                 styles.heading_style
               } flex-100 layout-row layout-align-space-between-center`}
             >
-              <TextHeading theme={theme} color="white" size={3} text="Extras" />
+              <TextHeading theme={theme} color="white" size={3} text="Additional Services" />
               <div
                 className="flex-10 layout-row layout-align-center-center"
                 onClick={() => this.handleCollapser('extras')}
@@ -594,6 +605,107 @@ export class BookingConfirmation extends Component {
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                   {cargoView}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
+          >
+            <div
+              style={themeTitled}
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
+            >
+              <TextHeading theme={theme} color="white" size={3} text="Additional Information" />
+              <div
+                className="flex-10 layout-row layout-align-center-center"
+                onClick={() => this.handleCollapser('extraInfo')}
+              >
+                {collapser.extraInfo ? (
+                  <i className="fa fa-chevron-down pointy" />
+                ) : (
+                  <i className="fa fa-chevron-up pointy" />
+                )}
+              </div>
+            </div>
+            <div className={`${collapser.extraInfo ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div
+                className={`${
+                  styles.inner_wrapper
+                } flex-100 layout-row layout-wrap layout-align-start-start`}
+              >
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    {shipment.total_goods_value ? (
+                      <div
+                        className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Total Value of Goods:</b>
+                        </p>
+                        <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
+                          shipment.total_goods_value.value
+                        }`}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.eori ? (
+                      <div
+                        className="flex-45 offset-10 layout-row
+                        layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>EORI number:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.eori}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.cargo_notes ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Description of Goods:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.notes ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Notes:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.notes}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {shipment.incoterm_text ? (
+                      <div
+                        className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                      >
+                        <p className="flex-100">
+                          <b>Incoterm:</b>
+                        </p>
+                        <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+
+                  </div>
                 </div>
               </div>
             </div>

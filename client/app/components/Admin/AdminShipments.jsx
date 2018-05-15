@@ -24,6 +24,7 @@ class AdminShipments extends Component {
     if (!shipments && !loading) {
       adminDispatch.getShipments(false)
     }
+    window.scrollTo(0, 0)
   }
   viewShipment (shipment) {
     const { adminDispatch } = this.props

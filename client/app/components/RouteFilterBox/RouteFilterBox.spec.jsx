@@ -2,6 +2,10 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity, theme } from '../../mocks'
 
+jest.mock('../../helpers', () => ({
+  switchIcon: x => x,
+  capitalize: x => x.toUpperCase()
+}))
 jest.mock('../../constants', () => {
   const format = () => 19
   const add = () => ({ format })

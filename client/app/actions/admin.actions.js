@@ -1384,9 +1384,9 @@ function uploadTrucking (url, file, direction) {
 
     adminService.uploadTrucking(url, file, direction).then(
       (data) => {
-        dispatch(alertActions.success('Fetch Trucking successful'))
-        dispatch(documentActions.setStats(data.data.stats))
+        dispatch(documentActions.setStats(data.data))
         dispatch(success(data))
+        dispatch(alertActions.success('Fetch Trucking successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1413,6 +1413,31 @@ function newHubImage (id, file) {
       (data) => {
         dispatch(success(data))
         dispatch(alertActions.success('Uploading Image successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function updateHubMandatoryCharges (id, charges) {
+  function request (hubData) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.updateHubMandatoryCharges(id, charges).then(
+      (data) => {
+        dispatch(success(data))
+        dispatch(alertActions.success('Updating Mandaotry Charge successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1488,7 +1513,8 @@ export const adminActions = {
   deleteClient,
   saveItineraryNotes,
   editTruckingPrice,
-  editCustomsFees
+  editCustomsFees,
+  updateHubMandatoryCharges
 }
 
 export default adminActions

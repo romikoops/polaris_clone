@@ -141,7 +141,7 @@ export class ShipmentSummaryBox extends Component {
               >
                 <p>Total Price:</p>{' '}
                 <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
-                <Price value={total} user={user} />
+                <Price value={total} currency={user.currency} />
               </div>
             </div>
           </div>

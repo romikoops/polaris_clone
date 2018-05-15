@@ -46,7 +46,7 @@ export class BookingDetails extends Component {
         bool: null,
         val: 0
       },
-      incoterm: '',
+      incotermText: '',
       customs: {
         import: {
           bool: false,
@@ -142,7 +142,7 @@ export class BookingDetails extends Component {
       cargoNotes: obj.cargoNotes,
       eori: obj.eori,
       notes: obj.notes,
-      incoterm: obj.incoterm,
+      incotermText: obj.incotermText,
       customsCredit: obj.customsCredit
     })
   }
@@ -228,11 +228,16 @@ export class BookingDetails extends Component {
       hsTexts,
       eori,
       notes,
-      incoterm,
+      incotermText,
       customsCredit
     } = this.state
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
+      this.setState({ finishBookingAttempted: true })
+      return
+    }
+    if (cargoNotes === '' || !cargoNotes) {
+      BookingDetails.scrollTo('cargo_notes')
       this.setState({ finishBookingAttempted: true })
       return
     }
@@ -251,7 +256,7 @@ export class BookingDetails extends Component {
         hsTexts,
         eori,
         notes,
-        incoterm,
+        incotermText,
         customsCredit
       }
     }
@@ -317,7 +322,11 @@ export class BookingDetails extends Component {
             finishBookingAttempted={this.state.finishBookingAttempted}
           />
         </div>
-        <Formsy onValidSubmit={this.toNextStage} onInvalidSubmit={this.handleInvalidSubmit}>
+        <Formsy
+          onValidSubmit={this.toNextStage}
+          onInvalidSubmit={this.handleInvalidSubmit}
+          className="flex-100"
+        >
           <CargoDetails
             theme={theme}
             handleChange={this.handleCargoInput}
@@ -341,7 +350,7 @@ export class BookingDetails extends Component {
             eori={eori}
             customsCredit={customsCredit}
             tenant={tenant}
-            incoterm={this.state.incoterm}
+            incotermText={this.state.incotermText}
             toggleCustomsCredit={this.toggleCustomsCredit}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />

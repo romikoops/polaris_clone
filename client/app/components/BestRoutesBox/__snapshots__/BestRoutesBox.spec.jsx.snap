@@ -31,16 +31,6 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-          }
-        }
       />
     </div>
   </div>
@@ -62,16 +52,6 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-          }
-        }
       />
     </div>
   </div>
@@ -93,16 +73,6 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
-        user={
-          Object {
-            "company_name": "FOO_COMPANY",
-            "email": "foo@bar.baz",
-            "first_name": "John",
-            "guest": false,
-            "last_name": "Doe",
-            "phone": "6345789",
-          }
-        }
       />
     </div>
   </div>

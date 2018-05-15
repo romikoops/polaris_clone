@@ -1,8 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :trackable, :validatable
-          # :confirmable, :omniauthable
+    :recoverable, :rememberable, :trackable, :validatable,
+    :confirmable #, :omniauthable
+
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
@@ -10,13 +11,13 @@ class User < ApplicationRecord
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
     scope: :tenant_id,
-    message: -> _self, _ { "'#{_self.email}' taken for Tenant '#{_self.tenant.subdomain}'" } 
+    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" } 
   }
 
   # Basic associations
   belongs_to :tenant
   belongs_to :role
-
+  has_many :conversations
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
 
@@ -36,11 +37,11 @@ class User < ApplicationRecord
   has_many :user_managers
   has_many :pricings
 
-  # Devise
-  # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
-  # devise :database_authenticatable, :registerable,
-  #        :recoverable, :rememberable, :validatable, :trackable, :confirmable
+  PERMITTED_PARAMS = [
+    :email, :password,
+    :guest, :tenant_id, :confirm_password, :password_confirmation, 
+    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+  ]
 
   # Filterrific
   filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
@@ -127,6 +128,25 @@ class User < ApplicationRecord
   def secondary_locations
     user_locations.where(primary: false).map(&:location)
   end
+
+
+  # override devise method to include additional info as opts hash
+  def send_confirmation_instructions(opts={})
+    return if self.guest
+    generate_confirmation_token! unless @raw_confirmation_token
+
+    # fall back to "default" config name
+    opts[:client_config] ||= "default"
+    opts[:to] = unconfirmed_email if pending_reconfirmation?
+    opts[:redirect_url] ||= DeviseTokenAuth.default_confirm_success_url
+
+    send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
+  end
+  
+  def confirm
+    update_shipments
+    super
+  end
   
   private
 
@@ -144,5 +164,18 @@ class User < ApplicationRecord
 
   def sync_uid
     self.uid = "#{tenant.id}***#{email}"
+  end
+
+  def update_shipments
+    self.shipments.requested_by_unconfirmed_account.each do |shipment|
+      shipment.status = "requested"
+      shipment.save
+    end
+  end
+
+  protected
+  
+  def confirmation_required?
+    false
   end
 end

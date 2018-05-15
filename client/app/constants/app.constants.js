@@ -9,8 +9,10 @@ export const appConstants = {
 
   REQUEST_TENANT: 'REQUEST_TENANT',
   RECEIVE_TENANT: 'RECEIVE_TENANT',
+  RECEIVE_TENANTS: 'RECEIVE_TENANTS',
   RECEIVE_TENANT_ERROR: 'RECEIVE_TENANT_ERROR',
-  INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN'
+  INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN',
+  SET_THEME: 'SET_THEME'
 }
 
 export const tooltips = {
@@ -20,7 +22,8 @@ export const tooltips = {
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',
   planned_pickup_date: 'Date states when cargo is ready for pickup',
-  planned_dropoff_date: 'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
+  planned_dropoff_date:
+    'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
   shipper_name: 'Example: John Smith, ItsMyCargo IVS.',
   shipper_street:
     'Example Tranehavegaard, 15. Note the address of the shipper is not always the same as the pick up location.',
@@ -45,7 +48,7 @@ export const tooltips = {
   gross_weight:
     'The gross weight is necessary to determine the chargeable weight. Gross weight is the total raw weight of the cargo + the weight of the packaging.',
   size_class:
-    'Choose the type of container that best accommodates your needs. Dry containers are suitable for most types of cargo, whereas high cube containers ensure that you gain an extra foot in height compared with dry containers. In general, high cube containers are ideal for light, voluminous or bulky cargo. 45 ft Pallet Wide High Cube containers are ideal for the transport of euro-pallet goods, as these containers are slightly wider. The following are the inner dimensions of each container: 20’GP - 5.900m x 2.350m x 2.393m; 40’GP - 12.036m x 2.350m x 2.392m; 40’HC - 12.036m x 2.350m x 2.697m',
+    'Choose the type of container that accommodates your needs. General inner dimensions for Dry Containers (Remark: Specification may vary depending on Shipping Line). \n 20’GP – 5,900m x 2,350m x 2,393m    (door width 2,342m // door height 2,280m) \n4 0’GP – 12,036m x 2,350m x 2,392m (door width 2,340m // door height 2,280m) \n40 ’HC – 12,036m x 2,350m x 2,697m (door width 2,340m // door height 2,2585m)',
   weight_class:
     'The net weight is the total weight of the cargo after it has been packed into a container – but excluding the tare weight of the container.',
   total_price: 'Total Price includes all associated costs incl. service charges.',
@@ -63,9 +66,9 @@ export const tooltips = {
   shipment_mots:
     'You will receive results for all available modes of transport. Simply select which applies best to your shipment',
   side_lifter:
-    'If you require a side-lifter (SIMA), where the container is lifted down on the ground for loading/unloading, an additional charge will be applied on top of the chassi price. Amount to be added depending on Port of loading/discharge and final stuffing/delivery location.',
+    'If you require the container to be lifted down on the ground for loading/unloading you order side lifter.',
   chassis:
-    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.',
+    'If you load/unload the container from ramp you order chassis. (Container is NOT lifted down on the ground).',
   customs_pre_carriage:
     'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:

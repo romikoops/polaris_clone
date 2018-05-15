@@ -91,8 +91,8 @@ export class AdminTripPanel extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
-    const startTime = trip.eta ? trip.eta : trip.start_date
-    const endTime = trip.etd ? trip.etd : trip.end_date
+    const startTime = trip.eta ? trip.etd : trip.start_date
+    const endTime = trip.etd ? trip.eta : trip.end_date
     const closingDate = layovers[0]
       ? layovers[0].closing_date
       : moment(startTime).subtract(4, 'days')

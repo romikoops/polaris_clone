@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
+import { moment } from '../../constants'
 
 export function Footer ({ theme, tenant }) {
   const primaryColor = {
@@ -10,8 +11,14 @@ export function Footer ({ theme, tenant }) {
   let logo = theme && theme.logoLarge ? theme.logoLarge : ''
   if (!logo && theme && theme.logoSmall) logo = theme.logoSmall
   const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
-  const supportEmail = tenant && tenant.emails ? tenant.emails.support : ''
+  const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
   const tenantName = tenant ? tenant.name : ''
+  const links = tenant && tenant.scope ? tenant.scope.links : {}
+  const defaultLinks = {
+    privacy: 'https://itsmycargo.com/en/privacy',
+    about: 'https://www.itsmycargo.com/en/ourstory',
+    legal: 'https://www.itsmycargo.com/en/contact'
+  }
   return (
     <div className="flex-100 layout-row layout-wrap">
       <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
@@ -52,23 +59,29 @@ export function Footer ({ theme, tenant }) {
           </div>
           <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/ourstory">
+              <a target="_blank" href={links && links.about ? links.about : defaultLinks.about}>
                 About Us
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/privacy">
+              <a
+                target="_blank"
+                href={links && links.privacy ? links.privacy : defaultLinks.privacy}
+              >
                 Privacy Policy
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/terms">
+              <a
+                target="_blank"
+                href={`https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions`}
+              >
                 Terms and Conditions
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href="https://www.itsmycargo.com/en/contact">
-                Impressum
+              <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
+                Legal
               </a>
             </div>
           </div>
@@ -76,7 +89,9 @@ export function Footer ({ theme, tenant }) {
         </div>
         <div className={`flex-100 layout-row ${styles.copyright}`}>
           <div className="flex-80 layout-row layout-align-end-center">
-            <p className="flex-none">Copyright © 2017 {tenantName}</p>
+            <p className="flex-none">
+              Copyright © {moment().format('YYYY')} {tenantName}
+            </p>
           </div>
           <div className="flex-20" />
         </div>
@@ -91,8 +106,8 @@ Footer.propTypes = {
 }
 
 Footer.defaultProps = {
-  theme: null,
-  tenant: null
+  theme: {},
+  tenant: {}
 }
 
 export default Footer

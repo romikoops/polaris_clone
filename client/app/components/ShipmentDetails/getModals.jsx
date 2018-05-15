@@ -53,8 +53,8 @@ export default function getModals (props, toggleFunc) {
 
           <span style={{ marginRight: '20px' }}> Contact via mail: </span>
           <span>
-            <a href={`mailto:${tenant.data.emails.support}?subject=Dangerous Goods Request`}>
-              {tenant.data.emails.support}
+            <a href={`mailto:${tenant.data.emails.support.general}?subject=Dangerous Goods Request`}>
+              {tenant.data.emails.support.general}
             </a>
           </span>
         </p>

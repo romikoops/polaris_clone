@@ -13,6 +13,9 @@ jest.mock('../../constants', () => {
 
   return { moment }
 })
+jest.mock('../ShipmentLocationBox/getRequests', () => ({
+  incoterms: (a, b, c) => () => 'incotermResults'
+}))
 jest.mock('../../helpers', () => ({
   isEmpty: () => true,
   camelize: x => x

@@ -17,14 +17,26 @@ class Tenant < ApplicationRecord
   has_many :trips, through: :itineraries
   has_many :layovers, through: :stops
   has_many :trucking_pricings
+  has_many :hub_truckings, through: :hubs
+  has_many :trucking_destinations, through: :hub_truckings
   has_many :documents
   has_many :pricings
   has_many :pricing_exceptions
   has_many :pricing_details
   has_many :local_charges
   has_many :customs_fees
+  has_many :tenant_incoterms
+  has_many :incoterms, through: :tenant_incoterms
+  has_many :seller_incoterm_liabilities, through: :incoterms
+  has_many :buyer_incoterm_liabilities, through: :incoterms
+  has_many :seller_incoterm_scopes, through: :incoterms
+  has_many :buyer_incoterm_scopes, through: :incoterms
+  has_many :seller_incoterm_charges, through: :incoterms
+  has_many :buyer_incoterm_charges, through: :incoterms
+  has_many :conversations
     
   validates :scope, presence: true, scope: true
+  validates :emails, presence: true, emails: true
 
   def get_admin
     self.users.joins(:role).where('roles.name': 'admin').first
@@ -33,11 +45,21 @@ class Tenant < ApplicationRecord
   def update_route_details
     itineraries.map(&:set_scope!)
   end
+
   def mot_scope(args)
     mot = scope["modes_of_transport"]
     mot = load_type_filter("container", mot)  if args[:only_container]
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
+  end
+
+  def email_for(branch_raw, mode_of_transport = nil)
+    return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
+    branch = branch_raw.to_s
+
+    return "itsmycargodev@gmail.com" if emails[branch].blank?
+
+    emails[branch][mode_of_transport] || emails[branch]['general']
   end
 
   def self.update_hs_codes
@@ -93,5 +115,11 @@ class Tenant < ApplicationRecord
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
   end
-  
+
+
+  # Shortcuts to find_by_subdomain to use in the console
+
+  def self.method_missing(name, *args)
+    where(subdomain: name.try(:to_s)).first || super
+  end
 end

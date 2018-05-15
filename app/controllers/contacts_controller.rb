@@ -53,7 +53,7 @@ class ContactsController < ApplicationController
     ncl[:street] = contact_data["street"]
     ncl[:city] = contact_data["city"]
     ncl[:zip_code] = contact_data["zipCode"]
-    ncl[:country] = contact_data["country"]
+    ncl[:country] = Country.geo_find_by_name(contact_data["country"])
 
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id

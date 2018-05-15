@@ -62,6 +62,22 @@ class NavBar extends Component {
             {`${capitalize(name)}`}
           </div>
         )
+      case 'schedules': {
+        const scheduleName =
+          admin.itinerarySchedules &&
+          admin.itinerarySchedules.itinerary &&
+          admin.itinerarySchedules.itinerary.name
+            ? admin.itinerarySchedules.itinerary.name
+            : categories[categories.length - 1]
+        return (
+          <div
+            className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
+          >
+            {' '}
+            {`${capitalize(scheduleName)}`}
+          </div>
+        )
+      }
       case 'hubs':
         return (
           <div
@@ -208,7 +224,7 @@ class NavBar extends Component {
     if (pathPieces[0] === 'admin') {
       appDispatch.goTo('/admin/dashboard')
     } else {
-      appDispatch.goTo('/account/dashboard')
+      appDispatch.goTo('/account')
     }
   }
 

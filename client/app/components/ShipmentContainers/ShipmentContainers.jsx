@@ -114,110 +114,89 @@ export class ShipmentContainers extends Component {
         <hr />
       </div>
     )
-    const generateContainer = (container, i) => {
-      const grossWeight = container
-        ? parseInt(container.payload_in_kg, 10) + parseInt(container.tareWeight, 10)
-        : ''
-      return (
-        <div
-          key={i}
-          name={`${i}-container`}
-          className="layout-row flex-100 layout-wrap layout-align-start-center"
-          style={{ position: 'relative' }}
-        >
-          <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}> Container Size </p>
-              <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
-            </div>
-            <NamedSelect
-              placeholder={container ? container.sizeClass : ''}
-              className="flex-95"
-              name={`${i}-container_size`}
-              value={container ? selectors[i].sizeClass : ''}
-              options={container ? optionsWithIndex(containerOptions, i) : []}
-              onChange={this.handleContainerSelect}
-            />
+    const generateContainer = (container, i) => (
+      <div
+        key={i}
+        name={`${i}-container`}
+        className="layout-row flex-100 layout-wrap layout-align-start-center"
+        style={{ position: 'relative' }}
+      >
+        <div className="layout-row flex layout-wrap layout-align-start-center">
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <p className={`${styles.input_label} flex-none`}> Container Size </p>
+            <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
           </div>
-          <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-            <p className={`${styles.input_label} flex-none`}> Net Weight </p>
-            <div className={`flex-95 layout-row ${styles.input_box}`}>
-              {container ? (
-                <ValidatedInput
-                  wrapperClassName="flex-80"
-                  name={`${i}-payload_in_kg`}
-                  value={container ? container.payload_in_kg : ''}
-                  type="number"
-                  onChange={handleDelta}
-                  firstRenderInputs={this.state.firstRenderInputs}
-                  setFirstRenderInputs={this.setFirstRenderInputs}
-                  nextStageAttempt={this.props.nextStageAttempt}
-                  validations={{ nonNegative: (values, value) => value > 0 }}
-                  validationErrors={{
-                    nonNegative: 'Must be greater than 0',
-                    isDefaultRequiredValue: 'Must not be blank'
-                  }}
-                  required={!!container}
-                />
-              ) : (
-                <input className="flex-80" type="number" />
-              )}
-              <div className="flex-20 layout-row layout-align-center-center">kg</div>
-            </div>
-          </div>
-          <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
-              <Tooltip theme={theme} icon="fa-info-circle" text="gross_weight" />
-            </div>
-            <div className={`flex-95 layout-row ${styles.input_box}`}>
-              <input
-                className="flex-80"
-                name={`${i}-payload_in_kg`}
-                value={grossWeight}
-                type="number"
-                disabled
-              />
-              <div className="flex-20 layout-row layout-align-center-center">kg</div>
-            </div>
-          </div>
-          <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-            <p className={`${styles.input_label} flex-none`}> No. of Containers </p>
-            <NamedSelect
-              placeholder={container ? container.quantity : ''}
-              className="flex-95"
-              name={`${i}-quantity`}
-              value={container ? container.quantity : ''}
-              options={numberOptions}
-              onChange={this.handleContainerQ}
-            />
-          </div>
-          <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
-              <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
-            </div>
-            <Checkbox
-              onChange={() => this.toggleDangerousGoods(i)}
-              checked={container ? container.dangerous_goods : false}
-              theme={theme}
-              size="34px"
-              disabled={!scope.dangerous_goods}
-              onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
-            />
-          </div>
-
-          {container ? (
-            <i
-              className={`fa fa-trash ${styles.delete_icon}`}
-              onClick={() => this.deleteCargo(i)}
-            />
-          ) : (
-            ''
-          )}
+          <NamedSelect
+            placeholder={container ? container.sizeClass : ''}
+            className="flex-95"
+            name={`${i}-container_size`}
+            value={container ? selectors[i].sizeClass : ''}
+            options={container ? optionsWithIndex(containerOptions, i) : []}
+            onChange={this.handleContainerSelect}
+          />
         </div>
-      )
-    }
+        <div className="layout-row flex layout-wrap layout-align-start-center">
+          <p className={`${styles.input_label} flex-none`}> Cargo Gross Weight </p>
+          <div className={`flex-95 layout-row ${styles.input_box}`}>
+            {container ? (
+              <ValidatedInput
+                wrapperClassName="flex-80"
+                name={`${i}-payload_in_kg`}
+                value={container ? container.payload_in_kg : ''}
+                type="number"
+                onChange={handleDelta}
+                firstRenderInputs={this.state.firstRenderInputs}
+                setFirstRenderInputs={this.setFirstRenderInputs}
+                nextStageAttempt={this.props.nextStageAttempt}
+                validations={{ nonNegative: (values, value) => value > 0 }}
+                validationErrors={{
+                  nonNegative: 'Must be greater than 0',
+                  isDefaultRequiredValue: 'Must not be blank'
+                }}
+                required={!!container}
+              />
+            ) : (
+              <input className="flex-80" type="number" />
+            )}
+            <div className="flex layout-row layout-align-center-center">kg</div>
+          </div>
+        </div>
+        <div className="layout-row flex layout-wrap layout-align-start-center">
+          <p className={`${styles.input_label} flex-none`}> No. of Containers </p>
+          <NamedSelect
+            placeholder={container ? container.quantity : ''}
+            className="flex-95"
+            name={`${i}-quantity`}
+            value={container ? container.quantity : ''}
+            options={numberOptions}
+            onChange={this.handleContainerQ}
+          />
+        </div>
+        <div className="layout-row flex layout-wrap layout-align-start-center">
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+            <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+          </div>
+          <Checkbox
+            onChange={() => this.toggleDangerousGoods(i)}
+            checked={container ? container.dangerous_goods : false}
+            theme={theme}
+            size="34px"
+            disabled={!scope.dangerous_goods}
+            onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
+          />
+        </div>
+
+        {container ? (
+          <i
+            className={`fa fa-trash ${styles.delete_icon}`}
+            onClick={() => this.deleteCargo(i)}
+          />
+        ) : (
+          ''
+        )}
+      </div>
+    )
     const containersAdded = []
     if (containers) {
       containers.forEach((container, i) => {

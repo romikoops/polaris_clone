@@ -32,3 +32,10 @@ test('props.viewHSCodes is true', () => {
   }
   expect(shallow(<ContainerDetails {...props} />)).toMatchSnapshot()
 })
+
+test('state.viewer is true', () => {
+  const wrapper = shallow(<ContainerDetails {...propsBase} />)
+  wrapper.setState({ viewer: true })
+
+  expect(wrapper).toMatchSnapshot()
+})

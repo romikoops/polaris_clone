@@ -10,7 +10,7 @@ exports[`shallow render 1`] = `
     onClick={[Function]}
   >
     <div
-      className="flex-90 layout-wrap layout-row layout-align-start-center"
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
     >
       <div
         className="flex-5"
@@ -22,7 +22,7 @@ exports[`shallow render 1`] = `
       <b />
     </div>
     <div
-      className="flex-100 layout-align-center-center layout-row"
+      className="flex-30 layout-align-center-center layout-row"
     >
       <h4
         className="flex-none no_m"
@@ -41,42 +41,6 @@ exports[`shallow render 1`] = `
         }
       />
     </div>
-  </div>
-  <div
-    className="flex-90 layout-column layout-align-start-start menu_content closed"
-  >
-    <MessageShipmentData
-      closeInfo={[Function]}
-      shipmentData={
-        Object {
-          "clientName": "FOO_CLIENT_NAME",
-          "id": 654,
-          "imc_reference": "FOO_IMC_REFERENCE",
-          "planned_etd": 789,
-          "schedule_set": Array [],
-          "status": "FOO_STATUS",
-        }
-      }
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-      user={
-        Object {
-          "company_name": "FOO_COMPANY",
-          "email": "foo@bar.baz",
-          "first_name": "John",
-          "guest": false,
-          "last_name": "Doe",
-          "phone": "6345789",
-          "role_id": 2,
-        }
-      }
-    />
   </div>
   <div
     className="flex-90 layout-column layout-align-start-start messageView"
@@ -239,7 +203,7 @@ exports[`with admin user 1`] = `
     onClick={[Function]}
   >
     <div
-      className="flex-90 layout-wrap layout-row layout-align-start-center"
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
     >
       <div
         className="flex-5"
@@ -251,7 +215,7 @@ exports[`with admin user 1`] = `
       <b />
     </div>
     <div
-      className="flex-100 layout-align-center-center layout-row"
+      className="flex-30 layout-align-center-center layout-row"
     >
       <h4
         className="flex-none no_m"
@@ -270,42 +234,6 @@ exports[`with admin user 1`] = `
         }
       />
     </div>
-  </div>
-  <div
-    className="flex-90 layout-column layout-align-start-start menu_content closed"
-  >
-    <MessageShipmentData
-      closeInfo={[Function]}
-      shipmentData={
-        Object {
-          "clientName": "FOO_CLIENT_NAME",
-          "id": 654,
-          "imc_reference": "FOO_IMC_REFERENCE",
-          "planned_etd": 789,
-          "schedule_set": Array [],
-          "status": "FOO_STATUS",
-        }
-      }
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-      user={
-        Object {
-          "company_name": "FOO_COMPANY",
-          "email": "foo@bar.baz",
-          "first_name": "John",
-          "guest": false,
-          "last_name": "Doe",
-          "phone": "6345789",
-          "role_id": 1,
-        }
-      }
-    />
   </div>
   <div
     className="flex-90 layout-column layout-align-start-start messageView"

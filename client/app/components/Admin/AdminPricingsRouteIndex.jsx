@@ -21,6 +21,9 @@ export class AdminPricingsRouteIndex extends Component {
     }
     this.viewRoute = this.viewRoute.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
 
   viewRoute (route) {
     const { adminTools } = this.props

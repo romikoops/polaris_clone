@@ -38,12 +38,22 @@ const schedulesInShipmentData = [
   { hub_route_key: 'FOO_HUB_ROUTE_KEY' }
 ]
 
-const shipmentInShipmentData = {
+export const shipmentInShipmentData = {
   schedules_charges: {
     [schedulesInShipmentData[0].hub_route_key]: {
       foo: 'FOO_ROUTE_KEY'
     }
   },
+  total_goods_value: {
+    value: 15,
+    currency: 'USD'
+  },
+  has_on_carriage: false,
+  has_pre_carriage: false,
+  notes: 'FOO_NOTES',
+  cargo_notes: 'FOO_CARGO_NOTES',
+  eori: 1234,
+  incoterm_text: 'FOO_INCOTERM_TEXT',
   total_price: {
     value: 12,
     currency: 'USD'
@@ -59,7 +69,21 @@ export const shipmentData = {
   schedules: schedulesInShipmentData,
   locations: {
     startHub: 'FOO_START_HUB',
-    endHub: 'FOO_END_HUB'
+    endHub: 'FOO_END_HUB',
+    destination: {
+      street_number: 9,
+      street: 'BAR_STREET',
+      city: 'BAR_CITY',
+      country: 'China',
+      zip_code: 845321
+    },
+    origin: {
+      street_number: 7,
+      street: 'FOO_STREET',
+      city: 'FOO_CITY',
+      country: 'Germany',
+      zip_code: 21177
+    }
   }
 }
 
@@ -139,13 +163,28 @@ export const locations = {
   destination: {}
 }
 
+class MapMock {
+  constructor (x) {
+    this.x = x
+  }
+  bindTo () {
+    return this.x
+  }
+  setContent () {
+    return this.x
+  }
+  addListener () {
+    return this.x
+  }
+}
+
 export const gMaps = {
-  Point: identity,
-  Size: identity,
-  Marker: identity,
-  LatLngBounds: identity,
-  MapTypeId: {},
-  Map: identity,
-  places: {},
-  InfoWindow: identity
+  InfoWindow: MapMock,
+  LatLngBounds: MapMock,
+  Map: MapMock,
+  MapTypeId: { ROADMAP: '' },
+  Marker: MapMock,
+  Point: MapMock,
+  Size: MapMock,
+  places: { Autocomplete: MapMock }
 }

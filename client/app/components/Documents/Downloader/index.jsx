@@ -6,6 +6,7 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../../prop-types'
 import { documentActions } from '../../../actions'
 import { RoundButton } from '../../RoundButton/RoundButton'
+import SquareButton from '../../SquareButton'
 import styles from './index.scss'
 
 class DocumentsDownloader extends React.Component {
@@ -56,11 +57,22 @@ class DocumentsDownloader extends React.Component {
     // this.setState({ requested: false })
   }
   render () {
-    const { theme, loading, tooltip } = this.props
+    const {
+      theme, loading, tooltip, square
+    } = this.props
     const { requested } = this.state
     const tooltipId = v4()
     // const errorStyle = this.state.error ? styles.error : ''
-    const start = (
+    const start = square ? (
+      <SquareButton
+        text="Request"
+        theme={theme}
+        size="small"
+        handleNext={() => this.requestDocument()}
+        active
+        border
+      />
+    ) : (
       <RoundButton
         text="Request"
         theme={theme}
@@ -75,7 +87,16 @@ class DocumentsDownloader extends React.Component {
         <p className="flex-none">Please wait....</p>
       </div>
     )
-    const ready = (
+    const ready = square ? (
+      <SquareButton
+        text="Download"
+        theme={theme}
+        size="small"
+        handleNext={() => this.downloadFile()}
+        active
+        border
+      />
+    ) : (
       <RoundButton
         text="Download"
         theme={theme}
@@ -109,14 +130,14 @@ DocumentsDownloader.propTypes = {
   documentDispatch: PropTypes.func.isRequired,
   downloadUrls: PropTypes.objectOf(PropTypes.any),
   tooltip: PropTypes.string,
-  // viewer: PropTypes.bool,
+  square: PropTypes.bool,
   target: PropTypes.string,
   loading: PropTypes.bool,
   options: PropTypes.objectOf(PropTypes.any)
 }
 
 DocumentsDownloader.defaultProps = {
-  // viewer: false,
+  square: false,
   downloadUrls: {},
   theme: null,
   tooltip: '',

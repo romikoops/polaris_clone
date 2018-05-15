@@ -11,6 +11,7 @@ class Hub < ApplicationRecord
   has_many :local_charges
   has_many :customs_fees
   has_many :notes,     dependent: :destroy
+  belongs_to :mandatory_charge, optional: true
 
 
   MOT_HUB_NAME = {
@@ -47,7 +48,7 @@ class Hub < ApplicationRecord
 
   def self.prepped(user)
     where(tenant_id: user.tenant_id).map do |hub|
-      { data: hub, location: hub.nexus }
+      { data: hub, location: hub.location.to_custom_hash }
     end
   end
 

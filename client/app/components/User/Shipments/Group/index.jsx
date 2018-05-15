@@ -4,7 +4,6 @@ import styles from '../../../Admin/Admin.scss'
 import { AdminSearchableShipments } from '../../../Admin/AdminSearchables'
 import { adminDashboard as adminTip } from '../../../../constants'
 import { history } from '../../../../helpers'
-import { RoundButton } from '../../../RoundButton/RoundButton'
 
 export class UserShipmentsGroup extends Component {
   static goBack () {
@@ -61,6 +60,7 @@ export class UserShipmentsGroup extends Component {
           shipments={mergedShipments}
           title={`${title} Shipments`}
           theme={theme}
+          userView
           handleShipmentAction={handleShipmentAction}
           tooltip={adminTip.requested}
           seeAll={false}
@@ -85,17 +85,6 @@ export class UserShipmentsGroup extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-end-center">
-          <div className="flex-none layout-row">
-            <RoundButton
-              theme={theme}
-              size="small"
-              text="Back"
-              handleNext={() => UserShipmentsGroup.goBack()}
-              iconClass="fa-chevron-left"
-            />
-          </div>
-        </div>
         {listView}
       </div>
     )

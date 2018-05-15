@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.css'
 import { moment } from '../../constants'
+import { switchIcon, capitalize } from '../../helpers'
 import styles from './RouteFilterBox.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -29,8 +30,8 @@ export class RouteFilterBox extends Component {
     const dur = event.target.value
     this.props.setDurationFilter(dur)
   }
-  editFilterDay (event) {
-    this.props.setDepartureDate(event.day)
+  editFilterDay (day) {
+    this.props.setDepartureDate(day)
   }
   handleOptionChange (changeEvent, target) {
     this.setState({
@@ -42,21 +43,23 @@ export class RouteFilterBox extends Component {
     this.props.setMoT(changeEvent, target)
   }
   render () {
-    const { theme, pickup, shipment } = this.props
-    const StyledRange = styled.div`
-      input[type='range']::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 12px;
-        cursor: pointer;
-        background: -webkit-linear-gradient(
-          left,
-          ${theme.colors.primary},
-          ${theme.colors.secondary}
-        ) !important;
-        border-radius: 1.3px;
-        opacity: 0.9;
-      }
-    `
+    const {
+      theme, pickup, shipment, availableMotKeys
+    } = this.props
+    // const StyledRange = styled.div`
+    //   input[type='range']::-webkit-slider-runnable-track {
+    //     width: 100%;
+    //     height: 12px;
+    //     cursor: pointer;
+    //     background: -webkit-linear-gradient(
+    //       left,
+    //       ${theme.colors.primary},
+    //       ${theme.colors.secondary}
+    //     ) !important;
+    //     border-radius: 1.3px;
+    //     opacity: 0.9;
+    //   }
+    // `
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
@@ -73,6 +76,19 @@ export class RouteFilterBox extends Component {
       ),
       name: 'dayPicker'
     }
+    const motCheckBoxes = Object.keys(availableMotKeys).map(mKey => (
+      <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
+        <Checkbox
+          onChange={e => this.handleOptionChange(e, mKey)}
+          checked={this.state.selectedOption[mKey]}
+          theme={theme}
+        />
+        <label className="flex-none">
+          {switchIcon(mKey)}
+          {capitalize(mKey)}
+        </label>
+      </div>
+    ))
 
     return (
       <div className={styles.filterbox}>
@@ -117,39 +133,20 @@ export class RouteFilterBox extends Component {
           <div>
             <TextHeading theme={theme} size={4} text="Mode of transport" />
           </div>
-          <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
-            <Checkbox
-              onChange={e => this.handleOptionChange(e, 'air')}
-              checked={this.state.selectedOption.air}
-              theme={theme}
-            />
-            <label className="flex-none">
-              <i className="fa fa-plane" />
-              Air
-            </label>
-          </div>
-          <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
-            <Checkbox
-              onChange={e => this.handleOptionChange(e, 'ocean')}
-              checked={this.state.selectedOption.ocean}
-              theme={theme}
-            />
-            <label className="flex-none">
-              <i className="fa fa-ship" />
-              Ocean
-            </label>
-          </div>
+          {motCheckBoxes}
         </div>
-        <StyledRange className={styles.transit_time}>
-          <p>
-            <TextHeading theme={theme} size={4} text="Transit Time" />
-          </p>
+        <div>
+          <p style={{ fontSize: '12px', marginTop: '0' }}>* Transit time (T/T) not guaranteed</p>
+        </div>
+        {/* <StyledRange className={styles.transit_time}>
+          <TextHeading theme={theme} size={4} text="Estimated Transit Time" />
+          <
           <input type="range" value={this.props.durationFilter} onChange={this.setFilterDuration} />
           <div className={styles.transit_time_labels}>
             <p>20 days</p>
             <p>100 days</p>
           </div>
-        </StyledRange>
+        </StyledRange> */}
       </div>
     )
   }
@@ -160,16 +157,18 @@ RouteFilterBox.propTypes = {
   setDurationFilter: PropTypes.func.isRequired,
   setMoT: PropTypes.func.isRequired,
   setDepartureDate: PropTypes.func.isRequired,
-  durationFilter: PropTypes.number.isRequired,
+  // durationFilter: PropTypes.number.isRequired,
   pickup: PropTypes.bool,
-  shipment: PropTypes.objectOf(PropTypes.any)
+  shipment: PropTypes.objectOf(PropTypes.any),
+  availableMotKeys: PropTypes.objectOf(PropTypes.bool)
 }
 
 RouteFilterBox.defaultProps = {
   departureDate: 0,
   theme: 0,
   pickup: false,
-  shipment: {}
+  shipment: {},
+  availableMotKeys: {}
 }
 
 export default RouteFilterBox

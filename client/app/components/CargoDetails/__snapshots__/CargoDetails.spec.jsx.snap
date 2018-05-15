@@ -283,6 +283,7 @@ exports[` 1`] = `
           </div>
           <div
             className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
           >
             <div
               className="flex-100"
@@ -293,7 +294,7 @@ exports[` 1`] = `
                  
                 <TextHeading
                   size={3}
-                  text="Description of goods (optional)"
+                  text="Description of goods"
                   theme={
                     Object {
                       "colors": Object {
@@ -308,12 +309,29 @@ exports[` 1`] = `
             <div
               className="flex-100"
             >
-              <textarea
-                className="cargo_text_area"
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="cargoNotes"
                 onChange={[Function]}
-                rows="6"
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
                 value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -324,21 +342,19 @@ exports[` 1`] = `
               className="flex-100"
             >
               <div
-                className="flex-none f_header"
+                className="flex-none layout-row layout-wrap f_header"
               >
                  
-                <TextHeading
-                  size={3}
-                  text="Incoterm"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
               </div>
             </div>
             <div
@@ -348,10 +364,10 @@ exports[` 1`] = `
                 className="textarea_incoterm"
                 cols="30"
                 id=""
-                name="incoterm"
+                name="incotermText"
                 onChange={[Function]}
                 rows="6"
-                value="FOO_INCOTERM"
+                value=""
               />
             </div>
           </div>
@@ -422,7 +438,7 @@ exports[` 1`] = `
                    
                   <TextHeading
                     size={3}
-                    text="Document Notes"
+                    text="Notes (Optional)"
                     theme={
                       Object {
                         "colors": Object {
