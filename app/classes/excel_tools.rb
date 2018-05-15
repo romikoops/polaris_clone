@@ -1683,6 +1683,7 @@ module ExcelTools
   def generate_meta_from_sheet(sheet)
     meta = {}
     sheet.row(1).each_with_index do |key, i|
+      next if key.nil?
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!
