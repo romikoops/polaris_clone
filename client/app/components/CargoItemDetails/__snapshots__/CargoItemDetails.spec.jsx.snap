@@ -1,5 +1,108 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`props.theme.colors is falsy 1`] = `
+<div
+  className="info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100"
+  >
+    <h4>
+      Unit 
+      2
+    </h4>
+  </div>
+  <hr />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Gross Weight
+    </p>
+    <p>
+      56
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Length
+    </p>
+    <p>
+      37
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Width
+    </p>
+    <p>
+      111
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Height
+    </p>
+    <p>
+      70
+       cm
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Volume
+    </p>
+    <p>
+      0.15
+       m
+      <sup>
+        3
+      </sup>
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-align-space-between"
+  >
+    <p>
+      Chargeable Weight
+    </p>
+    <p>
+      60000.00
+       kg
+    </p>
+  </div>
+  <hr
+    className="flex-100"
+  />
+</div>
+`;
+
 exports[`props.viewHSCodes is true 1`] = `
 <div
   className="info layout-row flex-100 layout-wrap layout-align-center"

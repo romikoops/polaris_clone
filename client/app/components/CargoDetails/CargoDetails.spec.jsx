@@ -2,6 +2,11 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, shipmentData, identity } from '../../mocks'
 
+/**
+ * ISSUE
+ * `totalGoodsValue: PropTypes.number.isRequired,` is wrong
+ */
+
 jest.mock('react-tooltip', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <h2>{children}</h2>)
@@ -70,7 +75,7 @@ const propsBase = {
   handleChange: identity,
   handleInsurance: identity,
   cargoNotes: 'FOO_CARGO_NOTES',
-  totalGoodsValue: 11,
+  totalGoodsValue: { value: 11 },
   insurance: {
     val: 'FOO_INSURANCE',
     bool: true
@@ -112,8 +117,9 @@ test('shallow render', () => {
 test('props.totalGoodsValue.value > 20000', () => {
   const props = {
     ...propsBase,
-    totalGoodsValue: 20001
+    totalGoodsValue: { value: 20001 }
   }
+
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
@@ -128,11 +134,11 @@ test('props.shipmentData.dangerousGoods is true', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('props.tenant.data.scope.has_customs is true', () => {
+test('props.tenant.data.scope.has_insurance is true', () => {
   const tenant = {
     data: {
       scope: {
-        has_customs: true
+        has_insurance: true
       }
     }
   }

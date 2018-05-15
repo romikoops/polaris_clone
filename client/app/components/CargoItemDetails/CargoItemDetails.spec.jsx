@@ -36,6 +36,14 @@ test('props.viewHSCodes is true', () => {
   expect(shallow(<CargoItemDetails {...props} />)).toMatchSnapshot()
 })
 
+test('props.theme.colors is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: {}
+  }
+  expect(shallow(<CargoItemDetails {...props} />)).toMatchSnapshot()
+})
+
 test('state.viewer is true', () => {
   const wrapper = shallow(<CargoItemDetails {...propsBase} />)
   wrapper.setState({ viewer: true })

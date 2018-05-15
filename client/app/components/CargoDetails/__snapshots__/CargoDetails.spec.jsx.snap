@@ -516,7 +516,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
 </div>
 `;
 
-exports[`props.tenant.data.scope.has_customs is true 1`] = `
+exports[`props.tenant.data.scope.has_insurance is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"
@@ -1017,14 +1017,14 @@ exports[`props.tenant.data.scope.has_customs is true 1`] = `
         className="flex-none content_width layout-row layout-wrap section_padding"
       >
         <div
-          className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+          className="flex-100 layout-row layout-align-space-between-start"
         >
           <div
             className="flex-none layout-row layout-align-space-around-center"
           >
             <TextHeading
               size={2}
-              text="Customs Handling"
+              text="Insurance"
               theme={
                 Object {
                   "colors": Object {
@@ -1036,30 +1036,25 @@ exports[`props.tenant.data.scope.has_customs is true 1`] = `
             />
           </div>
           <div
-            className="flex-33 layout-wrap layout-row layout-align-space-around-center"
+            className="flex-33 layout-row layout-align-space-around-center layout-wrap"
           >
             <div
-              className="flex-100 layout-row layout-align-end-center"
+              className="flex-100 layout-row layout-wrap layout-align-end-center"
             >
               <div
                 className="flex-90 layout-row layout-align-start-center"
               >
                 <p
-                  className="flex-none"
-                  style={
-                    Object {
-                      "marginRight": "5px",
-                    }
-                  }
+                  className="flex-none layout-align-start-center"
                 >
-                  Yes, I want undefined to handle my customs
+                  Yes, I want undefined to quote insurance for my cargo
                 </p>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
               >
                 <Checkbox
-                  checked={null}
+                  checked={true}
                   onChange={[Function]}
                   theme={
                     Object {
@@ -1086,14 +1081,14 @@ exports[`props.tenant.data.scope.has_customs is true 1`] = `
                     }
                   }
                 >
-                  No, I do not want undefined to handle my customs
+                  No, I do not want undefined to quote insurance for my cargo
                 </p>
               </div>
               <div
                 className="flex-10 layout-row layout-align-end-center"
               >
                 <Checkbox
-                  checked={null}
+                  checked={false}
                   onChange={[Function]}
                   theme={
                     Object {
@@ -1109,7 +1104,29 @@ exports[`props.tenant.data.scope.has_customs is true 1`] = `
           </div>
         </div>
         <div
-          className="flex-100 layout-row layout-wrap customs_box  box_content hidden"
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-100"
+          >
+            <b>
+              Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-100"
+          >
+            <b>
+              Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row  box_content show"
         >
           <div
             className="flex-80 layout-row layout-wrap"
@@ -1119,225 +1136,32 @@ exports[`props.tenant.data.scope.has_customs is true 1`] = `
             >
               <strong>
                  
-                When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT. You can either handle the customs on your own, or have Greencarrier handle it for you.
+                A cost effective and simple way to cover for physical loss or damage to goods in transit.
               </strong>
             </p>
             <p
               className="flex-90"
             >
-              To cover our costs when we present your goods to the customs authorities – and pay any customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee depends on the value of the goods you are shipping, and can be found here to the right.
+              Please contact your local undefined office for more info.
             </p>
-            <div
-              className="flex-100 layout-row layout-align-start-start layout-wrap"
-            >
-              <div
-                className="flex-100 layout-row layout-align-start-center"
-                style={
-                  Object {
-                    "height": "36px",
-                  }
-                }
-              >
-                <p
-                  className="flex-none"
-                >
-                   
-                  I would like undefined to handle:
-                </p>
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-start-center layout-wrap"
-                style={
-                  Object {
-                    "height": "36px",
-                  }
-                }
-              >
-                <div
-                  className="flex-45 layout-row layout-align-space-around-center"
-                  data-for="preCarriageTooltip"
-                  data-tip="Export Customs is not applicable for shipments without delivery to the port (pre-carriage)."
-                >
-                  <p
-                    className="faded_text flex-none"
-                  >
-                     Export Customs: 
-                  </p>
-                  <Checkbox
-                    checked={true}
-                    disabled={true}
-                    onChange={[Function]}
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
-                <Component
-                  className="tooltip_box"
-                  effect="solid"
-                  id="preCarriageTooltip"
-                />
-                <div
-                  className="flex-45 layout-row layout-align-space-around-center"
-                  data-for="onCarriageTooltip"
-                  data-tip="Import Customs is not applicable for shipments without delivery from the port (on-carriage)."
-                >
-                  <p
-                    className="faded_text flex-none"
-                  >
-                     Import Customs
-                  </p>
-                  <Checkbox
-                    checked={true}
-                    disabled={true}
-                    onChange={[Function]}
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                  <Component
-                    className="tooltip_box"
-                    effect="solid"
-                    id="onCarriageTooltip"
-                  />
-                </div>
-              </div>
-              <div
-                className="flex-100 no_max layout-row layout-align-start-center"
-              >
-                <div
-                  className="flex-33 layout-row layout-wrap"
-                >
-                  <div
-                    className="flex-100"
-                  >
-                    <TextHeading
-                      Comp={
-                        <b
-                          style={
-                            Object {
-                              "fontSize": ".83em",
-                              "fontWeight": "normal",
-                            }
-                          }
-                        >
-                          (if applicable)
-                        </b>
-                      }
-                      size={3}
-                      text="EORI"
-                      theme={
-                        Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        }
-                      }
-                    />
-                  </div>
-                  <div
-                    className="flex-100 input_box"
-                  >
-                    <input
-                      className="EORI_input"
-                      name="eori"
-                      onChange={[Function]}
-                      placeholder="Type in EORI number"
-                      type="text"
-                      value="FOO_EORI"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className=" prices flex-20 layout-row layout-wrap layout-align-start-start"
-          >
-            <div
-              className="customs_prices flex-100 layout-row  layout-align-end-center"
-            >
-              <p
-                className="flex-none"
-              >
-                Import
-              </p>
-              <h6
-                className="flex-none center"
-              >
-                 
-                Price subject to local regulations
-              </h6>
-            </div>
-            <div
-              className="customs_prices flex-100 layout-row  layout-align-end-center"
-            >
-              <p
-                className="flex-none"
-              >
-                Export
-              </p>
-              <h6
-                className="flex-none center"
-              >
-                 
-                100.00 EUR
-              </h6>
-            </div>
-            <div
-              className="customs_total flex-100 layout-row  layout-align-end-center"
-            >
-              <p
-                className="flex-none"
-              >
-                Total
-              </p>
-              <h6
-                className="flex-none center"
-              >
-                 
-                NaN EUR
-              </h6>
-            </div>
           </div>
         </div>
         <div
-          className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_box show"
+          className="flex-100 layout-row layout-align-start-center"
         >
           <div
-            className="flex-100 layout-row layout-align-start-center layout-wrap"
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
           >
             <p
-              className="flex-100"
+              className="flex-none pointy"
             >
-              <b>
-                A customs declaration is mandatory to pass a national border when exporting or
-              importing. If you choose to handle the customs clearance on your own, undefined
-              will need a copy of the customs declaration.
-              </b>
+              Read more...
             </p>
-            <p
-              className="flex-100"
-            >
-              <b>
-                When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.
-              </b>
-            </p>
+            <i
+              className="flex-none offset-5 fa fa-external-link"
+            />
           </div>
-          <div
-            className="flex-33 no_max layout-row layout-align-end-center"
-          />
         </div>
       </div>
     </div>
