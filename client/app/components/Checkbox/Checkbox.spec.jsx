@@ -13,18 +13,13 @@ const propsBase = {
   onClick: identity
 }
 
-let wrapper
-
 const createWrapper = propsInput => mount(<Checkbox {...propsInput} />)
 
-beforeEach(() => {
-  wrapper = createWrapper(propsBase)
+test('shallow render', () => {
+  expect(shallow(<Checkbox {...propsBase} />)).toMatchSnapshot()
 })
 
-test('shallow render', () =>
-  expect(shallow(<Checkbox {...propsBase} />)).toMatchSnapshot())
-
-test('props.checked is true', () => {
+test('checked is true', () => {
   const props = {
     ...propsBase,
     checked: true
@@ -32,11 +27,28 @@ test('props.checked is true', () => {
   expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
 })
 
-test('props.disabled is true', () => {
+test('disabled is true', () => {
   const props = {
     ...propsBase,
     disabled: true
   }
+  expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
+})
+
+test('size is undefined', () => {
+  const props = {
+    ...propsBase,
+    size: undefined
+  }
+
   expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
 })
 
@@ -48,7 +60,6 @@ test('click on div calls onClick', () => {
   const dom = createWrapper(props)
   const clickableDiv = dom.find('div').first()
 
-  expect(props.onClick).not.toHaveBeenCalled()
   clickableDiv.simulate('click')
   expect(props.onClick).toHaveBeenCalled()
 })
@@ -61,29 +72,7 @@ test('input action calls onChange', () => {
   const dom = createWrapper(props)
   const input = dom.find('input').first()
 
-  expect(props.onChange).not.toHaveBeenCalled()
   input.simulate('change', { target: { value: 'foo' } })
   expect(props.onChange).toHaveBeenCalled()
   expect(props.onChange.mock.calls).toHaveLength(1)
-})
-
-test('when size is defined, it influence style', () => {
-  const span = wrapper.find('span').first()
-  const style = span.prop('style')
-
-  expect(style).toEqual({
-    height: propsBase.size,
-    width: propsBase.size
-  })
-})
-
-test('when size is not defined, style is empty', () => {
-  const noSize = createWrapper({
-    ...propsBase,
-    size: undefined
-  })
-  const span = noSize.find('span').first()
-  const style = span.prop('style')
-
-  expect(style).toEqual({})
 })

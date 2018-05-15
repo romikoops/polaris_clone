@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.checked is true 1`] = `
+exports[`checked is true 1`] = `
 <div
   className="checkbox  flex-none"
   onClick={[Function]}
@@ -40,7 +40,7 @@ exports[`props.checked is true 1`] = `
 </div>
 `;
 
-exports[`props.disabled is true 1`] = `
+exports[`disabled is true 1`] = `
 <div
   className="checkbox  flex-none"
   onClick={[Function]}
@@ -111,6 +111,81 @@ exports[`shallow render 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "fontSize": "15px",
+          }
+        }
+      />
+    </span>
+  </label>
+</div>
+`;
+
+exports[`size is undefined 1`] = `
+<div
+  className="checkbox  flex-none"
+  onClick={[Function]}
+  style={
+    Object {
+      "border": "1px solid #fafafa",
+    }
+  }
+>
+  <label>
+    <input
+      checked={false}
+      disabled={false}
+      name="FOO_NAME"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      style={Object {}}
+    >
+      <i
+        className="fa fa-check "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "fontSize": "15px",
+          }
+        }
+      />
+    </span>
+  </label>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="checkbox  flex-none"
+  onClick={[Function]}
+  style={
+    Object {
+      "border": "1px solid black",
+    }
+  }
+>
+  <label>
+    <input
+      checked={false}
+      disabled={false}
+      name="FOO_NAME"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      style={
+        Object {
+          "height": "30px",
+          "width": "30px",
+        }
+      }
+    >
+      <i
+        className="fa fa-check "
+        style={
+          Object {
+            "color": "black",
             "fontSize": "15px",
           }
         }

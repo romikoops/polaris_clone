@@ -55,3 +55,41 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<ChooseRoute {...propsBase} />)).toMatchSnapshot()
 })
+
+test('shipmentData is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: null
+  }
+  expect(shallow(<ChooseRoute {...props} />)).toMatchSnapshot()
+})
+
+test('shipmentData.schedules is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...shipmentData,
+      schedules: null
+    }
+  }
+  expect(shallow(<ChooseRoute {...props} />)).toMatchSnapshot()
+})
+
+test('messages.length > 0', () => {
+  const props = {
+    ...propsBase,
+    messages: ['FOO_MESSAGE']
+  }
+  expect(shallow(<ChooseRoute {...props} />)).toMatchSnapshot()
+})
+
+test('user.guest is true', () => {
+  const props = {
+    ...propsBase,
+    user: {
+      ...user,
+      guest: true
+    }
+  }
+  expect(shallow(<ChooseRoute {...props} />)).toMatchSnapshot()
+})
