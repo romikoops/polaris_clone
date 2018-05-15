@@ -706,7 +706,7 @@ module ExcelTools
           tp = trucking_pricing_by_zone[row_key]
           
           new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
-          new_cols.delete("cbm_ratio") if load_type == "container"
+          new_cols.delete("cbm_ratio")     if load_type == "container"
           new_cols.delete("load_meterage") if load_type == "container"
 
           # Find or update trucking_destinations
@@ -741,10 +741,13 @@ module ExcelTools
             WITH
               td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
               matching_tps_without_rates_and_fees AS (
-                SELECT trucking_pricings.id, #{new_cols.join(", ")}
+                SELECT DISTINCT trucking_pricings.id, #{new_cols.join(", ")}
                 FROM td_ids
-                JOIN hub_truckings ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
-                JOIN trucking_pricings ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+                JOIN hub_truckings
+                  ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
+                JOIN trucking_pricings
+                  ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+                WHERE hub_truckings.hub_id = #{hub_id}
               ),
               hub_ids AS (
                 VALUES(#{hub_id})
@@ -773,7 +776,19 @@ module ExcelTools
             ) THEN
               #{with_statement}
               UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w(fees rates))}
-              WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
+              WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
+
+              #{with_statement}
+              INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+                (
+                  SELECT * FROM hub_ids
+                  CROSS JOIN matching_tp_id_table
+                  CROSS JOIN td_ids
+                  CROSS JOIN t_stamps AS created_ats
+                  CROSS JOIN t_stamps AS updated_ats
+                )
+                ON CONFLICT DO NOTHING;    
+
             ELSE
               #{with_statement},
               tp_ids AS (
