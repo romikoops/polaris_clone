@@ -41,3 +41,33 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<ChooseShipment {...propsBase} />)).toMatchSnapshot()
 })
+
+test('props.theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<ChooseShipment {...props} />)).toMatchSnapshot()
+})
+
+test('messages.length === 0', () => {
+  const props = {
+    ...propsBase,
+    messages: []
+  }
+  expect(shallow(<ChooseShipment {...props} />)).toMatchSnapshot()
+})
+
+test('state.direction === export', () => {
+  const wrapper = shallow(<ChooseShipment {...propsBase} />)
+  wrapper.setState({ direction: 'export' })
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('state.direction && state.loadType', () => {
+  const wrapper = shallow(<ChooseShipment {...propsBase} />)
+  wrapper.setState({ direction: 'export', loadType: 'FOO_LOAD_TYPE' })
+
+  expect(wrapper).toMatchSnapshot()
+})
