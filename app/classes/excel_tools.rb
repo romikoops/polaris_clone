@@ -453,7 +453,7 @@ module ExcelTools
     
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type = zone_sheet.row(1)[2] == 'CITY' ? 'geometry_id' : zone_sheet.row(1)[2]
+    identifier_type = zone_sheet.row(1)[1] == 'CITY' ? 'geometry_id' : zone_sheet.row(1)[1].downcase
 
     # START Load Zones ------------------------
     
@@ -471,7 +471,10 @@ module ExcelTools
         zip_char_length ||= range[0].length
         zones[zone_name] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
       elsif row_data[1] && row_data[2]        
-        zones[zone_name] << { ident: range[0].to_d, sub_ident: range[1].to_d, country: row_data[3] }
+        zones[zone_name] << {
+          ident: row_data[1].gsub("’", "'"),
+          sub_ident: row_data[2].gsub("’", "'"),
+          country: row_data[3] }
       end
     end
 
@@ -491,13 +494,13 @@ module ExcelTools
             { ident: ident_value, country: idents_and_country[:country] }
           end
         elsif identifier_type == "geometry_id"
-          geometry = Geometry.cascading_find_by_name(
+          geometry = Geometry.cascading_find_by_names(
             idents_and_country[:sub_ident],
             idents_and_country[:ident]
           )
           awesome_print idents_and_country
           if geometry.nil?
-            puts "skipped #{idents_and_country[:ident].to_s}"
+            puts "skipped #{idents_and_country[:ident]}"
             byebug
             next
           end

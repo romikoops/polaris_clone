@@ -14,11 +14,20 @@ class Geometry < ApplicationRecord
 		when 2
 			return cascading_find_by_two_names(*args)
 		else
-			raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+			raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 2)"
 		end
 	end
 
 	# Instance Methods
+
+	def self.find_by_coordinates(lat, lng)
+	  where("
+			SELECT ST_Contains(
+				geometries.data::geometry,
+				(SELECT ST_Point(:lng, :lat)::geometry)
+			)
+	  ", lat: lat, lng: lng).first
+	end
 
 	def names
 		[name_1, name_2, name_3, name_4]
@@ -40,8 +49,8 @@ class Geometry < ApplicationRecord
 	private
 
 	def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
-		name_1 = raw_name_1.capitalize
-		name_2 = raw_name_2.capitalize
+		name_1 = raw_name_1.split.map(&:capitalize).join(" ")
+		name_2 = raw_name_2.split.map(&:capitalize).join(" ")
 
 		(1..4).to_a.reverse.each do |i|
 			(2..4).to_a.reverse.each do |j|
@@ -55,7 +64,7 @@ class Geometry < ApplicationRecord
 	end
 
 	def self.cascading_find_by_name(raw_name)
-		name = raw_name.capitalize
+		name = raw_name.split.map(&:capitalize).join(" ")
 
 		(1..4).to_a.reverse.each do |i|
 			result = where("name_#{i}" => name).first
