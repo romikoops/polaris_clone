@@ -8,6 +8,11 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     country: '',
     fullAddress: ''
   }
+  console.log(place)
+  if (!place) {
+    // eslint-disable-next-line no-debugger
+    debugger
+  }
 
   place.address_components.forEach((ac) => {
     if (ac.types.includes('street_number')) {
@@ -43,7 +48,9 @@ export default function addressFromPlace (place, gMaps, map, callback) {
       radius: 10000
     }
     service.nearbySearch(requestOptions, (results) => {
-      tmpAddress.city = results[0].name
+      if (results) {
+        tmpAddress.city = results[0].name
+      }
       callback(tmpAddress)
     })
   } else {
