@@ -1,5 +1,6 @@
 module.exports = {
   // if true stops test after first failure
+  // testRegex: '.spec.jsx$',
   bail: true,
   verbose: true,
   setupFiles: ['./jest.init.js'],
