@@ -105,6 +105,40 @@ const propsBase = {
   incoterm: 'FOO_INCOTERM'
 }
 
-test('', () => {
+test('shallow render', () => {
   expect(shallow(<CargoDetails {...propsBase} />)).toMatchSnapshot()
+})
+
+test('props.totalGoodsValue.value > 20000', () => {
+  const props = {
+    ...propsBase,
+    totalGoodsValue: 20001
+  }
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('props.shipmentData.dangerousGoods is true', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      dangerousGoods: true
+    }
+  }
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('props.tenant.data.scope.has_customs is true', () => {
+  const tenant = {
+    data: {
+      scope: {
+        has_customs: true
+      }
+    }
+  }
+  const props = {
+    ...propsBase,
+    tenant
+  }
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })

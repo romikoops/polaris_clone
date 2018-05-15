@@ -46,3 +46,17 @@ test('props.viewHSCodes is true', () => {
   }
   expect(shallow(<CargoContainerGroup {...props} />)).toMatchSnapshot()
 })
+
+test('state.unitView is true', () => {
+  const wrapper = shallow(<CargoContainerGroup {...propsBase} />)
+  wrapper.setState({ unitView: true })
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('state.viewer is true', () => {
+  const wrapper = shallow(<CargoContainerGroup {...propsBase} />)
+  wrapper.setState({ viewer: true })
+
+  expect(wrapper).toMatchSnapshot()
+})
