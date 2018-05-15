@@ -102,7 +102,7 @@ class TruckingPricing < ApplicationRecord
           WHEN MAX(trucking_destinations.distance) != '0'
             THEN ('distance', MIN(trucking_destinations.distance), MAX(trucking_destinations.distance))
           ELSE
-            ('city', MAX(trucking_destinations.city_name))
+            ('city', MAX(geometries.name_2), MAX(geometries.name_4))
         END
       ) AS filter
       FROM  trucking_pricings
@@ -111,6 +111,7 @@ class TruckingPricing < ApplicationRecord
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
       JOIN  locations             ON hubs.location_id                      = locations.id
       JOIN  tenants               ON hubs.tenant_id                        = tenants.id
+      JOIN  geometries            ON trucking_destinations.geometry_id     = geometries.id                           
       WHERE tenants.id = :tenant_id
       AND   hubs.id IN (:hub_ids)
       GROUP BY trucking_pricings.id
@@ -119,9 +120,13 @@ class TruckingPricing < ApplicationRecord
 
     connection.exec_query(sanitized_query).map do |row|
       filter = parse_sql_record(row["filter"])
+
+      ident_type  = filter.first
+      ident_value = ident_type == "city" ? filter[1..-1].join(", ") : filter[1..-1]
+
       {
         "truckingPricing" => find(row["id"]),
-        filter.first      => filter[1..-1]
+        ident_type        => ident_value
       }
     end
   end
