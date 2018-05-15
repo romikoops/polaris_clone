@@ -497,12 +497,7 @@ module ExcelTools
         elsif identifier_type == "geometry_id"
           awesome_print idents_and_country
           geometry = find_geometry(idents_and_country)
-          if geometry.nil?
-            puts "skipped #{idents_and_country[:ident]}"
-            byebug
-            next
-          end
-          awesome_print geometry.names.log_format
+          puts geometry.names.log_format
           stats[:trucking_destinations][:number_created] += 1
           # stats[:hub_truckings][:number_created] += 1
           
@@ -697,8 +692,6 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
           end
 
-          byebug unless single_ident_values_and_country.first
-          
           single_ident_values_and_country_with_timestamps = case identifier_type
             when 'distance', 'geometry_id'
               single_ident_values_and_country.map do |h|
@@ -1700,6 +1693,8 @@ module ExcelTools
       coordinates = geocoder_results.first.geometry["location"]
       geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
     end
+
+    raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
 
     geometry
   end
