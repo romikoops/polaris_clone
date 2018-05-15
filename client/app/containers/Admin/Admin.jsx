@@ -6,11 +6,15 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
+<<<<<<< HEAD
 import {
   AdminDashboardNew,
   AdminServiceCharges,
   SuperAdmin
 } from '../../components/Admin'
+=======
+import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
+>>>>>>> d307614b0bf1f6a0793a156c33352837da6372a9
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
@@ -25,6 +29,8 @@ import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
 import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
+import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
+import { SuperAdminPrivateRoute } from '../../routes/index'
 
 class Admin extends Component {
   constructor (props) {
@@ -78,7 +84,7 @@ class Admin extends Component {
   }
   render () {
     const {
-      theme, adminData, adminDispatch, user, documentLoading
+      theme, adminData, adminDispatch, user, documentLoading, tenant
     } = this.props
 
     const {
@@ -140,6 +146,12 @@ class Admin extends Component {
                   render={props => (
                     <AdminPricings theme={theme} {...props} hubs={hubs} pricingData={pricingData} />
                   )}
+                />
+                <SuperAdminPrivateRoute
+                  path="/admin/superadmin"
+                  component={SuperAdminTenantCreator}
+                  user={user}
+                  theme={theme}
                 />
                 <Route
                   exact
@@ -217,7 +229,7 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <Footer />
+          <Footer theme={theme} tenant={tenant.data} />
         </div>
       </div>
     )
@@ -239,7 +251,7 @@ Admin.propTypes = {
     dashboard: PropTypes.any,
     loading: PropTypes.bool
   }).isRequired,
-
+  tenant: PropTypes.tenant,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
@@ -257,6 +269,7 @@ Admin.propTypes = {
 Admin.defaultProps = {
   theme: {},
   user: {},
+  tenant: {},
   documentLoading: false,
   loggedIn: false
 }
@@ -279,9 +292,7 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch),
-    user: null,
-    loggedIn: false
+    adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }
 

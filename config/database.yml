@@ -15,7 +15,7 @@
 # gem 'pg'
 #
 default: &default
-  adapter: postgresql
+  adapter: postgis
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
@@ -60,7 +60,7 @@ test:
 #  database: imcr_production
 #  username: greencarrier4
 #  password: <%= ENV['IMC_DATABASE_PASSWORD'] %>
-  database: imcr_development
+  database: imcr_test
 
 #   adapter: postgresql
 #   encoding: utf8
@@ -111,7 +111,7 @@ production:
 #  password: <%= ENV['IMC_DATABASE_PASSWORD'] %>
   database: ebdb
 
-  adapter: postgresql
+  adapter: postgis
   encoding: utf8
   database: <%= ENV['RDS_DB_NAME'] %>
   username: <%= ENV['RDS_DB_USERNAME'] %>

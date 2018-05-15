@@ -5,7 +5,6 @@ import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
 import { Message, MessageShipmentData } from './'
 import PropTypes from '../../prop-types'
-import menuStyles from './DetailMenu.scss'
 
 export class Conversation extends Component {
   constructor (props) {
@@ -44,11 +43,11 @@ export class Conversation extends Component {
   reply (event) {
     event.preventDefault()
     const { message, title } = this.state
-    const { sendMessage, conversation } = this.props
+    const { sendMessage, shipmentRef } = this.props
     const msg = {
       title,
       message,
-      shipmentRef: conversation.messages[0].shipmentRef
+      shipmentRef
     }
     this.setState({
       message: '',
@@ -163,7 +162,7 @@ export class Conversation extends Component {
     )
     //  const showDetailView = this.state.showDetails ? styles.detail_wrapper_open
     //    : styles.detail_wrapper_closed
-    const detailStyle = showDetails ? menuStyles.open : menuStyles.closed
+    // const detailStyle = showDetails ? menuStyles.open : menuStyles.closed
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
@@ -171,27 +170,30 @@ export class Conversation extends Component {
           flex-15 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >
-          <div className="flex-90 layout-wrap layout-row layout-align-start-center">
+          <div className="flex-70 layout-wrap layout-row layout-align-start-center">
             <div className="flex-5" />
            Shipment Reference:
             <div className="flex-5" />
             <b>
-              {conversation.messages[0].shipmentRef}
+              {conversation.shipmentRef}
             </b>
           </div>
           <div
-            className="flex-100 layout-align-center-center layout-row"
+            className="flex-30 layout-align-center-center layout-row"
           >
             <h4 className="flex-none no_m">Show Details</h4>
             <div className="flex-5" />
-            <i className="fa fa-info clip" style={btnStyle} />
+            { showDetails
+              ? <i className="fa fa-times clip" style={btnStyle} />
+              : <i className="fa fa-info clip" style={btnStyle} /> }
           </div>
         </div>
-        <div className={`flex-90 layout-column layout-align-start-start ${menuStyles.menu_content} ${detailStyle}`}>
+        {/* <div className={`flex-90 layout-column layout-align-start-start
+        ${menuStyles.menu_content} ${detailStyle}`}>
           { detailView }
-        </div>
+        </div> */}
         <div className={`flex-90 layout-column layout-align-start-start ${styles.messageView}`}>
-          { messageView }
+          { showDetails ? detailView : messageView }
         </div>
       </div>
     )
@@ -207,13 +209,15 @@ Conversation.propTypes = {
   shipment: PropTypes.shipment,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.client)
+  clients: PropTypes.arrayOf(PropTypes.client),
+  shipmentRef: PropTypes.string
 }
 
 Conversation.defaultProps = {
   theme: null,
   clients: null,
-  shipment: null
+  shipment: null,
+  shipmentRef: ''
 }
 
 export default Conversation

@@ -43,6 +43,7 @@ export class AdminPricingClientView extends Component {
     if (!clientPricings && !loading) {
       adminActions.getClientPricings(parseInt(match.params.id, 10), false)
     }
+    window.scrollTo(0, 0)
   }
   editThis (pricing, hubRoute, transport) {
     this.setState({

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426083300) do
+ActiveRecord::Schema.define(version: 20180514134957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,25 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.jsonb "unit_price"
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.integer "tenant_id"
+    t.integer "user_id"
+    t.integer "manager_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "last_updated"
+    t.integer "unreads"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.string "flag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "couriers", force: :cascade do |t|
     t.string "name"
     t.integer "tenant_id"
@@ -123,6 +142,17 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.integer "tenant_id"
   end
 
+  create_table "geometries", force: :cascade do |t|
+    t.string "name_1"
+    t.string "name_2"
+    t.string "name_3"
+    t.string "name_4"
+    t.geometry "data", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name_1", "name_2", "name_3", "name_4"], name: "index_geometries_on_name_1_and_name_2_and_name_3_and_name_4", unique: true
+  end
+
   create_table "hub_truckings", force: :cascade do |t|
     t.integer "hub_id"
     t.integer "trucking_destination_id"
@@ -146,69 +176,6 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "photo"
     t.integer "nexus_id"
     t.integer "mandatory_charge_id"
-  end
-
-  create_table "incoterm_charges", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.boolean "freight", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "origin_warehousing"
-    t.boolean "origin_labour"
-    t.boolean "origin_packing"
-    t.boolean "origin_loading"
-    t.boolean "origin_customs"
-    t.boolean "origin_port_charges"
-    t.boolean "forwarders_fee"
-    t.boolean "origin_vessel_loading"
-    t.boolean "destination_port_charges"
-    t.boolean "destination_customs"
-    t.boolean "destination_loading"
-    t.boolean "destination_labour"
-    t.boolean "destination_warehousing"
-  end
-
-  create_table "incoterm_liabilities", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.boolean "freight", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "origin_warehousing"
-    t.boolean "origin_labour"
-    t.boolean "origin_packing"
-    t.boolean "origin_loading"
-    t.boolean "origin_customs"
-    t.boolean "origin_port_charges"
-    t.boolean "forwarders_fee"
-    t.boolean "origin_vessel_loading"
-    t.boolean "destination_port_charges"
-    t.boolean "destination_customs"
-    t.boolean "destination_loading"
-    t.boolean "destination_labour"
-    t.boolean "destination_warehousing"
-  end
-
-  create_table "incoterm_scopes", force: :cascade do |t|
-    t.boolean "pre_carriage"
-    t.boolean "on_carriage"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "mode_of_transport"
-  end
-
-  create_table "incoterms", force: :cascade do |t|
-    t.string "code"
-    t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "seller_incoterm_scope_id"
-    t.integer "seller_incoterm_liability_id"
-    t.integer "seller_incoterm_charge_id"
-    t.integer "buyer_incoterm_scope_id"
-    t.integer "buyer_incoterm_liability_id"
-    t.integer "buyer_incoterm_charge_id"
   end
 
   create_table "incoterm_charges", force: :cascade do |t|
@@ -316,13 +283,13 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "street_number"
     t.string "zip_code"
     t.string "city"
-    t.string "country"
     t.string "street_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "province"
     t.string "photo"
     t.string "premise"
+    t.integer "country_id"
   end
 
   create_table "mandatory_charges", force: :cascade do |t|
@@ -330,6 +297,17 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.boolean "on_carriage"
     t.boolean "import_charges"
     t.boolean "export_charges"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "title"
+    t.string "message"
+    t.integer "conversation_id"
+    t.boolean "read"
+    t.datetime "read_at"
+    t.integer "sender_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -457,6 +435,8 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -527,6 +507,7 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "voyage_code"
     t.string "vessel"
     t.integer "tenant_vehicle_id"
+    t.datetime "closing_date"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
@@ -536,6 +517,7 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "geometry_id"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
     t.index ["distance"], name: "index_trucking_destinations_on_distance"
@@ -555,6 +537,7 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
+    t.string "cargo_class"
   end
 
   create_table "user_locations", force: :cascade do |t|
@@ -605,6 +588,7 @@ ActiveRecord::Schema.define(version: 20180426083300) do
     t.boolean "guest", default: false
     t.string "currency", default: "EUR"
     t.string "vat_number"
+    t.boolean "allow_password_change", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

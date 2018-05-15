@@ -398,11 +398,11 @@ function getNotes (noteIds) {
 }
 function updateCurrency (currency, req) {
   return (dispatch) => {
-    dispatch(appActions.setCurrency(currency))
-    setTimeout(() => {
-      dispatch(getOffers(req, false))
-      dispatch(alertActions.success('Updating Currency successful'))
-    }, 100)
+    dispatch(appActions.setCurrency(currency, req))
+    // setTimeout(() => {
+    //   dispatch(getOffers(req, false))
+    //   dispatch(alertActions.success('Updating Currency successful'))
+    // }, 500)
   }
 }
 

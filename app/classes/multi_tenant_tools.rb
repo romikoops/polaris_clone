@@ -18,7 +18,7 @@ module MultiTenantTools
           lnk.content = favicon
         end
       end
-        
+
       s3 = Aws::S3::Client.new(
         access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
@@ -34,6 +34,20 @@ module MultiTenantTools
       end
     end
   end
+
+  def create_sandboxes
+    sandbox_tenants = []
+    Tenant.all.map do |t| 
+      if t.subdomain.include? 'sandbox'
+        sandbox_tenants << t
+      end
+    end
+    
+    sandbox_tenants.each do |st|
+      new_site_from_tenant(st)
+    end
+  end
+
   def new_fn
     tenant_data = [{
       theme: {
@@ -114,7 +128,7 @@ module MultiTenantTools
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Wollkämmereistraße 1, 21107 Hamburg"
+        main: "Wollkämmereistraße 1, 21107 Hamburg"
       },
       phones:{
         main:"+49 40 311706-0",
@@ -187,13 +201,50 @@ module MultiTenantTools
         lnk.content = favicon
       end
     end
-      
+
       s3 = Aws::S3::Client.new(
         access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
         region: "us-east-1"
       )
       objKey = tenant[:subdomain] + ".html"
+      newHtml = indexHtml.to_html
+     File.open("blank.html", 'w') { |file|
+      file.write(newHtml)
+       }
+    upFile = open("blank.html")
+    s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+    # uploader.upload!
+
+    # if is_demo
+    #   seed_demo_site(tenant)
+    # end
+    create_distribution(tenant[:subdomain])
+  end
+  def new_site_from_tenant(tenant)
+    new_tenant = tenant
+    title = tenant.name + " | ItsMyCargo"
+
+    favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
+    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+    titles = indexHtml.xpath("//title")
+    titles[0].content = title
+    metas = indexHtml.xpath("//meta")
+    links = indexHtml.xpath("//link")
+
+    links.each do |lnk|
+      if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+        lnk.content = favicon
+      end
+    end
+
+      s3 = Aws::S3::Client.new(
+        access_key_id: ENV['AWS_KEY'],
+        secret_access_key: ENV['AWS_SECRET'],
+        region: "us-east-1"
+      )
+      objKey = tenant.subdomain + ".html"
       newHtml = indexHtml.to_html
      File.open("blank.html", 'w') { |file|
       file.write(newHtml)
@@ -228,7 +279,7 @@ module MultiTenantTools
             domain_name: origin_domain,
             origin_path: '',
             s3_origin_config: { origin_access_identity: '' }
-          } 
+          }
         ]
       }
       default_cache_behavior = {
@@ -260,7 +311,7 @@ module MultiTenantTools
           price_class: price_class,
           viewer_certificate: viewer_certificate,
           enabled: true,
-       
+
         custom_error_responses: {
           quantity: 2, # required
           items: [
@@ -361,7 +412,7 @@ module MultiTenantTools
 
       confirmed_at: DateTime.new(2017, 1, 20)
     )
-    
+
     admin.save!
     shipper = tenant.users.new(
       role: Role.find_by_name('shipper'),

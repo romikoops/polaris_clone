@@ -848,4 +848,16 @@
       font-size: 18px;
     }
   }
+   .open_filter {
+     height: max-content;
+   }
+
+   .closed_filter {
+     height: 0px;
+     overflow: hidden;
+   }
+
+   .expander_icon i {
+     font-size: 12px !important;
+   }
 }

@@ -6,9 +6,7 @@ import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
-import {
-  capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType
-} from '../../helpers'
+import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
 import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ChooseShipment extends Component {
@@ -38,14 +36,19 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, messages } = this.props
+    const { theme, messages, scope } = this.props
+    const allowedCargoTypes = { cargo_item: false, container: false }
+    Object.keys(scope.modes_of_transport).forEach((mot) => {
+      allowedCargoTypes.cargo_item = scope.modes_of_transport[mot].cargo_item
+      allowedCargoTypes.container = scope.modes_of_transport[mot].container
+    })
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const directionButtons = ['import', 'export'].map((dir) => {
+    const directionButtons = ['export', 'import'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       const commercialAction = { import: 'Buying', export: 'Selling' }
       return (
@@ -57,7 +60,10 @@ export class ChooseShipment extends Component {
           onClick={() => this.setDirection(dir)}
         >
           <div className="flex-80 layout-row layout-align-space-between-center">
-            <p className="flex-none"> I am { commercialAction[dir] } ({ capitalize(dir) })</p>
+            <p className="flex-none">
+              {' '}
+              I am {commercialAction[dir]} ({capitalize(dir)})
+            </p>
             {direction === dir ? (
               <i className="flex-none fa fa-check clip" style={gradientStyle} />
             ) : (
@@ -86,8 +92,7 @@ export class ChooseShipment extends Component {
         {flash}
         <div
           className={
-            `flex-none ${defs.content_width} ` +
-            'layout-row layout-align-start-center layout-wrap'
+            `flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`
           }
         >
           <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
@@ -109,7 +114,12 @@ export class ChooseShipment extends Component {
                 text="Are you shipping cargo items or containers?"
               />
             </div>
-            <CardLinkRow theme={theme} cards={this.cards} selectedType={loadType} />
+            <CardLinkRow
+              theme={theme}
+              cards={this.cards}
+              allowedCargoTypes={allowedCargoTypes}
+              selectedType={loadType}
+            />
           </div>
           <div
             className={

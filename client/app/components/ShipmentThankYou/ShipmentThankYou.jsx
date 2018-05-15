@@ -12,7 +12,7 @@ export class ShipmentThankYou extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, user
+      theme, shipmentData, shipmentDispatch, user, tenant
     } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
@@ -40,6 +40,19 @@ export class ShipmentThankYou extends Component {
                   <br />
                   Your booking will be confirmed after a review.
                   <br />
+                  {
+                    shipment.status === 'requested_by_unconfirmed_account' && (
+                      <span>
+                        <br />
+                        Please <b> confirm your email </b> to complete your booking request. <br />
+                        { `${tenant.name} will not confirm your order until the ` }
+                        email associated with this account is validated. <br />
+                        To confirm your email, please follow the link sent via email
+                        upon registration. <br />
+                        <br />
+                      </span>
+                    )
+                  }
                   Do not hesitate to contact us either through the
                   message center or your account manager
                 </p>
@@ -69,12 +82,14 @@ ShipmentThankYou.propTypes = {
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
-  user: PropTypes.objectOf(PropTypes.any)
+  user: PropTypes.objectOf(PropTypes.any),
+  tenant: PropTypes.tenant
 }
 ShipmentThankYou.defaultProps = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: null,
-  user: {}
+  user: {},
+  tenant: null
 }
 export default ShipmentThankYou

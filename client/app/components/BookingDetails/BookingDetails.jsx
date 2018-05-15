@@ -46,7 +46,7 @@ export class BookingDetails extends Component {
         bool: null,
         val: 0
       },
-      incoterm: '',
+      incotermText: '',
       customs: {
         import: {
           bool: false,
@@ -116,9 +116,18 @@ export class BookingDetails extends Component {
   }
   setCustomsFee (target, fee) {
     const { customs } = this.state
+    const customsData = this.props.shipmentData.customs[target]
+    const existsUnknown = customs.total.hasUnknown
     customs[target] = fee
-    const totalFee = customs.import.val + customs.export.val
+    console.log(`TARGET: ${target}, FEE:`)
+    console.log(fee)
+    const totalFee = parseFloat(customs.import.val) + parseFloat(customs.export.val)
     customs.total = { val: totalFee, currency: fee.currency }
+    if ((customsData.unknown && fee.bool) || existsUnknown) {
+      customs.total.hasUnknown = true
+    }
+    console.log(customs.total)
+
     this.setState({
       customs
     })
@@ -142,7 +151,7 @@ export class BookingDetails extends Component {
       cargoNotes: obj.cargoNotes,
       eori: obj.eori,
       notes: obj.notes,
-      incoterm: obj.incoterm,
+      incotermText: obj.incotermText,
       customsCredit: obj.customsCredit
     })
   }
@@ -228,7 +237,7 @@ export class BookingDetails extends Component {
       hsTexts,
       eori,
       notes,
-      incoterm,
+      incotermText,
       customsCredit
     } = this.state
     if ([shipper, consignee].some(isEmpty)) {
@@ -256,10 +265,11 @@ export class BookingDetails extends Component {
         hsTexts,
         eori,
         notes,
-        incoterm,
+        incotermText,
         customsCredit
       }
     }
+
     this.props.nextStage(data)
   }
   handleInvalidSubmit () {
@@ -322,7 +332,11 @@ export class BookingDetails extends Component {
             finishBookingAttempted={this.state.finishBookingAttempted}
           />
         </div>
-        <Formsy onValidSubmit={this.toNextStage} onInvalidSubmit={this.handleInvalidSubmit}>
+        <Formsy
+          onValidSubmit={this.toNextStage}
+          onInvalidSubmit={this.handleInvalidSubmit}
+          className="flex-100"
+        >
           <CargoDetails
             theme={theme}
             handleChange={this.handleCargoInput}
@@ -346,7 +360,7 @@ export class BookingDetails extends Component {
             eori={eori}
             customsCredit={customsCredit}
             tenant={tenant}
-            incoterm={this.state.incoterm}
+            incotermText={this.state.incotermText}
             toggleCustomsCredit={this.toggleCustomsCredit}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />

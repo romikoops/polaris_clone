@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
 import styles from './SquareButton.scss'
-import { gradientGenerator } from '../../helpers'
+import { gradientGenerator, browserType } from '../../helpers'
 
 export default function SquareButton ({
   text,
@@ -79,15 +79,19 @@ export default function SquareButton ({
       wrapperSizeClass = styles.large_wrapper
       break
   }
+  const contentStyle = browserType() === 'IE' ? styles.ie_content : styles.content
   return (
-    <div className={`flex-none ${sizeClass} ${borderClass} ${wrapperSizeClass}`} style={borderGradient}>
+    <div
+      className={`flex-none ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
+      style={borderGradient}
+    >
       <button
         className={`${styles.square_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
         onClick={disabled ? handleDisabled : handleNext}
         style={btnStyle}
       >
         <div className="layout-fill layout-row layout-align-space-around-center">
-          <p className={styles.content}>
+          <p className={contentStyle}>
             <span className={styles.icon}>{iconC}</span>
             {text}
           </p>

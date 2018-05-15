@@ -1,12 +1,4 @@
 
-<spacer size="16"></spacer>
-
-<center>
-  <%= image_tag attachments['logo.png'].url, height: 120 %>
-</center>
-
-<spacer size="16"></spacer>
-
 <row>
   <columns>      
     <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>

@@ -21,7 +21,7 @@
 	  position: relative;
 	  .trucking_elem {
 	  	font-size: 11px;
-	  	position: absolute;
+	  	// position: absolute;
 	  	bottom: 5px;
 	  }
 	}
@@ -29,7 +29,8 @@
 		color: rgb(70, 70, 70);
 		margin: 0 0 5px 0;
 	  text-align: center;
-	  font-weight: normal;
+		font-weight: normal;
+		height: 19px;
 	}
 	.mot_wrapper {
 		height: 13px;

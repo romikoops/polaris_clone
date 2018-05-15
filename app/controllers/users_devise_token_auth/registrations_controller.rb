@@ -6,13 +6,27 @@ module UsersDeviseTokenAuth
 		
 		def create
 			super do |resource|
+				# Create token even though email is not confirmed
+				resource.create_token
+				resource.save!
+
+				# Create Address for non-guest Users
 				unless resource.guest
-					# Create Address
-					location = Location.create(location_params)
+					location = Location.create_from_raw_params!(location_params)
 					location.geocode_from_address_fields!
 					resource.locations << location unless location.nil?
 				end
-			end				
+
+				@headers = resource.create_new_auth_token
+			end
+		end
+
+		def render_create_success
+			@headers.each do |k, v|
+				response.headers[k] = v
+			end
+
+			super
 		end
 
 		protected
@@ -20,25 +34,26 @@ module UsersDeviseTokenAuth
 		def configure_permitted_parameters
 		  devise_parameter_sanitizer.permit(
 		  	:sign_up,
-		  	keys: [
-		  		:guest, :tenant_id, :confirm_password,
-		  		:company_name, :VAT_number, :first_name, :last_name, :phone
-		  	]
+		  	keys: User::PERMITTED_PARAMS
 		  )
 		end
 
 		def sign_up_params
-			return_params = super.to_h
+			params_h = super.to_h
 			
-			unless return_params[:confirm_password].nil?
-				return_params[:password_confirmation] = return_params.delete(:confirm_password)
+			unless params_h[:confirm_password].nil?
+				params_h[:password_confirmation] = params_h.delete(:confirm_password)
 			end
 
-			unless return_params[:VAT_number].nil?
-				return_params[:vat_number] = return_params.delete(:VAT_number)
+			unless params_h[:VAT_number].nil?
+				params_h[:vat_number] = params_h.delete(:VAT_number)
 			end
 
-			return_params
+			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
+		end
+
+		def provider
+			"tenant_email"
 		end
 
 		def location_params

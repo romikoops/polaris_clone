@@ -4,6 +4,7 @@
     margin-right: 20px;
     min-width: 400px;
     max-width: 453.63px;
+    position: relative;
     box-shadow: 1px 1.5px 6px rgba(black, 0.12);
     cursor: pointer;
     &:hover {
@@ -34,5 +35,14 @@
     -webkit-box-shadow:  0px 0px 33px -7px rgba(0,0,0,0.66);
     -moz-box-shadow:  0px 0px 33px -7px rgba(0,0,0,0.66);
     box-shadow:  0px 0px 33px -7px rgba(0,0,0,0.66);
+  }
+  .inactive {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.25);
+    color: black;
   }
 }

@@ -28,4 +28,15 @@ class ApplicationRecord < ActiveRecord::Base
       end
     end.sql_format
   end
+
+  
+  def self.public_sanitize_sql(*args)
+    sanitize_sql(*args)
+  end
+
+  private
+
+  def sanitize_sql(*args)
+    self.class.public_sanitize_sql(*args)
+  end
 end

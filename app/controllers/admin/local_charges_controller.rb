@@ -1,5 +1,6 @@
 class Admin::LocalChargesController < ApplicationController
   include ExcelTools
+  include DocumentTools
   def edit
     data = params[:data].as_json
     id = data["id"]
@@ -17,7 +18,9 @@ class Admin::LocalChargesController < ApplicationController
     response_handler(data)
   end
   def download_local_charges
-    url = write_local_charges_to_sheet(tenant_id: current_user.tenant_id)
+    options = params[:options].as_json.deep_symbolize_keys!
+    options[:tenant_id] = current_user.tenant_id
+    url = write_local_charges_to_sheet(options)
     response_handler({url: url, key: 'local_charges'})
   end
   def overwrite

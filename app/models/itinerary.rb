@@ -101,14 +101,14 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
+        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         if trip_check
           p "REJECTED"
           tmp_date += 1.day
           stats[:trips][:number_updated] += 1
           next
         end
-        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
+        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         p trip
@@ -203,6 +203,12 @@ class Itinerary < ApplicationRecord
 
   def first_nexus
     self.stops.find_by(index: 0).hub.nexus
+  end
+  def users_with_pricing
+    self.pricings.where.not(user_id: nil).count 
+  end
+  def pricing_count
+    self.pricings.count
   end
 
   def last_nexus
@@ -329,7 +335,8 @@ class Itinerary < ApplicationRecord
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i[id name] }
+                  nexus: { only: %i[id name] },
+                  location: { only: %i[longitude latitude] }
                 },
                 only: %i[id name]
               }
@@ -337,19 +344,29 @@ class Itinerary < ApplicationRecord
           },
           only: [:id]
         },
+        {
         last_stop: {
           include: {
             hub: {
               include: {
-                nexus: { only: %i[id name] }
+                nexus: { only: %i[id name] },
+                location: { only: %i[longitude latitude] }
               },
               only: %i[id name]
             }
           },
           only: [:id]
         }
+      }
       ]
     )
     as_json(new_options)
+  end
+  def as_pricing_json(options={})
+    new_options = {
+        users_with_pricing: users_with_pricing,
+        pricing_count: pricing_count
+    }.merge(attributes)
+    # as_json(new_options)
   end
 end

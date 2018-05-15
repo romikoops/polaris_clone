@@ -16,7 +16,7 @@ export class CardLink extends Component {
   }
   render () {
     const {
-      text, img, path, options, code, selectedType
+      text, img, path, options, code, selectedType, allowedCargoTypes
     } = this.props
     if (this.state.redirect) {
       return <Redirect push to={this.props.path} />
@@ -30,11 +30,18 @@ export class CardLink extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+    const inActive = !allowedCargoTypes[code]
+      ? (
+        <div className={`${styles.inactive} flex-none layout-row layout-align-center-center`}>
+          <h3 className="flex-none">Coming Soon</h3>
+        </div>
+      ) : ''
     return (
       <div
-        className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30 ${buttonStyle}`}
-        onClick={handleClick}
+        className={`${styles.card_link}  layout-column flex-none ${buttonStyle}`}
+        onClick={allowedCargoTypes[code] ? handleClick : ''}
       >
+        {inActive}
         <div className={`${styles.card_img} flex-85`} style={imgStyles} />
         <div
           className={`${styles.card_action} flex-15 layout-row layout-align-space-between-center`}
@@ -43,11 +50,11 @@ export class CardLink extends Component {
             <p className="flex-none">{text} </p>
           </div>
           <div className="flex-none layout-row layout-align-center-center">
-            {
-              code && selectedType === code
-                ? <i className="flex-none fa fa-check" style={gradientStyle} />
-                : ''
-            }
+            {code && selectedType === code ? (
+              <i className="flex-none fa fa-check" style={gradientStyle} />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </div>
@@ -65,14 +72,16 @@ CardLink.propTypes = {
   handleClick: PropTypes.func,
   options: PropTypes.shape({
     contained: PropTypes.bool
-  }).isRequired
+  }).isRequired,
+  allowedCargoTypes: PropTypes.objectOf(PropTypes.bool)
 }
 
 CardLink.defaultProps = {
   theme: null,
   handleClick: null,
   selectedType: '',
-  code: ''
+  code: '',
+  allowedCargoTypes: {}
 }
 
 export default CardLink

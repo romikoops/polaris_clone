@@ -53,10 +53,20 @@ const greencarrier = (
       the order of magnitude 0.1-0.7 % of the stated insurance value.
       <br />
       <br />
+      <b>Example of how an insurance premium could be calculated: </b>
+      <br />
+      Basis of premium calculation CIF + 10% X the actual premium rate (The actual premium rate
+      applied on the total sum of cost of goods + freight + 10% margin).
+      <br />
+      <br />
       <b>How do I get it? </b>
       <br />
       It is simple, just tell your Greencarrier contact that you want to insure your goods and you
-      will get a quotation.
+      will get a quotation. Basis of premium calculation CIF + 10% X the actual premium rate (The
+      actual premium rate applied on the total sum of cost of goods + freight + 10% margin)
+      <br />
+      <br />
+      <b>For more information, please contact your local Greencarrier office.</b>
     </p>
   </div>
 )

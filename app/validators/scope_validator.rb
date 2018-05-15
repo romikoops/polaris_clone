@@ -1,6 +1,6 @@
 class ScopeValidator < ActiveModel::EachValidator
   SCOPES = %w(
-    cargo_info_level dangerous_goods detailed_billing has_customs has_insurance
+    cargo_info_level dangerous_goods detailed_billing fixed_currency has_customs has_insurance
     incoterm_info_level modes_of_transport terms carriage_options
   ) 
   LOAD_TYPES         = %w(cargo_item container)

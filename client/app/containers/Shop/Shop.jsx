@@ -235,6 +235,7 @@ class Shop extends Component {
               {...props}
               chooseRoute={this.selectShipmentRoute}
               theme={theme}
+              tenant={tenant}
               shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}

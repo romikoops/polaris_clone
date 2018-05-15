@@ -35,12 +35,14 @@ class OfferCalculator
       @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
       @shipment.send("#{plural_load_type}=", @cargo_units)
     end
-
-
-    @shipment.planned_pickup_date = Chronic.parse(
+    planned_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
     )
+    
+    date_limit = Date.today() + 5.days
+    @shipment.planned_pickup_date = planned_date > date_limit ? planned_date : date_limit
+
     @shipment.origin = Location.get_geocoded_location(
       params[:shipment][:origin_user_input],
       params[:shipment][:origin_id],
@@ -58,6 +60,7 @@ class OfferCalculator
 
   def calc_offer!
     determine_trucking_options!
+    
     determine_itinerary!
     # determine_route! 
     determine_hubs!
@@ -69,6 +72,7 @@ class OfferCalculator
     #   "pre_carriage" => { "truck_type" => "side_lifter"}
     # }
     determine_longest_trucking_time!
+    
     determine_layovers!
     
     

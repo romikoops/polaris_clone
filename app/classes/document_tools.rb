@@ -29,14 +29,14 @@ module DocumentTools
   end
   def write_pricings_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    pricings = get_tenant_pricings(tenant.id)
+    pricings = options[:mot] ? get_tenant_pricings_by_mot(tenant.id, options[:mot]) : get_tenant_pricings(tenant.id)
     aux_data = {
       itineraries: {},
       nexuses: {},
       vehicle: {},
       transit_times: {}
     }
-    filename = "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
@@ -46,59 +46,65 @@ module DocumentTools
     header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format)}
     row = 1
     pricings.each_with_index do |pricing, i|
+      pricing.deep_symbolize_keys!
       if pricing[:expiration_date] < DateTime.now
         next
       end
-      pricing_key_components = pricing[:_id].split("_")
-      if !aux_data[:nexuses][pricing_key_components[0]]
-        aux_data[:nexuses][pricing_key_components[0]] = Stop.find(pricing_key_components[0]).hub.nexus
-        current_origin = aux_data[:nexuses][pricing_key_components[0]]
+       if !aux_data[:itineraries][pricing[:itinerary_id]]
+        aux_data[:itineraries][pricing[:itinerary_id]] = Itinerary.find(pricing[:itinerary_id]).as_options_json
+        current_itinerary = Itinerary.find(pricing[:itinerary_id])
       else
-        current_origin = aux_data[:nexuses][pricing_key_components[0]]
+        current_itinerary = Itinerary.find(pricing[:itinerary_id])
       end
-      if !aux_data[:nexuses][pricing_key_components[1]]
-        aux_data[:nexuses][pricing_key_components[1]] = Stop.find(pricing_key_components[1]).hub.nexus
-        current_destination = aux_data[:nexuses][pricing_key_components[1]]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]).hub.nexus
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       else
-        current_destination = aux_data[:nexuses][pricing_key_components[1]]
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       end
-      if !aux_data[:itineraries][pricing[:itinerary_id]]
-        aux_data[:itineraries][pricing[:itinerary_id]] = Itinerary.find(pricing[:itinerary_id])
-        current_itinerary = aux_data[:itineraries][pricing[:itinerary_id]]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]).hub.nexus
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       else
-        current_itinerary = aux_data[:itineraries][pricing[:itinerary_id]]
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       end
+     
       destination_layover = ''
       origin_layover = ''
-      if !aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
+      if !aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
         p current_itinerary
-        tmp_layovers = current_itinerary.trips.last.layovers
+        tmp_trip = current_itinerary.trips.last
+        if tmp_trip
+         tmp_layovers = current_itinerary.trips.last.layovers
         
-        tmp_layovers.each do |lay| 
-          if lay.stop_id == pricing_key_components[0].to_i
-            origin_layover = lay
+          tmp_layovers.each do |lay| 
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
+              origin_layover = lay
+            end
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
+              destination_layover = lay
+            end
+            
           end
-          if lay.stop_id == pricing_key_components[1].to_i
-            destination_layover = lay
-          end
-          
+          diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
+          # diff = destination_layover && origin_layover ? ((destination_layover.eta - origin_layover.etd) / 86400).to_i : ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = diff
+        else
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"] = ''
         end
-        diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
-        aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"] = diff
-        current_transit_time = aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
-      else
-        current_transit_time = aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
       end
+        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]}"]
+
       
-      if !aux_data[:vehicle][pricing_key_components[2]]
-        aux_data[:vehicle][pricing_key_components[2]] = TransportCategory.find(pricing_key_components[2]).vehicle
-        current_vehicle = aux_data[:vehicle][pricing_key_components[2]]
+      if !aux_data[:vehicle][pricing[:transport_category_id]]
+        aux_data[:vehicle][pricing[:transport_category_id]] = TransportCategory.find(pricing[:transport_category_id]).vehicle
+        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
       else
-        current_vehicle = aux_data[:vehicle][pricing_key_components[2]]
+        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
       end
       pricing[:data].each do | key, fee |
         if fee[:range] && fee[:range].length > 0
-         fee[:range].each do |range_fee|
+          fee[:range].each do |range_fee|
             worksheet.write(row, 3, current_itinerary.mode_of_transport)
             worksheet.write(row, 4, pricing[:load_type])
             worksheet.write(row, 5, pricing[:effective_date])
@@ -196,7 +202,8 @@ module DocumentTools
 
   def write_local_charges_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
-    hubs = tenant.hubs
+    
+    hubs = options[:mot] ? tenant.hubs.where(hub_type: options[:mot]) : tenant.hubs
     results_by_hub = {}
     hubs.each do |hub|
       results_by_hub[hub.name] = []
@@ -210,7 +217,7 @@ module DocumentTools
       vehicle: {},
       transit_times: {}
     }
-    filename = "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = options[:mot] ? "#{options[:mot]}_local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     
@@ -225,7 +232,46 @@ module DocumentTools
         %w(import export).each do |dir|
           result[dir].deep_symbolize_keys!
           result[dir].each do |key, fee|
-            
+            if fee[:range] && fee[:range].length > 0
+              fee[:range].each do |range_fee|
+                worksheet.write(row, 0, fee[:effective_date])
+                worksheet.write(row, 1, fee[:expiration_date])
+                worksheet.write(row, 2, fee[:name])
+                worksheet.write(row, 3, result[:mode_of_transport])
+                worksheet.write(row, 4, key)
+                worksheet.write(row, 5, result[:load_type])
+                worksheet.write(row, 6, dir)
+                worksheet.write(row, 7, fee[:currency])
+                worksheet.write(row, 8, fee[:rate_basis])
+                case fee[:rate_basis]
+                when 'PER_CONTAINER'
+                  worksheet.write(row, 15, fee[:value])
+                when 'PER_ITEM'
+                  worksheet.write(row, 12, fee[:value])
+                when 'PER_BILL'
+                  worksheet.write(row, 14, fee[:value])
+                when 'PER_SHIPMENT'
+                  worksheet.write(row, 13, fee[:value])
+                when 'PER_CBM_TON'
+                  worksheet.write(row, 9, fee[:ton])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_CBM_KG'
+                  worksheet.write(row, 11, fee[:kg])
+                  worksheet.write(row, 10, fee[:cbm])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_WM'
+                  worksheet.write(row, 17, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                when 'PER_KG'
+                  worksheet.write(row, 11, range_fee[:rate])
+                  worksheet.write(row, 16, fee[:min])
+                end
+                worksheet.write(row, 18, range_fee[:min])
+                worksheet.write(row, 19, range_fee[:max])
+                row += 1
+              end
+            else
               worksheet.write(row, 0, fee[:effective_date])
               worksheet.write(row, 1, fee[:expiration_date])
               worksheet.write(row, 2, fee[:name])
@@ -233,7 +279,7 @@ module DocumentTools
               worksheet.write(row, 4, key)
               worksheet.write(row, 5, result[:load_type])
               worksheet.write(row, 6, dir)
-              worksheet.write(row, 7, result[:currency])
+              worksheet.write(row, 7, fee[:currency])
               worksheet.write(row, 8, fee[:rate_basis])
               case fee[:rate_basis]
               when 'PER_CONTAINER'
@@ -254,9 +300,12 @@ module DocumentTools
                 worksheet.write(row, 16, fee[:min])
               when 'PER_WM'
                 worksheet.write(row, 17, fee[:value])
-             
+              when 'PER_KG'
+                worksheet.write(row, 11, fee[:kg])
+                worksheet.write(row, 16, fee[:min])
               end
                row += 1
+            end
           end
         end
       end
@@ -328,7 +377,7 @@ module DocumentTools
       filename = "#{itinerary.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     else
       trips = Trip.joins("INNER JOIN itineraries ON trips.itinerary_id = itineraries.id AND itineraries.tenant_id = #{options[:tenant_id]}").order(:start_date)
-      filename = "schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+      filename = "#{tenant.name}_schedules_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     end
     
     dir = "tmp/#{filename}"

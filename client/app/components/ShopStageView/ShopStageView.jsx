@@ -129,7 +129,8 @@ export class ShopStageView extends Component {
         className={`${styles.help_btn} flex-none layout-row layout-align-center-center pointy`}
         onClick={() => this.showContactHelp()}
       >
-        <i className="fa fa-question" />
+        <p className="flex-none">Need Help</p>
+        <i className="fa fa-question-circle" />
       </div>
     )
     const helpModal = showHelp ? <HelpContact tenant={tenant} parentToggle={() => this.showContactHelp()} /> : ''

@@ -41,7 +41,9 @@ class MessageCenter extends Component {
   componentWillMount () {
     if (!this.props.shipments || (this.props.shipments && this.props.shipments.length === 0)) {
       const { messageDispatch, conversations } = this.props
-      messageDispatch.getShipments(Object.keys(conversations))
+      if (conversations) {
+        messageDispatch.getShipments(Object.keys(conversations))
+      }
     }
   }
   componentWillReceiveProps (nextProps) {
@@ -54,15 +56,15 @@ class MessageCenter extends Component {
     this.setState({ key })
   }
   viewConvo (convParam) {
-    console.log(convParam.convoKey)
-    this.setSelected(convParam.convoKey)
+    this.setSelected(convParam)
     const { conversations } = this.props
     const selectedConvo = conversations[convParam]
-    selectedConvo.shipmentRef = selectedConvo.messages[0].shipmentRef
+
+    selectedConvo.shipmentRef = convParam
     this.setState({ selectedConvo: convParam })
     const { messageDispatch } = this.props
-    messageDispatch.markAsRead(selectedConvo.shipmentRef)
-    messageDispatch.getShipment(selectedConvo.shipmentRef)
+    messageDispatch.markAsRead(convParam)
+    messageDispatch.getShipment(convParam)
   }
   sendMessage (msg) {
     const { messageDispatch } = this.props
@@ -75,7 +77,7 @@ class MessageCenter extends Component {
 
   filterHubs (id) {
     const { hubs } = this.props.users
-    const hub = hubs.map(hbs => (hbs.data.id === parseInt(id, 10) ? hbs.data.name : ''))
+    const hub = hubs ? hubs.map(hbs => (hbs.data.id === parseInt(id, 10) ? hbs.data.name : '')) : []
     return hub.filter(name => name !== '')
   }
   filterShipments (convoKey) {
@@ -116,7 +118,7 @@ class MessageCenter extends Component {
         origin: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[0])[0],
         destination: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[1])[0],
         eta: moment(tmpShipment.planned_eta).format('YYYY-MM-DD'),
-        etd: moment(tmpShipment.planned_et).format('YYYY-MM-DD'),
+        etd: moment(tmpShipment.planned_etd).format('YYYY-MM-DD'),
         totalPrice: Number.parseFloat(tmpShipment[0].total_price, 10).toFixed(2),
         status: tmpShipment[0].status
       })
@@ -141,21 +143,29 @@ class MessageCenter extends Component {
     let convoKeys = {}
     convoKeys = conversations ? Object.keys(conversations) : []
 
-    const convos = convoKeys.map((ms) => {
-      const { key } = this.state
-      const tileStyle = key === ms ? styles.selected : styles.unselected
-      return (
-        <ConvoTile
-          key={v4()}
-          className={tileStyle}
-          theme={theme}
-          conversation={conversations[ms]}
-          convoKey={ms}
-          viewConvo={this.viewConvo}
-          shipment={this.filterShipments(ms)}
-        />
-      )
-    })
+    const convoArray = convoKeys.map(ms => ({
+      conversation: conversations[ms].conversation,
+      convoKey: ms,
+      shipment: this.filterShipments(ms),
+      lastUpdated: conversations[ms].conversation.last_updated
+    }))
+    const { key } = this.state
+    const convos = convoArray
+      .sort((a, b) => a.lastUpdated - b.lastUpdated)
+      .map((cObj) => {
+        const tileStyle = key === cObj.convoKey ? styles.selected : styles.unselected
+        return (
+          <ConvoTile
+            key={v4()}
+            className={tileStyle}
+            theme={theme}
+            conversation={cObj.conversation}
+            convoKey={cObj.convoKey}
+            viewConvo={this.viewConvo}
+            shipment={cObj.shipment}
+          />
+        )
+      })
     const { selectedConvo } = this.state
     const textStyle = {
       color: 'white'
@@ -170,6 +180,7 @@ class MessageCenter extends Component {
         messageDispatch={messageDispatch}
         sendMessage={this.sendMessage}
         shipment={shipment}
+        shipmentRef={selectedConvo}
         user={user}
       />
     ) : (

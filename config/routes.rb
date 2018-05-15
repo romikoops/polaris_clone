@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations',
+    confirmations: 'users_devise_token_auth/confirmations',
+    passwords:     'users_devise_token_auth/passwords'
   }, skip: [:omniauth_callbacks]
   
   resources :subdomain, only: [:show] do
@@ -40,7 +42,7 @@ Rails.application.routes.draw do
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
-      get  "pricings/download",  to: "pricings#download_pricings"
+      post  "pricings/download",  to: "pricings#download_pricings"
       post "pricings/update/:id", to: "pricings#update_price"
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
@@ -67,7 +69,7 @@ Rails.application.routes.draw do
         to: "local_charges#overwrite", as: :local_charges_overwrite
       post "local_charges/:id/edit", to: "local_charges#edit"
       post "customs_fees/:id/edit", to: "local_charges#edit_customs"
-      get  "local_charges/download",  to: "local_charges#download_local_charges"
+      post  "local_charges/download",  to: "local_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
@@ -135,18 +137,21 @@ Rails.application.routes.draw do
     get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
       controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
     get "tenants/:name", to: "tenants#get_tenant"
+    get "tenants", to: "tenants#index"
 
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
 
     get "search/hscodes/:query" => "search#search_hs_codes"
     post 'super_admins/new_demo' => "super_admins#new_demo_site"
+    post 'super_admins/upload_image' => "super_admins#upload_image"
     get 'messaging/get' => "notifications#index"
     post 'messaging/send' => "notifications#send_message"
 
     post 'messaging/data' => "notifications#shipment_data"
     post 'messaging/shipments' => "notifications#shipments_data"
     post 'messaging/mark' => "notifications#mark_as_read"
+    post 'clear_shoryuken' => 'application#clear_shoryuken'
 end
 
 end

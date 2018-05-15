@@ -29,7 +29,7 @@ export * from './AdminPricingRouteView'
 
 export { default as AdminTrucking } from './AdminTrucking'
 export * from './AdminTruckingCreator'
-export * from './AdminTruckingView'
+export { default as AdminTruckingView } from './AdminTruckingView'
 export * from './AdminTruckingIndex'
 
 export * from './AdminRouteForm'
@@ -39,7 +39,7 @@ export * from './AdminRoutesIndex'
 
 export * from './AdminClientTile'
 export { default as AdminClients } from './AdminClients'
-export * from './AdminClientsIndex'
+export { default as AdminClientsIndex } from './AdminClientsIndex'
 export * from './AdminClientView'
 
 // export * from './AdminSchedules'

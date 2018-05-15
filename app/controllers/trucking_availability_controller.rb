@@ -8,7 +8,7 @@ class TruckingAvailabilityController < ApplicationController
 			load_type: params[:load_type],
 			location:  Location.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
 			nexus_ids: params[:nexus_ids].split(',').map(&:to_i),
-			carriage: params[:carriage]
+			carriage:  params[:carriage]
 		)
 		nexus_ids = trucking_pricings.map(&:nexus_id).uniq
 		response = {
@@ -17,3 +17,6 @@ class TruckingAvailabilityController < ApplicationController
 		response_handler(response)
 	end
 end
+
+
+trucking_pricings = TruckingPricing.find_by_filter( tenant_id: 13, load_type: 'cargo_item', location:  Location.new(latitude: 32.039948, longitude: 118.761585).reverse_geocode, nexus_ids: [116], carriage: 'on')

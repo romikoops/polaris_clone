@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
 
-function handleSearchChange (event, searchKeys, array) {
-  if (event.target.value === '') {
+function handleSearchChange (query, searchKeys, array) {
+  if (!query || query === '') {
     return array
   }
   const search = (keys) => {
@@ -16,7 +16,7 @@ function handleSearchChange (event, searchKeys, array) {
       keys
     }
     const fuse = new Fuse(array, options)
-    return fuse.search(event.target.value)
+    return fuse.search(query)
   }
 
   const filteredResults = search(searchKeys)

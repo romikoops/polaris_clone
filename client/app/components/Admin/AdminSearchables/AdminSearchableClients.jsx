@@ -73,7 +73,8 @@ export class AdminSearchableClients extends Component {
       placeholder,
       tooltip,
       showTooltip,
-      icon
+      icon,
+      hideFilters
     } = this.props
 
     const { clients } = this.state
@@ -115,14 +116,15 @@ export class AdminSearchableClients extends Component {
               </div>
             </div>
           </div>
-          <div className="input_box_full flex-40 layout-row layout-align-start-center">
-            <input
-              type="text"
-              name="search"
-              placeholder={placeholder || 'Search clients'}
-              onChange={this.handleSearchChange}
-            />
-          </div>
+          { !hideFilters
+            ? <div className="input_box_full flex-40 layout-row layout-align-start-center">
+              <input
+                type="text"
+                name="search"
+                placeholder={placeholder || 'Search clients'}
+                onChange={this.handleSearchChange}
+              />
+            </div> : '' }
         </div>
         <div className="flex-100 layout-row layout-align-center layout-align-space-between">
           {viewType}
@@ -156,7 +158,8 @@ AdminSearchableClients.propTypes = {
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
-  tooltip: PropTypes.string
+  tooltip: PropTypes.string,
+  hideFilters: PropTypes.bool
 
 }
 
@@ -169,7 +172,8 @@ AdminSearchableClients.defaultProps = {
   tooltip: '',
   title: '',
   placeholder: '',
-  adminDispatch: null
+  adminDispatch: null,
+  hideFilters: false
 }
 
 export default AdminSearchableClients

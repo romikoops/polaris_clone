@@ -5,11 +5,17 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
-    @requested_shipments = Shipment.where(status: "requested", tenant_id: current_user.tenant_id)
+    @requested_shipments = Shipment.where(
+      status: %w(requested requested_by_unconfirmed_account),
+      tenant_id: current_user.tenant_id
+    )
     @documents['requested_shipments'] = Document.get_documents_for_array(@requested_shipments)
-    @open_shipments = Shipment.where(status: ["accepted", "in_progress", "confirmed"], tenant_id: current_user.tenant_id)
+    @open_shipments = Shipment.where(
+      status: %w(in_progress confirmed),
+      tenant_id: current_user.tenant_id
+    )
     @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
-    @finished_shipments = Shipment.where(status: ["declined", "finished"], tenant_id: current_user.tenant_id)
+    @finished_shipments = Shipment.where(status: 'finished', tenant_id: current_user.tenant_id)
     @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
     resp = {
       requested: @requested_shipments,
@@ -42,7 +48,7 @@ class Admin::ShipmentsController < ApplicationController
         end
       end
     end
-    hsCodes = get_hs_code_hash(hs_codes)
+    # hsCodes = get_hs_code_hash(hs_codes)
     @shipment_contacts = @shipment.shipment_contacts
     @contacts = []
     @shipment_contacts.each do |sc|
@@ -65,7 +71,7 @@ class Admin::ShipmentsController < ApplicationController
       contacts: @contacts,
       documents: @documents,
       schedules: @schedules,
-      hsCodes: hsCodes,
+      # hsCodes: hsCodes,
       locations: locations,
       cargoItemTypes: cargo_item_types,
       accountHolder: account_holder
@@ -116,7 +122,7 @@ class Admin::ShipmentsController < ApplicationController
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
       when "accept"
-        @shipment.accept!
+        @shipment.confirm!
         shipper_confirmation_email(@shipment.user, @shipment)
         message = {
           title: 'Booking Accepted',

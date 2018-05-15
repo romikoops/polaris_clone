@@ -8,7 +8,7 @@ import { dashedGradient, switchIcon } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, cities, hubs, trucking, modeOfTransport
+    theme, totalWeight, totalVolume, cities, hubs, trucking, modeOfTransport, loadType
   } = props
   const dashedLineStyles = {
     marginTop: '6px',
@@ -46,13 +46,13 @@ function BookingSummary (props) {
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
-          <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4>
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
               <Truncate lines={1}>
                 {trucking.pre_carriage.truck_type ? cities.origin : hubs.origin}
               </Truncate>
             </h4>
-            <p className={styles.trucking_elem}>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
                   (cities.origin && trucking.pre_carriage.truck_type) ||
@@ -61,9 +61,11 @@ function BookingSummary (props) {
               }
             </p>
           </div>
-          <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {trucking.on_carriage.truck_type ? cities.destination : hubs.destination} </h4>
-            <p className={styles.trucking_elem}>
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
+              {trucking.on_carriage.truck_type ? cities.destination : hubs.destination}
+            </h4>
+            <p className={`${styles.trucking_elem} flex-none`}>
               {
                 (
                   (cities.destination && trucking.on_carriage.truck_type) ||
@@ -80,12 +82,16 @@ function BookingSummary (props) {
           { totalWeight.toFixed(1) } kg
         </p>
       </div>
-      <div className="flex layout-column layout-align-stretch">
-        <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
-        <p className="flex-50 layout-row layout-align-center-start">
-          { totalVolume.toFixed(3) } m³
-        </p>
-      </div>
+      {
+        loadType === 'cargo_item' && (
+          <div className="flex layout-column layout-align-stretch">
+            <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
+            <p className="flex-50 layout-row layout-align-center-start">
+              { totalVolume.toFixed(3) } m³
+            </p>
+          </div>
+        )
+      }
     </div>
   )
 }
@@ -106,7 +112,8 @@ BookingSummary.propTypes = {
   trucking: PropTypes.shape({
     onCarriage: PropTypes.objectOf(PropTypes.string),
     preCarriage: PropTypes.objectOf(PropTypes.string)
-  })
+  }),
+  loadType: PropTypes.string
 }
 
 BookingSummary.defaultProps = {
@@ -125,7 +132,8 @@ BookingSummary.defaultProps = {
   trucking: {
     on_carriage: { truck_type: '' },
     pre_carriage: { truck_type: '' }
-  }
+  },
+  loadType: ''
 }
 
 function mapStateToProps (state) {

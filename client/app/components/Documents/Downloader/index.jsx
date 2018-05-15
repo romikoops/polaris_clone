@@ -27,7 +27,7 @@ class DocumentsDownloader extends React.Component {
     const { target, documentDispatch, options } = this.props
     switch (target) {
       case 'pricing':
-        documentDispatch.downloadPricings()
+        documentDispatch.downloadPricings(options)
         break
       case 'hubs':
         documentDispatch.downloadHubs()
@@ -36,7 +36,7 @@ class DocumentsDownloader extends React.Component {
         documentDispatch.downloadTrucking(options)
         break
       case 'local_charges':
-        documentDispatch.downloadLocalCharges()
+        documentDispatch.downloadLocalCharges(options)
         break
       case 'schedules':
         documentDispatch.downloadSchedules(options)
