@@ -39,11 +39,21 @@ const propsBase = {
   downloadUrls: {},
   target: 'FOO_TARGET',
   loading: false,
+  square: false,
   options: {}
 }
 
 test('shallow render', () => {
   expect(shallow(<DocumentsDownloader {...propsBase} />)).toMatchSnapshot()
+})
+
+test('square is true', () => {
+  const props = {
+    ...propsBase,
+    square: true
+  }
+
+  expect(shallow(<DocumentsDownloader {...props} />)).toMatchSnapshot()
 })
 
 test('props.loading is false, state.requested is true', () => {

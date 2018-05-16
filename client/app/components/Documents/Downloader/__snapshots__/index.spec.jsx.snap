@@ -68,3 +68,32 @@ exports[`shallow render 1`] = `
   />
 </div>
 `;
+
+exports[`square is true 1`] = `
+<div
+  className="flex-none layout-row upload_btn_wrapper "
+  data-for="RANDOM_KEY"
+  data-tip="FOO_TOOLTIP"
+>
+  <SquareButton
+    active={true}
+    back={false}
+    border={true}
+    disabled={false}
+    handleDisabled={null}
+    handleNext={[Function]}
+    icon=""
+    iconClass=""
+    size="small"
+    text="Request"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
