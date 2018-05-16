@@ -36,7 +36,8 @@ exports[`messages.length === 0 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Selling
              (
             export
@@ -54,7 +55,8 @@ exports[`messages.length === 0 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Buying
              (
             import
@@ -83,13 +85,21 @@ exports[`messages.length === 0 1`] = `
         />
       </div>
       <CardLinkRow
+        allowedCargoTypes={
+          Object {
+            "cargo_item": false,
+            "container": false,
+          }
+        }
         cards={
           Array [
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -98,7 +108,9 @@ exports[`messages.length === 0 1`] = `
               "code": "container",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -201,7 +213,8 @@ exports[`props.theme is falsy 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Selling
              (
             export
@@ -219,7 +232,8 @@ exports[`props.theme is falsy 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Buying
              (
             import
@@ -241,13 +255,21 @@ exports[`props.theme is falsy 1`] = `
         />
       </div>
       <CardLinkRow
+        allowedCargoTypes={
+          Object {
+            "cargo_item": false,
+            "container": false,
+          }
+        }
         cards={
           Array [
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -256,7 +278,9 @@ exports[`props.theme is falsy 1`] = `
               "code": "container",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -352,7 +376,8 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Selling
              (
             export
@@ -370,7 +395,8 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Buying
              (
             import
@@ -399,13 +425,21 @@ exports[`shallow render 1`] = `
         />
       </div>
       <CardLinkRow
+        allowedCargoTypes={
+          Object {
+            "cargo_item": false,
+            "container": false,
+          }
+        }
         cards={
           Array [
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -414,7 +448,9 @@ exports[`shallow render 1`] = `
               "code": "container",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -524,7 +560,8 @@ exports[`state.direction && state.loadType 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Selling
              (
             export
@@ -546,7 +583,8 @@ exports[`state.direction && state.loadType 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Buying
              (
             import
@@ -575,13 +613,21 @@ exports[`state.direction && state.loadType 1`] = `
         />
       </div>
       <CardLinkRow
+        allowedCargoTypes={
+          Object {
+            "cargo_item": false,
+            "container": false,
+          }
+        }
         cards={
           Array [
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -590,7 +636,9 @@ exports[`state.direction && state.loadType 1`] = `
               "code": "container",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -703,7 +751,8 @@ exports[`state.direction === export 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Selling
              (
             export
@@ -725,7 +774,8 @@ exports[`state.direction === export 1`] = `
           <p
             className="flex-none"
           >
-             I am 
+             
+            I am 
             Buying
              (
             import
@@ -754,13 +804,21 @@ exports[`state.direction === export 1`] = `
         />
       </div>
       <CardLinkRow
+        allowedCargoTypes={
+          Object {
+            "cargo_item": false,
+            "container": false,
+          }
+        }
         cards={
           Array [
             Object {
               "code": "cargo_item",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/cargo_item.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },
@@ -769,7 +827,9 @@ exports[`state.direction === export 1`] = `
               "code": "container",
               "handleClick": [Function],
               "img": "https://assets.itsmycargo.com/assets/icons/container.svg",
-              "name": Object {},
+              "name": Object {
+                "modes_of_transport": Array [],
+              },
               "options": Object {
                 "contained": true,
               },

@@ -5,6 +5,7 @@ exports[`shallow render 1`] = `
   className="card_link_row layout-row flex-100 layout-align-space-around-center"
 >
   <CardLink
+    allowedCargoTypes={Object {}}
     code=""
     handleClick={[Function]}
     img="FOO_IMG1"
@@ -23,6 +24,7 @@ exports[`shallow render 1`] = `
     }
   />
   <CardLink
+    allowedCargoTypes={Object {}}
     code=""
     handleClick={[Function]}
     img="FOO_IMG2"

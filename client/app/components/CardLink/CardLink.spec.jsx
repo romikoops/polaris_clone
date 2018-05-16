@@ -14,22 +14,21 @@ const propsBase = {
   path: 'FOO_PATH',
   selectedType: 'FOO_TYPE',
   code: 'BAR',
+  allowedCargoTypes: { BAR: true },
   handleClick: identity,
   options: {
     contained: true
   }
 }
 
-test('text content of component is based on props.text', () => {
-  const wrapper = mount(<CardLink {...propsBase} />)
-
-  expect(wrapper.text()).toBe(`${propsBase.text} `)
+test('shallow render', () => {
+  expect(shallow(<CardLink {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.theme is falsy', () => {
+test('theme is falsy', () => {
   const props = {
     ...propsBase,
-    theme: false
+    theme: null
   }
   expect(shallow(<CardLink {...props} />)).toMatchSnapshot()
 })
@@ -49,21 +48,16 @@ test('state.redirect is true', () => {
   expect(wrapper).toMatchSnapshot()
 })
 
-test('props.handleClick is called', () => {
+test('handleClick is called', () => {
   const props = {
     ...propsBase,
-    path: undefined,
+    path: null,
     handleClick: jest.fn()
   }
   const wrapper = mount(<CardLink {...props} />)
 
   const clickableDiv = wrapper.find('.card_link').first()
 
-  expect(props.handleClick).not.toHaveBeenCalled()
   clickableDiv.simulate('click')
   expect(props.handleClick).toHaveBeenCalled()
-})
-
-test('shallow render', () => {
-  expect(shallow(<CardLink {...propsBase} />)).toMatchSnapshot()
 })

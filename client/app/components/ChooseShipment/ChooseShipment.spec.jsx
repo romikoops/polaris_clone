@@ -35,7 +35,9 @@ const propsBase = {
   theme,
   messages: ['FOO', 'BAR'],
   selectLoadType: identity,
-  scope: {}
+  scope: {
+    modes_of_transport: []
+  }
 }
 
 test('shallow render', () => {

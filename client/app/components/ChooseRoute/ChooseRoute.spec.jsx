@@ -36,9 +36,14 @@ jest.mock('../../constants', () => ({
 // eslint-disable-next-line
 import { ChooseRoute } from './ChooseRoute'
 
+const tenant = {
+  data: { scope: {} }
+}
+
 const propsBase = {
   theme,
   user,
+  tenant,
   shipmentData,
   chooseRoute: identity,
   messages: [],
