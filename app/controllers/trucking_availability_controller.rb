@@ -17,6 +17,3 @@ class TruckingAvailabilityController < ApplicationController
 		response_handler(response)
 	end
 end
-
-
-trucking_pricings = TruckingPricing.find_by_filter( tenant_id: 13, load_type: 'cargo_item', location:  Location.new(latitude: 32.039948, longitude: 118.761585).reverse_geocode, nexus_ids: [116], carriage: 'on')
