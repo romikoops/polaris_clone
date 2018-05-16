@@ -503,6 +503,7 @@ export class ShipmentDetails extends Component {
       const truckType = this.truckTypes[this.state.shipment.load_type][0]
       artificialEvent.target.id = `${carriage}-${truckType}`
     }
+
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
   }
