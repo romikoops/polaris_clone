@@ -21,37 +21,22 @@ subdomains.each do |sub|
 
 # # #   # # # # puts "# Overwrite public pricings from excel sheet"
 
-#   # public_pricings = File.open("#{Rails.root}/db/dummydata/NEW_hartrodt_rates.xlsx")
-#   # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/NEW_hartrodt_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
   # public_pricings = File.open("#{Rails.root}/db/dummydata/3_2_standard_sheet.xlsx")
-<<<<<<< HEAD
 #   # req = {"xlsx" => public_pricings}
 #   # overwrite_freight_rates(req, shipper, true)
 #   public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
 #   req = {"xlsx" => public_pricings}
 #   overwrite_freight_rates(req, shipper, true)
-=======
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
->>>>>>> 67166b03a3f65ff1d567fe09250033799288d3b0
 
 # # # # #   # # # # # Overwrite public pricings from excel sheet
 
-<<<<<<< HEAD
 #   # puts "# Overwrite Local Charges From Sheet"
 #     local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
 #     req = {"xlsx" => local_charges}
 #     overwrite_local_charges(req, shipper)
-=======
-  # puts "# Overwrite Local Charges From Sheet"
-    # local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-    # req = {"xlsx" => local_charges}
-    # overwrite_local_charges(req, shipper)
->>>>>>> 67166b03a3f65ff1d567fe09250033799288d3b0
 # #   #  puts "# Overwrite Local Charges From Sheet"
 # #   local_charges = File.open("#{Rails.root}/db/dummydata/ht_local_charges.xlsx")
 # #   req = {"xlsx" => local_charges}
