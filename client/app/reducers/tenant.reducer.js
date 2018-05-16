@@ -29,6 +29,8 @@ export const tenant = (
       return Object.assign({}, state, {
         isFetching: false
       })
+    case tenantActions.CLEAR_TENANT:
+      return {}
     case tenantActions.SET_THEME: {
       return {
         ...state,

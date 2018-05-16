@@ -415,6 +415,12 @@ function toDashboard (id) {
 function clearLoading () {
   return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
+function logOut () {
+  return {
+    type: shipmentConstants.CLEAR_SHIPMENTS,
+    payload: null
+  }
+}
 
 function goTo (path) {
   return (dispatch) => {
@@ -441,6 +447,7 @@ export const shipmentActions = {
   clearLoading,
   requestShipment,
   updateCurrency,
+  logOut,
   delete: _delete
 }
 

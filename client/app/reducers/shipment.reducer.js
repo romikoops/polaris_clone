@@ -237,6 +237,8 @@ export default function shipment (state = {}, action) {
         ...state,
         error: { hubs: action.error }
       }
+    case shipmentConstants.CLEAR_SHIPMENTS:
+      return {}
 
     case shipmentConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
