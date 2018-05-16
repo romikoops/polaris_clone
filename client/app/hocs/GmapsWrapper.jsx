@@ -7,7 +7,8 @@ export default function GmapsWrapper (props) {
   const apiKey = API_KEY
   const params = {
     key: apiKey, // Define your api key here
-    libraries: 'places' // To request multiple libraries, separate them with a comma
+    libraries: 'places', // To request multiple libraries, separate them with a comma
+    language: 'en'
   }
   const ParamComponent = props.component
   return (

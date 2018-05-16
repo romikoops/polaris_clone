@@ -6,7 +6,8 @@ import { API_KEY } from '../constants'
 export default function GmapsLoader (props) {
   const params = {
     key: API_KEY, // Define your api key here
-    libraries: 'places' // To request multiple libraries, separate them with a comma
+    libraries: 'places', // To request multiple libraries, separate them with a comma
+    language: 'en'
   }
   const ParamComponent = props.component
   return (
