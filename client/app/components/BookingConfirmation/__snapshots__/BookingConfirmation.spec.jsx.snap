@@ -171,15 +171,15 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -189,15 +189,15 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -242,32 +242,44 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -275,7 +287,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -314,6 +331,123 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -367,7 +501,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -580,7 +719,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -1219,15 +1358,15 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -1237,15 +1376,15 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -1290,32 +1429,44 @@ exports[`props.shipmentData.documents is truthy 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -1323,7 +1474,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -1362,6 +1518,123 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -1415,7 +1688,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -1620,7 +1898,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -2324,15 +2602,15 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -2342,15 +2620,15 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -2395,32 +2673,44 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -2428,7 +2718,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -2467,6 +2762,123 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -2520,7 +2932,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -2851,7 +3268,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -3484,15 +3901,15 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -3502,24 +3919,29 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-start"
+                className="flex-80 layout-row layout-align-center-start layout-wrap"
               >
+                <p
+                  className="flex-100 letter_3"
+                >
+                  With Delivery to:
+                </p>
                 <address
-                  className="flex-none"
+                  className="flex-90"
                 >
                   9 BAR_STREET
                    
@@ -3571,32 +3993,44 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -3604,7 +4038,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 destinationFees={true}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -3643,6 +4082,123 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -3696,7 +4252,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -3901,7 +4462,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -4534,24 +5095,29 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Collection:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-start"
+                className="flex-80 layout-row layout-align-center-start layout-wrap"
               >
+                <p
+                  className="flex-100 letter_3"
+                >
+                  With Pickup from:
+                </p>
                 <address
-                  className="flex-none"
+                  className="flex-90"
                 >
                   7 FOO_STREET
                   ,
@@ -4567,15 +5133,15 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -4620,32 +5186,44 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -4653,7 +5231,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -4692,6 +5275,123 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -4745,7 +5445,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -4950,7 +5655,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -5583,15 +6288,15 @@ exports[`shallow render 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -5601,15 +6306,15 @@ exports[`shallow render 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -5654,32 +6359,44 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -5687,7 +6404,12 @@ exports[`shallow render 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -5726,6 +6448,123 @@ exports[`shallow render 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -5779,7 +6618,12 @@ exports[`shallow render 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -5984,7 +6828,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -6617,15 +7461,15 @@ exports[`with cargo items 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -6635,15 +7479,15 @@ exports[`with cargo items 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -6688,32 +7532,44 @@ exports[`with cargo items 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -6721,7 +7577,12 @@ exports[`with cargo items 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -6760,6 +7621,123 @@ exports[`with cargo items 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -6813,7 +7791,12 @@ exports[`with cargo items 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -7233,7 +8216,7 @@ exports[`with cargo items 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -7866,15 +8849,15 @@ exports[`with containers 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -7884,15 +8867,15 @@ exports[`with containers 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-100 layout-row layout-align-center-start layout-wrap"
+                className="flex-80 layout-row layout-align-start-start layout-wrap"
               >
                 <p
-                  className="flex-100 center letter_3"
+                  className="flex-100  letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-none letter_3"
+                  className="flex-90 offset-10 margin_5"
                 >
                   19
                 </p>
@@ -7937,32 +8920,44 @@ exports[`with containers 1`] = `
         </div>
       </div>
       <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <h3
-          className="flex-70 letter_3"
-        >
-          Shipment Total:
-        </h3>
-        <div
-          className="flex-30 layout-row layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            USD 12.00 
-          </h3>
-        </div>
-      </div>
-      <div
         className=" main_panel"
       >
         <div
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center"
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
           >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 11.00 
+                </h5>
+              </div>
+            </div>
             <div
               className=" flex-none content_width_booking layout-row layout-align-center-center"
             >
@@ -7970,7 +8965,12 @@ exports[`with containers 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 firstStep={false}
@@ -8009,6 +9009,123 @@ exports[`with containers 1`] = `
                 }
               />
             </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center layout-wrap"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  USD 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-align-end-center layout-wrap"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
           </div>
         </div>
       </div>
@@ -8062,7 +9179,12 @@ exports[`with containers 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "customs": Object {
+                      "hasUnknown": false,
+                    },
+                    "total": Object {
+                      "value": 11,
+                    },
                   }
                 }
                 tenant={
@@ -8318,7 +9440,7 @@ exports[`with containers 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
