@@ -10,7 +10,8 @@ class TruckingAvailabilityController < ApplicationController
 			nexus_ids: params[:nexus_ids].split(',').map(&:to_i),
 			carriage:  params[:carriage]
 		)
-		nexus_ids = trucking_pricings.map(&:nexus_id).uniq
+    nexus_ids = trucking_pricings.map(&:nexus_id).uniq
+    
 		response = {
 			trucking_available: !trucking_pricings.empty?, nexus_ids: nexus_ids
 		}.deep_transform_keys { |k| k.to_s.camelize(:lower) }

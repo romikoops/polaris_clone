@@ -101,14 +101,10 @@
         <columns small="6" style="width: 45%;">         
           <p class="bold">
             <span class="bold">Overall Rate:</span> <br/>
-            <span class="bold">Service Charges:</span>
           </p>
         </columns>
         <columns small="6" style="width: 55%;">
           <p>
-            <span>
-              <%= format_to_price(@shipment.total_price) %>
-            </span><br>
             <span>
               <%= format_to_price(@shipment.total_price) %>
             </span>

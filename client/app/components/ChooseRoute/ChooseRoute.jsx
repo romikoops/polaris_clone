@@ -130,12 +130,15 @@ export class ChooseRoute extends Component {
     schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const availableMoTKeys = {}
     schedules.forEach((s) => {
-      availableMoTKeys[s.mode_of_transport] = true
+      if (tenant.data.scope.modes_of_transport[s.mode_of_transport][shipment.load_type]) {
+        availableMoTKeys[s.mode_of_transport] = true
+      }
     })
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
-    const mKeys = ['rail', 'ocean', 'air', 'truck']
+    const mKeys = Object.keys(tenant.data.scope.modes_of_transport)
+      .filter(motKey => tenant.data.scope.modes_of_transport[motKey][shipment.load_type])
     const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
     const noMotKeys = Object.keys(this.state.selectedMoT).filter(k => !this.state.selectedMoT[k])
     const scheduleObj = {}
@@ -144,11 +147,13 @@ export class ChooseRoute extends Component {
       scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {
-      const topSched = scheduleObj[key].shift()
-      if (topSched) {
-        closestRoutes.push(topSched)
+      if (scheduleObj[key]) {
+        const topSched = scheduleObj[key].shift()
+        if (topSched) {
+          closestRoutes.push(topSched)
+        }
+        focusRoutes.push(...scheduleObj[key])
       }
-      focusRoutes.push(...scheduleObj[key])
     })
     noMotKeys.forEach((key) => {
       altRoutes.push(...scheduleObj[key])
@@ -238,14 +243,17 @@ export class ChooseRoute extends Component {
                   />
                 </div>
                 <div className="flex-30 layout-row layout-align-end-center">
-                  { scope.fixed_currency ? '' : <NamedSelect
-                    className="flex-100"
-                    options={currencyOptions}
-                    value={currentCurrency}
-                    placeholder="Select Currency"
-                    onChange={e => this.handleCurrencyUpdate(e)}
-                  />
-                  }
+                  {scope.fixed_currency ? (
+                    ''
+                  ) : (
+                    <NamedSelect
+                      className="flex-100"
+                      options={currencyOptions}
+                      value={currentCurrency}
+                      placeholder="Select Currency"
+                      onChange={e => this.handleCurrencyUpdate(e)}
+                    />
+                  )}
                 </div>
               </div>
               {closestRoutestoRender}

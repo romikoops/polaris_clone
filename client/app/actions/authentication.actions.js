@@ -1,19 +1,23 @@
 import { push } from 'react-router-redux'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
-import { alertActions, shipmentActions, adminActions, userActions } from './'
+import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
 import { getSubdomain } from '../helpers/subdomain'
 
+const { localStorage } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
 console.log(cookieKey)
 function logout () {
   function lo () {
+    localStorage.removeItem('state')
     return { type: authenticationConstants.LOGOUT }
   }
   return (dispatch) => {
     dispatch(adminActions.logOut())
     dispatch(userActions.logOut())
+    dispatch(shipmentActions.logOut())
+    dispatch(tenantActions.logOut())
     authenticationService.logout()
     dispatch(lo())
   }

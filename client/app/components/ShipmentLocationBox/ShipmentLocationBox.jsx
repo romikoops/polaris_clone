@@ -570,10 +570,14 @@ export class ShipmentLocationBox extends Component {
       (truckingAvailable, nexusIds) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
+            const { direction } = this.props.shipmentData.shipment
+            const { scope } = this.props
+            const carriageOptionScope = scope.carriage_options[`${prefix}_carriage`][direction]
             let nexusOption
-            if (nexus) {
+            if (nexus && carriageOptionScope === 'optional') {
               nexusOption = availableNexuses.find(option => option.label === nexus.name)
             }
+
             if (nexusOption) {
               this.handleTrucking({
                 target: {
@@ -586,7 +590,6 @@ export class ShipmentLocationBox extends Component {
               })
             }
             target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
-
             const fieldsHaveErrors = !nexusOption
             this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
             const addressFormsHaveErrors =
@@ -608,7 +611,6 @@ export class ShipmentLocationBox extends Component {
         })
       }
     )
-
     addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
       this.setState({
         [target]: address,

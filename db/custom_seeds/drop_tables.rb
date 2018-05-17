@@ -13,4 +13,4 @@ LocalCharge.delete_all
 CustomsFee.delete_all
 Location.delete_all
 UserLocation.delete_all
-Tenant.delete_all
+Tenant.destroy_all

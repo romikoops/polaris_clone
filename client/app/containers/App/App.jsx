@@ -13,6 +13,7 @@ import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
 import { appActions } from '../../actions'
+import { defaultTheme } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
@@ -20,6 +21,13 @@ import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
 
 class App extends Component {
+  componentWillMount () {
+    const { tenant, isFetching, appDispatch } = this.props
+    if (!tenant && !isFetching) {
+      const subdomain = getSubdomain()
+      appDispatch.fetchTenantIfNeeded(subdomain)
+    }
+  }
   componentDidMount () {
     const { appDispatch } = this.props
     const subdomain = getSubdomain()
@@ -38,6 +46,9 @@ class App extends Component {
     const {
       tenant, isFetching, user, loggedIn, showMessages, sending
     } = this.props
+    if (!tenant || (tenant && !tenant.data)) {
+      return <Loading theme={defaultTheme} text="loading..." />
+    }
     const { theme } = tenant.data
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
@@ -45,9 +56,12 @@ class App extends Component {
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
           {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
-          {user && user.id && tenant && tenant.data &&
-            user.tenant_id !== tenant.data.id && user.role_id !== 3
-            ? (
+          {user &&
+          user.id &&
+          tenant &&
+          tenant.data &&
+          user.tenant_id !== tenant.data.id &&
+          user.role_id !== 3 ? (
               <Redirect to="/signout" />
             ) : (
               ''
@@ -68,7 +82,7 @@ class App extends Component {
             <Route
               exact
               path="/password_reset"
-              render={props => (<ResetPasswordForm user={user} theme={theme} {...props} />)}
+              render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
             />
             <PrivateRoute
               path="/booking"

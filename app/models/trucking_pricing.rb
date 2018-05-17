@@ -192,4 +192,6 @@ class TruckingPricing < ApplicationRecord
   def self.parse_sql_record(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
+
+  
 end

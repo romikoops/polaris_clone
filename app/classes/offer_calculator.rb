@@ -79,6 +79,7 @@ class OfferCalculator
     # determine_schedules!
     # add_schedules_charges!
     add_trip_charges! 
+    
     convert_currencies!
     prep_schedules!
   end

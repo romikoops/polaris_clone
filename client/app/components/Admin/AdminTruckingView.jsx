@@ -24,7 +24,7 @@ export class AdminTruckingView extends Component {
       return truckingPricing.zipcode.join(' - ')
     }
     if (truckingPricing.city) {
-      return truckingPricing.city[0]
+      return truckingPricing.city
     }
     if (truckingPricing.distance) {
       return truckingPricing.distance.join(' - ')

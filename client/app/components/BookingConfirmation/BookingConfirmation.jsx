@@ -581,51 +581,6 @@ export class BookingConfirmation extends Component {
                 styles.heading_style
               } flex-100 layout-row layout-align-space-between-center`}
             >
-              <TextHeading theme={theme} color="white" size={3} text="Additional Services" />
-              <div
-                className="flex-10 layout-row layout-align-center-center"
-                onClick={() => this.handleCollapser('extras')}
-              >
-                {collapser.extras ? (
-                  <i className="fa fa-chevron-down pointy" />
-                ) : (
-                  <i className="fa fa-chevron-up pointy" />
-                )}
-              </div>
-            </div>
-            <div className={`${collapser.extras ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div
-                className={
-                  `${styles.inner_wrapper} flex-100 ` +
-                  'layout-row layout-wrap layout-align-start-start'
-                }
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <div
-                    className="
-                    flex-none
-                     content_width_booking
-                     layout-row
-                     layout-align-center-center"
-                  >
-                    <IncotermExtras theme={theme} feeHash={feeHash} tenant={{ data: tenant }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              `${styles.shipment_card} flex-100 ` +
-              'layout-row layout-align-space-between-center layout-wrap'
-            }
-          >
-            <div
-              style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
-            >
               <TextHeading theme={theme} color="white" size={3} text="Contact Details" />
               <div
                 className="flex-10 layout-row layout-align-center-center"
