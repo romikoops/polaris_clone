@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-center add_contact_btn"
+  key="RANDOM_KEY"
+  onClick={[Function]}
+>
+  <h3>
+    Add a 
+    <br />
+    <span>
+      NOTIFYEE
+    </span>
+  </h3>
+</div>
+`;

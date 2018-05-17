@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start"
+    >
+      <h3>
+        NOTIFYEES 
+        <span
+          className="subtext"
+        >
+           (Optional) 
+        </span>
+      </h3>
+    </div>
+    <div
+      className="notifyee_contacts_sec flex-100 layout-row layout-wrap layout-align-start"
+    >
+      <div
+        className="flex-40"
+        style={
+          Object {
+            "marginBottom": "20px",
+          }
+        }
+      >
+        <ContactSetterBodyNotifyeeContactsAddContactButton
+          onClick={[Function]}
+        />
+      </div>
+      <div
+        className="flex-40 offset-5"
+        style={
+          Object {
+            "marginBottom": "20px",
+          }
+        }
+      >
+        <ContactSetterBodyNotifyeeContactsContactCard
+          contactData={
+            Object {
+              "contact": Object {
+                "companyName": "FOO_CONTACT_COMPANY",
+                "email": "foo@bar.baz",
+                "firstName": "John",
+                "lastName": "Doe",
+                "phone": "0761452887",
+              },
+              "location": Object {},
+            }
+          }
+          removeFunc={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
