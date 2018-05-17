@@ -247,6 +247,7 @@ export default async function init (options) {
 
     await page.keyboard.press(arrowToPress)
     await delay(DELAY)
+
     await page.keyboard.press('Enter')
     await delay(DELAY)
   }

@@ -31,6 +31,7 @@ test('successful login and placing an export LCL order', async () => {
     await orderExportLCL(puppeteer, expect)
     await puppeteer.browser.close()
   } catch (e) {
+    console.log(e)
     const { screen } = await puppeteer.catchError({})
 
     console.log(e, screen)
@@ -39,7 +40,7 @@ test('successful login and placing an export LCL order', async () => {
   }
 })
 
-test('successful login and placing an export FCL order', async () => {
+test.skip('successful login and placing an export FCL order', async () => {
   try {
     var puppeteer = await init(options)
 

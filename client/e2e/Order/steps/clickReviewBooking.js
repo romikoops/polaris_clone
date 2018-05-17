@@ -5,5 +5,5 @@ export default async function clickReviewBooking (puppeteer) {
   await puppeteer.page.waitForSelector(FINISH_BOOKING_LOADED)
 
   const finishBookingURL = await puppeteer.url()
-  expect(finishBookingURL.endsWith('finish_booking')).toBeTruthy()
+  expect(finishBookingURL.endsWith('final_details')).toBeTruthy()
 }

@@ -4,7 +4,6 @@ const loginButton = 'layout-fill layout-row layout-align-space-around-center'
 
 const BUTTONS = 'button > div'
 const LOGIN_BUTTON = `div[class="${loginButton}"]`
-const LOGIN_LINK_FORM = '.layout-align-space-between div'
 const LOGIN_LINK_HOME = 'div.flex-70 a'
 const PASSWORD = 'input[name="password"]'
 const USER = 'input[name="email"]'
@@ -17,7 +16,6 @@ export default async function login (puppeteer, expect) {
     exists,
     fill,
     page,
-    waitFor,
     waitForSelectors,
     url
   } = puppeteer
@@ -32,14 +30,6 @@ export default async function login (puppeteer, expect) {
      */
   expect(await exists(LOGIN_LINK_HOME)).toBeTruthy()
   await click(LOGIN_LINK_HOME)
-
-  /**
-     * Click on login link within the form
-     */
-  expect(await waitFor(LOGIN_LINK_FORM, 2)).toBeTruthy()
-  const [, loginDiv] = await page.$$(LOGIN_LINK_FORM)
-  await loginDiv.click()
-  await loginDiv.dispose()
 
   /**
      * Fill username and password
