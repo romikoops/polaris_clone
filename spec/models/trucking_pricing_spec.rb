@@ -232,26 +232,26 @@ describe TruckingPricing, type: :model do
       end      
 
       context 'main tests' do
-        it 'finds the correct pricing and destinations' do         
-          create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
-            create(:hub_trucking,
-              hub:                  hub,
-              trucking_destination: trucking_destination,
-              trucking_pricing:     trucking_pricing
-            )
-          end
+        # it 'finds the correct pricing and destinations' do         
+        #   create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
+        #     create(:hub_trucking,
+        #       hub:                  hub,
+        #       trucking_destination: trucking_destination,
+        #       trucking_pricing:     trucking_pricing
+        #     )
+        #   end
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+        #   trucking_pricings = described_class.find_by_hub_ids(
+        #     hub_ids: [hub.id], tenant_id: tenant.id
+        #   )
 
-          expect(trucking_pricings).to match([
-            {
-              "truckingPricing" => trucking_pricing,
-              "zipcode"         => ["15000", "15099"]          
-            }
-          ])
-        end
+        #   expect(trucking_pricings).to match([
+        #     {
+        #       "truckingPricing" => trucking_pricing,
+        #       "zipcode"         => ["15000", "15099"]          
+        #     }
+        #   ])
+        # end
 
         it 'finds the correct pricing and destination for multiple min/max groups per zone' do         
           create_list(:trucking_destination, 100, :zipcode_broken_sequence).each do |trucking_destination|

@@ -94,25 +94,41 @@ class TruckingPricing < ApplicationRecord
     raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
 
     sanitized_query = sanitize_sql(["
-      SELECT trucking_pricings.id, (
-        CASE
-          WHEN MAX(trucking_destinations.zipcode) != '0'
-            THEN ('zipcode', MIN(trucking_destinations.zipcode), MAX(trucking_destinations.zipcode))
-          WHEN MAX(trucking_destinations.distance) != '0'
-            THEN ('distance', MIN(trucking_destinations.distance), MAX(trucking_destinations.distance))
-          ELSE
-            ('city', MAX(geometries.name_2), MAX(geometries.name_4))
-        END
-      ) AS filter
-      FROM  trucking_pricings
-      JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-      JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-      FULL OUTER JOIN geometries ON trucking_destinations.geometry_id = geometries.id                           
-      WHERE trucking_pricings.tenant_id = :tenant_id
-      AND   hub_truckings.hub_id IN (:hub_ids)
-      GROUP BY trucking_pricings.id
-      ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(geometries.name_2), MAX(geometries.name_4)
+      SELECT tp_id, ident_type, MIN(ident_value), MAX(ident_value), range
+      FROM (
+        SELECT tp_id, ident_type, ident_value,
+          (
+            DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value)
+            + MIN(ident_value) OVER(PARTITION BY tp_id, ident_type)
+            - ident_value
+          ) AS range
+        FROM (
+          SELECT
+            trucking_pricings.id AS tp_id,
+            CASE
+              WHEN trucking_destinations.zipcode  IS NOT NULL THEN 'zipcode'
+              WHEN trucking_destinations.distance IS NOT NULL THEN 'distance'
+              ELSE 'city'
+            END AS ident_type,
+            CASE
+              WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
+              WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
+              ELSE trucking_destinations.geometry_id
+            END AS ident_value
+          FROM trucking_pricings
+          JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
+          JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
+          FULL OUTER JOIN geometries ON trucking_destinations.geometry_id = geometries.id                           
+          WHERE trucking_pricings.tenant_id = :tenant_id
+          AND   hub_truckings.hub_id IN (:hub_ids)
+        ) AS sub_query_lvl_2
+      ) AS sub_query_lvl_1
+      GROUP BY tp_id, ident_type, range
+      ORDER BY MAX(ident_value)      
     ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
+
+    x = connection.exec_query(sanitized_query).to_a
+    byebug
 
     connection.exec_query(sanitized_query).map do |row|
       filter = parse_sql_record(row["filter"])
