@@ -88,7 +88,6 @@ class TruckingPricing < ApplicationRecord
 
   end
 
-
   def self.find_by_hub_ids(args = {})
     hub_ids = args[:hub_ids]
     raise ArgumentError, "Must provide hub_ids"   if hub_ids.nil?
@@ -108,14 +107,11 @@ class TruckingPricing < ApplicationRecord
       FROM  trucking_pricings
       JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
       JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-      JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-      JOIN  locations             ON hubs.location_id                      = locations.id
-      JOIN  tenants               ON hubs.tenant_id                        = tenants.id
-      JOIN  geometries            ON trucking_destinations.geometry_id     = geometries.id                           
-      WHERE tenants.id = :tenant_id
-      AND   hubs.id IN (:hub_ids)
+      FULL OUTER JOIN geometries ON trucking_destinations.geometry_id = geometries.id                           
+      WHERE trucking_pricings.tenant_id = :tenant_id
+      AND   hub_truckings.hub_id IN (:hub_ids)
       GROUP BY trucking_pricings.id
-      ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(trucking_destinations.city_name)
+      ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(geometries.name_2), MAX(geometries.name_4)
     ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
 
     connection.exec_query(sanitized_query).map do |row|
@@ -123,7 +119,7 @@ class TruckingPricing < ApplicationRecord
 
       ident_type  = filter.first
       ident_value = ident_type == "city" ? filter[1..-1].join(", ") : filter[1..-1]
-
+      
       {
         "truckingPricing" => find(row["id"]),
         ident_type        => ident_value
@@ -192,6 +188,4 @@ class TruckingPricing < ApplicationRecord
   def self.parse_sql_record(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
-
-  
 end
