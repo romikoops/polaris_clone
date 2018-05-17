@@ -248,7 +248,8 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([
             {
               "truckingPricing" => trucking_pricing,
-              "zipcode"         => "15000 - 15099"          
+              "zipcode"         => "15000 - 15099",          
+              "countryCode"    => "SE"          
             }
           ])
         end
@@ -269,11 +270,13 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([
             {
               "truckingPricing" => trucking_pricing,
-              "zipcode"         => "15000 - 15039"          
+              "zipcode"         => "15000 - 15039",
+              "countryCode"    => "SE"
             },
             {
               "truckingPricing" => trucking_pricing,
-              "zipcode"         => "15050 - 15109"          
+              "zipcode"         => "15050 - 15109",          
+              "countryCode"    => "SE"
             }
           ])
         end
@@ -294,7 +297,8 @@ describe TruckingPricing, type: :model do
           expect(trucking_pricings).to match([
             {
               "truckingPricing" => trucking_pricing,
-              "city"            => "Testname4, Gothenburg"
+              "city"            => "Testname4, Gothenburg",
+              "countryCode"     => "SE"
             }
           ])
         end
