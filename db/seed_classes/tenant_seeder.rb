@@ -127,7 +127,20 @@ class TenantSeeder
           ocean: "imc.sea.se@greencarrier.se"
         }
       },
-      
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: "www.example.com",
+            link_text: "example",
+            text: "This is just an example."
+          },
+          {
+            href: "www.example2.com",
+            link_text: "example2",
+            text: "This is just an example2."
+          }         
+        ]
+      },      
       subdomain: "greencarrier",
       name: "Greencarrier",
       currency: 'USD',
@@ -228,6 +241,20 @@ class TenantSeeder
           ocean: "imc.sea@demo.com",
           rail: "imc.rail@demo.com"
         }
+      },
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: "www.example.com",
+            link_text: "example",
+            text: "This is just an example."
+          },
+          {
+            href: "www.example2.com",
+            link_text: "example2",
+            text: "This is just an example2."
+          }         
+        ]
       },
       subdomain: "demo",
       name: "Demo",
