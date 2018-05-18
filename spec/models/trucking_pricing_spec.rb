@@ -210,7 +210,7 @@ describe TruckingPricing, type: :model do
       end
     end
 
-    describe '.find_by_hub_ids' do
+    describe '.find_by_hub_id' do
       let(:tenant) { create(:tenant) }
       let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
@@ -218,15 +218,9 @@ describe TruckingPricing, type: :model do
       let(:trucking_pricing) { create(:trucking_pricing, courier: courier, tenant: tenant) }
 
       context 'basic tests' do
-        it 'raises an ArgumentError if no tenant_id is provided' do         
+        it 'raises an ArgumentError if no hub_id are provided' do         
           expect {
-            described_class.find_by_hub_ids(hub_ids: [hub.id])
-          }.to raise_error(ArgumentError)
-        end 
-
-        it 'raises an ArgumentError if no hub_ids are provided' do         
-          expect {
-            described_class.find_by_hub_ids(tenant_id: tenant.id)
+            described_class.find_by_hub_id()
           }.to raise_error(ArgumentError)
         end
       end      
@@ -241,9 +235,7 @@ describe TruckingPricing, type: :model do
             )
           end
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
 
           expect(trucking_pricings).to match([
             {
@@ -263,9 +255,7 @@ describe TruckingPricing, type: :model do
             )
           end
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
 
           expect(trucking_pricings).to match([
             {
@@ -285,9 +275,7 @@ describe TruckingPricing, type: :model do
             trucking_pricing:     trucking_pricing
           )
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
 
           expect(trucking_pricings).to match([
             {

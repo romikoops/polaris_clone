@@ -478,7 +478,7 @@ module DocumentTools
     filename = "#{hub.name}_#{target_load_type}_trucking_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
     dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
-    unfiltered_results = TruckingPricing.find_by_hub_ids(hub_ids: [options[:hub_id]], tenant_id: tenant.id)
+    unfiltered_results = TruckingPricing.find_by_hub_id(options[:hub_id])
     # byebug
     carriage_reducer = {}
     results_by_truck_type = {}

@@ -88,10 +88,12 @@ class TruckingPricing < ApplicationRecord
 
   end
 
-  def self.find_by_hub_ids(args = {})
-    hub_ids = args[:hub_ids]
-    raise ArgumentError, "Must provide hub_ids"   if hub_ids.nil?
-    raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
+  def self.find_by_hub_id(hub_id)
+    find_by_hub_ids([hub_id])
+  end
+
+  def self.find_by_hub_ids(hub_ids = [])
+    raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
 
     sanitized_query = sanitize_sql(["
       SELECT
@@ -137,8 +139,7 @@ class TruckingPricing < ApplicationRecord
             FROM trucking_pricings
             JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
             JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id             
-            WHERE trucking_pricings.tenant_id = :tenant_id
-            AND   hub_truckings.hub_id IN (:hub_ids)
+            WHERE hub_truckings.hub_id IN (:hub_ids)
           ) AS sub_query_lvl_3
         ) AS sub_query_lvl_2
         FULL OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
@@ -146,7 +147,7 @@ class TruckingPricing < ApplicationRecord
         ORDER BY MAX(ident_value)      
       ) AS sub_query_lvl_1
       GROUP BY trucking_pricing_id
-    ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
+    ", hub_ids: hub_ids])
 
     connection.exec_query(sanitized_query).map do |row|
       {
