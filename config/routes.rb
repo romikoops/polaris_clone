@@ -119,7 +119,8 @@ Rails.application.routes.draw do
 
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
-
+    get 'currencies/base/:currency', to: 'currencies#get_currencies_for_base'
+    get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: [:index, :show, :create, :update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'

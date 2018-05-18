@@ -19,11 +19,6 @@ subdomains.each do |sub|
   req = {"xlsx" => hubs}
   overwrite_hubs(req, shipper)
 
-# # #   # # # # puts "# Overwrite public pricings from excel sheet"
-
-#   public_pricings = File.open("#{Rails.root}/db/dummydata/3_2_standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
   public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
   req = {"xlsx" => public_pricings}
   overwrite_freight_rates(req, shipper, true)

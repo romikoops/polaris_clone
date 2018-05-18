@@ -125,6 +125,14 @@ class SideNav extends Component {
         url: '/admin/wizard',
         target: 'wizard',
         tooltip: menuTip.setup
+      },
+      {
+        key: v4(),
+        icon: 'fa-money',
+        text: 'Currencies',
+        url: '/admin/currencies',
+        target: 'currencies',
+        tooltip: menuTip.currencies
       }
     ]
 
@@ -192,6 +200,9 @@ class SideNav extends Component {
         break
       case 'wizard':
         adminDispatch.goTo('/admin/wizard')
+        break
+      case 'currencies':
+        adminDispatch.goTo('/admin/currencies')
         break
       case 'superadmin':
         adminDispatch.goTo('/admin/superadmin')

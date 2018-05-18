@@ -124,10 +124,14 @@ export class AdminTruckingView extends Component {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
+  backToList () {
+    this.setState({ currentTruckingPricing: false })
+  }
   closeSuccessDialog () {
     const { documentDispatch } = this.props
     documentDispatch.closeViewer()
   }
+
   handleSearchChange (event) {
     if (event.target.value === '') {
       this.setState({
@@ -192,8 +196,6 @@ export class AdminTruckingView extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    console.log('DOCUMENT!!!!!!')
-    console.log(document)
     const truckingPricingToDisplay =
       truckingDetail.truckingPricings
         .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
@@ -256,6 +258,18 @@ export class AdminTruckingView extends Component {
           <p className="flex-none">No truckings available</p>
         </div>
       )
+    const backBtn = (
+      <div
+        className="flex-20 layout-row layout-align-center-center"
+        onClick={() => this.backToList()}
+      >
+        <div className="flex-none layout-row layout-aling-center-center">
+          <i className="flex-none fa fa-long-arrow-left" />
+        </div>
+        <div className="flex-40 layout-row layout-aling-center-center">
+          <p className="flex-none">Back to list</p>
+        </div>
+      </div>)
     const truckView = currentTruckingPricing ? displayPanel : searchResults
     const truckFilter = loadTypeBool
       ? (<div className="flex-100 layout-row layout-align-space-between-center">
@@ -293,6 +307,7 @@ export class AdminTruckingView extends Component {
               }`}
             >
               <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
+              { currentTruckingPricing ? backBtn : ''}
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
               {/* <div className="flex-25 layout-row layout-align-center-start layout-wrap">
@@ -343,7 +358,7 @@ export class AdminTruckingView extends Component {
                   {searchResults}
                 </div>
               </div> */}
-              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+              <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                 {truckView}
               </div>
             </div>
