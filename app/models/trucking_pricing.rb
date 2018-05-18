@@ -100,7 +100,7 @@ class TruckingPricing < ApplicationRecord
         trucking_pricing_id,
         MIN(country_code) AS country_code,
         MIN(ident_type) AS ident_type,
-        STRING_AGG(ident_value, ',') AS ident_value
+        STRING_AGG(ident_values, ',') AS ident_values
       FROM (
         SELECT
           tp_id AS trucking_pricing_id,
@@ -111,7 +111,7 @@ class TruckingPricing < ApplicationRecord
               THEN MIN(geometries.name_4) || '*' || MIN(geometries.name_2)
             ELSE
               MIN(ident_value)::text      || '*' || MAX(ident_value)::text
-          END AS ident_value
+          END AS ident_values
         FROM (
           SELECT tp_id, ident_type, ident_value, country_code,
             CASE
@@ -146,13 +146,15 @@ class TruckingPricing < ApplicationRecord
         GROUP BY tp_id, ident_type, range
         ORDER BY MAX(ident_value)      
       ) AS sub_query_lvl_1
+      WHERE trucking_pricing_id IS NOT NULL
       GROUP BY trucking_pricing_id
+      ORDER BY ident_values
     ", hub_ids: hub_ids])
 
     connection.exec_query(sanitized_query).map do |row|
       {
         "truckingPricing" => find(row["trucking_pricing_id"]),
-        row["ident_type"] => row["ident_value"].split(',').map { |range| range.split('*') },
+        row["ident_type"] => row["ident_values"].split(',').map { |range| range.split('*') },
         "countryCode"     => row["country_code"]
       }
     end
