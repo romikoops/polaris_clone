@@ -130,15 +130,20 @@ class TenantSeeder
       email_links: {
         confirmation_instructions: [
           {
-            href: "www.example.com",
-            link_text: "example",
-            text: "This is just an example."
+            href: "https://freightservices.greencarrier.com/solution/tools/",
+            link_text: "Nordic Association of Freight Forwarders",
+            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
           },
           {
-            href: "www.example2.com",
-            link_text: "example2",
-            text: "This is just an example2."
-          }         
+            href: "https://freightservices.greencarrier.com/added-services/claims/",
+            link_text: "Claims Policy",
+            text: "In the event you suffer a loss or damage to your goods, please refer to Greencarrier Freight Services' Claims Policy."
+          },
+          {
+            href: "https://greencarrier.itsmycargo.com/terms_and_conditions",
+            link_text: "Terms and Conditions",
+            text: "For more information, please refer to the Terms and Conditions."
+          }
         ]
       },      
       subdomain: "greencarrier",
@@ -246,8 +251,8 @@ class TenantSeeder
         confirmation_instructions: [
           {
             href: "www.example.com",
-            link_text: "example",
-            text: "This is just an example."
+            link_text: "Nordic Association of Freight Forwarders",
+            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
           },
           {
             href: "www.example2.com",

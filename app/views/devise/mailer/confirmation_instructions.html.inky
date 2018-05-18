@@ -1,7 +1,14 @@
 <%= render "account_layout" do %>
   <row>
-    <columns>      
-  		<p>You can confirm your account email through the button below:</p>
+    <columns>
+      <p>
+        Thank you for registering a new account in the
+        <span>
+          <%= @resource.tenant.name %>
+        </span>
+        Online Shop (powered by ItsMyCargo).
+      </p>
+  		<p>You can confirm your account email by clicking the button below:</p>
     </columns>
   </row>
 
@@ -14,12 +21,10 @@
     <columns>
       <% @links.each do |link_data| %>
         <p>
-          <% link_data['text'].split.each do |word| %>
-            <% if word.gsub(/\W/, "") == link_data['link_text'] %>
-              <%= link_to word, link_data['href'] %>
-            <% else %>
-              <%= word %>
-            <% end %>
+          <% text_chunks = link_data['text'].split(link_data['link_text']) %>
+          <% text_chunks.each do |text_chunk| %>
+            <%= text_chunk %>
+            <%= link_to link_data['link_text'], link_data['href'] unless text_chunk == text_chunks.last %>
           <% end %>
         </p>
       <% end %>
