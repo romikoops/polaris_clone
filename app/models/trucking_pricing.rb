@@ -95,55 +95,63 @@ class TruckingPricing < ApplicationRecord
 
     sanitized_query = sanitize_sql(["
       SELECT
-        tp_id AS trucking_pricing_id,
+        trucking_pricing_id,
         MIN(country_code) AS country_code,
-        ident_type,
-        CASE
-          WHEN ident_type = 'city'
-            THEN MIN(ident_value)
-          ELSE
-            MIN(ident_value) || ' - ' || MAX(ident_value)
-        END AS ident_value
-        FROM (
-        SELECT tp_id, ident_type, ident_value, country_code,
+        MIN(ident_type) AS ident_type,
+        STRING_AGG(ident_value, ',') AS ident_value
+      FROM (
+        SELECT
+          tp_id AS trucking_pricing_id,
+          MIN(country_code) AS country_code,
+          ident_type,
           CASE
-          WHEN ident_type <> 'city'
-            THEN (
-              DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value)
-              + (MIN(ident_value) OVER(PARTITION BY tp_id, ident_type))::integer
-              - ident_value::integer
-            )
-          END AS range
+            WHEN ident_type = 'city'
+              THEN MIN(geometries.name_4) || '*' || MIN(geometries.name_2)
+            ELSE
+              MIN(ident_value)::text      || '*' || MAX(ident_value)::text
+          END AS ident_value
         FROM (
-          SELECT
-            trucking_pricings.id AS tp_id,
-            trucking_destinations.country_code,
+          SELECT tp_id, ident_type, ident_value, country_code,
             CASE
-              WHEN trucking_destinations.zipcode  IS NOT NULL THEN 'zipcode'
-              WHEN trucking_destinations.distance IS NOT NULL THEN 'distance'
-              ELSE 'city'
-            END AS ident_type,
-            CASE
-              WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::text
-              WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::text
-              ELSE geometries.name_4 || ', ' || geometries.name_2
-            END AS ident_value
-          FROM trucking_pricings
-          JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-          JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-          FULL OUTER JOIN geometries ON trucking_destinations.geometry_id = geometries.id                           
-          WHERE trucking_pricings.tenant_id = :tenant_id
-          AND   hub_truckings.hub_id IN (:hub_ids)
+            WHEN ident_type <> 'city'
+              THEN (
+                DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value)
+                + (MIN(ident_value) OVER(PARTITION BY tp_id, ident_type))::integer
+                - ident_value::integer
+              )
+            END AS range
+          FROM (
+            SELECT
+              trucking_pricings.id AS tp_id,
+              trucking_destinations.country_code,
+              CASE
+                WHEN trucking_destinations.zipcode  IS NOT NULL THEN 'zipcode'
+                WHEN trucking_destinations.distance IS NOT NULL THEN 'distance'
+                ELSE 'city'
+              END AS ident_type,
+              CASE
+                WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
+                WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
+                ELSE trucking_destinations.geometry_id
+              END AS ident_value
+            FROM trucking_pricings
+            JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
+            JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id             
+            WHERE trucking_pricings.tenant_id = :tenant_id
+            AND   hub_truckings.hub_id IN (:hub_ids)
+          ) AS sub_query_lvl_3
         ) AS sub_query_lvl_2
+        FULL OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
+        GROUP BY tp_id, ident_type, range
+        ORDER BY MAX(ident_value)      
       ) AS sub_query_lvl_1
-      GROUP BY tp_id, ident_type, range
-      ORDER BY MAX(ident_value)      
+      GROUP BY trucking_pricing_id
     ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
 
-    connection.exec_query(sanitized_query).map do |row|      
+    connection.exec_query(sanitized_query).map do |row|
       {
         "truckingPricing" => find(row["trucking_pricing_id"]),
-        row["ident_type"] => row["ident_value"],
+        row["ident_type"] => row["ident_value"].split(',').map { |range| range.split('*') },
         "countryCode"     => row["country_code"]
       }
     end
