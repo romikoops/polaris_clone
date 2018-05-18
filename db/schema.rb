@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180517151011) do
+ActiveRecord::Schema.define(version: 20180518130726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -487,6 +487,7 @@ ActiveRecord::Schema.define(version: 20180517151011) do
     t.jsonb "scope"
     t.string "currency", default: "EUR"
     t.jsonb "web"
+    t.jsonb "email_links"
   end
 
   create_table "transport_categories", force: :cascade do |t|
