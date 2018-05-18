@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { v4 } from 'node-uuid'
 // import Toggle from 'react-toggle'
 import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
@@ -30,7 +31,7 @@ export class TruckingDisplayPanel extends Component {
     const modifierString =
       fee.rate.base === 1 ? `per ${modKey}` : `per ${fee.rate.base} ${modKey}'s`
     const displayCell = (
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
+      <div key={v4()} className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
         <div className="flex-33 layout-align-start-center">
           <p className="flex-none no_m">
             {`${parseInt(fee[`min_${modKey}`], 10)} - ${parseInt(

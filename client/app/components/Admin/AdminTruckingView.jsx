@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import Fuse from 'fuse.js'
+import Truncate from 'react-truncate'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Toggle from 'react-toggle'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { history } from '../../helpers'
+import { history, capitalize, nameToDisplay } from '../../helpers'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
-// import { NamedSelect } from '../NamedSelect/NamedSelect'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../../components/Documents/Selector'
 import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
+import { cargoClassOptions } from '../../constants'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -21,13 +23,19 @@ export class AdminTruckingView extends Component {
   }
   static getTruckingPricingKey (truckingPricing) {
     if (truckingPricing.zipcode) {
-      return truckingPricing.zipcode
+      const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
+      const endResult = joinedArrays.join(', ')
+      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
     }
     if (truckingPricing.city) {
-      return truckingPricing.city
+      const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
+      const endResult = joinedArrays.join(', ')
+      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
     }
     if (truckingPricing.distance) {
-      return truckingPricing.distance
+      const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
+      const endResult = joinedArrays.join(', ')
+      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
     }
     return ''
   }
@@ -37,21 +45,16 @@ export class AdminTruckingView extends Component {
     this.state = {
       loadTypeBool: true,
       directionBool: true,
-      truckType: '',
+      truckBool: true,
       filteredTruckingPricings: [],
       searchFilter: '',
+      cargoClass: { value: 'fcl_20', label: 'FCL 20ft' },
       expander: {}
     }
   }
 
   componentWillMount () {
     if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
-      const truckType = this.props.truckingDetail.truckingPricings[0].truckingPricing.truck_type
-      if (truckType === 'cargo_item') {
-        this.setState({ truckType: 'default' })
-      } else {
-        this.setState({ truckType })
-      }
       this.handleSearchChange({ target: { value: '' } })
     }
   }
@@ -59,13 +62,22 @@ export class AdminTruckingView extends Component {
     window.scrollTo(0, 0)
   }
   filterTruckingPricingsByType (pricings) {
-    const { loadTypeBool, directionBool, truckType } = this.state
+    const {
+      loadTypeBool, directionBool, truckBool, cargoClass
+    } = this.state
     const loadTypeKey = loadTypeBool ? 'container' : 'cargo_item'
     const directionKey = directionBool ? 'pre' : 'on'
+    const truckKey = truckBool ? 'chassis' : 'side_lifter'
+    if (loadTypeBool) {
+      return pricings
+        .filter(pr => pr.truckingPricing.load_type === loadTypeKey)
+        .filter(pr => pr.truckingPricing.carriage === directionKey)
+        .filter(pr => pr.truckingPricing.truck_type === truckKey)
+        .filter(pr => pr.truckingPricing.cargo_class === cargoClass.value)
+    }
     return pricings
       .filter(pr => pr.truckingPricing.load_type === loadTypeKey)
       .filter(pr => pr.truckingPricing.carriage === directionKey)
-      .filter(pr => pr.truckingPricing.truck_type === truckType)
   }
 
   toggleNew () {
@@ -90,6 +102,9 @@ export class AdminTruckingView extends Component {
   }
   handleLoadTypeToggle (value) {
     this.setState({ loadTypeBool: !this.state.loadTypeBool }, () => {
+      if (this.state.loadTypeBool) {
+        this.setState({ truckBool: false })
+      }
       this.handleSearchChange({ target: { value: '' } })
     })
   }
@@ -101,6 +116,11 @@ export class AdminTruckingView extends Component {
   }
   handleDirectionToggle (value) {
     this.setState({ directionBool: !this.state.directionBool }, () => {
+      this.handleSearchChange({ target: { value: '' } })
+    })
+  }
+  handleCargoClass (selection) {
+    this.setState({ cargoClass: selection }, () => {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
@@ -152,7 +172,8 @@ export class AdminTruckingView extends Component {
       currentTruckingPricing,
       loadTypeBool,
       directionBool,
-      truckBool
+      truckBool,
+      cargoClass
     } = this.state
     // const truckType = truckBool ? 'chassis' : 'side_lifter'
     const uploadStatus = document.viewer ? (
@@ -197,13 +218,7 @@ export class AdminTruckingView extends Component {
         background: rgba(0, 0, 0, 0.5) !important;
       }
     `
-    const nothingSelected = (
-      <div className="layout-fill layout-row layout-align-center-center">
-        <h3 className="flex-none">Please select from the side menu to begin</h3>
-      </div>
-    )
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const truckView = currentTruckingPricing ? displayPanel : nothingSelected
 
     const { expander } = this.state
     const sectionStyle =
@@ -212,26 +227,40 @@ export class AdminTruckingView extends Component {
         : { background: 'darkslategrey', color: 'white' }
     const searchResults =
       filteredTruckingPricings.length > 0 ? (
-        filteredTruckingPricings.map(tp => (
-          <div
-            className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
-              styles.trucking_display_cell
-            }`}
-            key={v4()}
-            onClick={() => this.selectTruckingPricing(tp)}
-          >
-            <p className="flex-none"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
-          </div>
-        ))
+        filteredTruckingPricings.map((tp) => {
+          const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
+          return (
+            <div
+              className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
+                styles.trucking_display_cell
+              }`}
+              key={v4()}
+              onClick={() => this.selectTruckingPricing(tp)}
+            >
+              {loadTypeBool
+                ? <div className="flex-100 layout-row">
+                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
+                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+                </div>
+                : ''
+              }
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+                <p className="flex-90">{capitalize(idenitfierKey)}</p>
+              </div>
+              <p className="flex-90"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
+            </div>
+          )
+        })
       ) : (
         <div className="flex-100 layout-row layout-align-center-center">
           <p className="flex-none">No truckings available</p>
         </div>
       )
+    const truckView = currentTruckingPricing ? displayPanel : searchResults
     const truckFilter = loadTypeBool
       ? (<div className="flex-100 layout-row layout-align-space-between-center">
         <div className="flex-90 layout-row layout-align-space-between-center">
-          <p className="flex-none">Chassis</p>
+          <p className="flex-none">Side Lifter</p>
           <div className="flex-5" />
           <Toggle
             className="flex-none"
@@ -241,7 +270,7 @@ export class AdminTruckingView extends Component {
             onChange={e => this.handleTruckToggle(e)}
           />
           <div className="flex-5" />
-          <p className="flex-none">Side Lifter</p>
+          <p className="flex-none">Chassis</p>
         </div>
       </div>) : ''
     return (
@@ -266,7 +295,7 @@ export class AdminTruckingView extends Component {
               <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-              <div className="flex-25 layout-row layout-align-center-start layout-wrap">
+              {/* <div className="flex-25 layout-row layout-align-center-start layout-wrap">
                 <div className="flex-100 layout-row layout-align-space-between-center">
                   <div className="flex-90 layout-row layout-align-space-between-center">
                     <p className="flex-none">LTL</p>
@@ -313,8 +342,8 @@ export class AdminTruckingView extends Component {
                 >
                   {searchResults}
                 </div>
-              </div>
-              <div className="flex-75 layout-row layout-align-center-start layout-wrap">
+              </div> */}
+              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                 {truckView}
               </div>
             </div>
@@ -322,6 +351,162 @@ export class AdminTruckingView extends Component {
           {styleTagJSX}
         </div>
         <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div
+              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
+              style={sectionStyle}
+            >
+              <i className="flex-none fa fa-filter" />
+              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
+            </div>
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+            >
+              <input
+                type="text"
+                value={searchFilter}
+                placeholder="Search Trucking Zones"
+                onChange={e => this.handleSearchChange(e)}
+              />
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('load_type')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-ship" />
+                  <p className="flex-none">Load Type</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.load_type ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.load_type ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                <div className="flex-90 layout-row layout-align-space-between-center">
+                  <p className="flex-none">LTL</p>
+                  <div className="flex-5" />
+                  <Toggle
+                    className="flex-none"
+                    id="unitView"
+                    name="unitView"
+                    checked={loadTypeBool}
+                    onChange={e => this.handleLoadTypeToggle(e)}
+                  />
+                  <div className="flex-5" />
+                  <p className="flex-none">FTL</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                onClick={() => this.toggleExpander('direction')}
+              >
+                <div className="flex-90 layout-align-start-center layout-row">
+                  <i className="flex-none fa fa-star-half-o" />
+                  <p className="flex-none">Import / Export</p>
+                </div>
+                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                  {expander.direction ? (
+                    <i className="flex-none fa fa-chevron-up" />
+                  ) : (
+                    <i className="flex-none fa fa-chevron-down" />
+                  )}
+                </div>
+              </div>
+              <div
+                className={`${
+                  expander.direction ? styles.open_filter : styles.closed_filter
+                } flex-100 layout-row layout-wrap layout-align-center-start`}
+              >
+                <div className="flex-90 layout-row layout-align-space-between-center">
+                  <p className="flex-none">Export</p>
+                  <div className="flex-5" />
+                  <Toggle
+                    className="flex-none"
+                    id="unitView"
+                    name="unitView"
+                    checked={directionBool}
+                    onChange={e => this.handleDirectionToggle(e)}
+                  />
+                  <div className="flex-5" />
+                  <p className="flex-none">Import</p>
+                </div>
+              </div>
+            </div>
+            { loadTypeBool
+              ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div
+                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                  onClick={() => this.toggleExpander('truck_type')}
+                >
+                  <div className="flex-90 layout-align-start-center layout-row">
+                    <i className="flex-none fa fa-flag" />
+                    <p className="flex-none">Truck Type</p>
+                  </div>
+                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                    {expander.truck_type ? (
+                      <i className="flex-none fa fa-chevron-up" />
+                    ) : (
+                      <i className="flex-none fa fa-chevron-down" />
+                    )}
+                  </div>
+                </div>
+                <div
+                  className={`${
+                    expander.truck_type ? styles.open_filter : styles.closed_filter
+                  } flex-100 layout-row layout-wrap layout-align-center-start`}
+                >
+                  {truckFilter}
+                </div>
+              </div> : '' }
+            { loadTypeBool
+              ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div
+                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                  onClick={() => this.toggleExpander('cargo_class')}
+                >
+                  <div className="flex-90 layout-align-start-center layout-row">
+                    <i className="flex-none fa fa-flag" />
+                    <p className="flex-none">Cargo Class</p>
+                  </div>
+                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                    {expander.cargo_class ? (
+                      <i className="flex-none fa fa-chevron-up" />
+                    ) : (
+                      <i className="flex-none fa fa-chevron-down" />
+                    )}
+                  </div>
+                </div>
+                <div
+                  className={`${
+                    expander.cargo_class ? styles.open_filter : styles.closed_filter
+                  } flex-100 layout-row layout-wrap layout-align-center-start`}
+                >
+                  <NamedSelect
+                    placeholder="Cargo Class"
+                    className={styles.select}
+                    name="cargo_class"
+                    value={cargoClass}
+                    options={cargoClassOptions}
+                    onChange={e => this.handleCargoClass(e)}
+                  />
+                </div>
+              </div> : '' }
+          </div>
           <div
             className={`${
               styles.action_box
