@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Toggle } from 'react-toggle'
+import Toggle from 'react-toggle'
 import PropTypes from '../../../../prop-types'
 import styles from './index.scss'
 import { TextHeading } from '../../../TextHeading/TextHeading'
@@ -179,11 +179,12 @@ export class AdminCurrencyCenter extends Component {
                 onChange={e => this.handleBaseChange(e)}
               />
             </div>
-            <div className="flex-100 layout-row layout-align-center-center">
+            <div className="flex-100 layout-row layout-align-center-center" style={{ marginTop: '10px' }}>
               <SquareButton
                 className="flex-90"
                 handleNext={() => this.refreshRates()}
                 theme={theme}
+                size="small"
                 text="Refresh Rates"
               />
             </div>
