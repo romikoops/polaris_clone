@@ -21,13 +21,13 @@ export class AdminTruckingView extends Component {
   }
   static getTruckingPricingKey (truckingPricing) {
     if (truckingPricing.zipcode) {
-      return truckingPricing.zipcode.join(' - ')
+      return truckingPricing.zipcode
     }
     if (truckingPricing.city) {
       return truckingPricing.city
     }
     if (truckingPricing.distance) {
-      return truckingPricing.distance.join(' - ')
+      return truckingPricing.distance
     }
     return ''
   }
@@ -37,6 +37,7 @@ export class AdminTruckingView extends Component {
     this.state = {
       loadTypeBool: true,
       directionBool: true,
+      truckType: '',
       filteredTruckingPricings: [],
       searchFilter: '',
       expander: {}
@@ -45,6 +46,12 @@ export class AdminTruckingView extends Component {
 
   componentWillMount () {
     if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
+      const truckType = this.props.truckingDetail.truckingPricings[0].truckingPricing.truck_type
+      if (truckType === 'cargo_item') {
+        this.setState({ truckType: 'default' })
+      } else {
+        this.setState({ truckType })
+      }
       this.handleSearchChange({ target: { value: '' } })
     }
   }
@@ -52,12 +59,13 @@ export class AdminTruckingView extends Component {
     window.scrollTo(0, 0)
   }
   filterTruckingPricingsByType (pricings) {
-    const { loadTypeBool, directionBool } = this.state
+    const { loadTypeBool, directionBool, truckType } = this.state
     const loadTypeKey = loadTypeBool ? 'container' : 'cargo_item'
     const directionKey = directionBool ? 'pre' : 'on'
     return pricings
       .filter(pr => pr.truckingPricing.load_type === loadTypeKey)
       .filter(pr => pr.truckingPricing.carriage === directionKey)
+      .filter(pr => pr.truckingPricing.truck_type === truckType)
   }
 
   toggleNew () {
@@ -81,12 +89,18 @@ export class AdminTruckingView extends Component {
     adminDispatch.uploadTrucking(url, file, dir)
   }
   handleLoadTypeToggle (value) {
-    this.setState({ loadTypeBool: !this.state.loadTypeBool }, function () {
+    this.setState({ loadTypeBool: !this.state.loadTypeBool }, () => {
+      this.handleSearchChange({ target: { value: '' } })
+    })
+  }
+
+  handleTruckToggle (value) {
+    this.setState({ truckBool: !this.state.truckBool }, () => {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
   handleDirectionToggle (value) {
-    this.setState({ directionBool: !this.state.directionBool }, function () {
+    this.setState({ directionBool: !this.state.directionBool }, () => {
       this.handleSearchChange({ target: { value: '' } })
     })
   }
@@ -137,9 +151,10 @@ export class AdminTruckingView extends Component {
       searchFilter,
       currentTruckingPricing,
       loadTypeBool,
-      directionBool
+      directionBool,
+      truckBool
     } = this.state
-
+    // const truckType = truckBool ? 'chassis' : 'side_lifter'
     const uploadStatus = document.viewer ? (
       <AdminUploadsSuccess
         theme={theme}
@@ -213,6 +228,22 @@ export class AdminTruckingView extends Component {
           <p className="flex-none">No truckings available</p>
         </div>
       )
+    const truckFilter = loadTypeBool
+      ? (<div className="flex-100 layout-row layout-align-space-between-center">
+        <div className="flex-90 layout-row layout-align-space-between-center">
+          <p className="flex-none">Chassis</p>
+          <div className="flex-5" />
+          <Toggle
+            className="flex-none"
+            id="unitView"
+            name="unitView"
+            checked={truckBool}
+            onChange={e => this.handleTruckToggle(e)}
+          />
+          <div className="flex-5" />
+          <p className="flex-none">Side Lifter</p>
+        </div>
+      </div>) : ''
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         {uploadStatus}
@@ -266,6 +297,7 @@ export class AdminTruckingView extends Component {
                     <p className="flex-none">Import</p>
                   </div>
                 </div>
+                {truckFilter}
                 <div className="flex-100 layout-row layout-alignstart-center input_box_full">
                   <input
                     type="text"

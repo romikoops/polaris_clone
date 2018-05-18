@@ -154,7 +154,7 @@ GEM
     aws-sdk-comprehend (1.0.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-configservice (1.9.0)
+    aws-sdk-configservice (1.10.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
     aws-sdk-connect (1.0.0)
@@ -879,7 +879,7 @@ DEPENDENCIES
   premailer-rails
   puma (~> 3.7)
   rack-cors
-  rails (~> 5.1.4)
+  rails (~> 5.1.6)
   rails-erd
   roo
   rspec-rails
