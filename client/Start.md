@@ -55,9 +55,6 @@ Now it’s time to get data into the database.
 
 > cd into the „client“ folder and run `npm install` and finally `npm start`. Now the application should be running on localhost:8080!
 
-## Reset databases
+## Reset database
 
-> rake db:drop db:create db:migrate db:seed:demo db:seed:trucking_pricing
-
----
-
+> rake db:drop db:create db:migrate db:seed:geometries db:seed:demo db:seed:trucking_pricing
