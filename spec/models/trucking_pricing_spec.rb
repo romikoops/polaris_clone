@@ -249,7 +249,7 @@ describe TruckingPricing, type: :model do
             {
               "truckingPricing" => trucking_pricing,
               "zipcode"         => "15000 - 15099",          
-              "countryCode"    => "SE"          
+              "countryCode"     => "SE"          
             }
           ])
         end
@@ -271,12 +271,12 @@ describe TruckingPricing, type: :model do
             {
               "truckingPricing" => trucking_pricing,
               "zipcode"         => "15000 - 15039",
-              "countryCode"    => "SE"
+              "countryCode"     => "SE"
             },
             {
               "truckingPricing" => trucking_pricing,
               "zipcode"         => "15050 - 15109",          
-              "countryCode"    => "SE"
+              "countryCode"     => "SE"
             }
           ])
         end
