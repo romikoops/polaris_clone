@@ -12,7 +12,6 @@
   // will be detected based on the file contents. Set to false to keep
   // the values you've explicitly set, above.
   "editor.detectIndentation": false,
-  "editor.formatOnPaste": true,
   // Emmet Settings
   "emmet.triggerExpansionOnTab": true,
   "emmet.includeLanguages": {
