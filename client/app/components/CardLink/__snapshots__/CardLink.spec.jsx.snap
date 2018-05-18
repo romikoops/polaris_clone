@@ -6,7 +6,7 @@ exports[`code && selectedType === code 1`] = `
   onClick=""
 >
   <div
-    className="inactive flex-none layout-row layout-align-center-center"
+    className="inactive flex-none layout-row layout-align-center-end"
   >
     <h3
       className="flex-none"

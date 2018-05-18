@@ -2,6 +2,12 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, user, shipmentData, shipment } from '../../mocks'
 
+/**
+ * TODO
+ * Better code coverage as recent change of `shipmentData.schedules`
+ * require significant change of mock implementation
+ */
+
 jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
@@ -37,14 +43,23 @@ jest.mock('../../constants', () => ({
 import { ChooseRoute } from './ChooseRoute'
 
 const tenant = {
-  data: { scope: {} }
+  data: {
+    scope: {
+      modes_of_transport: {}
+    }
+  }
+}
+
+const editedShipmentData = {
+  ...shipmentData,
+  schedules: []
 }
 
 const propsBase = {
   theme,
   user,
   tenant,
-  shipmentData,
+  shipmentData: editedShipmentData,
   chooseRoute: identity,
   messages: [],
   req: {},

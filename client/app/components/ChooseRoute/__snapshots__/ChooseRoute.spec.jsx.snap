@@ -24,11 +24,7 @@ exports[`messages.length > 0 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
-        availableMotKeys={
-          Object {
-            "undefined": true,
-          }
-        }
+        availableMotKeys={Object {}}
         durationFilter={40}
         moT={
           Object {
@@ -222,11 +218,7 @@ exports[`shallow render 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
-        availableMotKeys={
-          Object {
-            "undefined": true,
-          }
-        }
+        availableMotKeys={Object {}}
         durationFilter={40}
         moT={
           Object {
@@ -424,11 +416,7 @@ exports[`user.guest is true 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
-        availableMotKeys={
-          Object {
-            "undefined": true,
-          }
-        }
+        availableMotKeys={Object {}}
         durationFilter={40}
         moT={
           Object {

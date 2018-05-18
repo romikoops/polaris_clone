@@ -17,6 +17,14 @@ test('shallow render', () => {
   expect(shallow(<FloatingMenu {...propsBase} />)).toMatchSnapshot()
 })
 
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<FloatingMenu {...props} />)).toMatchSnapshot()
+})
+
 test('click changes state.expand', () => {
   const wrapper = createWrapper(propsBase)
   const clickableDiv = wrapper.find('.collapse_prompt').first()
