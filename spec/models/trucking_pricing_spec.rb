@@ -223,6 +223,15 @@ describe TruckingPricing, type: :model do
             described_class.find_by_hub_id()
           }.to raise_error(ArgumentError)
         end
+        
+        it 'returns empty array if no pricings were found' do         
+          create(:hub_trucking,
+            hub:                  hub,
+            trucking_destination: create(:trucking_destination, :with_geometry),
+            trucking_pricing:     trucking_pricing
+          )
+          expect(described_class.find_by_hub_id(-1)).to eq([])
+        end
       end      
 
       context 'zipcode identifier' do

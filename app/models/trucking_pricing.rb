@@ -116,11 +116,7 @@ class TruckingPricing < ApplicationRecord
           SELECT tp_id, ident_type, ident_value, country_code,
             CASE
             WHEN ident_type <> 'city'
-              THEN (
-                DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value)
-                + (MIN(ident_value) OVER(PARTITION BY tp_id, ident_type))::integer
-                - ident_value::integer
-              )
+              THEN DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value) - ident_value::integer
             END AS range
           FROM (
             SELECT
@@ -142,11 +138,10 @@ class TruckingPricing < ApplicationRecord
             WHERE hub_truckings.hub_id IN (:hub_ids)
           ) AS sub_query_lvl_3
         ) AS sub_query_lvl_2
-        FULL OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
+        LEFT OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
         GROUP BY tp_id, ident_type, range
-        ORDER BY MAX(ident_value)      
+        ORDER BY MAX(ident_value)
       ) AS sub_query_lvl_1
-      WHERE trucking_pricing_id IS NOT NULL
       GROUP BY trucking_pricing_id
       ORDER BY ident_values
     ", hub_ids: hub_ids])
