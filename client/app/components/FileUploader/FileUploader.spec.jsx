@@ -37,10 +37,19 @@ const propsBase = {
   type: 'FOO_TYPE',
   dispatchFn: identity,
   uploadFn: identity,
+  square: false,
   tooltip: 'FOO_TOOLTIP',
   theme
 }
 
 test('shallow render', () => {
   expect(shallow(<FileUploader {...propsBase} />)).toMatchSnapshot()
+})
+
+test('square is true', () => {
+  const props = {
+    ...propsBase,
+    square: true
+  }
+  expect(shallow(<FileUploader {...props} />)).toMatchSnapshot()
 })

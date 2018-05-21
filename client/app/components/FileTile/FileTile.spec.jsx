@@ -65,7 +65,7 @@ test('shallow render', () => {
   expect(shallow(<FileTile {...propsBase} />)).toMatchSnapshot()
 })
 
-test('doc.approved === "rejected"', () => {
+test('doc.approved === rejected', () => {
   const props = {
     ...propsBase,
     doc: {
@@ -87,10 +87,18 @@ test('doc.approved === null', () => {
   expect(shallow(<FileTile {...props} />)).toMatchSnapshot()
 })
 
-test('props.isAdmin is true', () => {
+test('isAdmin is true', () => {
   const props = {
     ...propsBase,
     isAdmin: true
+  }
+  expect(shallow(<FileTile {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
   }
   expect(shallow(<FileTile {...props} />)).toMatchSnapshot()
 })

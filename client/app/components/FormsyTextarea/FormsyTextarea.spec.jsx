@@ -32,3 +32,10 @@ test('shallow render', () => {
   expect(shallow(<FormsyTextarea {...propsBase} />)).toMatchSnapshot()
 })
 
+test('submitAttempted is true', () => {
+  const props = {
+    ...propsBase,
+    submitAttempted: true
+  }
+  expect(shallow(<FormsyTextarea {...props} />)).toMatchSnapshot()
+})
