@@ -2,6 +2,12 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity } from '../../../mocks'
 
+/**
+ * ISSUE
+ * `const fileName = doc ? ` makes little sense as
+ * other assumptions for `doc` prevent its falsy value
+ */
+
 jest.mock('.././../../helpers', () => ({
   authHeader: x => x,
   gradientTextGenerator: x => x
@@ -44,7 +50,7 @@ test('shallow render', () => {
   expect(shallow(<DocumentsForm {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.displayOnly is true', () => {
+test('displayOnly is true', () => {
   const props = {
     ...propsBase,
     displayOnly: true
@@ -52,18 +58,26 @@ test('props.displayOnly is true', () => {
   expect(shallow(<DocumentsForm {...props} />)).toMatchSnapshot()
 })
 
-test('props.multiple is true', () => {
+test('multiple is true', () => {
   const props = {
     ...propsBase,
-    mutiple: true
+    multiple: true
   }
   expect(shallow(<DocumentsForm {...props} />)).toMatchSnapshot()
 })
 
-test('props.viewer is true', () => {
+test('viewer is true', () => {
   const props = {
     ...propsBase,
     viewer: true
+  }
+  expect(shallow(<DocumentsForm {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
   }
   expect(shallow(<DocumentsForm {...props} />)).toMatchSnapshot()
 })

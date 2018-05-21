@@ -32,11 +32,27 @@ const propsBase = {
   uploadFn: identity,
   tooltip: 'FOO_TOOLTIP',
   text: 'FOO_TEXT',
-  documents: [{ signed_url: 'FOO_SIGNED_URL' }, { signed_url: 'BAR_SIGNED_URL' }],
+  documents: [{ signed_url: 'FOO_SIGNED_URL' }, { signed_url: 'BAR_SIGNED_URL' }, {}],
   isRequired: false,
-  deleteFn: identity,
+  deleteFn: identity
 }
 
 test('shallow render', () => {
   expect(shallow(<DocumentsMultiForm {...propsBase} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<DocumentsMultiForm {...props} />)).toMatchSnapshot()
+})
+
+test('documents is falsy', () => {
+  const props = {
+    ...propsBase,
+    documents: null
+  }
+  expect(shallow(<DocumentsMultiForm {...props} />)).toMatchSnapshot()
 })

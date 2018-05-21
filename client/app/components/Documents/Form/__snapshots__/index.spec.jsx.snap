@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.displayOnly is true 1`] = `
+exports[`displayOnly is true 1`] = `
 <div
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
 >
@@ -60,7 +60,7 @@ exports[`props.displayOnly is true 1`] = `
 </div>
 `;
 
-exports[`props.multiple is true 1`] = `
+exports[`multiple is true 1`] = `
 <div
   className="form flex-100 layout-row layout-align-none-center layout-wrap"
 >
@@ -122,107 +122,10 @@ exports[`props.multiple is true 1`] = `
     </div>
     <div
       className="icon_btn flex-none layout-row layout-align-center-center"
-      onClick={[Function]}
-    >
-      <i
-        className="fa fa-trash"
-      />
-    </div>
+    />
     <div
       className="icon_btn flex-none layout-row layout-align-center-center"
     />
-  </div>
-  <div
-    className="file_error  flex-100 layout-row layout-align-center"
-  >
-    <p
-      className="flex-100"
-    >
-      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
-    </p>
-  </div>
-</div>
-`;
-
-exports[`props.viewer is true 1`] = `
-<div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
->
-  <div
-    className="flex layout-row layout-wrap"
-  >
-    <div
-      className="form_label flex-40 layout-row layout-align-start-center"
-    >
-      <p
-        className="flex-none"
-      >
-        FOO_TEXT
-      </p>
-    </div>
-    <div
-      className="flex-60 layout-row layout-align-center-center"
-    >
-      <p
-        className="flex-none"
-      >
-        <Component
-          lines={1}
-        >
-           
-        </Component>
-      </p>
-    </div>
-  </div>
-  <div
-    className="viewer_row flex-none layout-row layout-align-none-center"
-  >
-    <div
-      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY"
-      data-tip="FOO_TOOLTIP"
-    >
-      <form>
-        <button
-          className="icon_btn flex-none layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-upload clip"
-            style="#333"
-          />
-        </button>
-        <Component
-          className="tooltip"
-          effect="solid"
-          id="RANDOM_KEY"
-        />
-        <input
-          name="FOO_TYPE"
-          onChange={[Function]}
-          type="file"
-        />
-      </form>
-    </div>
-    <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
-      onClick={[Function]}
-    >
-      <i
-        className="fa fa-trash"
-      />
-    </div>
-    <Link
-      className="icon_btn flex-none layout-row layout-align-center-center"
-      replace={false}
-      target="_blank"
-      to="FOO_SIGNED_URL"
-    >
-      <i
-        className="clip fa fa-eye"
-        style="#333"
-      />
-    </Link>
   </div>
   <div
     className="file_error  flex-100 layout-row layout-align-center"
@@ -307,6 +210,186 @@ exports[`shallow render 1`] = `
     <div
       className="icon_btn flex-none layout-row layout-align-center-center"
     />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Component
+          lines={1}
+        >
+           
+        </Component>
+      </p>
+    </div>
+  </div>
+  <div
+    className="icon_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style={
+              Object {
+                "color": "black",
+              }
+            }
+          />
+        </button>
+        <Component
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`viewer is true 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Component
+          lines={1}
+        >
+           
+        </Component>
+      </p>
+    </div>
+  </div>
+  <div
+    className="viewer_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style="#333"
+          />
+        </button>
+        <Component
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <Link
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      replace={false}
+      target="_blank"
+      to="FOO_SIGNED_URL"
+    >
+      <i
+        className="clip fa fa-eye"
+        style="#333"
+      />
+    </Link>
   </div>
   <div
     className="file_error  flex-100 layout-row layout-align-center"

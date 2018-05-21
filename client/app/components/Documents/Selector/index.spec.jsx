@@ -31,3 +31,21 @@ test('state.selected is true', () => {
   wrapper.setState({ selected: true })
   expect(wrapper).toMatchSnapshot()
 })
+
+test('state.error is true', () => {
+  const wrapper = shallow(<DocumentsSelector {...propsBase} />)
+
+  wrapper.setState({ error: true })
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('selected || !options is false', () => {
+  const props = {
+    ...propsBase,
+    options: []
+  }
+  const wrapper = shallow(<DocumentsSelector {...props} />)
+
+  wrapper.setState({ selected: false })
+  expect(wrapper).toMatchSnapshot()
+})
