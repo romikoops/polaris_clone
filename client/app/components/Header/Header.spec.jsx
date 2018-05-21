@@ -2,7 +2,6 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { req, identity, tenant, theme, user } from '../../mocks'
 
-// import { bindActionCreators } from 'redux'
 jest.mock('../NavDropdown/NavDropdown', () => ({
   // eslint-disable-next-line react/prop-types
   NavDropdown: ({ children }) => <div>{children}</div>
@@ -46,7 +45,7 @@ test('shallow render', () => {
   expect(shallow(<Header {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.noMessages is true', () => {
+test('noMessages is true', () => {
   const props = {
     ...propsBase,
     noMessages: true
@@ -54,10 +53,37 @@ test('props.noMessages is true', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test('props.unread > 0', () => {
+test('unread > 0', () => {
   const props = {
     ...propsBase,
     unread: 1
+  }
+  expect(shallow(<Header {...props} />)).toMatchSnapshot()
+})
+
+test('user.role_id === 2', () => {
+  const props = {
+    ...propsBase,
+    user: {
+      ...user,
+      role_id: 2
+    }
+  }
+  expect(shallow(<Header {...props} />)).toMatchSnapshot()
+})
+
+test('user is falsy', () => {
+  const props = {
+    ...propsBase,
+    user: null
+  }
+  expect(shallow(<Header {...props} />)).toMatchSnapshot()
+})
+
+test('showRegistration is true', () => {
+  const props = {
+    ...propsBase,
+    showRegistration: true
   }
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
