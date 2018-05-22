@@ -136,11 +136,14 @@ class Shop extends Component {
   chooseOffer (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
     const { schedule, total } = obj
-    const shipmentData = bookingData.response.stage2
+    // eslint-disable-next-line camelcase
+    const { id, user_id, customs_credit } = bookingData.response.stage2.shipment
     const req = {
-      schedules: [schedule],
+      id,
+      schedule,
       total,
-      shipment: shipmentData.shipment
+      user_id,
+      customs_credit
     }
 
     if (this.props.user.guest) {

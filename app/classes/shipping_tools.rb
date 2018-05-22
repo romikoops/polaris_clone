@@ -298,15 +298,15 @@ module ShippingTools
   def self.choose_offer(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
 
-    shipment.user_id =        params[:shipment][:user_id]
+    shipment.user_id =        params[:user_id]
     shipment.total_price =    params[:total]
-    shipment.customs_credit = params[:shipment][:customsCredit]
+    shipment.customs_credit = params[:customs_credit]
 
-    shipment.schedule_set = params[:schedules]
-    shipment.trip_id =      params[:schedules][0]['trip_id']
-    @schedules =            params[:schedules].as_json
+    shipment.schedule_set = [params[:schedule]]
+    shipment.trip_id =      params[:schedule]['trip_id']
+    @schedule =             params[:schedule].as_json
 
-    shipment.itinerary = Itinerary.find(shipment.schedule_set.first['itinerary_id'])
+    shipment.itinerary = Itinerary.find(@schedule['itinerary_id'])
     case shipment.load_type
     when 'cargo_item'
       @dangerous = false
@@ -317,15 +317,15 @@ module ShippingTools
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub      = Layover.find(@schedules.first['origin_layover_id']).stop.hub
-    @destination_hub = Layover.find(@schedules.first['destination_layover_id']).stop.hub
+    @origin_hub      = Layover.find(@schedule['origin_layover_id']).stop.hub
+    @destination_hub = Layover.find(@schedule['destination_layover_id']).stop.hub
 
     shipment.origin_hub        = @origin_hub
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
 
-    shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
+    shipment.itinerary = Itinerary.find(@schedule["itinerary_id"])
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -345,7 +345,7 @@ module ShippingTools
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
   
-    hub_route = @schedules.first['hub_route_id']
+    hub_route = @schedule['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers
     if containers.present?
@@ -359,7 +359,7 @@ module ShippingTools
       cargos = cargo_items
     end
 
-    shipment.transport_category = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
+    shipment.transport_category = Trip.find(@schedule['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
     shipment.save!
 
     origin_customs_fee = @origin_hub.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
@@ -393,7 +393,7 @@ module ShippingTools
       hubs:           hubs,
       contacts:       @contacts,
       userLocations:  @user_locations,
-      schedules:      @schedules,
+      schedules:      [@schedule],
       dangerousGoods: @dangerous,
       documents:      documents,
       containers:     containers,
