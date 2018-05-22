@@ -14,6 +14,8 @@ class AccountMailer < Devise::Mailer
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
     @redirect_url = base_url(tenant) + "account"
 
+    @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
+
     # headers["Custom-header"] = "Some Headers"
     # opts[:reply_to] = 'example@email.com'
     super

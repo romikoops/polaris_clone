@@ -88,41 +88,69 @@ class TruckingPricing < ApplicationRecord
 
   end
 
-  def self.find_by_hub_ids(args = {})
-    hub_ids = args[:hub_ids]
-    raise ArgumentError, "Must provide hub_ids"   if hub_ids.nil?
-    raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
+  def self.find_by_hub_id(hub_id)
+    find_by_hub_ids([hub_id])
+  end
+
+  def self.find_by_hub_ids(hub_ids = [])
+    raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
 
     sanitized_query = sanitize_sql(["
-      SELECT trucking_pricings.id, (
-        CASE
-          WHEN MAX(trucking_destinations.zipcode) != '0'
-            THEN ('zipcode', MIN(trucking_destinations.zipcode), MAX(trucking_destinations.zipcode))
-          WHEN MAX(trucking_destinations.distance) != '0'
-            THEN ('distance', MIN(trucking_destinations.distance), MAX(trucking_destinations.distance))
-          ELSE
-            ('city', MAX(geometries.name_2), MAX(geometries.name_4))
-        END
-      ) AS filter
-      FROM  trucking_pricings
-      JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-      JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-      FULL OUTER JOIN geometries ON trucking_destinations.geometry_id = geometries.id                           
-      WHERE trucking_pricings.tenant_id = :tenant_id
-      AND   hub_truckings.hub_id IN (:hub_ids)
-      GROUP BY trucking_pricings.id
-      ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(geometries.name_2), MAX(geometries.name_4)
-    ", tenant_id: args[:tenant_id], hub_ids: hub_ids])
+      SELECT
+        trucking_pricing_id,
+        MIN(country_code) AS country_code,
+        MIN(ident_type) AS ident_type,
+        STRING_AGG(ident_values, ',') AS ident_values
+      FROM (
+        SELECT
+          tp_id AS trucking_pricing_id,
+          MIN(country_code) AS country_code,
+          ident_type,
+          CASE
+            WHEN ident_type = 'city'
+              THEN MIN(geometries.name_4) || '*' || MIN(geometries.name_2)
+            ELSE
+              MIN(ident_value)::text      || '*' || MAX(ident_value)::text
+          END AS ident_values
+        FROM (
+          SELECT tp_id, ident_type, ident_value, country_code,
+            CASE
+            WHEN ident_type <> 'city'
+              THEN DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value) - ident_value::integer
+            END AS range
+          FROM (
+            SELECT
+              trucking_pricings.id AS tp_id,
+              trucking_destinations.country_code,
+              CASE
+                WHEN trucking_destinations.zipcode  IS NOT NULL THEN 'zipcode'
+                WHEN trucking_destinations.distance IS NOT NULL THEN 'distance'
+                ELSE 'city'
+              END AS ident_type,
+              CASE
+                WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
+                WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
+                ELSE trucking_destinations.geometry_id
+              END AS ident_value
+            FROM trucking_pricings
+            JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
+            JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id             
+            WHERE hub_truckings.hub_id IN (:hub_ids)
+          ) AS sub_query_lvl_3
+        ) AS sub_query_lvl_2
+        LEFT OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
+        GROUP BY tp_id, ident_type, range
+        ORDER BY MAX(ident_value)
+      ) AS sub_query_lvl_1
+      GROUP BY trucking_pricing_id
+      ORDER BY ident_values
+    ", hub_ids: hub_ids])
 
     connection.exec_query(sanitized_query).map do |row|
-      filter = parse_sql_record(row["filter"])
-
-      ident_type  = filter.first
-      ident_value = ident_type == "city" ? filter[1..-1].join(", ") : filter[1..-1]
-      
       {
-        "truckingPricing" => find(row["id"]),
-        ident_type        => ident_value
+        "truckingPricing" => find(row["trucking_pricing_id"]),
+        row["ident_type"] => row["ident_values"].split(',').map { |range| range.split('*') },
+        "countryCode"     => row["country_code"]
       }
     end
   end

@@ -210,7 +210,7 @@ describe TruckingPricing, type: :model do
       end
     end
 
-    describe '.find_by_hub_ids' do
+    describe '.find_by_hub_id' do
       let(:tenant) { create(:tenant) }
       let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
@@ -218,20 +218,23 @@ describe TruckingPricing, type: :model do
       let(:trucking_pricing) { create(:trucking_pricing, courier: courier, tenant: tenant) }
 
       context 'basic tests' do
-        it 'raises an ArgumentError if no tenant_id is provided' do         
+        it 'raises an ArgumentError if no hub_id are provided' do         
           expect {
-            described_class.find_by_hub_ids(hub_ids: [hub.id])
+            described_class.find_by_hub_id()
           }.to raise_error(ArgumentError)
-        end 
-
-        it 'raises an ArgumentError if no hub_ids are provided' do         
-          expect {
-            described_class.find_by_hub_ids(tenant_id: tenant.id)
-          }.to raise_error(ArgumentError)
+        end
+        
+        it 'returns empty array if no pricings were found' do         
+          create(:hub_trucking,
+            hub:                  hub,
+            trucking_destination: create(:trucking_destination, :with_geometry),
+            trucking_pricing:     trucking_pricing
+          )
+          expect(described_class.find_by_hub_id(-1)).to eq([])
         end
       end      
 
-      context 'main tests' do
+      context 'zipcode identifier' do
         it 'finds the correct pricing and destinations' do         
           create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
             create(:hub_trucking,
@@ -241,19 +244,18 @@ describe TruckingPricing, type: :model do
             )
           end
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
 
           expect(trucking_pricings).to match([
             {
               "truckingPricing" => trucking_pricing,
-              "zipcode"         => ["15000", "15099"]          
+              "zipcode"         => [["15000", "15099"]],
+              "countryCode"     => "SE"          
             }
           ])
         end
 
-        it 'finds the correct pricing and destination for multiple min/max groups per zone' do         
+        it 'finds the correct pricing and destinations for multiple range groups per zone' do         
           create_list(:trucking_destination, 100, :zipcode_broken_sequence).each do |trucking_destination|
             create(:hub_trucking,
               hub:                  hub,
@@ -262,14 +264,33 @@ describe TruckingPricing, type: :model do
             )
           end
 
-          trucking_pricings = described_class.find_by_hub_ids(
-            hub_ids: [hub.id], tenant_id: tenant.id
-          )
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
 
           expect(trucking_pricings).to match([
             {
               "truckingPricing" => trucking_pricing,
-              "zipcode"         => ["15000", "15099"]          
+              "zipcode"         => [["15000", "15039"], ["15050", "15109"]],          
+              "countryCode"     => "SE"
+            }
+          ])
+        end
+      end
+      
+      context 'geometry identifier' do
+        it 'finds the correct pricing and destinations' do
+          create(:hub_trucking,
+            hub:                  hub,
+            trucking_destination: create(:trucking_destination, :with_geometry),
+            trucking_pricing:     trucking_pricing
+          )
+
+          trucking_pricings = described_class.find_by_hub_id(hub.id)
+
+          expect(trucking_pricings).to match([
+            {
+              "truckingPricing" => trucking_pricing,
+              "city"            => [["Testname4", "Gothenburg"]],
+              "countryCode"     => "SE"
             }
           ])
         end
