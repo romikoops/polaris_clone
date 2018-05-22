@@ -477,6 +477,7 @@ export class ShipmentDetails extends Component {
     // Update trucking details according to toggle
     const { shipment } = this.state
     const artificialEvent = { target: {} }
+
     if (!value) {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${carriage}-`

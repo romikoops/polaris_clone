@@ -296,27 +296,17 @@ module ShippingTools
   end
 
   def self.choose_offer(params, current_user)
-    @user_locations = current_user.user_locations.map do |uloc|
-      {
-        location: uloc.location.to_custom_hash,
-        contact:  current_user.attributes
-      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
-
-    @contacts = current_user.contacts.map do |contact|
-      {
-        location: contact.location.try(:to_custom_hash) || {},
-        contact:  contact.attributes
-      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-    end
     shipment = Shipment.find(params[:shipment_id])
-    shipment.user_id = params[:shipment][:user_id]
+
+    shipment.user_id =        params[:shipment][:user_id]
+    shipment.total_price =    params[:total]
     shipment.customs_credit = params[:shipment][:customsCredit]
-    shipment.total_price = params[:total]
-    @schedules = params[:schedules].as_json
+
     shipment.schedule_set = params[:schedules]
+    shipment.trip_id =      params[:schedules][0]['trip_id']
+    @schedules =            params[:schedules].as_json
+
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first['itinerary_id'])
-    shipment.trip_id = params[:schedules][0]['trip_id']
     case shipment.load_type
     when 'cargo_item'
       @dangerous = false
@@ -340,6 +330,21 @@ module ShippingTools
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
     end
+
+    @user_locations = current_user.user_locations.map do |uloc|
+      {
+        location: uloc.location.to_custom_hash,
+        contact:  current_user.attributes
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    end
+
+    @contacts = current_user.contacts.map do |contact|
+      {
+        location: contact.location.try(:to_custom_hash) || {},
+        contact:  contact.attributes
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    end
+  
     hub_route = @schedules.first['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers

@@ -9,7 +9,7 @@ import Header from '../../components/Header/Header'
 import styles from './Shop.scss'
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
-import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute'
+import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
@@ -40,7 +40,7 @@ class Shop extends Component {
       showRegistration: false
     }
     this.selectLoadType = this.selectLoadType.bind(this)
-    this.selectShipmentRoute = this.selectShipmentRoute.bind(this)
+    this.chooseOffer = this.chooseOffer.bind(this)
     this.setShipmentContacts = this.setShipmentContacts.bind(this)
     this.selectShipmentStage = this.selectShipmentStage.bind(this)
     this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this)
@@ -133,7 +133,7 @@ class Shop extends Component {
     }
   }
 
-  selectShipmentRoute (obj) {
+  chooseOffer (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
     const { schedule, total } = obj
     const shipmentData = bookingData.response.stage2
@@ -231,9 +231,9 @@ class Shop extends Component {
         <Route
           path={`${match.url}/:shipmentId/choose_offer`}
           render={props => (
-            <ChooseRoute
+            <ChooseOffer
               {...props}
-              chooseRoute={this.selectShipmentRoute}
+              chooseOffer={this.chooseOffer}
               theme={theme}
               tenant={tenant}
               shipmentData={shipmentData}
