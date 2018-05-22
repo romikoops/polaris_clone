@@ -398,8 +398,6 @@ ActiveRecord::Schema.define(version: 20180518130726) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -436,6 +434,8 @@ ActiveRecord::Schema.define(version: 20180518130726) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"

@@ -100,7 +100,7 @@ module ShippingTools
     hsTexts = shipment_data[:hsTexts].as_json
     shipment.assign_attributes(
       total_goods_value: shipment_data[:totalGoodsValue],
-      cargo_notes: shipment_data[:cargoNotes]
+      cargo_notes:       shipment_data[:cargoNotes]
     )
 
     if shipment_data[:incotermText]
@@ -231,8 +231,8 @@ module ShippingTools
     locations = {
       startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
       endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
-      origin:      shipment.origin.to_custom_hash,
-      destination: shipment.destination.to_custom_hash
+      origin:      shipment.origin_nexus.to_custom_hash,
+      destination: shipment.destination_nexus.to_custom_hash
     }
 
     {
@@ -327,10 +327,14 @@ module ShippingTools
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin      = Layover.find(@schedules.first['origin_layover_id']).stop.hub
-    @destination = Layover.find(@schedules.first['destination_layover_id']).stop.hub
-    shipment.origin_hub = @origin
-    shipment.destination_hub = @destination
+    @origin_hub      = Layover.find(@schedules.first['origin_layover_id']).stop.hub
+    @destination_hub = Layover.find(@schedules.first['destination_layover_id']).stop.hub
+
+    shipment.origin_hub        = @origin_hub
+    shipment.destination_hub   = @destination_hub
+    shipment.origin_nexus      = @origin_hub.nexus
+    shipment.destination_nexus = @destination_hub.nexus
+
     shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
     documents = {}
     shipment.documents.each do |doc|
@@ -349,11 +353,12 @@ module ShippingTools
       customsKey = 'lcl'
       cargos = cargo_items
     end
+
     shipment.transport_category = Trip.find(@schedules.first['trip_id']).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
     shipment.save!
 
-    origin_customs_fee = @origin.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
-    destination_customs_fee = @destination.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
+    origin_customs_fee = @origin_hub.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
+    destination_customs_fee = @destination_hub.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
 
     import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee['import'], cargos, shipment.load_type, current_user) : { unknown: true }
     export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee['export'], cargos, shipment.load_type, current_user) : { unknown: true }
@@ -371,9 +376,12 @@ module ShippingTools
       total: total_fees
     }
     hubs = {
-      startHub: { data: @origin,      location: @origin.nexus },
-      endHub:   { data: @destination, location: @destination.nexus }
+      startHub: { data: @origin_hub,      location: @origin_hub.nexus },
+      endHub:   { data: @destination_hub, location: @destination_hub.nexus }
     }
+
+    origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
+    destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
 
     {
       shipment:       shipment,
@@ -387,7 +395,8 @@ module ShippingTools
       cargoItems:     cargo_items,
       customs:        customs_fee,
       locations: {
-        origin: shipment.origin.to_custom_hash, destination: shipment.destination.to_custom_hash
+        origin:      origin.try(:to_custom_hash),
+        destination: destination.try(:to_custom_hash)
       }
     }
   end
