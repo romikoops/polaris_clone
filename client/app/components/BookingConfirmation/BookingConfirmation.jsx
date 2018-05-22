@@ -155,7 +155,7 @@ export class BookingConfirmation extends Component {
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
-      schedules,
+      schedule,
       locations,
       shipper,
       consignee,
@@ -244,7 +244,7 @@ export class BookingConfirmation extends Component {
       </div>
     )
 
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
     const docView = []
     const missingDocs = []
     const docChecker = {
@@ -383,7 +383,7 @@ export class BookingConfirmation extends Component {
                   styles.inner_wrapper
                 } flex-100 layout-row layout-wrap layout-align-start-start`}
               >
-                <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+                <RouteHubBox hubs={hubsObj} schedule={schedule} theme={theme} />
                 <div
                   className="flex-100 layout-row layout-align-space-between-center"
                   style={{ position: 'relative' }}
