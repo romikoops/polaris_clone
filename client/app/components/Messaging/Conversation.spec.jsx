@@ -44,6 +44,21 @@ test('shallow render', () => {
   expect(shallow(<Conversation {...propsBase} />)).toMatchSnapshot()
 })
 
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<Conversation {...props} />)).toMatchSnapshot()
+})
+
+test('state.showDetails is true', () => {
+  const wrapper = shallow(<Conversation {...propsBase} />)
+  wrapper.setState({ showDetails: true })
+
+  expect(wrapper).toMatchSnapshot()
+})
+
 test('with admin user', () => {
   const props = {
     ...propsBase,
