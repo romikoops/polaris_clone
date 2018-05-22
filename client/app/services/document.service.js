@@ -94,6 +94,13 @@ function downloadHubs () {
   }
   return fetch(`${BASE_URL}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
 }
+function downloadGdpr (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  return fetch(`${BASE_URL}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
+}
 function downloadSchedules (options) {
   const requestOptions = {
     method: 'POST',
@@ -123,7 +130,8 @@ export const documentService = {
   downloadLocalCharges,
   downloadHubs,
   uploadItinerarySchedules,
-  downloadTrucking
+  downloadTrucking,
+  downloadGdpr
 }
 
 export default documentService

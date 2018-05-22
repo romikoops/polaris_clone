@@ -810,8 +810,8 @@ module DocumentTools
       shipment_sheet.write(row, 7, shipment.planned_etd)
       shipment_sheet.write(row, 8, shipment.planned_eta)
       shipment_sheet.write(row, 9, "#{shipment.total_price["currency"]} #{shipment.total_price["value"].to_d.round(2)}")
-      shipment_sheet.write(row, 10, shipment.insurance["val"] ? "#{shipment.insurance["currency"]} #{shipment.insurance["val"].to_d.round(2)}" : "N/A" )
-      shipment_sheet.write(row, 11, shipment.customs["val"] ? "#{shipment.customs["currency"]} #{shipment.customs["val"].to_d.round(2)}" : "N/A" )
+      shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance["val"] ? "#{shipment.insurance["currency"]} #{shipment.insurance["val"].to_d.round(2)}" : "N/A" )
+      shipment_sheet.write(row, 11, shipment.customs && shipment.customs["val"] ? "#{shipment.customs["currency"]} #{shipment.customs["val"].to_d.round(2)}" : "N/A" )
 
     end
     workbook.close()

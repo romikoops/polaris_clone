@@ -591,7 +591,7 @@ ActiveRecord::Schema.define(version: 20180522141630) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
-    t.string "gdpr_status"
+    t.jsonb "optin_status", default: {}
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
