@@ -20,7 +20,7 @@ class User < ApplicationRecord
   has_many :conversations
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
-
+  has_many :documents
   has_many :shipments
   has_many :receivable_shipments, foreign_key: "consignee_id"
 
@@ -172,7 +172,9 @@ class User < ApplicationRecord
       shipment.save
     end
   end
-
+  def gdpr_delete
+    self.gdpr_status = 'deleted'
+  end
   protected
   
   def confirmation_required?
