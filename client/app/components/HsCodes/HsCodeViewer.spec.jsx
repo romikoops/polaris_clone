@@ -17,6 +17,14 @@ test('shallow render', () => {
   expect(shallow(<HsCodeViewer {...propsBase} />)).toMatchSnapshot()
 })
 
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<HsCodeViewer {...props} />)).toMatchSnapshot()
+})
+
 test('props.close is called', () => {
   const props = {
     ...propsBase,

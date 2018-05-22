@@ -206,3 +206,45 @@ exports[`incoterm_info_level render is text 1`] = `
   </div>
 </div>
 `;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-end-center"
+    >
+      <div
+        className="flex-none letter_2"
+      >
+        <TextHeading
+          size={3}
+          text="Select Incoterm:"
+          theme={null}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-80"
+      name="incoterms"
+      style={
+        Object {
+          "position": "relative",
+        }
+      }
+    >
+      <Styled(Component)
+        className="select"
+        name="incoterms"
+        onChange={[Function]}
+        options={Array []}
+        value="FOO_INCOTERM"
+      />
+      <span />
+    </div>
+  </div>
+</div>
+`;

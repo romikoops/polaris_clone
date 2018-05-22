@@ -24,3 +24,22 @@ const propsBase = {
 test('shallow render', () => {
   expect(shallow(<Loading {...propsBase} />)).toMatchSnapshot()
 })
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<Loading {...props} />)).toMatchSnapshot()
+})
+
+test('theme.logoLarge is truthy', () => {
+  const props = {
+    ...propsBase,
+    theme: {
+      ...theme,
+      logoLarge: 'FOO_LOGO_LARGE'
+    }
+  }
+  expect(shallow(<Loading {...props} />)).toMatchSnapshot()
+})

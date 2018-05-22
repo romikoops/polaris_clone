@@ -39,6 +39,21 @@ test('user.role_id is 2', () => {
   expect(shallow(<LandingTop {...propsBase} />)).toMatchSnapshot()
 })
 
+test('theme has truthy properties', () => {
+  const editedTheme = {
+    ...theme,
+    background: 'green',
+    logoLarge: 'FOO_LOGO_LARGE',
+    logoWhite: 'FOO_LOGO_WHITE',
+    welcome_text: 'FOO_WELCOME_TEXT'
+  }
+  const props = {
+    ...propsBase,
+    theme: editedTheme
+  }
+  expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
+})
+
 test('user.role_id is 1', () => {
   const props = {
     ...propsBase,

@@ -1,5 +1,185 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`theme has truthy properties 1`] = `
+<styled.div
+  bg="green"
+  className="layout-row flex-100 layout-align-center"
+>
+  <div
+    className="layout-row flex-100 layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row"
+    >
+      <Component
+        invert={true}
+        noMessages={true}
+        scrollable={true}
+        theme={
+          Object {
+            "background": "green",
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+            "logoLarge": "FOO_LOGO_LARGE",
+            "logoWhite": "FOO_LOGO_WHITE",
+            "welcome_text": "FOO_WELCOME_TEXT",
+          }
+        }
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "role_id": 2,
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-center layout-wrap"
+    >
+      <div
+        className="content_wrapper flex-100 layout-row layout-wrap layout-align-center-center"
+      >
+        <div
+          className="flex-75 banner_text"
+        >
+          <img
+            alt=""
+            className="flex-none tenant_logo_landing"
+            src="FOO_LOGO_WHITE"
+          />
+          <h2
+            className="flex-none"
+          >
+            <b>
+              Welcome to the 
+            </b>
+             
+            <br />
+            <i>
+               
+              FOO_NAME
+               
+            </i>
+             
+            <b>
+               
+              <br />
+              FOO_WELCOME_TEXT
+            </b>
+          </h2>
+          <div
+            className="wrapper_hr"
+          >
+            <hr />
+          </div>
+          <div
+            className="wrapper_h3"
+          >
+            <h3
+              className="flex-none"
+            >
+              Enjoy the most advanced and easy to use 
+              <b>
+                booking system
+              </b>
+               in the market. Finally, shipping is as simple as it should be.
+            </h3>
+          </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
+          <div
+            className="flex"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "background": "green",
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                  "logoLarge": "FOO_LOGO_LARGE",
+                  "logoWhite": "FOO_LOGO_WHITE",
+                  "welcome_text": "FOO_WELCOME_TEXT",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="My Account"
+              theme={
+                Object {
+                  "background": "green",
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                  "logoLarge": "FOO_LOGO_LARGE",
+                  "logoWhite": "FOO_LOGO_WHITE",
+                  "welcome_text": "FOO_WELCOME_TEXT",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-70 banner_text"
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
+          >
+            <h4
+              className="flex-none"
+            >
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</styled.div>
+`;
+
 exports[`user.role_id is 1 1`] = `
 <styled.div
   bg="https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"

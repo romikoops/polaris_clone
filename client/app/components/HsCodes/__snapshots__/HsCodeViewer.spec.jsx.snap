@@ -41,3 +41,45 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="backdrop layout-row flex-none layout-wrap layout-align-center-center"
+>
+  <div
+    className="content layout-row flex-none layout-wrap layout-align-center-start"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <h2
+        className="flex-none clip"
+        style={
+          Object {
+            "background": "black",
+          }
+        }
+      >
+        HS Codes
+      </h2>
+      <div
+        className="flex-10 layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="fa fa-times clip"
+          style={
+            Object {
+              "background": "black",
+            }
+          }
+        />
+      </div>
+    </div>
+    <hr />
+    <div
+      className="flex-100 layout-row layout-wrap"
+    />
+  </div>
+</div>
+`;

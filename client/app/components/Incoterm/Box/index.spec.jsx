@@ -34,6 +34,14 @@ test('incoterm_info_level is simple', () => {
   expect(shallow(<IncotermBox {...propsBase} />)).toMatchSnapshot()
 })
 
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<IncotermBox {...props} />)).toMatchSnapshot()
+})
+
 test('incoterm_info_level render is text', () => {
   const props = {
     ...propsBase,
