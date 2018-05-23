@@ -18,7 +18,7 @@ import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
 export function calcFareTotals (feeHash) {
-  let res1 = feeHash.total.value
+  let res1 = parseFloat(feeHash.total.value)
   let res2 = 0
   if (feeHash && feeHash.customs && feeHash.customs.val) {
     res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
@@ -526,7 +526,7 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">{`${
                         shipment.total_price.currency
                       } ${calcExtraTotals(feeHash)} `}</h5>
-                      { feeHash.customs.hasUnknown
+                      { feeHash.customs && feeHash.customs.hasUnknown
                         ? (
                           <div className="flex-100 layout-row layout-align-end-center">
                             <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
