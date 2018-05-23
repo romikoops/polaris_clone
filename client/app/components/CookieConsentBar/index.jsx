@@ -4,9 +4,9 @@ import styles from './CookieConsentBar.scss'
 import ConsentButton from "./ConsentButton"
 import { moment } from '../../constants'
 
-function handleAccept (tenant, loggedIn, authDispatch, userDispatch) {
+function handleAccept (user, tenant, loggedIn, authDispatch) {
   if (loggedIn) {
-    // userDispatch.goTo('/booking')
+    authDispatch.updateUser(user, { cookie_consent: true })
   } else {
     const unixTimeStamp = moment().unix().toString()
     const randNum = Math.floor(Math.random() * 100).toString()
@@ -33,8 +33,7 @@ export default function CookieConsentBar ({
   theme,
   tenant,
   loggedIn,
-  authDispatch,
-  userDispatch
+  authDispatch
  }) {
   if (!tenant) return ''
   const cookieBackground = theme && theme.colors ? theme.colors.secondary : '#aaa'
@@ -49,7 +48,7 @@ export default function CookieConsentBar ({
 
       <ConsentButton
         theme={theme}
-        handleNext={() => handleAccept(tenant, loggedIn, authDispatch, userDispatch)}
+        handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
         text="accept"
         active
       />

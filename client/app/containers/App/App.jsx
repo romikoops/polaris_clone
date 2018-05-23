@@ -56,7 +56,6 @@ class App extends Component {
           user={user}
           theme={theme}
           authDispatch={authDispatch}
-          userDispatch={userDispatch}
           tenant={tenant}
           loggedIn={loggedIn}
         />

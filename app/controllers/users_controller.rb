@@ -50,7 +50,7 @@ class UsersController < ApplicationController
       location = Location.create_from_raw_params(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
-      
+
       @user.send_confirmation_instructions if updating_guest_to_regular_user
       @user.save
     end
@@ -68,17 +68,17 @@ class UsersController < ApplicationController
     url = gdpr_download(current_user.id)
     response_handler({url: url, key: 'gdpr'})
   end
-  
+
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
     rates = get_rates(params[:currency])
     response_handler({user: current_user, rates: rates})
   end
-  
+
   def hubs
     @hubs = Hub.prepped(current_user)
-    
+
     response_handler(@hubs)
   end
   def opt_out
@@ -92,7 +92,7 @@ class UsersController < ApplicationController
   def user_params
     return_params = params.require(:update).permit(
       :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
-      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookie_consent
     ).to_h
 
     unless return_params[:confirm_password].nil?
