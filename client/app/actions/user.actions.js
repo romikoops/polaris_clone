@@ -99,7 +99,6 @@ function optOut (userId, target) {
     userService.optOut(userId, target).then(
       (response) => {
         dispatch(success(response))
-        debugger // eslint-disable-line
         dispatch(authenticationActions.setUser(response.data))
       },
       error => dispatch(failure(error))

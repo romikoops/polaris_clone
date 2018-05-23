@@ -70,7 +70,7 @@ export class CargoItemDetails extends Component {
         <div className="flex-100 layout-row layout-align-space-between">
           <p>Chargeable Weight</p>
           <p>
-            {(item.chargeable_weight * 1000).toFixed(2)} kg
+            {(item.chargeable_weight).toFixed(2)} kg
           </p>
         </div>
         <hr className="flex-100" />

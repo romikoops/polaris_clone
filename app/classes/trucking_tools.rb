@@ -35,14 +35,14 @@ module TruckingTools
     pricing.deep_symbolize_keys!
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != 'PERCENTAGE'
-        results = fee_calculator(k, fee, cargo, km)
+        results = fare_calculator(k, fee, cargo, km)
         fees[k] = results
       else
         total_fees[k] = fee
       end
     end
     
-    fees[:rate] = fee_calculator('rate', pricing[:rate], cargo, km)
+    fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, km)
 
     fees.each do |_k, fee|
       next unless fee
@@ -72,7 +72,7 @@ module TruckingTools
     end
   end
 
-  def fee_calculator(key, fee, cargo, km)
+  def fare_calculator(key, fee, cargo, km)
     fee.symbolize_keys!
     case fee[:rate_basis]
     when 'PER_KG'
@@ -108,6 +108,7 @@ module TruckingTools
   end
 
   def handle_range_fee(fee, cargo)
+    byebug
     weight_kg = cargo[:weight]
     min = fee["min"] || 0
     case fee["rate_basis"]

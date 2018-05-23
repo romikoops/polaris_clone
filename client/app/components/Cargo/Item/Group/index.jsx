@@ -91,7 +91,7 @@ export class CargoItemGroup extends Component {
         </div>
         <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
           <p className="flex-none">Chargeable Weight</p>
-          <p className="flex-none">{(item.chargeable_weight * 1000).toFixed(2)} kg</p>
+          <p className="flex-none">{(item.chargeable_weight).toFixed(2)} kg</p>
         </div>
         <hr className="flex-100" />
       </div>

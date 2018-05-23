@@ -24,10 +24,16 @@ module PricingTools
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      if cargo_unit.is_a? CargoItem
+        cargo_unit.set_chargeable_weight!(mot)
+        weight = cargo_unit.chargeable_weight
+      else
+        weight = cargo_unit.payload_in_kg
+      end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
       return_h[:volume]          += cargo_unit.try(:volume) || 0
       
-      return_h[:weight]          += (cargo_unit.try(:weight) || cargo_unit.payload_in_kg)
+      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
     end
 
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
@@ -47,9 +53,15 @@ module PricingTools
 
   def calc_customs_fees(charge, cargos, load_type, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      if cargo_unit.is_a? CargoItem
+        cargo_unit.set_chargeable_weight!(mot)
+        weight = cargo_unit.chargeable_weight
+      else
+        weight = cargo_unit.payload_in_kg
+      end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
       return_h[:volume]          += cargo_unit.try(:volume) || 0
-      return_h[:weight]          += (cargo_unit.try(:weight) || cargo_unit.payload_in_kg)
+      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
     end
 
     return {} if charge.nil?
@@ -66,7 +78,7 @@ module PricingTools
     totals
   end
 
-  def determine_cargo_item_price(cargo, pathKey, user, quantity, shipment_date)
+  def determine_cargo_item_price(cargo, pathKey, user, quantity, shipment_date, mot)
     pricing = get_user_price(pathKey, user, shipment_date)
     return nil if pricing.nil?
     totals = { "total" => {} }
@@ -81,7 +93,7 @@ module PricingTools
         totals[k]["value"] += heavy_weight_fee_value(fee, cargo)
       else
         
-        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))
+        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo, mot))
       end
     end
     
@@ -92,7 +104,7 @@ module PricingTools
     totals
   end
 
-  def determine_container_price(container, pathKey, user, quantity, shipment_date)
+  def determine_container_price(container, pathKey, user, quantity, shipment_date, mot)
     pricing = get_user_price(pathKey, user, shipment_date)
     return if pricing.nil?
     totals = {"total" => {}}
@@ -101,7 +113,7 @@ module PricingTools
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"] 
 
-      totals[k]["value"] += fee_value(fee, get_cargo_hash(container))
+      totals[k]["value"] += fee_value(fee, get_cargo_hash(container, mot))
     end
 
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
@@ -246,7 +258,7 @@ module PricingTools
     end
   end
 
-  def get_cargo_hash(cargo)
+  def get_cargo_hash(cargo, mot)
     if cargo.is_a? Container
       {    
       volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
@@ -254,7 +266,8 @@ module PricingTools
       quantity: cargo.try(:quantity) || 1  
     }
     else
-      cargo.set_chargeable_weight!
+      cargo.set_chargeable_weight!(mot)
+      
     {    
       volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
       weight: (cargo.try(:weight) || cargo.chargeable_weight) * (cargo.try(:quantity) || 1),
