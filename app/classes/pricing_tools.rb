@@ -162,14 +162,15 @@ module PricingTools
     Pricing.destroy(id)
   end
 
-  def handle_range_fee(fee, cargo_hash)
+  def handle_range_fare(fee, cargo_hash)
     weight_kg = cargo_hash[:weight]
     min = fee["min"] || 0
+    
     case fee["rate_basis"]
     when 'PER_KG_RANGE'
       fee_range = fee["range"].find do |range|
         weight_kg >= range["min"] && weight_kg <= range["max"]
-      end
+      end || fee["range"].sort_by { |x| x['max']}.last
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
       
       return [value, min].max
@@ -241,7 +242,7 @@ module PricingTools
       min = fee["min"] || 0
       [cbm, ton, min].max 
     when /RANGE/
-      handle_range_fee(fee, cargo_hash)
+      handle_range_fare(fee, cargo_hash)
     end
   end
 

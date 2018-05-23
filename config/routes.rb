@@ -101,6 +101,8 @@ Rails.application.routes.draw do
 
       resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
       post "locations/:location_id/edit", to: "user_locations#edit"
+      get "gdpr/download", to: "users#download_gdpr"
+      post "opt_out/:target", to: "users#opt_out"
     end
     post "notes/fetch", to: "notes#get_notes"
     
