@@ -65,7 +65,7 @@ function login (data) {
   }
 }
 
-function register (user, redirect) {
+function register (user, target) {
   function request (userRequest) {
     return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest }
   }
@@ -83,8 +83,8 @@ function register (user, redirect) {
       (response) => {
         dispatch(success(response))
         dispatch(alertActions.success('Registration successful'))
-        if (redirect) {
-          dispatch(push('/booking'))
+        if (user.guest) {
+          target && dispatch(push(target))
         } else if (response.data.role_id === 1) {
           dispatch(push('/admin'))
         } else if (response.data.role_id === 2) {

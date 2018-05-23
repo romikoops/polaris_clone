@@ -1,13 +1,58 @@
 :local {
+  .neutral {
+    background-color: #D8D8D8;
+    color: #2C2C2C !important;
+  }
+  .cookie_flex {
+    position: fixed;
+    display:flex;
+    align-items: center;
+    width: 100vw;
+    height: 6vh;
+    color: white;
+    z-index: 10000000;
+    bottom: 0;
+    text-shadow: none;
+    > * {
+      margin-right: 15px !important;
+    }
+    &.clickable {
+      cursor: pointer;
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+  .btn_cookie {
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    outline: none;
+    border: 1px solid white;
+    box-shadow: none !important;
+    border-radius: 1px;
+    &:focus {
+      outline: none;
+    }
+  }
+  .accept {
+    background: white;
+  }
+  .decline {
+    background: transparent;
+    color: white !important;
+  }
 	p.cookie_text {
 		text-shadow: 1px 1px rgba(100, 100, 100, 0.3);
-		margin: 0;
+    margin: 0;
+    padding-left: 35px;
 		display: inline-block;
 	}
 	i.cookie_exit_icon {
 		transition: all 0.3s ease;
 		color: rgba(white, 0.8);
-		
+
 		&:hover {
 			color: rgba(white, 1);
 		}
