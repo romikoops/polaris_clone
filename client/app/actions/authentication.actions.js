@@ -67,7 +67,7 @@ function login (data) {
 
 function register (user, target) {
   function request (userRequest) {
-    return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest }
+    return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest, target }
   }
   function success (response) {
     return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response.data }

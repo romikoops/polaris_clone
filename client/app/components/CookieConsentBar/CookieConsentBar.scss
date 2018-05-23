@@ -16,12 +16,9 @@
     > * {
       margin-right: 15px !important;
     }
-    &.clickable {
-      cursor: pointer;
-    }
-    &:active {
-      margin: 0;
-      box-shadow: none;
+    transition: all 0.5s ease;
+    &.hidden {
+      opacity: 0;
     }
   }
   .btn_cookie {

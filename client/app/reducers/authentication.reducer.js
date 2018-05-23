@@ -57,7 +57,7 @@ export default function (state = initialState, action) {
       }
     case authenticationConstants.REGISTRATION_REQUEST:
       return {
-        loading: action.user.guest,
+        loading: !!action.target,
         registering: !action.user.guest
       }
     case authenticationConstants.REGISTRATION_SUCCESS:

@@ -53,6 +53,7 @@ class App extends Component {
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
         <CookieConsentBar
+          user={user}
           theme={theme}
           authDispatch={authDispatch}
           userDispatch={userDispatch}

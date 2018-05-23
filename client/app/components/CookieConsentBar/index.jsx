@@ -21,23 +21,28 @@ function handleAccept (tenant, loggedIn, authDispatch, userDispatch) {
         first_name: 'Guest',
         last_name: '',
         tenant_id: tenant.data.id,
-        guest: true
+        guest: true,
+        cookie_consent: true
       }
     )
   }
 }
 
 export default function CookieConsentBar ({
+  user,
   theme,
   tenant,
   loggedIn,
   authDispatch,
   userDispatch
  }) {
+  if (!tenant) return ''
   const cookieBackground = theme && theme.colors ? theme.colors.secondary : '#aaa'
-
   return (
-    <div className={styles.cookie_flex} style={{ background: cookieBackground, filter: 'grayscale(60%)' }}>
+    <div
+      className={`${styles.cookie_flex} ${user && user.cookie_consent ? styles.hidden : ''}`}
+      style={{ background: cookieBackground, filter: 'grayscale(60%)' }}
+    >
       <p className={styles.cookie_text}>
         This website uses cookies to enhance your user experience.
       </p>
