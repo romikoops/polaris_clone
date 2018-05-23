@@ -34,11 +34,20 @@
     }
   }
   .accept {
-    background: white;
+    background: white !important;
   }
   .decline {
+    border: 1px solid white !important;
     background: transparent;
     color: white !important;
+  }
+  .accept_modal {
+    color: white !important;
+    margin-right: 20px;
+    margin-bottom: 9px;
+  }
+  .decline_modal {
+    background: white !important;
   }
 	p.cookie_text {
 		text-shadow: 1px 1px rgba(100, 100, 100, 0.3);
@@ -54,8 +63,8 @@
 			color: rgba(white, 1);
 		}
   }
-
   .cookie_modal {
-    color: black;
+    color: #333333;
+    max-width: 25vw;
   }
 }

@@ -60,18 +60,18 @@ export default class CookieConsentBar extends React.PureComponent {
       <Modal
         component={
           <div className={styles.cookie_modal} >
-            Are you sure you want to decline the usage of cookies? <br />
-            If so, unfortunately you may not continue using the website and this tab will be closed.
+            <p>We use cookies to enhance your user experience. <br /><br /> The consense is not mandatory but necessary to continue using our website.
+            Are you sure you want to decline the usage of cookies?</p>
             <ConsentButton
               theme={theme}
               handleNext={() => handleAccept(user, tenant, loggedIn, authDispatch)}
-              text="accept"
+              text="ok, accept"
               active
             />
             <ConsentButton
               theme={theme}
               handleNext={() => { window.location.replace('https://www.itsmycargo.com/') }}
-              text="decline"
+              text="cookies policy"
               active
             />
           </div>

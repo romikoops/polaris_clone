@@ -28,6 +28,12 @@ function ConsentButton ({
     case 'decline':
       btnToggle = styles.decline
       break
+    case 'ok, accept':
+      btnToggle = styles.accept_modal
+      break
+    case 'cookies policy':
+      btnToggle = styles.decline_modal
+      break
 
     default:
       btnToggle = styles.accept
@@ -38,7 +44,7 @@ function ConsentButton ({
     <button
       className={`${styles.btn_cookie} ${bStyle} ${btnToggle}`}
       onClick={disabled ? handleDisabled : handleNext}
-      style={{ color: cookieBackground }}
+      style={{ color: cookieBackground, background: cookieBackground, border: `1px solid ${cookieBackground}` }}
     > {text}
     </button>
   )
