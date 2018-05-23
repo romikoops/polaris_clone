@@ -33,13 +33,13 @@ RSpec::Matchers.define :deep_include do |expected|
 
   failure_message do |actual|
     if @failing_array_path
-      path = @failing_array_path.map{ |p| "[#{p.inspect}]" }.join
+      path = @failing_array_path.map { |p| "[#{p.inspect}]" }.join
       path = "root" if path.blank?
       message = "Actual array did not include value at #{path}: \n" +
         "  expected #{@failing_expected_array_item.inspect}\n" +
         "  but matching value not found in array: #{@failing_array}\n"
     else
-      path = @failing_path.map{ |p| "[#{p.inspect}]" }.join
+      path = @failing_path.map { |p| "[#{p.inspect}]" }.join
       path = "root" if path.blank?
       message = "Actual hash did not include expected value at #{path}: \n" +
         "  expected #{@failing_expected.inspect}\n" +

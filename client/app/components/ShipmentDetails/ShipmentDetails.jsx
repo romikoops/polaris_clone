@@ -453,7 +453,7 @@ export class ShipmentDetails extends Component {
       cargo_items_attributes: this.state.cargoItems,
       containers_attributes: this.state.containers,
       aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,
-      planned_pickup_date: this.state.selectedDay,
+      selected_day: this.state.selectedDay,
       incoterm: this.state.incoterm
     }
 

@@ -141,8 +141,7 @@ class OfferCalculator
         set_local_charges!(charges, trip, sched_key)
         set_trucking_charges!(charges, trip, sched_key)
         
-        set_cargo_charges!(charges, trip, sched_key)
-       
+        set_cargo_charges!(charges, trip, sched_key)      
       end
     end
     
