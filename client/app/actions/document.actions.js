@@ -188,6 +188,32 @@ function downloadHubs () {
     )
   }
 }
+function downloadGdpr (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadGdpr(options.userId).then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function uploadSchedules (file, target) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -293,7 +319,8 @@ export const documentActions = {
   uploadLocalCharges,
   uploadSchedules,
   uploadItinerarySchedules,
-  downloadTrucking
+  downloadTrucking,
+  downloadGdpr
 }
 
 export default documentActions

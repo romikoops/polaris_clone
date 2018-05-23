@@ -8,7 +8,8 @@ import {
   userActions,
   adminActions,
   authenticationActions,
-  documentActions
+  documentActions,
+  tenantActions
 } from './'
 // import { Promise } from 'es6-promise-promise';
 
@@ -41,6 +42,60 @@ function fetchCurrencies (type) {
   }
 }
 
+function refreshRates (type) {
+  function request (currencyReq) {
+    return { type: appConstants.REFRESH_CURRENCIES_REQUEST, payload: currencyReq }
+  }
+  function success (currencyData) {
+    return { type: appConstants.REFRESH_CURRENCIES_SUCCESS, payload: currencyData }
+  }
+  function failure (error) {
+    return { type: appConstants.REFRESH_CURRENCIES_ERROR, error }
+  }
+  return (dispatch) => {
+    dispatch(request(type))
+    appService.refreshRates(type).then(
+      (resp) => {
+        const currData = resp.data
+        dispatch(alertActions.success('Fetching Currency successful'))
+        dispatch(success(currData))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
+function fetchCurrenciesForBase (base) {
+  function request (currencyReq) {
+    return { type: appConstants.FETCH_CURRENCIES_FOR_BASE_REQUEST, payload: currencyReq }
+  }
+  function success (currencyData) {
+    return { type: appConstants.FETCH_CURRENCIES_FOR_BASE_SUCCESS, payload: currencyData }
+  }
+  function failure (error) {
+    return { type: appConstants.FETCH_CURRENCIES_FOR_BASE_ERROR, error }
+  }
+  return (dispatch) => {
+    dispatch(request(base))
+    appService.fetchCurrenciesForBase(base).then(
+      (resp) => {
+        const currData = resp.data
+        dispatch(alertActions.success('Fetching Currencies successful'))
+        dispatch(success(currData))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+
 function setCurrency (type, req) {
   function request (currencyReq) {
     return { type: appConstants.SET_CURRENCY_REQUEST, payload: currencyReq }
@@ -60,6 +115,32 @@ function setCurrency (type, req) {
         if (req) {
           dispatch(shipmentActions.getOffers(req, false))
         }
+        dispatch(alertActions.success('Fetching Currency successful'))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+function toggleTenantCurrencyMode () {
+  function request (currencyReq) {
+    return { type: appConstants.SET_CURRENCY_REQUEST, payload: currencyReq }
+  }
+  function success (currencyData) {
+    return { type: appConstants.SET_CURRENCY_SUCCESS, payload: currencyData }
+  }
+  function failure (error) {
+    return { type: appConstants.SET_CURRENCY_ERROR, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+    appService.toggleTenantCurrencyMode().then(
+      (resp) => {
+        dispatch(success(resp.data.rates))
+        dispatch(tenantActions.receiveTenant(resp.data.subdomain, resp.data))
         dispatch(alertActions.success('Fetching Currency successful'))
       },
       (error) => {
@@ -175,7 +256,10 @@ export const appActions = {
   clearLoading,
   goTo,
   fetchTenants,
-  setTheme
+  setTheme,
+  fetchCurrenciesForBase,
+  refreshRates,
+  toggleTenantCurrencyMode
 }
 
 export default appActions

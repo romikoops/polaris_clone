@@ -21,15 +21,15 @@ subdomains.each do |sub|
 
 # # #   # # # # puts "# Overwrite public pricings from excel sheet"
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/NEW_hartrodt_rates.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, true)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/NEW_hartrodt_rates.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
   # public_pricings = File.open("#{Rails.root}/db/dummydata/3_2_standard_sheet.xlsx")
 #   # req = {"xlsx" => public_pricings}
 #   # overwrite_freight_rates(req, shipper, true)
-#   public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-#   req = {"xlsx" => public_pricings}
-#   overwrite_freight_rates(req, shipper, true)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
 
 # # # # #   # # # # # Overwrite public pricings from excel sheet
 
@@ -95,10 +95,10 @@ subdomains.each do |sub|
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
 #   req = {"xlsx" => trucking}
 #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-#   hub = tenant.hubs.find_by_name("Gothenburg Airport")
-#   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_airport.xlsx")
-#   req = {"xlsx" => trucking}
-#   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  hub = tenant.hubs.find_by_name("Gothenburg Airport")
+  trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_airport.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 #   hub = tenant.hubs.find_by_name("Malmo Airport")
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_malmo_airport.xlsx")
 #   req = {"xlsx" => trucking}
@@ -216,3 +216,5 @@ subdomains.each do |sub|
     admin_air.save!
     
 end
+# user = Tenant.greencarrier.users.find_by_email('demo@greencarrier.com')
+# gdpr_download(user.id)

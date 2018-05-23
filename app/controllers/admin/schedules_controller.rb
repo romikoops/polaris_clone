@@ -16,7 +16,6 @@ class Admin::SchedulesController < ApplicationController
   def show
     itinerary = Itinerary.find(params[:id])
     schedules = itinerary.trips.where('closing_date > ?', Date.today).limit(100).order(:start_date)
-
     response_handler({schedules: schedules, itinerary: itinerary})
   end
   def auto_generate_schedules
