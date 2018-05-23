@@ -65,4 +65,21 @@ module CurrencyTools
     curr_obj
   end
 
+  def refresh_rates_array(base)
+    curr_obj = Currency.find_by_base(base)
+    # rates = JSON.parse(HTTP.get("http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}").to_s)
+    # byebug
+    rates = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)
+    if !curr_obj
+      curr_obj = Currency.create(today: rates["rates"], base: base)
+    else
+      curr_obj.update_attributes(today: rates["rates"])
+    end
+    results = [{key: base, rate: 1}]
+    rates["rates"].each do |k, v|
+      results.push({key: k, rate: v})
+    end
+    return results
+  end
+
 end

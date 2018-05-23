@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { userConstants } from '../constants'
 import { userService } from '../services'
 import { history } from '../helpers'
-import { alertActions } from './'
+import { alertActions, authenticationActions } from './'
 
 function getAll (redirect) {
   function request () {
@@ -76,6 +76,31 @@ function getLocations (user, redirect) {
           dispatch(push('/account/locations'))
         }
         dispatch(success(response))
+      },
+      error => dispatch(failure(error))
+    )
+  }
+}
+
+function optOut (userId, target) {
+  function request () {
+    return { type: userConstants.OPT_OUT_REQUEST }
+  }
+  function success (response) {
+    const payload = response.data
+    return { type: userConstants.OPT_OUT_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: userConstants.OPT_OUT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.optOut(userId, target).then(
+      (response) => {
+        dispatch(success(response))
+        debugger // eslint-disable-line
+        dispatch(authenticationActions.setUser(response.data))
       },
       error => dispatch(failure(error))
     )
@@ -590,7 +615,8 @@ export const userActions = {
   deleteContactAddress,
   delete: _delete,
   logOut,
-  editUserLocation
+  editUserLocation,
+  optOut
 }
 
 export default userActions

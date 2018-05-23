@@ -41,6 +41,9 @@ class DocumentsDownloader extends React.Component {
       case 'schedules':
         documentDispatch.downloadSchedules(options)
         break
+      case 'gdpr':
+        documentDispatch.downloadGdpr(options)
+        break
 
       default:
         break

@@ -42,6 +42,15 @@ function makePrimary (userId, locationId) {
   return fetch(`${BASE_URL}/users/${userId}/locations/${locationId}`, requestOptions).then(handleResponse)
 }
 
+function optOut (userId, target) {
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
+}
+
 function getShipments () {
   const requestOptions = {
     method: 'GET',
@@ -249,6 +258,7 @@ export const userService = {
   saveAddressEdit,
   deleteContactAddress,
   editUserLocation,
-  delete: _delete
+  delete: _delete,
+  optOut
 }
 export default userService
