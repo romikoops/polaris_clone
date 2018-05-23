@@ -8,25 +8,26 @@ export const ALIGN_END = 'layout-align-end-end'
 export const ALIGN_AROUND_STRETCH = 'layout-align-space-around-stretch'
 export const ALIGN_AROUND_CENTER = 'layout-align-space-around-center'
 
-export const ROW = 'flex layout-row'
-export const ROW_10 = 'flex-10 layout-row'
-export const ROW_40 = 'flex-40 layout-row'
-export const ROW_45 = 'flex-45 layout-row'
-export const ROW_30 = 'flex-30 layout-row'
-export const ROW_33 = 'flex-33 layout-row'
-export const ROW_65 = 'flex-65 layout-row'
-export const ROW_25 = 'flex-25 layout-row'
-export const ROW_15 = 'flex-15 layout-row'
-export const ROW_100 = 'flex-100 layout-row'
-export const ROW_NONE = 'flex-none layout-row'
-export const ROW_CONTENT = 'content-width layout-row'
+export const ROW = (mode) => {
+  if (mode === undefined) {
+    return 'flex layout-row'
+  } else if (mode === 'CONTENT') {
+    return 'content-width layout-row'
+  } else if (mode === 'NONE') {
+    return 'flex-none layout-row'
+  }
+
+  return `flex-${mode} layout-row`
+}
+
+export const WRAP_ROW = (mode) => {
+  if (mode === undefined) {
+    return 'layout-row layout-wrap'
+  } else if (mode === 'NONE') {
+    return 'flex-none layout-row layout-wrap'
+  }
+
+  return `flex-${mode} layout-row layout-wrap`
+}
 
 export const COLUMN_15 = 'flex-15 layout-column'
-
-export const WRAP_ROW = 'layout-row layout-wrap'
-export const WRAP_ROW_100 = 'flex-100 layout-row layout-wrap'
-export const WRAP_ROW_95 = 'flex-95 layout-row layout-wrap'
-export const WRAP_ROW_85 = 'flex-85 layout-row layout-wrap'
-export const WRAP_ROW_45 = 'flex-45 layout-row layout-wrap'
-export const WRAP_ROW_40 = 'flex-40 layout-row layout-wrap'
-export const WRAP_ROW_NONE = 'flex-none layout-row layout-wrap'
