@@ -100,9 +100,17 @@ function optOut (userId, target) {
       (response) => {
         dispatch(success(response))
         dispatch(authenticationActions.setUser(response.data))
+        if (target === 'cookies') {
+          optOutCookies()
+        }
       },
       error => dispatch(failure(error))
     )
+  }
+}
+function optOutCookies () {
+  return (dispatch) => {
+    dispatch(authenticationActions.logOut(true))
   }
 }
 

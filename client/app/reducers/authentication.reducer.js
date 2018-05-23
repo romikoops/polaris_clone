@@ -5,7 +5,8 @@ const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
 
 const localStorage = window.localStorage || { getItem (key) { return null } }
-const user = JSON.parse(localStorage.getItem(cookieKey))
+const userCookie = localStorage.getItem(cookieKey)
+const user = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
 
 const initialState = user ? { loggedIn: true, user } : {}
 

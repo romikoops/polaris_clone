@@ -24,7 +24,7 @@ module PricingTools
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      if cargo_unit.is_a? CargoItem
+      if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
         cargo_unit.set_chargeable_weight!(mot)
         weight = cargo_unit.chargeable_weight
       else
@@ -53,7 +53,7 @@ module PricingTools
 
   def calc_customs_fees(charge, cargos, load_type, user, mot)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      if cargo_unit.is_a? CargoItem
+      if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
         cargo_unit.set_chargeable_weight!(mot)
         weight = cargo_unit.chargeable_weight
       else
