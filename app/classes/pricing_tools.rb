@@ -51,7 +51,7 @@ module PricingTools
     return totals
   end
 
-  def calc_customs_fees(charge, cargos, load_type, user)
+  def calc_customs_fees(charge, cargos, load_type, user, mot)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       if cargo_unit.is_a? CargoItem
         cargo_unit.set_chargeable_weight!(mot)

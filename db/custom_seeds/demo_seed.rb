@@ -95,10 +95,10 @@ subdomains.each do |sub|
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
 #   req = {"xlsx" => trucking}
 #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  # hub = tenant.hubs.find_by_name("Gothenburg Airport")
-  # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_airport.xlsx")
-  # req = {"xlsx" => trucking}
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  hub = tenant.hubs.find_by_name("Gothenburg Airport")
+  trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_airport.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 #   hub = tenant.hubs.find_by_name("Malmo Airport")
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_malmo_airport.xlsx")
 #   req = {"xlsx" => trucking}
@@ -116,11 +116,11 @@ subdomains.each do |sub|
 #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 #   awesome_print "All rates done"
   
-  hub = tenant.hubs.find_by_name("Shanghai Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  awesome_print "All rates done"
+  # hub = tenant.hubs.find_by_name("Shanghai Airport")
+  # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "All rates done"
 
   # hub = tenant.hubs.find_by_name("Hamburg Port")
   # trucking = File.open("#{Rails.root}/db/dummydata/ht_trucking_hamburg_ftl.xlsx")
