@@ -13,6 +13,7 @@ class OfferCalculator
     @itineraries      = []
     @itineraries_hash = {}
 
+    # Setting trucking also sets has_on_carriage and has_pre_carriage
     @shipment.trucking = trucking_params(params).to_h
 
     @delay = params[:shipment][:delay]
@@ -35,14 +36,11 @@ class OfferCalculator
       @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
       @shipment.send("#{plural_load_type}=", @cargo_units)
     end
-    planned_date = Chronic.parse(
-      params[:shipment][:planned_pickup_date], 
-      endian_precedence: :little
-    )
-    
-    date_limit = Date.today() + 5.days
-    @shipment.planned_pickup_date = planned_date > date_limit ? planned_date : date_limit
 
+    date = Chronic.parse(params[:shipment][:selected_day], endian_precedence: :little)
+    date_limit = Date.today() + 5.days
+    @selected_day_attribute = @shipment.has_on_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
+    @shipment[@selected_day_attribute] = [date, date_limit].min
 
     @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
@@ -58,12 +56,12 @@ class OfferCalculator
       @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
     end
   end
-
+  
   def calc_offer!
     determine_trucking_options!
     
     determine_itinerary!
-    determine_longest_trucking_time!
+    # determine_longest_trucking_time!
     
     determine_layovers!
     add_trip_charges!
@@ -109,7 +107,12 @@ class OfferCalculator
     @itineraries.each do |itin|
       destination_stop = itin.stops.where(hub_id: @destination_hubs).first
       origin_stop = itin.stops.where(hub_id: @origin_hubs).first
-      origin_layovers = origin_stop.layovers.where("closing_date > ? AND closing_date < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
+      origin_layovers = origin_stop.layovers.where(
+        "closing_date > ? AND closing_date < ?",
+        @shipment[@selected_day_attribute],
+        @shipment[@selected_day_attribute] + delay.days
+      ).order(:etd).uniq
+
       trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|
         return_hash[ol.trip_id] = [
           ol,
@@ -119,7 +122,6 @@ class OfferCalculator
       
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
-    
     @itineraries_hash = schedule_obj
   end
 
@@ -145,7 +147,6 @@ class OfferCalculator
     end
     
     charges.reject! { |_, charge| charge[:cargo].empty? }
-    
     raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges
   end
