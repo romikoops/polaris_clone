@@ -12,7 +12,7 @@ Output: 'XmlHttpRequest'
 
 ## Single vs multiline
 
-multiline if more than one attribute and longer than 80 chars
+multiline if more than one attribute and longer than 90 chars
 
 `
 <div className={CONTAINER} onClick={onClick}>
@@ -36,17 +36,6 @@ It makes testing harder or imposible
 
 ## Handle long template strings
 
-> Case 2
-
-Case 1:
-
-`
-const CONTAINER = 'flex-100 flex-layout-center-center' +
-  `{styles.container} ${styles.centered}` +
-  `{styles.base} {styles.blueBackground}`
-`
-
-Case 2:
 
 `
 const WIDE = 'flex-100 flex-layout-center-center'
@@ -55,7 +44,15 @@ const BLUE = `{styles.base} {styles.blueBackground}`
 const CONTAINER = `${WIDE} ${CENTERED} ${BLUE}`
 `
 
-Case 3:
+Rejected alternativeCase #1:
+
+`
+const CONTAINER = 'flex-100 flex-layout-center-center' +
+  `{styles.container} ${styles.centered}` +
+  `{styles.base} {styles.blueBackground}`
+`
+
+Rejected alternativeCase #2:
 
 `
 const wide = 'flex-100 flex-layout-center-center'
@@ -65,6 +62,8 @@ const CONTAINER = `${wide} ${centered} ${blue}`
 `
 
 ## Prefer generic over descriptive counter
+
+Use the following:
 
 `
 // BookingConfirmation
@@ -80,6 +79,8 @@ prepCargoItemGroups (cargos) {
       }
     })
 `
+
+instead of:
 
 `
 // BookingConfirmation
@@ -98,25 +99,11 @@ prepCargoItemGroups (cargos) {
 
 ## Usage of generic variable names
 
-> Generic is fine if the context is clear
+Generic variable names are fine as long as the context is clear.
 
 `
 cargos.forEach(c => {
-
-})
-`
-
-`
-cargos.forEach(x => {
-
-})
-`
-
-or disallow them completely:
-
-`
-cargos.forEach(singleCargo => {
-
+  ...
 })
 `
 
@@ -124,8 +111,6 @@ cargos.forEach(singleCargo => {
 
 > No Blank Lines
 
-### No blank lines
-
 `
 let result
 if(counter > 2){
@@ -140,7 +125,7 @@ fooFn()
 return result
 `
 
-### After if/else
+### Rejected: after if/else
 
 `
 let result
@@ -159,7 +144,7 @@ fooFn()
 return result
 `
 
-### Before and after if/else
+### Rejected: before and after if/else
 
 `
 let result
@@ -185,20 +170,6 @@ return result
 `
 cargoGroups[singleCargo.id] = {
   ...base,
-  items: [],
-  payload_in_kg: payload,
-  tare_weight: tare,
-  gross_weight: gross,
-  groupAlias: i,
-  cargo_group_id: singleCargo.id,
-  hsCodes: singleCargo.hs_codes,
-  hsText: singleCargo.customs_text
-}
-`
-
-`
-cargoGroups[singleCargo.id] = {
-  ...base,
   cargo_group_id: singleCargo.id,
   gross_weight: gross,
   groupAlias: i,
@@ -212,8 +183,6 @@ cargoGroups[singleCargo.id] = {
 
 ## Redundant creation of new variables
 
-> Stay with first option
-
 `
 requestShipment () {
   const { shipmentData, shipmentDispatch } = this.props
@@ -221,6 +190,8 @@ requestShipment () {
   shipmentDispatch.requestShipment(shipment.id)
 }
 `
+
+instead of:
 
 `
 requestShipment () {
@@ -231,16 +202,6 @@ requestShipment () {
 `
 
 ## Blank line before return or the last statement
-
-`
-fileFn (file) {
-  const { shipmentData, shipmentDispatch } = this.props
-  const { shipment } = shipmentData
-  const type = file.doc_type
-  const url = `/shipments/${shipment.id}/upload/${type}`
-  shipmentDispatch.uploadDocument(file, type, url)
-}
-`
 
 `
 fileFn (file) {
@@ -265,23 +226,14 @@ const {
 
 `
 const {
-  theme,
-  shipmentData,
-  shipmentDispatch,
-  tenant,
-} = this.props
-`
-
-Multiline give us option to extend and also to sort alphabetically:
-
-`
-const {
   shipmentData,
   shipmentDispatch,
   tenant,
   theme,
 } = this.props
 `
+
+Multiline requires alphabetical sort of the properties.
 
 ## One line if statement
 
@@ -291,6 +243,8 @@ const {
 if (!shipmentData) return <h1>Loading</h1>
 `
 
+instead of:
+
 `
 if (!shipmentData){
   return <h1>Loading</h1>
@@ -299,7 +253,7 @@ if (!shipmentData){
 
 ## Move constant-like variables outside component
 
-Inside `render()`:
+Instead of declaration inside `render()`:
 
 `
 const defaultTerms = [
@@ -311,8 +265,9 @@ const defaultTerms = [
 ]
 `
 
+move it outside component:
+
 `
-// Outside component
 const getDefaultTerms = tenant => [
   'You verify that all the information provided above is true',
   `You agree to our Terms and Conditions and the General Conditions of the
@@ -324,35 +279,37 @@ const getDefaultTerms = tenant => [
 
 // inside render()
 const defaultTerms = getDefaultTerms(tenant)
+...
+
 `
 
 ## Blank line after ternary assignments
 
 `
 const terms = tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
+
 const textStyle = theme
   ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   : { color: 'black' }
+
 const createdDate = shipment
   ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
   : moment().format('DD-MM-YYYY | HH:mm A')
 `
+
+instead of:
 
 `
 const terms = tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
-
 const textStyle = theme
   ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   : { color: 'black' }
-
 const createdDate = shipment
   ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
   : moment().format('DD-MM-YYYY | HH:mm A')
 `
 
-## Readability blank line
-
-> Sparingly usage
+## Sparingly usage of readability blank line
 
 Within method bodies, sparingly to create logical groupings of statements. (https://google.github.io/styleguide/jsguide.html)
 
@@ -367,6 +324,7 @@ const createdDate = getCreatedDate(shipment)
 `
 
 `
+// with readability blank line
 const { acceptTerms, collapser } = this.state
 const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 
@@ -389,6 +347,7 @@ const termBullets = getTermBullets(terms)
 `
 
 `
+// with readability blank line
 const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
 const { docView, missingDocs } = getDocs({
   documents,
@@ -402,9 +361,9 @@ const termBullets = getTermBullets(terms)
 
 ## Unnecessary creation of closure
 
-We have been moving our code into the first format after binding too much in the constructor (a previous dev recommended we move away from it. We will have to make an adjustments back towards this then if the performance bump is worthwhile).
+> https://ryanfunduk.com/articles/never-bind-in-render/
 
-https://ryanfunduk.com/articles/never-bind-in-render/
+Despite the suggestion that it may have performance penalty, we are using this case:
 
 `
 <RoundButton
@@ -415,6 +374,7 @@ https://ryanfunduk.com/articles/never-bind-in-render/
 />
 `
 
+instead of:
 `
 <RoundButton
   theme={theme}
@@ -432,7 +392,7 @@ https://ryanfunduk.com/articles/never-bind-in-render/
 notifyees.map(notifyee => (
 `
 
-Arguably with prepending `single` there is less chance to mix `notifyees` and `notifyee`:
+instead of:
 
 `
 notifyees.map(singleNotifyee => (
@@ -441,43 +401,47 @@ notifyees.map(singleNotifyee => (
 ## Avoid ternary operator inside the render()
 
 `
-<div className={`${collapser.overview ? styles.collapsed : ''} ${styles.main_panel}`}>
-`
-
-`
 const mainPanel = `${collapser.overview ? styles.collapsed : ''} ${styles.main_panel}`
 ...
 <div className={mainPanel}>
 `
 
+instead of:
+
+`
+<div className={`${collapser.overview ? styles.collapsed : ''} ${styles.main_panel}`}>
+`
+
 ## Use shorter names if that can turn multiple multiline statements to single line
-
-For the moment we want to focus on readibility so we will keep the names longer but try and cut down the length if possible
-
-`
-<div 
-  className={COLLAPSER} 
-  onClick={() => this.handleCollapser('overview')}
->
-`
 
 `
 <div className={COLLAPSER} onClick={() => this.collapser('overview')}>
 `
 
-## Simpler render() with additional variables
+instead of:
+`
+<div 
+  className={COLLAPSER}
+  onClick={() => this.handleCollapser('overview')}
+>
+`
 
-`
-<p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
-  {shipmentStatii[shipment.status]}
-</p>
-`
+> Use this rule only if it actually influence readability. Otherwise use more descriptive `handleCollapser`
+
+## Simpler render() with additional variables
 
 `
 const status = shipmentStatii[shipment.status]
 ...
 <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
   {status}
+</p>
+`
+
+instead of:
+`
+<p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
+  {shipmentStatii[shipment.status]}
 </p>
 `
 
@@ -492,12 +456,14 @@ const status = shipmentStatii[shipment.status]
         {shipment.imc_reference}
       </h4>
     </div>
+
     <div className={INNER_WRAPPER_CELL}>
       <p className={SUBTITLE_NORMAL}>Status:</p>
       <p className={SUBTITLE}>
         {status}
       </p>
     </div>
+
     <div className={INNER_WRAPPER_CELL}>
       <p className={SUBTITLE_NORMAL}>Created at:</p>
       <p className={SUBTITLE}>
@@ -507,6 +473,8 @@ const status = shipmentStatii[shipment.status]
   </div>
 </div>
 ```
+
+instead of:
 
 ```html
 <div className={mainPanel}>
@@ -517,14 +485,12 @@ const status = shipmentStatii[shipment.status]
         {shipment.imc_reference}
       </h4>
     </div>
-
     <div className={INNER_WRAPPER_CELL}>
       <p className={SUBTITLE_NORMAL}>Status:</p>
       <p className={SUBTITLE}>
         {status}
       </p>
     </div>
-
     <div className={INNER_WRAPPER_CELL}>
       <p className={SUBTITLE_NORMAL}>Created at:</p>
       <p className={SUBTITLE}>
@@ -535,27 +501,21 @@ const status = shipmentStatii[shipment.status]
 </div>
 ```
 
-## Use function to reduce repeated DOM element declaration
+## Use factory function to reduce repeated DOM element declaration
 
-Rather not have the factory, as long as there is absolutely no point in carrying over the repeated props. Decide case by case, but lean towards not doing it.
-
-`TextHeading` is used multiple times with only `text` as different property.
-
-`
-<TextHeading theme={theme} color="white" size={3} text="Cargo Details" />
-`
+`TextHeading` is used multiple times(more than 3) with only `text` as different property.
+In this case we lean towards:
 
 `
 {TextHeadingFactory('Cargo Details')}
 `
 
-`GetTextHeading`, `TextHeadingFn` and `getTextHeading` are alternative names for `TextHeadingFactory`
+instead of:
+`
+<TextHeading theme={theme} color="white" size={3} text="Cargo Details" />
+`
 
 ## Avoid long string, prefer using functions
-
-`
-<h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
-`
 
 `
 const price = getTotalPrice(shipment)
@@ -572,7 +532,23 @@ function getTotalPrice(shipment){
 }
 `
 
+instead of:
+
+`
+<h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
+`
+
 ## Prefer positive over negative `if` evaluations
+
+`
+if (bool) {
+  this.calcInsurance(false, true)
+} else {
+  this.setState({ insurance: { bool: false, val: 0 } })
+}
+`
+
+instead of:
 
 `
 if (!bool) {
@@ -582,25 +558,20 @@ if (!bool) {
 }
 `
 
-`
-if (bool) {
-  this.calcInsurance(false, true)
-} else {
-  this.setState({ insurance: { bool: false, val: 0 } })
-}
-`
 ## Deconstructing `state` before `setState`
 
 `
 handleInvalidSubmit () {
-  this.setState({ finishBookingAttempted: true })
   const { shipper, consignee } = this.state
+  this.setState({ finishBookingAttempted: true })
 }
 `
 
+instead of:
+
 `
 handleInvalidSubmit () {
-  const { shipper, consignee } = this.state
   this.setState({ finishBookingAttempted: true })
+  const { shipper, consignee } = this.state
 }
 `
