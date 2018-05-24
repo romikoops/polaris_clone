@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
+  include DocumentTools
   # skip_before_action :require_authentication! # TODO: why skip?
   skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency]
 
@@ -63,6 +64,10 @@ class UsersController < ApplicationController
     results = get_currency_array(currency)
     response_handler(results)
   end
+  def download_gdpr
+    url = gdpr_download(current_user.id)
+    response_handler({url: url, key: 'gdpr'})
+  end
   
   def set_currency
     current_user.currency = params[:currency]
@@ -75,6 +80,11 @@ class UsersController < ApplicationController
     @hubs = Hub.prepped(current_user)
     
     response_handler(@hubs)
+  end
+  def opt_out
+    current_user.optin_status[params[:target]] = !current_user.optin_status[params[:target]]
+    current_user.save!
+    response_handler(user: current_user)
   end
 
   private

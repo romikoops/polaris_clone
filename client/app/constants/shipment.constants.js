@@ -115,7 +115,8 @@ export const shipmentConstants = {
 
   SHIPMENT_GET_NOTES_REQUEST: 'SHIPMENT_GET_NOTES_REQUEST',
   SHIPMENT_GET_NOTES_SUCCESS: 'SHIPMENT_GET_NOTES_SUCCESS',
-  SHIPMENT_GET_NOTES_FAILURE: 'SHIPMENT_GET_NOTES_FAILURE'
+  SHIPMENT_GET_NOTES_FAILURE: 'SHIPMENT_GET_NOTES_FAILURE',
+  CLEAR_SHIPMENTS: 'CLEAR_SHIPMENTS'
 }
 
 export const activeRoutesData = [
@@ -209,6 +210,7 @@ export const chargeGlossary = {
   effective_date: 'Effective Date',
   expiration_date: 'Expiration Date',
   rate_basis: 'Rate Basis',
+  hw_rate_basis: 'Heavy Weight Rate Basis',
   base_rate: 'Base Rate',
   base: 'Base',
   congestion: 'Congestion Charge',
@@ -221,6 +223,7 @@ export const chargeGlossary = {
   limit: 'Limit',
   extra: 'Extra',
   min: 'Minimum',
+  max: 'Maximum',
   PER_ITEM: 'Per Item',
   PER_CONTAINER: 'Per Container',
   PER_SHIPMENT: 'Per Shipment',

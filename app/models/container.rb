@@ -50,4 +50,5 @@ class Container < ApplicationRecord
 
     self.weight_class = "<= #{which_weight_step}t"
   end
+  
 end

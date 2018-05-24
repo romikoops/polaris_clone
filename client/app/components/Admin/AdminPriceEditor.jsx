@@ -142,6 +142,24 @@ export class AdminPriceEditor extends Component {
       }
     })
   }
+  handleRateChange (event) {
+    const { name, value } = event.target
+    const nameKeys = name.split('-')
+    const oldRanges = this.state.pricing.data[nameKeys[0]][nameKeys[1]]
+    oldRanges[nameKeys[2]][nameKeys[3]] = parseInt(value, 10)
+    this.setState({
+      pricing: {
+        ...this.state.pricing,
+        data: {
+          ...this.state.pricing.data,
+          [nameKeys[0]]: {
+            ...this.state.pricing.data[nameKeys[0]],
+            [nameKeys[1]]: oldRanges
+          }
+        }
+      }
+    })
+  }
   handleDayChange (date, target) {
     this.setState({
       pricing: {
@@ -262,7 +280,7 @@ export class AdminPriceEditor extends Component {
     Object.keys(pricing.data).forEach((key) => {
       const cells = []
       Object.keys(pricing.data[key]).forEach((chargeKey) => {
-        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis' && chargeKey !== 'range') {
           cells.push(<div
             key={chargeKey}
             className={`flex layout-row layout-align-none-center layout-wrap ${
@@ -314,6 +332,57 @@ export class AdminPriceEditor extends Component {
               />
             </div>
           </div>)
+        } else if (chargeKey === 'range') {
+          pricing.data[key].range.forEach((rangeFee, i) => {
+            const ellipsis = (
+              <div className="flex-10 layout-row layout-align-center-center">
+                <i className="flex-none fa fa-balance-scale" />
+              </div>
+            )
+            const rangeCells = [ellipsis]
+            Object.keys(rangeFee).forEach((rfKey) => {
+              if (rfKey === 'max' || rfKey === 'min') {
+                rangeCells.push(<div
+                  key={rfKey}
+                  className={`flex layout-row layout-align-none-center layout-wrap ${
+                    styles.price_cell
+                  }`}
+                >
+                  <p className="flex-100">{chargeGloss[rfKey]}</p>
+                  <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                    <input
+                      type="number"
+                      value={pricing.data[key][chargeKey][i][rfKey]}
+                      onChange={e => this.handleRateChange(e)}
+                      name={`${key}-${chargeKey}-${i}-${rfKey}`}
+                    />
+                  </div>
+                </div>)
+              } else if (rfKey === 'rate') {
+                rangeCells.push(<div
+                  key={rfKey}
+                  className={`flex layout-row layout-align-none-center layout-wrap ${
+                    styles.price_cell
+                  }`}
+                >
+                  <p className="flex-100">{chargeGloss[rfKey]}</p>
+                  <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                    <input
+                      type="number"
+                      value={pricing.data[key][chargeKey][i][rfKey]}
+                      onChange={e => this.handleRateChange(e)}
+                      name={`${key}-${chargeKey}-${i}-${rfKey}`}
+                    />
+                  </div>
+
+                </div>)
+              }
+            })
+            cells
+              .push(<div className="flex-100 layout-row layout-align-start-center">
+                {rangeCells}
+              </div>)
+          })
         }
       })
       panel.push(<div
@@ -336,7 +405,7 @@ export class AdminPriceEditor extends Component {
             <i className="fa fa-trash clip" style={textStyle} />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+        <div className="flex-100 layout-row layout-align-start-center layout-wrap ">{cells}</div>
       </div>)
     })
     const confimPrompt = confirm ? (

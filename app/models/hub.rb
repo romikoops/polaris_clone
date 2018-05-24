@@ -89,4 +89,17 @@ class Hub < ApplicationRecord
     end
     self.save!
   end
+  def copy_to_hub(hub_id)
+    self.hub_truckings.each do |ht|
+      nht = ht.as_json
+      nht.delete('id')
+      nht['hub_id'] = hub_id
+      tp = ht.trucking_pricing
+      ntp = tp.as_json
+      ntp.delete('id')
+      ntps = TruckingPricing.create!(ntp)
+      nht['trucking_pricing_id'] = ntps.id
+      HubTrucking.create!(nht)
+    end
+  end
 end

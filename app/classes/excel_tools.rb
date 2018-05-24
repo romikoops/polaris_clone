@@ -453,28 +453,32 @@ module ExcelTools
     
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type = zone_sheet.row(2)[4] == 'city' ? 'geometry_id' : zone_sheet.row(2)[4]
+    identifier_type = zone_sheet.row(1)[1] == 'CITY' ? 'geometry_id' : zone_sheet.row(1)[1].downcase
 
     # START Load Zones ------------------------
     
     zones = {}
     (2..num_rows).each do |line|
       row_data = zone_sheet.row(line)
-      zones[row_data[0]] = [] unless zones[row_data[0]]
+      zone_name = row_data[0]
+      zones[zone_name] = [] if zones[zone_name].nil?
+
       if row_data[1] && !row_data[2]
-        if !zip_char_length
-          zip_char_length = row_data[1].length
-        end 
-        zones[row_data[0]] << { ident: row_data[1], country: row_data[3] }
-      elsif !row_data[1] && row_data[2]
-        
+        zip_char_length ||= row_data[1].length
+        zones[zone_name] << { ident: row_data[1], country: row_data[3] }
+      elsif !row_data[1] && row_data[2]        
         range = row_data[2].delete(' ').split('-')
-        if !zip_char_length
-          zip_char_length = range[0].length
-        end 
-        zones[row_data[0]] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
+        zip_char_length ||= range[0].length
+        zones[zone_name] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
+      elsif row_data[1] && row_data[2]        
+        zones[zone_name] << {
+          ident: row_data[1],
+          sub_ident: row_data[2],
+          country: row_data[3]
+        }
       end
     end
+
     all_ident_values_and_countries = {} 
     zones.each do |zone_name, idents_and_countries|
       all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
@@ -491,13 +495,9 @@ module ExcelTools
             { ident: ident_value, country: idents_and_country[:country] }
           end
         elsif identifier_type == "geometry_id"
-          geometry = Geometry.cascading_find_by_name(idents_and_country[:ident].to_s)
           awesome_print idents_and_country
-          if geometry.nil?
-            puts "skipped #{idents_and_country[:ident].to_s}"
-            next
-          end
-          awesome_print geometry.names.log_format
+          geometry = find_geometry(idents_and_country)
+          puts geometry.names.log_format
           stats[:trucking_destinations][:number_created] += 1
           # stats[:hub_truckings][:number_created] += 1
           
@@ -607,6 +607,9 @@ module ExcelTools
           next if !cell || !mod_indexes.include?(i)
           defaults[mod_key] = {} unless defaults[mod_key]
           min_max_arr = cell.split(" - ")
+          if !min_max_arr[1]
+            
+          end
           defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil}.symbolize_keys
         end
       end
@@ -692,8 +695,6 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
           end
 
-          byebug unless single_ident_values_and_country.first
-          
           single_ident_values_and_country_with_timestamps = case identifier_type
             when 'distance', 'geometry_id'
               single_ident_values_and_country.map do |h|
@@ -708,7 +709,7 @@ module ExcelTools
           tp = trucking_pricing_by_zone[row_key]
           
           new_cols = %w(cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
-          new_cols.delete("cbm_ratio") if load_type == "container"
+          new_cols.delete("cbm_ratio")     if load_type == "container"
           new_cols.delete("load_meterage") if load_type == "container"
 
           # Find or update trucking_destinations
@@ -743,10 +744,13 @@ module ExcelTools
             WITH
               td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
               matching_tps_without_rates_and_fees AS (
-                SELECT trucking_pricings.id, #{new_cols.join(", ")}
+                SELECT DISTINCT trucking_pricings.id, #{new_cols.join(", ")}
                 FROM td_ids
-                JOIN hub_truckings ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
-                JOIN trucking_pricings ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+                JOIN hub_truckings
+                  ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
+                JOIN trucking_pricings
+                  ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+                WHERE hub_truckings.hub_id = #{hub_id}
               ),
               hub_ids AS (
                 VALUES(#{hub_id})
@@ -775,7 +779,19 @@ module ExcelTools
             ) THEN
               #{with_statement}
               UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w(fees rates))}
-              WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
+              WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
+
+              #{with_statement}
+              INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+                (
+                  SELECT * FROM hub_ids
+                  CROSS JOIN matching_tp_id_table
+                  CROSS JOIN td_ids
+                  CROSS JOIN t_stamps AS created_ats
+                  CROSS JOIN t_stamps AS updated_ats
+                )
+                ON CONFLICT DO NOTHING;    
+
             ELSE
               #{with_statement},
               tp_ids AS (
@@ -1624,6 +1640,7 @@ module ExcelTools
   def debug_message(message)
     puts message if DEBUG
   end
+
   def set_regular_fee(all_charges, charge, load_type, direction)
     if load_type === 'fcl'
       %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
@@ -1673,11 +1690,30 @@ module ExcelTools
     awesome_print all_charges
     all_charges
   end
+
   def generate_meta_from_sheet(sheet)
     meta = {}
     sheet.row(1).each_with_index do |key, i|
+      next if key.nil?
       meta[key.downcase] = sheet.row(2)[i]
     end
     meta.deep_symbolize_keys!
+  end
+
+  def find_geometry(idents_and_country)
+    geometry = Geometry.cascading_find_by_names(
+      idents_and_country[:sub_ident],
+      idents_and_country[:ident]
+    )
+
+    if geometry.nil?
+      geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+      coordinates = geocoder_results.first.geometry["location"]
+      geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+    end
+
+    raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
+
+    geometry
   end
 end

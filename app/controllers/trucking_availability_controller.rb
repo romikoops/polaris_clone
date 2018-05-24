@@ -10,13 +10,11 @@ class TruckingAvailabilityController < ApplicationController
 			nexus_ids: params[:nexus_ids].split(',').map(&:to_i),
 			carriage:  params[:carriage]
 		)
-		nexus_ids = trucking_pricings.map(&:nexus_id).uniq
+    nexus_ids = trucking_pricings.map(&:nexus_id).uniq
+    
 		response = {
 			trucking_available: !trucking_pricings.empty?, nexus_ids: nexus_ids
 		}.deep_transform_keys { |k| k.to_s.camelize(:lower) }
 		response_handler(response)
 	end
 end
-
-
-trucking_pricings = TruckingPricing.find_by_filter( tenant_id: 13, load_type: 'cargo_item', location:  Location.new(latitude: 32.039948, longitude: 118.761585).reverse_geocode, nexus_ids: [116], carriage: 'on')

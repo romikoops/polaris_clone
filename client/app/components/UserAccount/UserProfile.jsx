@@ -10,6 +10,9 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
 import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
+import DocumentsDownloader from '../Documents/Downloader'
+import { Modal } from '../Modal/Modal'
+import OptOutCookies from '../OptOut/Cookies'
 
 const ProfileBox = ({ user, style, edit }) => (
   <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
@@ -266,6 +269,25 @@ export class UserProfile extends Component {
       }
     })
   }
+  optOut (target) {
+    this.setState({
+      optOut: target
+    })
+  }
+  closeOptOutModal () {
+    this.setState({ optOut: false })
+  }
+  generateModal (target) {
+    const { user, theme, userDispatch } = this.props
+    switch (target) {
+      case 'cookies': {
+        const comp = <OptOutCookies user={user} userDispatch={userDispatch} theme={theme} />
+        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
+      }
+      default:
+        return ''
+    }
+  }
 
   saveEdit () {
     const { authDispatch, user } = this.props
@@ -296,14 +318,16 @@ export class UserProfile extends Component {
   }
   render () {
     const {
-      user, aliases, locations, theme, userDispatch
+      user, aliases, locations, theme, userDispatch, tenant
     } = this.props
     if (!user) {
       return ''
     }
+
     const {
-      editBool, editObj, newAliasBool, newAlias
+      editBool, editObj, newAliasBool, newAlias, optOut
     } = this.state
+    const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
@@ -556,6 +580,78 @@ export class UserProfile extends Component {
             user={user}
           />
         </div>
+        <div
+          className={`flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
+            styles.section
+          } `}
+        >
+          <div className="flex-100 layout-row layout-align-space-between-center sec_header">
+            <p className="sec_header_text flex-none"> GDPR - Your data </p>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-75 layout-row layout-align-start-center">
+              <p className="flex-none">
+                Here you can download all the data that ItsMyCargo has related to your account.
+              </p>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              <DocumentsDownloader
+                theme={theme}
+                target="gdpr"
+                options={{ userId: user.id }}
+              />
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-75 layout-row layout-align-start-center">
+              <p className="flex-none">
+                {`To opt out of the ${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions click the "Opt Out" button to the right`}
+              </p>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              <RoundButton
+                theme={theme}
+                size="small"
+                active
+                text="Opt Out"
+                handleNext={() => this.optOut('tenant')}
+              />
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-75 layout-row layout-align-start-center">
+              <p className="flex-none">
+                {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
+              </p>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              <RoundButton
+                theme={theme}
+                size="small"
+                active
+                text="Opt Out"
+                handleNext={() => this.optOut('itsmycargo')}
+              />
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-75 layout-row layout-align-start-center">
+              <p className="flex-none">
+                {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
+              </p>
+            </div>
+            <div className="flex-25 layout-row layout-align-end-center">
+              <RoundButton
+                theme={theme}
+                size="small"
+                active
+                text="Opt Out"
+                handleNext={() => this.optOut('cookies')}
+              />
+            </div>
+          </div>
+        </div>
+        {optOutModal}
       </div>
     )
   }
@@ -577,13 +673,15 @@ UserProfile.propTypes = {
     makePrimary: PropTypes.func,
     newAlias: PropTypes.func,
     deleteAlias: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  tenant: PropTypes.tenant
 }
 
 UserProfile.defaultProps = {
   theme: null,
   aliases: [],
-  locations: []
+  locations: [],
+  tenant: {}
 }
 
 export default UserProfile

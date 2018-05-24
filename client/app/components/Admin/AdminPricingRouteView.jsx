@@ -133,18 +133,55 @@ export class AdminPricingRouteView extends Component {
       Object.keys(pricing.data).forEach((key) => {
         const cells = []
         Object.keys(pricing.data[key]).forEach((chargeKey) => {
-          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis' && chargeKey !== 'range') {
+          if (
+            chargeKey !== 'currency' &&
+            chargeKey !== 'rate_basis' &&
+            chargeKey !== 'hw_rate_basis' &&
+            chargeKey !== 'range'
+          ) {
             cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
               <p className="flex-none">{chargeGloss[chargeKey]}</p>
               <p className="flex">
                 {pricing.data[key][chargeKey]} {pricing.data[key].currency}
               </p>
             </div>)
-          } else if (chargeKey === 'rate_basis') {
+          } else if (chargeKey === 'rate_basis' || chargeKey === 'hw_rate_basis') {
             cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
               <p className="flex-none">{chargeGloss[chargeKey]}</p>
               <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
             </div>)
+          } else if (chargeKey === 'range') {
+            pricing.data[key].range.forEach((rangeFee, i) => {
+              const ellipsis = (
+                <div className="flex-10 layout-row layout-align-center-center">
+                  <i className="flex-none fa fa-balance-scale" />
+                </div>
+              )
+              const rangeCells = [ellipsis]
+              Object.keys(rangeFee).forEach((rfKey) => {
+                if (rfKey !== 'currency' && rfKey !== 'max' && rfKey !== 'min') {
+                  rangeCells.push(<div
+                    className={`flex-20 layout-row layout-align-none-center ${styles.price_cell}`}
+                  >
+                    <p className="flex-none">{chargeGloss[rfKey]}</p>
+                    <p className="flex">
+                      {pricing.data[key].range[i][rfKey]} {pricing.data[key].currency}
+                    </p>
+                  </div>)
+                } else if (rfKey === 'min' || rfKey === 'max') {
+                  rangeCells.push(<div
+                    className={`flex-20 layout-row layout-align-none-center ${styles.price_cell}`}
+                  >
+                    <p className="flex-none">{rfKey}</p>
+                    <p className="flex">{pricing.data[key].range[i][rfKey]} kg</p>
+                  </div>)
+                }
+              })
+              cells
+                .push(<div className="flex-100 layout-row layout-align-start-center">
+                  {rangeCells}
+                </div>)
+            })
           }
         })
         panel.push(<div className="flex-100 layout-row layout-align-none-center layout-wrap">
@@ -155,7 +192,7 @@ export class AdminPricingRouteView extends Component {
               {key} - {gloss[key]}
             </p>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">{cells}</div>
         </div>)
       })
 
@@ -303,13 +340,13 @@ export class AdminPricingRouteView extends Component {
           </p>
         </div>
         <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Open Pricing </p>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+          <div className="flex-80 layout-row layout-wrap layout-align-space-between-center">
             <RoutePricingBox
               key={v4()}
               routeData={itinerary}
@@ -318,16 +355,16 @@ export class AdminPricingRouteView extends Component {
             />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}>
               {' '}
               Users With Dedicated Pricings{' '}
             </p>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+          <div className="flex-80 layout-row layout-wrap layout-align-space-between-center">
             {selectedClient ? clientPriceView : clientsView}
           </div>
           {confimPrompt}

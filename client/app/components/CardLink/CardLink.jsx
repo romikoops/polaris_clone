@@ -32,7 +32,7 @@ export class CardLink extends Component {
         : { color: 'black' }
     const inActive = !allowedCargoTypes[code]
       ? (
-        <div className={`${styles.inactive} flex-none layout-row layout-align-center-center`}>
+        <div className={`${styles.inactive} flex-none layout-row layout-align-center-end`}>
           <h3 className="flex-none">Coming Soon</h3>
         </div>
       ) : ''

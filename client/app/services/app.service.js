@@ -22,6 +22,22 @@ function fetchCurrencies () {
   return fetch(`${BASE_URL}/currencies/get`, requestOptions).then(handleResponse)
 }
 
+function refreshRates (base) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  return fetch(`${BASE_URL}/currencies/refresh/${base}`, requestOptions).then(handleResponse)
+}
+
+function fetchCurrenciesForBase (base) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  return fetch(`${BASE_URL}/currencies/base/${base}`, requestOptions).then(handleResponse)
+}
+
 function setCurrency (currency) {
   const requestOptions = {
     method: 'POST',
@@ -35,7 +51,9 @@ function setCurrency (currency) {
 
 const appService = {
   fetchCurrencies,
-  setCurrency
+  setCurrency,
+  fetchCurrenciesForBase,
+  refreshRates
 }
 
 export default appService

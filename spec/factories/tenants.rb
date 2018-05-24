@@ -19,6 +19,7 @@ FactoryBot.define do
             cargo_item: true
           }
         },
+        fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -29,7 +30,6 @@ FactoryBot.define do
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
           'Greencarrier is to discuss the validity of the presented prices with the product owners.'
-
         ],
         carriage_options: {
           on_carriage: {

@@ -1,19 +1,28 @@
 import { push } from 'react-router-redux'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
-import { alertActions, shipmentActions, adminActions, userActions } from './'
+import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
 import { getSubdomain } from '../helpers/subdomain'
 
+const { localStorage } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
-console.log(cookieKey)
-function logout () {
+function logout (closeWindow) {
   function lo () {
+    localStorage.removeItem('state')
+    localStorage.removeItem(cookieKey)
     return { type: authenticationConstants.LOGOUT }
   }
   return (dispatch) => {
+    if (closeWindow) {
+      setTimeout(() => {
+        window.close()
+      }, 1000)
+    }
     dispatch(adminActions.logOut())
     dispatch(userActions.logOut())
+    dispatch(shipmentActions.logOut())
+    dispatch(tenantActions.logOut())
     authenticationService.logout()
     dispatch(lo())
   }
@@ -55,7 +64,6 @@ function login (data) {
             persistState: !!data.req
           }))
         })
-        // dispatch(alertActions.error(error));
       }
     )
   }

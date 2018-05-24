@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514134957) do
+ActiveRecord::Schema.define(version: 20180522141630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.integer "trucking_pricing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["trucking_pricing_id", "trucking_destination_id", "hub_id"], name: "foreign_keys", unique: true
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -486,6 +487,7 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.jsonb "scope"
     t.string "currency", default: "EUR"
     t.jsonb "web"
+    t.jsonb "email_links"
   end
 
   create_table "transport_categories", force: :cascade do |t|
@@ -589,6 +591,7 @@ ActiveRecord::Schema.define(version: 20180514134957) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

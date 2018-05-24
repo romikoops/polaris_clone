@@ -18,7 +18,7 @@ import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
 export function calcFareTotals (feeHash) {
-  let res1 = feeHash.total.value
+  let res1 = parseFloat(feeHash.total.value)
   let res2 = 0
   if (feeHash && feeHash.customs && feeHash.customs.val) {
     res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
@@ -526,7 +526,7 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">{`${
                         shipment.total_price.currency
                       } ${calcExtraTotals(feeHash)} `}</h5>
-                      { feeHash.customs.hasUnknown
+                      { feeHash.customs && feeHash.customs.hasUnknown
                         ? (
                           <div className="flex-100 layout-row layout-align-end-center">
                             <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
@@ -565,51 +565,6 @@ export class BookingConfirmation extends Component {
                     {' '}
                     ( incl. Quoted Additional Services )
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className={
-              `${styles.shipment_card} flex-100 ` +
-              'layout-row layout-align-space-between-center layout-wrap'
-            }
-          >
-            <div
-              style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
-            >
-              <TextHeading theme={theme} color="white" size={3} text="Additional Services" />
-              <div
-                className="flex-10 layout-row layout-align-center-center"
-                onClick={() => this.handleCollapser('extras')}
-              >
-                {collapser.extras ? (
-                  <i className="fa fa-chevron-down pointy" />
-                ) : (
-                  <i className="fa fa-chevron-up pointy" />
-                )}
-              </div>
-            </div>
-            <div className={`${collapser.extras ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div
-                className={
-                  `${styles.inner_wrapper} flex-100 ` +
-                  'layout-row layout-wrap layout-align-start-start'
-                }
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <div
-                    className="
-                    flex-none
-                     content_width_booking
-                     layout-row
-                     layout-align-center-center"
-                  >
-                    <IncotermExtras theme={theme} feeHash={feeHash} tenant={{ data: tenant }} />
-                  </div>
                 </div>
               </div>
             </div>

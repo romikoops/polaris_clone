@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import Toggle from 'react-toggle'
+import { v4 } from 'node-uuid'
 import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
 import {
@@ -13,6 +13,25 @@ import { capitalize, gradientTextGenerator } from '../../../helpers'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 const rbSchema = rateBasisSchema
+function getTruckingPricingKey (truckingPricing) {
+  if (truckingPricing.zipcode) {
+    const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
+    const endResult = joinedArrays.join(', ')
+    return endResult
+  }
+  if (truckingPricing.city) {
+    const joinedArrays = truckingPricing.city.map(zArray => zArray.join(', '))
+    const endResult = joinedArrays.join(', ')
+    return endResult
+  }
+  if (truckingPricing.distance) {
+    const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
+    const endResult = joinedArrays.join(', ')
+    return endResult
+  }
+  return ''
+}
+
 export class TruckingDisplayPanel extends Component {
   static selectFromOptions (options, value) {
     let result
@@ -30,7 +49,7 @@ export class TruckingDisplayPanel extends Component {
     const modifierString =
       fee.rate.base === 1 ? `per ${modKey}` : `per ${fee.rate.base} ${modKey}'s`
     const displayCell = (
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
+      <div key={v4()} className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
         <div className="flex-33 layout-align-start-center">
           <p className="flex-none no_m">
             {`${parseInt(fee[`min_${modKey}`], 10)} - ${parseInt(
@@ -429,7 +448,7 @@ export class TruckingDisplayPanel extends Component {
     if (truckingInstance.zipcode) {
       [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.zipcode
     } else if (truckingInstance.city) {
-      [keyObj.upperKey] = truckingInstance.city
+      [keyObj.lowerKey, keyObj.upperKey] = truckingInstance.city
     } else if (truckingInstance.distance) {
       [keyObj.lowerKey, keyObj.upperKey] = truckingInstance.distance
     }
@@ -571,22 +590,7 @@ export class TruckingDisplayPanel extends Component {
               {capitalize(modifier)}
             </h4>
             <div className="flex-5" />
-            {modifier === 'City' ? (
-              <p className="flex-none">{`${capitalize(keyObj.upperKey)}`}</p>
-            ) : (
-              <p className="flex-none">{`${keyObj.lowerKey} - ${keyObj.upperKey}`}</p>
-            )}
-            {/* <div className="flex-30 layout-row layout-align-end-center">
-              <p className="flex-none">Toggle Import/Export View</p>
-              <div className="flex-5" />
-              <Toggle
-                className="flex-none"
-                id="unitView"
-                name="unitView"
-                checked={directionBool}
-                onChange={e => this.handleDirectionToggle(e)}
-              />
-            </div> */}
+            {getTruckingPricingKey(truckingInstance)}
           </div>
           {pricingsTypes}
           {feeTypes}

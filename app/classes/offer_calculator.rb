@@ -79,6 +79,7 @@ class OfferCalculator
     # determine_schedules!
     # add_schedules_charges!
     add_trip_charges! 
+    
     convert_currencies!
     prep_schedules!
   end
@@ -177,8 +178,8 @@ class OfferCalculator
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
         set_local_charges!(charges, trip, sched_key)
         set_trucking_charges!(charges, trip, sched_key)
-        
-        set_cargo_charges!(charges, trip, sched_key)
+        itinerary = @itineraries.select {|it| it.id == itinerary_id }.first
+        set_cargo_charges!(charges, trip, sched_key, itinerary.mode_of_transport)
        
       end
     end
@@ -259,7 +260,7 @@ class OfferCalculator
     @schedules = schedules
   end
 
-  def set_cargo_charges!(charges, trip, sched_key)
+  def set_cargo_charges!(charges, trip, sched_key, mot)
     total_units = @cargo_units.reduce(0) { |sum, cargo_unit| sum += cargo_unit.try(:quantity).to_i }
 
     @cargo_units.each do |cargo_unit|
@@ -270,7 +271,8 @@ class OfferCalculator
         path_key, 
         @user, 
         total_units,
-        @shipment.planned_pickup_date
+        @shipment.planned_pickup_date,
+        mot
       )
       
       if charge_result

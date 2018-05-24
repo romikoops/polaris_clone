@@ -5,7 +5,7 @@ import styles from './ShipmentLocationBox.scss'
 import { capitalizeAndDashifyCamelCase } from '../../helpers'
 
 function showTootip (truckingOption, directionConstraint, hubName) {
-  return (!truckingOption || ['mandatory', 'disabled'].includes(directionConstraint)) && hubName
+  return ['mandatory', 'disabled'].includes(directionConstraint) || (!truckingOption && hubName)
 }
 
 export default function TruckingTooltip ({

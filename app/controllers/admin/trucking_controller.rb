@@ -11,7 +11,7 @@ class Admin::TruckingController < ApplicationController
 
   def show
     hub = Hub.find(params[:id])
-    results = TruckingPricing.find_by_hub_ids(hub_ids: [params[:id]], tenant_id: current_user.tenant_id)
+    results = TruckingPricing.find_by_hub_id(params[:id])
     response_handler(hub: hub, truckingPricings: results)
   end
 
@@ -183,9 +183,8 @@ class Admin::TruckingController < ApplicationController
        overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], 'Globelink', dir)
       end
       hub = Hub.find(params["id"])
-      results = TruckingPricing.find_by_hub_ids(hub_ids: [params[:id]], tenant_id: current_user.tenant_id)
+      results = TruckingPricing.find_by_hub_id(params[:id])
       response_handler(hub: hub, truckingPricings: results)
-
     else
       response_handler(false)
     end

@@ -43,13 +43,9 @@ class CargoItem < ApplicationRecord
 
   def set_chargeable_weight!(mot = "ocean")
     self.chargeable_weight =
-      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym], payload_in_tons].max
+      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
     
     save!
   end
 
-  def weight_or_volume
-    # Keeping this alias method temporarily
-    chargeable_weight
-  end
 end

@@ -23,6 +23,8 @@ import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
+// eslint-disable-next-line import/no-named-as-default
+import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
 
 class Admin extends Component {
   constructor (props) {
@@ -137,6 +139,12 @@ class Admin extends Component {
                   path="/admin/pricings"
                   render={props => (
                     <AdminPricings theme={theme} {...props} hubs={hubs} pricingData={pricingData} />
+                  )}
+                />
+                <Route
+                  path="/admin/currencies"
+                  render={props => (
+                    <AdminCurrencyCenter theme={theme} />
                   )}
                 />
                 <SuperAdminPrivateRoute

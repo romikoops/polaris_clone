@@ -43,7 +43,9 @@ export default function addressFromPlace (place, gMaps, map, callback) {
       radius: 10000
     }
     service.nearbySearch(requestOptions, (results) => {
-      tmpAddress.city = results[0].name
+      if (results) {
+        tmpAddress.city = results[0].name
+      }
       callback(tmpAddress)
     })
   } else {

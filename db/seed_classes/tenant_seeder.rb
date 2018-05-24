@@ -127,7 +127,25 @@ class TenantSeeder
           ocean: "imc.sea.se@greencarrier.se"
         }
       },
-      
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: "https://freightservices.greencarrier.com/solution/tools/",
+            link_text: "Nordic Association of Freight Forwarders",
+            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+          },
+          {
+            href: "https://freightservices.greencarrier.com/added-services/claims/",
+            link_text: "Claims Policy",
+            text: "In the event you suffer a loss or damage to your goods, please refer to Greencarrier Freight Services' Claims Policy."
+          },
+          {
+            href: "https://greencarrier.itsmycargo.com/terms_and_conditions",
+            link_text: "Terms and Conditions",
+            text: "For more information, please refer to the Terms and Conditions."
+          }
+        ]
+      },      
       subdomain: "greencarrier",
       name: "Greencarrier",
       currency: 'USD',
@@ -161,7 +179,6 @@ class TenantSeeder
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
           "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
-
         ],
         carriage_options: {
           on_carriage: {
@@ -229,6 +246,20 @@ class TenantSeeder
           ocean: "imc.sea@demo.com",
           rail: "imc.rail@demo.com"
         }
+      },
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: "www.example.com",
+            link_text: "Nordic Association of Freight Forwarders",
+            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+          },
+          {
+            href: "www.example2.com",
+            link_text: "example2",
+            text: "This is just an example2."
+          }         
+        ]
       },
       subdomain: "demo",
       name: "Demo",

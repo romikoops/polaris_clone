@@ -33,7 +33,7 @@ export default function CargoItemGroupAggregated ({ group }) {
         </div>
         <div className="flex-33 layout-row layout-align-space-around">
           <p className="flex-none">Chargeable Weight</p>
-          <p className="flex-none">{(group.chargeable_weight * 1000).toFixed(3)} kg</p>
+          <p className="flex-none">{(group.chargeable_weight).toFixed(3)} kg</p>
         </div>
       </div>
       <hr className="flex-100" />
