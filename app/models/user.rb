@@ -11,7 +11,7 @@ class User < ApplicationRecord
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
     scope: :tenant_id,
-    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" } 
+    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
 
   # Basic associations
@@ -39,8 +39,9 @@ class User < ApplicationRecord
 
   PERMITTED_PARAMS = [
     :email, :password,
-    :guest, :tenant_id, :confirm_password, :password_confirmation, 
-    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+    :guest, :tenant_id, :confirm_password, :password_confirmation,
+    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone,
+    :cookie_consent
   ]
 
   # Filterrific
@@ -71,7 +72,7 @@ class User < ApplicationRecord
       "users.last_name ILIKE ?",
       "users.email ILIKE ?"
     ].join(' OR ')
-    
+
     where(
       terms.map { "(#{or_clauses})" }.join(' AND '),
       *terms.map { |e| [e] * num_or_conditions }.flatten
@@ -96,7 +97,7 @@ class User < ApplicationRecord
       ['Registration date (oldest first)', 'created_at_asc']
     ]
   end
-  
+
   def self.clear_tokens
     User.all.each do |u|
       u.tokens = nil
@@ -142,12 +143,12 @@ class User < ApplicationRecord
 
     send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
   end
-  
+
   def confirm
     update_shipments
     super
   end
-  
+
   private
 
   def set_default_role
@@ -176,7 +177,7 @@ class User < ApplicationRecord
     self.gdpr_status = 'deleted'
   end
   protected
-  
+
   def confirmation_required?
     false
   end
