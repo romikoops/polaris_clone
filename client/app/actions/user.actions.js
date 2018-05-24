@@ -99,11 +99,18 @@ function optOut (userId, target) {
     userService.optOut(userId, target).then(
       (response) => {
         dispatch(success(response))
-        debugger // eslint-disable-line
         dispatch(authenticationActions.setUser(response.data))
+        if (target === 'cookies') {
+          optOutCookies()
+        }
       },
       error => dispatch(failure(error))
     )
+  }
+}
+function optOutCookies () {
+  return (dispatch) => {
+    dispatch(authenticationActions.logOut(true))
   }
 }
 

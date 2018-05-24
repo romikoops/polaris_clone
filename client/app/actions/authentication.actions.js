@@ -7,13 +7,18 @@ import { getSubdomain } from '../helpers/subdomain'
 const { localStorage } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
-console.log(cookieKey)
-function logout () {
+function logout (closeWindow) {
   function lo () {
     localStorage.removeItem('state')
+    localStorage.removeItem(cookieKey)
     return { type: authenticationConstants.LOGOUT }
   }
   return (dispatch) => {
+    if (closeWindow) {
+      setTimeout(() => {
+        window.close()
+      }, 1000)
+    }
     dispatch(adminActions.logOut())
     dispatch(userActions.logOut())
     dispatch(shipmentActions.logOut())
@@ -59,7 +64,6 @@ function login (data) {
             persistState: !!data.req
           }))
         })
-        // dispatch(alertActions.error(error));
       }
     )
   }
