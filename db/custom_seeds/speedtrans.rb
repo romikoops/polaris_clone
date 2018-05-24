@@ -35,7 +35,7 @@ subdomains.each do |sub|
 
     puts "Hamburg Port"
     hub = tenant.hubs.find_by_name("Hamburg Port")
-    trucking = File.open("#{Rails.root}/db/dummydata/st_trucking_hamburg.xlsx")
+    trucking = File.open("#{Rails.root}/db/dummydata/st_trucking_hamburg_port.xlsx")
     req = {"xlsx" => trucking}
     overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
     
