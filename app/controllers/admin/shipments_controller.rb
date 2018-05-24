@@ -61,7 +61,7 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] =  doc.get_signed_url
       @documents << tmp
     end
-    locations = {origin: @shipment.origin, destination: @shipment.destination}
+    locations = { origin: @shipment.origin_nexus, destination: @shipment.destination_nexus }
     account_holder = @shipment.user
     resp = {
       shipment: @shipment,
