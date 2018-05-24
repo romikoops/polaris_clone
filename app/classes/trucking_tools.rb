@@ -42,7 +42,7 @@ module TruckingTools
         total_fees[k] = fee
       end
     end
-    byebug
+    
     fees[:rate] = fare_calculator('rate', pricing[:rate], cargo, km)
 
     fees.each do |_k, fee|
@@ -81,7 +81,7 @@ module TruckingTools
       val = cargo['weight'] * fee[:value]
       min = fee[:min_value] || 0
       res = [val, min].max
-      byebug
+      
       return { currency: fee[:currency], value: res, key: key }
     when 'PER_X_KG'
       val = (cargo['weight'] / fee[:base]) * fee[:value]
