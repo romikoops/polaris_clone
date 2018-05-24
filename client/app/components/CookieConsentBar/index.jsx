@@ -70,7 +70,7 @@ export default class CookieConsentBar extends React.PureComponent {
             />
             <ConsentButton
               theme={theme}
-              handleNext={() => { window.location.replace('https://www.itsmycargo.com/') }}
+              handleNext={() => { window.open('https://www.itsmycargo.com/') }}
               text="cookies policy"
               active
             />
@@ -92,7 +92,7 @@ export default class CookieConsentBar extends React.PureComponent {
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
-          This website uses cookies to enhance your user experience.
+          This website uses cookies to enhance your user experience. <a href="https://www.itsmycargo.com/" target="_blank">Learn more</a>
         </p>
 
         <ConsentButton
