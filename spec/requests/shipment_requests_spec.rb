@@ -107,8 +107,8 @@ describe 'Shipment requests', type: :request do
 
         post subdomain_shipment_get_offers_path(subdomain_id: 'demo', shipment_id: shipment.id), 
           params: { shipment: { selected_day: planned_origin_drop_off_date, origin: { nexus_id: origin_nexus.id, nexus_name: origin_nexus.name, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude }, destination: { nexus_id: destination_nexus.id, nexus_name: destination_nexus.name, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude }, incoterm: '', delay: '1', trucking: { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }, containers_attributes: [{ payload_in_kg: 0, sizeClass: 'fcl_20', tareWeight: 0, quantity: 1, dangerous_goods: false }] } }
-        # expect(response).to have_http_status(:success)
-        # expect(json[:success]).to be_truthy
+        expect(response).to have_http_status(:success)
+        expect(json[:success]).to be_truthy
         expect(json[:data]).to deep_include(response_data)
       end
     end
@@ -117,17 +117,22 @@ describe 'Shipment requests', type: :request do
       let(:response_data) do
         {
           shipment: {
-            user_id: user.id, customs_credit: nil, total_price: nil, schedule_set: [{ itinerary_id: itinerary.id.to_s, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s, total: { value: '1111.0', currency: 'EUR' } }], itinerary_id: itinerary.id, trip_id: trip.id, load_type: load_type, id: shipment.id, origin_hub_id: origin_hub.id, destination_hub_id: destination_hub.id, status: nil, direction: direction, pre_carriage_distance_km: nil, on_carriage_distance_km: nil, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, route_id: nil, uuid: shipment.uuid, imc_reference: shipment.imc_reference, has_pre_carriage: nil, has_on_carriage: nil, hs_code: [], tenant_id: tenant.id, trucking: { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
+            user_id: user.id, customs_credit: nil, total_price: { value: '1111.0', currency: 'EUR' }, schedule_set: [{ itinerary_id: itinerary.id.to_s, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s }], itinerary_id: itinerary.id, trip_id: trip.id, load_type: load_type, id: shipment.id, origin_hub_id: origin_hub.id, destination_hub_id: destination_hub.id, status: nil, direction: direction, pre_carriage_distance_km: nil, on_carriage_distance_km: nil, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, route_id: nil, uuid: shipment.uuid, imc_reference: shipment.imc_reference, tenant_id: tenant.id
           },
           hubs: {
-            startHub: { data: { id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id }, location: { id: origin_hub.nexus_id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: origin.city, country: origin.country, street_address: nil, province: nil, photo: nil, premise: nil } }, endHub: { data: { id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: nil, longitude: nil, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: destination_hub.nexus_id }, location: { id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: destination_nexus.city, country: destination_nexus.country, street_address: nil, province: nil, photo: nil, premise: nil } }
+            startHub: {
+              data: { id: origin_hub.id, tenant_id: tenant.id, location_id: origin_hub.location_id, name: origin_hub.name, hub_type: origin_hub.hub_type, latitude: nil, longitude: nil, hub_status: origin_hub.hub_status, hub_code: origin_hub.hub_code, trucking_type: nil, photo: nil, nexus_id: origin_hub.nexus_id },
+              location: origin_hub.nexus.given_attributes
+            },
+            endHub: {
+              data: { id: destination_hub.id, tenant_id: tenant.id, location_id: destination_hub.location_id, name: destination_hub.name, hub_type: destination_hub.hub_type, latitude: destination_hub.latitude, longitude: destination_hub.longitude, hub_status: destination_hub.hub_status, hub_code: destination_hub.hub_code, nexus_id: destination_hub.nexus_id },
+              location: destination_hub.nexus.given_attributes
+            }
           },
           contacts: [], userLocations: [],
-          schedules: [
-            {
-              itinerary_id: itinerary.id.to_s, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s, total: { value: '1111.0', currency: 'EUR' }
-            }
-          ],
+          schedule: {
+            itinerary_id: itinerary.id.to_s, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s
+          },
           dangerousGoods: false, documents: {},
           containers: [
             {
@@ -137,10 +142,10 @@ describe 'Shipment requests', type: :request do
           cargoItems: [], customs: { import: { unknown: true }, export: { unknown: true }, total: { total: { value: 0, currency: 'EUR' } } },
           locations: {
             origin: {
-              id: origin_hub.nexus_id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: origin_nexus.city, country: origin_nexus.country, street_address: nil, province: nil, photo: nil, premise: nil
+              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: destination_nexus.city, country: destination_nexus.country, street_address: nil, province: nil, photo: nil, premise: nil
+              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           }
         }
@@ -148,14 +153,14 @@ describe 'Shipment requests', type: :request do
 
       it 'Updates the existing shipment with information about which offer was actually chosen' do
         post subdomain_shipment_choose_offer_path(subdomain_id: 'demo', shipment_id: shipment.id), params: {
-          shipment: { user_id: user.id },
-          schedules: [
-            {
-              itinerary_id: itinerary.id, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id, trip_id: trip.id, origin_layover_id: origin_layover.id, destination_layover_id: destination_layover.id,
-              total: { value: '1111.0', currency: 'EUR' }
-            }
-          ]
+          customs_credit: nil, 
+          user_id: user.id,
+          schedule: {
+            itinerary_id: itinerary.id, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id, trip_id: trip.id, origin_layover_id: origin_layover.id, destination_layover_id: destination_layover.id
+          },
+          total: { value: '1111.0', currency: 'EUR' }
         }
+
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
         expect(json[:data]).to deep_include(response_data)
@@ -168,11 +173,9 @@ describe 'Shipment requests', type: :request do
           shipment: {
             total_goods_value: nil, cargo_notes: nil, direction: direction, id: shipment.id, schedule_set: schedule_set, schedules_charges: response_schedules_charges, customs: { val: '1111.0', currency: 'EUR' }, total_price: { value: '2222.0', currency: 'EUR' }, customs_credit: nil, notes: nil, planned_etd: schedule_set.last[:etd], planned_eta: schedule_set.last[:eta], status: nil, load_type: load_type, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, uuid: shipment.uuid, imc_reference: shipment.imc_reference, hs_code: [], tenant_id: tenant.id, itinerary_id: itinerary.id, trucking: { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
           },
-          schedules: [
-            {
-              itinerary_id: itinerary.id.to_s, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s, total: { value: '1111.0', currency: 'EUR' }
-            }
-          ],
+          schedule: {
+            itinerary_id: itinerary.id.to_s, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s
+          },
           documents: [],
           containers: [
             {
@@ -182,16 +185,16 @@ describe 'Shipment requests', type: :request do
           cargoItems: [],
           locations: {
             origin: {
-              id: origin_hub.nexus_id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: origin_nexus.city, country: origin_nexus.country, street_address: nil, province: nil, photo: nil, premise: nil
+              id: origin_nexus.id, name: origin_nexus.name, location_type: nil, latitude: origin_nexus.latitude, longitude: origin_nexus.longitude, geocoded_address: origin_nexus.geocoded_address, zip_code: origin_nexus.zip_code, city: origin_nexus.city
             },
             destination: {
-              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, street: nil, street_number: nil, zip_code: nil, city: destination_nexus.city, country: destination_nexus.country, street_address: nil, province: nil, photo: nil, premise: nil
+              id: destination_nexus.id, name: destination_nexus.name, location_type: nil, latitude: destination_nexus.latitude, longitude: destination_nexus.longitude, geocoded_address: destination_nexus.geocoded_address, zip_code: destination_nexus.zip_code, city: destination_nexus.city
             }
           }
         }
       end
 
-      let(:schedule_set) { [{ itinerary_id: itinerary.id.to_s, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s, total: { value: '1111.0', currency: 'EUR' } }] }
+      let(:schedule_set) { [{ itinerary_id: itinerary.id.to_s, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s }] }
 
       let(:response_schedules_charges) { { [origin_hub.id, destination_hub.id].join('-').to_sym => { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: { container.id.to_s.to_sym => { total: { value: '1111.0', currency: 'EUR' }, BAS: { value: '1111.0', currency: 'EUR' } } }, total: { value: '2222.0', currency: 'EUR' } } } }
 
@@ -224,19 +227,21 @@ describe 'Shipment requests', type: :request do
             headers: {}
           )
         post subdomain_shipment_update_shipment_path(subdomain_id: 'demo', shipment_id: shipment.id), params: {
-          shipment: { user_id: user.id,
-                      insurance: { 1 => '' },
-                      shipper: {
-                        location: { city: 'Gothenburg', country: 'Sweden' },
-                        contact: { companyName: 'TestCargo', firstName: 'Carl', lastName: 'Carlson', phone: '12344356443', email: 'carlson@testcargo.zz' }
-                      },
-                      consignee: {
-                        location: { city: 'Gothenburg', country: 'Sweden' },
-                        contact: { companyName: 'TestConsignee', firstName: 'Svea', lastName: 'Svenson', phone: '1232346443', email: 'svenson@testconsignee.zz' }
-                      },
-                      customs: { import: { unknown: true }, export: { unknown: true }, total: { val: 1111, currency: 'EUR' } },
-                      hsCodes: { container.id.to_s => [{ value: '123' }] },
-                      hsTexts: { container.id.to_s => 'test' } }
+          shipment: {
+            user_id: user.id,
+            insurance: { 1 => '' },
+            shipper: {
+              location: { city: 'Gothenburg', country: 'Sweden' },
+              contact: { companyName: 'TestCargo', firstName: 'Carl', lastName: 'Carlson', phone: '12344356443', email: 'carlson@testcargo.zz' }
+            },
+            consignee: {
+              location: { city: 'Gothenburg', country: 'Sweden' },
+              contact: { companyName: 'TestConsignee', firstName: 'Svea', lastName: 'Svenson', phone: '1232346443', email: 'svenson@testconsignee.zz' }
+            },
+            customs: { import: { unknown: true }, export: { unknown: true }, total: { val: 1111, currency: 'EUR' } },
+            hsCodes: { container.id.to_s => [{ value: '123' }] },
+            hsTexts: { container.id.to_s => 'test' }
+          }
         }
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
@@ -250,11 +255,18 @@ describe 'Shipment requests', type: :request do
       let(:response_data) do
         {
           shipment: {
-            status: "requested", id: shipment.id, load_type: load_type, direction: direction, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, uuid: shipment.uuid, imc_reference: shipment.imc_reference, hs_code: [], schedule_set: schedule_set, tenant_id: tenant.id, itinerary_id: itinerary.id, trucking: { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }, customs_credit: false, total_price: nil, total_goods_value: nil, trip_id: nil, eori: nil, notes: nil, incoterm: nil, insurance: nil, customs: nil }
+            status: "requested_by_unconfirmed_account", id: shipment.id, load_type: load_type, direction: direction, origin_nexus_id: origin_nexus.id, destination_nexus_id: destination_nexus.id, uuid: shipment.uuid, imc_reference: shipment.imc_reference, hs_code: [], schedule_set: schedule_set, tenant_id: tenant.id, itinerary_id: itinerary.id, trucking: { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }, customs_credit: false, total_price: nil, total_goods_value: nil, trip_id: nil, eori: nil, notes: nil, incoterm: nil, insurance: nil, customs: nil
           }
+        }
       end
 
-      let(:schedule_set) { [{ itinerary_id: itinerary.id.to_s, eta: origin_layover.eta.iso8601(3), etd: origin_layover.eta.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s, total: { value: '1111.0', currency: 'EUR' } }] }
+      let(:schedule_set) {
+        [
+          {
+            itinerary_id: itinerary.id.to_s, eta: destination_layover.eta.iso8601(3), etd: origin_layover.etd.iso8601(3), closing_date: origin_layover.closing_date.iso8601(3), mode_of_transport: 'ocean', hub_route_key: [origin_hub.id, destination_hub.id].join('-'), tenant_id: tenant.id.to_s, trip_id: trip.id.to_s, origin_layover_id: origin_layover.id.to_s, destination_layover_id: destination_layover.id.to_s
+          },
+        ] 
+      }
 
       before do
         shipment.update!(itinerary: itinerary, schedule_set: schedule_set)

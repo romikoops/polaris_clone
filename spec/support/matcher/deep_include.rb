@@ -22,8 +22,8 @@ RSpec::Matchers.define :deep_include do |expected|
       end
     elsif actual.is_a? Hash
       return false unless expected.is_a? Hash
+
       expected.all? do |key, expected_value|
-        return false unless actual.has_key? key
         deep_include? actual[key], expected_value, path + [key]
       end
     else
