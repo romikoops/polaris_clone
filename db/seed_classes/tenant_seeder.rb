@@ -1321,9 +1321,9 @@ class TenantSeeder
           brightPrimary: "#270C77",
           brightSecondary:  "#4FAACA"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
-        logoSmall: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
-        logoWhite: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtrans_logo_white.png",
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
