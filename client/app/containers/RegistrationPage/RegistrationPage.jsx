@@ -31,12 +31,17 @@ class RegistrationPage extends React.Component {
     this.state = {
       focus: {},
       alertVisible: false,
-      termsAndConditionsAccepted: false
+      termsAndConditionsAccepted: {
+        imc: false,
+        tenant: false
+      }
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
+    this.allAccepted = this.allAccepted.bind(this)
+    this.shakeInvalidCheckboxes = this.shakeInvalidCheckboxes.bind(this)
   }
 
   componentWillMount () {
@@ -64,14 +69,21 @@ class RegistrationPage extends React.Component {
     })
   }
 
-  handleChangeTermsAndConditionsAccepted () {
-    this.setState({
-      termsAndConditionsAccepted: !this.state.termsAndConditionsAccepted
-    })
+  handleChangeTermsAndConditionsAccepted (value, e) {
+    const key = e.target.name.split('-')[0]
+    this.setState(prevState => ({
+      termsAndConditionsAccepted: {
+        ...prevState.termsAndConditionsAccepted,
+        [key]: value
+      }
+    }))
   }
 
   handleSubmit (model) {
-    if (!this.state.termsAndConditionsAccepted) return
+    if (!this.allAccepted()) {
+      this.shakeInvalidCheckboxes()
+      return
+    }
     const user = Object.assign({}, model)
     user.tenant_id = this.props.tenant.data.id
     user.guest = false
@@ -85,8 +97,32 @@ class RegistrationPage extends React.Component {
   }
 
   handleInvalidSubmit () {
-    if (!this.state.termsAndConditionsAccepted) return
+    if (!this.allAccepted()) {
+      this.shakeInvalidCheckboxes()
+      return
+    }
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
+  }
+
+  allAccepted () {
+    return Object.values(this.state.termsAndConditionsAccepted).every(bool => bool)
+  }
+
+  shakeInvalidCheckboxes () {
+    this.setState(prevState => ({
+      shakeClass: {
+        imc: prevState.termsAndConditionsAccepted.imc ? '' : 'apply_shake',
+        tenant: prevState.termsAndConditionsAccepted.tenant ? '' : 'apply_shake'
+      }
+    }))
+    setTimeout(() => {
+      this.setState({
+        shakeClass: {
+          imc: '',
+          tenant: ''
+        }
+      })
+    }, 1000)
   }
 
   render () {
@@ -186,16 +222,18 @@ class RegistrationPage extends React.Component {
         <TermsAndConditionsSummary
           theme={theme}
           tenant={tenant}
-          handleChange={() => this.handleChangeTermsAndConditionsAccepted()}
+          handleChange={(e, x) => this.handleChangeTermsAndConditionsAccepted(e, x)}
           accepted={this.state.termsAndConditionsAccepted}
+          shakeClass={this.state.shakeClass}
           goToTermsAndConditions={() => authenticationDispatch.goTo('/terms_and_conditions', true)}
+          goToImcTermsAndConditions={() => window.open('https://www.itsmycargo.com/en/terms', '_blank')}
         />
         <div className={`${styles.form_group_submit_btn} layout-row layout-align-center`}>
           <RoundButton
             text="Register new account"
             theme={theme}
-            active={this.state.termsAndConditionsAccepted}
-            disabled={!this.state.termsAndConditionsAccepted}
+            active={this.allAccepted()}
+            disabled={!this.allAccepted()}
           />
           <div className={styles.spinner}>{ registering && <LoadingSpinner /> }</div>
         </div>
