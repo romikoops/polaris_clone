@@ -2,8 +2,7 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   include DocumentTools
-  # skip_before_action :require_authentication! # TODO: why skip?
-  skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency]
+  skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency, :currencies]
 
   def home
     @shipper = current_user
@@ -18,8 +17,9 @@ class UsersController < ApplicationController
 
     user_locs = @shipper.user_locations
     locations = user_locs.map do |ul|
-      {user: ul, location: ul.location}
+      { user: ul, location: ul.location }
     end
+
     resp = {
       shipments:{
         requested: @requested_shipments,
@@ -60,10 +60,11 @@ class UsersController < ApplicationController
   end
 
   def currencies
-    currency = current_user ? current_user.currency : "EUR"
+    currency = current_user.try(:currency) || "EUR"
     results = get_currency_array(currency)
     response_handler(results)
   end
+
   def download_gdpr
     url = gdpr_download(current_user.id)
     response_handler({url: url, key: 'gdpr'})
