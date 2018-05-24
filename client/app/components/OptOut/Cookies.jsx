@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
+import styles from './index.scss'
 
 class OptOutCookies extends Component {
   constructor (props) {
@@ -15,7 +16,7 @@ class OptOutCookies extends Component {
   render () {
     const { theme } = this.props
     return (
-      <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+      <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-80 layout-row layout-align-start-center">
           <h3 className="flex-none">Cookies</h3>
         </div>

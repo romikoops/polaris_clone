@@ -1,0 +1,2 @@
+class OptinStatus < ApplicationRecord
+end
