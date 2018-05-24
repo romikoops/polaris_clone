@@ -81,12 +81,11 @@ export default class CookieConsentBar extends React.PureComponent {
     )
 
     if (!tenant) return ''
-    if (user && user.optin_status && user.optin_status.cookies) return ''
 
     const cookieBackground = theme && theme.colors ? theme.colors.secondary : '#aaa'
     return (
       <div
-        className={`${styles.cookie_flex} ${user && user.cookie_consent ? styles.hidden : ''}`}
+        className={`${styles.cookie_flex} ${user && user.optin_status && user.optin_status.cookies ? styles.hidden : ''}`}
         style={{ background: cookieBackground, filter: 'grayscale(60%)' }}
       >
         { this.state.showModal && modal}

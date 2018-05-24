@@ -34,8 +34,8 @@ class OptOutTenant extends Component {
              able to continue using the shop and we will have to close the window
           </p>
           <p className="flex-100">
-            {`Should you wish to resume using one of the ${tenant.data.name} ItsMyCargo Shop you will need to consent
-             to the use of cookies again`}
+            {`Should you wish to resume using one of the ${tenant.data.name} ItsMyCargo Shop you will need to 
+            agree to the terms and conditions again`}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">

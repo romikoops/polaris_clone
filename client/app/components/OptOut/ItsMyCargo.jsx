@@ -11,7 +11,7 @@ class OptOutItsMyCargo extends Component {
   }
   handleOptOut () {
     const { userDispatch, user } = this.props
-    userDispatch.optOut(user.id, 'tenant')
+    userDispatch.optOut(user.id, 'itsmycargo')
   }
   render () {
     const { theme, tenant } = this.props
@@ -21,12 +21,12 @@ class OptOutItsMyCargo extends Component {
     return (
       <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-100 layout-row layout-align-start-center">
-          <h3 className="flex-none">{tenant.data.name} Terms & Conditions</h3>
+          <h3 className="flex-none">ItsMyCargo GMBH Terms & Conditions</h3>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
-            {` Use of the ${tenant.data.name} ItsMyCargo webshop requires accepting the terms and
-             conditions laid out by ${tenant.data.name}.`}
+            {` Use of any ItsMyCargo webshop requires accepting the terms and
+             conditions laid out on the Terms and Conditions page.`}
           </p>
           <p className="flex-100">
             As such if you decide to withdraw your agreement to the terms and conditions
@@ -34,16 +34,16 @@ class OptOutItsMyCargo extends Component {
              able to continue using the shop and we will have to close the window
           </p>
           <p className="flex-100">
-            {`Should you wish to resume using one of the ${tenant.data.name} ItsMyCargo Shop you will need to consent
-             to the use of cookies again`}
+            {`Should you wish to resume using one of the ItsMyCargo Shops you will need to agree to the 
+            terms and conditions again`}
           </p>
         </div>
         <div className="flex-100 layout-row layout-wrap layout-aling-center-center">
           <p className="flex-100">
-            By clicking the Opt Out button below the follwoing will happen:
+            By clicking the Opt Out button below the following will happen:
           </p>
           <ul className="flex-100">
-            <li> {`Your user account will be marked as not agreeing to the ${tenant.data.name} terms and conditions`}</li>
+            <li> {`Your user account will be marked as not agreeing to the ItsMyCargo GMBH terms and conditions`}</li>
             <li> You will be logged out and returned to the landing page</li>
           </ul>
         </div>

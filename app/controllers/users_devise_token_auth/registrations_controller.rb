@@ -24,8 +24,8 @@ module UsersDeviseTokenAuth
 		def render_create_success
 			@headers.each do |k, v|
 				response.headers[k] = v
-			end
-
+      end
+      @resource = @resource.expanded()
 			super
 		end
 
@@ -47,8 +47,10 @@ module UsersDeviseTokenAuth
 
 			unless params_h[:VAT_number].nil?
 				params_h[:vat_number] = params_h.delete(:VAT_number)
-			end
-			unless params_h[:cookies].nil?
+      end
+      
+      unless params_h[:cookies].nil?
+        params_h.delete(:cookies)
 				params_h[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
 			end
 

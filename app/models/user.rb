@@ -43,7 +43,7 @@ class User < ApplicationRecord
     :email, :password,
     :guest, :tenant_id, :confirm_password, :password_confirmation,
     :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone,
-    :optin_status_id
+    :optin_status_id, :cookies
   ]
 
   # Filterrific
@@ -154,6 +154,9 @@ class User < ApplicationRecord
   def expanded()
     return self.as_json(include: :optin_status)
   end
+  def expand!()
+    return self.as_json(include: :optin_status)
+  end
   # Devise Token Auth override
   def token_validation_response
     as_json(except: [:tokens, :created_at, :updated_at], include: :optin_status)
@@ -187,13 +190,10 @@ class User < ApplicationRecord
     self.gdpr_status = 'deleted'
   end
   def set_default_optin_status
-    optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
-    if !optin_status
-      OptinStatus.create_all!
+    if !self.optin_status_id
       optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
+      self.optin_status = optin_status
     end
-    self.optin_status = optin_status
-    self.save!
   end
   
   protected

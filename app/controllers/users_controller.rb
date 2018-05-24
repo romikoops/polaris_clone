@@ -84,6 +84,9 @@ class UsersController < ApplicationController
   def opt_out
     new_status = current_user.optin_status.as_json
     new_status[params[:target]] = !new_status[params[:target]]
+    new_status.delete("id")
+    new_status.delete("updated_at")
+    new_status.delete("created_at")
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
@@ -104,6 +107,11 @@ class UsersController < ApplicationController
 
     unless return_params[:VAT_number].nil?
       return_params[:vat_number] = return_params.delete(:VAT_number)
+    end
+
+    unless return_params[:cookies].nil?
+      return_params.delete(:cookies)
+      return_params[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
     end
 
     return_params
