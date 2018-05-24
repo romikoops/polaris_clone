@@ -60,7 +60,7 @@ class OfferCalculator
     determine_trucking_options!
     
     determine_itinerary!
-    # determine_longest_trucking_time!
+    determine_current_etd_in_search!
     
     determine_layovers!
     add_trip_charges!
@@ -80,9 +80,11 @@ class OfferCalculator
     raise ApplicationError::NoRoute unless @itineraries
   end
 
-  def determine_longest_trucking_time!
+  def determine_current_etd_in_search!
     begin
-      if shipment.has_pre_carriage
+      longest_trucking_time = 0
+
+      if shipment.has_pre_carriage?
         google_directions = GoogleDirections.new(
           @pickup_address.lat_lng_string,
           @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
@@ -90,11 +92,9 @@ class OfferCalculator
         )
         
         driving_time = google_directions.driving_time_in_seconds
-        @longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
-      else
-        @longest_trucking_time = 0
+        longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
       end
-      @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
+      @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
     rescue
       raise ApplicationError::NoTruckingTime
     end
@@ -108,8 +108,8 @@ class OfferCalculator
       origin_stop = itin.stops.where(hub_id: @origin_hubs).first
       origin_layovers = origin_stop.layovers.where(
         "closing_date > ? AND closing_date < ?",
-        @shipment[@selected_day_attribute],
-        @shipment[@selected_day_attribute] + delay.days
+        @current_etd_in_search,
+        @current_etd_in_search + delay.days
       ).order(:etd).uniq
 
       trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|

@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :layover do
-    etd Date.tomorrow + 2.days + 2.hours
-    eta Date.tomorrow + 8.days
-    closing_date Date.tomorrow + 5.hours
+    etd Date.tomorrow + 7.days + 2.hours
+    eta Date.tomorrow + 11.days
+    closing_date Date.tomorrow + 4.days + 5.hours
     sequence(:stop_index) { |n| n }
     association :stop
     association :trip
