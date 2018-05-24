@@ -1321,10 +1321,10 @@ class TenantSeeder
           brightPrimary: "#270C77",
           brightSecondary:  "#4FAACA"
         },
-        logoLarge: "",
-        logoWhite: "",
-        logoSmall: "",
-        background: ""
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/igs-itermodal/IGS-Logistics.png",
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
         main: 'Am Spitzwald 9 D-21509 Glinde'
@@ -1365,7 +1365,7 @@ class TenantSeeder
         ]
       },      
       subdomain: "speedtrans",
-      name: "Küster Speedrans Übersee Spedition GmbH",
+      name: "Küster Speedtrans Übersee Spedition GmbH",
       currency: 'USD',
       scope: {
         modes_of_transport: {
