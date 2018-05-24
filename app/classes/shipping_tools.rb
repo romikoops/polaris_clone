@@ -355,8 +355,8 @@ module ShippingTools
     origin_customs_fee = @origin.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
     destination_customs_fee = @destination.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
 
-    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee['import'], cargos, shipment.load_type, current_user) : { unknown: true }
-    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee['export'], cargos, shipment.load_type, current_user) : { unknown: true }
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee['import'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee['export'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
     total_fees = { total: { value: 0, currency: current_user.currency } }
     if import_fees['total'] && import_fees['total'][:value]
       total_fees[:total][:value] += import_fees['total'][:value]

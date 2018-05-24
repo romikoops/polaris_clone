@@ -117,7 +117,7 @@ subdomains.each do |sub|
 #   awesome_print "All rates done"
   
   # hub = tenant.hubs.find_by_name("Shanghai Airport")
-  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # awesome_print "All rates done"

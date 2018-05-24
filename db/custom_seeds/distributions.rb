@@ -5,7 +5,8 @@ subdomains =  [
   {cloudfront: "E2VR366CPGNLTC", subdomain: "easyshipping"},
   {cloudfront: "E1WJTKUIV6CYP3", subdomain: "integrail"},
   {cloudfront: "E1XPLYJA1HASN3", subdomain: "eimskip"},
-  {cloudfront: "E42GZPFHU0WZO", subdomain: "belglobe"}
+  {cloudfront: "E42GZPFHU0WZO", subdomain: "belglobe"},
+  {cloudfront: "E2IQ14Z9Z5JEGN", subdomain: "greencarrier-sandbox"}
 ];
 
 subdomains.each do |s|
