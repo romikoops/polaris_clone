@@ -16,7 +16,7 @@ export class GreyBox extends Component {
     const InnerComponent = this.props.component
 
     return (
-      <div className={`layout-row flex-${this.state.flex} layout-wrap layout-align-center-stretch ${styles.greyboxborder}
+      <div className={`layout-row flex-${this.state.flex} flex-sm-100 layout-wrap layout-align-center-stretch ${styles.greyboxborder}
         ${this.state.padding ? styles.boxpadding : ''}
         ${this.state.fullWidth ? styles.fullWidth : ''}`}
       >
@@ -37,7 +37,7 @@ GreyBox.defaultProps = {
   component: React.createElement('div'),
   flex: 50,
   fullWidth: false,
-  padding: true
+  padding: false
 }
 
 export default GreyBox

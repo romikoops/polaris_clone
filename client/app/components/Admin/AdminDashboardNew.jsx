@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { TabBox as TBox } from '../TabBox/TabBox'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import { AdminShipmentStatus as AShipStat } from './AdminShipmentStatus'
@@ -7,6 +8,7 @@ import { AdminRequestedShipments as AReqShip } from './AdminRequestedShipments'
 import { AdminCustomers as ACust } from './AdminCustomers'
 import { AdminAffluency as AAffl } from './AdminAffluency'
 import { AdminFCL as Fcl } from './AdminFCL'
+import { AdminShipmentCard as AShipCard } from './AdminShipmentCard'
 import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
@@ -37,8 +39,35 @@ export class AdminDashboardNew extends Component {
   render () {
     const {
       theme,
-      shipments
+      shipments,
+      hubs
     } = this.props
+
+    const shipment = {
+      imc_reference: 123456789,
+      originHub: {
+        location: {
+          city: 'Stockholm'
+        }
+      },
+      destinationHub: {
+        location: {
+          city: 'Shanghai'
+        }
+      },
+      mode_of_transport: 'air',
+      clientName: 'John Smith',
+      companyName: 'Max Steel Inc.',
+      booking_placed_at: moment(),
+      planned_pickup_date: moment(),
+      planned_etd: moment(),
+      planned_eta: moment(),
+      delivery_fee: 100,
+      total_price: {
+        currency: 'USD',
+        value: 424.2
+      }
+    }
 
     const ShipmentStatus = (
       <AShipStat
@@ -64,11 +93,26 @@ export class AdminDashboardNew extends Component {
       <Fcl />
     )
 
+    const ShipCard = (
+      <AShipCard
+        shipment={shipment}
+        hubs={hubs}
+      />
+    )
+
     const tabs = [FclComp, lcl]
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`}>
         <TextHeading theme={theme} size={1} text="Dashboard" />
+        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
+          <GBox
+            title=""
+            subtitle=""
+            flex={50}
+            component={ShipCard}
+          />
+        </section>
         <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
           <GBox
             title="Something"
@@ -125,12 +169,14 @@ export class AdminDashboardNew extends Component {
 
 AdminDashboardNew.propTypes = {
   theme: PropTypes.node,
-  shipments: PropTypes.node
+  shipments: PropTypes.node,
+  hubs: PropTypes.node
 }
 
 AdminDashboardNew.defaultProps = {
   theme: null,
-  shipments: ['']
+  shipments: [''],
+  hubs: PropTypes.node
 }
 
 export default AdminDashboardNew

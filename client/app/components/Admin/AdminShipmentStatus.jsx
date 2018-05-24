@@ -19,15 +19,21 @@ export class AdminShipmentStatus extends Component {
         </div>
         <div className="layout-row flex-80 layout-wrap layout-align-center-center">
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
-            <span className={`${styles.amount}`}>{this.state.shipments.finished.length}</span><br />
+            <span className={`${styles.amount}`}>
+              {this.state.shipments.finished ? this.state.shipments.finished.length : 0}
+            </span><br />
             <span className={`${styles.amounttitle}`}>Shipments</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
-            <span className={`${styles.amount}`}>{this.state.shipments.open.length}</span><br />
+            <span className={`${styles.amount}`}>
+              {this.state.shipments.open ? this.state.shipments.open.length : 0}
+            </span><br />
             <span className={`${styles.amounttitle}`}>Active</span>
           </div>
           <div className="layout-column flex-33 layout-wrap layout-align-center-center">
-            <span className={`${styles.amount}`}>{this.state.shipments.requested.length}</span><br />
+            <span className={`${styles.amount}`}>
+              {this.state.shipments.requested ? this.state.shipments.requested.length : 0}
+            </span><br />
             <span className={`${styles.amounttitle}`}>Requested</span>
           </div>
         </div>
