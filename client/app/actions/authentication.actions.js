@@ -7,7 +7,6 @@ import { getSubdomain } from '../helpers/subdomain'
 const { localStorage } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
-console.log(cookieKey)
 function logout (closeWindow) {
   function lo () {
     localStorage.removeItem('state')
@@ -17,7 +16,6 @@ function logout (closeWindow) {
   return (dispatch) => {
     if (closeWindow) {
       setTimeout(() => {
-        debugger // eslint-disable-line
         window.close()
       }, 1000)
     }
@@ -66,7 +64,6 @@ function login (data) {
             persistState: !!data.req
           }))
         })
-        // dispatch(alertActions.error(error));
       }
     )
   }
