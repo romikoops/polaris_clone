@@ -44,7 +44,7 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch, userDispatch
+      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />

@@ -50,6 +50,24 @@ function ConsentButton ({
   )
 }
 
+ConsentButton.propTypes = {
+  theme: PropTypes.theme,
+  text: PropTypes.string,
+  disabled: PropTypes.bool,
+  active: PropTypes.bool,
+  handleNext: PropTypes.func,
+  handleDisabled: PropTypes.func
+}
+
+ConsentButton.defaultProps = {
+  theme: {},
+  text: '',
+  disabled: false,
+  active: false,
+  handleNext: null,
+  handleDisabled: null
+}
+
 // ConsentButton.propTypes = {
 //   text: PropTypes.string.isRequired
 // }

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
-import ConsentButton from "./ConsentButton"
+import ConsentButton from './ConsentButton'
 import { Modal } from '../Modal/Modal'
 import { moment } from '../../constants'
 
@@ -14,21 +14,18 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
     const randSuffix = unixTimeStamp + randNum
     const email = `guest${randSuffix}@${tenant.data.subdomain}.com`
 
-    authDispatch.register(
-      {
-        email,
-        password: 'guestpassword',
-        password_confirmation: 'guestpassword',
-        first_name: 'Guest',
-        last_name: '',
-        tenant_id: tenant.data.id,
-        guest: true,
-        cookie_consent: true
-      }
-    )
+    authDispatch.register({
+      email,
+      password: 'guestpassword',
+      password_confirmation: 'guestpassword',
+      first_name: 'Guest',
+      last_name: '',
+      tenant_id: tenant.data.id,
+      guest: true,
+      cookie_consent: true
+    })
   }
 }
-
 
 export default class CookieConsentBar extends React.PureComponent {
   constructor (props) {
@@ -44,7 +41,7 @@ export default class CookieConsentBar extends React.PureComponent {
   }
 
   toggleShowModal () {
-    this.setState((prevState) => { return { showModal: !prevState.showModal } })
+    this.setState(prevState => ({ showModal: !prevState.showModal }))
   }
 
   render () {
@@ -60,7 +57,8 @@ export default class CookieConsentBar extends React.PureComponent {
       <Modal
         component={
           <div className={styles.cookie_modal} >
-            <p>We use cookies to enhance your user experience. <br /><br /> The consense is not mandatory but necessary to continue using our website.
+            <p>We use cookies to enhance your user experience. <br /><br />
+            The consense is not mandatory but necessary to continue using our website.
             Are you sure you want to decline the usage of cookies?</p>
             <ConsentButton
               theme={theme}
@@ -113,11 +111,18 @@ export default class CookieConsentBar extends React.PureComponent {
 }
 
 CookieConsentBar.propTypes = {
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  user: PropTypes.user,
+  loggedIn: PropTypes.bool,
+  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  tenant: PropTypes.tenant
 }
 
 CookieConsentBar.defaultProps = {
-  theme: null
+  tenant: null,
+  user: null,
+  loggedIn: false,
+  theme: {}
 }
 
 // buttonText = {< i className = {`${styles.cookie_exit_icon} fa fa-times`} />}
