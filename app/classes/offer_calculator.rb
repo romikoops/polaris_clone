@@ -20,7 +20,6 @@ class OfferCalculator
     @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
     @truck_seconds_pre_carriage = 0
-    @pricing = nil
 
     @current_eta_in_search = DateTime.new
     @total_price = { total:0, currency: "EUR" }
