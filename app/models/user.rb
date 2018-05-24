@@ -7,6 +7,7 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
+  before_validation :set_default_optin_status, on: :create 
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
@@ -17,6 +18,7 @@ class User < ApplicationRecord
   # Basic associations
   belongs_to :tenant
   belongs_to :role
+  belongs_to :optin_status
   has_many :conversations
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
@@ -41,7 +43,7 @@ class User < ApplicationRecord
     :email, :password,
     :guest, :tenant_id, :confirm_password, :password_confirmation,
     :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone,
-    :cookie_consent
+    :optin_status_id
   ]
 
   # Filterrific
@@ -149,6 +151,14 @@ class User < ApplicationRecord
     super
   end
 
+  def expanded()
+    return self.as_json(include: :optin_status)
+  end
+  # Devise Token Auth override
+  def token_validation_response
+    as_json(except: [:tokens, :created_at, :updated_at], include: :optin_status)
+  end
+
   private
 
   def set_default_role
@@ -176,9 +186,20 @@ class User < ApplicationRecord
   def gdpr_delete
     self.gdpr_status = 'deleted'
   end
+  def set_default_optin_status
+    optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
+    if !optin_status
+      OptinStatus.create_all!
+      optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
+    end
+    self.optin_status = optin_status
+    self.save!
+  end
+  
   protected
 
   def confirmation_required?
     false
   end
+  
 end

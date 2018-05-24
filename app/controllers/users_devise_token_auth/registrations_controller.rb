@@ -48,6 +48,9 @@ module UsersDeviseTokenAuth
 			unless params_h[:VAT_number].nil?
 				params_h[:vat_number] = params_h.delete(:VAT_number)
 			end
+			unless params_h[:cookies].nil?
+				params_h[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
+			end
 
 			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
 		end

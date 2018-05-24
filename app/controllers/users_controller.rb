@@ -50,13 +50,13 @@ class UsersController < ApplicationController
       location = Location.create_from_raw_params(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
-
+      @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
       @user.send_confirmation_instructions if updating_guest_to_regular_user
       @user.save
     end
 
     headers = @user.create_new_auth_token
-    response_handler({ user: @user, headers: headers })
+    response_handler({ user: @user.expanded(), headers: headers })
   end
 
   def currencies
@@ -82,7 +82,10 @@ class UsersController < ApplicationController
     response_handler(@hubs)
   end
   def opt_out
-    current_user.optin_status[params[:target]] = !current_user.optin_status[params[:target]]
+    new_status = current_user.optin_status.as_json
+    new_status[params[:target]] = !new_status[params[:target]]
+    optin_status = OptinStatus.find_by(new_status)
+    current_user.optin_status = optin_status
     current_user.save!
     response_handler(user: current_user)
   end
@@ -92,7 +95,7 @@ class UsersController < ApplicationController
   def user_params
     return_params = params.require(:update).permit(
       :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
-      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookie_consent
+      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookies
     ).to_h
 
     unless return_params[:confirm_password].nil?

@@ -7,7 +7,7 @@ import { moment } from '../../constants'
 
 function handleAccept (user, tenant, loggedIn, authDispatch) {
   if (loggedIn) {
-    authDispatch.updateUser(user, { cookie_consent: true })
+    authDispatch.updateUser(user, { cookies: true })
   } else {
     const unixTimeStamp = moment().unix().toString()
     const randNum = Math.floor(Math.random() * 100).toString()
@@ -22,7 +22,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
       last_name: '',
       tenant_id: tenant.data.id,
       guest: true,
-      cookie_consent: true
+      cookies: true
     })
   }
 }
@@ -81,6 +81,7 @@ export default class CookieConsentBar extends React.PureComponent {
     )
 
     if (!tenant) return ''
+    if (user && user.optin_status && user.optin_status.cookies) return ''
 
     const cookieBackground = theme && theme.colors ? theme.colors.secondary : '#aaa'
     return (
