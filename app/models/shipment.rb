@@ -211,28 +211,23 @@ class Shipment < ApplicationRecord
     end
   end
 
-  def self.update_hubs_on_shipments
-    Shipment.all.each do |s|
-      if s.origin_id != nil && s.destination_id != nil && s.origin && s.destination
-        if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
-          hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
-          if s.origin.location_type
-            s.origin_hub_id = s.origin.id
-          else
-            s.origin_hub_id = hub_keys[0].to_i
-            s.destination_hub_id = hub_keys[1].to_i
-          end
-          if s.destination.location_type
-            s.destination_hub_id = s.destination.id
-          else
-            
-            s.destination_hub_id = hub_keys[1].to_i
-          end
-          s.save!
-        end
+  def self.update_refactor_shipments
+    Shipment.where.not(itinerary: nil).each do |s|
+      itinerary = s.itinerary
+      s.destination_nexus = itinerary.last_stop.hub.nexus
+      s.origin_nexus = itinerary.first_stop.hub.nexus
+      if s.has_on_carriage
+        
+        s.trucking['on_carriage']['location_id'] = itinerary.last_stop.hub.id
       end
+      if s.has_pre_carriage
+        
+        s.trucking['pre_carriage']['location_id'] = itinerary.first_stop.hub.id
+      end
+      s.save!
     end
   end
+
 
   private
 

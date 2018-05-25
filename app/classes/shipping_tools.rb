@@ -228,11 +228,13 @@ module ShippingTools
 
     origin_hub      = Layover.find(shipment.schedule_set.first['origin_layover_id']).stop.hub
     destination_hub = Layover.find(shipment.schedule_set.first['destination_layover_id']).stop.hub
+    origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
+    destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     locations = {
       startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
       endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
-      origin:      shipment.origin_nexus.to_custom_hash,
-      destination: shipment.destination_nexus.to_custom_hash
+      origin:      origin.to_custom_hash,
+      destination: destination.to_custom_hash
     }
 
     {

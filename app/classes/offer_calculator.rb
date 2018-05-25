@@ -43,7 +43,9 @@ class OfferCalculator
 
     @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
+
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
+      
       raise ApplicationError::InvalidPickupAddress unless @pickup_address
       @shipment.trucking['pre_carriage']['location_id'] = @pickup_address.id
     end
@@ -386,6 +388,7 @@ class OfferCalculator
     unsafe_location_hash = params.require(:shipment).require(target).to_unsafe_hash
     snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
     snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
+    snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
     snakefied_location_params = ActionController::Parameters.new(snakefied_location_hash)
   end
 end
