@@ -1,0 +1,2 @@
+class ChargeCategory < ApplicationRecord
+end

@@ -242,7 +242,7 @@ module TruckingTools
 
     cargo_object
   end
-
+  
   def get_container_object(containers)
     cargo_total_items = containers.map(&:quantity).sum
     containers.each_with_object({}) do |cargo, cargo_object|

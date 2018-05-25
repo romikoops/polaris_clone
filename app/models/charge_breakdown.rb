@@ -1,0 +1,2 @@
+class ChargeBreakdown < ApplicationRecord
+end

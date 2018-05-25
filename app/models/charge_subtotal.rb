@@ -1,0 +1,2 @@
+class ChargeSubtotal < ApplicationRecord
+end
