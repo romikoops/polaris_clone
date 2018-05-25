@@ -3,28 +3,28 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import styles from './AdminShipmentCard.scss'
 
-export class AdminShipmentCard extends Component {
-  static stationType (transportMode) {
-    let type
+function stationType (transportMode) {
+  let type
 
-    switch (transportMode) {
-      case 'ocean':
-        type = 'Port'
-        break
-      case 'air':
-        type = 'Airport'
-        break
-      case 'train':
-        type = 'Station'
-        break
-      default:
-        type = ''
-        break
-    }
-
-    return type
+  switch (transportMode) {
+    case 'ocean':
+      type = 'Port'
+      break
+    case 'air':
+      type = 'Airport'
+      break
+    case 'train':
+      type = 'Station'
+      break
+    default:
+      type = ''
+      break
   }
 
+  return type
+}
+
+export class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
 
@@ -35,14 +35,6 @@ export class AdminShipmentCard extends Component {
     const {
       shipment
     } = this.props
-
-    // const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    // if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-    //   return ''
-    // }
-    //
-    // const originHub = hubs[hubKeys[0]].data
-    // const destHub = hubs[hubKeys[1]].data
 
     return (
       <div
@@ -66,7 +58,7 @@ export class AdminShipmentCard extends Component {
             <div className={`layout-column flex-45 ${styles.city}`}>
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
                 <span>{shipment.originHub.location.city}<br />
-                  {AdminShipmentCard.stationType(shipment.mode_of_transport)}
+                  {stationType(shipment.originHub.data.hub_type)}
                 </span>
               </div>
               <div className="layout-column flex-50">
@@ -79,7 +71,7 @@ export class AdminShipmentCard extends Component {
             <div className={`layout-column flex-45 ${styles.city}`}>
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
                 <span>{shipment.destinationHub.location.city}<br />
-                  {AdminShipmentCard.stationType(shipment.mode_of_transport)}
+                  {stationType(shipment.destinationHub.data.hub_type)}
                 </span>
               </div>
               <div className="layout-column flex-50">
@@ -146,27 +138,28 @@ export class AdminShipmentCard extends Component {
         <div className={`layout-row flex-25 layout-align-space-between-center
             ${styles.sectionBottom} ${styles.separatorTop}`}
         >
-          <div className="layout-row flex-55 layout-align-space-between-center">
-            <div className={`layout-row layout-align-center-center ${styles.greenIcon}`}>
-              <span className={`${styles.smallText}`}>
-                <b>x</b><span className={`${styles.bigText}`}>1</span>
-              </span>
+          <div className="layout-row flex-60 layout-align-start-center">
+            <div className="layout-row flex-15">
+              <div className={`layout-row layout-align-center-center ${styles.greenIcon}`}>
+                <span className={`${styles.smallText}`}>
+                  <b>x</b><span className={`${styles.bigText}`}>1</span>
+                </span>
+              </div>
             </div>
-            <span>Cargo item</span>
-            <span>
-              <i className={`${shipment.planned_pickup_date ? '' : styles.noDisplay}
-                fa fa-check-square ${styles.darkgreen}`}
-              /> pickup
+            <span className="flex-30">Cargo item</span>
+            <span className={`flex-25 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
+              <i className={`fa fa-check-square ${styles.darkgreen}`} />
+              <span> pickup</span>
             </span>
-            <span>
-              <i className={`${shipment.delivery_fee ? '' : styles.noDisplay}
-                fa fa-check-square ${styles.grey}`}
-              /> delivery
+            <span className="flex-25">
+              <i className={`fa fa-check-square ${styles.grey}`} />
+              <span> delivery</span>
             </span>
           </div>
           <div className="layout-align-end-center">
             <span className={`${styles.bigText}`}>
-              {shipment.total_price.currency} {shipment.total_price.value}
+              <span>{shipment.total_price.currency} </span>
+              <span>{Number.parseFloat(shipment.total_price.value).toFixed(2)}</span>
             </span>
           </div>
         </div>
@@ -176,13 +169,11 @@ export class AdminShipmentCard extends Component {
 }
 
 AdminShipmentCard.propTypes = {
-  shipment: PropTypes.node
-  // hubs: PropTypes.arrayOf(PropTypes.hub)
+  shipment: PropTypes.objectOf(PropTypes.shipment)
 }
 
 AdminShipmentCard.defaultProps = {
   shipment: {}
-  // hubs: []
 }
 
 export default AdminShipmentCard

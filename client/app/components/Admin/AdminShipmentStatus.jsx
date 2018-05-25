@@ -43,11 +43,15 @@ export class AdminShipmentStatus extends Component {
 }
 
 AdminShipmentStatus.propTypes = {
-  shipments: PropTypes.node
+  shipments: PropTypes.shape({
+    open: PropTypes.arrayOf(PropTypes.shipment),
+    requested: PropTypes.arrayOf(PropTypes.shipment),
+    finished: PropTypes.arrayOf(PropTypes.shipment)
+  })
 }
 
 AdminShipmentStatus.defaultProps = {
-  shipments: ['']
+  shipments: {}
 }
 
 export default AdminShipmentStatus

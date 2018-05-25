@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { TabBox as TBox } from '../TabBox/TabBox'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import { AdminShipmentStatus as AShipStat } from './AdminShipmentStatus'
@@ -31,6 +30,20 @@ const lcl = (<span>In elementum lorem sed ante venenatis, at sollicitudin velit 
   et justo.</span>)
 
 export class AdminDashboardNew extends Component {
+  static prepShipment (baseShipment, clients, hubsObj) {
+    const shipment = Object.assign({}, baseShipment)
+    shipment.clientName = clients[shipment.user_id]
+      ? `${clients[shipment.user_id].first_name} ${clients[shipment.user_id].last_name}`
+      : ''
+    shipment.companyName = clients[shipment.user_id]
+      ? `${clients[shipment.user_id].company_name}`
+      : ''
+    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
+    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]] : ''
+    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]] : ''
+    return shipment
+  }
+
   constructor (props) {
     super(props)
     this.state = {}
@@ -38,36 +51,21 @@ export class AdminDashboardNew extends Component {
 
   render () {
     const {
+      clients,
       theme,
       shipments,
-      hubs
+      hubHash
     } = this.props
 
-    const shipment = {
-      imc_reference: 123456789,
-      originHub: {
-        location: {
-          city: 'Stockholm'
-        }
-      },
-      destinationHub: {
-        location: {
-          city: 'Shanghai'
-        }
-      },
-      mode_of_transport: 'air',
-      clientName: 'John Smith',
-      companyName: 'Max Steel Inc.',
-      booking_placed_at: moment(),
-      planned_pickup_date: moment(),
-      planned_etd: moment(),
-      planned_eta: moment(),
-      delivery_fee: 100,
-      total_price: {
-        currency: 'USD',
-        value: 424.2
-      }
+    const clientHash = {}
+    if (clients) {
+      clients.forEach((cl) => {
+        clientHash[cl.id] = cl
+      })
     }
+
+    const preparedRequestedShipments = shipments.requested.map(s => AdminDashboardNew
+      .prepShipment(s, clientHash, hubHash))
 
     const ShipmentStatus = (
       <AShipStat
@@ -95,8 +93,8 @@ export class AdminDashboardNew extends Component {
 
     const ShipCard = (
       <AShipCard
-        shipment={shipment}
-        hubs={hubs}
+        shipment={preparedRequestedShipments[0]}
+        hubs={hubHash}
       />
     )
 
@@ -168,15 +166,21 @@ export class AdminDashboardNew extends Component {
 }
 
 AdminDashboardNew.propTypes = {
-  theme: PropTypes.node,
-  shipments: PropTypes.node,
-  hubs: PropTypes.node
+  clients: PropTypes.arrayOf(PropTypes.client),
+  theme: PropTypes.theme,
+  shipments: PropTypes.shape({
+    open: PropTypes.arrayOf(PropTypes.shipment),
+    requested: PropTypes.arrayOf(PropTypes.shipment),
+    finished: PropTypes.arrayOf(PropTypes.shipment)
+  }),
+  hubHash: PropTypes.objectOf(PropTypes.hub)
 }
 
 AdminDashboardNew.defaultProps = {
+  clients: [],
   theme: null,
-  shipments: [''],
-  hubs: PropTypes.node
+  shipments: {},
+  hubHash: {}
 }
 
 export default AdminDashboardNew
