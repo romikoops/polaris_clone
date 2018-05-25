@@ -406,8 +406,6 @@ ActiveRecord::Schema.define(version: 20180524073952) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -444,8 +442,11 @@ ActiveRecord::Schema.define(version: 20180524073952) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -599,7 +600,7 @@ ActiveRecord::Schema.define(version: 20180524073952) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
-    t.integer "optin_status_id"
+    t.jsonb "optin_status", default: {}
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

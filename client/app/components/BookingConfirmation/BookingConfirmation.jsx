@@ -18,17 +18,12 @@ import { IncotermRow } from '../Incoterm/Row'
 import { IncotermExtras } from '../Incoterm/Extras'
 
 export function calcFareTotals (feeHash) {
-  let res1 = parseFloat(feeHash.total.value)
-  let res2 = 0
-  if (feeHash && feeHash.customs && feeHash.customs.val) {
-    res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
-  }
-  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
-    res2 = parseFloat(res1) - parseFloat(feeHash.insurance.val)
-  } else {
-    res2 = res1
-  }
-  return res2.toFixed(2)
+  if (!feeHash) return 0
+
+  const total = feeHash.total && +feeHash.total.value
+  return Object.keys(feeHash).reduce((sum, k) => (
+    feeHash[k] && ['customs', 'insurance'].includes(k) ? sum - feeHash[k].val : sum
+  ), total).toFixed(2)
 }
 export function calcExtraTotals (feeHash) {
   let res1 = 0
@@ -160,7 +155,7 @@ export class BookingConfirmation extends Component {
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
-      schedules,
+      schedule,
       locations,
       shipper,
       consignee,
@@ -249,7 +244,7 @@ export class BookingConfirmation extends Component {
       </div>
     )
 
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
     const docView = []
     const missingDocs = []
     const docChecker = {
@@ -388,7 +383,7 @@ export class BookingConfirmation extends Component {
                   styles.inner_wrapper
                 } flex-100 layout-row layout-wrap layout-align-start-start`}
               >
-                <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+                <RouteHubBox hubs={hubsObj} schedule={schedule} theme={theme} />
                 <div
                   className="flex-100 layout-row layout-align-space-between-center"
                   style={{ position: 'relative' }}
@@ -489,9 +484,9 @@ export class BookingConfirmation extends Component {
                       />
                     </div>
                     <div className="flex-30 layout-row layout-align-end-center">
-                      <h5 className="flex-none letter_3">{`${
-                        shipment.total_price.currency
-                      } ${calcFareTotals(feeHash)} `}</h5>
+                      <h5 className="flex-none letter_3">
+                        {`${shipment.total_price.currency} ${calcFareTotals(feeHash)}`}
+                      </h5>
                     </div>
                   </div>
                   <div
@@ -526,15 +521,13 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">{`${
                         shipment.total_price.currency
                       } ${calcExtraTotals(feeHash)} `}</h5>
-                      { feeHash.customs && feeHash.customs.hasUnknown
-                        ? (
-                          <div className="flex-100 layout-row layout-align-end-center">
-                            <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
-                              {' '}
-                          ( excl. charges subject to local regulations )
-                            </p>
-                          </div>)
-                        : ''}
+                      { feeHash.customs && feeHash.customs.hasUnknown && (
+                        <div className="flex-100 layout-row layout-align-end-center">
+                          <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
+                            ( excl. charges subject to local regulations )
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div

@@ -223,9 +223,7 @@ module PricingTools
     nil
   end
 
-  def fee_value(fee, cargo_hash)
-    awesome_print fee
-    
+  def fee_value(fee, cargo_hash)    
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d

@@ -46,7 +46,7 @@ class ShipmentsController < ApplicationController
       { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
 
-    locations = { origin: shipment.origin, destination: shipment.destination }
+    locations = { origin: shipment.origin_nexus, destination: shipment.destination_nexus }
   
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json

@@ -26,12 +26,14 @@ class ApplicationController < ActionController::API
   def require_non_guest_authentication!
     raise ApplicationError::NotAuthenticated if current_user.guest
   end
-   private
+
+  private
 
   def set_raven_context
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
   end
+  
   def clear_shoryuken
     file_path = Rails.root + '/log/shoryuken.log'
     File.delete(file_path)

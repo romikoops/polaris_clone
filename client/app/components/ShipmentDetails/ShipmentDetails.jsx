@@ -22,7 +22,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { camelize } from '../../helpers'
+import { camelize, isEmpty } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -110,7 +110,8 @@ export class ShipmentDetails extends Component {
       shakeClass: {
         noDangerousGoodsConfirmed: '',
         stackableGoodsConfirmed: ''
-      }
+      },
+      prevRequestLoaded: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -136,12 +137,11 @@ export class ShipmentDetails extends Component {
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
-    this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
 
-    if (prevRequest && prevRequest.shipment) {
+    if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -163,7 +163,9 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
+
     return !!(
+      (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -258,19 +260,14 @@ export class ShipmentDetails extends Component {
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
       selectedDay: obj.planned_pickup_date,
-      origin: {
-        fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
-        hub_id: obj.origin_id
-      },
-      destination: {
-        fullAddress: obj.destination_user_input ? obj.destination_user_input : '',
-        hub_id: obj.destination_id
-      },
-      has_on_carriage: obj.has_on_carriage,
-      has_pre_carriage: obj.has_pre_carriage,
+      origin: obj.origin,
+      destination: obj.destination,
+      has_on_carriage: !!obj.trucking.on_carriage.truck_type,
+      has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
       trucking: obj.trucking,
       incoterm: obj.incoterm,
-      routeSet: true
+      routeSet: true,
+      prevRequestLoaded: true
     })
   }
 
@@ -406,8 +403,8 @@ export class ShipmentDetails extends Component {
 
   handleNextStage () {
     if (
-      (!this.state.origin.hub_id && !this.state.has_pre_carriage) ||
-      (!this.state.destination.hub_id && !this.state.has_on_carriage) ||
+      (!this.state.origin.nexus_id && !this.state.has_pre_carriage) ||
+      (!this.state.destination.nexus_id && !this.state.has_on_carriage) ||
       (!this.state.origin.fullAddress && this.state.has_pre_carriage) ||
       (!this.state.destination.fullAddress && this.state.has_on_carriage) ||
       this.state.addressFormsHaveErrors
@@ -448,34 +445,19 @@ export class ShipmentDetails extends Component {
       }
     }
 
-    const data = { shipment: this.state.shipment }
+    const shipment = {
+      id: this.state.shipment.id,
+      trucking: this.state.shipment.trucking,
+      origin: this.state.origin,
+      destination: this.state.destination,
+      cargo_items_attributes: this.state.cargoItems,
+      containers_attributes: this.state.containers,
+      aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,
+      selected_day: this.state.selectedDay,
+      incoterm: this.state.incoterm
+    }
 
-    data.shipment.origin_user_input = this.state.origin.fullAddress
-      ? this.state.origin.fullAddress
-      : ''
-    data.shipment.destination_user_input = this.state.destination.fullAddress
-      ? this.state.destination.fullAddress
-      : ''
-    data.shipment.origin_id = this.state.origin.hub_id
-    data.shipment.destination_id = this.state.destination.hub_id
-    data.shipment.cargo_items_attributes = this.state.cargoItems
-    data.shipment.containers_attributes = this.state.containers
-    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
-
-    data.shipment.has_on_carriage = this.state.has_on_carriage
-    data.shipment.has_pre_carriage = this.state.has_pre_carriage
-    data.shipment.planned_pickup_date = this.state.selectedDay
-    data.shipment.incoterm = this.state.incoterm
-    data.shipment.carriageNexuses = this.state.carriageNexuses
-    this.props.getOffers(data)
-  }
-  handleCarriageNexuses (target, id) {
-    this.setState({
-      carriageNexuses: {
-        ...this.state.carriageNexuses,
-        [target]: id
-      }
-    })
+    this.props.getOffers({ shipment })
   }
   returnToDashboard () {
     this.props.shipmentDispatch.getDashboard(true)
@@ -492,9 +474,10 @@ export class ShipmentDetails extends Component {
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
-    // Upate trucking details according to toggle
+    // Update trucking details according to toggle
     const { shipment } = this.state
     const artificialEvent = { target: {} }
+
     if (!value) {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${carriage}-`
@@ -626,7 +609,6 @@ export class ShipmentDetails extends Component {
         shipmentData={shipmentData}
         routeIds={routeIds}
         setNotesIds={(e, t) => this.setNotesIds(e, t)}
-        handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}

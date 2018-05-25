@@ -266,17 +266,18 @@ class Itinerary < ApplicationRecord
   def self.for_locations(shipment, trucking_data)
     if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
-      start_hubs = start_hub_ids.map {|id| Hub.find(id)}
+      start_hubs = Hub.where(id: start_hub_ids).to_a
     else
-      start_city = Location.find(shipment.origin_id)
+      start_city = shipment.origin_nexus
       start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
       start_hub_ids = start_hubs.ids
     end
+
     if trucking_data && trucking_data["on_carriage"]
       end_hub_ids = trucking_data["on_carriage"].keys
-      end_hubs = end_hub_ids.map { |id| Hub.find(id) }
+      end_hubs = Hub.where(id: end_hub_ids).to_a
     else
-      end_city = Location.find(shipment.destination_id)
+      end_city = shipment.destination_nexus
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
@@ -363,10 +364,11 @@ class Itinerary < ApplicationRecord
     )
     as_json(new_options)
   end
+
   def as_pricing_json(options={})
     new_options = {
-        users_with_pricing: users_with_pricing,
-        pricing_count: pricing_count
+      users_with_pricing: users_with_pricing,
+      pricing_count: pricing_count
     }.merge(attributes)
     # as_json(new_options)
   end
