@@ -59,7 +59,7 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none"
       >
-        4000.000
+        4.000
          kg
       </p>
     </div>

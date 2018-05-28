@@ -368,6 +368,145 @@ exports[`props.aliases is truthy 1`] = `
       }
     />
   </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -707,6 +846,145 @@ exports[`shallow render 1`] = `
       }
     />
   </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
@@ -1036,6 +1314,145 @@ exports[`state.editBool is true 1`] = `
         }
       }
     />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
   </div>
 </div>
 `;

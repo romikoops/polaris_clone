@@ -191,7 +191,7 @@ exports[`props.viewHSCodes is true 1`] = `
           <p
             className="flex-none"
           >
-            80000.00
+            80.00
              kg
           </p>
         </div>
@@ -457,7 +457,7 @@ exports[`shallow render 1`] = `
           <p
             className="flex-none"
           >
-            80000.00
+            80.00
              kg
           </p>
         </div>
@@ -709,7 +709,7 @@ exports[`state.unitView is true 1`] = `
           <p
             className="flex-none"
           >
-            80000.00
+            80.00
              kg
           </p>
         </div>
@@ -961,7 +961,7 @@ exports[`state.viewer is true 1`] = `
           <p
             className="flex-none"
           >
-            80000.00
+            80.00
              kg
           </p>
         </div>

@@ -93,7 +93,7 @@ exports[`props.theme.colors is falsy 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60000.00
+      60.00
        kg
     </p>
   </div>
@@ -196,7 +196,7 @@ exports[`props.viewHSCodes is true 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60000.00
+      60.00
        kg
     </p>
   </div>
@@ -317,7 +317,7 @@ exports[`shallow render 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60000.00
+      60.00
        kg
     </p>
   </div>
@@ -420,7 +420,7 @@ exports[`state.viewer is true 1`] = `
       Chargeable Weight
     </p>
     <p>
-      60000.00
+      60.00
        kg
     </p>
   </div>

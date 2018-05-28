@@ -15,6 +15,9 @@ jest.mock('./index.jsx', () => ({
   // eslint-disable-next-line react/prop-types
   UserLocations: ({ children }) => <div>{children}</div>
 }))
+jest.mock('../Documents/Downloader', () =>
+  // eslint-disable-next-line react/prop-types
+  ({ props }) => <div {...props} />)
 jest.mock('../Admin', () => ({
   // eslint-disable-next-line react/prop-types
   AdminClientTile: ({ children }) => <div>{children}</div>
