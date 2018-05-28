@@ -8,6 +8,7 @@ import { AdminCustomers as ACust } from './AdminCustomers'
 import { AdminAffluency as AAffl } from './AdminAffluency'
 import { AdminFCL as Fcl } from './AdminFCL'
 import { AdminShipmentCard as AShipCard } from './AdminShipmentCard'
+import { AdminRouteList as ARouteList } from './AdminRouteList'
 import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
@@ -98,6 +99,12 @@ export class AdminDashboardNew extends Component {
       />
     )
 
+    const RouteList = (
+      <ARouteList
+        shipments={preparedRequestedShipments}
+      />
+    )
+
     const tabs = [FclComp, lcl]
 
     return (
@@ -109,6 +116,13 @@ export class AdminDashboardNew extends Component {
             subtitle=""
             flex={50}
             component={ShipCard}
+          />
+          <GBox
+            title=""
+            subtitle=""
+            flex={40}
+            padding
+            component={RouteList}
           />
         </section>
         <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
