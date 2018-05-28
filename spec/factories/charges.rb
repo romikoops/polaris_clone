@@ -1,9 +1,8 @@
 FactoryBot.define do
   factory :charge do
-    price_id 1
-    name "MyString"
-    code "MyString"
-    charge_category_id 1
-    charge_breakdown_id 1
+    association :price
+    association :charge_breakdown
+    association :charge_category
+    association :children_charge_category, factory: :charge_category
   end
 end
