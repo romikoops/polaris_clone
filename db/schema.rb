@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.integer "parent_id"
     t.integer "price_id"
     t.integer "charge_category_id"
+    t.integer "children_charge_category_id"
     t.integer "charge_breakdown_id"
     t.integer "detail_level"
     t.datetime "created_at", null: false
