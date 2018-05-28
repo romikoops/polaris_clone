@@ -366,7 +366,7 @@ export class AdminHubFees extends Component {
     ) : (
       ''
     )
-    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'effective_date', 'expiration_date']
+    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'effective_date', 'expiration_date', 'range']
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []

@@ -1312,12 +1312,143 @@ class TenantSeeder
           "Barrel"
         ]
       }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#270C77",
+          secondary: "#4FAACA",
+          brightPrimary: "#270C77",
+          brightSecondary:  "#4FAACA"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/logos/speedtrans/speedtrans_logo_white.png",
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+      },
+      addresses: {
+        main: 'Am Spitzwald 9 D-21509 Glinde'
+      },
+      phones:{
+        main:"+49 040 - 530 366 7 - 0",
+        support: "49 040 - 530 366 7 - 0"
+      },
+      emails: {
+        sales: {
+          air: 'mkuester@speedtrans.com',
+          ocean: 'mkuester@speedtrans.com',
+          general: 'mkuester@speedtrans.com'
+        },
+        support: {
+          general: "mkuester@speedtrans.com",
+          air: 'mkuester@speedtrans.com',
+          ocean:'mkuester@speedtrans.com' 
+        }
+      },
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: '',
+            link_text: '',
+            text: ''
+          },
+          {
+            href: '',
+            link_text: '',
+            text:''
+          },
+          {
+            href: '',
+            link_text: '',
+            text: ''
+          }
+        ]
+      },      
+      subdomain: "speedtrans",
+      name: "Küster Speedtrans Übersee Spedition GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: false,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        links: {
+          about: "http://www.speedtrans.com/ueberuns.php",
+          legal: 'http://www.speedtrans.com/impressum.php'
+        },
+        fixed_currency: true,
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
+        ]
+      }
     }
 ]
 
   def self.sandbox_exec(tenant_attr, other_data)
     tenant_attr[:subdomain] = "#{tenant_attr[:subdomain]}-sandbox"
     tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
+    tenant_attr[:scope][:modes_of_transport] = {
+      air: {
+        cargo_item: true,
+        container: true
+      },
+      ocean: {
+        cargo_item: true,
+        container: true
+      },
+      rail: {
+        cargo_item: true,
+        container: true
+      }
+    }
     tenant ? tenant.assign_attributes(tenant_attr) : tenant = Tenant.new(tenant_attr)
     tenant.save!
 

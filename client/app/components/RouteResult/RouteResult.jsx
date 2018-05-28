@@ -56,7 +56,7 @@ export class RouteResult extends Component {
   }
   render () {
     const {
-      theme, schedule, user, pickup
+      theme, schedule, pickup
     } = this.props
 
     const schedKey = schedule.hub_route_key
@@ -183,7 +183,10 @@ export class RouteResult extends Component {
         <div className="flex-30 layout-row layout-wrap layout-align-center">
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <p className="flex-none">Total price: </p>
-            <Price value={this.props.fees[schedKey].total.value} currency={user.currency} />
+            <Price
+              value={this.props.fees[schedKey].total.value}
+              currency={this.props.fees[schedKey].total.currency}
+            />
           </div>
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <RoundButton
@@ -208,7 +211,6 @@ RouteResult.propTypes = {
   })).isRequired,
   originHubs: PropTypes.arrayOf(PropTypes.hub),
   destinationHubs: PropTypes.arrayOf(PropTypes.hub),
-  user: PropTypes.user.isRequired,
   pickup: PropTypes.bool
 }
 RouteResult.defaultProps = {

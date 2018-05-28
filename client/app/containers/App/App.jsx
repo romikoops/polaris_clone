@@ -12,7 +12,7 @@ import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import { appActions } from '../../actions'
+import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
@@ -44,7 +44,7 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending
+      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />
@@ -52,7 +52,13 @@ class App extends Component {
     const { theme } = tenant.data
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
-        <CookieConsentBar theme={theme} />
+        <CookieConsentBar
+          user={user}
+          theme={theme}
+          authDispatch={authDispatch}
+          tenant={tenant}
+          loggedIn={loggedIn}
+        />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
           {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
@@ -129,7 +135,9 @@ App.propTypes = {
     fetchCurrencies: PropTypes.func
   }).isRequired,
   sending: PropTypes.bool,
-  showMessages: PropTypes.bool
+  showMessages: PropTypes.bool,
+  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  userDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 App.defaultProps = {
@@ -163,7 +171,9 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    appDispatch: bindActionCreators(appActions, dispatch)
+    appDispatch: bindActionCreators(appActions, dispatch),
+    authDispatch: bindActionCreators(authenticationActions, dispatch),
+    userDispatch: bindActionCreators(userActions, dispatch)
   }
 }
 

@@ -7,13 +7,18 @@ import { getSubdomain } from '../helpers/subdomain'
 const { localStorage } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
-console.log(cookieKey)
-function logout () {
+function logout (closeWindow) {
   function lo () {
     localStorage.removeItem('state')
+    localStorage.removeItem(cookieKey)
     return { type: authenticationConstants.LOGOUT }
   }
   return (dispatch) => {
+    if (closeWindow) {
+      setTimeout(() => {
+        window.close()
+      }, 1000)
+    }
     dispatch(adminActions.logOut())
     dispatch(userActions.logOut())
     dispatch(shipmentActions.logOut())
@@ -59,15 +64,14 @@ function login (data) {
             persistState: !!data.req
           }))
         })
-        // dispatch(alertActions.error(error));
       }
     )
   }
 }
 
-function register (user, redirect) {
+function register (user, target) {
   function request (userRequest) {
-    return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest }
+    return { type: authenticationConstants.REGISTRATION_REQUEST, user: userRequest, target }
   }
   function success (response) {
     return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response.data }
@@ -83,8 +87,8 @@ function register (user, redirect) {
       (response) => {
         dispatch(success(response))
         dispatch(alertActions.success('Registration successful'))
-        if (redirect) {
-          dispatch(push('/booking'))
+        if (user.guest) {
+          target && dispatch(push(target))
         } else if (response.data.role_id === 1) {
           dispatch(push('/admin'))
         } else if (response.data.role_id === 2) {

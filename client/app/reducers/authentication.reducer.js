@@ -5,7 +5,8 @@ const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
 
 const localStorage = window.localStorage || { getItem (key) { return null } }
-const user = JSON.parse(localStorage.getItem(cookieKey))
+const userCookie = localStorage.getItem(cookieKey)
+const user = (typeof (userCookie) !== 'undefined') && userCookie !== 'undefined' ? JSON.parse(userCookie) : {}
 
 const initialState = user ? { loggedIn: true, user } : {}
 
@@ -57,7 +58,7 @@ export default function (state = initialState, action) {
       }
     case authenticationConstants.REGISTRATION_REQUEST:
       return {
-        loading: action.user.guest,
+        loading: !!action.target,
         registering: !action.user.guest
       }
     case authenticationConstants.REGISTRATION_SUCCESS:
