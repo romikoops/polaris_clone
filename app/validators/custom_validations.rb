@@ -6,5 +6,5 @@ module CustomValidations
 	      message: "must be included in #{array.log_format}" 
 	    },
 	    allow_nil: true
-	end
+  end
 end

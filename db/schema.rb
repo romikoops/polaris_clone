@@ -62,24 +62,18 @@ ActiveRecord::Schema.define(version: 20180525104346) do
 
   create_table "charge_categories", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "charge_subtotals", force: :cascade do |t|
-    t.integer "price_id"
-    t.integer "charge_category_id"
-    t.integer "charge_breakdown_id"
+    t.string "code"
+    t.integer "cargo_unit_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "charges", force: :cascade do |t|
+    t.integer "parent_id"
     t.integer "price_id"
-    t.string "name"
-    t.string "code"
     t.integer "charge_category_id"
     t.integer "charge_breakdown_id"
+    t.integer "detail_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
