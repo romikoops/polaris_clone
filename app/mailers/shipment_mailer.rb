@@ -33,7 +33,7 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
 
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
-    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+    attachments.inline['logo_small.png'] = try(:open, (tenant.theme["logoSmall"])).try(:read)
 
     mail(
       to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
@@ -49,7 +49,7 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
-    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+    attachments.inline['logo_small.png'] = try(:open, (tenant.theme["logoSmall"])).try(:read)
     
     # bill_of_lading = generate_and_upload_bill_of_lading
     # attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read

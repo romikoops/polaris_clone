@@ -255,8 +255,8 @@ module MultiTenantTools
     # end
     create_distribution(tenant[:subdomain])
   end
-  def new_site_from_tenant(tenant)
-    new_tenant = tenant
+  def new_site_from_tenant(subdomain)
+    tenant = Tenant.find_by_subdomain(subdomain)
     title = tenant.name + " | ItsMyCargo"
 
     favicon = "https://assets.itsmycargo.com/assets/favicon.ico"

@@ -11,6 +11,12 @@ import '../../styles/select-css-custom.css'
 import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
+import { Modal } from '../Modal/Modal'
+import {
+  OptOutCookies,
+  OptOutTenant,
+  OptOutItsMyCargo
+} from '../OptOut'
 
 const ProfileBox = ({ user, style, edit }) => (
   <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
@@ -268,8 +274,48 @@ export class UserProfile extends Component {
     })
   }
   optOut (target) {
-    const { userDispatch, user } = this.props
-    userDispatch.optOut(user.id, target)
+    this.setState({
+      optOut: target
+    })
+  }
+  closeOptOutModal () {
+    this.setState({ optOut: false })
+  }
+  generateModal (target) {
+    const {
+      user, theme, userDispatch, tenant
+    } = this.props
+    switch (target) {
+      case 'cookies': {
+        const comp = (<OptOutCookies
+          user={user}
+          userDispatch={userDispatch}
+          theme={theme}
+          tenant={tenant}
+        />)
+        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
+      }
+      case 'tenant': {
+        const comp = (<OptOutTenant
+          user={user}
+          userDispatch={userDispatch}
+          theme={theme}
+          tenant={tenant}
+        />)
+        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
+      }
+      case 'itsmycargo': {
+        const comp = (<OptOutItsMyCargo
+          user={user}
+          userDispatch={userDispatch}
+          theme={theme}
+          tenant={tenant}
+        />)
+        return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
+      }
+      default:
+        return ''
+    }
   }
 
   saveEdit () {
@@ -306,9 +352,11 @@ export class UserProfile extends Component {
     if (!user) {
       return ''
     }
+
     const {
-      editBool, editObj, newAliasBool, newAlias
+      editBool, editObj, newAliasBool, newAlias, optOut
     } = this.state
+    const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
@@ -632,6 +680,7 @@ export class UserProfile extends Component {
             </div>
           </div>
         </div>
+        {optOutModal}
       </div>
     )
   }

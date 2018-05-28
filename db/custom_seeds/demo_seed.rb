@@ -2,7 +2,7 @@ include ExcelTools
 include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(greencarrier greencarrier-sandbox)
+subdomains = %w(speedtrans speedtrans-sandbox)
 subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -95,8 +95,8 @@ subdomains.each do |sub|
 #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
 #   req = {"xlsx" => trucking}
 #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  hub = tenant.hubs.find_by_name("Gothenburg Airport")
-  trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_airport.xlsx")
+  hub = tenant.hubs.find_by_name("Hamburg Port")
+  trucking = File.open("#{Rails.root}/db/dummydata/st_trucking_hamburg_port.xlsx")
   req = {"xlsx" => trucking}
   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 #   hub = tenant.hubs.find_by_name("Malmo Airport")
@@ -117,7 +117,7 @@ subdomains.each do |sub|
 #   awesome_print "All rates done"
   
   # hub = tenant.hubs.find_by_name("Shanghai Airport")
-  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # awesome_print "All rates done"
