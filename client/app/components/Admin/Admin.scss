@@ -53,13 +53,13 @@
     font-size: 8px;
   }
   .clip {
-  
+
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
-  
+
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
@@ -212,7 +212,7 @@
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
-  
+
   }
   .hub_card {
     width: 240px;
@@ -574,7 +574,7 @@
   .new_margin {
   margin-bottom: 0px !important;
   padding-bottom: 0px
-   
+
   }
   .tooltip{
     max-width: 150px !important;
@@ -741,7 +741,7 @@
     width: 200px;
     height: 200px;
   }
-  .upload_btn_wrapper input[type=file] { 
+  .upload_btn_wrapper input[type=file] {
     width: 0;
     height: 0;
     opacity: 0;
@@ -757,7 +757,7 @@
   }
   .error {
     height: 40px !important;
-    
+
   }
   .file_error {
     overflow: hidden;
@@ -791,10 +791,12 @@
     border-radius: 5px;
   }
   .action_header {
-    background: lightslategray;
-    p, i{ 
-      font-size: 20px;
-      color: white;
+    background:#F2F2F2;
+    border-bottom: 1px solid #4F4F4F;
+    p, i{
+      font-size: 17px;
+      text-align: center;
+      color: #4F4F4F;
       margin: 5px;
     }
   }

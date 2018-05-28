@@ -10,6 +10,7 @@ import DocumentsDownloader from '../../Documents/Downloader'
 import { adminPricing as priceTip, moment } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import { filters } from '../../../helpers'
+import SideOptionsBox from '../SideOptions/SideOptionsBox'
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
@@ -117,10 +118,10 @@ export default class CardPricingIndex extends Component {
       theme, limit, scope, toggleCreator, lastUpdate
     } = this.props
     if (!scope) return ''
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
+    // const sectionStyle =
+    //   theme && theme.colors
+    //     ? { background: theme.colors.secondary, color: 'white' }
+    //     : { background: 'darkslategrey', color: 'white' }
     const modesOfTransport = scope.modes_of_transport
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
@@ -158,138 +159,100 @@ export default class CardPricingIndex extends Component {
             </div>
           ))}
         </div>
-        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              adminStyles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${adminStyles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${
-                  adminStyles.action_header
-                } flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
+        <div className="flex-20 layout-row">
+          <SideOptionsBox
+            header="Data manager"
+            content={
+              <div>
+                <p className={styles.newsfeed}>Last updated at: </p>
+                {lastUpdate !== ''
+                  ? <p className={styles.newsfeed}>{moment(lastUpdate).format('lll')}</p>
+                  : ''}
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${
+                      adminStyles.action_header
+                    } flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('upload')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-cloud-upload" />
+                      <p className="flex-none">Upload Data</p>
+                    </div>
+                    <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.upload ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.upload ? adminStyles.open_filter : adminStyles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    <div
+                      className={`${
+                        adminStyles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={e => this.lclUpload(e)}
+                        tooltip={priceTip.upload_lcl}
+                        type="xlsx"
+                        text="Dedicated Pricings .xlsx"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.upload ? adminStyles.open_filter : adminStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    adminStyles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={e => this.lclUpload(e)}
-                    tooltip={priceTip.upload_lcl}
-                    type="xlsx"
-                    text="Dedicated Pricings .xlsx"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${
-                  adminStyles.action_header
-                } flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
-                </div>
-                <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.download ? adminStyles.open_filter : adminStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    adminStyles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100">Download Ocean Pricings Sheet</p>
-                  <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
-                </div>
-                <div
-                  className={`${
-                    adminStyles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100">Download Air Pricings Sheet</p>
-                  <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${
+                      adminStyles.action_header
+                    } flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('download')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-cloud-download" />
+                      <p className="flex-none">Download Data</p>
+                    </div>
+                    <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.download ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.download ? adminStyles.open_filter : adminStyles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    <div
+                      className={`${
+                        adminStyles.action_section
+                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                    >
+                      <p className="flex-100">Download Ocean Pricings Sheet</p>
+                      <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
+                    </div>
+                    <div
+                      className={`${
+                        adminStyles.action_section
+                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                    >
+                      <p className="flex-100">Download Air Pricings Sheet</p>
+                      <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${
-                  adminStyles.action_header
-                } flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">Create New Hub</p>
-                </div>
-                <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.new ? adminStyles.open_filter : adminStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    adminStyles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  {newButton}
-                </div>
-              </div>
-            </div> */}
-          </div>
-          {lastUpdate !== ''
-            ? <p className="flex-100">{`Last updated at: ${moment(lastUpdate).format('lll')} `}</p>
-            : '' }
+            }
+          />
         </div>
       </div>
     )
