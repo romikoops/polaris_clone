@@ -57,8 +57,8 @@ export class AdminShipmentCard extends Component {
           >
             <div className={`layout-column flex-45 ${styles.city}`}>
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <span>{shipment.originHub.location.city}<br />
-                  {stationType(shipment.originHub.data.hub_type)}
+                <span>{shipment.originHub ? shipment.originHub.location.city : ''}<br />
+                  {shipment.originHub ? stationType(shipment.originHub.data.hub_type) : ''}
                 </span>
               </div>
               <div className="layout-column flex-50">
@@ -70,8 +70,8 @@ export class AdminShipmentCard extends Component {
             </div>
             <div className={`layout-column flex-45 ${styles.city}`}>
               <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <span>{shipment.destinationHub.location.city}<br />
-                  {stationType(shipment.destinationHub.data.hub_type)}
+                <span>{shipment.destinationHub ? shipment.destinationHub.location.city : ''}<br />
+                  {shipment.destinationHub ? stationType(shipment.destinationHub.data.hub_type) : ''}
                 </span>
               </div>
               <div className="layout-column flex-50">
@@ -147,19 +147,22 @@ export class AdminShipmentCard extends Component {
               </div>
             </div>
             <span className="flex-30">Cargo item</span>
-            <span className={`flex-25 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
+            <span className={`flex-30 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
               <i className={`fa fa-check-square ${styles.darkgreen}`} />
               <span> pickup</span>
             </span>
-            <span className="flex-25">
+            <span className="flex-30">
               <i className={`fa fa-check-square ${styles.grey}`} />
               <span> delivery</span>
             </span>
           </div>
           <div className="layout-align-end-center">
             <span className={`${styles.bigText}`}>
-              <span>{shipment.total_price.currency} </span>
-              <span>{Number.parseFloat(shipment.total_price.value).toFixed(2)}</span>
+              <span>{shipment.total_price ? shipment.total_price.currency : ''} </span>
+              <span>
+                {shipment.total_price ? Number.parseFloat(shipment.total_price.value)
+                  .toFixed(2) : 0}
+              </span>
             </span>
           </div>
         </div>
