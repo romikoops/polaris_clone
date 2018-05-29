@@ -1,34 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TabBox as TBox } from '../TabBox/TabBox'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import { AdminShipmentStatus as AShipStat } from './AdminShipmentStatus'
-import { AdminRequestedShipments as AReqShip } from './AdminRequestedShipments'
-import { AdminCustomers as ACust } from './AdminCustomers'
-import { AdminAffluency as AAffl } from './AdminAffluency'
-import { AdminFCL as Fcl } from './AdminFCL'
-import { AdminShipmentCard as AShipCard } from './AdminShipmentCard'
-import { AdminRouteList as ARouteList } from './AdminRouteList'
-import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminShipmentCards as AShipCards } from './AdminShipmentCards'
+import { AdminHubCards as AHubCards } from './AdminHubCards'
+import { AdminClientCards as AClientCards } from './AdminClientCards'
+// import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
-
-const fcl = (<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  Integer at est ipsum. Aenean venenatis maximus dapibus. Aliquam faucibus nisi
-  id faucibus interdum. Vivamus justo felis, vulputate eget metus ac, congue
-  molestie libero. Praesent erat mauris, consequat eu pharetra vitae, suscipit id risus.
-  Donec suscipit, mi ac faucibus laoreet, ex enim maximus tellus, eu laoreet risus sem at magna.
-  Vestibulum non dictum ligula. Donec ante massa, porttitor quis felis sit amet, pretium
-  tincidunt nisl.</span>)
-
-const lcl = (<span>In elementum lorem sed ante venenatis, at sollicitudin velit rhoncus.
-  Vivamus tempor nunc eu est iaculis, id tincidunt magna finibus.
-  Donec ac ante luctus orci tempor auctor quis non ante. Aenean a diam vel est venenatis
-  fringilla eget at mi. Sed rutrum lacus elit, nec auctor eros rutrum gravida. Cras
-  tincidunt, sapien vel finibus dignissim, eros nibh suscipit nunc, non fringilla eros
-  nisi nec neque. Ut interdum porttitor magna at varius. Donec varius ipsum purus, et
-  semper odio malesuada at. Vivamus turpis elit, sollicitudin a aliquet vitae, pharetra
-  et justo.</span>)
 
 export class AdminDashboardNew extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -52,8 +30,8 @@ export class AdminDashboardNew extends Component {
 
   render () {
     const {
+      user,
       clients,
-      theme,
       shipments,
       hubHash
     } = this.props
@@ -65,123 +43,80 @@ export class AdminDashboardNew extends Component {
       })
     }
 
-    const preparedRequestedShipments = shipments.requested.map(s => AdminDashboardNew
-      .prepShipment(s, clientHash, hubHash))
+    const preparedRequestedShipments = shipments.requested ? shipments.requested
+      .map(s => AdminDashboardNew.prepShipment(s, clientHash, hubHash)) : []
 
-    const ShipmentStatus = (
-      <AShipStat
-        shipments={shipments}
-      />
+    const header1 = (
+      <div className={`layout-row flex-100 layout-align-start-center ${astyles.headerElement}`}>
+        <span className="layout-row flex-20 layout-align-center-center">
+          <i className={`fa fa-user ${astyles.bigProfile}`} />
+        </span>
+        <span className={`${astyles.welcome}`}>Welcome back, <b>{user.first_name}</b></span>
+      </div>
     )
 
-    const RequestedShipments = (
-      <AReqShip
-        requested={['asd', 'foobar', 'something', 'yo', 'yeehaw', 'wat']}
-      />
+    const header2 = (
+      <div className="layout-row layout-padding flex-100 layout-align-center-center">
+        <img src="/app/assets/images/logos/logo_black.png" />
+      </div>
     )
-
-    const Customers = (
-      <ACust />
-    )
-
-    const Affluency = (
-      <AAffl />
-    )
-
-    const FclComp = (
-      <Fcl />
-    )
-
-    const ShipCard = (
-      <AShipCard
-        shipment={preparedRequestedShipments[0]}
-        hubs={hubHash}
-      />
-    )
-
-    const RouteList = (
-      <ARouteList
-        shipments={preparedRequestedShipments}
-      />
-    )
-
-    const tabs = [FclComp, lcl]
 
     return (
-      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`}>
-        <TextHeading theme={theme} size={1} text="Dashboard" />
-        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
+      <div
+        className={
+          `layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`
+        }
+      >
+        <div
+          className={
+            `layout-row flex-100 layout-align-space-between-start ${astyles.header}`
+          }
+        >
           <GBox
-            title=""
-            subtitle=""
-            flex={50}
-            component={ShipCard}
+            flex={70}
+            component={header1}
           />
           <GBox
-            title=""
-            subtitle=""
-            flex={40}
-            padding
-            component={RouteList}
+            flex={25}
+            component={header2}
           />
-        </section>
-        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
-          <GBox
-            title="Something"
-            subtitle="Sub"
-            flex={40}
-            padding
-            component={ShipmentStatus}
-          />
-          <GBox
-            title="Something"
-            subtitle="Sub"
-            flex={55}
-            padding
-            component={RequestedShipments}
-          />
-        </section>
-        <section className={`layout-row flex-100 layout-wrap layout-align-space-between-stretch ${astyles.section}`}>
-          <GBox
-            title="Something"
-            subtitle="Sub"
-            flex={55}
-            padding
-            component={fcl}
-          />
-          <div className={`layout-column flex-40 layout-wrap layout-align-space-between-stretch ${astyles.sectionpart}`}>
-            <GBox
-              title="Something"
-              subtitle="Sub"
-              flex={65}
-              fullWidth
-              padding
-              component={Customers}
+        </div>
+        <AShipCards
+          shipments={preparedRequestedShipments}
+        />
+        <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
+          <span className="flex-15"><u><b>See more shipments</b></u></span>
+          <div className={`flex-85 ${astyles.separator}`} />
+        </div>
+        <div className="layout-row flex-100 layout-align-space-between-stretch">
+          <div className="flex-60">
+            <AHubCards
+              hubs={hubHash}
             />
-            <GBox
-              title="Something"
-              subtitle="Sub"
-              flex={30}
-              fullWidth
-              padding
-              component={Affluency}
-            />
+            <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
+              <span className="flex-15"><u><b>See more</b></u></span>
+              <div className={`flex-85 ${astyles.separator}`} />
+            </div>
           </div>
-        </section>
-        <section className={`layout-row flex-100 layout-wrap layout-align-start-stretch ${astyles.section}`}>
-          <TBox
-            tabs={['FCL', 'LCL']}
-            components={tabs}
-          />
-        </section>
+          <div className="flex-35">
+            <AClientCards
+              clients={clients}
+            />
+            <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
+              <span className="flex-20"><u><b>See more</b></u></span>
+              <div className={`flex-80 ${astyles.separator}`} />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 }
 
 AdminDashboardNew.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  user: PropTypes.any,
   clients: PropTypes.arrayOf(PropTypes.client),
-  theme: PropTypes.theme,
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),
     requested: PropTypes.arrayOf(PropTypes.shipment),
@@ -191,8 +126,8 @@ AdminDashboardNew.propTypes = {
 }
 
 AdminDashboardNew.defaultProps = {
+  user: {},
   clients: [],
-  theme: null,
   shipments: {},
   hubHash: {}
 }

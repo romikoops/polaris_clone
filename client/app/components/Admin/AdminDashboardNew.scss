@@ -5,13 +5,32 @@
   .container {
     height: 100%;
   }
-  .section {
-    padding: 20px 0px 0px;
-    height: 400px;
-    min-height: 300px;
+  .header {
+    margin: 20px 0px;
+    height: 200px;
+    min-height: 200px;
+  }
+  .headerElement {
+    padding: 20px 30px;
+  }
+  .welcome {
+    font-size: 25px;
   }
   .sectionpart {
     height: 400px;
     min-height: 300px;
+  }
+  .space {
+    margin-bottom: 20px;
+  }
+  .separator {
+    height: 1px;
+    border: 1px solid lightgrey;
+  }
+  .bigProfile {
+    font-size: 60px;
+    background: -webkit-linear-gradient(0deg, #0089CF 0%, #0DB14B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }

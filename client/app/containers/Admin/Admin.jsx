@@ -35,6 +35,7 @@ class Admin extends Component {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
     adminDispatch.getHubs(false)
+    adminDispatch.getShipments(false)
   }
   setUrl (target) {
     const { adminDispatch } = this.props
@@ -118,6 +119,7 @@ class Admin extends Component {
                   path="/admin/dashboard"
                   render={props => (
                     <AdminDashboardNew
+                      user={user}
                       theme={theme}
                       {...props}
                       clients={clients}
