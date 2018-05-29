@@ -22,6 +22,10 @@ class ChargeBreakdown < ApplicationRecord
     end
   end
 
+  scope :selected, -> {
+    joins(:shipment).where('charge_breakdowns.itinerary_id = shipments.itinerary_id')
+  }
+
   def charge(charge_category)
     charges.where(children_charge_category: ChargeCategory.where(code: charge_category)).first
   end
