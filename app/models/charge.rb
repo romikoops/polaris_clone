@@ -1,4 +1,6 @@
 class Charge < ApplicationRecord
+  include CurrencyTools
+
   belongs_to :price
   belongs_to :charge_category
   belongs_to :children_charge_category,
@@ -25,7 +27,7 @@ class Charge < ApplicationRecord
   def self.create_from_schedule_charge(
     schedule_charge,
     charge_breakdown = ChargeBreakdown.create(shipment: Shipment.first),
-    charge_category  = ChargeCategory.find_or_create_by(name: 'base_node', code: 'base_node'),
+    charge_category  = ChargeCategory.base_node,
     parent           = nil
   )
     schedule_charge.map do |key, charge_h|
@@ -42,14 +44,28 @@ class Charge < ApplicationRecord
         children_charge_category: children_charge_category, charge_category: charge_category,
         parent: parent
       )
-      create_from_schedule_charge(charge_h, charge_breakdown, children_charge_category, charge) unless charge_h['total'].nil?
+      unless charge_h['total'].nil?
+        create_from_schedule_charge(charge_h, charge_breakdown, children_charge_category, charge)
+      end
       charge
     end.compact
+  end
+
+  def update_price!
+    rates = get_rates(price.currency).today.merge(price.currency => 1.0)
+    self.price.value = children.reduce(0) do |sum, charge|
+      sum + charge.price.value / rates[charge.price.currency].to_d
+    end
+    self.price.save!
   end
 
   private
 
   def set_detail_level
     self.detail_level = ChargeDetailLevelCalculator.exec(self)
+  end
+
+  def update_parent
+    parent.update_price!
   end
 end

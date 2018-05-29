@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180525104346) do
 
   create_table "charge_breakdowns", force: :cascade do |t|
     t.integer "shipment_id"
+    t.integer "itinerary_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -632,7 +633,6 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
-    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"

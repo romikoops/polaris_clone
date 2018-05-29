@@ -11,9 +11,7 @@ describe Charge, type: :model do
       "export"=>{"SC"=>{"value"=>50.0, "currency"=>"SEK"}, "DOC"=>{"value"=>"395.0", "currency"=>"SEK"}, "HDF"=>{"value"=>80.0, "currency"=>"SEK"}, "HDL"=>{"value"=>"650.0", "currency"=>"SEK"}, "THC"=>{"value"=>395.0, "currency"=>"SEK"}, "VGM"=>{"value"=>"25.0", "currency"=>"USD"}, "ISPS"=>{"value"=>"5.0", "currency"=>"EUR"}, "total"=>{"value"=>"210.8882307364988775", "currency"=>"USD"}},
       "import"=>{},
       "trucking_on"=>{},
-      "trucking_pre"=>{"total"=>{"value"=>"326.34", "currency"=>"SEK"}},
-      "stackable"=>{"value"=>"326.34", "currency"=>"SEK"},
-      "non_stackable"=>{}
+      "trucking_pre"=>{"total"=>{"value"=>"326.34", "currency"=>"SEK"}, "stackable"=>{"value"=>"326.34", "currency"=>"SEK"}, "non_stackable"=>{}}
     }
   }
   context 'class methods' do

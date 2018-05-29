@@ -2,30 +2,6 @@
 
 module TruckingTools
   include MongoTools
-  def retrieve_trucking_pricing(location, user, load_type, _delivery_type, hub)
-    lt = load_type == 'cargo_item' ? 'lcl' : 'fcl'
-    sql = "SELECT * FROM trucking_pricings
-        JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-        JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-        JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-        JOIN  locations             ON hubs.location_id                      = locations.id
-        JOIN  tenants                ON hubs.tenant_id                        = tenants.id
-        WHERE tenants.id = #{user.tenant_id}
-        AND trucking_pricings.load_type = '#{lt}'
-        AND hub.id = #{hub.id}
-        AND (
-          (
-            (trucking_destinations.zipcode IS NOT NULL)
-            AND (trucking_destinations.zipcode = '#{location.get_zip_code}')
-          ) OR (
-            (trucking_destinations.city_name IS NOT NULL)
-            AND (trucking_destinations.city_name = '#{location.city}')
-          )
-        )
-        "
-    #
-    result = TruckingPricing.find_by_sql(sql)
-  end
 
   def calculate_trucking_price(pricing, cargo, _direction, km)
     fees = {}

@@ -1,5 +1,15 @@
 class ChargeBreakdown < ApplicationRecord
   belongs_to :shipment
+  belongs_to :itinerary
+
+  validates :itinerary_id, uniqueness: {
+    scope: :shipment_id,
+    message: -> obj, _ {
+      itinerary_info = "#{obj.itinerary_id} (#{obj.itinerary.name})"
+      "#{itinerary_info} is already taken for shipment_id #{obj.shipment_id}"
+    }
+  }
+
   has_many :charges do
     def from_category(charge_category)
       where(charge_category: ChargeCategory.where(code: charge_category))
@@ -20,7 +30,7 @@ class ChargeBreakdown < ApplicationRecord
     charge('grand_total')
   end
 
-  def to_schedule_charge(itinerary)
+  def to_schedule_charges
     hub_route_key = "#{itinerary.first_stop.hub.id}-#{itinerary.last_stop.hub.id}"
     { hub_route_key => grand_total.deconstruct_tree_into_schedule_charge }.deep_stringify_keys
   end
