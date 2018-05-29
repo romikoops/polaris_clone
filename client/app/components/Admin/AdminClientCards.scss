@@ -1,0 +1,27 @@
+:local {
+  .listComponent {
+    height: 400px;
+  }
+  .list {
+    overflow-y: auto;
+  }
+  .listelement {
+    margin-bottom: 20px;
+  }
+  .greyBg {
+    background-color: lightgrey;
+    margin-bottom: 20px;
+  }
+  .icon {
+    font-size: 25px;
+  }
+  .profileIcon {
+    color: #106084;
+  }
+  .grey {
+    color: grey;
+  }
+  .smallText {
+    font-size: 12px;
+  }
+}
