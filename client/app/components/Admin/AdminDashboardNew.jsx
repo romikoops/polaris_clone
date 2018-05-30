@@ -68,12 +68,12 @@ export class AdminDashboardNew extends Component {
 
     const mapComponent = (
       <div className="layout-row flex-100 layout-align-space-between-stretch">
-        <div className="flex-45">
+        <div className="flex-45 flex-sm-100">
           <ARouteList
             shipments={preparedRequestedShipments}
           />
         </div>
-        <div className="flex-55">
+        <div className="flex-55 flex-sm-0">
           <WMap
             itineraries={itineraries}
           />
@@ -113,8 +113,8 @@ export class AdminDashboardNew extends Component {
           flex={100}
           component={mapComponent}
         />
-        <div className="layout-row flex-100 layout-align-space-between-stretch">
-          <div className="flex-60">
+        <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
+          <div className="flex-60 flex-sm-100">
             <AHubCards
               hubs={hubHash}
             />
@@ -123,7 +123,7 @@ export class AdminDashboardNew extends Component {
               <div className={`flex-85 ${astyles.separator}`} />
             </div>
           </div>
-          <div className="flex-35">
+          <div className="flex-35 flex-sm-100">
             <AClientCards
               clients={clients}
             />
