@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
+import ReactTooltip from 'react-tooltip'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -322,7 +323,7 @@ export class ShipmentDetails extends Component {
     this.setState({ aggregatedCargo, aggregatedCargoErrors })
   }
 
-  handleCargoItemChange (event, hasError) {
+  handleCargoItemChange (event, hasError, divRef) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
@@ -332,6 +333,11 @@ export class ShipmentDetails extends Component {
       cargoItems[index][suffixName] = value
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
+    }
+    if (value > 158) {
+      setTimeout(() => {
+        ReactTooltip.show(divRef)
+      }, 1000)
     }
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError

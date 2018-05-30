@@ -182,9 +182,21 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let heightDataTip = ''
+  if (cargoItem && cargoItem.dimension_x > 158) {
+    heightDataTip = 'test'
+  }
+
+  let heightRef
   inputs.height = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <div className={`flex-90 layout-row ${styles.input_box}`}>
+      <div
+        className={`flex-90 layout-row ${styles.input_box}`}
+        data-tip={heightDataTip}
+        ref={(div) => { heightRef = div }}
+        onBlur={() => ReactTooltip.hide(heightRef)}
+      >
         <div className="flex-20 layout-row layout-align-center-center">
           H
         </div>
@@ -224,16 +236,24 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let lengthDataTip = ''
+  if (cargoItem) {
+    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
+      lengthDataTip = 'Length is automatically set by \'Collie Type\''
+    } else if (cargoItem.dimension_x > 158) {
+      lengthDataTip = 'test'
+    }
+  }
+  let lengthRef
   inputs.length = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <ReactTooltip effect="solid" />
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
-        data-tip={
-          cargoItem && cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x ? (
-            'Length is automatically set by \'Collie Type\''
-          ) : ''
-        }
+        data-tip={lengthDataTip}
+        ref={(div) => { lengthRef = div }}
+        onBlur={() => ReactTooltip.hide(lengthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
           L
@@ -248,7 +268,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, lengthRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -276,16 +296,25 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let widthDataTip = ''
+  if (cargoItem) {
+    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
+      widthDataTip = 'Width is automatically set by \'Collie Type\''
+    } else if (cargoItem.dimension_x > 158) {
+      widthDataTip = 'test'
+    }
+  }
+
+  let widthRef
   inputs.width = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <ReactTooltip effect="solid" />
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
-        data-tip={
-          cargoItem && cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y ? (
-            'Width is automatically set by \'Colli Type\''
-          ) : ''
-        }
+        data-tip={widthDataTip}
+        ref={(div) => { widthRef = div }}
+        onBlur={() => ReactTooltip.hide(widthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
           W
@@ -299,7 +328,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, widthRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
