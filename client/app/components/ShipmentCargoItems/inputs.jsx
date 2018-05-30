@@ -92,12 +92,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.payloadInKg
+                maxDimension: (values, value) => value < +maxDimensions.general.payloadInKg
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.payloadInKg}`
+                maxDimension: `Maximum height is ${maxDimensions.general.payloadInKg}`
               }}
               required
             />
@@ -184,8 +184,15 @@ export default function getInputs (
   )
 
   let heightDataTip = ''
-  if (cargoItem && cargoItem.dimension_x > 158) {
-    heightDataTip = 'test'
+  if (
+    cargoItem &&
+    +cargoItem.dimension_z < +maxDimensions.general.dimensionZ &&
+    +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
+  ) {
+    heightDataTip = `
+      Notice: The maximum height for items in
+      Air Freight shipments is ${maxDimensions.air.dimensionZ} cm
+    `
   }
 
   let heightRef
@@ -209,7 +216,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, heightRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -219,12 +226,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionZ
+                maxDimension: (values, value) => value < +maxDimensions.general.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionZ}`
+                maxDimension: `Maximum height is ${maxDimensions.general.dimensionZ}`
               }}
               required
             />
@@ -241,8 +248,14 @@ export default function getInputs (
   if (cargoItem) {
     if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
       lengthDataTip = 'Length is automatically set by \'Collie Type\''
-    } else if (cargoItem.dimension_x > 158) {
-      lengthDataTip = 'test'
+    } else if (
+      +cargoItem.dimension_x < +maxDimensions.general.dimensionX &&
+      +cargoItem.dimension_x > +maxDimensions.air.dimensionX
+    ) {
+      lengthDataTip = `
+        Notice: The maximum length for items in
+        Air Freight shipments is ${maxDimensions.air.dimensionX} cm
+      `
     }
   }
   let lengthRef
@@ -278,12 +291,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionX
+                maxDimension: (values, value) => value < +maxDimensions.general.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionX}`
+                maxDimension: `Maximum height is ${maxDimensions.general.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -299,10 +312,16 @@ export default function getInputs (
 
   let widthDataTip = ''
   if (cargoItem) {
-    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
+    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_y) {
       widthDataTip = 'Width is automatically set by \'Collie Type\''
-    } else if (cargoItem.dimension_x > 158) {
-      widthDataTip = 'test'
+    } else if (
+      +cargoItem.dimension_y < +maxDimensions.general.dimensionY &&
+      +cargoItem.dimension_y > +maxDimensions.air.dimensionY
+    ) {
+      widthDataTip = `
+        Notice: The maximum width for items in
+        Air Freight shipments is ${maxDimensions.air.dimensionY} cm
+      `
     }
   }
 
@@ -338,12 +357,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionY
+                maxDimension: (values, value) => value < +maxDimensions.general.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionY}`
+                maxDimension: `Maximum height is ${maxDimensions.general.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

@@ -334,10 +334,13 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
-    if (value > 158) {
+
+    if (+value > +this.props.shipmentData.maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => {
         ReactTooltip.show(divRef)
-      }, 1000)
+      }, 500)
+    } else {
+      ReactTooltip.hide(divRef)
     }
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
