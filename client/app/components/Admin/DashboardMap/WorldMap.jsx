@@ -11,7 +11,7 @@ function projection () {
 
 /* eslint no-console: "off" */
 
-class WorldMap extends Component {
+export class WorldMap extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -89,9 +89,7 @@ class WorldMap extends Component {
 
     return (
       <div>
-        <p>{}</p>
-        <p>{}</p>
-        <svg width={800} height={450} viewBox="0 0 800 450">
+        <svg width={650} height={450} viewBox="0 0 900 450">
           <defs>
             <marker
               id="mid"

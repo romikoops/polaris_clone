@@ -4,6 +4,8 @@ import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import { AdminShipmentCards as AShipCards } from './AdminShipmentCards'
 import { AdminHubCards as AHubCards } from './AdminHubCards'
 import { AdminClientCards as AClientCards } from './AdminClientCards'
+import { AdminRouteList as ARouteList } from './AdminRouteList'
+import { WorldMap as WMap } from './DashboardMap/WorldMap'
 // import { TextHeading } from '../TextHeading/TextHeading'
 import astyles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
@@ -33,8 +35,11 @@ export class AdminDashboardNew extends Component {
       user,
       clients,
       shipments,
-      hubHash
+      hubHash,
+      dashData
     } = this.props
+
+    const { itineraries } = dashData
 
     const clientHash = {}
     if (clients) {
@@ -58,6 +63,21 @@ export class AdminDashboardNew extends Component {
     const header2 = (
       <div className="layout-row layout-padding flex-100 layout-align-center-center">
         <img src="/app/assets/images/logos/logo_black.png" />
+      </div>
+    )
+
+    const mapComponent = (
+      <div className="layout-row flex-100 layout-align-space-between-stretch">
+        <div className="flex-45">
+          <ARouteList
+            shipments={preparedRequestedShipments}
+          />
+        </div>
+        <div className="flex-55">
+          <WMap
+            itineraries={itineraries}
+          />
+        </div>
       </div>
     )
 
@@ -88,6 +108,11 @@ export class AdminDashboardNew extends Component {
           <span className="flex-15"><u><b>See more shipments</b></u></span>
           <div className={`flex-85 ${astyles.separator}`} />
         </div>
+        <GBox
+          padding
+          flex={100}
+          component={mapComponent}
+        />
         <div className="layout-row flex-100 layout-align-space-between-stretch">
           <div className="flex-60">
             <AHubCards
@@ -116,6 +141,9 @@ export class AdminDashboardNew extends Component {
 AdminDashboardNew.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
+  dashData: PropTypes.shape({
+    schedules: PropTypes.array
+  }),
   clients: PropTypes.arrayOf(PropTypes.client),
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),
@@ -127,6 +155,7 @@ AdminDashboardNew.propTypes = {
 
 AdminDashboardNew.defaultProps = {
   user: {},
+  dashData: null,
   clients: [],
   shipments: {},
   hubHash: {}
