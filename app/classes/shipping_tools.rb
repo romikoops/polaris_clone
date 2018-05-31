@@ -63,7 +63,8 @@ module ShippingTools
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
       cargo_item_types: tenant.cargo_item_types,
-      max_dimensions: CargoItem::MAX_DIMENSIONS
+      max_dimensions: CargoItem::MAX_DIMENSIONS,
+      max_aggregate_dimensions: CargoItem::MAX_AGGREGATE_DIMENSIONS
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 

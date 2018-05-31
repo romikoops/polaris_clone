@@ -334,7 +334,7 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
-    const { maxDimensions } = this.props.shipmentData
+    const { maxDimensions, maxAggregateDimensions } = this.props.shipmentData
     if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => {
         ReactTooltip.show(divRef)
@@ -343,12 +343,20 @@ export class ShipmentDetails extends Component {
       ReactTooltip.hide(divRef)
     }
 
-    const TotalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
-      sum + chargeableWeight(cargoItem)
-    ))
+    const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + +chargeableWeight(cargoItem, 'air')
+    ), 0)
+
     let excessChargeableWeightText = ''
-    if (TotalChargeableWeight > maxDimensions.air.chargeableWeight) {
-      excessChargeableWeightText = 'Test'
+    if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
+      excessChargeableWeightText = `
+        Please note that you total chargeable weight
+        (${totalChargeableWeight} kg)
+        excedes the maximum for Air Freight shipments
+        (${maxAggregateDimensions.air.chargeableWeight} kg)
+      `
+    } else {
+      excessChargeableWeightText = ''
     }
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
@@ -904,7 +912,7 @@ export class ShipmentDetails extends Component {
                 />
               </div>
               <div className="flex-100 layout-row layout-align-end">
-                <p style={{ fontSize: '14px' }}>
+                <p style={{ fontSize: '14px', width: '317px' }}>
                   { this.state.excessChargeableWeightText }
                 </p>
               </div>
