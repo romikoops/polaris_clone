@@ -88,7 +88,7 @@ class CargoItem < ApplicationRecord
     )
     Module.const_set('AuxCargoItem', klass)
     
-    # Instantiates the auxialiary class and checks if the item is still valid,
+    # Instantiates the auxiliary class and checks if the item is still valid,
     # thereby applying the new validation.
     Module::AuxCargoItem.new(self.given_attributes).valid?
   end
