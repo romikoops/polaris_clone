@@ -89,7 +89,8 @@ class OfferCalculator
     return unless @cargo_units.first.is_a? CargoItem
 
     @itineraries.select! do |itinerary|
-      @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) }
+      @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) } &&
+      @shipment.valid_for_itinerary?(itinerary)
     end
   end
 
