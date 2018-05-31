@@ -1,7 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import {
-  Promise
-} from 'es6-promise-promise'
+import { Promise } from 'es6-promise-promise'
 import {
   BASE_URL,
   tenantConstants

@@ -25,6 +25,7 @@ import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
 // eslint-disable-next-line import/no-named-as-default
 import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
+import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
   constructor (props) {
@@ -131,7 +132,14 @@ class Admin extends Component {
                 <Route
                   path="/admin/hubs"
                   render={props => (
-                    <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs} />
+                    <AdminHubs
+                      theme={theme}
+                      {...props}
+                      hubHash={hubHash}
+                      hubs={hubs}
+                      icon="fa-info-circle"
+                      tooltip={hubsTip.manage}
+                    />
                   )}
                 />
                 <Route

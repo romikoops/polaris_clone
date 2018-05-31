@@ -209,7 +209,7 @@ export class AdminHubView extends Component {
     ) : (
       ''
     )
-    const activate = (
+    const activateBtn = (
       <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
           theme={theme}
@@ -233,7 +233,7 @@ export class AdminHubView extends Component {
         />
       </div>
     )
-    const deactivate = (
+    const deactivateBtn = (
       <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
           theme={theme}
@@ -391,7 +391,7 @@ export class AdminHubView extends Component {
         </div>
         <div className="flex-100 layout-row layout-align-start-center">
           <address className="flex-none">
-            {`${location.street_number || ''} 
+            {`${location.street_number || ''}
             ${location.street || ''}`}{' '}
             <br />
             {location.city} <br />
@@ -550,7 +550,7 @@ export class AdminHubView extends Component {
                 <p className="flex-none">Manage Hub</p>
               </div>
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                {hub.hub_status === 'active' ? deactivate : activate}
+                {hub.hub_status === 'active' ? deactivateBtn : activateBtn}
                 {editBtn}
                 {deleteBtn}
               </div>

@@ -862,4 +862,12 @@
    .expander_icon i {
      font-size: 12px !important;
    }
+   .position_fixed_right {
+    position: absolute;
+    right: 0;
+    overflow: auto;
+   }
+   .filter_panel {
+    margin-bottom: 30px;
+   }
 }
