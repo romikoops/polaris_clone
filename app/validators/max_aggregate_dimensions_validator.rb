@@ -1,10 +1,10 @@
 class MaxAggregateDimensionsValidator < ActiveModel::Validator
   def validate(record)
     dimension_names = CargoItem::MAX_AGGREGATE_DIMENSIONS[:general].keys
-    mode_of_transport = record.shipment.itinerary && record.shipment.itinerary.mode_of_transport
+    mode_of_transport = record.itinerary && record.itinerary.mode_of_transport.to_sym
  
     max_dimensions =
-      CargoItem::MAX_AGGREGATE_DIMENSIONS[mode_of_transport.to_sym] ||
+      CargoItem::MAX_AGGREGATE_DIMENSIONS[mode_of_transport] ||
       CargoItem::MAX_AGGREGATE_DIMENSIONS[:general]
     
 
@@ -16,7 +16,7 @@ class MaxAggregateDimensionsValidator < ActiveModel::Validator
 
     dimension_names.each do |dimension_name|
       max = max_dimensions[dimension_name]
-  		if sums[dimension] > max && max > 0
+  		if sums[dimension_name] > max && max > 0
   			message = "cannot be greater than #{max}"
       	record.errors["Total #{humanize_dimension(dimension_name)} (#{dimension_name})"] << message
   		end

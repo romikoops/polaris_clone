@@ -19,7 +19,7 @@ class Shipment < ApplicationRecord
     CustomValidations.inclusion(self, attribute, array)
   end
 
-  # validates_with MaxAggregateDimensionsValidator
+  validates_with MaxAggregateDimensionsValidator
   validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?

@@ -76,10 +76,21 @@ class OfferCalculator
   def determine_itinerary!
     data  = Itinerary.for_locations(@shipment, @trucking_data)
     @itineraries = data[:itineraries]
+    filter_itineraries!
+
+    raise ApplicationError::NoRoute if @itineraries.nil?
+
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
-    
-    raise ApplicationError::NoRoute unless @itineraries
+
+  end
+
+  def filter_itineraries!
+    return unless @cargo_units.first.is_a? CargoItem
+
+    @itineraries.select! do |itinerary|
+      @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) }
+    end
   end
 
   def determine_current_etd_in_search!

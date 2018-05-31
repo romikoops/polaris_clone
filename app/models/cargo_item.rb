@@ -40,19 +40,7 @@ class CargoItem < ApplicationRecord
   belongs_to :cargo_item_type
 
   MAX_DIMENSIONS.each do |mot, max_dimensions|
-    max_dimensions.each do |attribute, max_dimension|
-      validates attribute,
-        presence: true,
-        numericality: {
-          greater_than_or_equal_to: 0,
-          less_than_or_equal_to: max_dimension
-        },
-        if: -> obj {
-          itinerary = obj.shipment.itinerary
-          max_dimension > 0 &&
-          ((mot == :general) || (mot == (itinerary && itinerary.mode_of_transport.to_sym)))
-        }
-    end
+    CustomValidations.cargo_item_max_dimensions(self, mot, max_dimensions)
   end
 
   # Class Methods
@@ -78,4 +66,23 @@ class CargoItem < ApplicationRecord
     save!
   end
 
+  def valid_for_itinerary?(itinerary)
+    # This method determines whether the cargo_item would be valid, should the itinerary
+    # supplied as argument become the shipment's itinerary.
+
+
+    # Creates and auxiliary class, cloned from CargoItem, with one aditional
+    # validation, which depends on this itinerary's mode of transport.
+    klass = CustomValidations.cargo_item_max_dimensions(
+      CargoItem.clone,
+      :air,
+      CargoItem::MAX_DIMENSIONS[:air],
+      itinerary
+    )
+    Module.const_set('AuxCargoItem', klass)
+    
+    # Instantiates the auxialiary class and checks if the item is still valid,
+    # thereby applying the new validation.
+    Module::AuxCargoItem.new(self.given_attributes).valid?
+  end
 end
