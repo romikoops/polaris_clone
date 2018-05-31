@@ -187,7 +187,7 @@ module ShippingTools
           cargo_item.save!
         end
         cargo_item_types[cargo_item.cargo_item_type_id] = CargoItemType.find(cargo_item.cargo_item_type_id)
-        cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+        cargo_item.set_chargeable_weight!
         cargo_item
       end
     end
@@ -212,7 +212,7 @@ module ShippingTools
 
     if shipment.aggregated_cargo
       aggregated_cargo = shipment.aggregated_cargo
-      aggregated_cargo.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+      aggregated_cargo.set_chargeable_weight!
     end
 
     documents = shipment.documents.map do |doc|

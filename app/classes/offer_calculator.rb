@@ -82,7 +82,6 @@ class OfferCalculator
 
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
-
   end
 
   def filter_itineraries!
