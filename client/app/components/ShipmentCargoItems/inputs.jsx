@@ -4,7 +4,7 @@ import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { switchIcon } from '../../helpers'
+import { switchIcon, chargeableWeight, volume } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -111,12 +111,6 @@ export default function getInputs (
     </div>
   )
 
-  const unitVolume =
-    cargoItem &&
-    cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
-
-  const volume = cargoItem && (unitVolume * cargoItem.quantity).toFixed(3)
-
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">
       <div className="layout-row flex-40 layout-align-center" >
@@ -125,7 +119,7 @@ export default function getInputs (
 
       <div className="flex">
         <p className={styles.input_label}>
-          { volume }
+          { volume(cargoItem) }
           <span>m</span>
           <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
         </p>
@@ -141,21 +135,12 @@ export default function getInputs (
     </div>
   )
 
-  function chargeableWeight (mot) {
-    const effectiveKgPerCubicMeter = {
-      air: 167,
-      rail: 550,
-      ocean: 1000
-    }
-
-    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
-  }
   function chargeableWeightElemJSX (mot) {
     return (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value}`}>
-          { cargoItem && chargeableWeight(mot) } kg
+          { chargeableWeight(cargoItem, mot) } kg
         </p>
       </div>
     )
@@ -190,7 +175,7 @@ export default function getInputs (
     +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
   ) {
     heightDataTip = `
-      Notice: The maximum height for items in
+      Please note that the maximum height for items in
       Air Freight shipments is ${maxDimensions.air.dimensionZ} cm
     `
   }
@@ -253,7 +238,7 @@ export default function getInputs (
       +cargoItem.dimension_x > +maxDimensions.air.dimensionX
     ) {
       lengthDataTip = `
-        Notice: The maximum length for items in
+        Please note that the maximum length for items in
         Air Freight shipments is ${maxDimensions.air.dimensionX} cm
       `
     }
@@ -319,7 +304,7 @@ export default function getInputs (
       +cargoItem.dimension_y > +maxDimensions.air.dimensionY
     ) {
       widthDataTip = `
-        Notice: The maximum width for items in
+        Please note that the maximum width for items in
         Air Freight shipments is ${maxDimensions.air.dimensionY} cm
       `
     }

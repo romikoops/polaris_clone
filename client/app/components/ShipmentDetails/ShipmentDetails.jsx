@@ -23,7 +23,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { camelize, isEmpty } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -334,8 +334,8 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
-
-    if (+value > +this.props.shipmentData.maxDimensions.air[camelize(suffixName)]) {
+    const { maxDimensions } = this.props.shipmentData
+    if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => {
         ReactTooltip.show(divRef)
       }, 500)
@@ -343,8 +343,16 @@ export class ShipmentDetails extends Component {
       ReactTooltip.hide(divRef)
     }
 
+    const TotalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + chargeableWeight(cargoItem)
+    ))
+    let excessChargeableWeightText = ''
+    if (TotalChargeableWeight > maxDimensions.air.chargeableWeight) {
+      excessChargeableWeightText = 'Test'
+    }
+
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
-    this.setState({ cargoItems, cargoItemsErrors })
+    this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
   handleContainerChange (event, hasError) {
@@ -884,15 +892,22 @@ export class ShipmentDetails extends Component {
                   </div>
                 )}
             </div>
-            <div className="flex layout-row layout-align-end">
-              <RoundButton
-                text="Get Offers"
-                handleNext={this.handleNextStage}
-                handleDisabled={() => this.handleNextStageDisabled()}
-                theme={theme}
-                active={getOffersBtnIsActive(this.state)}
-                disabled={!getOffersBtnIsActive(this.state)}
-              />
+            <div className="flex layout-row layout-wrap layout-align-end">
+              <div className="flex-100 layout-row layout-align-end">
+                <RoundButton
+                  text="Get Offers"
+                  handleNext={this.handleNextStage}
+                  handleDisabled={() => this.handleNextStageDisabled()}
+                  theme={theme}
+                  active={getOffersBtnIsActive(this.state)}
+                  disabled={!getOffersBtnIsActive(this.state)}
+                />
+              </div>
+              <div className="flex-100 layout-row layout-align-end">
+                <p style={{ fontSize: '14px' }}>
+                  { this.state.excessChargeableWeightText }
+                </p>
+              </div>
             </div>
           </div>
         </div>
