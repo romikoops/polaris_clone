@@ -63,7 +63,8 @@ module ShippingTools
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
       cargo_item_types: tenant.cargo_item_types,
-      max_dimensions: CargoItem::MAX_DIMENSIONS
+      max_dimensions: CargoItem::MAX_DIMENSIONS,
+      max_aggregate_dimensions: CargoItem::MAX_AGGREGATE_DIMENSIONS
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -187,7 +188,7 @@ module ShippingTools
           cargo_item.save!
         end
         cargo_item_types[cargo_item.cargo_item_type_id] = CargoItemType.find(cargo_item.cargo_item_type_id)
-        cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+        cargo_item.set_chargeable_weight!
         cargo_item
       end
     end
@@ -212,7 +213,7 @@ module ShippingTools
 
     if shipment.aggregated_cargo
       aggregated_cargo = shipment.aggregated_cargo
-      aggregated_cargo.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+      aggregated_cargo.set_chargeable_weight!
     end
 
     documents = shipment.documents.map do |doc|

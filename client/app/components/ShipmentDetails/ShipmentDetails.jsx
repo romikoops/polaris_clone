@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
+import ReactTooltip from 'react-tooltip'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -22,7 +23,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { camelize, isEmpty } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -119,9 +120,18 @@ export class ShipmentDetails extends Component {
     }
 
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
-      this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date
-      this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage
-      this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage
+      /* eslint-disable camelcase */
+      const {
+        planned_pickup_date, planned_origin_drop_off_date, has_on_carriage, has_pre_carriage
+      } = this.props.shipmentData.shipment
+      this.state.selectedDay = planned_pickup_date
+      this.state = {
+        ...this.state,
+        has_on_carriage,
+        has_pre_carriage,
+        selectedDay: has_pre_carriage ? planned_pickup_date : planned_origin_drop_off_date
+      }
+      /* eslint-enable camelcase */
     }
 
     this.handleAddressChange = this.handleAddressChange.bind(this)
@@ -259,7 +269,7 @@ export class ShipmentDetails extends Component {
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
-      selectedDay: obj.planned_pickup_date,
+      selectedDay: obj.selected_day,
       origin: obj.origin,
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
@@ -322,7 +332,7 @@ export class ShipmentDetails extends Component {
     this.setState({ aggregatedCargo, aggregatedCargoErrors })
   }
 
-  handleCargoItemChange (event, hasError) {
+  handleCargoItemChange (event, hasError, divRef) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
@@ -333,9 +343,33 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
+    const { maxDimensions, maxAggregateDimensions } = this.props.shipmentData
+    if (+value > +maxDimensions.air[camelize(suffixName)]) {
+      setTimeout(() => {
+        ReactTooltip.show(divRef)
+      }, 500)
+    } else {
+      ReactTooltip.hide(divRef)
+    }
+
+    const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + +chargeableWeight(cargoItem, 'air')
+    ), 0)
+
+    let excessChargeableWeightText = ''
+    if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
+      excessChargeableWeightText = `
+        Please note that you total chargeable weight
+        (${totalChargeableWeight} kg)
+        excedes the maximum for Air Freight shipments
+        (${maxAggregateDimensions.air.chargeableWeight} kg)
+      `
+    } else {
+      excessChargeableWeightText = ''
+    }
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
-    this.setState({ cargoItems, cargoItemsErrors })
+    this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
   handleContainerChange (event, hasError) {
@@ -862,28 +896,35 @@ export class ShipmentDetails extends Component {
                     </div>
                     <div className="flex">
                       <p style={{ margin: 0, fontSize: '14px' }}>
-                      I hereby confirm that none of the specified cargo units contain{' '}
+                        I hereby confirm that none of the specified cargo units contain{' '}
                         <span
                           className="emulate_link blue_link"
                           onClick={() => this.toggleModal('dangerousGoodsInfo')}
                         >
-                        dangerous goods
+                          dangerous goods
                         </span>
-                      .
+                        .
                       </p>
                     </div>
                   </div>
                 )}
             </div>
-            <div className="flex layout-row layout-align-end">
-              <RoundButton
-                text="Get Offers"
-                handleNext={this.handleNextStage}
-                handleDisabled={() => this.handleNextStageDisabled()}
-                theme={theme}
-                active={getOffersBtnIsActive(this.state)}
-                disabled={!getOffersBtnIsActive(this.state)}
-              />
+            <div className="flex layout-row layout-wrap layout-align-end">
+              <div className="flex-100 layout-row layout-align-end">
+                <RoundButton
+                  text="Get Offers"
+                  handleNext={this.handleNextStage}
+                  handleDisabled={() => this.handleNextStageDisabled()}
+                  theme={theme}
+                  active={getOffersBtnIsActive(this.state)}
+                  disabled={!getOffersBtnIsActive(this.state)}
+                />
+              </div>
+              <div className="flex-100 layout-row layout-align-end">
+                <p style={{ fontSize: '14px', width: '317px' }}>
+                  { this.state.excessChargeableWeightText }
+                </p>
+              </div>
             </div>
           </div>
         </div>
