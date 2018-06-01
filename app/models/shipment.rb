@@ -19,7 +19,7 @@ class Shipment < ApplicationRecord
     CustomValidations.inclusion(self, attribute, array)
   end
 
-  # validates_with MaxAggregateDimensionsValidator
+  validates_with MaxAggregateDimensionsValidator
   validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
@@ -226,6 +226,17 @@ class Shipment < ApplicationRecord
       end
       s.save!
     end
+  end
+
+  def valid_for_itinerary?(itinerary_arg)
+    current_itinerary = self.itinerary
+
+    self.itinerary = itinerary_arg
+    return_bool = self.valid?
+
+    self.itinerary = current_itinerary
+
+    return_bool
   end
 
 

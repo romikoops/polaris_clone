@@ -33,6 +33,7 @@ module TruckingTools
     result = {}
     total_fees = {}
     return {} if pricing.empty?
+
     pricing.deep_symbolize_keys!
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != "PERCENTAGE"
@@ -55,6 +56,7 @@ module TruckingTools
       end
       result["currency"] = fee[:currency]
     end
+
     extra_fees_results = {}
 
     total_fees.each do |tk, tfee|
@@ -63,11 +65,11 @@ module TruckingTools
     extra_fees_results.each do |_ek, evalue|
       result["value"] += evalue
     end
-
-    if !pricing["min_value"] || (pricing["min_value"] && result["value"] > pricing["min_value"])
-      return {value: result["value"], currency: result["currency"]}
+    
+    if !pricing['min_value'] || (pricing['min_value'] && result['value'] > pricing['min_value'])
+      return { value: result['value'], currency: result['currency'] }
     else
-      return {value: pricing["min_value"], currency: result["currency"]}
+      return { value: pricing['min_value'], currency: result['currency'] }
     end
   end
 

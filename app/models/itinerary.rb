@@ -10,6 +10,7 @@ class Itinerary < ApplicationRecord
   has_many :trips,     dependent: :destroy
   has_many :notes,     dependent: :destroy
   has_many :pricings,  dependent: :destroy
+  has_many :hubs,      through: :stops
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
   #scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
@@ -190,29 +191,28 @@ class Itinerary < ApplicationRecord
     }
   end
 
-  def hubs
-    self.stops.flat_map { |s| s.hub }
-  end
   def first_stop
-    self.stops.order(index: :asc).first
+    self.stops.order(index: :asc).limit(1).first
   end
 
   def last_stop
-    self.stops.order(index: :desc).first
+    self.stops.order(index: :desc).limit(1).first
   end
 
   def first_nexus
     self.stops.find_by(index: 0).hub.nexus
   end
+
   def users_with_pricing
     self.pricings.where.not(user_id: nil).count 
   end
+
   def pricing_count
     self.pricings.count
   end
 
   def last_nexus
-    self.stops.order(index: :desc)[0].hub.nexus
+    last_stop.hub.nexus
   end
 
   def self.mot_scoped(tenant_id, mot_scope_ids)
@@ -266,7 +266,7 @@ class Itinerary < ApplicationRecord
   def self.for_locations(shipment, trucking_data)
     if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
-      start_hubs = Hub.where(id: start_hub_ids).to_a
+      start_hubs = Hub.where(id: start_hub_ids)
     else
       start_city = shipment.origin_nexus
       start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
@@ -275,35 +275,34 @@ class Itinerary < ApplicationRecord
 
     if trucking_data && trucking_data["on_carriage"]
       end_hub_ids = trucking_data["on_carriage"].keys
-      end_hubs = Hub.where(id: end_hub_ids).to_a
+      end_hubs = Hub.where(id: end_hub_ids)
     else
       end_city = shipment.destination_nexus
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
 
-    query = "
-      SELECT * FROM itineraries
-      WHERE tenant_id = #{shipment.tenant_id}
-      AND id IN (
-        SELECT d_stops.itinerary_id
-        FROM (
-          SELECT id, itinerary_id, index
-          FROM stops
-          WHERE hub_id IN #{start_hub_ids.sql_format}
-        ) as o_stops
-        JOIN (
-          SELECT id, itinerary_id, index
-          FROM stops
-          WHERE hub_id IN #{end_hub_ids.sql_format}
-        ) as d_stops
-        ON o_stops.itinerary_id = d_stops.itinerary_id
-        WHERE o_stops.index < d_stops.index
+    itineraries = shipment.tenant.itineraries.where("
+      id IN (
+        (
+          SELECT d_stops.itinerary_id
+          FROM (
+            SELECT id, itinerary_id, index
+            FROM stops
+            WHERE hub_id IN (?)
+          ) as o_stops
+          JOIN (
+            SELECT id, itinerary_id, index
+            FROM stops
+            WHERE hub_id IN (?)
+          ) as d_stops
+          ON o_stops.itinerary_id = d_stops.itinerary_id
+          WHERE o_stops.index < d_stops.index
+        )
       )
-    "
-    itineraries = Itinerary.find_by_sql(query)
+    ", start_hub_ids, end_hub_ids)
     
-    { itineraries: itineraries, origin_hubs: start_hubs, destination_hubs: end_hubs }
+    { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end
 
   def set_scope!

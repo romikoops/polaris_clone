@@ -267,7 +267,7 @@ ShipmentCargoItems.propTypes = {
   scope: PropTypes.shape({
     dangerous_goods: PropTypes.bool
   }).isRequired,
-  maxDimensions: PropTypes.objectOf(PropTypes.number).isRequired
+  maxDimensions: PropTypes.objectOf(PropTypes.objectOf(PropTypes.number)).isRequired
 }
 
 ShipmentCargoItems.defaultProps = {
