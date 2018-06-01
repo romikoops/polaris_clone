@@ -1,5 +1,5 @@
 import React from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styles from '../RegistrationPage.scss'
 import { Checkbox } from '../../../components/Checkbox/Checkbox'
 import PropTypes from '../../../prop-types'

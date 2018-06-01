@@ -1,5 +1,5 @@
 import React from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styles from './AddContactButton.scss'
 import PropTypes from '../../../../../prop-types'
 
