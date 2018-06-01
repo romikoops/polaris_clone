@@ -35,18 +35,23 @@ export function Carousel ({ slides, noSlides, fade }) {
       navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true
         ? styles.slick_slide_ie11
         : styles.slick_slide
+
     return (
       <div
         key={v4()}
         className={`${slickSlide} flex-none layout-row layout-align-center-center`}
-        style={divStyle}
       >
-        {fade ? <div className={`flex-none ${styles.fade}`} /> : ''}
         <div
-          className={`flex-none layout-column layout-align-center-center ${styles.slick_content}`}
+          className={`${styles.inner_wrapper} flex-100 layout-row layout-align-center-center`}
+          style={divStyle}
         >
-          <h2 className={`${styles.slick_city} flex-none`}> {route.header} </h2>
-          <h5 className={`${styles.slick_country} flex-none`}> {route.subheader} </h5>
+          {fade ? <div className={`flex-none ${styles.fade}`} /> : ''}
+          <div
+            className={`flex-none layout-column layout-align-center-center ${styles.slick_content}`}
+          >
+            <h2 className={`${styles.slick_city} flex-none`}> {route.header} </h2>
+            <h5 className={`${styles.slick_country} flex-none`}> {route.subheader} </h5>
+          </div>
         </div>
       </div>
     )
