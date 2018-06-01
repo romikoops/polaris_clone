@@ -7,16 +7,18 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
+  before_validation :set_default_optin_status, on: :create 
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
     scope: :tenant_id,
-    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" } 
+    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" }
   }
 
   # Basic associations
   belongs_to :tenant
   belongs_to :role
+  belongs_to :optin_status
   has_many :conversations
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
@@ -39,8 +41,9 @@ class User < ApplicationRecord
 
   PERMITTED_PARAMS = [
     :email, :password,
-    :guest, :tenant_id, :confirm_password, :password_confirmation, 
-    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+    :guest, :tenant_id, :confirm_password, :password_confirmation,
+    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone,
+    :optin_status_id, :cookies
   ]
 
   # Filterrific
@@ -71,7 +74,7 @@ class User < ApplicationRecord
       "users.last_name ILIKE ?",
       "users.email ILIKE ?"
     ].join(' OR ')
-    
+
     where(
       terms.map { "(#{or_clauses})" }.join(' AND '),
       *terms.map { |e| [e] * num_or_conditions }.flatten
@@ -96,7 +99,7 @@ class User < ApplicationRecord
       ['Registration date (oldest first)', 'created_at_asc']
     ]
   end
-  
+
   def self.clear_tokens
     User.all.each do |u|
       u.tokens = nil
@@ -121,33 +124,49 @@ class User < ApplicationRecord
     created_at.to_date.to_s(:long)
   end
 
+  def locations
+    Location.joins(:user_locations).where('user_locations.user_id': id)
+  end
+
   def primary_location
-    user_locations.where(primary: true).first.try(:location)
+    locations.where('user_locations.primary': true).first
   end
 
   def secondary_locations
-    user_locations.where(primary: false).map(&:location)
+    locations.where('user_locations.primary': false)
+  end
+  
+  def expanded
+    return self.as_json(include: :optin_status)
   end
 
+  def expand!
+    return self.as_json(include: :optin_status)
+  end
+  
+  # Devise Token Auth override
+  def token_validation_response
+    as_json(except: [:tokens, :created_at, :updated_at], include: :optin_status)
+  end
 
-  # override devise method to include additional info as opts hash
-  def send_confirmation_instructions(opts={})
+  # Override devise method to include additional info as opts hash
+  def send_confirmation_instructions(opts = {})
     return if self.guest
     generate_confirmation_token! unless @raw_confirmation_token
 
     # fall back to "default" config name
     opts[:client_config] ||= "default"
-    opts[:to] = unconfirmed_email if pending_reconfirmation?
-    opts[:redirect_url] ||= DeviseTokenAuth.default_confirm_success_url
+    opts[:redirect_url]  ||= DeviseTokenAuth.default_confirm_success_url
+    opts[:to]              = unconfirmed_email if pending_reconfirmation?
 
     send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
   end
-  
+
   def confirm
     update_shipments
     super
   end
-  
+
   private
 
   def set_default_role
@@ -172,11 +191,16 @@ class User < ApplicationRecord
       shipment.save
     end
   end
-  def gdpr_delete
-    self.gdpr_status = 'deleted'
+
+  def set_default_optin_status
+    if !self.optin_status_id
+      optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
+      self.optin_status = optin_status
+    end
   end
-  protected
   
+  protected
+
   def confirmation_required?
     false
   end

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'

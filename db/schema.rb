@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180522141630) do
+ActiveRecord::Schema.define(version: 20180601170411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -335,6 +335,14 @@ ActiveRecord::Schema.define(version: 20180522141630) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "optin_statuses", force: :cascade do |t|
+    t.boolean "cookies"
+    t.boolean "tenant"
+    t.boolean "itsmycargo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pricing_details", force: :cascade do |t|
     t.decimal "rate"
     t.string "rate_basis"
@@ -398,8 +406,6 @@ ActiveRecord::Schema.define(version: 20180522141630) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -436,8 +442,11 @@ ActiveRecord::Schema.define(version: 20180522141630) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -591,7 +600,7 @@ ActiveRecord::Schema.define(version: 20180522141630) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
-    t.jsonb "optin_status", default: {}
+    t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

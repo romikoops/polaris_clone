@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styles from './Admin.scss'
 import { gradientTextGenerator, capitalize } from '../../helpers'
 import AdminPromptConfirm from './Prompt/Confirm'

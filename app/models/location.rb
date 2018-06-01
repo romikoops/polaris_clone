@@ -15,6 +15,8 @@ class Location < ApplicationRecord
 
   scope :nexus, -> { where(location_type: "nexus") }
 
+  before_validation :sanitize_zip_code!
+
   # Geocoding
   geocoded_by :geocoded_address
 
@@ -262,12 +264,12 @@ class Location < ApplicationRecord
   end
 
   def get_zip_code
-    if self.zip_code
-      self.zip_code.gsub(' ', '')
-    else
+    if self.zip_code.nil?
       self.reverse_geocode
-      self.zip_code.try(:gsub, ' ', '')
     end
+
+    sanitize_zip_code!
+    self.zip_code
   end
 
   def to_custom_hash
@@ -288,11 +290,17 @@ class Location < ApplicationRecord
   def self.location_params(raw_location_params)
     country = Country.geo_find_by_name(raw_location_params["country"])
 
-    raw_location_params.try(:permit,
+    filtered_params = raw_location_params.try(:permit,
       :latitude, :longitude, :geocoded_address, :street,
       :street_number, :zip_code, :city
-    )
+    ) || raw_location_params
 
-    raw_location_params.to_h.merge(country: country)
-  end  
+    filtered_params.to_h.merge(country: country)
+  end
+
+  def sanitize_zip_code!
+    return if zip_code.nil?
+
+    self.zip_code = zip_code.gsub(/[^a-zA-z\d]/, '')
+  end
 end

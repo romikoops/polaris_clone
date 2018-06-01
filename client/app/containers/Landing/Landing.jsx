@@ -52,7 +52,7 @@ class Landing extends Component {
           tenant_id: tenant.data.id,
           guest: true
         },
-        true
+        '/booking'
       )
     }
   }

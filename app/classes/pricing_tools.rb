@@ -25,15 +25,14 @@ module PricingTools
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-        cargo_unit.set_chargeable_weight!(mot)
-        weight = cargo_unit.chargeable_weight
+        weight = cargo_unit.calc_chargeable_weight(mot)
       else
         weight = cargo_unit.payload_in_kg
       end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]          += cargo_unit.try(:volume) || 0
+      return_h[:volume]   += cargo_unit.try(:volume) || 0
       
-      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
+      return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
@@ -54,8 +53,7 @@ module PricingTools
   def calc_customs_fees(charge, cargos, load_type, user, mot)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-        cargo_unit.set_chargeable_weight!(mot)
-        weight = cargo_unit.chargeable_weight
+        weight = cargo_unit.calc_chargeable_weight(mot)
       else
         weight = cargo_unit.payload_in_kg
       end
@@ -223,9 +221,7 @@ module PricingTools
     nil
   end
 
-  def fee_value(fee, cargo_hash)
-    awesome_print fee
-    
+  def fee_value(fee, cargo_hash)    
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
@@ -261,18 +257,18 @@ module PricingTools
   def get_cargo_hash(cargo, mot)
     if cargo.is_a? Container
       {    
-      volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
-      weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
-      quantity: cargo.try(:quantity) || 1  
-    }
+        volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
+        weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
+        quantity: cargo.try(:quantity) || 1  
+      }
     else
-      cargo.set_chargeable_weight!(mot)
+      chargeable_weight = cargo.calc_chargeable_weight(mot)
       
-    {    
-      volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
-      weight: (cargo.try(:weight) || cargo.chargeable_weight) * (cargo.try(:quantity) || 1),
-      quantity: cargo.try(:quantity) || 1  
-    }
+      {    
+        volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
+        weight: (cargo.try(:weight) || chargeable_weight) * (cargo.try(:quantity) || 1),
+        quantity: cargo.try(:quantity) || 1  
+      }
     end
     
   end

@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 // import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { currencyOptions, moment } from '../../constants'
-import styles from './ChooseRoute.scss'
+import styles from './ChooseOffer.scss'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 
-export class ChooseRoute extends Component {
+export class ChooseOffer extends Component {
   static dynamicSort (property) {
     let sortOrder = 1
     let prop
@@ -111,7 +111,7 @@ export class ChooseRoute extends Component {
   }
 
   chooseResult (obj) {
-    this.props.chooseRoute(obj)
+    this.props.chooseOffer(obj)
   }
   render () {
     const {
@@ -333,7 +333,7 @@ export class ChooseRoute extends Component {
           </div>
         </div>
 
-        {!user.guest ? (
+        {!user.guest && (
           <div
             className={`${
               styles.back_to_dash_sec
@@ -349,18 +349,16 @@ export class ChooseRoute extends Component {
               />
             </div>
           </div>
-        ) : (
-          ''
         )}
       </div>
     )
   }
 }
-ChooseRoute.propTypes = {
+ChooseOffer.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
   shipmentData: PropTypes.shipmentData.isRequired,
-  chooseRoute: PropTypes.func.isRequired,
+  chooseOffer: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
   req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
@@ -373,7 +371,7 @@ ChooseRoute.propTypes = {
   tenant: PropTypes.tenant
 }
 
-ChooseRoute.defaultProps = {
+ChooseOffer.defaultProps = {
   theme: null,
   prevRequest: null,
   messages: [],
@@ -381,4 +379,4 @@ ChooseRoute.defaultProps = {
   tenant: {}
 }
 
-export default ChooseRoute
+export default ChooseOffer

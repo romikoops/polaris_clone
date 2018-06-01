@@ -4,7 +4,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
 import { Tooltip } from '../../Tooltip/Tooltip'
-import WorldMap from '../DashboardMap/WorldMap'
+import { WorldMap as WMap } from '../DashboardMap/WorldMap'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
@@ -153,7 +153,7 @@ export class AdminSearchableRoutes extends Component {
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
           {viewType}
-          <WorldMap itineraries={itineraries} />
+          <WMap itineraries={itineraries} />
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">

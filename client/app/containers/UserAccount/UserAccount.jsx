@@ -203,6 +203,7 @@ class UserAccount extends Component {
                       currencies={currencies}
                       theme={theme}
                       user={user}
+                      tenant={tenant}
                       aliases={dashboard.aliases}
                       {...props}
                       locations={dashboard.locations}

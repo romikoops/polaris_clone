@@ -1,6 +1,6 @@
 import React from 'react'
 import Truncate from 'react-truncate'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../../../../prop-types'
 import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../../../../helpers'

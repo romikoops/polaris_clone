@@ -33,7 +33,7 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
 
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
-    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+    attachments.inline['logo_small.png'] = try(:open, (tenant.theme["logoSmall"])).try(:read)
 
     mail(
       to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 

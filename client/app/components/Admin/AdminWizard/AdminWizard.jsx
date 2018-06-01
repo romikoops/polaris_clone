@@ -14,7 +14,7 @@ import {
 import { RoundButton } from '../../RoundButton/RoundButton'
 import { adminActions } from '../../../actions'
 import { TextHeading } from '../../TextHeading/TextHeading'
-// import {v4} from 'node-uuid';
+// import {v4} from 'uuid';
 
 class AdminWizard extends Component {
   constructor (props) {

@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   include DocumentTools
-  # skip_before_action :require_authentication! # TODO: why skip?
-  skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency]
+  skip_before_action :require_authentication!, only: :currencies
+  skip_before_action :require_non_guest_authentication!, only: [:update, :set_currency, :currencies]
 
   def home
     @shipper = current_user
@@ -18,8 +18,9 @@ class UsersController < ApplicationController
 
     user_locs = @shipper.user_locations
     locations = user_locs.map do |ul|
-      {user: ul, location: ul.location}
+      { user: ul, location: ul.location }
     end
+
     resp = {
       shipments:{
         requested: @requested_shipments,
@@ -50,39 +51,46 @@ class UsersController < ApplicationController
       location = Location.create_from_raw_params(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
-      
+      @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
       @user.send_confirmation_instructions if updating_guest_to_regular_user
       @user.save
     end
 
     headers = @user.create_new_auth_token
-    response_handler({ user: @user, headers: headers })
+    response_handler({ user: @user.expanded(), headers: headers })
   end
 
   def currencies
-    currency = current_user ? current_user.currency : "EUR"
+    currency = current_user.try(:currency) || "EUR"
     results = get_currency_array(currency)
     response_handler(results)
   end
+
   def download_gdpr
     url = gdpr_download(current_user.id)
     response_handler({url: url, key: 'gdpr'})
   end
-  
+
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
     rates = get_rates(params[:currency])
     response_handler({user: current_user, rates: rates})
   end
-  
+
   def hubs
     @hubs = Hub.prepped(current_user)
-    
+
     response_handler(@hubs)
   end
   def opt_out
-    current_user.optin_status[params[:target]] = !current_user.optin_status[params[:target]]
+    new_status = current_user.optin_status.as_json
+    new_status[params[:target]] = !new_status[params[:target]]
+    new_status.delete("id")
+    new_status.delete("updated_at")
+    new_status.delete("created_at")
+    optin_status = OptinStatus.find_by(new_status)
+    current_user.optin_status = optin_status
     current_user.save!
     response_handler(user: current_user)
   end
@@ -92,7 +100,7 @@ class UsersController < ApplicationController
   def user_params
     return_params = params.require(:update).permit(
       :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
-      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone, :cookies
     ).to_h
 
     unless return_params[:confirm_password].nil?
@@ -101,6 +109,11 @@ class UsersController < ApplicationController
 
     unless return_params[:VAT_number].nil?
       return_params[:vat_number] = return_params.delete(:VAT_number)
+    end
+
+    unless return_params[:cookies].nil?
+      return_params.delete(:cookies)
+      return_params[:optin_status_id] = OptinStatus.find_by(tenant: !params[:guest], itsmycargo: !params[:guest], cookies: true).id
     end
 
     return_params
