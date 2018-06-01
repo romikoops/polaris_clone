@@ -4,7 +4,7 @@ module CurrencyTools
   def get_rates(base)
     cached_rates = Currency.find_by(base: base)
 
-    if !cached_rates
+    if cached_rates.nil? || cached_rates.today.nil?
       rates = refresh_rates(base)
     elsif cached_rates.updated_at < Date.new() - 1.day
       rates = refresh_rates(base)
