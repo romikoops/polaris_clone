@@ -589,6 +589,7 @@ module ExcelTools
       rate_num_rows = rates_sheet.last_row
       modifier_position_objs = {}
       modifier_row = rates_sheet.row(3)
+      
       modifier_row.shift
       modifier_row.shift
       modifier_row.uniq.each do |mod|
@@ -1031,8 +1032,8 @@ module ExcelTools
             charge = {currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_CBM_KG"
             charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-            when "PER_KG_RANGE"
-           charge = {currency: row[:currency],  kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max]}
+          when "PER_KG_RANGE"
+            charge = {currency: row[:currency],  kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max]}
           end
 
           charge[:expiration_date] = row[:expiration_date]

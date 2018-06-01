@@ -268,33 +268,29 @@ class OfferCalculator
   def determine_trucking_options!
     load_type = @shipment.load_type 
     if @shipment.has_pre_carriage?
-      trucking_pricings_by_hub = TruckingPricing.find_by_filter(
+      trucking_pricings = TruckingPricing.find_by_filter(
         location: @pickup_address, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["pre_carriage"]["truck_type"],
         carriage: 'pre'
       )
-      trucking_pricings_by_hub.each do |trucking_pricing|
-        if !@trucking_data["pre_carriage"]
-          @trucking_data["pre_carriage"] = {}
-        end
+      @trucking_data["pre_carriage"] = {}
+      trucking_pricings.each do |trucking_pricing|
         @trucking_data["pre_carriage"][trucking_pricing.hub_id] = trucking_pricing
       end
     end
 
     if @shipment.has_on_carriage?
-      trucking_pricings_by_hub = TruckingPricing.find_by_filter(
+      trucking_pricings = TruckingPricing.find_by_filter(
         location: @delivery_address, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["on_carriage"]["truck_type"],
         carriage: 'on'
       )
-      trucking_pricings_by_hub.each do |trucking_pricing|
-        if !@trucking_data["on_carriage"]
-          @trucking_data["on_carriage"] = {}
-        end
+      @trucking_data["on_carriage"] = {}
+      trucking_pricings.each do |trucking_pricing|
         @trucking_data["on_carriage"][trucking_pricing.hub_id] = trucking_pricing
       end
     end
