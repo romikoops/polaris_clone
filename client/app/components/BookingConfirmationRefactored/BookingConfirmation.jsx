@@ -23,6 +23,7 @@ import {
   ALIGN_AROUND_STRETCH,
   ALIGN_BETWEEN_CENTER,
   ALIGN_BETWEEN_START,
+  ALIGN_END_CENTER,
   ALIGN_CENTER,
   ALIGN_CENTER_START,
   ALIGN_END,
@@ -69,6 +70,33 @@ const TOTAL_ROW = `${styles.total_row} ${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`
 
 const acceptStyle = { height: '150px', marginBottom: '15px' }
 
+export function calcFareTotals (feeHash) {
+  let res1 = parseFloat(feeHash.total.value)
+  let res2 = 0
+  if (feeHash && feeHash.customs && feeHash.customs.val) {
+    res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
+  }
+  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
+    res2 = parseFloat(res1) - parseFloat(feeHash.insurance.val)
+  } else {
+    res2 = res1
+  }
+
+  return res2.toFixed(2)
+}
+
+export function calcExtraTotals (feeHash) {
+  let res1 = 0
+  if (feeHash && feeHash.customs && feeHash.customs.val) {
+    res1 += parseFloat(feeHash.customs.val)
+  }
+  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
+    res1 += parseFloat(feeHash.insurance.val)
+  }
+
+  return res1.toFixed(2)
+}
+
 export class BookingConfirmation extends Component {
   constructor (props) {
     super(props)
@@ -93,22 +121,24 @@ export class BookingConfirmation extends Component {
       }
     })
   }
+  requestShipment () {
+    const { shipmentData, shipmentDispatch } = this.props
+    const { shipment } = shipmentData
+    shipmentDispatch.requestShipment(shipment.id)
+  }
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
     const type = file.doc_type
     const url = `/shipments/${shipment.id}/upload/${type}`
-
     shipmentDispatch.uploadDocument(file, type, url)
   }
   deleteDoc (doc) {
-    this.props.shipmentDispatch.deleteDocument(doc.id)
+    const { shipmentDispatch } = this.props
+    shipmentDispatch.deleteDocument(doc.id)
   }
   toggleAcceptTerms () {
     this.setState({ acceptTerms: !this.state.acceptTerms })
-  }
-  requestShipment () {
-    this.props.shipmentDispatch.requestShipment(this.props.shipmentData.shipment.id)
   }
   render () {
     const {
@@ -142,9 +172,6 @@ export class BookingConfirmation extends Component {
     const textStyle = getTextStyle(theme)
     const createdDate = getCreatedDate(shipment)
 
-    /**
-     * if series instead of if/else is not very common
-     */
     let cargoView = ''
     if (containers) {
       cargoView = prepContainerGroups(containers, this.props)
@@ -165,8 +192,8 @@ export class BookingConfirmation extends Component {
       theme,
       handleNext: this.requestShipment
     })
-
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const themeTitled = getThemeTitled(theme)
     const { docView, missingDocs } = getDocs({
       documents,
       theme,
@@ -174,8 +201,14 @@ export class BookingConfirmation extends Component {
       deleteFn: this.deleteDoc
     })
 
-    const themeTitled = getThemeTitled(theme)
+    const HeadingFactory = HeadingFactoryFn(theme)
+    const Terms = getTerms({ theme, terms })
+    const LocationsOrigin = getLocationsOrigin({ shipment, locations })
+    const LocationsDestination = getLocationsDestination({ shipment, locations })
+    const arrivalTime = getArrivalTime(shipment)
+    const totalPrice = getTotalPrice(shipment)
     const status = shipmentStatii[shipment.status]
+
     const expectedTime = shipment.has_pre_carriage
       ? 'Expected Time of Collection:'
       : 'Expected Time of Departure:'
@@ -186,12 +219,15 @@ export class BookingConfirmation extends Component {
         .format('DD/MM/YYYY')}`
       : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`
 
-    const Terms = getTerms({ theme, terms })
-    const HeadingFactory = HeadingFactoryFn(theme)
-    const LocationsOrigin = getLocationsOrigin({ shipment, locations })
-    const LocationsDestination = getLocationsDestination({ shipment, locations })
-    const arrivalTime = getArrivalTime(shipment)
-    const totalPrice = getTotalPrice(shipment)
+    const extraFee = feeHash.customs && feeHash.customs.hasUnknown
+      ? (
+        <div className="flex-100 layout-row layout-align-end-center">
+          <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
+            {' '}
+      ( excl. charges subject to local regulations )
+          </p>
+        </div>)
+      : ''
 
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>
@@ -247,24 +283,21 @@ export class BookingConfirmation extends Component {
               style={{ position: 'relative' }}
             >
               <div className={`flex-40 ${WRAP_ROW()} ${ALIGN_CENTER}`}>
-                <div className={`${ROW(100)} ${ALIGN_CENTER_START} layout-wrap`}>
-                  <p className="flex-100 center letter_3">
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
+                  <p className="flex-100 letter_3">
                     {expectedTime}
                   </p>
-                  <p className="flex-none letter_3">
+                  <p className="flex-90 offset-10 margin_5">
                     {plannedTime}
                   </p>
                 </div>
                 {LocationsOrigin}
               </div>
+
               <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
-                <div className={`${ROW(100)} ${ALIGN_CENTER_START} layout-wrap`}>
-                  <p
-                    className="flex-100 center letter_3"
-                  > Expected Time of Arrival:</p>
-                  <p className="flex-none letter_3">
-                    {arrivalTime}
-                  </p>
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
+                  <p className="flex-100 letter_3"> Expected Time of Arrival:</p>
+                  <p className="flex-90 offset-10 margin_5">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
               </div>
@@ -276,7 +309,6 @@ export class BookingConfirmation extends Component {
 
     const FaresAndFees = (
       <div className={SHIPMENT_CARD}>
-
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Fares & Fees')}
           <div className={COLLAPSER} onClick={() => this.setCollapser('charges')}>
@@ -284,18 +316,24 @@ export class BookingConfirmation extends Component {
           </div>
         </div>
 
-        <div className={TOTAL_ROW}>
-          <h3 className="flex-70 letter_3">Shipment Total:</h3>
-          <div className={`${ROW(30)} layout-align-end-center`}>
-            <h3 className="flex-none letter_3">
-              {totalPrice}
-            </h3>
-          </div>
-        </div>
-
         <div className={getPanelStyle(collapser.charges)}>
           <div className={INNER_WRAPPER}>
-            <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
+            <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
+              <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+                <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
+                  <TextHeading
+                    theme={theme}
+                    color="white"
+                    size={4}
+                    text="Freight, Duties & Carriage: "
+                  />
+                </div>
+                <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
+                  <h5 className="flex-none letter_3">{`${
+                    shipment.total_price.currency
+                  } ${calcFareTotals(feeHash)} `}</h5>
+                </div>
+              </div>
               <div className={BOOKING}>
                 <IncotermRow
                   theme={theme}
@@ -308,25 +346,24 @@ export class BookingConfirmation extends Component {
                 />
               </div>
             </div>
-          </div>
-        </div>
+            <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
+              <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
+                <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
+                  <TextHeading
+                    theme={theme}
+                    color="white"
+                    size={4}
+                    text="Additional Services: "
+                  />
+                </div>
+                <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
+                  <h5 className="flex-none letter_3">{`${
+                    shipment.total_price.currency
+                  } ${calcExtraTotals(feeHash)} `}</h5>
+                  {extraFee}
+                </div>
+              </div>
 
-      </div>
-    )
-
-    const AdditionalServices = (
-      <div className={SHIPMENT_CARD}>
-
-        <div style={themeTitled} className={HEADING}>
-          {HeadingFactory('Additional Services')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('extras')}>
-            {getChevronIcon(collapser.extras)}
-          </div>
-        </div>
-
-        <div className={getPanelStyle(collapser.extras)}>
-          <div className={INNER_WRAPPER}>
-            <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
               <div className={BOOKING}>
                 <IncotermExtras
                   theme={theme}
@@ -337,20 +374,34 @@ export class BookingConfirmation extends Component {
             </div>
           </div>
         </div>
-
+        <div className={TOTAL_ROW}>
+          <div className={`${ROW(70)} ${ALIGN_START_CENTER}`}>
+            <h3 className="flex-none letter_3">Shipment Total: </h3>
+          </div>
+          <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
+            <h3 className="flex-none letter_3">{totalPrice}</h3>
+            <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
+              <p className="flex-none center no_m" style={{ fontSize: '12px' }}>
+                {' '}
+                    ( incl. Quoted Additional Services )
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     )
 
     const ContactDetails = (
       <div className={SHIPMENT_CARD}>
-
-        <div style={themeTitled} className={HEADING} >
+        <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Contact Details')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('contacts')}>
+          <div
+            className={`${ROW(10)} ${ALIGN_CENTER}`}
+            onClick={() => this.setCollapser('contacts')}
+          >
             {getChevronIcon(collapser.contacts)}
           </div>
         </div>
-
         <div className={getPanelStyle(collapser.contacts)}>
           <div className={INNER_WRAPPER}>
             <div className={SUMM_TOP}>
@@ -362,7 +413,6 @@ export class BookingConfirmation extends Component {
             </div>
           </div>
         </div>
-
       </div>
     )
 
@@ -389,7 +439,6 @@ export class BookingConfirmation extends Component {
 
     const AdditionalInformation = (
       <div className={SHIPMENT_CARD}>
-
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Additional Information')}
           <div
@@ -406,16 +455,41 @@ export class BookingConfirmation extends Component {
               <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
                 {TotalGoodsValue(shipment)}
                 {Eori(shipment)}
-              </div>
-              <div className={`${ROW(100)} ${ALIGN_AROUND_CENTER}`}>
-                {DescriptionGoods(shipment)}
-                {Notes(shipment)}
-                {Incoterm(shipment)}
+
+                {shipment.cargo_notes ? (
+                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                    <p className="flex-100">
+                      <b>Description of Goods:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.cargo_notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.notes ? (
+                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                    <p className="flex-100">
+                      <b>Notes:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.notes}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {shipment.incoterm_text ? (
+                  <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
+                    <p className="flex-100">
+                      <b>Incoterm:</b>
+                    </p>
+                    <p className="flex-100 no_m">{shipment.incoterm_text}</p>
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>
         </div>
-
       </div>
     )
 
@@ -479,8 +553,6 @@ export class BookingConfirmation extends Component {
 
           {FaresAndFees}
 
-          {AdditionalServices}
-
           {ContactDetails}
 
           {CargoDetails}
@@ -500,11 +572,10 @@ export class BookingConfirmation extends Component {
                 text="Back to dashboard"
                 back
                 iconClass="fa-angle-left"
-                handleNext={shipmentDispatch.toDashboard}
+                handleNext={() => shipmentDispatch.toDashboard()}
               />
             </div>
           </div>
-
         </div>
       </div>
     )
@@ -771,7 +842,7 @@ function getShipperAndConsignee ({
 }
 
 function getTerms ({ theme, terms }) {
-  const termBullets = terms.map(singleTerm => <li> {singleTerm}</li>)
+  const termBullets = terms.map(t => <li> {t}</li>)
 
   return (
     <div className={`${ROW()} ${ALIGN_START_CENTER}`}>
@@ -794,10 +865,10 @@ function getLocationsDestination ({ shipment, locations }) {
       <address className="flex-none">
         {/* eslint-disable-next-line */}
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-        <br />
-        {`${locations.destination.city}`} <br />
-        {`${locations.destination.zip_code}`} <br />
-        {`${locations.destination.country}`} <br />
+        ,
+        {`${locations.destination.city}`},
+        {`${locations.destination.zip_code}`},
+        {`${locations.destination.country}`}
       </address>
     </div>
   ) : (
@@ -809,10 +880,10 @@ function getLocationsOrigin ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
     <div className={`${ROW(100)} ${ALIGN_START}`}>
       <address className="flex-none">
-        {`${locations.origin.street_number} ${locations.origin.street}`} <br />
-        {`${locations.origin.city}`} <br />
-        {`${locations.origin.zip_code}`} <br />
-        {`${locations.origin.country}`} <br />
+        {`${locations.origin.street_number} ${locations.origin.street}`},
+        {`${locations.origin.city}`},
+        {`${locations.origin.zip_code}`},
+        {`${locations.origin.country}`}
       </address>
     </div>
   ) : (
@@ -849,9 +920,9 @@ function TotalGoodsValue (shipment) {
       <p className="flex-100">
         <b>Total Value of Goods:</b>
       </p>
-      <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
-        shipment.total_goods_value.value
-      }`}</p>
+      <p className="flex-100 no_m">{`${
+        shipment.total_goods_value.currency
+      } ${parseFloat(shipment.total_goods_value.value).toFixed(2)}`}</p>
     </div>
   ) : (
     ''
@@ -865,45 +936,6 @@ function Eori (shipment) {
         <b>EORI number:</b>
       </p>
       <p className="flex-100 no_m">{shipment.eori}</p>
-    </div>
-  ) : (
-    ''
-  )
-}
-
-function DescriptionGoods (shipment) {
-  return shipment.cargo_notes ? (
-    <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-      <p className="flex-100">
-        <b>Description of Goods:</b>
-      </p>
-      <p className="flex-100 no_m">{shipment.cargo_notes}</p>
-    </div>
-  ) : (
-    ''
-  )
-}
-
-function Notes (shipment) {
-  return shipment.notes ? (
-    <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-      <p className="flex-100">
-        <b>Notes:</b>
-      </p>
-      <p className="flex-100 no_m">{shipment.notes}</p>
-    </div>
-  ) : (
-    ''
-  )
-}
-
-function Incoterm (shipment) {
-  return shipment.incoterm_text ? (
-    <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
-      <p className="flex-100">
-        <b>Incoterm:</b>
-      </p>
-      <p className="flex-100 no_m">{shipment.incoterm_text}</p>
     </div>
   ) : (
     ''

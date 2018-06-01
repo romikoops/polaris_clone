@@ -5,6 +5,7 @@ export const ALIGN_START = 'layout-align-start-start'
 export const ALIGN_BETWEEN_CENTER = 'layout-align-space-between-center'
 export const ALIGN_BETWEEN_START = 'layout-align-space-between-start'
 export const ALIGN_END = 'layout-align-end-end'
+export const ALIGN_END_CENTER = 'layout-align-end-center'
 export const ALIGN_AROUND_STRETCH = 'layout-align-space-around-stretch'
 export const ALIGN_AROUND_CENTER = 'layout-align-space-around-center'
 

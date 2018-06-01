@@ -107,10 +107,19 @@ const barCargoItem = {
 }
 
 const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
+const shipment = {
+  ...shipmentData.shipment,
+  schedules_charges: {
+    FOO_HUB_ROUTE_KEY: {
+      total: { value: 87 }
+    }
+  }
+}
+const editedShipmentData = { ...shipmentData, shipment, cargoItemTypes }
 
 const propsBase = {
   theme,
-  shipmentData: { ...shipmentData, cargoItemTypes },
+  shipmentData: editedShipmentData,
   setStage: identity,
   tenant: editedTenant,
   shipmentDispatch: {
@@ -126,8 +135,7 @@ test('with containers', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       containers
     }
   }
@@ -138,8 +146,7 @@ test('with cargo items', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       cargoItems
     }
   }
@@ -166,8 +173,7 @@ test('props.shipmentData.aggregatedCargo is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       aggregatedCargo: { foo: 1 }
     }
   }
@@ -178,8 +184,7 @@ test('props.shipmentData.documents is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       documents: [
         { id: 0, doc_type: 'FOO_DOC_TYPE' },
         { id: 1, doc_type: 'BAR_DOC_TYPE' }
@@ -193,8 +198,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       notifyees: [
         { first_name: 'John', last_name: 'Doe' },
         { first_name: 'Robert', last_name: 'Plant' },
@@ -209,10 +213,9 @@ test('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       shipment: {
-        ...shipmentData.shipment,
+        ...shipment,
         has_pre_carriage: true
       }
     }
@@ -224,10 +227,9 @@ test('props.shipmentData.shipment.has_on_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {
-      ...shipmentData,
-      cargoItemTypes,
+      ...editedShipmentData,
       shipment: {
-        ...shipmentData.shipment,
+        ...shipment,
         has_on_carriage: true
       }
     }
