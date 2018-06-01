@@ -35,7 +35,6 @@
     "lodash": "^4.17.4",
     "moment": "^2.19.2",
     "moment-range": "^4.0.1",
-    "node-uuid": "^1.4.8",
     "parse-domain": "^2.0.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.4.0",
@@ -68,7 +67,8 @@
     "resolve-url-loader": "^2.1.1",
     "slick-carousel": "^1.8.1",
     "style-it": "^2.0.0",
-    "styled-components": "^3.3.0"
+    "styled-components": "^3.3.0",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.39",
