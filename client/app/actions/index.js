@@ -10,9 +10,7 @@ export * from './messaging.actions'
 export { default as bookingSummaryActions } from './bookingSummary.actions'
 export * from './document.actions'
 export * from './tenant'
-export {
-  default as tenantActions
-} from './tenant.actions'
+export { default as tenantActions } from './tenant.actions'
 
 export function filterTable (filter) {
   return {
