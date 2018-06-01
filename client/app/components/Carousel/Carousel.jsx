@@ -1,6 +1,6 @@
 import React from 'react'
 import Slider from 'react-slick'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import 'slick-carousel/slick/slick.css'

@@ -5,7 +5,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 // import { AdminHubTile } from '../';
 import { RoundButton } from '../../RoundButton/RoundButton'
-// import {v4} from 'node-uuid';
+// import {v4} from 'uuid';
 import '../../../styles/select-css-custom.css'
 import FileUploader from '../../../components/FileUploader/FileUploader'
 import history from '../../../helpers'

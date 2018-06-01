@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Toggle from 'react-toggle'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
