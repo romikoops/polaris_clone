@@ -120,9 +120,18 @@ export class ShipmentDetails extends Component {
     }
 
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
-      this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date
-      this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage
-      this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage
+      /* eslint-disable camelcase */
+      const {
+        planned_pickup_date, planned_origin_drop_off_date, has_on_carriage, has_pre_carriage
+      } = this.props.shipmentData.shipment
+      this.state.selectedDay = planned_pickup_date
+      this.state = {
+        ...this.state,
+        has_on_carriage,
+        has_pre_carriage,
+        selectedDay: has_pre_carriage ? planned_pickup_date : planned_origin_drop_off_date
+      }
+      /* eslint-enable camelcase */
     }
 
     this.handleAddressChange = this.handleAddressChange.bind(this)
@@ -260,7 +269,7 @@ export class ShipmentDetails extends Component {
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
-      selectedDay: obj.planned_pickup_date,
+      selectedDay: obj.selected_day,
       origin: obj.origin,
       destination: obj.destination,
       has_on_carriage: !!obj.trucking.on_carriage.truck_type,
@@ -887,14 +896,14 @@ export class ShipmentDetails extends Component {
                     </div>
                     <div className="flex">
                       <p style={{ margin: 0, fontSize: '14px' }}>
-                      I hereby confirm that none of the specified cargo units contain{' '}
+                        I hereby confirm that none of the specified cargo units contain{' '}
                         <span
                           className="emulate_link blue_link"
                           onClick={() => this.toggleModal('dangerousGoodsInfo')}
                         >
-                        dangerous goods
+                          dangerous goods
                         </span>
-                      .
+                        .
                       </p>
                     </div>
                   </div>
