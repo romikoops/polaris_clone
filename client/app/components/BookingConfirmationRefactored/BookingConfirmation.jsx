@@ -113,7 +113,7 @@ export class BookingConfirmation extends Component {
     setStage(5)
     window.scrollTo(0, 0)
   }
-  setCollapser (key) {
+  handleCollapser (key) {
     this.setState({
       collapser: {
         ...this.state.collapser,
@@ -233,7 +233,7 @@ export class BookingConfirmation extends Component {
       <div className={SHIPMENT_CARD_CONTAINER}>
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Overview')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('overview')}>
+          <div className={COLLAPSER} onClick={() => this.handleCollapser('overview')}>
             {getChevronIcon(collapser.overview)}
           </div>
         </div>
@@ -270,7 +270,7 @@ export class BookingConfirmation extends Component {
       <div className={ITINERARY}>
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Itinerary')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('itinerary')}>
+          <div className={COLLAPSER} onClick={() => this.handleCollapser('itinerary')}>
             {getChevronIcon(collapser.itinerary)}
           </div>
         </div>
@@ -311,7 +311,7 @@ export class BookingConfirmation extends Component {
       <div className={SHIPMENT_CARD}>
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Fares & Fees')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('charges')}>
+          <div className={COLLAPSER} onClick={() => this.handleCollapser('charges')}>
             {getChevronIcon(collapser.charges)}
           </div>
         </div>
@@ -397,7 +397,7 @@ export class BookingConfirmation extends Component {
           {HeadingFactory('Contact Details')}
           <div
             className={`${ROW(10)} ${ALIGN_CENTER}`}
-            onClick={() => this.setCollapser('contacts')}
+            onClick={() => this.handleCollapser('contacts')}
           >
             {getChevronIcon(collapser.contacts)}
           </div>
@@ -421,7 +421,7 @@ export class BookingConfirmation extends Component {
 
         <div style={themeTitled} className={HEADING} >
           {HeadingFactory('Cargo Details')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('cargo')}>
+          <div className={COLLAPSER} onClick={() => this.handleCollapser('cargo')}>
             {getChevronIcon(collapser.cargo)}
           </div>
         </div>
@@ -443,7 +443,7 @@ export class BookingConfirmation extends Component {
           {HeadingFactory('Additional Information')}
           <div
             className={`${ROW(10)} ${ALIGN_CENTER}`}
-            onClick={() => this.setCollapser('extraInfo')}
+            onClick={() => this.handleCollapser('extraInfo')}
           >
             {getChevronIcon(collapser.extraInfo)}
           </div>
@@ -498,7 +498,7 @@ export class BookingConfirmation extends Component {
 
         <div style={themeTitled} className={HEADING}>
           {HeadingFactory('Documents')}
-          <div className={COLLAPSER} onClick={() => this.setCollapser('documents')}>
+          <div className={COLLAPSER} onClick={() => this.handleCollapser('documents')}>
             {getChevronIcon(collapser.documents)}
           </div>
         </div>
