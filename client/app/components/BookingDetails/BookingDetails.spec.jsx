@@ -37,7 +37,7 @@ jest.mock('../RoundButton/RoundButton', () => ({
 // eslint-disable-next-line
 import { BookingDetails } from './BookingDetails'
 
-const edittedShipmentData = {
+const editedShipmentData = {
   ...shipmentData,
   hubs: {}
 }
@@ -45,7 +45,7 @@ const edittedShipmentData = {
 const propsBase = {
   theme,
   tenant,
-  shipmentData: edittedShipmentData,
+  shipmentData: editedShipmentData,
   nextStage: identity,
   prevRequest: {
     shipment
@@ -64,4 +64,31 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<BookingDetails {...propsBase} />)).toMatchSnapshot()
+})
+
+test('shipmentData is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: null
+  }
+  expect(shallow(<BookingDetails {...props} />)).toMatchSnapshot()
+})
+
+test('shipmentData.shipment is falsy', () => {
+  const props = {
+    ...propsBase,
+    shipmentData: {
+      ...editedShipmentData,
+      shipment: null
+    }
+  }
+  expect(shallow(<BookingDetails {...props} />)).toMatchSnapshot()
+})
+
+test('theme is falsy', () => {
+  const props = {
+    ...propsBase,
+    theme: null
+  }
+  expect(shallow(<BookingDetails {...props} />)).toMatchSnapshot()
 })
