@@ -26,5 +26,5 @@ export default async function selectOriginDestination (puppeteer) {
   await page.mouse.click(x + 10, y + 40)
   await delay(LONG_DELAY)
   await focus('body')
-  await selectWithTab(11)
+  await selectWithTab(12, undefined, true)
 }

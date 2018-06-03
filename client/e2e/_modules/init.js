@@ -2,7 +2,7 @@ import { initPuppeteer } from 'init-puppeteer'
 import { delay } from './delay'
 
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
-const DELAY = 200
+const DELAY = 250
 
 function log (input) {
   // eslint-disable-next-line
@@ -230,7 +230,7 @@ export default async function init (options) {
     await page.keyboard.type(text, { delay: 50 })
   }
 
-  const selectWithTab = async (tabCount, arrowToPressInput) => {
+  const selectWithTab = async (tabCount, arrowToPressInput, bruteForceFlag) => {
     const arrowToPress = arrowToPressInput === undefined
       ? 'ArrowDown'
       : `Arrow${arrowToPressInput}`
@@ -241,6 +241,13 @@ export default async function init (options) {
     for (const _ of Array(tabCount).fill('')) {
       // eslint-disable-next-line
       await page.keyboard.press('Tab')
+
+      if (bruteForceFlag) {
+        // eslint-disable-next-line
+        await page.keyboard.press(arrowToPress)
+        // eslint-disable-next-line
+        await delay(DELAY)
+      }
       // eslint-disable-next-line
       await delay(DELAY)
     }
