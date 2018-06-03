@@ -57,4 +57,4 @@ Now it’s time to get data into the database.
 
 ## Reset database
 
-> rake db:drop db:create db:migrate db:seed:geometries db:seed:demo db:seed:trucking_pricing
+> rake db:drop db:create db:migrate db:seed:demo db:seed:geometries db:seed:trucking_pricing
