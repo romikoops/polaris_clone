@@ -1,7 +1,14 @@
 class Hash
 	def deep_values
-		return self.values if self.values.none? { |value| value.is_a?(Hash) }
 		self.values.map { |value| value.is_a?(Hash) ? value.deep_values : value }.flatten
+  end
+  
+  def map_deep_values(&block)
+		self.map_values { |value| value.is_a?(Hash) ? value.map_deep_values(&block) : yield(value) }
+	end
+
+  def map_deep_values!(&block)
+		self.map_values! { |value| value.is_a?(Hash) ? value.map_deep_values!(&block) : yield(value) }
 	end
 
 	def map_values

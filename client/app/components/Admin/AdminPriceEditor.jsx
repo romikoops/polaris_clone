@@ -27,7 +27,7 @@ const fclChargeGloss = fclChargeGlossary
 const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
-// import {v4} from 'node-uuid';
+// import {v4} from 'uuid';
 const currencyOpts = currencyOptions
 export class AdminPriceEditor extends Component {
   static selectFromOptions (options, value) {

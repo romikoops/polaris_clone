@@ -5,7 +5,7 @@ import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 
 import { Link } from 'react-router-dom'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import { BASE_URL } from '../../../constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
