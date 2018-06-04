@@ -214,6 +214,20 @@ class Shipment < ApplicationRecord
     end
   end
 
+  def create_charge_breakdowns_from_schedules_charges!
+    schedules_charges.map do |hub_route_key, schedule_charges|
+      origin_hub_id, destination_hub_id = *hub_route_key.split('-').map(&:to_i)
+      itinerary = Itinerary.filter_by_hubs(origin_hub_id, destination_hub_id).first
+      charge_breakdown = ChargeBreakdown.create!(shipment: self, itinerary: itinerary)
+      Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
+    end
+  end
+
+  def self.create_all_empty_charge_breakdowns!
+    where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
+      .each(&:create_charge_breakdowns_from_schedules_charges!)
+  end
+
   def self.update_refactor_shipments
     Shipment.where.not(itinerary: nil).each do |s|
       itinerary = s.itinerary

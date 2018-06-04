@@ -7,7 +7,7 @@ class Charge < ApplicationRecord
     foreign_key: 'children_charge_category_id', class_name: 'ChargeCategory'
   belongs_to :charge_breakdown
   belongs_to :parent, class_name: 'Charge', optional: true
-  has_many :children, foreign_key: 'parent_id', class_name: 'Charge'
+  has_many :children, foreign_key: 'parent_id', class_name: 'Charge', dependent: :destroy
   before_validation :set_detail_level, on: :create
 
   validates :detail_level, presence: true
@@ -24,13 +24,14 @@ class Charge < ApplicationRecord
     { total: price.given_attributes }.merge(children_charges)
   end
 
-  def self.create_from_schedule_charge(
+  def self.create_from_schedule_charges(
     schedule_charge,
     charge_breakdown = ChargeBreakdown.create(shipment: Shipment.first),
     charge_category  = ChargeCategory.base_node,
     parent           = nil
   )
-    schedule_charge.map do |key, charge_h|
+    schedule_charge = { 'grand_total' => schedule_charge } if parent.nil?
+    schedule_charge.each do |key, charge_h|
       next if %w(total value currency).include? key
       children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key)
       price_h = charge_h['value'].nil? ? charge_h['total'] : charge_h
@@ -45,10 +46,10 @@ class Charge < ApplicationRecord
         parent: parent
       )
       unless charge_h['total'].nil?
-        create_from_schedule_charge(charge_h, charge_breakdown, children_charge_category, charge)
+        create_from_schedule_charges(charge_h, charge_breakdown, children_charge_category, charge)
       end
-      charge
-    end.compact
+    end
+    charge_breakdown
   end
 
   def update_price!

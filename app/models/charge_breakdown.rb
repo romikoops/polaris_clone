@@ -10,7 +10,7 @@ class ChargeBreakdown < ApplicationRecord
     }
   }
 
-  has_many :charges do
+  has_many :charges, dependent: :destroy do
     def from_category(charge_category)
       where(charge_category: ChargeCategory.where(code: charge_category))
     end
