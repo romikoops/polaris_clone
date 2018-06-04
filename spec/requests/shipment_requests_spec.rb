@@ -33,7 +33,10 @@ describe 'Shipment requests', type: :request do
         {
           allNexuses: { origins: [], destinations: [] },
           cargoItemTypes: [], itineraries: [],
-          maxDimensions: { dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0' },
+          maxDimensions: {
+            general: { dimensionX: '590.0', dimensionY: '234.2', dimensionZ: '228.0', payloadInKg: '21770.0' },
+            air:     { dimensionX: '120.0', dimensionY: '80.0',  dimensionZ: '158.0', payloadInKg: '1500.0' }
+          },
           shipment: {
             user_id: tenant.users.last.id, status: 'booking_process_started', load_type: load_type, tenant_id: tenant.id
           }
