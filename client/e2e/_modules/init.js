@@ -1,9 +1,10 @@
-import { initPuppeteer } from 'init-puppeteer'
+import open from 'open'
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
-import open from 'open'
-import looksSame from 'looks-same'
+
+import looksSame from '../_vendor/looks-same'
 import { delay } from './delay'
+import { initPuppeteer } from '../_vendor/init-puppeteer'
 
 const SCREEN_DIR = path.resolve(__dirname, '../node_modules')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')

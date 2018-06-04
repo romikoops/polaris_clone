@@ -16,7 +16,7 @@ const options = {
   url: BASE_URL
 }
 
-test('successful login and placing an export LCL order', async () => {
+test.only('successful login and placing an export LCL order', async () => {
   try {
     var puppeteer = await init(options)
 
@@ -40,7 +40,7 @@ test('successful login and placing an export LCL order', async () => {
   }
 })
 
-test.skip('successful login and placing an export FCL order', async () => {
+test('successful login and placing an export FCL order', async () => {
   try {
     var puppeteer = await init(options)
 
