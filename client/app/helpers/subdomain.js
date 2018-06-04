@@ -8,7 +8,7 @@ export function getSubdomain () {
     host.split('.')[0] === '192' ||
     host.includes('localhost')
   ) {
-    return 'demo'
+    return 'easyshipping'
   }
   return host.split('.')[0]
 }

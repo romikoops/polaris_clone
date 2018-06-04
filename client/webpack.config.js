@@ -95,7 +95,8 @@ module.exports = {
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: ['css-loader'],
-          publicPath: '/dist'
+          publicPath: '/dist',
+          disable: !NodeEnvPlugin.isProduction
         })
       },
       {
@@ -106,7 +107,8 @@ module.exports = {
             'css-loader',
             'sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
           ],
-          publicPath: '/dist'
+          publicPath: '/dist',
+          disable: !NodeEnvPlugin.isProduction
         })
       },
       {
