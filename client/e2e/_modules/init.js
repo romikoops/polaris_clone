@@ -1,6 +1,11 @@
 import { initPuppeteer } from 'init-puppeteer'
+import path from 'path'
+import { existsSync, unlinkSync } from 'fs'
+import open from 'open'
+import looksSame from 'looks-same'
 import { delay } from './delay'
 
+const SCREEN_DIR = path.resolve(__dirname, '../node_modules')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
@@ -10,6 +15,49 @@ function log (input) {
     // eslint-disable-next-line
     console.log(input._text)
   }
+}
+
+function compareImages (label, compareLabel, toleranceInput) {
+  return new Promise((resolve) => {
+    const tolerance = toleranceInput === undefined ? 0 : toleranceInput
+    const base = `${SCREEN_DIR}/${label}.png`
+    const compareTo = `${SCREEN_DIR}/${compareLabel}.png`
+    const diff = `${SCREEN_DIR}/${label}.diff.png`
+
+    looksSame(
+      base,
+      compareTo,
+      { tolerance },
+      (err, equal) => {
+        if (err !== null) {
+          throw err
+        }
+
+        if (equal) {
+          return resolve(true)
+        }
+
+        if (existsSync(diff)) {
+          unlinkSync(diff)
+        }
+
+        return looksSame.createDiff({
+          reference: base,
+          current: compareTo,
+          diff,
+          highlightColor: '#ff00ff',
+          strict: false
+        }, (diffErr) => {
+          if (diffErr !== null) {
+            throw diffErr
+          }
+          open(diff)
+
+          resolve(false)
+        })
+      }
+    )
+  })
 }
 
 export default async function init (options) {
@@ -271,6 +319,51 @@ export default async function init (options) {
 
     return page.evaluate(selectFirstAvailableDayFn)
   }
+  const takeScreenshot = async (label) => {
+    const screenshotPath = `${SCREEN_DIR}/${label}.png`
+    await page.screenshot({
+      fullPage: true,
+      path: screenshotPath
+    })
+
+    return screenshotPath
+  }
+  const shouldMatchScreenshot = async (label, tolerance, resetFlag) => {
+    await delay(2 * DELAY)
+    const filePath = `${SCREEN_DIR}/${label}.png`
+
+    if (!existsSync(filePath)) {
+      await takeScreenshot(label)
+      /**
+       * As there is no screenshot to compare
+       * we save the screen and return true
+       */
+
+      return true
+    }
+
+    if (resetFlag === true) {
+      unlinkSync(filePath)
+      await takeScreenshot(label)
+
+      return true
+    }
+    const compareLabel = `${label}.to.compare`
+    const compareFilePath = `${SCREEN_DIR}/${compareLabel}.png`
+
+    if (existsSync(compareFilePath)) {
+      unlinkSync(compareFilePath)
+    }
+    await takeScreenshot(compareLabel)
+    const result = await compareImages(label, compareLabel, tolerance)
+
+    if (result === false) {
+      // eslint-disable-next-line
+      console.warning('compareImages', false)
+    }
+
+    return result
+  }
 
   const onError = () => {
     // eslint-disable-next-line
@@ -285,24 +378,26 @@ export default async function init (options) {
     browser,
     catchError,
     click,
-    clickWithText,
     clickWithPartialText,
+    clickWithText,
     count,
     exists,
     fill,
     focus,
+    inputWithTab,
     onError,
     page,
-    url,
-    stop,
-    inputWithTab,
-    selectWithTab,
     selectFirstAvailableDay,
+    selectWithTab,
     setInput,
-    waitFor,
-    waitForText,
+    shouldMatchScreenshot,
+    stop,
+    takeScreenshot,
+    url,
     waitAndClick,
-    waitForSelectors
+    waitFor,
+    waitForSelectors,
+    waitForText
   }
 }
 

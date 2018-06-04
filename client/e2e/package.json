@@ -10,13 +10,16 @@
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
     "moduleFileExtensions": [
-      "js"
+      "js",
+      "json"
     ],
     "testRegex": "test.js$"
   },
   "dependencies": {
     "init-puppeteer": "https://github.com/selfrefactor/init-puppeteer#3.0.0",
+    "looks-same": "^3.3.0",
     "open": "^0.0.5",
+    "pixelmatch": "^4.0.2",
     "puppeteer": "^1.2.0"
   },
   "devDependencies": {
