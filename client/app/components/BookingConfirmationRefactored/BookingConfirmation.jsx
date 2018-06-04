@@ -1,6 +1,6 @@
 /* eslint react/prop-types: "off" */
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
 import styles from './BookingConfirmation.scss'
@@ -71,20 +71,14 @@ const TOTAL_ROW = `${styles.total_row} ${WRAP_ROW(100)} ${ALIGN_AROUND_CENTER}`
 const acceptStyle = { height: '150px', marginBottom: '15px' }
 
 export function calcFareTotals (feeHash) {
-  let res1 = parseFloat(feeHash.total.value)
-  let res2 = 0
-  if (feeHash && feeHash.customs && feeHash.customs.val) {
-    res1 = parseFloat(feeHash.total.value) - parseFloat(feeHash.customs.val)
-  }
-  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
-    res2 = parseFloat(res1) - parseFloat(feeHash.insurance.val)
-  } else {
-    res2 = res1
-  }
+  if (!feeHash) return 0
 
-  return res2.toFixed(2)
+  const total = feeHash.total && +feeHash.total.value
+
+  return Object.keys(feeHash).reduce((sum, k) => (
+    feeHash[k] && ['customs', 'insurance'].includes(k) ? sum - feeHash[k].val : sum
+  ), total).toFixed(2)
 }
-
 export function calcExtraTotals (feeHash) {
   let res1 = 0
   if (feeHash && feeHash.customs && feeHash.customs.val) {
@@ -159,7 +153,7 @@ export class BookingConfirmation extends Component {
       documents,
       locations,
       notifyees,
-      schedules,
+      schedule,
       shipment,
       shipper
     } = shipmentData
@@ -192,7 +186,8 @@ export class BookingConfirmation extends Component {
       theme,
       handleNext: this.requestShipment
     })
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
+
     const themeTitled = getThemeTitled(theme)
     const { docView, missingDocs } = getDocs({
       documents,
@@ -218,16 +213,6 @@ export class BookingConfirmation extends Component {
         .subtract(3, 'days')
         .format('DD/MM/YYYY')}`
       : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`
-
-    const extraFee = feeHash.customs && feeHash.customs.hasUnknown
-      ? (
-        <div className="flex-100 layout-row layout-align-end-center">
-          <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
-            {' '}
-      ( excl. charges subject to local regulations )
-          </p>
-        </div>)
-      : ''
 
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>
@@ -277,7 +262,7 @@ export class BookingConfirmation extends Component {
 
         <div className={getPanelStyle(collapser.itinerary)}>
           <div className={INNER_WRAPPER}>
-            <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+            <RouteHubBox hubs={hubsObj} schedule={schedule} theme={theme} />
             <div
               className={`${ROW(100)} ${ALIGN_BETWEEN_CENTER}`}
               style={{ position: 'relative' }}
@@ -329,9 +314,9 @@ export class BookingConfirmation extends Component {
                   />
                 </div>
                 <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
-                  <h5 className="flex-none letter_3">{`${
-                    shipment.total_price.currency
-                  } ${calcFareTotals(feeHash)} `}</h5>
+                  <h5 className="flex-none letter_3">
+                    {`${shipment.total_price.currency} ${calcFareTotals(feeHash)}`}
+                  </h5>
                 </div>
               </div>
               <div className={BOOKING}>
@@ -360,7 +345,13 @@ export class BookingConfirmation extends Component {
                   <h5 className="flex-none letter_3">{`${
                     shipment.total_price.currency
                   } ${calcExtraTotals(feeHash)} `}</h5>
-                  {extraFee}
+                  { feeHash.customs && feeHash.customs.hasUnknown && (
+                    <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
+                      <p className="flex-none center no_m" style={{ fontSize: '10px' }}>
+                            ( excl. charges subject to local regulations )
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 

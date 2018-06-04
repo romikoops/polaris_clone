@@ -115,11 +115,11 @@ const shipment = {
     }
   }
 }
-const editedShipmentData = { 
-  ...shipmentData, 
+const editedShipmentData = {
+  ...shipmentData,
   cargoItemTypes,
-  schedule: {hub_route_key: 'FOO_HUB_ROUTE_KEY'}, 
-  shipment, 
+  schedule: { hub_route_key: 'FOO_HUB_ROUTE_KEY' },
+  shipment
 }
 
 const propsBase = {
@@ -132,11 +132,11 @@ const propsBase = {
   }
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<BookingConfirmation {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('with containers', () => {
+test('with containers', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -147,7 +147,7 @@ test.skip('with containers', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('with cargo items', () => {
+test('with cargo items', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -158,7 +158,7 @@ test.skip('with cargo items', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData is falsy', () => {
+test('props.shipmentData is falsy', () => {
   const props = {
     ...propsBase,
     shipmentData: false
@@ -166,7 +166,7 @@ test.skip('props.shipmentData is falsy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.cargoItemTypes is falsy', () => {
+test('props.shipmentData.cargoItemTypes is falsy', () => {
   const props = {
     ...propsBase,
     shipmentData
@@ -174,7 +174,7 @@ test.skip('props.shipmentData.cargoItemTypes is falsy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.aggregatedCargo is truthy', () => {
+test('props.shipmentData.aggregatedCargo is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -185,7 +185,7 @@ test.skip('props.shipmentData.aggregatedCargo is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.documents is truthy', () => {
+test('props.shipmentData.documents is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -199,7 +199,7 @@ test.skip('props.shipmentData.documents is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.notifyees is truthy', () => {
+test('props.shipmentData.notifyees is truthy', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -214,7 +214,7 @@ test.skip('props.shipmentData.notifyees is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
+test('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -228,7 +228,7 @@ test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.shipment.has_on_carriage is true', () => {
+test('props.shipmentData.shipment.has_on_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {
