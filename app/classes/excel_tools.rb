@@ -464,7 +464,7 @@ module ExcelTools
       zones[zone_name] = [] if zones[zone_name].nil?
 
       if row_data[1] && !row_data[2]
-        zip_char_length ||= row_data[1].length
+        zip_char_length ||= row_data[1].to_s.length
         zones[zone_name] << { ident: row_data[1], country: row_data[3] }
       elsif !row_data[1] && row_data[2]        
         range = row_data[2].delete(' ').split('-')
@@ -1223,7 +1223,7 @@ module ExcelTools
     hub_type_name = {
       'ocean' => 'Port',
       'air' => 'Airport',
-      'rail' => 'Railway Station'
+      'rail' => 'Railyard'
     }
     default_mandatory_charge = MandatoryCharge.find_by({pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false})
 
