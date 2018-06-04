@@ -8,7 +8,7 @@ module PricingTools
 
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
-    byebug
+    
     return if pricing.nil?
 
     pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)
@@ -19,7 +19,7 @@ module PricingTools
     end
     
     final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
-    byebug
+    
     final_pricing.with_indifferent_access
   end
   
@@ -48,7 +48,7 @@ module PricingTools
     end
     converted = sum_and_convert_cargo(totals, user.currency)
     totals["total"] = { value: converted, currency: user.currency}
-    byebug
+    
     return totals
   end
 
