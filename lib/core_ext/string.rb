@@ -9,5 +9,9 @@ class String
 		self.gsub(/\s+/, " ").gsub(/\s+,/, ",").strip
 			.gsub(/^,/, "").gsub(/,\z/, "").strip
 			.gsub(/,+/, ",")
-	end
+  end
+  
+  def is_number?
+    true if Float(self) rescue false
+  end
 end

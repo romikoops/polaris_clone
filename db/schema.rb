@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180524165119) do
+ActiveRecord::Schema.define(version: 20180525104346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,32 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.boolean "stackable", default: true
     t.integer "quantity"
     t.jsonb "unit_price"
+  end
+
+  create_table "charge_breakdowns", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.integer "itinerary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charge_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.integer "cargo_unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "price_id"
+    t.integer "charge_category_id"
+    t.integer "children_charge_category_id"
+    t.integer "charge_breakdown_id"
+    t.integer "detail_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -339,6 +365,13 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.boolean "cookies"
     t.boolean "tenant"
     t.boolean "itsmycargo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.decimal "value"
+    t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

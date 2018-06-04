@@ -260,6 +260,26 @@ class Itinerary < ApplicationRecord
     end
   end
 
+  def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
+    where("
+      id IN (
+        SELECT d_stops.itinerary_id
+        FROM (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN (?)
+        ) as o_stops
+        JOIN (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN (?)
+        ) as d_stops
+        ON o_stops.itinerary_id = d_stops.itinerary_id
+        WHERE o_stops.index < d_stops.index
+      )
+    ", origin_hub_ids, destination_hub_ids)
+  end
+
   def self.for_locations(shipment, trucking_data)
     if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
@@ -279,25 +299,7 @@ class Itinerary < ApplicationRecord
       end_hub_ids = end_hubs.ids
     end
 
-    itineraries = shipment.tenant.itineraries.where("
-      id IN (
-        (
-          SELECT d_stops.itinerary_id
-          FROM (
-            SELECT id, itinerary_id, index
-            FROM stops
-            WHERE hub_id IN (?)
-          ) as o_stops
-          JOIN (
-            SELECT id, itinerary_id, index
-            FROM stops
-            WHERE hub_id IN (?)
-          ) as d_stops
-          ON o_stops.itinerary_id = d_stops.itinerary_id
-          WHERE o_stops.index < d_stops.index
-        )
-      )
-    ", start_hub_ids, end_hub_ids)
+    itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
     
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end

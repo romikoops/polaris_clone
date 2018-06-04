@@ -51,10 +51,13 @@ class Shipment < ApplicationRecord
   has_many :cargo_items
   has_many :cargo_item_types, through: :cargo_items
   has_one :aggregated_cargo
-  belongs_to :origin_hub, class_name: "Hub", optional: true
-  belongs_to :destination_hub, class_name: "Hub", optional: true
   has_many :conversations
   has_many :messages, through: :conversation
+  has_many :charge_breakdowns do    
+    def to_schedules_charges
+      reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
+    end
+  end
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
@@ -209,6 +212,20 @@ class Shipment < ApplicationRecord
         s.save!
       end
     end
+  end
+
+  def create_charge_breakdowns_from_schedules_charges!
+    schedules_charges.map do |hub_route_key, schedule_charges|
+      origin_hub_id, destination_hub_id = *hub_route_key.split('-').map(&:to_i)
+      itinerary = Itinerary.filter_by_hubs(origin_hub_id, destination_hub_id).first
+      charge_breakdown = ChargeBreakdown.create!(shipment: self, itinerary: itinerary)
+      Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
+    end
+  end
+
+  def self.create_all_empty_charge_breakdowns!
+    where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
+      .each(&:create_charge_breakdowns_from_schedules_charges!)
   end
 
   def self.update_refactor_shipments
