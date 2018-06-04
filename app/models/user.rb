@@ -124,10 +124,6 @@ class User < ApplicationRecord
     created_at.to_date.to_s(:long)
   end
 
-  def locations
-    Location.joins(:user_locations).where('user_locations.user_id': id)
-  end
-
   def primary_location
     locations.where('user_locations.primary': true).first
   end
