@@ -7,7 +7,7 @@ import {
   tenant
 } from '../../mocks'
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../../helpers', () => ({
@@ -107,27 +107,25 @@ const barCargoItem = {
 }
 
 const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
-
 const shipment = {
   ...shipmentData.shipment,
   schedules_charges: {
     FOO_HUB_ROUTE_KEY: {
-      total: {
-        value: 11
-      },
-      customs: {
-        hasUnknown: false
-      }
+      total: { value: 87 }
     }
   }
 }
-
-const editedShipmentData = { ...shipmentData, shipment, cargoItemTypes }
+const editedShipmentData = {
+  ...shipmentData,
+  cargoItemTypes,
+  schedule: { hub_route_key: 'FOO_HUB_ROUTE_KEY' },
+  shipment
+}
 
 const propsBase = {
   theme,
-  shipmentData: editedShipmentData,
   setStage: identity,
+  shipmentData: editedShipmentData,
   tenant: editedTenant,
   shipmentDispatch: {
     toDashboard: identity
@@ -163,7 +161,7 @@ test('with cargo items', () => {
 test('props.shipmentData is falsy', () => {
   const props = {
     ...propsBase,
-    shipmentData: null
+    shipmentData: false
   }
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
@@ -171,10 +169,7 @@ test('props.shipmentData is falsy', () => {
 test('props.shipmentData.cargoItemTypes is falsy', () => {
   const props = {
     ...propsBase,
-    shipmentData: {
-      ...editedShipmentData,
-      cargoItemTypes: null
-    }
+    shipmentData
   }
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
@@ -225,7 +220,7 @@ test('props.shipmentData.shipment.has_pre_carriage is true', () => {
     shipmentData: {
       ...editedShipmentData,
       shipment: {
-        ...editedShipmentData.shipment,
+        ...shipment,
         has_pre_carriage: true
       }
     }
@@ -239,7 +234,7 @@ test('props.shipmentData.shipment.has_on_carriage is true', () => {
     shipmentData: {
       ...editedShipmentData,
       shipment: {
-        ...editedShipmentData.shipment,
+        ...shipment,
         has_on_carriage: true
       }
     }
