@@ -6,7 +6,7 @@ subdomains = %w(greencarrier greencarrier-sandbox)
 subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
-  
+
   shipper = tenant.users.where(role_id: 2).first
   # tenant.itineraries.destroy_all
   # tenant.local_charges.destroy_all
@@ -14,21 +14,21 @@ subdomains.each do |sub|
   # tenant.trucking_pricings.delete_all
   # tenant.hubs.destroy_all
 # # #   # # # # #Overwrite hubs from excel sheet
-#   puts "# Overwrite hubs from excel sheet"
-#   hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
-#   req = {"xlsx" => hubs}
-#   overwrite_hubs(req, shipper)
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
-#   public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-#   req = {"xlsx" => public_pricings}
-#   overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
-# # # # #   # # # # # Overwrite public pricings from excel sheet
+# # # #   # # # # # Overwrite public pricings from excel sheet
 
-#   # puts "# Overwrite Local Charges From Sheet"
-#     local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-#     req = {"xlsx" => local_charges}
-#     overwrite_local_charges(req, shipper)
+  # puts "# Overwrite Local Charges From Sheet"
+    local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
+    req = {"xlsx" => local_charges}
+    overwrite_local_charges(req, shipper)
 
 
 # #   # # # # # # Overwrite trucking data from excel sheet
@@ -111,5 +111,5 @@ subdomains.each do |sub|
     # )
     # # admin.skip_confirmation!
     # admin_air.save!
-    
+
 end
