@@ -278,6 +278,11 @@ export default async function init (options) {
     await page.keyboard.type(text, { delay: 50 })
   }
 
+  const pressTabAndType = async (text) => {
+    await page.keyboard.press('Tab')
+    await page.keyboard.type(text, { delay: 50 })
+  }
+
   const selectWithTab = async (tabCount, arrowToPressInput, bruteForceFlag) => {
     const arrowToPress = arrowToPressInput === undefined
       ? 'ArrowDown'
@@ -392,6 +397,7 @@ export default async function init (options) {
     setInput,
     shouldMatchScreenshot,
     stop,
+    pressTabAndType,
     takeScreenshot,
     url,
     waitAndClick,

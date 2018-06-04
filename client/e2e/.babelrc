@@ -1,8 +1,8 @@
 {
-  "presets": [["@babel/env", {"modules": false}]],
+  "presets": [["env", {"modules": false}]],
   "env": {
     "test": {
-      "presets": [["@babel/env"]]
+      "presets": [["env"]]
     }
   }
 }
