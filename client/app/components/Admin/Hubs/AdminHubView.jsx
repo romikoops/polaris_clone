@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import Toggle from 'react-toggle'
 import PropTypes from '../../../prop-types'
 import { AdminLayoverRow, AdminHubTile } from '../'

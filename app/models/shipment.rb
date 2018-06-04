@@ -19,28 +19,29 @@ class Shipment < ApplicationRecord
     CustomValidations.inclusion(self, attribute, array)
   end
 
-  # validates_with MaxAggregateDimensionsValidator
+  validates_with MaxAggregateDimensionsValidator
+  validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   
-  # validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+
 
   # ActiveRecord Callbacks
-  before_create :assign_uuid
-  before_create :generate_imc_reference
-  before_create :set_default_trucking
+  before_validation :assign_uuid, :generate_imc_reference, :set_default_trucking, on: :create
+  before_validation :update_carriage_properties!
 
-  # Basic associations
+  # ActiveRecord associations
   belongs_to :user, optional: true
   belongs_to :consignee, optional: true
   belongs_to :tenant, optional: true
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin, class_name: "Location", optional: true
-  belongs_to :destination, class_name: "Location", optional: true
+  belongs_to :origin_nexus, class_name: "Location", optional: true
+  belongs_to :destination_nexus, class_name: "Location", optional: true
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
@@ -72,32 +73,16 @@ class Shipment < ApplicationRecord
   end
 
   # Class methods
-  def self.determine_haulage_from_ids(item_ids)
-    pricings = []
-    item_ids.each do |item_id|
-      s = item_id.split("-")
-      id = s[0]
-      pricing_type = s[1]
-
-      case pricing_type
-      when "truck"
-        pricing = TruckingPricing.find_by_id(id)
-        pricings << pricing
-      when "train"
-        pricing = TrainPricing.find_by_id(id)
-        pricings << pricing
-      when "ocean"
-        pricing = OceanPricing.find_by_id(id)
-        pricings << pricing
-      else
-        raise "Something went wrong."
-      end
-    end
-
-    pricings
-  end
 
   # Instance methods
+
+  def pickup_address
+    Location.where(id: trucking.dig("pre_carriage", "location_id")).first
+  end
+
+  def delivery_address
+    Location.where(id: trucking.dig("on_carriage", "location_id")).first
+  end
 
   def import?
     direction == "import"
@@ -124,23 +109,45 @@ class Shipment < ApplicationRecord
   end
 
   def has_dangerous_goods?
-    _aggregated_cargo = self.aggregated_cargo
-    _cargo_units      = cargo_units
-    return _aggregated_cargo.dangerous_goods? unless _aggregated_cargo.nil?
-    return _cargo_units.any? { |cargo_unit| cargo_unit.dangerous_goods } unless _cargo_units.nil?
+    return aggregated_cargo.dangerous_goods? unless aggregated_cargo.nil?
+    return cargo_units.any? { |cargo_unit| cargo_unit.dangerous_goods } unless cargo_units.nil?
     nil  
   end
 
   def has_non_stackable_cargo?
-    _aggregated_cargo = self.aggregated_cargo
-    _cargo_units      = cargo_units
-    return true unless _aggregated_cargo.nil?
-    return _cargo_units.any? { |cargo_unit| !cargo_unit.stackable } unless _cargo_units.nil?
+    return true unless aggregated_cargo.nil?
+    return cargo_units.any? { |cargo_unit| !cargo_unit.stackable } unless cargo_units.nil?
     nil
+  end
+
+  def trucking=(value)
+    super
+
+    update_carriage_properties!
   end
 
   def mode_of_transport
     itinerary.try(:mode_of_transport)
+  end
+
+  def has_on_carriage=(value)
+    raise "This property is read only. Please write to trucking property instead."
+  end
+
+  def has_pre_carriage=(value)
+    raise "This property is read only. Please write to trucking property instead."
+  end
+
+  def has_on_carriage?
+    has_on_carriage
+  end
+
+  def has_pre_carriage?
+    has_pre_carriage
+  end
+
+  def mode_of_transport
+    itinerary.mode_of_transport
   end
 
   def has_customs?
@@ -151,128 +158,20 @@ class Shipment < ApplicationRecord
     !!insurance
   end
 
-  def full_haulage_to_string
-    self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
+  def accept!
+    self.update!(status: "confirmed")
   end
 
-  def individualized_haulage_to_string
-    stop_addresses = []
-    get_all_pricings_in_haulage.each do |pricing|
-      unless pricing.class.name == "TruckingPricing"
-        stop_addresses << pricing.starthub_name
-        stop_addresses << pricing.endhub_name
-      end
-    end
-
-    self.origin.geocoded_address + " \u2192 " + stop_addresses.uniq.join(" \u2192 ") + " \u2192 " + self.destination.geocoded_address
-  end
-
-  def determine_full_haulage_pricings(starthub, endhub)
-    route = determine_route!(starthub, endhub)
-    route.get_all_pricings
-  end
-
-  def determine_route!(origin, destination)
-    route = Route.get_route(origin, destination)
-    self.update_attribute(:route, route)
-    route
-  end
-
-  def set_haulage_from_haulage_pricings(haulage_pricings)
-    item_ids = []
-    haulage_pricings.each do |pricing|
-      case pricing.class.name
-      when "TruckingPricing"
-        item_id = pricing.id.to_s + "-" + "truck"
-      when "TrainPricing"
-        item_id = pricing.id.to_s + "-" + "train"
-      when "OceanPricing"
-        item_id = pricing.id.to_s + "-" + "ocean"
-      else
-        raise "Something went wrong."
-      end
-      item_ids << item_id
-    end
-    set_haulage_from_ids(item_ids)
-  end
-
-  def set_haulage_from_ids(item_ids)
-    self.update_attribute(:haulage, item_ids.join(";"))
-  end
-
-  def get_all_pricings_in_haulage
-    item_ids = self.haulage.split(";")
-    pricings = []
-    item_ids.each do |item_id|
-      s = item_id.split("-")
-      id = s[0]
-      pricing_type = s[1]
-
-      case pricing_type
-      when "truck"
-        pricing = TruckingPricing.find_by_id(id)
-      when "train"
-        pricing = TrainPricing.find_by_id(id)
-      when "ocean"
-        pricing = OceanPricing.find_by_id(id)
-      else
-        raise "Something went wrong."
-      end
-
-      pricings << pricing
-    end
-
-    pricings
-  end
-
-  def total_price_of_haulage(pricings)
-    total_price = 0
-    pricings.each_with_index do |pricing, index|
-      case pricing.class.name
-      when "TruckingPricing"
-        if index == 0 # Pre-Carriage
-          total_price += pricing.price(self.origin.geocoded_address, self.route.stops.first.geocoded_address)
-        else # On-Carriage
-          total_price += pricing.price(self.route.stops.last.geocoded_address, self.destination.geocoded_address)
-        end
-      when "OceanPricing"
-        total_price += pricing.price
-      when "TrainPricing"
-        total_price += pricing.price
-      else
-        raise "Something went wrong"
-      end
-    end
-    
-    total_price
-  end
-
-  def booked?
-    self.status == "booked"    
-  end
-
-  def confirm!
-    self.update_attributes(status: "confirmed")
-    self.save!
-  end
-
-  def finished!
-    self.update_attributes(status: "finished")
-    self.save!
+  def finish!
+    self.update!(status: "finished")
   end
 
   def decline!
-    self.update_attributes(status: "declined")
-    self.save!
+    self.update!(status: "declined")
   end
 
   def ignore!
-    self.update_attributes(status: "ignored")
-    self.save!
-  end
-
-  def is_lcl?
-    raise "Not implemented"
+    self.update!(status: "ignored")
   end
 
   def etd
@@ -312,38 +211,42 @@ class Shipment < ApplicationRecord
     end
   end
 
-  def self.test_email
-    user = User.find_by_email("demo@demo.com")
-    shipment = user.shipments.find_by(status: "requested")
-    ShipmentMailer.tenant_notification(user, shipment).deliver_now
-    ShipmentMailer.shipper_notification(user, shipment).deliver_now
-    shipper_confirmation_email(user, shipment)
-  end
-
-  def self.update_hubs_on_shipments
-    Shipment.all.each do |s|
-      if s.origin_id != nil && s.destination_id != nil && s.origin && s.destination
-        if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
-          hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
-          if s.origin.location_type
-            s.origin_hub_id = s.origin.id
-          else
-            s.origin_hub_id = hub_keys[0].to_i
-            s.destination_hub_id = hub_keys[1].to_i
-          end
-          if s.destination.location_type
-            s.destination_hub_id = s.destination.id
-          else
-            
-            s.destination_hub_id = hub_keys[1].to_i
-          end
-          s.save!
-        end
+  def self.update_refactor_shipments
+    Shipment.where.not(itinerary: nil).each do |s|
+      itinerary = s.itinerary
+      s.destination_nexus = itinerary.last_stop.hub.nexus
+      s.origin_nexus = itinerary.first_stop.hub.nexus
+      if s.has_on_carriage
+        
+        s.trucking['on_carriage']['location_id'] = itinerary.last_stop.hub.id
       end
+      if s.has_pre_carriage
+        
+        s.trucking['pre_carriage']['location_id'] = itinerary.first_stop.hub.id
+      end
+      s.save!
     end
   end
 
+  def valid_for_itinerary?(itinerary_arg)
+    current_itinerary = self.itinerary
+
+    self.itinerary = itinerary_arg
+    return_bool = self.valid?
+
+    self.itinerary = current_itinerary
+
+    return_bool
+  end
+
+
   private
+
+  def update_carriage_properties!
+    %w(on_carriage pre_carriage).each do |carriage|
+      self["has_#{carriage}"] = !trucking.dig(carriage, 'truck_type').blank?
+    end
+  end
 
   def generate_imc_reference
     now = DateTime.now
@@ -383,7 +286,6 @@ class Shipment < ApplicationRecord
   end
 
   def set_default_trucking
-    no_trucking_h = { truck_type: '' }
-    self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
+    self.trucking ||= { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
   end
 end

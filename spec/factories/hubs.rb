@@ -14,5 +14,6 @@ FactoryBot.define do
     association :tenant
     association :location
     association :nexus
+    association :mandatory_charge
   end
 end

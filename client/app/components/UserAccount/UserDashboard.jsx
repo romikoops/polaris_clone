@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { documentActions } from '../../../../actions'

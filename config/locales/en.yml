@@ -31,30 +31,44 @@
 
 en:
   error:
+    # Booking Process Errors
+
     no_route:
       http_code: 400
       code: 1000
       message: "No route matches the selected origin and destination."
-    no_origin:
-      http_code: 400
-      code: 1001
-      message: "Unable to find the geolocated address for the given origin."
-    no_destination:
-      http_code: 400
-      code: 1002
-      message: "Unable to find the geolocated address for the given destination."
+    # ...:
+    #   http_code: 400
+    #   code: 1001
+    #   message: ""
+    # ...:
+    #   http_code: 400
+    #   code: 1002
+    #   message: ""
     no_trucking_time:
       http_code: 400
       code: 1003
       message: "Unable to calculate trucking time with the given date"
-    no_schedules:
-      http_code: 400
-      code: 1004
-      message: "Unable to determine the schedule with the given date."
+    # ...:
+    #   http_code: 400
+    #   code: 1004
+    #   message: ""
     no_schedules_charges:
       http_code: 400
       code: 1005
       message: "Unable to determine charges."
+    invalid_pickup_address:
+      http_code: 400
+      code: 1006
+      message: "Unable to build pickup location from address fields."
+    invalid_delivery_address:
+      http_code: 400
+      code: 1007
+      message: "Unable to build delivery location from address fields."
+    
+
+    # Authentication Errors
+
     not_authenticated:
       http_code: 401
       code: 1050
@@ -63,3 +77,4 @@ en:
       http_code: 401
       code: 1051
       message: "Invalid email or password."
+

@@ -211,21 +211,21 @@
         </div>
         <div class="col-xs-12 hr-top" style="height: 12.5mm;padding-top: 3px;">
           <div class="col-xs-12"><strong>PORT OF DISCHARGE</strong></div>
-          <div class="col-xs-12"><%= shipment.origin.name %></div>
+          <div class="col-xs-12"><%= shipment.origin_nexus.name %></div>
         </div>
       </div>
       <div class="col-xs-4 hr-right text" style="height: 31mm;">
         <div class="col-xs-12 " style="height: 6mm;padding-top: 3px;">
           <div class="col-xs-3"><strong>FROM</strong></div>
-          <div class="col-xs-9 "><%= shipment.origin.full_address %></div>
+          <div class="col-xs-9 "><%= shipment.origin_nexus.full_address %></div>
         </div>
         <div class="col-xs-12 hr-top" style="height: 12.5mm; padding-top: 3px;">
           <div class="col-xs-6"><strong>PORT OF LOADING</strong></div>
-          <div class="col-xs-6 "><%= shipment.destination.name %></div>
+          <div class="col-xs-6 "><%= shipment.destination_nexus.name %></div>
         </div>
         <div class="col-xs-12 hr-top" style="height: 12.5mm; padding-top: 3px;">
           <div class="col-xs-12"><strong>FINAL DESTINATION (FOR TRANSSHIPMENT)</strong></div>
-          <div class="col-xs-12 "><%= shipment.destination.full_address %></div>
+          <div class="col-xs-12 "><%= shipment.destination_nexus.full_address %></div>
         </div>
       </div>
 

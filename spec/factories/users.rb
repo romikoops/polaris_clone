@@ -6,6 +6,7 @@ FactoryBot.define do
     password 'demo123456789'
     association :tenant
     association :role
+    association :optin_status
   end
 
 end

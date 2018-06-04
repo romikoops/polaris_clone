@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from 'prop-types'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'

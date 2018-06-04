@@ -30,13 +30,13 @@
       <h6><span class="bold">From:</span></h6>
       <p>
         <% if @shipment.has_pre_carriage? %>
-          <% @shipment.origin.geocoded_address.split(", ").each do |address_elem| %>
+          <% @shipment.pickup_address.geocoded_address.split(", ").each do |address_elem| %>
             <% if address_elem %>
               <span><%= address_elem %></span><br/>
             <% end %>  
           <% end %>  
         <% else %>
-          <span><%= @shipment.origin.city_country %></span>
+          <span><%= @shipment.origin_nexus.city_country %></span>
         <% end %>
       </p>
     </callout>
@@ -46,13 +46,13 @@
       <h6><span class="bold">To:</span class="bold"></span></h6>
       <p>
         <% if @shipment.has_on_carriage? %>
-          <% @shipment.destination.geocoded_address.split(", ").each do |address_elem| %>
+          <% @shipment.delivery_address.geocoded_address.split(", ").each do |address_elem| %>
             <% if address_elem %>
               <span><%= address_elem %></span><br/>
             <% end %>  
           <% end %>  
         <% else %>
-          <span><%= @shipment.destination.city_country %></span>
+          <span><%= @shipment.destination_nexus.city_country %></span>
         <% end %>
       </p>
     </callout>

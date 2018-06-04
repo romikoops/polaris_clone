@@ -36,7 +36,7 @@ export class RouteHubBox extends Component {
   }
   render () {
     const {
-      theme, hubs, route, locations
+      theme, hubs, schedule, locations
     } = this.props
     const { startHub, endHub } = hubs
     const { origin, destination } = locations
@@ -103,7 +103,7 @@ export class RouteHubBox extends Component {
         ''
       )
     const timeDiff =
-      route && route[0] && route[0].eta ? (
+      schedule && schedule.eta ? (
         <div
           className="flex-65 layout-row layout-wrap layout-align-center-stretch"
           style={{ marginTop: '25px' }}
@@ -114,7 +114,7 @@ export class RouteHubBox extends Component {
           </h4>
           <p className="flex-100 no_m center">
             {' '}
-            {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days{' '}
+            {moment(schedule.eta).diff(moment(schedule.etd), 'days')} days{' '}
           </p>
         </div>
       ) : (
@@ -148,7 +148,7 @@ export class RouteHubBox extends Component {
                 style={{ marginTop: '100px' }}
               >
                 <div className="flex-none width_100 layout-row layout-align-center-center">
-                  {RouteHubBox.faIcon(route)}
+                  {RouteHubBox.faIcon(schedule)}
                 </div>
                 <div className="flex" style={dashedLineStyles} />
                 <br />
@@ -180,16 +180,16 @@ export class RouteHubBox extends Component {
 }
 RouteHubBox.propTypes = {
   theme: PropTypes.theme,
-  route: PropTypes.arrayOf(PropTypes.shape({
+  schedule: PropTypes.shape({
     eta: PropTypes.number
-  })),
+  }),
   hubs: PropTypes.arrayOf(PropTypes.hub),
   locations: PropTypes.objectOf(PropTypes.any)
 }
 RouteHubBox.defaultProps = {
   theme: null,
   hubs: [],
-  route: [],
+  schedule: {},
   locations: {}
 }
 
