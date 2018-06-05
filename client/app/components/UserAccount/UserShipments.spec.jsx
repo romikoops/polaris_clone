@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, shipments, user } from '../../mocks'
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../TextHeading/TextHeading', () => ({

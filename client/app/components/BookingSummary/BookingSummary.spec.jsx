@@ -8,7 +8,7 @@ jest.mock('react-redux', () => ({
 jest.mock('react-router-dom', () => ({
   withRouter: x => x
 }))
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 // eslint-disable-next-line

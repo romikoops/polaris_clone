@@ -6,7 +6,7 @@ jest.mock('.././../../helpers', () => ({
   authHeader: x => x,
   gradientTextGenerator: x => x
 }))
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('isomorphic-fetch', () =>

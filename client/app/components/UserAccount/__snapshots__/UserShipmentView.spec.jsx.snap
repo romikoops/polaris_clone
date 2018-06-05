@@ -522,7 +522,6 @@ exports[`props.loading is true 1`] = `
                 }
               }
               type="packing_sheet"
-              uploadFn={undefined}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -942,7 +941,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
               "volume": NaN,
             }
           }
-          hsCodes={undefined}
           theme={
             Object {
               "colors": Object {
@@ -970,7 +968,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
               "volume": NaN,
             }
           }
-          hsCodes={undefined}
           theme={
             Object {
               "colors": Object {
@@ -1177,7 +1174,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
                 }
               }
               type="packing_sheet"
-              uploadFn={undefined}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -1918,7 +1914,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 }
               }
               type="packing_sheet"
-              uploadFn={undefined}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -2516,7 +2511,6 @@ exports[`props.shipmentData.documents is present 1`] = `
                 }
               }
               type="packing_sheet"
-              uploadFn={undefined}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -3185,7 +3179,6 @@ exports[`shallow render 1`] = `
                 }
               }
               type="packing_sheet"
-              uploadFn={undefined}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>

@@ -5,7 +5,7 @@ import { theme, identity } from '../../../../mocks'
 jest.mock('../../../../helpers', () => ({
   gradientTextGenerator: x => x
 }))
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 // eslint-disable-next-line

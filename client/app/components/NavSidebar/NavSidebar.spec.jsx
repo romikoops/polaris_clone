@@ -9,7 +9,7 @@ jest.mock('../../components/Admin/AdminNavItem', () => {
   return { AdminNavItem }
 })
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 

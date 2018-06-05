@@ -18,7 +18,7 @@ jest.mock('react-scroll', () => ({
   scroller: { scrollTo: x => x }
 }))
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   // eslint-disable-next-line react/prop-types
   v4: () => 'RANDOM_KEY'
 }))

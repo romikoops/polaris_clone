@@ -1,24 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`shallow render 1`] = `
-<CSSTransitionGroup
-  transitionAppear={false}
+<CSSTransition
   transitionEnter={false}
-  transitionLeave={true}
   transitionLeaveTimeout={500}
   transitionName="alerts"
 >
-  <Alert
-    key="0"
-    message="FOO"
-    onClose={[Function]}
-    timeout={5000}
-  />
-  <Alert
-    key="1"
-    message="BAR"
-    onClose={[Function]}
-    timeout={5000}
-  />
-</CSSTransitionGroup>
+  <div
+    className="flex-none"
+  >
+    <Alert
+      key="0"
+      message="FOO"
+      onClose={[Function]}
+      timeout={5000}
+    />
+    <Alert
+      key="1"
+      message="BAR"
+      onClose={[Function]}
+      timeout={5000}
+    />
+  </div>
+</CSSTransition>
 `;

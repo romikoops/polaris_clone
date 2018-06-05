@@ -4,7 +4,7 @@ import { shallow } from 'enzyme'
 jest.mock('react-slick', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <span>{children}</span>)
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 // eslint-disable-next-line

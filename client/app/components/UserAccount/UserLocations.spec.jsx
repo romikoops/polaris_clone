@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { theme, identity, user, location } from '../../mocks'
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../../hocs/EditLocationWrapper', () => ({

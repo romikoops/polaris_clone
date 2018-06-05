@@ -98,34 +98,6 @@ exports[`props.locations is falsy 1`] = `
             }
           />
           <br />
-          <div
-            className="flex-65 layout-row layout-wrap layout-align-center-stretch"
-            style={
-              Object {
-                "marginTop": "25px",
-              }
-            }
-          >
-            <h4
-              className="no_m center"
-              style={
-                Object {
-                  "marginBottom": "10px",
-                }
-              }
-            >
-               
-              Estimated Transit Time
-            </h4>
-            <p
-              className="flex-100 no_m center"
-            >
-               
-              0
-               days
-               
-            </p>
-          </div>
         </div>
       </div>
     </div>
@@ -308,34 +280,6 @@ exports[`shallow rendering 1`] = `
             }
           />
           <br />
-          <div
-            className="flex-65 layout-row layout-wrap layout-align-center-stretch"
-            style={
-              Object {
-                "marginTop": "25px",
-              }
-            }
-          >
-            <h4
-              className="no_m center"
-              style={
-                Object {
-                  "marginBottom": "10px",
-                }
-              }
-            >
-               
-              Estimated Transit Time
-            </h4>
-            <p
-              className="flex-100 no_m center"
-            >
-               
-              0
-               days
-               
-            </p>
-          </div>
         </div>
       </div>
     </div>

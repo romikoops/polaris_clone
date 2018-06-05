@@ -38,6 +38,7 @@ exports[`shallow render 1`] = `
         },
       ]
     }
+    schedule={Object {}}
     theme={
       Object {
         "colors": Object {

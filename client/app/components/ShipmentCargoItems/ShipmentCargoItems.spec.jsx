@@ -51,6 +51,6 @@ const propsBase = {
 
 const createShallow = propsInput => shallow(<ShipmentCargoItems {...propsInput} />)
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })

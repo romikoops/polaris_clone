@@ -8,7 +8,7 @@ import { theme, identity, shipment } from '../../mocks'
  * but `static switchIcon (sched) {`
  */
 
-jest.mock('node-uuid', () => ({
+jest.mock('uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../../constants', () => {
