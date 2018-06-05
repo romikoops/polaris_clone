@@ -97,7 +97,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.payloadInKg}`
+                maxDimension: `Maximum weight is ${maxDimensions.general.payloadInKg}`
               }}
               required
             />
@@ -283,7 +283,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.dimensionX}`
+                maxDimension: `Maximum length is ${maxDimensions.general.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -350,7 +350,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.dimensionY}`
+                maxDimension: `Maximum width is ${maxDimensions.general.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required
