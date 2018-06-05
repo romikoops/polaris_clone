@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180525104346) do
+ActiveRecord::Schema.define(version: 20180601170411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -475,10 +475,10 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
