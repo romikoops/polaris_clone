@@ -103,6 +103,7 @@ group :development, :test do
   gem 'dotenv-rails' # set environment variables
   gem 'factory_bot_rails'
   gem 'rails-erd'
+  gem 'rubocop'
 end
 
 group :test do
