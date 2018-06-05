@@ -13,22 +13,22 @@ subdomains.each do |sub|
   # tenant.customs_fees.destroy_all
   # tenant.trucking_pricings.delete_all
   # tenant.hubs.destroy_all
-# # #   # # # # #Overwrite hubs from excel sheet
-#   puts "# Overwrite hubs from excel sheet"
-#   hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
-#   req = {"xlsx" => hubs}
-#   overwrite_hubs(req, shipper)
+# #   # # # # #Overwrite hubs from excel sheet
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
-#   public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-#   req = {"xlsx" => public_pricings}
-#   overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
-# # # # #   # # # # # Overwrite public pricings from excel sheet
+# # # #   # # # # # Overwrite public pricings from excel sheet
 
-#   # puts "# Overwrite Local Charges From Sheet"
-#     local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-#     req = {"xlsx" => local_charges}
-#     overwrite_local_charges(req, shipper)
+  # puts "# Overwrite Local Charges From Sheet"
+    local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
+    req = {"xlsx" => local_charges}
+    overwrite_local_charges(req, shipper)
 
 
 # #   # # # # # # Overwrite trucking data from excel sheet
