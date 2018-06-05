@@ -332,6 +332,38 @@ export class ShipmentDetails extends Component {
     this.setState({ aggregatedCargo, aggregatedCargoErrors })
   }
 
+  updateAirMaxDimensionsTooltips (value, divRef, suffixName) {
+    const { maxDimensions } = this.props.shipmentData
+    if (!maxDimensions.air) return
+
+    if (+value > +maxDimensions.air[camelize(suffixName)]) {
+      setTimeout(() => { ReactTooltip.show(divRef) }, 500)
+    } else {
+      ReactTooltip.hide(divRef)
+    }
+  }
+
+  updatedExcessChargeableWeightText (cargoItems) {
+    const { maxAggregateDimensions } = this.props.shipmentData
+    if (!maxAggregateDimensions.air) return ''
+
+    const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + +chargeableWeight(cargoItem, 'air')
+    ), 0)
+
+    let excessChargeableWeightText = ''
+    if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
+      excessChargeableWeightText = `
+        Please note that the total chargeable weight for Air Freight shipments
+        (${totalChargeableWeight.toFixed(1)} kg) excedes the maximum
+        (${maxAggregateDimensions.air.chargeableWeight} kg).
+      `
+    } else {
+      excessChargeableWeightText = ''
+    }
+    return excessChargeableWeightText
+  }
+
   handleCargoItemChange (event, hasError, divRef) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
@@ -343,30 +375,11 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
-    const { maxDimensions, maxAggregateDimensions } = this.props.shipmentData
-    if (+value > +maxDimensions.air[camelize(suffixName)]) {
-      setTimeout(() => {
-        ReactTooltip.show(divRef)
-      }, 500)
-    } else {
-      ReactTooltip.hide(divRef)
-    }
 
-    const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
-      sum + +chargeableWeight(cargoItem, 'air')
-    ), 0)
+    this.updateAirMaxDimensionsTooltips(value, divRef, suffixName)
 
-    let excessChargeableWeightText = ''
-    if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
-      excessChargeableWeightText = `
-        Please note that you total chargeable weight
-        (${totalChargeableWeight} kg)
-        excedes the maximum for Air Freight shipments
-        (${maxAggregateDimensions.air.chargeableWeight} kg)
-      `
-    } else {
-      excessChargeableWeightText = ''
-    }
+    const excessChargeableWeightText =
+      this.updatedExcessChargeableWeightText(cargoItems)
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
