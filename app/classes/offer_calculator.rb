@@ -151,6 +151,10 @@ class OfferCalculator
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+        @charge_breakdown = ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id)
+        if @charge_breakdown
+          @charge_breakdown.destroy
+        end
         @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
