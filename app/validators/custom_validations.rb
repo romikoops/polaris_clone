@@ -15,16 +15,14 @@ module CustomValidations
         numericality: {
           greater_than_or_equal_to: 0,
           less_than_or_equal_to: -> obj {
-            itinerary         = itinerary_arg || obj.shipment.itinerary
-            mode_of_transport = itinerary.mode_of_transport
-            obj.tenant.max_dimensions.dig(mode_of_transport, dimension)
+            itinerary = itinerary_arg || obj.shipment.itinerary
+            obj.tenant.max_dimensions.dig(itinerary.mode_of_transport.to_sym, dimension)
           }
         },
         if: -> obj {
-          itinerary         = itinerary_arg || obj.shipment.itinerary
-          mode_of_transport = itinerary.mode_of_transport
+          itinerary = itinerary_arg || obj.shipment.itinerary
           (itinerary_arg || obj.shipment.itinerary) &&
-          obj.tenant.max_dimensions.dig(mode_of_transport, dimension)
+          obj.tenant.max_dimensions.dig(itinerary.mode_of_transport.to_sym, dimension)
         }
     end
     klass

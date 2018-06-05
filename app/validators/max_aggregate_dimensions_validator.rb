@@ -1,12 +1,13 @@
 class MaxAggregateDimensionsValidator < ActiveModel::Validator
   def validate(record)
-    dimension_names = CargoItem::MAX_AGGREGATE_DIMENSIONS[:general].keys
+    dimension_names = CargoItem::DIMENSIONS
     mode_of_transport = record.itinerary && record.itinerary.mode_of_transport.to_sym
     dimension_names.delete(:chargeable_weight) if mode_of_transport.nil?
  
+    max_aggregate_dimensions = record.tenant.max_aggregate_dimensions
     max_dimensions =
-      CargoItem::MAX_AGGREGATE_DIMENSIONS[mode_of_transport] ||
-      CargoItem::MAX_AGGREGATE_DIMENSIONS[:general]
+      max_aggregate_dimensions[mode_of_transport] ||
+      max_aggregate_dimensions[:general]
     
 
   	sums = record.cargo_items.each_with_object(Hash.new(0)) do |cargo_item, return_h|  		
