@@ -8,18 +8,23 @@ module CustomValidations
 	    allow_nil: true
   end
   
-  def self.cargo_item_max_dimensions(klass, mot, max_dimensions, itinerary_arg = nil)
-    max_dimensions.each do |attribute, max_dimension|
-      klass.validates attribute,
+  def self.cargo_item_max_dimensions(klass, itinerary_arg = nil)
+    klass::DIMENSIONS.each do |dimension|
+      klass.validates dimension,
         presence: true,
         numericality: {
           greater_than_or_equal_to: 0,
-          less_than_or_equal_to: max_dimension
+          less_than_or_equal_to: -> obj {
+            itinerary         = itinerary_arg || obj.shipment.itinerary
+            mode_of_transport = itinerary.mode_of_transport
+            obj.tenant.max_dimensions.dig(mode_of_transport, dimension)
+          }
         },
         if: -> obj {
-          itinerary = itinerary_arg || obj.shipment.itinerary 
-          max_dimension > 0 &&
-          ((mot == :general) || (mot == (itinerary && itinerary.mode_of_transport.to_sym)))
+          itinerary         = itinerary_arg || obj.shipment.itinerary
+          mode_of_transport = itinerary.mode_of_transport
+          (itinerary_arg || obj.shipment.itinerary) &&
+          obj.tenant.max_dimensions.dig(mode_of_transport, dimension)
         }
     end
     klass

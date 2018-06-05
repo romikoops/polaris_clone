@@ -34,6 +34,7 @@ class Tenant < ApplicationRecord
   has_many :seller_incoterm_charges, through: :incoterms
   has_many :buyer_incoterm_charges, through: :incoterms
   has_many :conversations
+  has_many :max_dimensions_bundles
     
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
@@ -71,6 +72,14 @@ class Tenant < ApplicationRecord
         update_item('hsCodes', {_id: datum["_id"]}, datum)
       end
     end
+  end
+
+  def max_dimensions
+    max_dimensions_bundles.unit.to_max_dimensions_hash
+  end
+
+  def max_aggregate_dimensions
+    max_dimensions_bundles.aggregate.to_max_dimensions_hash
   end
 
   private
@@ -116,6 +125,13 @@ class Tenant < ApplicationRecord
     end
   end
 
+  def create_default_max_dimensions
+    MaxDimensionsBundle.create_defaults_for(self)
+  end
+
+  def create_default_aggregate_max_dimensions
+    MaxDimensionsBundle.create_defaults_for(self, aggregate: true)
+  end
 
   # Shortcuts to find_by_subdomain to use in the console
 

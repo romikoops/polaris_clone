@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180525104346) do
+ActiveRecord::Schema.define(version: 20180604160619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,6 +328,19 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "max_dimensions_bundles", force: :cascade do |t|
+    t.string "mode_of_transport"
+    t.integer "tenant_id"
+    t.boolean "aggregate"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
+    t.decimal "dimension_z"
+    t.decimal "payload_in_kg"
+    t.decimal "chargeable_weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "title"
     t.string "message"
@@ -475,10 +488,10 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
@@ -633,6 +646,7 @@ ActiveRecord::Schema.define(version: 20180525104346) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
