@@ -28,21 +28,21 @@ function listShipments (shipments) {
     <div className={`layout-row layout-padding layout-align-space-around-stretch
         ${styles.listelement}`}
     >
-      <div className="layout-row layout-align-center-center">
+      <div className="layout-row flex-25 layout-align-center-center">
         <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
           <i className="fa fa-ship" />
         </div>
       </div>
-      <div className="layout-column layout-align-center-start">
+      <div className="layout-column flex-25 layout-align-center-start">
         <span className="layout-padding">
           {shipment.originHub.location.city}<br />
           {stationType(shipment.originHub.data.hub_type)}
         </span>
       </div>
-      <div className={`layout-row layout-align-center-center ${styles.icon}`}>
+      <div className={`layout-row flex-25 layout-align-center-center ${styles.icon}`}>
         <i className="fa fa-angle-double-right" />
       </div>
-      <div className="layout-column layout-align-center-start">
+      <div className="layout-column flex-25 layout-align-center-start">
         <span className="layout-padding">
           {shipment.destinationHub.location.city}<br />
           {stationType(shipment.destinationHub.data.hub_type)}

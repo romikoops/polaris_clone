@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import {
   UserProfile,
-  UserDashboardNew,
+  UserDashboard,
   UserShipments,
   UserShipmentView,
   UserLocations,
@@ -156,12 +156,15 @@ class UserAccount extends Component {
                   exact
                   path="/account"
                   render={props => (
-                    <UserDashboardNew
+                    <UserDashboard
+                      setNav={this.setNavLink}
+                      theme={theme}
                       {...props}
-                      shipments={shipments}
                       user={user}
                       dashboard={dashboard}
-                      hubHash={hubHash}
+                      hubs={hubHash}
+                      navFn={this.setUrl}
+                      userDispatch={userDispatch}
                     />
                   )}
                 />
