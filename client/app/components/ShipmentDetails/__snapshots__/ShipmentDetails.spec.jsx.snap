@@ -22,25 +22,12 @@ exports[`shallow rendering 1`] = `
   >
     <[object Object]
       component={[Function]}
-      destination={
-        Object {
-          "fullAddress": "destination_user_input",
-          "hub_id": 12,
-        }
-      }
       handleAddressChange={[Function]}
       handleCarriageChange={[Function]}
-      handleCarriageNexuses={[Function]}
       handleSelectLocation={[Function]}
       has_on_carriage={true}
       has_pre_carriage={false}
       nextStageAttempt={false}
-      origin={
-        Object {
-          "fullAddress": "origin_user_input",
-          "hub_id": 1,
-        }
-      }
       prevRequest={
         Object {
           "shipment": Object {
@@ -64,6 +51,7 @@ exports[`shallow rendering 1`] = `
             "status": "FOO_STATUS",
             "trucking": Object {
               "on_carriage": Object {},
+              "pre_carriage": Object {},
             },
           },
         }
@@ -107,6 +95,7 @@ exports[`shallow rendering 1`] = `
             "status": "FOO_STATUS",
             "trucking": Object {
               "on_carriage": Object {},
+              "pre_carriage": Object {},
             },
           },
         }
@@ -181,7 +170,7 @@ exports[`shallow rendering 1`] = `
             name="dayPicker"
             onDayChange={[Function]}
             placeholder="DD/MM/YYYY"
-            value={19}
+            value=""
           />
           <span
             className="error_message"
@@ -232,6 +221,7 @@ exports[`shallow rendering 1`] = `
           "on_carriage": Object {
             "truck_type": "default",
           },
+          "pre_carriage": Object {},
         }
       }
     />
@@ -381,15 +371,31 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
       <div
-        className="flex layout-row layout-align-end"
+        className="flex layout-row layout-wrap layout-align-end"
       >
-        <RoundButton
-          active={false}
-          disabled={true}
-          handleDisabled={[Function]}
-          handleNext={[Function]}
-          text="Get Offers"
-        />
+        <div
+          className="flex-100 layout-row layout-align-end"
+        >
+          <RoundButton
+            active={false}
+            disabled={true}
+            handleDisabled={[Function]}
+            handleNext={[Function]}
+            text="Get Offers"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-end"
+        >
+          <p
+            style={
+              Object {
+                "fontSize": "14px",
+                "width": "317px",
+              }
+            }
+          />
+        </div>
       </div>
     </div>
   </div>

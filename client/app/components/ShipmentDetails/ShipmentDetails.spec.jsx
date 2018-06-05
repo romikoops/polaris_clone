@@ -88,7 +88,7 @@ const editedShipment = {
   origin_user_input: 'origin_user_input',
   destination_user_input: 'destination_user_input',
   incoterm: 'incoterm',
-  trucking: { on_carriage: {} },
+  trucking: { on_carriage: {}, pre_carriage: {} },
   origin_id: 1,
   destination_id: 12,
   has_on_carriage: false,
@@ -135,6 +135,6 @@ const propsBase = {
 
 const createShallow = propsInput => shallow(<ShipmentDetails {...propsInput} />)
 
-test.skip('shallow rendering', () => {
+test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
