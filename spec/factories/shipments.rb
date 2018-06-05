@@ -5,6 +5,7 @@ FactoryBot.define do
     association :user
     association :origin_nexus, factory: :location
     association :destination_nexus, factory: :location
+    association :itinerary
     load_type 'container'
   end
 

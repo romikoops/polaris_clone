@@ -103,8 +103,7 @@ class Itinerary < ApplicationRecord
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
         trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
-        if trip_check
-          p "REJECTED"
+        if trip_check && !trip_check.layovers.empty?
           tmp_date += 1.day
           stats[:trips][:number_updated] += 1
           next
@@ -112,7 +111,6 @@ class Itinerary < ApplicationRecord
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
-        p trip
         stops_in_order.each do |stop|
           if stop.index == 0
             data = {
@@ -136,7 +134,6 @@ class Itinerary < ApplicationRecord
           layover = trip.layovers.create!(data)
           results[:layovers] << layover
           stats[:layovers][:number_created] += 1
-          p layover
         end
       end
       tmp_date += 1.day
@@ -263,6 +260,26 @@ class Itinerary < ApplicationRecord
     end
   end
 
+  def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
+    where("
+      id IN (
+        SELECT d_stops.itinerary_id
+        FROM (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN (?)
+        ) as o_stops
+        JOIN (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN (?)
+        ) as d_stops
+        ON o_stops.itinerary_id = d_stops.itinerary_id
+        WHERE o_stops.index < d_stops.index
+      )
+    ", origin_hub_ids, destination_hub_ids)
+  end
+
   def self.for_locations(shipment, trucking_data)
     if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
@@ -282,25 +299,7 @@ class Itinerary < ApplicationRecord
       end_hub_ids = end_hubs.ids
     end
 
-    itineraries = shipment.tenant.itineraries.where("
-      id IN (
-        (
-          SELECT d_stops.itinerary_id
-          FROM (
-            SELECT id, itinerary_id, index
-            FROM stops
-            WHERE hub_id IN (?)
-          ) as o_stops
-          JOIN (
-            SELECT id, itinerary_id, index
-            FROM stops
-            WHERE hub_id IN (?)
-          ) as d_stops
-          ON o_stops.itinerary_id = d_stops.itinerary_id
-          WHERE o_stops.index < d_stops.index
-        )
-      )
-    ", start_hub_ids, end_hub_ids)
+    itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
     
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end

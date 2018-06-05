@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 import PropTypes from 'prop-types'
 import { Alert } from '../Alert/Alert'
 
@@ -29,15 +29,19 @@ export class FlashMessages extends Component {
       // eslint-disable-next-line react/no-array-index-key
       <Alert key={i} message={message} onClose={this.removeMessage} />
     ))
-
+    // debugger // eslint-disable-line
     return (
-      <CSSTransitionGroup
+
+      <CSSTransition
         transitionName="alerts"
         transitionEnter={false}
         transitionLeaveTimeout={500}
       >
-        {alerts}
-      </CSSTransitionGroup>
+        <div className="flex-none">
+          {alerts}
+        </div>
+      </CSSTransition>
+
     )
   }
 }

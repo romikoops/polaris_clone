@@ -19,6 +19,7 @@ module PricingTools
     end
     
     final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
+    
     final_pricing.with_indifferent_access
   end
   
@@ -47,6 +48,7 @@ module PricingTools
     end
     converted = sum_and_convert_cargo(totals, user.currency)
     totals["total"] = { value: converted, currency: user.currency}
+    
     return totals
   end
 

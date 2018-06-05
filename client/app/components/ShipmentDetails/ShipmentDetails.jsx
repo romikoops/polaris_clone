@@ -875,39 +875,39 @@ export class ShipmentDetails extends Component {
                 this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
                 this.state.containers.some(container => container.dangerous_goods)
               ) && (
-                  <div
-                    className={
-                      `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+                <div
+                  className={
+                    `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
                     'layout-row layout-align-start-center'
-                    }
-                  >
-                    <div className="flex-10 layout-row layout-align-start-start">
-                      <Checkbox
-                        theme={theme}
-                        onChange={() =>
-                          this.setState({
-                            noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                          })
-                        }
-                        size="30px"
-                        name="no_dangerous_goods_confirmation"
-                        checked={this.state.noDangerousGoodsConfirmed}
-                      />
-                    </div>
-                    <div className="flex">
-                      <p style={{ margin: 0, fontSize: '14px' }}>
-                        I hereby confirm that none of the specified cargo units contain{' '}
-                        <span
-                          className="emulate_link blue_link"
-                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                        >
-                          dangerous goods
-                        </span>
-                        .
-                      </p>
-                    </div>
+                  }
+                >
+                  <div className="flex-10 layout-row layout-align-start-start">
+                    <Checkbox
+                      theme={theme}
+                      onChange={() =>
+                        this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })
+                      }
+                      size="30px"
+                      name="no_dangerous_goods_confirmation"
+                      checked={this.state.noDangerousGoodsConfirmed}
+                    />
                   </div>
-                )}
+                  <div className="flex">
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                        I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                          dangerous goods
+                      </span>
+                        .
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="flex layout-row layout-wrap layout-align-end">
               <div className="flex-100 layout-row layout-align-end">
@@ -930,35 +930,35 @@ export class ShipmentDetails extends Component {
         </div>
         {user &&
           !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+                'layout-wrap layout-align-center-center'
+            }
+          >
             <div
               className={
-                `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                  'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <div
                 className={
                   `${styles.btn_sec} ${defaults.content_width} ` +
-                  'layout-row flex-none layout-wrap layout-align-start-start'
+                    'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={
-                    `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                  }
-                >
-                  <RoundButton
-                    text="Back to Dashboard"
-                    handleNext={this.returnToDashboard}
-                    iconClass="fa-angle-left"
-                    theme={theme}
-                    back
-                  />
-                </div>
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
         {styleTagJSX}
       </div>
     )
