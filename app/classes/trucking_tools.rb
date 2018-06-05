@@ -150,6 +150,15 @@ module TruckingTools
         result["min_value"] = rate["min_value"]
         result["currency"] = rate["rate"]["currency"]
       end
+      if cargo_values["volume"] < trucking_pricing["rates"]["cbm"].first["min_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].first["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].first["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].first["rate"]["currency"]
+      elsif cargo_values["volume"] > trucking_pricing["rates"]["cbm"].last["max_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].last["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].last["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].last["rate"]["currency"]
+      end
       return {rate: result, fees: trucking_pricing["fees"]}
     when "unit"
       return {rate: trucking_pricing["rates"]["unit"][0]["rate"], fees: trucking_pricing["fees"]}
