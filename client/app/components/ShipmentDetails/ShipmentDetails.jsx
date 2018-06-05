@@ -181,7 +181,7 @@ export class ShipmentDetails extends Component {
       nextState.modals &&
       nextProps.tenant &&
       nextProps.user &&
-      !isEmpty(nextProps.shipmentData.maxDimensions)
+      nextProps.shipmentData.maxDimensions
     )
   }
   componentWillUpdate () {
