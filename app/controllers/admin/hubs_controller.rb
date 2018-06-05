@@ -43,7 +43,7 @@ class Admin::HubsController < ApplicationController
     # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     resp = {
-      hub: hub,
+      hub: hub.as_json({include:[ { nexus: {}, only: %i[name]} ]}),
       routes: routes,
       relatedHubs: related_hubs,
       schedules: layovers,

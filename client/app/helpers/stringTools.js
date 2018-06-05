@@ -13,3 +13,16 @@ export function humanizeSnakeCase (str) {
 export function capitalizeAndDashifyCamelCase (str) {
   return str.split(/(?=[A-Z])/).map(capitalize).join('-')
 }
+
+export function renderHubType (mot) {
+  switch (mot) {
+    case 'air':
+      return 'Airport'
+    case 'ocean':
+      return 'Port'
+    case 'rail':
+      return 'Railyard'
+    default:
+      return ''
+  }
+}
