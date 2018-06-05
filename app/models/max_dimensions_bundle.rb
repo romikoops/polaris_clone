@@ -1,10 +1,16 @@
 class MaxDimensionsBundle < ApplicationRecord
   belongs_to :tenant
-  validates :mode_of_transport, presence: true
+  validates :mode_of_transport, presence: true, uniqueness: {
+    scope: %i(tenant_id aggregate),
+    message: -> obj, _ {
+      max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
+      "'#{obj.mode_of_transport}' already exists in #{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
+    }
+  }
   CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air general))
   validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
     numericality: true, allow_nil: true
-
+  
   scope :aggregate,  -> { where(aggregate: true) }
   scope :unit,       -> { where(aggregate: false) }
 
@@ -49,16 +55,18 @@ class MaxDimensionsBundle < ApplicationRecord
   end
 
   def self.create_defaults_for(tenant, options = {})
-    return create_all_defaults_for(tenant) if options[:all]
+    return create_all_defaults_for(tenant, options) if options.delete(:all)
 
     aggregate = !!options[:aggregate]
 
     defaults = aggregate ? CARGO_ITEM_AGGREGATE_DEFAULTS : CARGO_ITEM_DEFAULTS
     defaults.map do |mode_of_transport, max_dimensions_hash|
+      next if excluded_in_options?(options, mode_of_transport)
+    
       create(max_dimensions_hash.merge(
         tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
       ))
-    end
+    end.compact
   end
 
   def to_max_dimension_hash
@@ -75,10 +83,16 @@ class MaxDimensionsBundle < ApplicationRecord
 
   private
 
-  def self.create_all_defaults_for(tenant)
+  def self.excluded_in_options?(options, mode_of_transport)
+    return false if options[:modes_of_transport].nil?
+    modes_of_transport = [options[:modes_of_transport]].flatten.compact
+    modes_of_transport.exclude?(mode_of_transport)
+  end
+
+  def self.create_all_defaults_for(tenant, options)
     [
-      create_defaults_for(tenant),
-      create_defaults_for(tenant, aggregate: true),
+      create_defaults_for(tenant, options),
+      create_defaults_for(tenant, options.merge(aggregate: true)),
     ]
   end
 end

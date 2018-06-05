@@ -47,10 +47,10 @@ class Tenant < ApplicationRecord
     itineraries.map(&:set_scope!)
   end
 
-  def mot_scope(args)
+  def mot_scope(options = {})
     mot = scope["modes_of_transport"]
-    mot = load_type_filter("container", mot)  if args[:only_container]
-    mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
+    mot = load_type_filter("container", mot)  if options[:only_container]
+    mot = load_type_filter("cargo_item", mot) if options[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
   end
 
@@ -72,6 +72,12 @@ class Tenant < ApplicationRecord
         update_item('hsCodes', {_id: datum["_id"]}, datum)
       end
     end
+  end
+
+  def mode_of_transport_in_scope?(mode_of_transport, load_type = nil)
+    return scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
+
+    scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
   end
 
   def max_dimensions
