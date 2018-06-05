@@ -21,5 +21,19 @@ class Hash
 		self.each do |k, v|
 			self[k] = yield(v)
 		end
-	end
+  end
+
+  def each_deep_key(&block)
+    each do |key, value|
+      yield(key)
+      value.each_deep_key(&block) if value.is_a? Hash
+    end
+  end
+
+  def deep_each(&block)
+    each do |key, value|
+      yield(key, value)
+      value.each_deep_key(&block) if value.is_a? Hash
+    end
+  end
 end

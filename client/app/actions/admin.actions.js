@@ -374,7 +374,7 @@ function updatePricing (id, req) {
   }
   function success (prData) {
     // ;
-    return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData.data }
+    return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData }
   }
   function failure (error) {
     return { type: adminConstants.UPDATE_PRICING_FAILURE, error }
@@ -384,12 +384,10 @@ function updatePricing (id, req) {
 
     adminService.updatePricing(id, req).then(
       (data) => {
+        dispatch(success(data.data))
         dispatch(alertActions.success('Updating Pricing successful'))
-
-        dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }

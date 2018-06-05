@@ -54,7 +54,8 @@ class Admin::PricingsController < ApplicationController
       currency = pricing_detail_data.delete("currency")
       pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
       range = pricing_detail_params.delete("range")
-      pricing_detail = pricing_to_update.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
+      pricing_detail  = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: current_user.tenant)
+      pricing_detail.update!(pricing_detail_params)
       pricing_detail.update!(range: range, currency_name: currency) #, external_updated_at: external_updated_at)
     end
     
@@ -69,8 +70,7 @@ class Admin::PricingsController < ApplicationController
         pricing_detail.update!(range: range, currency_name: currency)
       end
     end
-
-    response_handler(pricing_to_update)
+    response_handler({pricing: pricing_to_update.as_json, transport_category: pricing_to_update.transport_category})
   end
 
   def destroy
@@ -128,7 +128,6 @@ class Admin::PricingsController < ApplicationController
 
   def require_login_and_role_is_admin
     unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end
   end
