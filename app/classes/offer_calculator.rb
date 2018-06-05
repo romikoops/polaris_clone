@@ -274,12 +274,12 @@ class OfferCalculator
       path_key = path_key(cargo_unit, trip)
 
       charge_result = send("determine_#{@shipment.load_type}_price",
-                           cargo_unit,
-                           path_key,
-                           @user,
-                           total_units,
-                           @shipment.planned_pickup_date,
-                           mot)
+        cargo_unit,
+        path_key,
+        @user,
+        total_units,
+        @shipment.planned_pickup_date,
+        mot)
       next if charge_result.nil?
 
       cargo_unit_model = cargo_unit.class.to_s

@@ -2,7 +2,7 @@
 
 class Shipments::BookingProcessController < ApplicationController
   skip_before_action :require_non_guest_authentication!,
-                     except: %i[update_shipment request_shipment]
+    except: %i[update_shipment request_shipment]
   def create_shipment
     resp = ShippingTools.create_shipment(params[:details], current_user)
     response_handler(resp)

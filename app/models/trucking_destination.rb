@@ -2,10 +2,10 @@
 
 class TruckingDestination < ApplicationRecord
   validates given_attribute_names.first.to_sym,
-            uniqueness: {
-              scope: given_attribute_names[1..-1],
-              message: 'is a duplicate (all attributes match an existing record in the DB)'
-            }
+    uniqueness: {
+      scope: given_attribute_names[1..-1],
+      message: 'is a duplicate (all attributes match an existing record in the DB)'
+    }
 
   belongs_to :geometry, optional: true
   has_many :hub_truckings
@@ -25,9 +25,9 @@ class TruckingDestination < ApplicationRecord
         ) / 500)
       )
     ",
-          hub_lng: args[:hub].longitude,
-          hub_lat: args[:hub].latitude,
-          lng:     args[:longitude],
-          lat:     args[:latitude])
+      hub_lng: args[:hub].longitude,
+      hub_lat: args[:hub].latitude,
+      lng:     args[:longitude],
+      lat:     args[:latitude])
   end
 end

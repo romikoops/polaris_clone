@@ -290,8 +290,8 @@ class Location < ApplicationRecord
     country = Country.geo_find_by_name(raw_location_params['country'])
 
     filtered_params = raw_location_params.try(:permit,
-                                              :latitude, :longitude, :geocoded_address, :street,
-                                              :street_number, :zip_code, :city) || raw_location_params
+      :latitude, :longitude, :geocoded_address, :street,
+      :street_number, :zip_code, :city) || raw_location_params
 
     filtered_params.to_h.merge(country: country)
   end

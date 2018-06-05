@@ -46,7 +46,7 @@ Rails.application.routes.draw do
       post 'pricings/download', to: 'pricings#download_pricings'
       post 'pricings/update/:id', to: 'pricings#update_price'
       post 'pricings/train_and_ocean_pricings/process_csv',
-           to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
+        to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
 
       post 'itineraries/process_csv', to: 'itineraries#overwrite', as: :itineraries_overwrite
       get 'itineraries/:id/layovers', to: 'schedules#layovers'
@@ -66,7 +66,7 @@ Rails.application.routes.draw do
 
       resources :local_charges, only: %i[index update]
       post 'local_charges/process_csv',
-           to: 'local_charges#overwrite', as: :local_charges_overwrite
+        to: 'local_charges#overwrite', as: :local_charges_overwrite
       post 'local_charges/:id/edit', to: 'local_charges#edit'
       post 'customs_fees/:id/edit', to: 'local_charges#edit_customs'
       post 'local_charges/download', to: 'local_charges#download_local_charges'
@@ -78,16 +78,16 @@ Rails.application.routes.draw do
       resources :schedules, only: %i[index show destroy]
       post 'schedules/overwrite/:id', to: 'schedules#schedules_by_itinerary'
       post 'train_schedules/process_csv',
-           to: 'schedules#overwrite_trains',
-           as: :schedules_train_overwrite
+        to: 'schedules#overwrite_trains',
+        as: :schedules_train_overwrite
       post 'vessel_schedules/process_csv',
-           to: 'schedules#overwrite_vessels',
-           as: :schedules_vessel_overwrite
+        to: 'schedules#overwrite_vessels',
+        as: :schedules_vessel_overwrite
       post 'air_schedules/process_csv',
-           to: 'schedules#overwrite_air',
-           as: :schedules_air_overwrite
+        to: 'schedules#overwrite_air',
+        as: :schedules_air_overwrite
       post 'schedules/auto_generate',
-           to: 'schedules#auto_generate_schedules'
+        to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
       get 'hubs',      to: 'hubs#index'
       get 'dashboard', to: 'dashboard#index'
@@ -133,12 +133,12 @@ Rails.application.routes.draw do
     post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_document'
     post 'search/hscodes', to: 'search#search_hs_codes'
     get '/documents/download/:document_id',
-        to: 'documents#download_redirect', as: :document_download
+      to: 'documents#download_redirect', as: :document_download
     get '/documents/delete/:document_id', to: 'documents#delete', as: :document_delete
     post '/admin/documents/action/:id', to: 'admin/shipments#document_action'
 
     get '/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading',
-        controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
+      controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
     get 'tenants/:name', to: 'tenants#get_tenant'
     get 'tenants', to: 'tenants#index'
 

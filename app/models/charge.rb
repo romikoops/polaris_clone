@@ -6,7 +6,7 @@ class Charge < ApplicationRecord
   belongs_to :price
   belongs_to :charge_category
   belongs_to :children_charge_category,
-             foreign_key: 'children_charge_category_id', class_name: 'ChargeCategory'
+    foreign_key: 'children_charge_category_id', class_name: 'ChargeCategory'
   belongs_to :charge_breakdown
   belongs_to :parent, class_name: 'Charge', optional: true
   has_many :children, foreign_key: 'parent_id', class_name: 'Charge', dependent: :destroy

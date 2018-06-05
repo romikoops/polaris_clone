@@ -49,9 +49,9 @@ puts
 puts 'Writing Geometries to DB...'
 
 Geometry.import geometries_data,
-                on_duplicate_key_update: {
-                  conflict_target: %i[name_1 name_2 name_3 name_4],
-                  columns:         [:data]
-                }
+  on_duplicate_key_update: {
+    conflict_target: %i[name_1 name_2 name_3 name_4],
+    columns:         [:data]
+  }
 
 puts 'Geometries seeded...'

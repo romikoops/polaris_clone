@@ -5,11 +5,11 @@ class Vehicle < ApplicationRecord
   has_many :itineraries
 
   validates :name,
-            presence: true,
-            uniqueness: {
-              scope: :mode_of_transport,
-              message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
-            }
+    presence: true,
+    uniqueness: {
+      scope: :mode_of_transport,
+      message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
+    }
 
   VEHICLE_NAMES = %w[ocean_default rail_default air_default truck_default].freeze
   TRANSPORT_CATEGORY_NAMES = %w[dry_goods liquid_bulk gas_bulk any].freeze
