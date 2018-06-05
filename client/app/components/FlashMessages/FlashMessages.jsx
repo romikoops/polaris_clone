@@ -29,7 +29,6 @@ export class FlashMessages extends Component {
       // eslint-disable-next-line react/no-array-index-key
       <Alert key={i} message={message} onClose={this.removeMessage} />
     ))
-    // debugger // eslint-disable-line
     return (
 
       <CSSTransition
