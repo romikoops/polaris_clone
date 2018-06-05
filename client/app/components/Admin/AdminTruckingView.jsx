@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import Truncate from 'react-truncate'
 import { connect } from 'react-redux'

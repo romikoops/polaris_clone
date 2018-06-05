@@ -63,7 +63,7 @@ function chooseOffer (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/choose_offer`
+  const url = `${BASE_URL}/shipments/${data.id}/choose_offer`
   return fetch(url, requestOptions).then(handleResponse)
 }
 

@@ -464,7 +464,7 @@ module ExcelTools
       zones[zone_name] = [] if zones[zone_name].nil?
 
       if row_data[1] && !row_data[2]
-        zip_char_length ||= row_data[1].length
+        zip_char_length ||= row_data[1].to_s.length
         zones[zone_name] << { ident: row_data[1], country: row_data[3] }
       elsif !row_data[1] && row_data[2]        
         range = row_data[2].delete(' ').split('-')
@@ -589,6 +589,7 @@ module ExcelTools
       rate_num_rows = rates_sheet.last_row
       modifier_position_objs = {}
       modifier_row = rates_sheet.row(3)
+      
       modifier_row.shift
       modifier_row.shift
       modifier_row.uniq.each do |mod|
@@ -1031,8 +1032,8 @@ module ExcelTools
             charge = {currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_CBM_KG"
             charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-            when "PER_KG_RANGE"
-           charge = {currency: row[:currency],  kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max]}
+          when "PER_KG_RANGE"
+            charge = {currency: row[:currency],  kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max]}
           end
 
           charge[:expiration_date] = row[:expiration_date]
@@ -1222,7 +1223,7 @@ module ExcelTools
     hub_type_name = {
       'ocean' => 'Port',
       'air' => 'Airport',
-      'rail' => 'Railway Station'
+      'rail' => 'Railyard'
     }
     default_mandatory_charge = MandatoryCharge.find_by({pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false})
 

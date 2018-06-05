@@ -45,7 +45,7 @@ function login (data) {
         const shipmentReq = data.req
         dispatch(success(response.data))
         if (shipmentReq) {
-          shipmentReq.shipment.user_id = response.data.id
+          shipmentReq.user_id = response.data.id
           dispatch(shipmentActions.chooseOffer(shipmentReq))
         } else if (
           (response.data.role_id === 1 && !data.noRedirect) ||

@@ -125,23 +125,35 @@ class User < ApplicationRecord
   end
 
   def primary_location
-    user_locations.where(primary: true).first.try(:location)
+    locations.where('user_locations.primary': true).first
   end
 
   def secondary_locations
-    user_locations.where(primary: false).map(&:location)
+    locations.where('user_locations.primary': false)
+  end
+  
+  def expanded
+    return self.as_json(include: :optin_status)
   end
 
+  def expand!
+    return self.as_json(include: :optin_status)
+  end
+  
+  # Devise Token Auth override
+  def token_validation_response
+    as_json(except: [:tokens, :created_at, :updated_at], include: :optin_status)
+  end
 
-  # override devise method to include additional info as opts hash
-  def send_confirmation_instructions(opts={})
+  # Override devise method to include additional info as opts hash
+  def send_confirmation_instructions(opts = {})
     return if self.guest
     generate_confirmation_token! unless @raw_confirmation_token
 
     # fall back to "default" config name
     opts[:client_config] ||= "default"
-    opts[:to] = unconfirmed_email if pending_reconfirmation?
-    opts[:redirect_url] ||= DeviseTokenAuth.default_confirm_success_url
+    opts[:redirect_url]  ||= DeviseTokenAuth.default_confirm_success_url
+    opts[:to]              = unconfirmed_email if pending_reconfirmation?
 
     send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
   end
@@ -149,17 +161,6 @@ class User < ApplicationRecord
   def confirm
     update_shipments
     super
-  end
-
-  def expanded()
-    return self.as_json(include: :optin_status)
-  end
-  def expand!()
-    return self.as_json(include: :optin_status)
-  end
-  # Devise Token Auth override
-  def token_validation_response
-    as_json(except: [:tokens, :created_at, :updated_at], include: :optin_status)
   end
 
   private
@@ -186,9 +187,7 @@ class User < ApplicationRecord
       shipment.save
     end
   end
-  def gdpr_delete
-    self.gdpr_status = 'deleted'
-  end
+
   def set_default_optin_status
     if !self.optin_status_id
       optin_status = OptinStatus.find_by(tenant: false, cookies: false, itsmycargo: false)
@@ -201,5 +200,4 @@ class User < ApplicationRecord
   def confirmation_required?
     false
   end
-  
 end

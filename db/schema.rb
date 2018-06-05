@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180524073952) do
+ActiveRecord::Schema.define(version: 20180601170411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,32 @@ ActiveRecord::Schema.define(version: 20180524073952) do
     t.boolean "stackable", default: true
     t.integer "quantity"
     t.jsonb "unit_price"
+  end
+
+  create_table "charge_breakdowns", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.integer "itinerary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charge_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.integer "cargo_unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "price_id"
+    t.integer "charge_category_id"
+    t.integer "children_charge_category_id"
+    t.integer "charge_breakdown_id"
+    t.integer "detail_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -343,6 +369,13 @@ ActiveRecord::Schema.define(version: 20180524073952) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "prices", force: :cascade do |t|
+    t.decimal "value"
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pricing_details", force: :cascade do |t|
     t.decimal "rate"
     t.string "rate_basis"
@@ -406,8 +439,6 @@ ActiveRecord::Schema.define(version: 20180524073952) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -444,8 +475,11 @@ ActiveRecord::Schema.define(version: 20180524073952) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 

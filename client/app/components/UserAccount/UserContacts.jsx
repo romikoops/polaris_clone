@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { UserContactsIndex, UserContactsView } from './'
 import styles from './UserAccount.scss'
-// import {v4} from 'node-uuid';
+// import {v4} from 'uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
 import { gradientTextGenerator } from '../../helpers'

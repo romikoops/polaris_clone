@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../Cargo/Item/Group'

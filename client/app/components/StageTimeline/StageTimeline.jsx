@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styles from './StageTimeline.scss'
 import defs from '../../styles/default_classes.scss'
 import { capitalize } from '../../helpers/stringTools'

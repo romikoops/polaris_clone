@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
+import ReactTooltip from 'react-tooltip'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -22,7 +23,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { camelize } from '../../helpers'
+import { camelize, isEmpty, chargeableWeight } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -110,7 +111,8 @@ export class ShipmentDetails extends Component {
       shakeClass: {
         noDangerousGoodsConfirmed: '',
         stackableGoodsConfirmed: ''
-      }
+      },
+      prevRequestLoaded: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -118,9 +120,18 @@ export class ShipmentDetails extends Component {
     }
 
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
-      this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date
-      this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage
-      this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage
+      /* eslint-disable camelcase */
+      const {
+        planned_pickup_date, planned_origin_drop_off_date, has_on_carriage, has_pre_carriage
+      } = this.props.shipmentData.shipment
+      this.state.selectedDay = planned_pickup_date
+      this.state = {
+        ...this.state,
+        has_on_carriage,
+        has_pre_carriage,
+        selectedDay: has_pre_carriage ? planned_pickup_date : planned_origin_drop_off_date
+      }
+      /* eslint-enable camelcase */
     }
 
     this.handleAddressChange = this.handleAddressChange.bind(this)
@@ -136,12 +147,11 @@ export class ShipmentDetails extends Component {
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
-    this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
 
-    if (prevRequest && prevRequest.shipment) {
+    if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -163,7 +173,9 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
+
     return !!(
+      (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -257,20 +269,15 @@ export class ShipmentDetails extends Component {
       containers: obj.containers_attributes,
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
-      selectedDay: obj.planned_pickup_date,
-      origin: {
-        fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
-        hub_id: obj.origin_id
-      },
-      destination: {
-        fullAddress: obj.destination_user_input ? obj.destination_user_input : '',
-        hub_id: obj.destination_id
-      },
-      has_on_carriage: obj.has_on_carriage,
-      has_pre_carriage: obj.has_pre_carriage,
+      selectedDay: obj.selected_day,
+      origin: obj.origin,
+      destination: obj.destination,
+      has_on_carriage: !!obj.trucking.on_carriage.truck_type,
+      has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
       trucking: obj.trucking,
       incoterm: obj.incoterm,
-      routeSet: true
+      routeSet: true,
+      prevRequestLoaded: true
     })
   }
 
@@ -325,7 +332,7 @@ export class ShipmentDetails extends Component {
     this.setState({ aggregatedCargo, aggregatedCargoErrors })
   }
 
-  handleCargoItemChange (event, hasError) {
+  handleCargoItemChange (event, hasError, divRef) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
@@ -336,9 +343,33 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
+    const { maxDimensions, maxAggregateDimensions } = this.props.shipmentData
+    if (+value > +maxDimensions.air[camelize(suffixName)]) {
+      setTimeout(() => {
+        ReactTooltip.show(divRef)
+      }, 500)
+    } else {
+      ReactTooltip.hide(divRef)
+    }
+
+    const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
+      sum + +chargeableWeight(cargoItem, 'air')
+    ), 0)
+
+    let excessChargeableWeightText = ''
+    if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
+      excessChargeableWeightText = `
+        Please note that you total chargeable weight
+        (${totalChargeableWeight} kg)
+        excedes the maximum for Air Freight shipments
+        (${maxAggregateDimensions.air.chargeableWeight} kg)
+      `
+    } else {
+      excessChargeableWeightText = ''
+    }
 
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
-    this.setState({ cargoItems, cargoItemsErrors })
+    this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
   handleContainerChange (event, hasError) {
@@ -406,8 +437,8 @@ export class ShipmentDetails extends Component {
 
   handleNextStage () {
     if (
-      (!this.state.origin.hub_id && !this.state.has_pre_carriage) ||
-      (!this.state.destination.hub_id && !this.state.has_on_carriage) ||
+      (!this.state.origin.nexus_id && !this.state.has_pre_carriage) ||
+      (!this.state.destination.nexus_id && !this.state.has_on_carriage) ||
       (!this.state.origin.fullAddress && this.state.has_pre_carriage) ||
       (!this.state.destination.fullAddress && this.state.has_on_carriage) ||
       this.state.addressFormsHaveErrors
@@ -448,34 +479,19 @@ export class ShipmentDetails extends Component {
       }
     }
 
-    const data = { shipment: this.state.shipment }
+    const shipment = {
+      id: this.state.shipment.id,
+      trucking: this.state.shipment.trucking,
+      origin: this.state.origin,
+      destination: this.state.destination,
+      cargo_items_attributes: this.state.cargoItems,
+      containers_attributes: this.state.containers,
+      aggregated_cargo_attributes: this.state.aggregated && this.state.aggregatedCargo,
+      selected_day: this.state.selectedDay,
+      incoterm: this.state.incoterm
+    }
 
-    data.shipment.origin_user_input = this.state.origin.fullAddress
-      ? this.state.origin.fullAddress
-      : ''
-    data.shipment.destination_user_input = this.state.destination.fullAddress
-      ? this.state.destination.fullAddress
-      : ''
-    data.shipment.origin_id = this.state.origin.hub_id
-    data.shipment.destination_id = this.state.destination.hub_id
-    data.shipment.cargo_items_attributes = this.state.cargoItems
-    data.shipment.containers_attributes = this.state.containers
-    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
-
-    data.shipment.has_on_carriage = this.state.has_on_carriage
-    data.shipment.has_pre_carriage = this.state.has_pre_carriage
-    data.shipment.planned_pickup_date = this.state.selectedDay
-    data.shipment.incoterm = this.state.incoterm
-    data.shipment.carriageNexuses = this.state.carriageNexuses
-    this.props.getOffers(data)
-  }
-  handleCarriageNexuses (target, id) {
-    this.setState({
-      carriageNexuses: {
-        ...this.state.carriageNexuses,
-        [target]: id
-      }
-    })
+    this.props.getOffers({ shipment })
   }
   returnToDashboard () {
     this.props.shipmentDispatch.getDashboard(true)
@@ -492,9 +508,10 @@ export class ShipmentDetails extends Component {
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
-    // Upate trucking details according to toggle
+    // Update trucking details according to toggle
     const { shipment } = this.state
     const artificialEvent = { target: {} }
+
     if (!value) {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${carriage}-`
@@ -626,7 +643,6 @@ export class ShipmentDetails extends Component {
         shipmentData={shipmentData}
         routeIds={routeIds}
         setNotesIds={(e, t) => this.setNotesIds(e, t)}
-        handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
@@ -859,83 +875,90 @@ export class ShipmentDetails extends Component {
                 this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
                 this.state.containers.some(container => container.dangerous_goods)
               ) && (
-                  <div
-                    className={
-                      `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+                <div
+                  className={
+                    `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
                     'layout-row layout-align-start-center'
-                    }
-                  >
-                    <div className="flex-10 layout-row layout-align-start-start">
-                      <Checkbox
-                        theme={theme}
-                        onChange={() =>
-                          this.setState({
-                            noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                          })
-                        }
-                        size="30px"
-                        name="no_dangerous_goods_confirmation"
-                        checked={this.state.noDangerousGoodsConfirmed}
-                      />
-                    </div>
-                    <div className="flex">
-                      <p style={{ margin: 0, fontSize: '14px' }}>
-                      I hereby confirm that none of the specified cargo units contain{' '}
-                        <span
-                          className="emulate_link blue_link"
-                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                        >
-                        dangerous goods
-                        </span>
-                      .
-                      </p>
-                    </div>
+                  }
+                >
+                  <div className="flex-10 layout-row layout-align-start-start">
+                    <Checkbox
+                      theme={theme}
+                      onChange={() =>
+                        this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })
+                      }
+                      size="30px"
+                      name="no_dangerous_goods_confirmation"
+                      checked={this.state.noDangerousGoodsConfirmed}
+                    />
                   </div>
-                )}
+                  <div className="flex">
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                        I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                          dangerous goods
+                      </span>
+                        .
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="flex layout-row layout-align-end">
-              <RoundButton
-                text="Get Offers"
-                handleNext={this.handleNextStage}
-                handleDisabled={() => this.handleNextStageDisabled()}
-                theme={theme}
-                active={getOffersBtnIsActive(this.state)}
-                disabled={!getOffersBtnIsActive(this.state)}
-              />
+            <div className="flex layout-row layout-wrap layout-align-end">
+              <div className="flex-100 layout-row layout-align-end">
+                <RoundButton
+                  text="Get Offers"
+                  handleNext={this.handleNextStage}
+                  handleDisabled={() => this.handleNextStageDisabled()}
+                  theme={theme}
+                  active={getOffersBtnIsActive(this.state)}
+                  disabled={!getOffersBtnIsActive(this.state)}
+                />
+              </div>
+              <div className="flex-100 layout-row layout-align-end">
+                <p style={{ fontSize: '14px', width: '317px' }}>
+                  { this.state.excessChargeableWeightText }
+                </p>
+              </div>
             </div>
           </div>
         </div>
         {user &&
           !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+                'layout-wrap layout-align-center-center'
+            }
+          >
             <div
               className={
-                `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                  'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <div
                 className={
                   `${styles.btn_sec} ${defaults.content_width} ` +
-                  'layout-row flex-none layout-wrap layout-align-start-start'
+                    'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={
-                    `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                  }
-                >
-                  <RoundButton
-                    text="Back to Dashboard"
-                    handleNext={this.returnToDashboard}
-                    iconClass="fa-angle-left"
-                    theme={theme}
-                    back
-                  />
-                </div>
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
         {styleTagJSX}
       </div>
     )
