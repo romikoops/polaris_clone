@@ -59,12 +59,12 @@ module ShippingTools
       itinerary
     end
     {
-      shipment:       shipment,
-      all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
-      itineraries:    itineraries,
-      cargo_item_types: tenant.cargo_item_types,
-      max_dimensions: CargoItem::MAX_DIMENSIONS,
-      max_aggregate_dimensions: CargoItem::MAX_AGGREGATE_DIMENSIONS
+      shipment:                 shipment,
+      all_nexuses:              { origins: origins.uniq, destinations: destinations.uniq },
+      itineraries:              itineraries,
+      cargo_item_types:         tenant.cargo_item_types,
+      max_dimensions:           tenant.max_dimensions,
+      max_aggregate_dimensions: tenant.max_aggregate_dimensions
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 

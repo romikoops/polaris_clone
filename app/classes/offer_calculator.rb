@@ -151,16 +151,14 @@ class OfferCalculator
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-        @charge_breakdown = ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id)
-        if @charge_breakdown
-          @charge_breakdown.destroy
-        end
+        
+        destroy_previous_charge_breakdown(itinerary_id)
         @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
-          charge_category: ChargeCategory.base_node,
-          charge_breakdown: @charge_breakdown,
-          price: Price.create(currency: @shipment.user.currency)
+          charge_category:          ChargeCategory.base_node,
+          charge_breakdown:         @charge_breakdown,
+          price:                    Price.create(currency: @shipment.user.currency)
         )
 
         set_local_charges!(charges, trip, sched_key)
@@ -438,6 +436,10 @@ class OfferCalculator
   end
 
   private
+
+  def destroy_previous_charge_breakdown(itinerary_id)
+    ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
+  end
 
   def trucking_params(params)
     params.require(:shipment).require(:trucking).permit(
