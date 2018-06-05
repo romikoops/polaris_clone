@@ -1,42 +1,44 @@
+# frozen_string_literal: true
+
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
-    air:      "0.167",
-    rail:     "0.550",
-    ocean:    "1.000",
-    trucking: "0.333"
-  }.map_values { |v| BigDecimal.new(v) }
+    air:      '0.167',
+    rail:     '0.550',
+    ocean:    '1.000',
+    trucking: '0.333'
+  }.map_values { |v| BigDecimal(v) }
 
   MAX_DIMENSIONS = {
     general: {
-      dimension_x:       "590.0",
-      dimension_y:       "234.2",
-      dimension_z:       "228.0",
-      payload_in_kg:     "21_770.0"
+      dimension_x:       '590.0',
+      dimension_y:       '234.2',
+      dimension_z:       '228.0',
+      payload_in_kg:     '21_770.0'
     },
     air: {
-      dimension_x:       "120.0",
-      dimension_y:       "80.0",
-      dimension_z:       "158.0",
-      payload_in_kg:     "1_500.0"
+      dimension_x:       '120.0',
+      dimension_y:       '80.0',
+      dimension_z:       '158.0',
+      payload_in_kg:     '1_500.0'
     }
-  }.map_deep_values { |v| BigDecimal.new(v) }
-  
+  }.map_deep_values { |v| BigDecimal(v) }
+
   MAX_AGGREGATE_DIMENSIONS = {
     general: {
-      dimension_x:       "0",
-      dimension_y:       "0",
-      dimension_z:       "0",
-      payload_in_kg:     "0",
-      chargeable_weight: "0"
+      dimension_x:       '0',
+      dimension_y:       '0',
+      dimension_z:       '0',
+      payload_in_kg:     '0',
+      chargeable_weight: '0'
     },
     air: {
-      dimension_x:       "0",
-      dimension_y:       "0",
-      dimension_z:       "0",
-      payload_in_kg:     "1_500.0",
-      chargeable_weight: "1_500.0"
+      dimension_x:       '0',
+      dimension_y:       '0',
+      dimension_z:       '0',
+      payload_in_kg:     '1_500.0',
+      chargeable_weight: '1_500.0'
     }
-  }.map_deep_values { |v| BigDecimal.new(v) }
+  }.map_deep_values { |v| BigDecimal(v) }
 
   belongs_to :shipment
   belongs_to :cargo_item_type
@@ -56,11 +58,11 @@ class CargoItem < ApplicationRecord
 
   # Instance Methods
   def volume
-    dimension_x * dimension_y * dimension_z / 1000000    
+    dimension_x * dimension_y * dimension_z / 1_000_000
   end
 
   def payload_in_tons
-    payload_in_kg / 1000    
+    payload_in_kg / 1000
   end
 
   def set_chargeable_weight!
@@ -70,13 +72,12 @@ class CargoItem < ApplicationRecord
   end
 
   def calc_chargeable_weight(mot)
-    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max    
+    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
   end
 
   def valid_for_itinerary?(itinerary)
     # This method determines whether the cargo_item would be valid, should the itinerary
     # supplied as argument become the shipment's itinerary.
-
 
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
     # validation, which depends on this itinerary's mode of transport.
@@ -87,9 +88,9 @@ class CargoItem < ApplicationRecord
       itinerary
     )
     Module.const_set('AuxCargoItem', klass)
-    
+
     # Instantiates the auxiliary class and checks if the item is still valid,
     # thereby applying the new validation.
-    Module::AuxCargoItem.new(self.given_attributes).valid?
+    Module::AuxCargoItem.new(given_attributes).valid?
   end
 end

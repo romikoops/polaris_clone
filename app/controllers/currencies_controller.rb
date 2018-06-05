@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CurrenciesController < ApplicationController
   include CurrencyTools
 
   def currencies
-    currency = current_user ? current_user.currency : "EUR"
+    currency = current_user ? current_user.currency : 'EUR'
     results = get_currency_array(currency)
     response_handler(results)
   end
@@ -21,6 +23,6 @@ class CurrenciesController < ApplicationController
     current_user.currency = params[:currency]
     current_user.save!
     rates = get_rates(params[:currency])
-    response_handler({user: current_user, rates: rates})
+    response_handler(user: current_user, rates: rates)
   end
 end

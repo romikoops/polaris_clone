@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContainerLookups
   def self.get_descriptions
     xlsx = Roo::Spreadsheet.open("#{Rails.root}/db/static_data/container_descriptions.xlsx")

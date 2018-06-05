@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Shoryuken
   module Middleware
     module Server
       class RavenReporter
-        def call(worker_instance, queue, sqs_msg, body)
+        def call(_worker_instance, queue, _sqs_msg, body)
           tags = { job: body['job_class'], queue: queue }
-          context = { message: body}
+          context = { message: body }
           Raven.capture(tags: tags, extra: context) do
             yield
           end
@@ -38,7 +40,7 @@ Shoryuken.configure_server do |config|
     chain.add Shoryuken::Middleware::Server::RavenReporter
   end
 
-  # For dynamically adding queues prefixed by Rails.env 
+  # For dynamically adding queues prefixed by Rails.env
   # %w(queue1 queue2).each do |name|
   #   Shoryuken.add_queue("#{Rails.env}_#{name}", 1)
   # end

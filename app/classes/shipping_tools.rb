@@ -10,8 +10,8 @@ module ShippingTools
 
   def self.create_shipment(details, current_user)
     tenant = current_user.tenant
-    load_type = details["loadType"].underscore
-    direction = details["direction"]
+    load_type = details['loadType'].underscore
+    direction = details['direction']
     shipment = Shipment.new(
       user_id: current_user.id,
       status: 'booking_process_started',
@@ -42,18 +42,17 @@ module ShippingTools
     destinations = []
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
       begin
-      origins << {
-        value: Location.find(itinerary.first_nexus.id).to_custom_hash,
-        label: itinerary.first_nexus.name
-      }
-      destinations << {
-        value: Location.find(itinerary.last_nexus.id).to_custom_hash,
-        label: itinerary.last_nexus.name
-      }
-      
+        origins << {
+          value: Location.find(itinerary.first_nexus.id).to_custom_hash,
+          label: itinerary.first_nexus.name
+        }
+        destinations << {
+          value: Location.find(itinerary.last_nexus.id).to_custom_hash,
+          label: itinerary.last_nexus.name
+        }
+
         itinerary = itinerary.as_options_json
-      rescue
-        
+      rescue StandardError
       end
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
@@ -75,7 +74,7 @@ module ShippingTools
     offer_calculatior.calc_offer!
 
     offer_calculatior.shipment.save!
-    return {
+    {
       shipment:                   offer_calculatior.shipment,
       total_price:                offer_calculatior.total_price,
       has_pre_carriage:           offer_calculatior.has_pre_carriage,
@@ -84,7 +83,7 @@ module ShippingTools
       truck_seconds_pre_carriage: offer_calculatior.truck_seconds_pre_carriage,
       originHubs:                 offer_calculatior.origin_hubs,
       destinationHubs:            offer_calculatior.destination_hubs,
-      cargoUnits:                 offer_calculatior.shipment.cargo_units,
+      cargoUnits:                 offer_calculatior.shipment.cargo_units
     }
   end
 
@@ -277,7 +276,6 @@ module ShippingTools
       "
     end
 
-
     {
       title: 'Booking Received',
       message: message,
@@ -287,15 +285,15 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-      .permit(:street, :streetNumber, :zipCode, :city, :country)
-      .to_h.deep_transform_keys(&:underscore)
+            .permit(:street, :streetNumber, :zipCode, :city, :country)
+            .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
-      .permit(:companyName, :firstName, :lastName, :email, :phone)
-      .to_h.deep_transform_keys(&:underscore)
-      .merge(location_id: location_id)
+            .permit(:companyName, :firstName, :lastName, :email, :phone)
+            .to_h.deep_transform_keys(&:underscore)
+            .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
@@ -328,7 +326,7 @@ module ShippingTools
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
 
-    shipment.itinerary = Itinerary.find(@schedule["itinerary_id"])
+    shipment.itinerary = Itinerary.find(@schedule['itinerary_id'])
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -347,7 +345,7 @@ module ShippingTools
         contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-  
+
     hub_route = @schedule['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTenantIncoterms < ActiveRecord::Migration[5.1]
   def change
     create_table :tenant_incoterms do |t|

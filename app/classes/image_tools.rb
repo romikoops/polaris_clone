@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module ImageTools
-  require "mini_magick"
+  require 'mini_magick'
 
   def reduce_and_upload(name, url)
     img = MiniMagick::Image.open(url)
-    resized_small = img.resize "600x400"
+    resized_small = img.resize '600x400'
     # resized_large = img.resize "800x600"
     resized_small.write("./#{name}_sm.jpg")
     # resized_large.write("./#{name}_lg.jpg")
@@ -12,7 +14,7 @@ module ImageTools
     lg_str = 'test'
     # img.destroy!
     # resized_small.destroy!
-    return {sm: sm_str, lg: lg_str}
+    { sm: sm_str, lg: lg_str }
   end
 
   def load_city_images
@@ -33,12 +35,12 @@ module ImageTools
     filename = filepath[2..-1]
     objKey = 'assets/default_images/' + filename
     File.open(filepath, 'rb') do |file|
-      s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body:file, acl: 'public-read')
+      s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, acl: 'public-read')
     end
     # s3.bucket(ENV['AWS_BUCKET']).object(objKey).upload_file(filepath)
-    awsurl = "https://assets.itsmycargo.com/" + objKey
+    awsurl = 'https://assets.itsmycargo.com/' + objKey
 
-    return awsurl
+    awsurl
     # s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'public-read')
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Drop all tables
 
 Pricing.destroy_all

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pricing < ApplicationRecord
   belongs_to :itinerary
   belongs_to :tenant
@@ -10,7 +12,7 @@ class Pricing < ApplicationRecord
 
   def as_json(options = {})
     new_options = options.reverse_merge(
-{ methods: [:data, :exceptions, :load_type], only: [:effective_date, :expiration_date, :wm_rate, :itinerary_id, :tenant_id, :transport_category_id, :id, :currency_name] }
+      methods: %i[data exceptions load_type], only: %i[effective_date expiration_date wm_rate itinerary_id tenant_id transport_category_id id currency_name]
     )
     super(new_options)
   end
@@ -22,6 +24,4 @@ class Pricing < ApplicationRecord
   def exceptions
     pricing_exceptions.map(&:as_json)
   end
-
 end
-

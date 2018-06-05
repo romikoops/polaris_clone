@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TenantIncoterm < ApplicationRecord
   belongs_to :tenant
   belongs_to :incoterm

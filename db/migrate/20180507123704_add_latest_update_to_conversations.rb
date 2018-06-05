@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLatestUpdateToConversations < ActiveRecord::Migration[5.1]
   def change
     add_column :conversations, :last_updated, :datetime

@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 class PricingDetail < ApplicationRecord
   belongs_to :tenant
   belongs_to :priceable, polymorphic: true
 
-  def as_json(options={})
-
+  def as_json(options = {})
     new_options = options.reverse_merge(
-      { methods: shipping_type, only: [] }
+      methods: shipping_type, only: []
     )
     super(new_options)
   end
@@ -25,16 +26,16 @@ class PricingDetail < ApplicationRecord
   def method_missing(method_name, *args)
     if method_name == shipping_type.to_sym
       to_fee
-    else 
-      super      
-    end
-  end
-  def respond_to_missing?(method_name, *args)
-    if method_name == shipping_type.to_sym
-      true
-    else 
-      super    
+    else
+      super
     end
   end
 
+  def respond_to_missing?(method_name, *args)
+    if method_name == shipping_type.to_sym
+      true
+    else
+      super
+    end
+  end
 end

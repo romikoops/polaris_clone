@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
-ruby "2.5.1"
+ruby '2.5.1'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -18,14 +20,14 @@ gem 'activerecord-import'
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 
-gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sass-rails'
+gem 'sprockets-rails', require: 'sprockets/railtie'
 
+gem 'awesome_print'
+gem 'aws-sdk-sqs'
 gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'rufo'
-gem 'awesome_print'
 gem 'shoryuken'
-gem 'aws-sdk-sqs'
 
 gem 'activerecord-postgis-adapter'
 
@@ -48,7 +50,7 @@ gem 'rack-cors'
 gem 'geocoder'
 
 # gem 'remote_syslog_logger'
-gem "sentry-raven"
+gem 'sentry-raven'
 
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'
@@ -78,39 +80,39 @@ gem 'chronic'
 gem 'table_print'
 
 # Filter and sort Active record collections
-gem "filterrific"
+gem 'filterrific'
 
 # Pagination library
 gem 'will_paginate', '~> 3.1.5'
 
 # Easier CSS for emails
-gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
+gem 'premailer-rails'
 
 # Image resizing
-gem "mini_magick"
+gem 'mini_magick'
 
 # AWS SDK for hosting and S3
 gem 'aws-sdk', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
   # Better debugging
-  gem 'ruby-debug-ide'
   gem 'debase'
-  gem 'rspec-rails'
   gem 'dotenv-rails' # set environment variables
   gem 'factory_bot_rails'
   gem 'rails-erd'
+  gem 'rspec-rails'
   gem 'rubocop'
+  gem 'ruby-debug-ide'
 end
 
 group :test do
-  gem 'webmock'
-  gem 'simplecov', require: false
   gem 'shoulda-matchers'
+  gem 'simplecov', require: false
   gem 'timecop'
+  gem 'webmock'
 end
 
 group :development, :staging do
@@ -121,4 +123,4 @@ group :development, :staging do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

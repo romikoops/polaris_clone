@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Container < ApplicationRecord
   # The following Constants are currently being stored directly
   # in the Front End, but may be needed in future refactoring.
@@ -25,7 +27,7 @@ class Container < ApplicationRecord
 
   # Instance Methods
   def size
-    self.size_class.split("_")[0]
+    size_class.split('_')[0]
   end
 
   private
@@ -38,7 +40,7 @@ class Container < ApplicationRecord
     return unless weight_class.blank?
     return if size_class.nil?
 
-    size = size_class.split("_").first
+    size = size_class.split('_').first
     which_weight_step = nil
     PRICING_WEIGHT_STEPS[1..-1].each_with_index do |weight_step, i|
       if payload_in_kg / 1000 > weight_step
@@ -50,5 +52,4 @@ class Container < ApplicationRecord
 
     self.weight_class = "<= #{which_weight_step}t"
   end
-  
 end
