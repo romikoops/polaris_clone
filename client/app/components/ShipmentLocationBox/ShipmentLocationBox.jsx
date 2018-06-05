@@ -126,6 +126,10 @@ export class ShipmentLocationBox extends Component {
     if (nextProps.has_on_carriage) {
       this.postToggleAutocomplete('destination')
     }
+    if (this.props.nextStageAttempts < nextProps.nextStageAttempts) {
+      this.changeAddressFormVisibility('origin', true)
+      this.changeAddressFormVisibility('destination', true)
+    }
   }
   setDestNexus (event) {
     this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
@@ -423,7 +427,7 @@ export class ShipmentLocationBox extends Component {
   }
 
   updateAddressFieldsErrors (target) {
-    if (!this.props.nextStageAttempt) {
+    if (this.props.nextStageAttempts === 0) {
       return
     }
     const counterpart = target === 'origin' ? 'destination' : 'origin'
@@ -675,7 +679,7 @@ export class ShipmentLocationBox extends Component {
   }
   render () {
     const {
-      allNexuses, shipmentDispatch, scope, shipmentData
+      allNexuses, shipmentDispatch, scope, shipmentData, nextStageAttempts, origin, destination
     } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -692,7 +696,7 @@ export class ShipmentLocationBox extends Component {
     if (availableDestinations) destinationOptions = availableDestinations
     if (availableOrigins) originOptions = availableOrigins
 
-    const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
+    const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
         <StyledSelect
@@ -702,7 +706,7 @@ export class ShipmentLocationBox extends Component {
           placeholder="Origin"
           options={originOptions}
           onChange={this.setOriginNexus}
-          nextStageAttempt={this.props.nextStageAttempt}
+          nextStageAttempt={nextStageAttempts > 0}
         />
         <span className={errorStyles.error_message} style={{ color: 'white' }}>
           {showOriginError ? 'Must not be blank' : ''}
@@ -710,7 +714,7 @@ export class ShipmentLocationBox extends Component {
       </div>
     )
 
-    const showDestinationError = !this.state.dSelect && this.props.nextStageAttempt
+    const showDestinationError = !this.state.dSelect && nextStageAttempts > 0
     const destNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
         <StyledSelect
@@ -721,7 +725,7 @@ export class ShipmentLocationBox extends Component {
           options={destinationOptions}
           onChange={this.setDestNexus}
           backgroundColor={backgroundColor}
-          nextStageAttempt={this.props.nextStageAttempt}
+          nextStageAttempt={nextStageAttempts > 0}
         />
         <span className={errorStyles.error_message} style={{ color: 'white' }}>
           {showDestinationError ? 'Must not be blank' : ''}
@@ -754,52 +758,67 @@ export class ShipmentLocationBox extends Component {
           <input
             id="not-auto"
             name="origin-number"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.number ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.origin.number}
+            value={origin.number}
             placeholder="Number"
           />
           <input
             name="origin-street"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.street ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.origin.street}
+            value={origin.street}
             placeholder="Street"
           />
           <input
             name="origin-zipCode"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.zipCode ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.origin.zipCode}
+            value={origin.zipCode}
             placeholder="Zip Code"
           />
           <input
             name="origin-city"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.city ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.origin.city}
+            value={origin.city}
             placeholder="City"
           />
           <input
             name="origin-country"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.country ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.origin.country}
+            value={origin.country}
             placeholder="Country"
           />
           <div className="flex-100 layout-row layout-align-start-center">
@@ -862,52 +881,63 @@ export class ShipmentLocationBox extends Component {
           </div>
           <input
             name="destination-number"
-            className={`flex-90 ${styles.input}`}
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.destination.number}
+            value={destination.number}
             placeholder="Number"
           />
           <input
             name="destination-street"
-            className={`flex-90 ${styles.input}`}
-            type="string"
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.street ? styles.with_errors : ''}`
+            }
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.destination.street}
+            value={destination.street}
             placeholder="Street"
           />
           <input
             name="destination-zipCode"
-            className={`flex-90 ${styles.input}`}
-            type="string"
+            className={
+              `flex-90 ${styles.zipCode} ` +
+              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
+            }
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.destination.zipCode}
+            value={destination.zipCode}
             placeholder="Zip Code"
           />
           <input
             name="destination-city"
-            className={`flex-90 ${styles.input}`}
-            type="string"
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.city ? styles.with_errors : ''}`
+            }
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.destination.city}
+            value={destination.city}
             placeholder="City"
           />
           <input
             name="destination-country"
-            className={`flex-90 ${styles.input}`}
-            type="string"
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.country ? styles.with_errors : ''}`
+            }
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={this.props.destination.country}
+            value={destination.country}
             placeholder="Country"
           />
           <div className="flex-100 layout-row layout-align-start-center">
@@ -1100,7 +1130,7 @@ export class ShipmentLocationBox extends Component {
 }
 
 ShipmentLocationBox.propTypes = {
-  nextStageAttempt: PropTypes.bool,
+  nextStageAttempts: PropTypes.integer,
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
@@ -1130,7 +1160,7 @@ ShipmentLocationBox.propTypes = {
 }
 
 ShipmentLocationBox.defaultProps = {
-  nextStageAttempt: false,
+  nextStageAttempts: 0,
   theme: null,
   user: null,
   shipmentData: null,

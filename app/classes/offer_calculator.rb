@@ -106,7 +106,7 @@ class OfferCalculator
           @pickup_address.lat_lng_string,
           @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
           @shipment.planned_pickup_date.to_i
-        )
+        )                                                                                                                                     
         
         driving_time = google_directions.driving_time_in_seconds
         longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
