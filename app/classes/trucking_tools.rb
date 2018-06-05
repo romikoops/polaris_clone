@@ -132,9 +132,18 @@ module TruckingTools
     when "cbm"
       trucking_pricing["rates"]["cbm"].each do |rate|
         if cargo_values["volume"] <= rate["max_cbm"].to_d && cargo_values["volume"] >= rate["min_cbm"].to_d
+          
           rate["rate"]["min_value"] = rate["min_value"]
           return {rate: rate["rate"], fees: trucking_pricing["fees"]}
         end
+      end
+      
+      if cargo_values["volume"] < trucking_pricing["rates"]["cbm"].first["min_cbm"].to_d
+        trucking_pricing["rates"]["cbm"].first["rate"]["min_value"] = trucking_pricing["rates"]["cbm"].first["min_value"]
+        return {rate: trucking_pricing["rates"]["cbm"].first["rate"], fees: trucking_pricing["fees"]}
+      elsif cargo_values["volume"] > trucking_pricing["rates"]["cbm"].last["max_cbm"].to_d
+        trucking_pricing["rates"]["cbm"].last["rate"]["min_value"] = trucking_pricing["rates"]["cbm"].last["min_value"]
+        return {rate: trucking_pricing["rates"]["cbm"].last["rate"], fees: trucking_pricing["fees"]}
       end
     when "cbm_kg"
       result = {rate_basis: "PER_CBM_KG"}
@@ -149,6 +158,16 @@ module TruckingTools
         result["cbm"] = rate["rate"]["value"]
         result["min_value"] = rate["min_value"]
         result["currency"] = rate["rate"]["currency"]
+      end
+      
+      if cargo_values["volume"] < trucking_pricing["rates"]["cbm"].first["min_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].first["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].first["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].first["rate"]["currency"]
+      elsif cargo_values["volume"] > trucking_pricing["rates"]["cbm"].last["max_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].last["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].last["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].last["rate"]["currency"]
       end
       return {rate: result, fees: trucking_pricing["fees"]}
     when "unit"

@@ -235,11 +235,11 @@ class Shipment < ApplicationRecord
       s.origin_nexus = itinerary.first_stop.hub.nexus
       if s.has_on_carriage
         
-        s.trucking['on_carriage']['location_id'] = itinerary.last_stop.hub.id
+        s.trucking['on_carriage']['location_id'] ||= itinerary.last_stop.hub.id
       end
       if s.has_pre_carriage
         
-        s.trucking['pre_carriage']['location_id'] = itinerary.first_stop.hub.id
+        s.trucking['pre_carriage']['location_id'] ||= itinerary.first_stop.hub.id
       end
       s.save!
     end

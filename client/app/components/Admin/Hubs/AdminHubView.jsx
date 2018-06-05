@@ -419,9 +419,17 @@ export class AdminHubView extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >
-            <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-              {hub.name}
-            </p>
+            <div className={`flex layout-row layout-align-start-center ${styles.header_bar_grey}`}>
+              <p className="flex-none" style={textStyle}>
+                Hub
+              </p>
+            </div>
+            <div className={`flex-none layout-row layout-align-center-center ${styles.header_bar_active_button}`}>
+              <p className="flex-none" style={textStyle}>
+                {hub.status}
+              </p>
+            </div>
+            
           </div>
           <div className="flex-100 layout-row layout-align-space-between-start">
             {editing ? editBox : detailsBox}
