@@ -46,7 +46,7 @@ class OfferCalculator
     @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
-      
+
       if @pickup_address.nil? || @pickup_address.zip_code.blank?
         raise ApplicationError::InvalidPickupAddress
       end
@@ -56,8 +56,8 @@ class OfferCalculator
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
     if @shipment.has_on_carriage?
       @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
-      
-      if @delivery_address.nil? || @pickup_address.zip_code.blank?
+
+      if @delivery_address.nil? || @delivery_address.zip_code.blank?
         raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
       end
       @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
@@ -99,22 +99,17 @@ class OfferCalculator
   end
 
   def determine_current_etd_in_search!
-    begin
-      longest_trucking_time = 0
+    longest_trucking_time = 0
 
-      if shipment.has_pre_carriage?
-        google_directions = GoogleDirections.new(
-          @pickup_address.lat_lng_string,
-          @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
-          @shipment.planned_pickup_date.to_i
-        )                                                                                                                                     
-        
-        driving_time = google_directions.driving_time_in_seconds
-        longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
-      end
-      @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
-    rescue
-      raise ApplicationError::NoTruckingTime
+    if shipment.has_pre_carriage?
+      google_directions = GoogleDirections.new(
+        @pickup_address.lat_lng_string,
+        @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
+        @shipment.planned_pickup_date.to_i
+      )
+
+      driving_time = google_directions.driving_time_in_seconds
+      longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
     end
     @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
   rescue StandardError
@@ -152,22 +147,6 @@ class OfferCalculator
 
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
-      
-      if trip && trip.length > 1
-        sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
-        
-        next if charges[sched_key]
-
-        charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-        
-        destroy_previous_charge_breakdown(itinerary_id)
-        @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
-        @grand_total_charge = Charge.create(
-          children_charge_category: ChargeCategory.grand_total,
-          charge_category:          ChargeCategory.base_node,
-          charge_breakdown:         @charge_breakdown,
-          price:                    Price.create(currency: @shipment.user.currency)
-        )
 
       next unless trip && trip.length > 1
       sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
@@ -175,12 +154,14 @@ class OfferCalculator
       next if charges[sched_key]
 
       charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+
+      destroy_previous_charge_breakdown(itinerary_id)
       @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
       @grand_total_charge = Charge.create(
         children_charge_category: ChargeCategory.grand_total,
-        charge_category: ChargeCategory.base_node,
-        charge_breakdown: @charge_breakdown,
-        price: Price.create(currency: @shipment.user.currency)
+        charge_category:          ChargeCategory.base_node,
+        charge_breakdown:         @charge_breakdown,
+        price:                    Price.create(currency: @shipment.user.currency)
       )
 
       set_local_charges!(charges, trip, sched_key)
@@ -494,6 +475,6 @@ class OfferCalculator
     snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
     snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
     snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
-    snakefied_location_params = ActionController::Parameters.new(snakefied_location_hash)
+    ActionController::Parameters.new(snakefied_location_hash)
   end
 end

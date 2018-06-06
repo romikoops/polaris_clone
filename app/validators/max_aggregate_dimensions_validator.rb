@@ -2,7 +2,7 @@
 
 class MaxAggregateDimensionsValidator < ActiveModel::Validator
   def validate(record)
-    dimension_names = CargoItem::DIMENSIONS
+    dimension_names = CargoItem::DIMENSIONS.dup
     mode_of_transport = record.itinerary&.mode_of_transport&.to_sym
 
     # If an itinerary has not yet been set, the chargeable weight validation is skipped,
