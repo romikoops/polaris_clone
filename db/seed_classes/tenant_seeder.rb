@@ -1456,6 +1456,7 @@ class TenantSeeder
 
     update_cargo_item_types!(tenant, other_data[:cargo_item_types])
     update_tenant_incoterms!(tenant, other_data[:incoterms])
+    update_max_dimensions!(tenant)
   end
 
   def self.exec(tenant_data = TENANT_DATA)
@@ -1469,6 +1470,7 @@ class TenantSeeder
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
       update_tenant_incoterms!(tenant, other_data[:incoterms])
+      update_max_dimensions!(tenant)
       TenantSeeder.sandbox_exec(tenant_attr, other_data)
     end
   end
@@ -1530,5 +1532,17 @@ class TenantSeeder
         tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
       end
     end
+  end
+
+  def self.update_max_dimensions!(tenant)
+    modes_of_transport = %i(general)
+    modes_of_transport += %i(air ocean rail).select do |mot| 
+      tenant.mode_of_transport_in_scope? mot
+    end
+    MaxDimensionsBundle.create_defaults_for(
+      tenant,
+      modes_of_transport: modes_of_transport,
+      all: true # Creates for aggregate and unit
+    )
   end
 end

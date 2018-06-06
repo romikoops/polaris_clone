@@ -8,46 +8,16 @@ class CargoItem < ApplicationRecord
     trucking: '0.333'
   }.map_values { |v| BigDecimal(v) }
 
-  MAX_DIMENSIONS = {
-    general: {
-      dimension_x:       '590.0',
-      dimension_y:       '234.2',
-      dimension_z:       '228.0',
-      payload_in_kg:     '21_770.0'
-    },
-    air: {
-      dimension_x:       '120.0',
-      dimension_y:       '80.0',
-      dimension_z:       '158.0',
-      payload_in_kg:     '1_500.0'
-    }
-  }.map_deep_values { |v| BigDecimal(v) }
-
-  MAX_AGGREGATE_DIMENSIONS = {
-    general: {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '0',
-      chargeable_weight: '0'
-    },
-    air: {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '1_500.0',
-      chargeable_weight: '1_500.0'
-    }
-  }.map_deep_values { |v| BigDecimal(v) }
+  DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
 
   belongs_to :shipment
+  delegate :tenant, to: :shipment
+
   belongs_to :cargo_item_type
 
   before_validation :set_chargeable_weight!
 
-  MAX_DIMENSIONS.each do |mot, max_dimensions|
-    CustomValidations.cargo_item_max_dimensions(self, mot, max_dimensions)
-  end
+  CustomValidations.cargo_item_max_dimensions(self)
 
   # Class Methods
   def self.extract(cargo_items_attributes)
@@ -81,12 +51,7 @@ class CargoItem < ApplicationRecord
 
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
     # validation, which depends on this itinerary's mode of transport.
-    klass = CustomValidations.cargo_item_max_dimensions(
-      CargoItem.clone,
-      :air,
-      CargoItem::MAX_DIMENSIONS[:air],
-      itinerary
-    )
+    klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, itinerary)
     Module.const_set('AuxCargoItem', klass)
 
     # Instantiates the auxiliary class and checks if the item is still valid,

@@ -36,6 +36,7 @@ class Tenant < ApplicationRecord
   has_many :seller_incoterm_charges, through: :incoterms
   has_many :buyer_incoterm_charges, through: :incoterms
   has_many :conversations
+  has_many :max_dimensions_bundles
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
@@ -48,10 +49,10 @@ class Tenant < ApplicationRecord
     itineraries.map(&:set_scope!)
   end
 
-  def mot_scope(args)
+  def mot_scope(options = {})
     mot = scope['modes_of_transport']
-    mot = load_type_filter('container', mot)  if args[:only_container]
-    mot = load_type_filter('cargo_item', mot) if args[:only_cargo_item]
+    mot = load_type_filter('container', mot)  if options[:only_container]
+    mot = load_type_filter('cargo_item', mot) if options[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
   end
 
@@ -73,6 +74,20 @@ class Tenant < ApplicationRecord
         update_item('hsCodes', { _id: datum['_id'] }, datum)
       end
     end
+  end
+
+  def mode_of_transport_in_scope?(mode_of_transport, load_type = nil)
+    return scope.dig('modes_of_transport', mode_of_transport.to_s).values.any? if load_type.nil?
+
+    scope.dig('modes_of_transport', mode_of_transport.to_s, load_type.to_s)
+  end
+
+  def max_dimensions
+    max_dimensions_bundles.unit.to_max_dimensions_hash
+  end
+
+  def max_aggregate_dimensions
+    max_dimensions_bundles.aggregate.to_max_dimensions_hash
   end
 
   private
@@ -113,6 +128,14 @@ class Tenant < ApplicationRecord
     mot.reduce({}) do |h, (k, v)|
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
+  end
+
+  def create_default_max_dimensions
+    MaxDimensionsBundle.create_defaults_for(self)
+  end
+
+  def create_default_aggregate_max_dimensions
+    MaxDimensionsBundle.create_defaults_for(self, aggregate: true)
   end
 
   # Shortcuts to find_by_subdomain to use in the console
