@@ -170,13 +170,15 @@ module.exports = exports = function looksSame (reference, image, opts, callback)
     const second = pair.second
 
     if (first.width !== second.width || first.height !== second.height) {
+      console.log('difference in images sizes', first.width, second.width, first.height, second.height)
+
       return process.nextTick(() => callback(null, false))
     }
 
     const comparator = createComparator(first, second, opts)
 
     getDiffPixelsCoords(first, second, comparator, { stopOnFirstFail: true }, (result) => {
-      callback(null, result.length === 0)
+      callback(null, result.length)
     })
   })
 }

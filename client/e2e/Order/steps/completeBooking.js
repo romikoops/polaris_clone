@@ -11,8 +11,12 @@ export default async function completeBooking (puppeteer) {
   expect(await puppeteer.click(CHECK_ICON, 'last')).toBeTruthy()
   expect(await puppeteer.clickWithText('p', 'Finish Booking Request')).toBeTruthy()
 
-  await puppeteer.waitForText(THANK_YOU_LOADED)
+  /**
+   * TODO: it doesn't wait for text, still there is no `false` returned
+   */
+  expect(await puppeteer.waitForText(THANK_YOU_LOADED)).toBeTruthy()
 
+  await puppeteer.takeScreenshot('thank.you')
   const thankYouURL = await puppeteer.url()
   expect(thankYouURL.endsWith('thank_you')).toBeTruthy()
 }

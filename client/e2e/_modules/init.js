@@ -29,32 +29,43 @@ function compareImages (label, compareLabel, toleranceInput) {
       base,
       compareTo,
       { tolerance },
-      (err, equal) => {
+      (err, numberOfDiffPixels) => {
         if (err !== null) {
           throw err
         }
 
-        if (equal) {
+        if (numberOfDiffPixels === 0) {
+          console.log(`(i) '${label}' successful visual regression testing`)
+
           return resolve(true)
         }
+
+        /**
+         * `false` indicates images with different size, so we skip the creation of diff image
+         */
+        if (numberOfDiffPixels === false) {
+          return resolve(false)
+        }
+        console.log(`'${label}' has ${numberOfDiffPixels} pixels difference in visual regression testing`)
+        console.log(`Building a diff image. It will take some time, please be patient!`)
 
         if (existsSync(diff)) {
           unlinkSync(diff)
         }
 
-        return looksSame.createDiff({
+        looksSame.createDiff({
           reference: base,
           current: compareTo,
           diff,
           highlightColor: '#ff00ff',
           strict: false
         }, (diffErr) => {
-          if (diffErr !== null) {
-            throw diffErr
-          }
-          open(diff)
+          if (diffErr === null) {
+            open(diff)
 
-          resolve(false)
+            return resolve(false)
+          }
+          throw diffErr
         })
       }
     )
@@ -352,13 +363,8 @@ export default async function init (options) {
       unlinkSync(compareFilePath)
     }
     await takeScreenshot(compareLabel)
-    const result = await compareImages(label, compareLabel, tolerance)
 
-    if (result === false) {
-      console.warning('compareImages', false)
-    }
-
-    return result
+    return compareImages(label, compareLabel, tolerance)
   }
 
   const onError = () => {
