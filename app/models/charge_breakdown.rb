@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class ChargeBreakdown < ApplicationRecord
   belongs_to :shipment
   belongs_to :itinerary
 
   validates :itinerary_id, uniqueness: {
     scope: :shipment_id,
-    message: -> obj, _ {
+    message: lambda { |obj, _|
       itinerary_info = "#{obj.itinerary_id} (#{obj.itinerary.name})"
       "#{itinerary_info} is already taken for shipment_id #{obj.shipment_id}"
     }

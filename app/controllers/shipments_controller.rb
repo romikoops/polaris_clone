@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentsController < ApplicationController
   include ShippingTools
   include MongoTools
@@ -7,8 +9,8 @@ class ShipmentsController < ApplicationController
   def index
     @shipper = current_user
 
-    @requested_shipments = @shipper.shipments.where(status: %w(requested requested_by_unconfirmed_account))
-    @open_shipments = @shipper.shipments.where(status: %w(accepted in_progress))
+    @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
+    @open_shipments = @shipper.shipments.where(status: %w[accepted in_progress])
     @finished_shipments = @shipper.shipments.where(status: 'finished')
     response_handler(
       requested: @requested_shipments,
@@ -17,12 +19,12 @@ class ShipmentsController < ApplicationController
     )
   end
 
-  def new 
-  end
+  def new; end
 
   def test_email
     tenant_notification_email(current_user, Shipment.first)
   end
+
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
@@ -30,7 +32,7 @@ class ShipmentsController < ApplicationController
     if params[:file]
       @doc = create_document(params[:file], @shipment, params[:type], current_user)
       tmp = @doc.as_json
-      tmp["signed_url"] = @doc.get_signed_url
+      tmp['signed_url'] = @doc.get_signed_url
     end
     response_handler(tmp)
   end
@@ -47,10 +49,10 @@ class ShipmentsController < ApplicationController
     end
 
     locations = { origin: shipment.origin_nexus, destination: shipment.destination_nexus }
-  
+
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
-      tmp_doc["signed_url"] = doc.get_signed_url
+      tmp_doc['signed_url'] = doc.get_signed_url
       tmp_doc
     end
 

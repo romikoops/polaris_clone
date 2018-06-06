@@ -8,7 +8,7 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
   
   shipper = tenant.users.where(role_id: 2).first
-  # tenant.itineraries.destroy_all
+  tenant.itineraries.destroy_all
   # tenant.local_charges.destroy_all
   # tenant.customs_fees.destroy_all
 #   # tenant.trucking_pricings.delete_all
@@ -25,10 +25,10 @@ subdomains.each do |sub|
 
 # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
-#   puts "# Overwrite Local Charges From Sheet"
-#     local_charges = File.open("#{Rails.root}/db/dummydata/trucking_local_charges.xlsx")
-#     req = {"xlsx" => local_charges}
-#     overwrite_local_charges(req, shipper)
+  # puts "# Overwrite Local Charges From Sheet"
+  #   local_charges = File.open("#{Rails.root}/db/dummydata/trucking_local_charges.xlsx")
+  #   req = {"xlsx" => local_charges}
+  #   overwrite_local_charges(req, shipper)
 
 
 # # #   # # # # # # Overwrite trucking data from excel sheet

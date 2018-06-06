@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScheduleSet
   attr_accessor :set
   attr_reader :actual_pickup_date, :departure_date, :eta_terminal

@@ -327,6 +327,19 @@ ActiveRecord::Schema.define(version: 20180606124541) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "max_dimensions_bundles", force: :cascade do |t|
+    t.string "mode_of_transport"
+    t.integer "tenant_id"
+    t.boolean "aggregate"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
+    t.decimal "dimension_z"
+    t.decimal "payload_in_kg"
+    t.decimal "chargeable_weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "title"
     t.string "message"

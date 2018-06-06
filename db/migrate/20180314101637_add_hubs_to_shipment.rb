@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddHubsToShipment < ActiveRecord::Migration[5.1]
   def change
     add_column :shipments, :origin_hub_id, :integer

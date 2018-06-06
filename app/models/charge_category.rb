@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class ChargeCategory < ApplicationRecord
   has_many :charges
-  
+
   validates :name, :code, presence: true
-  validates :code, is_model: true, unless: -> obj { obj.cargo_unit_id.nil? }
+  validates :code, is_model: true, unless: ->(obj) { obj.cargo_unit_id.nil? }
 
   def self.grand_total
     find_or_create_by(code: 'grand_total', name: 'Grand Total')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IsModelValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     @record    = record
@@ -12,6 +14,6 @@ class IsModelValidator < ActiveModel::EachValidator
   private
 
   def add_error(message)
-   	@record.errors[@attribute] << message
+    @record.errors[@attribute] << message
   end
 end

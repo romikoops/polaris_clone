@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Charge < ApplicationRecord
   include CurrencyTools
 
@@ -18,7 +20,7 @@ class Charge < ApplicationRecord
     children_charges = children.map do |charge|
       children_charge_category = charge.children_charge_category
       key = children_charge_category.try(:cargo_unit).try(:id) || children_charge_category.code
-      [key , charge.deconstruct_tree_into_schedule_charge]
+      [key, charge.deconstruct_tree_into_schedule_charge]
     end.to_h
 
     { total: price.given_attributes }.merge(children_charges)
@@ -32,7 +34,7 @@ class Charge < ApplicationRecord
   )
     schedule_charge = { 'grand_total' => schedule_charge } if parent.nil?
     schedule_charge.each do |key, charge_h|
-      next if %w(total value currency).include? key
+      next if %w[total value currency].include? key
       children_charge_category = ChargeCategory.find_or_create_by(name: key, code: key)
       price_h = charge_h['value'].nil? ? charge_h['total'] : charge_h
       price_h ||= {
@@ -54,11 +56,10 @@ class Charge < ApplicationRecord
 
   def update_price!
     rates = get_rates(price.currency).today.merge(price.currency => 1.0)
-    self.price.value = children.reduce(0) do |sum, charge|
-      byebug
+    price.value = children.reduce(0) do |sum, charge|
       sum + charge.price.value / rates[charge.price.currency].to_d
     end
-    self.price.save!
+    price.save!
   end
 
   private

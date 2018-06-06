@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class EmailsValidator < ActiveModel::EachValidator
-  BRANCHES = %w(sales support)
+  BRANCHES = %w[sales support].freeze
 
   def validate_each(record, attribute, value)
     @record    = record
@@ -9,11 +11,11 @@ class EmailsValidator < ActiveModel::EachValidator
       add_error 'must be a Hash'
       return
     end
-    
+
     value.deep_stringify_keys!
-    
+
     missing_branches = BRANCHES - value.keys
-  	unless missing_branches.empty?
+    unless missing_branches.empty?
       add_error "is missing the following keys: #{missing_branches.log_format}"
     end
 
@@ -28,13 +30,13 @@ class EmailsValidator < ActiveModel::EachValidator
       end
 
       value[branch].each do |mode_of_transport, email|
-      	unless email.is_a?(String)
-      		add_error "'#{branch} - #{mode_of_transport}' email must be a string"
-      	end
+        unless email.is_a?(String)
+          add_error "'#{branch} - #{mode_of_transport}' email must be a string"
+        end
 
-      	unless email.match(/\A[^@\s]+@[^@\s]+\z/)
-      		add_error "'#{branch} - #{mode_of_transport}' email is invalid"
-      	end
+        unless /\A[^@\s]+@[^@\s]+\z/.match?(email)
+          add_error "'#{branch} - #{mode_of_transport}' email is invalid"
+        end
       end
     end
   end
@@ -42,6 +44,6 @@ class EmailsValidator < ActiveModel::EachValidator
   private
 
   def add_error(message)
-   	@record.errors[@attribute] << message
+    @record.errors[@attribute] << message
   end
 end
