@@ -43,17 +43,21 @@ class OfferCalculator
 
     @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
-
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
       
-      raise ApplicationError::InvalidPickupAddress unless @pickup_address
+      if @pickup_address.nil? || @pickup_address.zip_code.blank?
+        raise ApplicationError::InvalidPickupAddress
+      end
       @shipment.trucking['pre_carriage']['location_id'] = @pickup_address.id
     end
 
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
     if @shipment.has_on_carriage?
       @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
-      raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
+      
+      if @delivery_address.nil? || @pickup_address.zip_code.blank?
+        raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
+      end
       @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
     end
   end
@@ -102,7 +106,7 @@ class OfferCalculator
           @pickup_address.lat_lng_string,
           @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
           @shipment.planned_pickup_date.to_i
-        )
+        )                                                                                                                                     
         
         driving_time = google_directions.driving_time_in_seconds
         longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
@@ -151,12 +155,14 @@ class OfferCalculator
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+        
+        destroy_previous_charge_breakdown(itinerary_id)
         @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
-          charge_category: ChargeCategory.base_node,
-          charge_breakdown: @charge_breakdown,
-          price: Price.create(currency: @shipment.user.currency)
+          charge_category:          ChargeCategory.base_node,
+          charge_breakdown:         @charge_breakdown,
+          price:                    Price.create(currency: @shipment.user.currency)
         )
 
         set_local_charges!(charges, trip, sched_key)
@@ -434,6 +440,10 @@ class OfferCalculator
   end
 
   private
+
+  def destroy_previous_charge_breakdown(itinerary_id)
+    ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
+  end
 
   def trucking_params(params)
     params.require(:shipment).require(:trucking).permit(
