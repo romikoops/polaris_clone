@@ -15,7 +15,23 @@ TypeError: Cannot read property 'catchError' of undefined
     > 33 |     const { screen } = await puppeteer.catchError({})
 `
 
-Fixable with reinstalling with `yarn` command and closing opened `Chrome` browsers.
+Fixable with reinstalling with `yarn` command. If that doesn't help, try closing any opened `Chrome` browsers.
+
+---
+
+`
+** ERROR: directory is already being watched! **
+
+        Directory: /Users/henry/imc-react-api/client/e2e/node_modules/puppeteer/.local-chromium/mac-549031/chrome-mac/Chromium.app/Contents/Versions/67.0.3391.0/Chromium Framework.framework/Versions/Current
+
+        is already being watched through: /Users/henry/imc-react-api/client/e2e/node_modules/puppeteer/.local-chromium/mac-549031/chrome-mac/Chromium.app/Contents/Versions/67.0.3391.0/Chromium Framework.framework/Versions/A
+
+        MORE INFO: https://github.com/guard/listen/wiki/Duplicate-directory-errors
+`
+
+The only solution is to move the entire frontend application into it’s own directory. We will do that as soon as we have somewhat stable test suite in the frontend.
+
+https://github.com/guard/listen/issues/363#issuecomment-171867909
 
 ## How to run e2e tests
 
