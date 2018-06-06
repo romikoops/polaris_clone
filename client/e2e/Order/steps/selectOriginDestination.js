@@ -6,6 +6,20 @@ const ORIGIN = 'Gothenburg'
 
 export default async function selectOriginDestination (puppeteer) {
   const {
+    focus,
+    selectWithTab
+  } = puppeteer
+
+  await focus('body')
+  await selectWithTab(3)
+  await selectWithTab(7)
+}
+
+/**
+ * When the user needs to click on origin to select it
+ */
+export async function selectOriginDestinationWithClick (puppeteer) {
+  const {
     $,
     page,
     focus,

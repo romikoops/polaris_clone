@@ -6,6 +6,17 @@
 
 It happens when `npm install` is used instead of `yarn install`
 
+---
+`
+TypeError: Cannot read property 'catchError' of undefined
+
+      31 |   } catch (e) {
+      32 |     console.log(e)
+    > 33 |     const { screen } = await puppeteer.catchError({})
+`
+
+Fixable with reinstalling with `yarn` command and closing opened `Chrome` browsers.
+
 ## How to run e2e tests
 
 1. `yarn install`
