@@ -9,7 +9,7 @@ class AccountMailer < Devise::Mailer
   def confirmation_instructions(record, token, opts={})
     tenant = record.tenant
 
-    attachments.inline["logo.png"] = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
     @redirect_url = base_url(tenant) + "account"
@@ -24,7 +24,7 @@ class AccountMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts={})
     tenant = record.tenant
 
-    attachments.inline["logo.png"] = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     opts[:subject] = "ItsMyCargo Account Password Reset"
     @redirect_url = base_url(tenant) + "password_reset"

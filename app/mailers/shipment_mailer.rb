@@ -11,15 +11,16 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    base_url = case Rails.env
-               when "production"  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
-               when "development" then "http://localhost:8080/"
-               when "test"        then "http://localhost:8080/"
+    base_url =
+      case Rails.env
+      when "production"  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when "development" then "http://localhost:8080/"
+      when "test"        then "http://localhost:8080/"
       end
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
-    attachments.inline["logo.png"] = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     mail(
       to:      tenant.email_for(:sales, shipment.mode_of_transport),
@@ -34,8 +35,8 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
-    attachments.inline["logo.png"]       = open(tenant.theme["logoLarge"]).read
-    attachments.inline["logo_small.png"] = try(:open, tenant.theme["logoSmall"]).try(:read)
+    attachments.inline["logo.png"]       = URI.open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo_small.png"] = URI.try(:open, tenant.theme["logoSmall"]).try(:read)
 
     mail(
       to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
@@ -50,7 +51,7 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
-    attachments.inline["logo.png"]       = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"]       = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline["logo_small.png"] = try(:open, tenant.theme["logoSmall"]).try(:read)
 
     # bill_of_lading = generate_and_upload_bill_of_lading

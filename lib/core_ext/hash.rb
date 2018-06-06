@@ -7,11 +7,11 @@ class Hash
 
   def map_deep_values(&block)
     map_values { |value| value.is_a?(Hash) ? value.map_deep_values(&block) : yield(value) }
-   end
+  end
 
   def map_deep_values!(&block)
     map_values! { |value| value.is_a?(Hash) ? value.map_deep_values!(&block) : yield(value) }
-   end
+  end
 
   def map_values
     each_with_object({}) do |(k, v), return_h|

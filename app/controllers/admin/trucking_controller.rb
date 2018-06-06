@@ -108,7 +108,7 @@ class Admin::TruckingController < ApplicationController
       response_handler(true)
     else
       response_handler(false)
-   end
+    end
   end
 
   def overwrite_zonal_trucking_by_hub
@@ -119,8 +119,8 @@ class Admin::TruckingController < ApplicationController
       response_handler(resp)
     else
       response_handler(false)
-   end
-end
+    end
+  end
 
   def overwrite_city_trucking
     if params[:file]
@@ -159,7 +159,7 @@ end
       response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
     else
       response_handler(false)
-   end
+    end
   end
 
   def download

@@ -679,7 +679,7 @@ module DocumentTools
     s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
     new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "schedules_sheet")
     new_doc.get_signed_url
- end
+  end
 
   def gdpr_download(user_id)
     user = User.find(user_id)
