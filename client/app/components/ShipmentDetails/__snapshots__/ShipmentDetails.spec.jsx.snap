@@ -27,7 +27,7 @@ exports[`shallow rendering 1`] = `
       handleSelectLocation={[Function]}
       has_on_carriage={true}
       has_pre_carriage={false}
-      nextStageAttempt={false}
+      nextStageAttempts={0}
       prevRequest={
         Object {
           "shipment": Object {
