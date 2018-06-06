@@ -181,12 +181,27 @@ export class BookingConfirmation extends Component {
       shipper, consignee, textStyle, shipment
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle })
-    const nonAcceptedBtn = getNonAcceptedBtn(theme)
-    const acceptedBtn = getAcceptedBtn({
-      theme,
-      handleNext: this.requestShipment
-    })
     const feeHash = shipment.schedules_charges[schedule.hub_route_key]
+
+    const acceptedBtn = (
+      <div className={BUTTON}>
+        <RoundButton
+          theme={theme}
+          text="Finish Booking Request"
+          handleNext={() => this.requestShipment()}
+          active
+        />
+      </div>
+    )
+    const nonAcceptedBtn = (
+      <div className={BUTTON}>
+        <RoundButton
+          theme={theme}
+          text="Finish Booking Request"
+          handleNext={e => e.preventDefault()}
+        />
+      </div>
+    )
 
     const themeTitled = getThemeTitled(theme)
     const { docView, missingDocs } = getDocs({
@@ -787,31 +802,6 @@ function getNotifyeesJSX ({ notifyees, textStyle }) {
   }
 
   return notifyeesJSX
-}
-
-function getAcceptedBtn ({ theme, handleNext }) {
-  return (
-    <div className={BUTTON}>
-      <RoundButton
-        theme={theme}
-        text="Finish Booking Request"
-        handleNext={handleNext}
-        active
-      />
-    </div>
-  )
-}
-
-function getNonAcceptedBtn (theme) {
-  return (
-    <div className={BUTTON}>
-      <RoundButton
-        theme={theme}
-        text="Finish Booking Request"
-        handleNext={e => e.preventDefault()}
-      />
-    </div>
-  )
 }
 
 function getShipperAndConsignee ({
