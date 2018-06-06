@@ -55,7 +55,7 @@ class OfferCalculator
     if @shipment.has_on_carriage?
       @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
       
-      if @delivery_address.nil? || @pickup_address.zip_code.blank?
+      if @delivery_address.nil? || @delivery_address.zip_code.blank?
         raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
       end
       @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
