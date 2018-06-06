@@ -2,7 +2,7 @@ AllCops:
   Exclude:
     - 'client/**/*'
     - 'spec/**/*'
-    - 'db/**'
+    - 'db/**/*'
 
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation

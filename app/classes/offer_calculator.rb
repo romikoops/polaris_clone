@@ -45,17 +45,21 @@ class OfferCalculator
 
     @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
     if @shipment.has_pre_carriage?
-
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
-
-      raise ApplicationError::InvalidPickupAddress unless @pickup_address
+      
+      if @pickup_address.nil? || @pickup_address.zip_code.blank?
+        raise ApplicationError::InvalidPickupAddress
+      end
       @shipment.trucking['pre_carriage']['location_id'] = @pickup_address.id
     end
 
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
     if @shipment.has_on_carriage?
       @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
-      raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
+      
+      if @delivery_address.nil? || @pickup_address.zip_code.blank?
+        raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
+      end
       @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
     end
   end
@@ -95,17 +99,22 @@ class OfferCalculator
   end
 
   def determine_current_etd_in_search!
-    longest_trucking_time = 0
+    begin
+      longest_trucking_time = 0
 
-    if shipment.has_pre_carriage?
-      google_directions = GoogleDirections.new(
-        @pickup_address.lat_lng_string,
-        @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
-        @shipment.planned_pickup_date.to_i
-      )
-
-      driving_time = google_directions.driving_time_in_seconds
-      longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
+      if shipment.has_pre_carriage?
+        google_directions = GoogleDirections.new(
+          @pickup_address.lat_lng_string,
+          @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
+          @shipment.planned_pickup_date.to_i
+        )                                                                                                                                     
+        
+        driving_time = google_directions.driving_time_in_seconds
+        longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
+      end
+      @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
+    rescue
+      raise ApplicationError::NoTruckingTime
     end
     @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
   rescue StandardError

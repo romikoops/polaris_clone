@@ -1535,8 +1535,8 @@ class TenantSeeder
   end
 
   def self.update_max_dimensions!(tenant)
-    modes_of_transport = %i(general)
-    modes_of_transport += %i(air ocean rail).select do |mot| 
+    modes_of_transport = %i[general]
+    modes_of_transport += %i[air ocean rail].select do |mot|
       tenant.mode_of_transport_in_scope? mot
     end
     MaxDimensionsBundle.create_defaults_for(
