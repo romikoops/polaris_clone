@@ -55,6 +55,7 @@ class Charge < ApplicationRecord
   def update_price!
     rates = get_rates(price.currency).today.merge(price.currency => 1.0)
     self.price.value = children.reduce(0) do |sum, charge|
+      byebug
       sum + charge.price.value / rates[charge.price.currency].to_d
     end
     self.price.save!

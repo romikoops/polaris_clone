@@ -15,7 +15,6 @@ class OfferCalculator
 
     # Setting trucking also sets has_on_carriage and has_pre_carriage
     @shipment.trucking = trucking_params(params).to_h
-
     @delay = params[:shipment][:delay]
     @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
@@ -79,7 +78,7 @@ class OfferCalculator
     filter_itineraries!
 
     raise ApplicationError::NoRoute if @itineraries.nil?
-
+    
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
   end
@@ -131,7 +130,7 @@ class OfferCalculator
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
-      
+      byebug
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
     
@@ -151,6 +150,7 @@ class OfferCalculator
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+        destroy_previous_charge_breakdown(itinerary_id)
         @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
         @grand_total_charge = Charge.create(
           children_charge_category: ChargeCategory.grand_total,
@@ -470,5 +470,8 @@ class OfferCalculator
     snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
     snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
     snakefied_location_params = ActionController::Parameters.new(snakefied_location_hash)
+  end
+  def destroy_previous_charge_breakdown(itinerary_id)
+    ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
   end
 end

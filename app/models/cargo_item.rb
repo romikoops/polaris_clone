@@ -3,7 +3,8 @@ class CargoItem < ApplicationRecord
     air:      "0.167",
     rail:     "0.550",
     ocean:    "1.000",
-    trucking: "0.333"
+    trucking: "0.333",
+    truck: "0.333"
   }.map_values { |v| BigDecimal.new(v) }
 
   MAX_DIMENSIONS = {

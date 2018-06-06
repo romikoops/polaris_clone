@@ -151,6 +151,10 @@ class TenantSeeder
       currency: 'USD',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: false,
             cargo_item: true
@@ -265,6 +269,10 @@ class TenantSeeder
       name: "Demo",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -347,6 +355,10 @@ class TenantSeeder
       name: "Nordic Consolidators",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -417,6 +429,10 @@ class TenantSeeder
       name: "Easyshipping",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -484,6 +500,10 @@ class TenantSeeder
       name: "Integrail",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: false,
             cargo_item: false
@@ -554,6 +574,10 @@ class TenantSeeder
       name: "Inter-Scan Sea & Air",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -622,6 +646,10 @@ class TenantSeeder
       name: "Eimskip",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -688,6 +716,10 @@ class TenantSeeder
       name: "Belglobe",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -754,6 +786,10 @@ class TenantSeeder
       name: "GW Forwarding",
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -823,6 +859,10 @@ class TenantSeeder
       currency: 'USD',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -908,6 +948,10 @@ class TenantSeeder
       currency: 'USD',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: false
@@ -995,6 +1039,10 @@ class TenantSeeder
       currency: 'EUR',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -1086,6 +1134,10 @@ class TenantSeeder
       currency: 'EUR',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -1175,6 +1227,10 @@ class TenantSeeder
       currency: 'EUR',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -1262,6 +1318,10 @@ class TenantSeeder
       currency: 'USD',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: true,
             cargo_item: true
@@ -1369,6 +1429,10 @@ class TenantSeeder
       currency: 'USD',
       scope: {
         modes_of_transport: {
+          truck: {
+            container: false,
+            cargo_item: false
+          },
           ocean: {
             container: false,
             cargo_item: true
@@ -1483,17 +1547,21 @@ class TenantSeeder
       name: "Trucking",
       scope: {
         modes_of_transport: {
-          ocean: {
+          truck: {
             container: true,
             cargo_item: true
+          },
+          ocean: {
+            container: false,
+            cargo_item: false
           },
           rail: {
-            container: true,
-            cargo_item: true
+            container: false,
+            cargo_item: false
           },
           air: {
-            container: true,
-            cargo_item: true
+            container: false,
+            cargo_item: false
           }
         },
         fixed_currency: false,
@@ -1510,12 +1578,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'optional',
-            export: 'optional'
+            import: 'mandatory',
+            export: 'mandatory'
           },
           pre_carriage: {
-            import: 'optional',
-            export: 'optional'
+            import: 'mandatory',
+            export: 'mandatory'
           }
         }
       },

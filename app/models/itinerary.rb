@@ -3,7 +3,6 @@ class Itinerary < ApplicationRecord
   include ItineraryTools
 
   belongs_to :tenant
-  belongs_to :mot_scope, optional: true
   has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
   has_many :shipments, dependent: :destroy
@@ -13,6 +12,7 @@ class Itinerary < ApplicationRecord
   has_many :hubs,      through: :stops
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
+  scope :for_load_type_scope, ->(load_type_scope_id) { where(load_type_scope_id: load_type_scope_id) }
   #scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
 
@@ -136,6 +136,7 @@ class Itinerary < ApplicationRecord
           stats[:layovers][:number_created] += 1
         end
       end
+      p tmp_date
       tmp_date += 1.day
     end
     return {results: results, stats: stats}
@@ -184,7 +185,8 @@ class Itinerary < ApplicationRecord
     {
       ocean: exists.('ocean'),
       air:   exists.('air'),
-      rails: exists.('rails')
+      rail: exists.('rail'),
+      truck: exists.('truck')
     }
   end
 
@@ -210,10 +212,6 @@ class Itinerary < ApplicationRecord
 
   def last_nexus
     last_stop.hub.nexus
-  end
-
-  def self.mot_scoped(tenant_id, mot_scope_ids)
-    get_scoped_itineraries(tenant_id, mot_scope_ids)
   end
 
   def routes
@@ -298,21 +296,10 @@ class Itinerary < ApplicationRecord
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
-
+    byebug
     itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
     
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
-  end
-
-  def set_scope!
-    scope_attributes_arr = modes_of_transport.select { |k, v| v }.keys.map do |mode_of_transport|
-      load_types.map { |load_type| "#{mode_of_transport}_#{load_type}" }
-    end.flatten
-    scope_attributes = MotScope.given_attribute_names.each_with_object({}) do |attribute_name, h|
-      h[attribute_name] = scope_attributes_arr.include?(attribute_name)
-    end
-    self.mot_scope = MotScope.find_by(scope_attributes)
-    save!
   end
 
   def self.update_hubs

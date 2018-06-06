@@ -8,6 +8,10 @@ function humanizedMotAndLoadType (scope, loadType) {
       container: 'Rail FCL',
       cargo_item: 'Rail LCL'
     },
+    truck: {
+      container: 'Trucking FTL',
+      cargo_item: 'Trucking LTL'
+    },
     air: {
       container: '',
       cargo_item: 'Air'

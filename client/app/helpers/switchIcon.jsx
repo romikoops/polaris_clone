@@ -8,6 +8,8 @@ export function switchIcon (mot) {
       return <i className="fa fa-plane" />
     case 'rail':
       return <i className="fa fa-train" />
+    case 'truck':
+      return <i className="fa fa-truck" />
     default:
       return <i className="fa fa-ship" />
   }

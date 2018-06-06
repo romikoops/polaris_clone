@@ -557,16 +557,15 @@ export class ShipmentDetails extends Component {
 
   handleTruckingDetailsChange (event) {
     const [carriage, truckType] = event.target.id.split('-')
-    const { shipment } = this.state
-    this.setState({
+    this.setState(prevState => ({
       shipment: {
-        ...shipment,
+        ...prevState.shipment,
         trucking: {
-          ...shipment.trucking,
+          ...prevState.shipment.trucking,
           [carriage]: { truck_type: truckType }
         }
       }
-    })
+    }))
   }
 
   toggleModal (name) {

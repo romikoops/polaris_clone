@@ -1223,7 +1223,8 @@ module ExcelTools
     hub_type_name = {
       'ocean' => 'Port',
       'air' => 'Airport',
-      'rail' => 'Railyard'
+      'rail' => 'Railyard',
+      'truck' => 'Depot'
     }
     default_mandatory_charge = MandatoryCharge.find_by({pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false})
 
@@ -1595,7 +1596,6 @@ module ExcelTools
         results[:pricings] << pricing
       end
     end
-    tenant.update_route_details # TODO: check if necessary
     { results: results, stats: stats }
   end
 
