@@ -1429,6 +1429,110 @@ class TenantSeeder
           "FAS"
         ]
       }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#0D5BA9",
+          secondary: "#23802A",
+          brightPrimary: "#2491FD",
+          brightSecondary: "#25ED36"
+        },
+        logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+        logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+        logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
+        logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+      },
+      addresses: {
+        main:"Brooktorkai 7, 20457 Hamburg, Germany"
+      },
+      phones:{
+        main:"+46 31-85 32 00",
+        support: "0173042031020"
+      },
+      emails: {
+        sales: {
+          general: "sales@trucking.com",
+          air: "sales@trucking.com",
+          ocean: "sales@trucking.com",
+          rail: "sales@trucking.com"
+        },
+        support: {
+          general: "support@trucking.com",
+          air: "imc.air@trucking.com",
+          ocean: "imc.sea@trucking.com",
+          rail: "imc.rail@trucking.com"
+        }
+      },
+      email_links: {
+        confirmation_instructions: [
+          {
+            href: "www.example.com",
+            link_text: "Nordic Association of Freight Forwarders",
+            text: "All assignments will be performed in accordance with the General Conditions of the Nordic Association of Freight Forwarders (NSAB 2015)"
+          },
+          {
+            href: "www.example2.com",
+            link_text: "example2",
+            text: "This is just an example2."
+          }         
+        ]
+      },
+      subdomain: "trucking",
+      name: "Trucking",
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        fixed_currency: false,
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Trucking is to discuss the validity of the presented prices with the product owners."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ]
+      }
     }
 ]
 
