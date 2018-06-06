@@ -56,7 +56,7 @@ class OfferCalculator
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
     if @shipment.has_on_carriage?
       @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
-      
+
       if @delivery_address.nil? || @delivery_address.zip_code.blank?
         raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
       end
