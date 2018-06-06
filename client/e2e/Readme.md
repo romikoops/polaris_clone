@@ -1,5 +1,44 @@
 # End-to-end tests
 
+## How to run e2e tests
+
+1. `yarn install`
+
+2. Run `yarn test` for standard e2e test settings
+
+3. Or run `yarn dev` for e2e test with additional delay
+
+## Visual regression testing
+
+Created in order to confirm that refactored component has the same visual representation as the origin component.
+We are using method `shouldMatchScreenshot` declared in `./_modules/init.js`.
+
+```
+// ./Order/steps/clickReviewBooking.js
+
+export default async function clickReviewBooking (puppeteer) {
+  expect(await puppeteer.clickWithText('p', 'Review Booking')).toBeTruthy()
+  expect(await puppeteer.page.waitForSelector('i.fa-ship')).toBeTruthy()
+
+  await puppeteer.shouldMatchScreenshot('review.booking', 110)
+}
+```
+
+Images are saved in `./node_modules`.
+The number `110` presents allowed 110 pixels difference allowed. It is optional and if omitted, value `0` will be assumed.
+
+The first time this code runs, it will create origin image.
+
+Every other time this code runs, it will create image and compare it to the origin image. In any case, you will receive log information about the difference in pixels between the two images.
+
+If there is more than `110` pixels, diff image will be created and opened with your default image viewer. You will see in purple those areas, where two images differ.
+
+---
+
+! Important
+
+In the example above, we are using `shouldMatchScreenshot` within a step declaration. This declaration is used by both `./Order/step/orderExportFCL.js` and `./Order/step/orderExportLCL.js`. So in this case, we can use `shouldMatchScreenshot` only if we use `test.only` in one of the two tests written in `./Order/test.js`.
+
 ## Known issues
 
 `TypeError: Cannot read property 'bindings' of null`
@@ -32,16 +71,6 @@ Fixable with reinstalling with `yarn` command. If that doesn't help, try closing
 The only solution is to move the entire frontend application into it’s own directory. We will do that as soon as we have somewhat stable test suite in the frontend.
 
 https://github.com/guard/listen/issues/363#issuecomment-171867909
-
-## How to run e2e tests
-
-1. `yarn install`
-
-2. Set include `testRegex: '.spec.jsx$'` in `/client/jest.config.js`
-
-3. Run `yarn test` for standard e2e test settings
-
-4. Or run `yarn dev` for e2e test with additional delay
 
 ## Helpers
 
