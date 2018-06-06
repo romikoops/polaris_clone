@@ -88,11 +88,8 @@ export class AdminHubFees extends Component {
   setAllFromOptions (charges) {
     const newObj = { import: {}, export: {} }
     const tmpObj = {}
-
-    if (!charges.import) {
-      return
-    }
-    ['import', 'export'].forEach((dir) => {
+    const directions = ['import', 'export']
+    directions.forEach((dir) => {
       Object.keys(charges[dir]).forEach((key) => {
         if (!newObj[dir][key]) {
           newObj[dir][key] = {}
@@ -119,7 +116,12 @@ export class AdminHubFees extends Component {
       })
     })
 
-    this.setState({ selectOptions: newObj })
+    this.setState({
+      selectOptions: {
+        ...this.state.selectOptions,
+        [charges.load_type]: newObj
+      }
+    })
   }
 
   handleTopLevelSelect (selection) {
@@ -295,14 +297,21 @@ export class AdminHubFees extends Component {
     }
   }
   renderCargoClassButtons () {
-    const { selectedCargoClass } = this.state
+    const { selectedCargoClass, charges } = this.state
     const { theme } = this.props
     const { primary, secondary } = theme.colors
     const bgStyle = gradientGenerator(primary, secondary)
+
     return cargoClassOptions.map((cargoClass, i) => {
+      const hasCargoClass = charges.filter(charge => charge.load_type === cargoClass.value).length > 0
       const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#E0E0E0' }
       const innerStyle = selectedCargoClass === cargoClass.value ? styles2.cargo_class_button_selected : ''
-      return (<div className={`flex-25 layout-row layout-align-start-center ${styles2.cargo_class_button}`} style={buttonStyle} onClick={() => this.setCargoClass(cargoClass.value)}>
+      const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
+      return (<div
+        className={`flex-25 layout-row layout-align-start-center ${inactiveStyle} ${styles2.cargo_class_button}`}
+        style={buttonStyle}
+        onClick={hasCargoClass ? () => this.setCargoClass(cargoClass.value) : null}
+      >
         <div className={`flex-none layout-row layout-align-center-center ${innerStyle} ${styles2.cargo_class_button_inner}`}>
           <p className="flex-none">{cargoClass.label}</p>
         </div>
@@ -327,28 +336,9 @@ export class AdminHubFees extends Component {
       direction,
       directionBool,
       charges,
-      confirm
+      confirm,
+      selectedCargoClass
     } = this.state
-    console.log('#### charges @@@@@@')
-    console.log(charges)
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format())
-      },
-      month: new Date(
-        moment()
-          .add(7, 'days')
-          .format('YYYY'),
-        moment()
-          .add(7, 'days')
-          .format('M') - 1
-      ),
-      name: 'dayPicker'
-    }
-    const panel = []
-    const viewPanel = []
     // let gloss
     const { primary, secondary } = theme.colors
     const toggleCSS = `
@@ -376,7 +366,7 @@ export class AdminHubFees extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const gloss = chargeGloss
 
-    if (!charges || (charges && !charges[direction])) {
+    if (!charges || (charges && !charges[0])) {
       return ''
     }
     const confimPrompt = confirm ? (
@@ -548,21 +538,22 @@ export class AdminHubFees extends Component {
     const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
     const impStyle = directionBool ? styles2.toggle_off : styles2.toggle_on
     const expStyle = directionBool ? styles2.toggle_on : styles2.toggle_off
-    const feeRows = Object.keys(charges[direction]).map((ck) => {
-      const fee = charges[direction][ck]
+    const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass)[0]
+    const feeRows = Object.keys(currentCharge[direction]).map((ck) => {
+      const fee = currentCharge[direction][ck]
       return (<FeeRow
         className="flex-100"
         theme={theme}
         fee={fee}
-        selectOptions={selectOptions}
+        selectOptions={selectOptions[currentCharge.load_type]}
         direction={direction}
       />)
     })
     return (
-      <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
           <div className="flex-30 layout-row layout-align-start-center">
-            <p className="flex-none" style={{ marginLeft: '20px' }} >Fees & Charges</p>
+            <p className={`flex-none ${styles2.text}`} >Fees & Charges</p>
           </div>
           <div className="flex-30 layout-row layout-align-end-center">
             <div
@@ -575,7 +566,8 @@ export class AdminHubFees extends Component {
             <div
               className={`flex-none layout-row layout-align-center-center ${styles2.toggle} ${expStyle}`}
               style={bgStyle}
-              onClick={() => this.handleDirectionChange()}>
+              onClick={() => this.handleDirectionChange()}
+            >
               <p className="flex-none">Export</p>
             </div>
           </div>
@@ -584,7 +576,7 @@ export class AdminHubFees extends Component {
           <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
             {this.renderCargoClassButtons()}
           </div>
-          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+          <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
             {feeRows}
           </div>
         </div>

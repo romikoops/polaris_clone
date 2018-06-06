@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { DayPickerInput } from 'react-day-picker'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
 import styles from './index.scss'
 import PropTypes from '../../../../prop-types'
 import { gradientCSSGenerator } from '../../../../helpers'
@@ -18,7 +18,12 @@ import {
 class FeeRow extends PureComponent {
   constructor (props) {
     super(props)
-    this.state = { }
+    this.state = {
+      edit: false
+    }
+  }
+  toggleEdit () {
+    this.setState({ edit: !this.state.edit })
   }
   renderFeeBoxes (fee, selectOptions, direction, edit) {
     const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'range']
@@ -26,7 +31,7 @@ class FeeRow extends PureComponent {
     let feeKeys = []
     switch (fee.rate_basis) {
       case 'PER_SHIPMENT' || 'PER_BILL' || 'PER_ITEM' || 'PER_CONTAINER' || 'PER_WM':
-        feeKeys = ['rate', 'min']
+        feeKeys = ['value', 'min']
         break
       case 'PER_CBM':
         feeKeys = ['cbm', 'min']
@@ -43,7 +48,7 @@ class FeeRow extends PureComponent {
       case /RANGE/:
         break
       default:
-        feeKeys = ['rate', 'min']
+        feeKeys = ['value', 'min']
         break
     }
     const cells = []
@@ -69,7 +74,7 @@ class FeeRow extends PureComponent {
         styles.price_cell
       }`}
     >
-      <p className="flex-100">{chargeGlossary.rate_basis}</p>
+      <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary.rate_basis}</p>
       <NamedSelect
         name={`${direction}-${fee.key}-${'rate_basis'}`}
         classes={`${styles.select}`}
@@ -87,10 +92,10 @@ class FeeRow extends PureComponent {
         {chargeGlossary[fee.rate_basis]}
       </p>
       <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary.rate_basis}</p>
-
+      <div className={`flex-none ${styles.price_cell_divider}`} />
     </div>)
     cells.push(rbCell)
-    feeKeys.forEach((chargeKey) => {
+    feeKeys.forEach((chargeKey, i) => {
       if (!dnrKeys.includes(chargeKey)) {
         const cell = edit ? (<div
           key={chargeKey}
@@ -98,8 +103,8 @@ class FeeRow extends PureComponent {
             styles.price_cell
           }`}
         >
-          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-          <div className={`flex-95 layout-row ${styles.editor_input}`}>
+          <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[chargeKey]}</p>
+          <div className="flex-95 layout-row input_box_full">
             <input
               type="number"
               value={fee[chargeKey]}
@@ -107,6 +112,7 @@ class FeeRow extends PureComponent {
               name={`${direction}-${fee.key}-${chargeKey}`}
             />
           </div>
+          {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
         </div>) : (<div
           className={`flex-25 layout-row layout-align-none-center layout-wrap ${
             styles.price_cell
@@ -116,6 +122,7 @@ class FeeRow extends PureComponent {
             {fee[chargeKey]} {fee.currency}
           </p>
           <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[chargeKey]}</p>
+          {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
         </div>)
         cells.push(cell)
       }
@@ -143,13 +150,13 @@ class FeeRow extends PureComponent {
       ),
       name: 'dayPicker'
     }
-    dateKeys.forEach((dk) => {
+    dateKeys.forEach((dk, i) => {
       const dateCell = edit ? (<div
         className={`flex layout-row layout-align-none-center layout-wrap ${
           styles.price_cell
         } ${styles.dpb}`}
       >
-        <p className="flex-100">{chargeGlossary[dk]}</p>
+        <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[dk]}</p>
         <DayPickerInput
           name="dayPicker"
           placeholder="DD/MM/YYYY"
@@ -158,6 +165,7 @@ class FeeRow extends PureComponent {
           onDayChange={e => this.handleDayChange(e, direction, fee.key, dk)}
           dayPickerProps={dayPickerProps}
         />
+        {i !== dateKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
       </div>) : (<div
         className={`flex layout-row layout-align-none-center layout-wrap ${
           styles.price_cell
@@ -165,12 +173,14 @@ class FeeRow extends PureComponent {
       >
         <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[dk]}</p>
         <p className={`flex-90 ${styles.price_cell_data}`}>{moment(fee[dk]).format('ll')}</p>
+        {i !== dateKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
       </div>)
       cells.push(dateCell)
     })
     return cells
   }
   render () {
+    const { edit } = this.state
     const {
       fee, toggleEdit, theme, handleDateEdit, handleFeeEdit, handleRateBasisEdit, selectOptions, direction
     } = this.props
@@ -189,13 +199,13 @@ class FeeRow extends PureComponent {
           <p className="flex-none offset-5">{ `${fee.key} - ${fee.name}`}</p>
         </div>
         <div className="flex-50 layout-row ">
-          {this.renderFeeBoxes(fee, selectOptions, direction)}
+          {this.renderFeeBoxes(fee, selectOptions, direction, edit)}
         </div>
         <div className="flex-25 layout-row ">
           <div className="flex-75 layout-row">
-            {this.renderDateBoxes(fee, selectOptions, direction)}
+            {this.renderDateBoxes(fee, selectOptions, direction, edit)}
           </div>
-          <div className="flex-25 layout-row layout-align-center-center" onClick={toggleEdit}>
+          <div className="flex-25 layout-row layout-align-center-center" onClick={() => this.toggleEdit()}>
             <i className="fa fa-edit" />
           </div>
         </div>
