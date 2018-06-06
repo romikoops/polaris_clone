@@ -626,6 +626,7 @@ function prepContainerGroups (cargos, props) {
 
   return Object.keys(cargoGroups).map(prop =>
     (<CargoContainerGroup
+      key={v4()}
       group={cargoGroups[prop]}
       theme={props.theme}
       hsCodes={props.shipmentData.hsCodes}
@@ -677,6 +678,7 @@ function prepCargoItemGroups (cargos, props) {
 
   return Object.keys(cargoGroups).map(prop =>
     (<CargoItemGroup
+      key={v4()}
       group={cargoGroups[prop]}
       theme={props.theme}
       hsCodes={hsCodes}
@@ -723,7 +725,7 @@ function getDocs ({
 
   Object.keys(docChecker).forEach((key) => {
     if (!docChecker[key]) {
-      missingDocs.push(<div className={MISSING_DOCS}>
+      missingDocs.push(<div key={v4()} className={MISSING_DOCS}>
         <div className={`flex-none layout-row ${ALIGN_CENTER}`}>
           <i className="flex-none fa fa-ban" />
         </div>
@@ -811,8 +813,8 @@ function getShipperAndConsignee ({
   shipment
 }) {
   const els = [
-    <Contact contact={shipper} contactType="Shipper" textStyle={textStyle} />,
-    <Contact contact={consignee} contactType="Consignee" textStyle={textStyle} />
+    <Contact key={v4()} contact={shipper} contactType="Shipper" textStyle={textStyle} />,
+    <Contact key={v4()} contact={consignee} contactType="Consignee" textStyle={textStyle} />
   ]
 
   if (shipment.direction === 'import') {
@@ -823,7 +825,7 @@ function getShipperAndConsignee ({
 }
 
 function getTerms ({ theme, terms }) {
-  const termBullets = terms.map(t => <li> {t}</li>)
+  const termBullets = terms.map(t => <li key={v4()}> {t}</li>)
 
   return (
     <div className={`${ROW()} ${ALIGN_START_CENTER}`}>
