@@ -8,7 +8,7 @@ class Country < ApplicationRecord
     geocoder_results = Geocoder.search(country: name)
     return nil if geocoder_results.empty?
 
-    code = geocoder_results.first.data['address_components'].first['short_name']
+    code = geocoder_results.first.data["address_components"].first["short_name"]
     find_by(code: code)
   end
 end

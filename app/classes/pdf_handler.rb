@@ -3,12 +3,12 @@
 class PdfHandler
   attr_reader :name, :full_name, :pdf, :url, :path
 
-  def initialize(args = {})
-    @layout = args[:layout] || args['layout']
-    @template = args[:template] || args['template']
-    @margin   = args[:margin]   || args['margin']
-    @shipment = args[:shipment] || args['shipment']
-    @name     = args[:name]     || args['name']
+  def initialize(args={})
+    @layout = args[:layout] || args["layout"]
+    @template = args[:template] || args["template"]
+    @margin   = args[:margin]   || args["margin"]
+    @shipment = args[:shipment] || args["shipment"]
+    @name     = args[:name]     || args["name"]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -24,8 +24,8 @@ class PdfHandler
       doc_erb.render,
       margin: @margin
     )
-    File.open('tmp/' + @full_name, 'wb') { |file| file.write(@raw_pdf_string) }
-    @path = 'tmp/' + @full_name
+    File.open("tmp/" + @full_name, "wb") { |file| file.write(@raw_pdf_string) }
+    @path = "tmp/" + @full_name
     @pdf  = File.open(@path)
     self
   end

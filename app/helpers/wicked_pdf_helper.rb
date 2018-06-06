@@ -7,7 +7,7 @@ module WickedPdfHelper
     end.join("\n").gsub(/url\(['"](.+)['"]\)(.+)/, %[url("#{wicked_pdf_image_location('\\1')}")\\2]).html_safe
   end
 
-  def wicked_pdf_image_tag(img, options = {})
+  def wicked_pdf_image_tag(img, options={})
     image_tag wicked_pdf_image_location(img), options
   end
 

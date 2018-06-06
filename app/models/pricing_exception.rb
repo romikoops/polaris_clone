@@ -5,7 +5,7 @@ class PricingException < ApplicationRecord
   belongs_to :pricing
   has_many :pricing_details, as: :priceable, dependent: :destroy
 
-  def as_json(options = {})
+  def as_json(options={})
     new_options = options.reverse_merge(
       methods: [:data], only: %i[effective_date expiration_date]
     )

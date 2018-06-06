@@ -18,7 +18,7 @@ class Trip < ApplicationRecord
   def self.clear_dupes
     Trip.all.each do |trip|
       t = trip.as_json
-      t.delete('id')
+      t.delete("id")
       dupes = Trip.where(t)
       dupes.each do |d|
         d.destroy if d.id != trip.id

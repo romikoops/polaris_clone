@@ -27,7 +27,7 @@ class Container < ApplicationRecord
 
   # Instance Methods
   def size
-    size_class.split('_')[0]
+    size_class.split("_")[0]
   end
 
   private
@@ -40,12 +40,10 @@ class Container < ApplicationRecord
     return unless weight_class.blank?
     return if size_class.nil?
 
-    size = size_class.split('_').first
+    size = size_class.split("_").first
     which_weight_step = nil
     PRICING_WEIGHT_STEPS[1..-1].each_with_index do |weight_step, i|
-      if payload_in_kg / 1000 > weight_step
-        which_weight_step = PRICING_WEIGHT_STEPS[i]
-      end
+      which_weight_step = PRICING_WEIGHT_STEPS[i] if payload_in_kg / 1000 > weight_step
     end
     which_weight_step = PRICING_WEIGHT_STEPS[-1] if which_weight_step.nil?
     which_weight_step = which_weight_step.to_d

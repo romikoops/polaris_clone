@@ -11,11 +11,11 @@ class ShipmentsController < ApplicationController
 
     @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
     @open_shipments = @shipper.shipments.where(status: %w[accepted in_progress])
-    @finished_shipments = @shipper.shipments.where(status: 'finished')
+    @finished_shipments = @shipper.shipments.where(status: "finished")
     response_handler(
       requested: @requested_shipments,
-      open: @open_shipments,
-      finished: @finished_shipments
+      open:      @open_shipments,
+      finished:  @finished_shipments
     )
   end
 
@@ -32,7 +32,7 @@ class ShipmentsController < ApplicationController
     if params[:file]
       @doc = create_document(params[:file], @shipment, params[:type], current_user)
       tmp = @doc.as_json
-      tmp['signed_url'] = @doc.get_signed_url
+      tmp["signed_url"] = @doc.get_signed_url
     end
     response_handler(tmp)
   end
@@ -52,20 +52,20 @@ class ShipmentsController < ApplicationController
 
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
-      tmp_doc['signed_url'] = doc.get_signed_url
+      tmp_doc["signed_url"] = doc.get_signed_url
       tmp_doc
     end
 
     response_handler(
-      shipment:         shipment,
-      cargoItems:       shipment.cargo_items,
-      containers:       shipment.containers,
-      aggregatedCargo:  shipment.aggregated_cargo,
-      contacts:         contacts,
-      documents:        documents,
-      schedules:        shipment.schedule_set,
-      locations:        locations,
-      cargoItemTypes:   cargo_item_types
+      shipment:        shipment,
+      cargoItems:      shipment.cargo_items,
+      containers:      shipment.containers,
+      aggregatedCargo: shipment.aggregated_cargo,
+      contacts:        contacts,
+      documents:       documents,
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      cargoItemTypes:  cargo_item_types
     )
   end
 

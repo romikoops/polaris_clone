@@ -2,7 +2,7 @@
 
 class Hub < ApplicationRecord
   belongs_to :tenant
-  belongs_to :nexus, class_name: 'Location'
+  belongs_to :nexus, class_name: "Location"
   belongs_to :location
 
   has_many :stops,    dependent: :destroy
@@ -15,9 +15,9 @@ class Hub < ApplicationRecord
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {
-    'ocean' => 'Port',
-    'air'   => 'Airport',
-    'rail'  => 'Railway Station'
+    "ocean" => "Port",
+    "air"   => "Airport",
+    "rail"  => "Railway Station"
   }.freeze
 
   def self.update_all!
@@ -32,18 +32,18 @@ class Hub < ApplicationRecord
 
   def self.create_from_nexus(nexus, mot, tenant_id)
     nexus.hubs.find_or_create_by(
-      nexus_id: nexus.id,
+      nexus_id:  nexus.id,
       tenant_id: tenant_id,
-      hub_type: mot,
-      latitude: nexus.latitude,
+      hub_type:  mot,
+      latitude:  nexus.latitude,
       longitude: nexus.longitude,
-      name: "#{nexus.name} #{MOT_HUB_NAME[mot]}",
-      photo: nexus.photo
+      name:      "#{nexus.name} #{MOT_HUB_NAME[mot]}",
+      photo:     nexus.photo
     )
   end
 
   def self.ports
-    where(hub_type: 'ocean')
+    where(hub_type: "ocean")
   end
 
   def self.prepped(user)
@@ -53,11 +53,11 @@ class Hub < ApplicationRecord
   end
 
   def self.air_ports
-    where(hub_type: 'air')
+    where(hub_type: "air")
   end
 
   def self.rail
-    where(hub_type: 'rail')
+    where(hub_type: "rail")
   end
 
   def generate_hub_code!(tenant_id)
@@ -80,12 +80,12 @@ class Hub < ApplicationRecord
 
   def toggle_hub_status!
     case hub_status
-    when 'active'
-      update_attribute(:hub_status, 'inactive')
-    when 'inactive'
-      update_attribute(:hub_status, 'active')
+    when "active"
+      update_attribute(:hub_status, "inactive")
+    when "inactive"
+      update_attribute(:hub_status, "active")
     else
-      raise 'Location contains invalid hub status!'
+      raise "Location contains invalid hub status!"
     end
     save!
   end
@@ -93,13 +93,13 @@ class Hub < ApplicationRecord
   def copy_to_hub(hub_id)
     hub_truckings.each do |ht|
       nht = ht.as_json
-      nht.delete('id')
-      nht['hub_id'] = hub_id
+      nht.delete("id")
+      nht["hub_id"] = hub_id
       tp = ht.trucking_pricing
       ntp = tp.as_json
-      ntp.delete('id')
+      ntp.delete("id")
       ntps = TruckingPricing.create!(ntp)
-      nht['trucking_pricing_id'] = ntps.id
+      nht["trucking_pricing_id"] = ntps.id
       HubTrucking.create!(nht)
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CurrencyTools
-  require 'http'
+  require "http"
 
   def get_rates(base)
     cached_rates = Currency.find_by(base: base)
@@ -20,7 +20,7 @@ module CurrencyTools
   def get_currency_array(base)
     rates = get_rates(base)
     results = [{ key: base, rate: 1 }]
-    rates['today'].each do |k, v|
+    rates["today"].each do |k, v|
       results << { key: k, rate: v }
     end
 
@@ -46,10 +46,10 @@ module CurrencyTools
     base_value = 0
 
     hash_obj.each do |_key, charge|
-      if rates[:today][charge['currency']]
-        base_value += charge['value'] * (1 / rates[:today][charge['currency']])
-      elsif charge['currency'] == base
-        base_value += charge['value']
+      if rates[:today][charge["currency"]]
+        base_value += charge["value"] * (1 / rates[:today][charge["currency"]])
+      elsif charge["currency"] == base
+        base_value += charge["value"]
       end
     end
 
@@ -61,7 +61,7 @@ module CurrencyTools
     # old___response = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)
     url = "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}"
     response = JSON.parse(HTTP.get(url).to_s)
-    rates = response['rates']
+    rates = response["rates"]
 
     if !currency_obj
       currency_obj = Currency.create(today: rates, base: base)

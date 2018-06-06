@@ -43,13 +43,9 @@ module UsersDeviseTokenAuth
     def sign_up_params
       params_h = super.to_h
 
-      unless params_h[:confirm_password].nil?
-        params_h[:password_confirmation] = params_h.delete(:confirm_password)
-      end
+      params_h[:password_confirmation] = params_h.delete(:confirm_password) unless params_h[:confirm_password].nil?
 
-      unless params_h[:VAT_number].nil?
-        params_h[:vat_number] = params_h.delete(:VAT_number)
-      end
+      params_h[:vat_number] = params_h.delete(:VAT_number) unless params_h[:VAT_number].nil?
 
       unless params_h[:cookies].nil?
         params_h.delete(:cookies)
@@ -60,7 +56,7 @@ module UsersDeviseTokenAuth
      end
 
     def provider
-      'tenant_email'
+      "tenant_email"
      end
 
     def location_params

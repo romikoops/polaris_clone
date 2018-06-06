@@ -18,7 +18,7 @@ class ContactsController < ApplicationController
   def update_contact
     update_data = JSON.parse(params[:update])
     contact = Contact.find(params[:id])
-    update_data.delete('id')
+    update_data.delete("id")
     contact.update_attributes(update_data)
     contact.save!
     response_handler(contact)
@@ -26,8 +26,8 @@ class ContactsController < ApplicationController
 
   def update_contact_address
     data = JSON.parse(params[:address])
-    loc = Location.find(data['id'])
-    data.delete('id')
+    loc = Location.find(data["id"])
+    data.delete("id")
     loc.update_attributes(data)
     loc.save!
     response_handler(loc)
@@ -43,18 +43,18 @@ class ContactsController < ApplicationController
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}
     ncl = {}
-    ncd[:first_name] = contact_data['firstName']
-    ncd[:last_name] = contact_data['lastName']
-    ncd[:company_name] = contact_data['companyName']
-    ncd[:phone] = contact_data['phone']
-    ncd[:email] = contact_data['email']
+    ncd[:first_name] = contact_data["firstName"]
+    ncd[:last_name] = contact_data["lastName"]
+    ncd[:company_name] = contact_data["companyName"]
+    ncd[:phone] = contact_data["phone"]
+    ncd[:email] = contact_data["email"]
     ncd[:alias] = true
 
-    ncl[:street_number] = contact_data['number']
-    ncl[:street] = contact_data['street']
-    ncl[:city] = contact_data['city']
-    ncl[:zip_code] = contact_data['zipCode']
-    ncl[:country] = Country.geo_find_by_name(contact_data['country'])
+    ncl[:street_number] = contact_data["number"]
+    ncl[:street] = contact_data["street"]
+    ncl[:city] = contact_data["city"]
+    ncl[:zip_code] = contact_data["zipCode"]
+    ncl[:country] = Country.geo_find_by_name(contact_data["country"])
 
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id
@@ -76,17 +76,17 @@ class ContactsController < ApplicationController
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}
     ncl = {}
-    ncd[:first_name] = contact_data['firstName']
-    ncd[:last_name] = contact_data['lastName']
-    ncd[:company_name] = contact_data['companyName']
-    ncd[:phone] = contact_data['phone']
-    ncd[:email] = contact_data['email']
+    ncd[:first_name] = contact_data["firstName"]
+    ncd[:last_name] = contact_data["lastName"]
+    ncd[:company_name] = contact_data["companyName"]
+    ncd[:phone] = contact_data["phone"]
+    ncd[:email] = contact_data["email"]
 
-    ncl[:street_number] = contact_data['number']
-    ncl[:street] = contact_data['street']
-    ncl[:city] = contact_data['city']
-    ncl[:zip_code] = contact_data['zipCode']
-    ncl[:country] = contact_data['country']
+    ncl[:street_number] = contact_data["number"]
+    ncl[:street] = contact_data["street"]
+    ncl[:city] = contact_data["city"]
+    ncl[:zip_code] = contact_data["zipCode"]
+    ncl[:country] = contact_data["country"]
 
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id
@@ -98,7 +98,7 @@ class ContactsController < ApplicationController
 
   def require_login
     unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = 'You are not authorized to access this section.'
+      flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end
   end

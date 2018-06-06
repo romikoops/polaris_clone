@@ -2,12 +2,12 @@
 
 class TransportCategory < ApplicationRecord
   LOAD_TYPE_CARGO_CLASSES = {
-    'container' => %w[
+    "container"  => %w[
       fcl_20
       fcl_40
       fcl_40_hq
     ],
-    'cargo_item' => %w[
+    "cargo_item" => %w[
       lcl
     ]
   }.freeze
@@ -22,10 +22,10 @@ class TransportCategory < ApplicationRecord
   LOAD_TYPES.each do |_load_type|
     validates :cargo_class,
       inclusion: {
-        in: LOAD_TYPE_CARGO_CLASSES[_load_type],
+        in:      LOAD_TYPE_CARGO_CLASSES[_load_type],
         message: "must be included in #{LOAD_TYPE_CARGO_CLASSES[_load_type].log_format}"
       },
-      if: -> { load_type == _load_type }
+      if:        -> { load_type == _load_type }
 
     # This allows the following example usage for every load type:
     # TransportCategory.container_load_type #=> collection of TransportCategory instances
@@ -37,16 +37,16 @@ class TransportCategory < ApplicationRecord
   scope :load_type, ->(_load_type) { where(load_type: _load_type) }
 
   validates :load_type,
-    presence: true,
+    presence:  true,
     inclusion: {
-      in: LOAD_TYPES,
+      in:      LOAD_TYPES,
       message: "must be included in #{LOAD_TYPES.log_format}"
     }
 
   validates :name,
-    presence: true,
+    presence:   true,
     uniqueness: {
-      scope: %i[vehicle_id cargo_class],
+      scope:   %i[vehicle_id cargo_class],
       message: lambda do |_self, _|
                  "'#{_self.name}' taken for " \
                      "vehicle id '#{_self.vehicle_id}' cargo class '#{_self.cargo_class}'"
@@ -58,18 +58,18 @@ class TransportCategory < ApplicationRecord
   end
 
   def humanized_cargo_class
-    cargo_class.split('_')
+    cargo_class.split("_")
                .map.with_index { |str_elem, _i| str_elem.upcase }
-               .join(' – ')
-               .gsub(/(?<=(20|40))F/, '’')
+               .join(" – ")
+               .gsub(/(?<=(20|40))F/, "’")
   end
 
   def humanized_name
-    name.tr('_', ' ').gsub(/( any| goods)/, '')
+    name.tr("_", " ").gsub(/( any| goods)/, "")
   end
 
   def humanized_load_type
-    load_type.tr('_', ' ')
+    load_type.tr("_", " ")
   end
 
   private

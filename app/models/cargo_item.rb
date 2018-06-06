@@ -2,10 +2,10 @@
 
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
-    air:      '0.167',
-    rail:     '0.550',
-    ocean:    '1.000',
-    trucking: '0.333'
+    air:      "0.167",
+    rail:     "0.550",
+    ocean:    "1.000",
+    trucking: "0.333"
   }.map_values { |v| BigDecimal(v) }
 
   DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
@@ -52,7 +52,7 @@ class CargoItem < ApplicationRecord
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
     # validation, which depends on this itinerary's mode of transport.
     klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, itinerary)
-    Module.const_set('AuxCargoItem', klass)
+    Module.const_set("AuxCargoItem", klass)
 
     # Instantiates the auxiliary class and checks if the item is still valid,
     # thereby applying the new validation.

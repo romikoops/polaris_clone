@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MongoTools
-  require 'mongo'
+  require "mongo"
 
   def put_item(table, value)
     client = init
@@ -15,7 +15,7 @@ module MongoTools
 
   def update_item(table, key, updates)
     client = init
-    resp = client[table.to_sym].update_one(key, { '$set' => updates }, upsert: true)
+    resp = client[table.to_sym].update_one(key, { "$set" => updates }, upsert: true)
   end
 
   def get_item(table, keyName, key)
@@ -54,18 +54,18 @@ module MongoTools
 
   def get_items_by_key_values(client, table, key, values)
     client ||= get_client
-    resp = client[table.to_sym].find(key => { '$in' => values })
+    resp = client[table.to_sym].find(key => { "$in" => values })
     resp.to_a
   end
 
   def get_items_query(table, query)
     client = init
-    resp = client[table.to_sym].find('$and' => query)
+    resp = client[table.to_sym].find("$and" => query)
     resp
   end
 
   def get_items_query_fn(client, table, query)
-    resp = client[table.to_sym].find('$and' => query)
+    resp = client[table.to_sym].find("$and" => query)
     resp
   end
 
@@ -83,39 +83,39 @@ module MongoTools
   end
 
   def update_item_fn(client, table, key, updates)
-    client[table.to_sym].update_one(key, { '$set' => updates }, upsert: true)
+    client[table.to_sym].update_one(key, { "$set" => updates }, upsert: true)
   end
 
   def text_search_fn(client, table, query)
     client ||= get_client
     resp = client[table.to_sym].find(
-      { '$text' => { '$search' => query } },
-      projection: { 'score' => { '$meta' => 'textScore' } }
+      { "$text" => { "$search" => query } },
+      projection: { "score" => { "$meta" => "textScore" } }
     )
     resp.to_a
   end
 
   def update_array_fn(client, table, key, updates)
     updateArr = {}
-    updateArr = { data: { '$each' => updates } }
+    updateArr = { data: { "$each" => updates } }
     # updateArr = {'$each' => updates}
     p updateArr
-    client[table.to_sym].update_one(key, { '$push' => updateArr }, upsert: true)
+    client[table.to_sym].update_one(key, { "$push" => updateArr }, upsert: true)
   end
 
   def update_array(table, key, updates)
     client = init
     updateArr = {}
-    updateArr = { data: { '$each' => updates } }
+    updateArr = { data: { "$each" => updates } }
     # updateArr = {'$each' => updates}
     p updateArr
-    client[table.to_sym].update_one(key, { '$push' => updateArr }, upsert: true)
+    client[table.to_sym].update_one(key, { "$push" => updateArr }, upsert: true)
   end
 
   def get_items_aggregate(table, query)
     client = init
     resp = client[table].aggregate(query)
-    resp.first ? resp.first['data'] : []
+    resp.first ? resp.first["data"] : []
   end
 
   def delete_item(table, query)

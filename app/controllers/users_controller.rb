@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
     @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
     @open_shipments = @shipper.shipments.where(status: %w[confirmed in_progress])
-    @finished_shipments = @shipper.shipments.where(status: 'finished')
+    @finished_shipments = @shipper.shipments.where(status: "finished")
 
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false)
@@ -26,12 +26,12 @@ class UsersController < ApplicationController
     resp = {
       shipments: {
         requested: @requested_shipments,
-        open: @open_shipments,
-        finished: @finished_shipments
+        open:      @open_shipments,
+        finished:  @finished_shipments
       },
-      pricings: @pricings,
-      contacts: @contacts,
-      aliases: @aliases,
+      pricings:  @pricings,
+      contacts:  @contacts,
+      aliases:   @aliases,
       locations: locations
     }
     response_handler(resp)
@@ -63,14 +63,14 @@ class UsersController < ApplicationController
   end
 
   def currencies
-    currency = current_user.try(:currency) || 'EUR'
+    currency = current_user.try(:currency) || "EUR"
     results = get_currency_array(currency)
     response_handler(results)
   end
 
   def download_gdpr
     url = gdpr_download(current_user.id)
-    response_handler(url: url, key: 'gdpr')
+    response_handler(url: url, key: "gdpr")
   end
 
   def set_currency
@@ -89,9 +89,9 @@ class UsersController < ApplicationController
   def opt_out
     new_status = current_user.optin_status.as_json
     new_status[params[:target]] = !new_status[params[:target]]
-    new_status.delete('id')
-    new_status.delete('updated_at')
-    new_status.delete('created_at')
+    new_status.delete("id")
+    new_status.delete("updated_at")
+    new_status.delete("created_at")
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
@@ -110,9 +110,7 @@ class UsersController < ApplicationController
       return_params[:password_confirmation] = return_params.delete(:confirm_password)
     end
 
-    unless return_params[:VAT_number].nil?
-      return_params[:vat_number] = return_params.delete(:VAT_number)
-    end
+    return_params[:vat_number] = return_params.delete(:VAT_number) unless return_params[:VAT_number].nil?
 
     unless return_params[:cookies].nil?
       return_params.delete(:cookies)

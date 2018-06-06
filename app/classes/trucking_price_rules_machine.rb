@@ -3,13 +3,13 @@
 class TruckingPriceRulesMachine
   attr_reader :total_price
 
-  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code = 1000)
+  def initialize(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code=1000)
     @total_price = rule_evaluation(pricing, km.to_f, weight_in_tons.to_f, volume_in_cm3.to_f, units.to_i, zip_code)
   end
 
   def rule_evaluation(pricing, km, weight_in_tons, volume_in_cm3, units, zip_code)
     if volume_in_cm3 / 1_000_000 > pricing.fcl_limit_m3_40_foot || weight_in_tons > pricing.fcl_limit_tons_40_foot
-      raise 'Volume and/or weight are out of bounds!'
+      raise "Volume and/or weight are out of bounds!"
       return false
     end
 
@@ -51,16 +51,12 @@ class TruckingPriceRulesMachine
           price_per_part = table[zip_code_range_string][multiplier_range_string]
         end
       end
-      if price_per_part.nil?
-        price_per_part = table[zip_code_range_string][table[zip_code_range_string].keys.last]
-      end
+      price_per_part = table[zip_code_range_string][table[zip_code_range_string].keys.last] if price_per_part.nil?
     end
 
     total_price = multiplier * price_per_part
 
-    if total_price < pricing.steptable_min_price
-      total_price = pricing.steptable_min_price
-    end
+    total_price = pricing.steptable_min_price if total_price < pricing.steptable_min_price
 
     total_price
   end

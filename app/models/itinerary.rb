@@ -21,28 +21,28 @@ class Itinerary < ApplicationRecord
     tenant = Tenant.find(tenant_id)
     stops = tenant.stops
                   .where(hub_id: hub_ids)
-                  .group('stops.id, stops.itinerary_id')
+                  .group("stops.id, stops.itinerary_id")
     stops = stops.first.is_a?(Array) ? stops : [stops]
     itineraries = stops.select { |itinerary_group| itinerary_group.size == hub_ids.size }
                        .map { |itinerary_group| itinerary_group[0].itinerary }
                        .select { |itinerary| itinerary.mode_of_transport == mot && vehicle_id == vehicle_id }
-    if itineraries.empty?
-      # create
-      itinerary = tenant.itineraries.create!(mode_of_transport: mot, vehicle_id: vehicle_id, name: name)
-    else
-      itinerary = itineraries.first
-    end
+    itinerary = if itineraries.empty?
+                  # create
+                  tenant.itineraries.create!(mode_of_transport: mot, vehicle_id: vehicle_id, name: name)
+                else
+                  itineraries.first
+                end
     itinerary
   end
 
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
-      trips: []
+      trips:    []
     }
     trip_check = trips.find_by(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     if trip_check
-      p 'REJECTED'
+      p "REJECTED"
       # return results
     end
     trip = trips.create!(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
@@ -51,19 +51,19 @@ class Itinerary < ApplicationRecord
       data = if stop.index == 0
                {
                  closing_date: closing_date,
-                 eta: nil,
-                 etd: start_date,
-                 stop_index: stop.index,
+                 eta:          nil,
+                 etd:          start_date,
+                 stop_index:   stop.index,
                  itinerary_id: stop.itinerary_id,
-                 stop_id: stop.id
+                 stop_id:      stop.id
                }
              else
                {
-                 eta: end_date,
-                 etd: nil,
-                 stop_index: stop.index,
+                 eta:          end_date,
+                 etd:          nil,
+                 stop_index:   stop.index,
                  itinerary_id: stop.itinerary_id,
-                 stop_id: stop.id
+                 stop_id:      stop.id
                }
              end
       layover = trip.layovers.find_or_create_by!(data)
@@ -72,17 +72,17 @@ class Itinerary < ApplicationRecord
     results
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4)
+  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer=4)
     results = {
       layovers: [],
-      trips: []
+      trips:    []
     }
     stats = {
       layovers: {
         number_created: 0,
         number_updated: 0
       },
-      trips: {
+      trips:    {
         number_created: 0,
         number_updated: 0
       }
@@ -99,7 +99,7 @@ class Itinerary < ApplicationRecord
                       end
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
-      if ordinal_array.include?(tmp_date.strftime('%u').to_i)
+      if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
@@ -115,21 +115,21 @@ class Itinerary < ApplicationRecord
         stops_in_order.each do |stop|
           if stop.index == 0
             data = {
-              eta: nil,
-              etd: journey_start,
-              stop_index: stop.index,
+              eta:          nil,
+              etd:          journey_start,
+              stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id: stop.id,
+              stop_id:      stop.id,
               closing_date: closing_date
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
             data = {
-              eta: journey_start,
-              etd: journey_start + 1.day,
-              stop_index: stop.index,
+              eta:          journey_start,
+              etd:          journey_start + 1.day,
+              stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
+              stop_id:      stop.id
             }
           end
           layover = trip.layovers.create!(data)
@@ -154,16 +154,16 @@ class Itinerary < ApplicationRecord
       end
       layovers_combinations.each do |lc|
         schedules.push(
-          itinerary_id: id,
-          eta: lc[1].eta,
-          etd: lc[0].etd,
-          mode_of_transport: lc[0].itinerary.mode_of_transport,
-          hub_route_key: "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
-          tenant_id: tenant_id,
-          trip_id: lc[0].trip_id,
-          origin_layover_id: lc[0].id,
+          itinerary_id:           id,
+          eta:                    lc[1].eta,
+          etd:                    lc[0].etd,
+          mode_of_transport:      lc[0].itinerary.mode_of_transport,
+          hub_route_key:          "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}",
+          tenant_id:              tenant_id,
+          trip_id:                lc[0].trip_id,
+          origin_layover_id:      lc[0].id,
           destination_layover_id: lc[1].id,
-          closing_date: lc[0].closing_date
+          closing_date:           lc[0].closing_date
         )
       end
     end
@@ -171,16 +171,16 @@ class Itinerary < ApplicationRecord
     schedules
   end
 
-  def self.ids_dedicated(user = nil)
+  def self.ids_dedicated(user=nil)
     get_itineraries_with_dedicated_pricings(user.id, user.tenant_id)
   end
 
   def modes_of_transport
     exists = ->(mot) { !Itinerary.where(mode_of_transport: mot).limit(1).empty? }
     {
-      ocean: exists.call('ocean'),
-      air:   exists.call('air'),
-      rails: exists.call('rails')
+      ocean: exists.call("ocean"),
+      air:   exists.call("air"),
+      rails: exists.call("rails")
     }
   end
 
@@ -230,7 +230,7 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def detailed_hash(stop_array, options = {})
+  def detailed_hash(stop_array, options={})
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
@@ -277,8 +277,8 @@ class Itinerary < ApplicationRecord
   end
 
   def self.for_locations(shipment, trucking_data)
-    if trucking_data && trucking_data['pre_carriage']
-      start_hub_ids = trucking_data['pre_carriage'].keys
+    if trucking_data && trucking_data["pre_carriage"]
+      start_hub_ids = trucking_data["pre_carriage"].keys
       start_hubs = Hub.where(id: start_hub_ids)
     else
       start_city = shipment.origin_nexus
@@ -286,8 +286,8 @@ class Itinerary < ApplicationRecord
       start_hub_ids = start_hubs.ids
     end
 
-    if trucking_data && trucking_data['on_carriage']
-      end_hub_ids = trucking_data['on_carriage'].keys
+    if trucking_data && trucking_data["on_carriage"]
+      end_hub_ids = trucking_data["on_carriage"].keys
       end_hubs = Hub.where(id: end_hub_ids)
     else
       end_city = shipment.destination_nexus
@@ -323,7 +323,7 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def as_options_json(options = {})
+  def as_options_json(options={})
     new_options = options.reverse_merge(
       include: [
         {
@@ -331,27 +331,27 @@ class Itinerary < ApplicationRecord
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i[id name] },
+                  nexus:    { only: %i[id name] },
                   location: { only: %i[longitude latitude] }
                 },
-                only: %i[id name]
+                only:    %i[id name]
               }
             }
           },
-          only: [:id]
+          only:       [:id]
         },
         {
           last_stop: {
             include: {
               hub: {
                 include: {
-                  nexus: { only: %i[id name] },
+                  nexus:    { only: %i[id name] },
                   location: { only: %i[longitude latitude] }
                 },
-                only: %i[id name]
+                only:    %i[id name]
               }
             },
-            only: [:id]
+            only:    [:id]
           }
         }
       ]
@@ -359,10 +359,10 @@ class Itinerary < ApplicationRecord
     as_json(new_options)
   end
 
-  def as_pricing_json(_options = {})
+  def as_pricing_json(_options={})
     new_options = {
       users_with_pricing: users_with_pricing,
-      pricing_count: pricing_count
+      pricing_count:      pricing_count
     }.merge(attributes)
     # as_json(new_options)
   end
