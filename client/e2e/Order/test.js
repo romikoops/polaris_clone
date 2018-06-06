@@ -21,12 +21,12 @@ test.only('successful login and placing an export LCL order', async () => {
     /**
      * Login as demo user
      */
-    await login(puppeteer, expect)
+    await login(puppeteer)
 
     /**
      * Place an order as a seller
      */
-    await orderExportLCL(puppeteer, expect)
+    await orderExportLCL(puppeteer)
     await puppeteer.browser.close()
   } catch (e) {
     console.log(e)
@@ -45,12 +45,12 @@ test('successful login and placing an export FCL order', async () => {
     /**
      * Login as demo user
      */
-    await login(puppeteer, expect)
+    await login(puppeteer)
 
     /**
      * Place an order as a seller
      */
-    await orderExportFCL(puppeteer, expect)
+    await orderExportFCL(puppeteer)
     await puppeteer.browser.close()
   } catch (e) {
     const { screen } = await puppeteer.catchError({})

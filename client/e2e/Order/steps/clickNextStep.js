@@ -1,6 +1,6 @@
-export const SHIPMENT_DETAILS_LOADED = 'i.fa-truck'
+const SHIPMENT_DETAILS_LOADED = 'i.fa-truck'
 
-export default async function clickNextStep (puppeteer, expect) {
+export default async function clickNextStep (puppeteer) {
   expect(await puppeteer.clickWithText('button', 'Next Step')).toBeTruthy()
   await puppeteer.page.waitForSelector(SHIPMENT_DETAILS_LOADED)
 

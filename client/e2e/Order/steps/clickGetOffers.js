@@ -4,7 +4,7 @@ const CHOOSE_OFFER_LOADED = {
   text: 'departure'
 }
 
-export default async function clickGetOffers (puppeteer, expect) {
+export default async function clickGetOffers (puppeteer) {
   expect(await puppeteer.clickWithText('p', 'Get Offers')).toBeTruthy()
   expect(await puppeteer.waitForText(CHOOSE_OFFER_LOADED)).toBeTruthy()
 

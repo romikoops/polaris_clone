@@ -141,6 +141,7 @@ export default async function init (options) {
   const waitForText = async (input) => {
     mark('waitForText', input.selector)
 
+    const waitIndex = input.index === undefined ? 0 : input.index
     let counter = 20
     let found = false
 
@@ -152,7 +153,7 @@ export default async function init (options) {
         els => els.length
       )
 
-      if (countResult < input.index + 1) {
+      if (countResult < waitIndex + 1) {
         continue
       }
 
@@ -161,7 +162,7 @@ export default async function init (options) {
         els => els.map(el => el.textContent)
       )
 
-      found = texts[input.index].includes(input.text)
+      found = texts[waitIndex].includes(input.text)
     }
 
     return found
@@ -313,6 +314,10 @@ export default async function init (options) {
   }
   const takeScreenshot = async (label) => {
     const screenshotPath = `${SCREEN_DIR}/${label}.png`
+
+    if (existsSync(screenshotPath)) {
+      unlinkSync(screenshotPath)
+    }
     await page.screenshot({
       fullPage: true,
       path: screenshotPath

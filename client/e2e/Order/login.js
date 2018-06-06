@@ -9,7 +9,7 @@ const PASSWORD = 'input[name="password"]'
 const USER = 'input[name="email"]'
 const ACCOUNT_PAGE_LOADED = `i.fa-tachometer`
 
-export default async function login (puppeteer, expect) {
+export default async function login (puppeteer) {
   const {
     click,
     count,

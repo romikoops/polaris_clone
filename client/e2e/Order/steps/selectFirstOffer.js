@@ -1,6 +1,6 @@
-export const FINAL_DETAILS_LOADED = 'h1'
+const FINAL_DETAILS_LOADED = 'h1'
 
-export default async function selectFirstOffer (puppeteer, expect) {
+export default async function selectFirstOffer (puppeteer) {
   expect(await puppeteer.clickWithText('p', 'Choose')).toBeTruthy()
   await puppeteer.page.waitForSelector(FINAL_DETAILS_LOADED)
 

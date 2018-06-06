@@ -12,13 +12,13 @@ import selectOriginDestination from './steps/selectOriginDestination'
 import setPriceDescription from './steps/setPriceDescription'
 import setWeight from './steps/setWeight'
 
-export default async function orderExportFCL (puppeteer, expect) {
+export default async function orderExportFCL (puppeteer) {
   const { clickWithPartialText } = puppeteer
 
   /**
    * Click booking's next step
    */
-  await bookingNextStep(puppeteer, expect)
+  await bookingNextStep(puppeteer)
 
   /**
    * Click on 'Export'
@@ -33,7 +33,7 @@ export default async function orderExportFCL (puppeteer, expect) {
   /**
    * Click next step and wait for navigation change
    */
-  await clickNextStep(puppeteer, expect)
+  await clickNextStep(puppeteer)
 
   /**
    * Select origin and destination
@@ -43,32 +43,32 @@ export default async function orderExportFCL (puppeteer, expect) {
   /**
    * Select date
    */
-  await selectDate(puppeteer, expect)
+  await selectDate(puppeteer)
 
   /**
    * Set net weight
    */
-  await setWeight(puppeteer, expect)
+  await setWeight(puppeteer)
 
   /**
    * Click on confirm no dangerous goods
    */
-  await confirmDangerousGoods(puppeteer, expect)
+  await confirmDangerousGoods(puppeteer)
 
   /**
    * Click get offers and wait for navigation change
    */
-  await clickGetOffers(puppeteer, expect)
+  await clickGetOffers(puppeteer)
 
   /**
    * Select first offer and wait for navigation change
    */
-  await selectFirstOffer(puppeteer, expect)
+  await selectFirstOffer(puppeteer)
 
   /**
    * Select first sender and first receiver
    */
-  await chooseSenderReceiver(puppeteer, expect)
+  await chooseSenderReceiver(puppeteer)
 
   /**
    * Set price and description of goods
@@ -78,5 +78,5 @@ export default async function orderExportFCL (puppeteer, expect) {
   /**
    * Click review booking and complete the test
    */
-  await clickReviewBooking(puppeteer, expect)
+  await clickReviewBooking(puppeteer)
 }

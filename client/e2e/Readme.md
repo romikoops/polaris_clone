@@ -13,7 +13,7 @@
 Created in order to confirm that refactored component has the same visual representation as the origin component.
 We are using method `shouldMatchScreenshot` declared in `./_modules/init.js`.
 
-```
+```javascript
 // ./Order/steps/clickReviewBooking.js
 
 export default async function clickReviewBooking (puppeteer) {

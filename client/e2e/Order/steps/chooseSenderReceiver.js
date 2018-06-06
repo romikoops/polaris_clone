@@ -8,7 +8,7 @@ const SELECT_RECEIVER_SENDER = {
   index: 1
 }
 
-export default async function chooseSenderReceiver (puppeteer, expect) {
+export default async function chooseSenderReceiver (puppeteer) {
   const {
     click,
     waitFor,

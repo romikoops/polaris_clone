@@ -6,19 +6,20 @@ import clickGetOffers from './steps/clickGetOffers'
 import clickNextStep from './steps/clickNextStep'
 import clickReviewBooking from './steps/clickReviewBooking'
 import confirmDangerousGoods from './steps/confirmDangerousGoods'
+import completeBooking from './steps/completeBooking'
 import selectDate from './steps/selectDate'
 import selectFirstOffer from './steps/selectFirstOffer'
 import selectOriginDestination from './steps/selectOriginDestination'
 import selectTypeSizeWeight from './steps/selectTypeSizeWeight'
 import setPriceDescription from './steps/setPriceDescription'
 
-export default async function orderExportLCL (puppeteer, expect) {
+export default async function orderExportLCL (puppeteer) {
   const { clickWithPartialText } = puppeteer
 
   /**
    * Click booking's next step
    */
-  await bookingNextStep(puppeteer, expect)
+  await bookingNextStep(puppeteer)
 
   /**
    * Click on 'Export'
@@ -33,7 +34,7 @@ export default async function orderExportLCL (puppeteer, expect) {
   /**
    * Click next step and wait for navigation change
    */
-  await clickNextStep(puppeteer, expect)
+  await clickNextStep(puppeteer)
 
   /**
    * Select origin and destination
@@ -76,7 +77,12 @@ export default async function orderExportLCL (puppeteer, expect) {
   await setPriceDescription(puppeteer)
 
   /**
-   * Click review booking and complete the test
+   * Click review booking
    */
   await clickReviewBooking(puppeteer, expect)
+
+  /**
+   * Click review booking and complete the test
+   */
+  await completeBooking(puppeteer, expect)
 }
