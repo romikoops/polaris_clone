@@ -13,7 +13,7 @@ subdomains.each do |sub|
   # tenant.customs_fees.destroy_all
   # tenant.trucking_pricings.delete_all
   # tenant.hubs.destroy_all
-# # #   # # # # #Overwrite hubs from excel sheet
+# #   # # # # #Overwrite hubs from excel sheet
   puts "# Overwrite hubs from excel sheet"
   hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
   req = {"xlsx" => hubs}

@@ -97,7 +97,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.payloadInKg}`
+                maxDimension: `Maximum weight is ${maxDimensions.general.payloadInKg}`
               }}
               required
             />
@@ -171,6 +171,7 @@ export default function getInputs (
   let heightDataTip = ''
   if (
     cargoItem &&
+    maxDimensions.air &&
     +cargoItem.dimension_z < +maxDimensions.general.dimensionZ &&
     +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
   ) {
@@ -234,6 +235,7 @@ export default function getInputs (
     if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
       lengthDataTip = 'Length is automatically set by \'Collie Type\''
     } else if (
+      maxDimensions.air &&
       +cargoItem.dimension_x < +maxDimensions.general.dimensionX &&
       +cargoItem.dimension_x > +maxDimensions.air.dimensionX
     ) {
@@ -281,7 +283,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.dimensionX}`
+                maxDimension: `Maximum length is ${maxDimensions.general.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -300,6 +302,7 @@ export default function getInputs (
     if (cargoItemTypes[i] && cargoItemTypes[i].dimension_y) {
       widthDataTip = 'Width is automatically set by \'Collie Type\''
     } else if (
+      maxDimensions.air &&
       +cargoItem.dimension_y < +maxDimensions.general.dimensionY &&
       +cargoItem.dimension_y > +maxDimensions.air.dimensionY
     ) {
@@ -347,7 +350,7 @@ export default function getInputs (
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.dimensionY}`
+                maxDimension: `Maximum width is ${maxDimensions.general.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

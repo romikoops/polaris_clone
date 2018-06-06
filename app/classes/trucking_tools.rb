@@ -3,31 +3,6 @@
 module TruckingTools
   include MongoTools
 
-  def retrieve_trucking_pricing(location, user, load_type, _delivery_type, hub)
-    lt = load_type == "cargo_item" ? "lcl" : "fcl"
-    sql = "SELECT * FROM trucking_pricings
-        JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-        JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-        JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-        JOIN  locations             ON hubs.location_id                      = locations.id
-        JOIN  tenants                ON hubs.tenant_id                        = tenants.id
-        WHERE tenants.id = #{user.tenant_id}
-        AND trucking_pricings.load_type = '#{lt}'
-        AND hub.id = #{hub.id}
-        AND (
-          (
-            (trucking_destinations.zipcode IS NOT NULL)
-            AND (trucking_destinations.zipcode = '#{location.get_zip_code}')
-          ) OR (
-            (trucking_destinations.city_name IS NOT NULL)
-            AND (trucking_destinations.city_name = '#{location.city}')
-          )
-        )
-        "
-    #
-    result = TruckingPricing.find_by_sql(sql)
-  end
-
   def calculate_trucking_price(pricing, cargo, _direction, km)
     fees = {}
     result = {}
@@ -175,6 +150,15 @@ module TruckingTools
         result["min_value"] = rate["min_value"]
         result["currency"] = rate["rate"]["currency"]
       end
+      if cargo_values["volume"] < trucking_pricing["rates"]["cbm"].first["min_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].first["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].first["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].first["rate"]["currency"]
+      elsif cargo_values["volume"] > trucking_pricing["rates"]["cbm"].last["max_cbm"].to_d
+        result["cbm"] = trucking_pricing["rates"]["cbm"].last["rate"]["value"]
+        result["min_value"] = trucking_pricing["rates"]["cbm"].last["min_value"]
+        result["currency"] = trucking_pricing["rates"]["cbm"].last["rate"]["currency"]
+      end
       return {rate: result, fees: trucking_pricing["fees"]}
     when "unit"
       return {rate: trucking_pricing["rates"]["unit"][0]["rate"], fees: trucking_pricing["fees"]}
@@ -238,7 +222,7 @@ module TruckingTools
 
     cargo_object
   end
-
+  
   def get_container_object(containers)
     cargo_total_items = containers.map(&:quantity).sum
     containers.each_with_object({}) do |cargo, cargo_object|

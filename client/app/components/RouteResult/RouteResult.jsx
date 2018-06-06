@@ -15,7 +15,7 @@ export class RouteResult extends Component {
       case 'air':
         icon = <i className="fa fa-plane" />
         break
-      case 'train':
+      case 'rail':
         icon = <i className="fa fa-train" />
         break
       default:
