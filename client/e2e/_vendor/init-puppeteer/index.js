@@ -68,10 +68,6 @@ export async function initPuppeteer (inputRaw) {
 
     await page.goto(input.url, wait)
 
-    if (input.logFlag) {
-      page.on('console', log)
-    }
-
     const catchError = async (e) => {
       if (page !== undefined && page.close !== undefined) {
         e.screen = await takeScreenshot(
@@ -98,11 +94,5 @@ export async function initPuppeteer (inputRaw) {
     }
 
     throw error
-  }
-}
-
-function log (input) {
-  if (input._type === 'log') {
-    console.log(input._text)
   }
 }

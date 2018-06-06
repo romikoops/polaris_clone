@@ -4,8 +4,8 @@
   "description": "End-to-end tests",
   "main": "index.js",
   "scripts": {
-    "test": "STEP_DELAY=200 jest",
-    "dev": "STEP_DELAY=1000 jest"
+    "test": "STEP_DELAY=200 jest --detectOpenHandles",
+    "dev": "STEP_DELAY=1000 jest --detectOpenHandles"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",

@@ -1,3 +1,10 @@
+import { resolve } from 'path'
+
+const SCREENS_DIR = resolve(
+  __dirname,
+  '../../node_modules'
+)
+
 export async function takeScreenshot (
   page,
   screenOnError
@@ -7,7 +14,7 @@ export async function takeScreenshot (
       return 'OFF'
     }
 
-    const screenshotPath = `${__dirname}/${Date.now()}.png`
+    const screenshotPath = `${SCREENS_DIR}/${Date.now()}.png`
     await page.screenshot({
       fullPage: true,
       path: screenshotPath

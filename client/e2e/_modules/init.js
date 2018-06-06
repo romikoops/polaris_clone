@@ -11,10 +11,10 @@ const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
 function log (input) {
-  // eslint-disable-next-line
   if (input._type === 'log' && !input._text.startsWith('%')) {
-    // eslint-disable-next-line
     console.log(input._text)
+  } else if (input._type === 'error') {
+    console.error(input._text)
   }
 }
 
@@ -77,7 +77,7 @@ export default async function init (options) {
     holder.push(x)
   }
 
-  if (options.log) {
+  if (options.log !== false) {
     page.on('console', log)
   }
 
@@ -115,9 +115,7 @@ export default async function init (options) {
 
     while (!found && counter > 0) {
       counter -= 1
-      // eslint-disable-next-line
       await delay(DELAY)
-      // eslint-disable-next-line
       found = await page.$$eval(
         selector,
         (els, countValue) => els.length >= countValue,
@@ -148,20 +146,16 @@ export default async function init (options) {
 
     while (!found && counter > 0) {
       counter -= 1
-      // eslint-disable-next-line
       await delay(DELAY)
-      // eslint-disable-next-line
       const countResult = await page.$$eval(
         input.selector,
         els => els.length
       )
 
       if (countResult < input.index + 1) {
-        // eslint-disable-next-line
         continue
       }
 
-      // eslint-disable-next-line
       const texts = await page.$$eval(
         input.selector,
         els => els.map(el => el.textContent)
@@ -268,11 +262,8 @@ export default async function init (options) {
   const inputWithTab = async (tabCount, text) => {
     mark('inputWithTab', tabCount, text)
 
-    // eslint-disable-next-line
     for (const _ of Array(tabCount).fill('')) {
-      // eslint-disable-next-line
       await page.keyboard.press('Tab')
-      // eslint-disable-next-line
       await delay(DELAY)
     }
 
@@ -291,18 +282,13 @@ export default async function init (options) {
 
     mark('selectWithTab', tabCount, arrowToPress)
 
-    // eslint-disable-next-line
     for (const _ of Array(tabCount).fill('')) {
-      // eslint-disable-next-line
       await page.keyboard.press('Tab')
 
       if (bruteForceFlag) {
-        // eslint-disable-next-line
         await page.keyboard.press(arrowToPress)
-        // eslint-disable-next-line
         await delay(DELAY)
       }
-      // eslint-disable-next-line
       await delay(DELAY)
     }
 
@@ -364,7 +350,6 @@ export default async function init (options) {
     const result = await compareImages(label, compareLabel, tolerance)
 
     if (result === false) {
-      // eslint-disable-next-line
       console.warning('compareImages', false)
     }
 
@@ -372,7 +357,6 @@ export default async function init (options) {
   }
 
   const onError = () => {
-    // eslint-disable-next-line
     holder.forEach(x => console.log(x))
   }
 
@@ -409,7 +393,6 @@ export default async function init (options) {
 }
 
 function clickWhichSelector (els, i) {
-  // eslint-disable-next-line
   const convertIndex = (x, length) => (typeof x === 'number'
     ? x
     : x === 'last'
@@ -450,7 +433,6 @@ function clickWithPartialTextFn (els, text) {
 }
 
 function setInputFn (el, newValue) {
-  // eslint-disable-next-line
   el.value = newValue
 }
 
