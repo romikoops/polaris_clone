@@ -1,20 +1,20 @@
+# frozen_string_literal: true
+
 class AccountMailer < Devise::Mailer
-	default template_path: 'devise/mailer'
-  layout 'mailer'
+  default template_path: "devise/mailer"
+  layout "mailer"
   helper :application
   include Devise::Controllers::UrlHelpers
-
 
   def confirmation_instructions(record, token, opts={})
     tenant = record.tenant
 
-    attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
-    
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
     @redirect_url = base_url(tenant) + "account"
 
-    @links = tenant.email_links ? tenant.email_links['confirmation_instructions'] : []
+    @links = tenant.email_links ? tenant.email_links["confirmation_instructions"] : []
 
     # headers["Custom-header"] = "Some Headers"
     # opts[:reply_to] = 'example@email.com'
@@ -24,9 +24,8 @@ class AccountMailer < Devise::Mailer
   def reset_password_instructions(record, token, opts={})
     tenant = record.tenant
 
-    attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
+    attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
-    
     opts[:subject] = "ItsMyCargo Account Password Reset"
     @redirect_url = base_url(tenant) + "password_reset"
 
@@ -39,9 +38,9 @@ class AccountMailer < Devise::Mailer
 
   def base_url(tenant)
     case Rails.env
-    when 'production'  then "http://#{tenant.subdomain}.itsmycargo.com/"
-    when 'development' then "http://localhost:8080/"
-    when 'test'        then "http://localhost:8080/"
+    when "production"  then "http://#{tenant.subdomain}.itsmycargo.com/"
+    when "development" then "http://localhost:8080/"
+    when "test"        then "http://localhost:8080/"
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FixLayoverIds < ActiveRecord::Migration[5.1]
   def change
     remove_column :layovers, :interary_id

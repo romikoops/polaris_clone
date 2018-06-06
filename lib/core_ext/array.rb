@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Array
-	def log_format
-		self.to_s.gsub("\"", "'")
+  def log_format
+    to_s.tr('"', "'")
   end
-  
+
   def sql_format
-    "(#{self.join(', ')})"
+    "(#{join(', ')})"
   end
 end
