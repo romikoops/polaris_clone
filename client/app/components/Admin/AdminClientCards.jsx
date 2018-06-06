@@ -5,7 +5,7 @@ import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import styles from './AdminClientCards.scss'
 
 function listClients (clients) {
-  return clients.map((client) => {
+  return clients.length > 0 ? clients.map((client) => {
     const clientCard = (
       <div className="layout-row flex-100 layout-align-space-between-stretch">
         <div className="layout-column flex-50 layout-align-center-stretch">
@@ -41,7 +41,7 @@ function listClients (clients) {
         />
       </div>
     )
-  })
+  }) : (<span className={`${styles.listelement}`}>No shipments available</span>)
 }
 
 export class AdminClientCards extends Component {
@@ -74,7 +74,7 @@ AdminClientCards.propTypes = {
 }
 
 AdminClientCards.defaultProps = {
-  clients: {}
+  clients: []
 }
 
 export default AdminClientCards

@@ -24,7 +24,7 @@ function stationType (transportMode) {
 }
 
 function listShipments (shipments) {
-  return shipments.map(shipment => (
+  return shipments.length > 0 ? shipments.map(shipment => (
     <div className={`layout-row layout-padding layout-align-space-around-stretch
         ${styles.listelement}`}
     >
@@ -49,7 +49,7 @@ function listShipments (shipments) {
         </span>
       </div>
     </div>
-  ))
+  )) : (<span className={`${styles.bottomSpace}`}>No routes available</span>)
 }
 
 export class AdminRouteList extends Component {
@@ -63,8 +63,6 @@ export class AdminRouteList extends Component {
     const {
       shipments
     } = this.props
-
-    // const shipments = ['asd', 'asd', 'asd', 'asd', 'asd', 'asd', 'asd']
 
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.container}`}>
@@ -84,7 +82,7 @@ AdminRouteList.propTypes = {
 }
 
 AdminRouteList.defaultProps = {
-  shipments: {}
+  shipments: []
 }
 
 export default AdminRouteList

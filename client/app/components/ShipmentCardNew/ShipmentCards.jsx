@@ -15,7 +15,7 @@ export class ShipmentCards extends Component {
   }
 
   listShipments (shipments) {
-    return shipments.map((shipment) => {
+    return shipments.length > 0 ? shipments.map((shipment) => {
       const ShipCard = this.state.admin ? (
         <AShipCard
           shipment={shipment}
@@ -34,7 +34,7 @@ export class ShipmentCards extends Component {
           component={ShipCard}
         />
       )
-    })
+    }) : (<span className={`${styles.wideelement}`}>No shipments available</span>)
   }
 
   render () {
@@ -43,7 +43,7 @@ export class ShipmentCards extends Component {
     } = this.props
 
     return (
-      <div className="layout-wrap layout-row layout-align-space-between-start">
+      <div className="layout-wrap flex-100 layout-row layout-align-space-between-start">
         <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
           <span><b>Requested Shipments</b></span>
         </div>
@@ -55,12 +55,12 @@ export class ShipmentCards extends Component {
 
 ShipmentCards.propTypes = {
   admin: PropTypes.bool,
-  shipments: PropTypes.objectOf(PropTypes.shipments)
+  shipments: PropTypes.arrayOf(PropTypes.shipment)
 }
 
 ShipmentCards.defaultProps = {
   admin: false,
-  shipments: {}
+  shipments: []
 }
 
 export default ShipmentCards

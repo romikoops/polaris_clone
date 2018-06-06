@@ -4,7 +4,7 @@ import { AdminHubCard as AHubCard } from './AdminHubCard'
 import styles from './AdminHubCards.scss'
 
 function listHubs (hubs) {
-  return Object.keys(hubs).map((hub) => {
+  return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hub) => {
     const HubCard = (
       <div className={`flex-22 ${styles.hub}`}>
         <AHubCard
@@ -14,7 +14,7 @@ function listHubs (hubs) {
     )
 
     return HubCard
-  })
+  }) : (<span className={`${styles.hub}`}>No hubs available</span>)
 }
 
 export class AdminHubCards extends Component {
