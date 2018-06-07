@@ -42,14 +42,14 @@ module ShippingTools
     destinations = []
     itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
       begin
-      origins << {
-        value: Location.find(itinerary.first_nexus.id).to_custom_hash,
-        label: itinerary.first_nexus.name
-      }
-      destinations << {
-        value: Location.find(itinerary.last_nexus.id).to_custom_hash,
-        label: itinerary.last_nexus.name
-      }
+        origins << {
+          value: Location.find(itinerary.first_nexus.id).to_custom_hash,
+          label: itinerary.first_nexus.name
+        }
+        destinations << {
+          value: Location.find(itinerary.last_nexus.id).to_custom_hash,
+          label: itinerary.last_nexus.name
+        }
       
         itinerary = itinerary.as_options_json
       rescue

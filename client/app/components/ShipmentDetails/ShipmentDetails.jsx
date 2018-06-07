@@ -35,6 +35,8 @@ import getOffersBtnIsActive, {
 } from './getOffersBtnIsActive'
 import formatCargoItemTypes from './formatCargoItemTypes'
 import addressFieldsAreValid from './addressFieldsAreValid'
+import calcAvailableMotsForRoute,
+{ shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
 import getRequests from '../ShipmentLocationBox/getRequests'
 
 export class ShipmentDetails extends Component {
@@ -175,6 +177,14 @@ export class ShipmentDetails extends Component {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
 
+    if (shouldUpdateAvailableMotsForRoute(this.state, nextState)) {
+      this.updateAvailableMotsForRoute()
+      return false
+    }
+
+    console.log('nextState.availableMotsForRoute')
+    console.log(nextState.availableMotsForRoute)
+
     return !!(
       (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
       nextProps.shipmentData &&
@@ -279,6 +289,16 @@ export class ShipmentDetails extends Component {
       incoterm: obj.incoterm,
       routeSet: true,
       prevRequestLoaded: true
+    })
+  }
+
+  updateAvailableMotsForRoute () {
+    this.setState((prevState) => {
+      const { origin, destination } = prevState
+      const { itineraries } = this.props.shipmentData
+
+      const availableMotsForRoute = calcAvailableMotsForRoute(itineraries, origin, destination)
+      return { availableMotsForRoute }
     })
   }
 
