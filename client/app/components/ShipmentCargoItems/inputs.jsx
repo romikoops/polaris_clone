@@ -96,7 +96,7 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensionsToApply.payloadInKg
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
@@ -216,7 +216,7 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionZ
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
@@ -282,7 +282,7 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionX
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
@@ -349,7 +349,7 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionY
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',

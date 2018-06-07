@@ -65,14 +65,10 @@ function getOffers (data, redirect) {
       },
       (error) => {
         error.then((newData) => {
-          // eslint-disable-next-line no-debugger
-          debugger
           dispatch(failure({
             type: 'error',
             text: newData.message || newData.error
           }))
-          // eslint-disable-next-line no-debugger
-          debugger
           if (newData.error) console.error(newData.exception)
         })
       }

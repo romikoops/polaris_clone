@@ -364,7 +364,9 @@ export class ShipmentDetails extends Component {
 
   updatedExcessChargeableWeightText (cargoItems) {
     const { maxAggregateDimensions } = this.props.shipmentData
-    if (!maxAggregateDimensions.air) return ''
+    if (!maxAggregateDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) {
+      return ''
+    }
 
     const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
       sum + +chargeableWeight(cargoItem, 'air')
@@ -616,6 +618,7 @@ export class ShipmentDetails extends Component {
     const {
       tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
+
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
@@ -1008,7 +1011,7 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   getOffers: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.string),
+  messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
