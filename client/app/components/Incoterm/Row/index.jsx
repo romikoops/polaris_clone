@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator } from '../../../helpers'
+import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
 
 export function IncotermRow ({
   theme,
@@ -14,6 +14,7 @@ export function IncotermRow ({
   tenant,
   firstStep
 }) {
+  const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
   const sumCargoFees = (cargos) => {
     let total = 0.0
     let curr = ''
@@ -195,7 +196,8 @@ export function IncotermRow ({
   const freightFeesTile = (
     <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-ship clip flex-none" style={freightStyle} />
+        {switchIcon(speciality, freightStyle)}
+        {/* <i className="fa fa-ship  flex-none" style={freightStyle} /> */}
       </div>
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}

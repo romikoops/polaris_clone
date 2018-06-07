@@ -34,13 +34,10 @@ module ShippingTools
     end
 
     itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
-
-    mot_scope_args = { ("only_" + load_type).to_sym => true }
-    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args)&.intercepting_scope_ids
-
     origins = []
     destinations = []
-    itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
+    itineraries = current_user.tenant.itineraries.map do |itinerary|
+      next if itinerary.pricings.for_load_type(load_type).empty?
       begin
         origins << {
           value: Location.find(itinerary.first_nexus.id).to_custom_hash,
@@ -56,7 +53,7 @@ module ShippingTools
       end
       itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
       itinerary
-    end
+    end.compact
     {
       shipment:                 shipment,
       all_nexuses:              { origins: origins.uniq, destinations: destinations.uniq },
