@@ -100,7 +100,7 @@ export class RouteResult extends Component {
               </div>
               <div className={`${styles.connection_graphics}`}>
                 <div className="flex-none layout-row layout-align-center-center">
-                  {switchIcon(schedule)}
+                  {switchIcon(schedule.mode_of_transport)}
                 </div>
                 <div style={dashedLineStyles} />
               </div>

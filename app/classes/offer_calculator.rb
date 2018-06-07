@@ -83,7 +83,7 @@ class OfferCalculator
     filter_itineraries!
 
     raise ApplicationError::NoRoute if @itineraries.nil?
-    byebug
+    
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
   end
@@ -135,7 +135,7 @@ class OfferCalculator
       end
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
-    byebug
+    
     @itineraries_hash = schedule_obj
   end
 
@@ -286,7 +286,7 @@ class OfferCalculator
         total_units,
         @shipment.planned_pickup_date,
         mot)
-        byebug
+        
       next if charge_result.nil?
 
       cargo_unit_model = cargo_unit.class.to_s
@@ -337,7 +337,7 @@ class OfferCalculator
       cargo_class: cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-      byebug
+      
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 

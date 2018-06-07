@@ -464,12 +464,14 @@ module ExcelTools
       zones[zone_name] = [] if zones[zone_name].nil?
 
       if row_data[1] && !row_data[2]
-        zip_char_length ||= row_data[1].to_s.length
-        zones[zone_name] << { ident: row_data[1], country: row_data[3] }
+        row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
+        zip_char_length ||= row_zip.to_s.length
+        p zip_char_length
+        zones[zone_name] << { ident: row_zip, country: row_data[3] }
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete(' ').split('-')
         zip_char_length ||= range[0].length
-        zones[zone_name] << { min: range[0].to_d, max: range[1].to_d, country: row_data[3] }
+        zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
       elsif row_data[1] && row_data[2]
         zones[zone_name] << {
           ident: row_data[1],

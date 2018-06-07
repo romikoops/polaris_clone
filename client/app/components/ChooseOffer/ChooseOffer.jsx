@@ -33,7 +33,9 @@ export class ChooseOffer extends Component {
     this.state = {
       selectedMoT: {
         ocean: true,
-        air: true
+        air: true,
+        truck: true,
+        rail: true
       },
       durationFilter: 40,
       limits: {

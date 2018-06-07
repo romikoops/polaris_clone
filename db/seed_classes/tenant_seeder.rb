@@ -444,8 +444,8 @@ class TenantSeeder
             cargo_item: true
           },
           air: {
-            container: true,
-            cargo_item: true
+            container: false,
+            cargo_item: false
           }
         },
         fixed_currency: false,

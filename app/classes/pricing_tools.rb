@@ -10,7 +10,7 @@ module PricingTools
 
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
-    byebug
+    
     return if pricing.nil?
 
     pricing_exceptions = pricing.pricing_exceptions.where('effective_date <= ? AND expiration_date >= ?', shipment_date, shipment_date)
@@ -84,7 +84,7 @@ module PricingTools
     pricing = get_user_price(pathKey, user, shipment_date)
     return nil if pricing.nil?
     totals = { 'total' => {} }
-    byebug
+    
     pricing.keys.each do |k|
       fee = pricing[k].clone
 

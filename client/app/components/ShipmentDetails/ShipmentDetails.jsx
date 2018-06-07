@@ -600,6 +600,7 @@ export class ShipmentDetails extends Component {
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
+
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
 
     if (this.state.aggregated) {
