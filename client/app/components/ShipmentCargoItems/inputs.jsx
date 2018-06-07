@@ -40,7 +40,8 @@ export default function getInputs (
   toggleModal,
   nextStageAttempt,
   scope,
-  maxDimensions
+  maxDimensions,
+  availableMotsForRoute
 ) {
   const { handleDelta } = this.props
   const placeholderInput = (
@@ -53,6 +54,9 @@ export default function getInputs (
   const showColliTypeErrors =
     !firstRenderInputs && nextStageAttempt &&
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
+
+  const maxDimensionsKey = availableMotsForRoute.every(mot => mot === 'air') ? 'air' : 'general'
+  const maxDimensionsToApply = maxDimensions[maxDimensionsKey]
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
@@ -92,12 +96,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.general.payloadInKg
+                maxDimension: (values, value) => value < +maxDimensionsToApply.payloadInKg
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum weight is ${maxDimensions.general.payloadInKg}`
+                maxDimension: `Maximum weight is ${maxDimensionsToApply.payloadInKg}`
               }}
               required
             />
@@ -172,7 +176,7 @@ export default function getInputs (
   if (
     cargoItem &&
     maxDimensions.air &&
-    +cargoItem.dimension_z < +maxDimensions.general.dimensionZ &&
+    +cargoItem.dimension_z < +maxDimensionsToApply.dimensionZ &&
     +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
   ) {
     heightDataTip = `
@@ -212,12 +216,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.general.dimensionZ
+                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.general.dimensionZ}`
+                maxDimension: `Maximum height is ${maxDimensionsToApply.dimensionZ}`
               }}
               required
             />
@@ -236,7 +240,7 @@ export default function getInputs (
       lengthDataTip = 'Length is automatically set by \'Collie Type\''
     } else if (
       maxDimensions.air &&
-      +cargoItem.dimension_x < +maxDimensions.general.dimensionX &&
+      +cargoItem.dimension_x < +maxDimensionsToApply.dimensionX &&
       +cargoItem.dimension_x > +maxDimensions.air.dimensionX
     ) {
       lengthDataTip = `
@@ -278,12 +282,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.general.dimensionX
+                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum length is ${maxDimensions.general.dimensionX}`
+                maxDimension: `Maximum length is ${maxDimensionsToApply.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -303,7 +307,7 @@ export default function getInputs (
       widthDataTip = 'Width is automatically set by \'Collie Type\''
     } else if (
       maxDimensions.air &&
-      +cargoItem.dimension_y < +maxDimensions.general.dimensionY &&
+      +cargoItem.dimension_y < +maxDimensionsToApply.dimensionY &&
       +cargoItem.dimension_y > +maxDimensions.air.dimensionY
     ) {
       widthDataTip = `
@@ -345,12 +349,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.general.dimensionY
+                maxDimension: (values, value) => value < +maxDimensionsToApply.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum width is ${maxDimensions.general.dimensionY}`
+                maxDimension: `Maximum width is ${maxDimensionsToApply.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

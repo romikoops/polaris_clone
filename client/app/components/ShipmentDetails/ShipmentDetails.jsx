@@ -115,7 +115,8 @@ export class ShipmentDetails extends Component {
         noDangerousGoodsConfirmed: '',
         stackableGoodsConfirmed: ''
       },
-      prevRequestLoaded: false
+      prevRequestLoaded: false,
+      availableMotsForRoute: []
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -181,9 +182,6 @@ export class ShipmentDetails extends Component {
       this.updateAvailableMotsForRoute()
       return false
     }
-
-    console.log('nextState.availableMotsForRoute')
-    console.log(nextState.availableMotsForRoute)
 
     return !!(
       (isEmpty(nextProps.prevRequest) || nextState.prevRequestLoaded) &&
@@ -355,7 +353,7 @@ export class ShipmentDetails extends Component {
 
   updateAirMaxDimensionsTooltips (value, divRef, suffixName) {
     const { maxDimensions } = this.props.shipmentData
-    if (!maxDimensions.air) return
+    if (!maxDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) return
 
     if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => { ReactTooltip.show(divRef) }, 500)
@@ -659,6 +657,7 @@ export class ShipmentDetails extends Component {
           scope={scope}
           availableCargoItemTypes={formatCargoItemTypes(shipmentData.cargoItemTypes)}
           maxDimensions={shipmentData.maxDimensions}
+          availableMotsForRoute={this.state.availableMotsForRoute}
           toggleModal={name => this.toggleModal(name)}
         />
       )
