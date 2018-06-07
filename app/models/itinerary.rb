@@ -14,11 +14,7 @@ class Itinerary < ApplicationRecord
   has_many :hubs,      through: :stops
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
-<<<<<<< HEAD
-  #scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
-=======
   # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
->>>>>>> 5a8777290aec5a49bb985d98513c535bb4e5a37a
 
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
@@ -195,7 +191,6 @@ class Itinerary < ApplicationRecord
 
   def last_stop
     stops.order(index: :desc).limit(1).first
-<<<<<<< HEAD
   end
   
   def origin_stops
@@ -232,12 +227,6 @@ class Itinerary < ApplicationRecord
   
   def destination_nexuses
     Location.where(id: destination_nexus_ids)
-=======
-  end
-
-  def first_nexus
-    stops.find_by(index: 0).hub.nexus
->>>>>>> 5a8777290aec5a49bb985d98513c535bb4e5a37a
   end
 
   def users_with_pricing
@@ -246,15 +235,6 @@ class Itinerary < ApplicationRecord
 
   def pricing_count
     pricings.count
-  end
-
-<<<<<<< HEAD
-  def self.mot_scoped(tenant_id, mot_scope_ids)
-    get_scoped_itineraries(tenant_id, mot_scope_ids)
-=======
-  def last_nexus
-    last_stop.hub.nexus
->>>>>>> 5a8777290aec5a49bb985d98513c535bb4e5a37a
   end
 
   def routes
