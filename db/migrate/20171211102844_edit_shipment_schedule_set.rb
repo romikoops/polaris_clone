@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EditShipmentScheduleSet < ActiveRecord::Migration[5.1]
   def change
     remove_column :shipments, :schedule_set, :integer, array: true

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # puts 'Workaround to ignore directories. Doesn\'t work currently.'
 # Spring::Watcher::Listen.class_eval do
 #   def base_directories
@@ -11,9 +13,9 @@
 
 ### Above was added. Below is standard.
 
-%w(
+%w[
   .ruby-version
   .rbenv-vars
   tmp/restart.txt
   tmp/caching-dev.txt
-).each { |path| Spring.watch(path) }
+].each { |path| Spring.watch(path) }

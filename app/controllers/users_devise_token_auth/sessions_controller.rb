@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module UsersDeviseTokenAuth
   class UsersDeviseTokenAuth::SessionsController < DeviseTokenAuth::SessionsController
     before_action :configure_permitted_parameters, if: :devise_controller?
     skip_before_action :require_authentication!
     skip_before_action :require_non_guest_authentication!
-    
+
     wrap_parameters false
 
     def render_create_error_bad_credentials

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class EditShipmentModelForNewScystem < ActiveRecord::Migration[5.1]
   def change
     remove_column :shipments, :total_goods_value, :string

@@ -4,26 +4,9 @@ import styles from './RouteResult.scss'
 import { moment } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Price } from '../Price/Price'
+import { switchIcon } from '../../helpers'
 
 export class RouteResult extends Component {
-  static switchIcon (sched) {
-    let icon
-    switch (sched.mode_of_transport) {
-      case 'ocean':
-        icon = <i className="fa fa-ship" />
-        break
-      case 'air':
-        icon = <i className="fa fa-plane" />
-        break
-      case 'rail':
-        icon = <i className="fa fa-train" />
-        break
-      default:
-        icon = <i className="fa fa-ship" />
-        break
-    }
-    return icon
-  }
   static returnHubType (hub) {
     let hubType = ''
     switch (hub.hub_type) {
@@ -35,6 +18,9 @@ export class RouteResult extends Component {
         break
       case 'rail':
         hubType = 'Railyard'
+        break
+      case 'truck':
+        hubType = 'Depot'
         break
       default:
         break
@@ -114,7 +100,7 @@ export class RouteResult extends Component {
               </div>
               <div className={`${styles.connection_graphics}`}>
                 <div className="flex-none layout-row layout-align-center-center">
-                  {RouteResult.switchIcon(schedule)}
+                  {switchIcon(schedule.mode_of_transport)}
                 </div>
                 <div style={dashedLineStyles} />
               </div>

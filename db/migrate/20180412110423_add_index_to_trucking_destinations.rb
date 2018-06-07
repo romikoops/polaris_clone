@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexToTruckingDestinations < ActiveRecord::Migration[5.1]
   def change
     add_index :trucking_destinations, :zipcode

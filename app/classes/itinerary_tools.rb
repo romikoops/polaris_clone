@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ItineraryTools
-
   def get_itineraries_with_dedicated_pricings(user_id, tenant_id)
     itinerary_ids = User.find(user_id).pricings.where(tenant_id: tenant_id).pluck(:itinerary_id)
     Itinerary.where(id: itinerary_ids)

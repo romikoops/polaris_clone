@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 class MaxDimensionsBundle < ApplicationRecord
   belongs_to :tenant
   validates :mode_of_transport, presence: true, uniqueness: {
-    scope: %i(tenant_id aggregate),
-    message: -> obj, _ {
+    scope:   %i[tenant_id aggregate],
+    message: lambda { |obj, _|
       max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
       "'#{obj.mode_of_transport}' already exists in #{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
     }
   }
-  CustomValidations.inclusion(self, :mode_of_transport, %w(ocean rail air general))
+  CustomValidations.inclusion(self, :mode_of_transport, %w[ocean rail air general])
   validates :dimension_x, :dimension_y, :dimension_z, :payload_in_kg, :chargeable_weight,
     numericality: true, allow_nil: true
-  
+
   scope :aggregate,  -> { where(aggregate: true) }
   scope :unit,       -> { where(aggregate: false) }
 
@@ -22,15 +24,15 @@ class MaxDimensionsBundle < ApplicationRecord
       payload_in_kg:     "21_770.0",
       chargeable_weight: "21_770.0"
     },
-    air: {
+    air:     {
       dimension_x:       "120.0",
       dimension_y:       "80.0",
       dimension_z:       "158.0",
       payload_in_kg:     "1_500.0",
       chargeable_weight: "1_500.0"
     }
-  }.map_deep_values { |v| BigDecimal.new(v) }
-  
+  }.map_deep_values { |v| BigDecimal(v) }
+
   CARGO_ITEM_AGGREGATE_DEFAULTS = {
     general: {
       dimension_x:       "0",
@@ -39,14 +41,14 @@ class MaxDimensionsBundle < ApplicationRecord
       payload_in_kg:     "0",
       chargeable_weight: "0"
     },
-    air: {
+    air:     {
       dimension_x:       "0",
       dimension_y:       "0",
       dimension_z:       "0",
       payload_in_kg:     "1_500.0",
       chargeable_weight: "1_500.0"
     }
-  }.map_deep_values { |v| BigDecimal.new(v) }
+  }.map_deep_values { |v| BigDecimal(v) }
 
   def self.to_max_dimensions_hash
     all.reduce({}) do |return_h, max_dimensions_bundle|
@@ -54,7 +56,7 @@ class MaxDimensionsBundle < ApplicationRecord
     end
   end
 
-  def self.create_defaults_for(tenant, options = {})
+  def self.create_defaults_for(tenant, options={})
     return create_all_defaults_for(tenant, options) if options.delete(:all)
 
     aggregate = !!options[:aggregate]
@@ -62,10 +64,10 @@ class MaxDimensionsBundle < ApplicationRecord
     defaults = aggregate ? CARGO_ITEM_AGGREGATE_DEFAULTS : CARGO_ITEM_DEFAULTS
     defaults.map do |mode_of_transport, max_dimensions_hash|
       next if excluded_in_options?(options, mode_of_transport)
-    
+
       create(max_dimensions_hash.merge(
-        tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
-      ))
+               tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
+             ))
     end.compact
   end
 
@@ -92,7 +94,7 @@ class MaxDimensionsBundle < ApplicationRecord
   def self.create_all_defaults_for(tenant, options)
     [
       create_defaults_for(tenant, options),
-      create_defaults_for(tenant, options.merge(aggregate: true)),
+      create_defaults_for(tenant, options.merge(aggregate: true))
     ]
   end
 end

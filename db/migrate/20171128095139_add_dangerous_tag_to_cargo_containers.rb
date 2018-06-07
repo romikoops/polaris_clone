@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDangerousTagToCargoContainers < ActiveRecord::Migration[5.1]
   def change
     add_column :cargo_items, :dangerous_goods, :boolean

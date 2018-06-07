@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pricing < ApplicationRecord
   belongs_to :itinerary
   belongs_to :tenant
@@ -7,10 +9,11 @@ class Pricing < ApplicationRecord
   has_many :pricing_exceptions, dependent: :destroy
 
   delegate :load_type, to: :transport_category
+  scope :for_load_type, -> (load_type) { joins(:transport_category).where('transport_categories.load_type': load_type)} 
 
-  def as_json(options = {})
+  def as_json(options={})
     new_options = options.reverse_merge(
-{ methods: [:data, :exceptions, :load_type], only: [:effective_date, :expiration_date, :wm_rate, :itinerary_id, :tenant_id, :transport_category_id, :id, :currency_name] }
+      methods: %i[data exceptions load_type], only: %i[effective_date expiration_date wm_rate itinerary_id tenant_id transport_category_id id currency_name]
     )
     super(new_options)
   end
@@ -22,6 +25,4 @@ class Pricing < ApplicationRecord
   def exceptions
     pricing_exceptions.map(&:as_json)
   end
-
 end
-

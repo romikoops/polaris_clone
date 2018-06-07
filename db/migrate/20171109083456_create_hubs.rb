@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHubs < ActiveRecord::Migration[5.1]
   def change
     create_table :hubs do |t|
@@ -7,7 +9,7 @@ class CreateHubs < ActiveRecord::Migration[5.1]
       t.string   :hub_type
       t.float    :latitude
       t.float    :longitude
-      t.string   :hub_status,  default: "active"
+      t.string   :hub_status, default: 'active'
       t.string   :hub_code
       t.timestamps
     end
