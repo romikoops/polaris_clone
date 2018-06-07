@@ -619,6 +619,9 @@ export class ShipmentDetails extends Component {
       tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
 
+    console.log('this.state.availableMotsForRoute')
+    console.log(this.state.availableMotsForRoute)
+
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails

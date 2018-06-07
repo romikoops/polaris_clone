@@ -27,7 +27,7 @@ export class FlashMessages extends Component {
   render () {
     const alerts = this.state.messages.map((message, i) => (
       // eslint-disable-next-line react/no-array-index-key
-      <Alert key={i} message={message} onClose={this.removeMessage} />
+      <Alert key={i} message={message} onClose={this.removeMessage} timeout={10000} />
     ))
     return (
       <div style={{ zIndex: 9999 }}>

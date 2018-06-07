@@ -90,10 +90,15 @@ class OfferCalculator
 
   def filter_itineraries!
     return unless @cargo_units.first.is_a? CargoItem
+    unfiltered_itineraries = @itineraries.dup
 
     @itineraries.select! do |itinerary|
       @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) } &&
       @shipment.valid_for_itinerary?(itinerary)
+    end
+
+    if @itineraries.empty? && !unfiltered_itineraries.empty?
+      raise ApplicationError::InvalidItineraries
     end
   end
 
