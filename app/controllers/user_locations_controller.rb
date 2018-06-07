@@ -43,7 +43,7 @@ class UserLocationsController < ApplicationController
   def edit
     user = User.find(params[:user_id])
     location_data = JSON.parse(params[:edit_location])
-    location_data.delete('id')
+    location_data.delete("id")
     user_loc = Location.find(params[:location_id])
     user_loc.update_attributes(location_data)
     user_loc.save!

@@ -41,10 +41,10 @@ class Shipment < ApplicationRecord
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin_nexus, class_name: 'Location', optional: true
-  belongs_to :destination_nexus, class_name: 'Location', optional: true
-  belongs_to :origin_hub, class_name: 'Hub', optional: true
-  belongs_to :destination_hub, class_name: 'Hub', optional: true
+  belongs_to :origin_nexus, class_name: "Location", optional: true
+  belongs_to :destination_nexus, class_name: "Location", optional: true
+  belongs_to :origin_hub, class_name: "Hub", optional: true
+  belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
   belongs_to :transport_category, optional: true
@@ -73,7 +73,7 @@ class Shipment < ApplicationRecord
   end
 
   %i[ocean air rail].each do |mot|
-    scope mot, -> { joins(:itinerary).where('itineraries.mode_of_transport = ?', mot) }
+    scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
   end
 
   # Class methods
@@ -81,31 +81,31 @@ class Shipment < ApplicationRecord
   # Instance methods
 
   def pickup_address
-    Location.where(id: trucking.dig('pre_carriage', 'location_id')).first
+    Location.where(id: trucking.dig("pre_carriage", "location_id")).first
   end
 
   def delivery_address
-    Location.where(id: trucking.dig('on_carriage', 'location_id')).first
+    Location.where(id: trucking.dig("on_carriage", "location_id")).first
   end
 
   def import?
-    direction == 'import'
+    direction == "import"
   end
 
   def export?
-    direction == 'export'
+    direction == "export"
   end
 
   def shipper
-    find_contacts('shipper').first
+    find_contacts("shipper").first
   end
 
   def consignee
-    find_contacts('consignee').first
+    find_contacts("consignee").first
   end
 
   def notifyees
-    find_contacts('notifyee')
+    find_contacts("notifyee")
   end
 
   def cargo_units
@@ -135,11 +135,11 @@ class Shipment < ApplicationRecord
   end
 
   def has_on_carriage=(_value)
-    raise 'This property is read only. Please write to trucking property instead.'
+    raise "This property is read only. Please write to trucking property instead."
   end
 
   def has_pre_carriage=(_value)
-    raise 'This property is read only. Please write to trucking property instead.'
+    raise "This property is read only. Please write to trucking property instead."
   end
 
   def has_on_carriage?
@@ -163,19 +163,19 @@ class Shipment < ApplicationRecord
   end
 
   def accept!
-    update!(status: 'confirmed')
+    update!(status: "confirmed")
   end
 
   def finish!
-    update!(status: 'finished')
+    update!(status: "finished")
   end
 
   def decline!
-    update!(status: 'declined')
+    update!(status: "declined")
   end
 
   def ignore!
-    update!(status: 'ignored')
+    update!(status: "ignored")
   end
 
   def etd
@@ -196,7 +196,7 @@ class Shipment < ApplicationRecord
 
   def cargo_charges
     schedule_set.reduce({}) do |cargo_charges, schedule|
-      cargo_charges.merge schedules_charges[schedule['hub_route_key']]['cargo']
+      cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
     end
   end
 
@@ -205,7 +205,7 @@ class Shipment < ApplicationRecord
     ships.each do |s|
       scheds = []
       s.schedule_set.each do |ss|
-        scheds.push(Schedule.find(ss['id']))
+        scheds.push(Schedule.find(ss["id"]))
       end
       next unless scheds.first&.etd && scheds.last && scheds.last.eta
       s.planned_etd = scheds.first.etd
@@ -216,7 +216,7 @@ class Shipment < ApplicationRecord
 
   def create_charge_breakdowns_from_schedules_charges!
     schedules_charges.map do |hub_route_key, schedule_charges|
-      origin_hub_id, destination_hub_id = *hub_route_key.split('-').map(&:to_i)
+      origin_hub_id, destination_hub_id = *hub_route_key.split("-").map(&:to_i)
       itinerary = Itinerary.filter_by_hubs(origin_hub_id, destination_hub_id).first
       charge_breakdown = ChargeBreakdown.create!(shipment: self, itinerary: itinerary)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
@@ -233,14 +233,8 @@ class Shipment < ApplicationRecord
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus
-      if s.has_on_carriage
-
-        s.trucking['on_carriage']['location_id'] = itinerary.last_stop.hub.id
-      end
-      if s.has_pre_carriage
-
-        s.trucking['pre_carriage']['location_id'] = itinerary.first_stop.hub.id
-      end
+      s.trucking["on_carriage"]["location_id"] = itinerary.last_stop.hub.id if s.has_on_carriage
+      s.trucking["pre_carriage"]["location_id"] = itinerary.first_stop.hub.id if s.has_pre_carriage
       s.save!
     end
   end
@@ -260,23 +254,23 @@ class Shipment < ApplicationRecord
 
   def update_carriage_properties!
     %w[on_carriage pre_carriage].each do |carriage|
-      self["has_#{carriage}"] = !trucking.dig(carriage, 'truck_type').blank?
+      self["has_#{carriage}"] = !trucking.dig(carriage, "truck_type").blank?
     end
   end
 
   def generate_imc_reference
     now = DateTime.now
-    day_of_the_year = now.strftime('%d%m')
-    hour_as_letter = ('A'..'Z').to_a[now.hour - 1]
+    day_of_the_year = now.strftime("%d%m")
+    hour_as_letter = ("A".."Z").to_a[now.hour - 1]
     year = now.year.to_s[-2..-1]
     first_part = day_of_the_year + hour_as_letter + year
-    last_shipment_in_this_hour = Shipment.where('imc_reference LIKE ?', first_part + '%').last
+    last_shipment_in_this_hour = Shipment.where("imc_reference LIKE ?", first_part + "%").last
     if last_shipment_in_this_hour
       last_serial_number = last_shipment_in_this_hour.imc_reference[first_part.length..-1].to_i
       new_serial_number = last_serial_number + 1
-      serial_code = new_serial_number.to_s.rjust(5, '0')
+      serial_code = new_serial_number.to_s.rjust(5, "0")
     else
-      serial_code = '1'.rjust(5, '0')
+      serial_code = "1".rjust(5, "0")
     end
 
     self.imc_reference = first_part + serial_code
@@ -298,10 +292,10 @@ class Shipment < ApplicationRecord
 
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
-    errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
+    errors.add(:planned_pickup_date, "must be a DateTime") unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def set_default_trucking
-    self.trucking ||= { on_carriage: { truck_type: '' }, pre_carriage: { truck_type: '' } }
+    self.trucking ||= { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }
   end
 end

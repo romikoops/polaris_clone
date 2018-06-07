@@ -13,8 +13,8 @@ class Contact < ApplicationRecord
   validates :email,        presence: true, length: { in: 8..50 }
 
   # Filterrific configuration
-  filterrific default_filter_params: { sorted_by: 'created_at_asc' },
-              available_filters: %w[
+  filterrific default_filter_params: { sorted_by: "created_at_asc" },
+              available_filters:     %w[
                 sorted_by
                 search_query
               ]
@@ -24,11 +24,11 @@ class Contact < ApplicationRecord
   scope :search_query, lambda { |query|
     return nil if query.blank?
     # condition query, parse into individual keywords
-    terms = query.to_s.delete(',').downcase.split(/\s+/)
+    terms = query.to_s.delete(",").downcase.split(/\s+/)
     # replace "*" with "%" for wildcard searches,
     # prepend and append '%', remove duplicate '%'s
     terms = terms.map do |e|
-      ('%' + e.tr('*', '%') + '%').gsub(/%+/, '%')
+      ("%" + e.tr("*", "%") + "%").gsub(/%+/, "%")
     end
 
     # configure number of OR conditions for provision
@@ -37,20 +37,20 @@ class Contact < ApplicationRecord
     num_or_conditions = 3
 
     or_clauses = [
-      'consignees.first_name ILIKE ?',
-      'consignees.last_name ILIKE ?',
-      'consignees.company_name ILIKE ?'
-    ].join(' OR ')
+      "consignees.first_name ILIKE ?",
+      "consignees.last_name ILIKE ?",
+      "consignees.company_name ILIKE ?"
+    ].join(" OR ")
 
     where(
-      terms.map { "(#{or_clauses})" }.join(' AND '),
+      terms.map { "(#{or_clauses})" }.join(" AND "),
       *terms.map { |e| [e] * num_or_conditions }.flatten
     )
   }
 
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
-    direction = /desc$/.match?(sort_option) ? 'desc' : 'asc'
+    direction = /desc$/.match?(sort_option) ? "desc" : "asc"
     case sort_option.to_s
     when /^created_at_/
       order("consignees.created_at #{direction}")
@@ -62,8 +62,8 @@ class Contact < ApplicationRecord
   # Class methods
   def self.options_for_sorted_by
     [
-      ['Registration date (newest first)', 'created_at_desc'],
-      ['Registration date (oldest first)', 'created_at_asc']
+      ["Registration date (newest first)", "created_at_desc"],
+      ["Registration date (oldest first)", "created_at_asc"]
     ]
   end
 
@@ -77,7 +77,7 @@ class Contact < ApplicationRecord
   end
 
   def full_name_and_company_and_address
-    address_if_exists = location.nil? ? '' : "\n#{location.geocoded_address}"
+    address_if_exists = location.nil? ? "" : "\n#{location.geocoded_address}"
     "#{first_name} #{last_name} #{company_name}#{address_if_exists}"
   end
 end

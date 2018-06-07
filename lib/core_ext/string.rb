@@ -2,15 +2,15 @@
 
 class String
   def remove_extra_spaces!
-    gsub!(/\s+/, ' ').gsub!(/\s+,/, ',').strip!
-                     .gsub!(/^,/, '').gsub!(/,\z/, '').strip!
-                     .gsub!(/,+/, ',')
+    gsub!(/\s+/, " ").gsub!(/\s+,/, ",").strip!
+                     .gsub!(/^,/, "").gsub!(/,\z/, "").strip!
+                     .gsub!(/,+/, ",")
   end
 
   def remove_extra_spaces
-    gsub(/\s+/, ' ').gsub(/\s+,/, ',').strip
-                    .gsub(/^,/, '').gsub(/,\z/, '').strip
-                    .gsub(/,+/, ',')
+    gsub(/\s+/, " ").gsub(/\s+,/, ",").strip
+                    .gsub(/^,/, "").gsub(/,\z/, "").strip
+                    .gsub(/,+/, ",")
   end
 
   def is_number?

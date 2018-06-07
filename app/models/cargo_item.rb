@@ -53,7 +53,7 @@ class CargoItem < ApplicationRecord
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
     # validation, which depends on this itinerary's mode of transport.
     klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, itinerary)
-    Module.const_set('AuxCargoItem', klass)
+    Module.const_set("AuxCargoItem", klass)
 
     # Instantiates the auxiliary class and checks if the item is still valid,
     # thereby applying the new validation.

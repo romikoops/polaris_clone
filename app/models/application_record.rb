@@ -13,18 +13,18 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
-  def to_postgres_insertable(attributes = self.class.given_attribute_names)
+  def to_postgres_insertable(attributes=self.class.given_attribute_names)
     attributes.sort.map do |attr_name|
       val = self[attr_name]
       case val
       when nil
-        'NULL'
+        "NULL"
       when Hash
         "'#{val.to_json}'::jsonb"
       when String
         "'#{val}'"
       when nil
-        'NULL'
+        "NULL"
       else
         val
       end

@@ -8,9 +8,9 @@ class Admin::SchedulesController < ApplicationController
 
   def index
     tenant = Tenant.find(current_user.tenant_id)
-    train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map { |it| it.trips.limit(10).order(:start_date) }
-    ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map { |it| it.trips.limit(10).order(:start_date) }
-    air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map { |it| it.trips.limit(10).order(:start_date) }
+    train_schedules = tenant.itineraries.where(mode_of_transport: "train").flat_map { |it| it.trips.limit(10).order(:start_date) }
+    ocean_schedules = tenant.itineraries.where(mode_of_transport: "ocean").flat_map { |it| it.trips.limit(10).order(:start_date) }
+    air_schedules = tenant.itineraries.where(mode_of_transport: "air").flat_map { |it| it.trips.limit(10).order(:start_date) }
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     detailed_itineraries = itineraries.map(&:as_options_json)
     response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, detailedItineraries: detailed_itineraries)
@@ -18,7 +18,7 @@ class Admin::SchedulesController < ApplicationController
 
   def show
     itinerary = Itinerary.find(params[:id])
-    schedules = itinerary.trips.where('closing_date > ?', Date.today).limit(100).order(:start_date)
+    schedules = itinerary.trips.where("closing_date > ?", Date.today).limit(100).order(:start_date)
     response_handler(schedules: schedules, itinerary: itinerary)
   end
 
@@ -31,9 +31,9 @@ class Admin::SchedulesController < ApplicationController
     closing_date_buffer = params[:closing_date].to_i
     vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
     resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
-    train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map { |it| it.trips.limit(10).order(:start_date) }
-    ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map { |it| it.trips.limit(10).order(:start_date) }
-    air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map { |it| it.trips.limit(10).order(:start_date) }
+    train_schedules = tenant.itineraries.where(mode_of_transport: "train").flat_map { |it| it.trips.limit(10).order(:start_date) }
+    ocean_schedules = tenant.itineraries.where(mode_of_transport: "ocean").flat_map { |it| it.trips.limit(10).order(:start_date) }
+    air_schedules = tenant.itineraries.where(mode_of_transport: "air").flat_map { |it| it.trips.limit(10).order(:start_date) }
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, stats: resp)
   end
@@ -42,7 +42,7 @@ class Admin::SchedulesController < ApplicationController
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
     url = write_schedules_to_sheet(options)
-    response_handler(url: url, key: 'schedules')
+    response_handler(url: url, key: "schedules")
   end
 
   def destroy
@@ -59,7 +59,7 @@ class Admin::SchedulesController < ApplicationController
   def schedules_by_itinerary
     if params[:file]
       itinerary = Itinerary.find(params[:id])
-      req = { 'xlsx' => params[:file], 'itinerary' => itinerary }
+      req = { "xlsx" => params[:file], "itinerary" => itinerary }
       results = overwrite_schedules_by_itinerary(req, current_user)
       response_handler(results)
     else
@@ -69,7 +69,7 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_trains
     if params[:file]
-      req = { 'xlsx' => params[:file], 'mot' => 'rail' }
+      req = { "xlsx" => params[:file], "mot" => "rail" }
       results = overwrite_all_schedules(req)
       response_handler(results)
     else
@@ -79,7 +79,7 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_vessels
     if params[:file]
-      req = { 'xlsx' => params[:file], 'mot' => 'ocean' }
+      req = { "xlsx" => params[:file], "mot" => "ocean" }
       results = overwrite_all_schedules(req)
       response_handler(results)
     else
@@ -89,7 +89,7 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_air
     if params[:file]
-      req = { 'xlsx' => params[:file], 'mot' => 'air' }
+      req = { "xlsx" => params[:file], "mot" => "air" }
       results = overwrite_all_schedules(req)
       response_handler(results)
     else
@@ -100,8 +100,8 @@ class Admin::SchedulesController < ApplicationController
   private
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?('admin') && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = 'You are not authorized to access this section.'
+    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+      flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end
   end

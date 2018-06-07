@@ -3,7 +3,7 @@
 class MaxDimensionsBundle < ApplicationRecord
   belongs_to :tenant
   validates :mode_of_transport, presence: true, uniqueness: {
-    scope: %i[tenant_id aggregate],
+    scope:   %i[tenant_id aggregate],
     message: lambda { |obj, _|
       max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
       "'#{obj.mode_of_transport}' already exists in #{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
@@ -18,35 +18,35 @@ class MaxDimensionsBundle < ApplicationRecord
 
   CARGO_ITEM_DEFAULTS = {
     general: {
-      dimension_x:       '590.0',
-      dimension_y:       '234.2',
-      dimension_z:       '228.0',
-      payload_in_kg:     '21_770.0',
-      chargeable_weight: '21_770.0'
+      dimension_x:       "590.0",
+      dimension_y:       "234.2",
+      dimension_z:       "228.0",
+      payload_in_kg:     "21_770.0",
+      chargeable_weight: "21_770.0"
     },
-    air: {
-      dimension_x:       '120.0',
-      dimension_y:       '80.0',
-      dimension_z:       '158.0',
-      payload_in_kg:     '1_500.0',
-      chargeable_weight: '1_500.0'
+    air:     {
+      dimension_x:       "120.0",
+      dimension_y:       "80.0",
+      dimension_z:       "158.0",
+      payload_in_kg:     "1_500.0",
+      chargeable_weight: "1_500.0"
     }
   }.map_deep_values { |v| BigDecimal(v) }
 
   CARGO_ITEM_AGGREGATE_DEFAULTS = {
     general: {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '0',
-      chargeable_weight: '0'
+      dimension_x:       "0",
+      dimension_y:       "0",
+      dimension_z:       "0",
+      payload_in_kg:     "0",
+      chargeable_weight: "0"
     },
-    air: {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '1_500.0',
-      chargeable_weight: '1_500.0'
+    air:     {
+      dimension_x:       "0",
+      dimension_y:       "0",
+      dimension_z:       "0",
+      payload_in_kg:     "1_500.0",
+      chargeable_weight: "1_500.0"
     }
   }.map_deep_values { |v| BigDecimal(v) }
 
@@ -56,7 +56,7 @@ class MaxDimensionsBundle < ApplicationRecord
     end
   end
 
-  def self.create_defaults_for(tenant, options = {})
+  def self.create_defaults_for(tenant, options={})
     return create_all_defaults_for(tenant, options) if options.delete(:all)
 
     aggregate = !!options[:aggregate]

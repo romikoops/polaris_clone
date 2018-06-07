@@ -3,7 +3,7 @@
 class Geometry < ApplicationRecord
   validates :name_1, :name_2, :name_3, :name_4, presence: true
   validates :name_1, uniqueness: {
-    scope: %i[name_2 name_3 name_4],
+    scope:   %i[name_2 name_3 name_4],
     message: ->(obj, _) { "is a duplicate for the names: #{obj.names.log_format}" }
   }
 
@@ -45,14 +45,14 @@ class Geometry < ApplicationRecord
 
     results = ActiveRecord::Base.connection.execute(sanitized_query).first
 
-    results['contains']
+    results["contains"]
   end
 
   private
 
   def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
-    name_1 = raw_name_1.split.map(&:capitalize).join(' ')
-    name_2 = raw_name_2.split.map(&:capitalize).join(' ')
+    name_1 = raw_name_1.split.map(&:capitalize).join(" ")
+    name_2 = raw_name_2.split.map(&:capitalize).join(" ")
 
     (1..4).to_a.reverse.each do |i|
       (2..4).to_a.reverse.each do |j|
@@ -66,7 +66,7 @@ class Geometry < ApplicationRecord
   end
 
   def self.cascading_find_by_name(raw_name)
-    name = raw_name.split.map(&:capitalize).join(' ')
+    name = raw_name.split.map(&:capitalize).join(" ")
 
     (1..4).to_a.reverse.each do |i|
       result = where("name_#{i}" => name).first

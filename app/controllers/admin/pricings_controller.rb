@@ -41,32 +41,32 @@ class Admin::PricingsController < ApplicationController
   def update_price
     pricing_to_update = Pricing.find(params[:id])
     new_pricing_data = params.as_json
-    new_pricing_data.delete('controller')
-    new_pricing_data.delete('subdomain_id')
-    new_pricing_data.delete('action')
-    new_pricing_data.delete('id')
-    new_pricing_data.delete('created_at')
-    new_pricing_data.delete('updated_at')
-    new_pricing_data.delete('load_type')
-    new_pricing_data.delete('currency')
-    pricing_details = new_pricing_data.delete('data')
-    pricing_exceptions = new_pricing_data.delete('exceptions')
+    new_pricing_data.delete("controller")
+    new_pricing_data.delete("subdomain_id")
+    new_pricing_data.delete("action")
+    new_pricing_data.delete("id")
+    new_pricing_data.delete("created_at")
+    new_pricing_data.delete("updated_at")
+    new_pricing_data.delete("load_type")
+    new_pricing_data.delete("currency")
+    pricing_details = new_pricing_data.delete("data")
+    pricing_exceptions = new_pricing_data.delete("exceptions")
     pricing_to_update.update(new_pricing_data)
     pricing_details.each do |shipping_type, pricing_detail_data|
-      currency = pricing_detail_data.delete('currency')
+      currency = pricing_detail_data.delete("currency")
       pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
-      range = pricing_detail_params.delete('range')
+      range = pricing_detail_params.delete("range")
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: current_user.tenant)
       pricing_detail.update!(pricing_detail_params)
       pricing_detail.update!(range: range, currency_name: currency) # , external_updated_at: external_updated_at)
     end
 
     pricing_exceptions.each do |pricing_exception_data|
-      pricing_details = pricing_exception_data.delete('data')
+      pricing_details = pricing_exception_data.delete("data")
       pricing_exception = pricing_to_update.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
       pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete('currency')
-        range = pricing_detail_data.delete('range')
+        currency = pricing_detail_data.delete("currency")
+        range = pricing_detail_data.delete("range")
         pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
         pricing_detail = pricing_exception.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
         pricing_detail.update!(range: range, currency_name: currency)
@@ -84,12 +84,12 @@ class Admin::PricingsController < ApplicationController
     options = params[:options].as_json.deep_symbolize_keys!
     options[:tenant_id] = current_user.tenant_id
     url = write_pricings_to_sheet(options)
-    response_handler(url: url, key: 'pricing')
+    response_handler(url: url, key: "pricing")
   end
 
   def overwrite_main_lcl_carriage
-    if params[:file] && params[:file] != 'null'
-      req = { 'xlsx' => params[:file] }
+    if params[:file] && params[:file] != "null"
+      req = { "xlsx" => params[:file] }
       results = overwrite_freight_rates(req, current_user, false)
       response_handler(results)
     else
@@ -98,8 +98,8 @@ class Admin::PricingsController < ApplicationController
   end
 
   def overwrite_main_fcl_carriage
-    if params[:file] && params[:file] != 'null'
-      req = { 'xlsx' => params[:file] }
+    if params[:file] && params[:file] != "null"
+      req = { "xlsx" => params[:file] }
       results = overwrite_freight_rates(req, current_user, false)
       response_handler(results)
     else
@@ -114,12 +114,10 @@ class Admin::PricingsController < ApplicationController
         results.push(itin)
       else
         prices.each do |_k, v|
-          splits = v.split('_')
+          splits = v.split("_")
           hub1 = splits[0].to_i
           hub2 = splits[1].to_i
-          if itin['first_stop_id'] == hub1 && itin['destination_stop_id'] == hub2
-            results.push(itin)
-          end
+          results.push(itin) if itin["first_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
         end
       end
     end
@@ -129,7 +127,7 @@ class Admin::PricingsController < ApplicationController
   private
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?('admin') && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
       redirect_to root_path
     end
   end

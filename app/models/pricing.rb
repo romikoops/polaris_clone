@@ -11,7 +11,7 @@ class Pricing < ApplicationRecord
   delegate :load_type, to: :transport_category
   scope :for_load_type, -> (load_type) { joins(:transport_category).where('transport_categories.load_type': load_type)} 
 
-  def as_json(options = {})
+  def as_json(options={})
     new_options = options.reverse_merge(
       methods: %i[data exceptions load_type], only: %i[effective_date expiration_date wm_rate itinerary_id tenant_id transport_category_id id currency_name]
     )

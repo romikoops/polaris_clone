@@ -4,16 +4,16 @@ module DocumentTools
   include PricingTools
   def create(file, shipment)
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     # tixObj = firebase.get("tix/" + tid)
-    objKey = 'documents/' + shipment['uuid'] + '/' + file.name
+    objKey = "documents/" + shipment["uuid"] + "/" + file.name
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'private')
-    shipment.documents.create(url: awsurl, shipment_id: shipment['uuid'], text: file.name)
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: file.content_type, acl: "private")
+    shipment.documents.create(url: awsurl, shipment_id: shipment["uuid"], text: file.name)
   end
 
   def get_file_url(key)
@@ -23,20 +23,20 @@ module DocumentTools
     #     region: ENV['AWS_REGION']
     #   )
     signer = Aws::S3::Presigner.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
-    @url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: key)
+    @url = signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
   end
 
   def write_pricings_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
     pricings = options[:mot] ? get_tenant_pricings_by_mot(tenant.id, options[:mot]) : get_tenant_pricings(tenant.id)
     aux_data = {
-      itineraries: {},
-      nexuses: {},
-      vehicle: {},
+      itineraries:   {},
+      nexuses:       {},
+      vehicle:       {},
       transit_times: {}
     }
     filename = options[:mot] ? "#{options[:mot]}_pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
@@ -57,21 +57,21 @@ module DocumentTools
       else
         current_itinerary = Itinerary.find(pricing[:itinerary_id])
      end
-      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']]
-        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']).hub.nexus
-        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]).hub.nexus
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       else
-        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']]
+        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
       end
-      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']]
-        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']).hub.nexus
-        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']]
+      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
+        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]).hub.nexus
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       else
-        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']]
+        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
       end
 
-      destination_layover = ''
-      origin_layover = ''
+      destination_layover = ""
+      origin_layover = ""
       unless aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"]
         p current_itinerary
         tmp_trip = current_itinerary.trips.last
@@ -79,10 +79,10 @@ module DocumentTools
           tmp_layovers = current_itinerary.trips.last.layovers
 
           tmp_layovers.each do |lay|
-            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id'].to_i
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
               origin_layover = lay
             end
-            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id'].to_i
+            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
               destination_layover = lay
             end
           end
@@ -90,7 +90,7 @@ module DocumentTools
           # diff = destination_layover && origin_layover ? ((destination_layover.eta - origin_layover.etd) / 86400).to_i : ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
           aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"] = diff
         else
-          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"] = ''
+          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"] = ""
         end
       end
       current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"]
@@ -148,7 +148,7 @@ module DocumentTools
       next unless pricing[:exceptions] && !pricing[:exceptions].empty?
       pricing[:exceptions].each do |ex_pricing|
         ex_pricing[:data].each do |key, fee|
-          worksheet.write(row, 1, 'TRUE')
+          worksheet.write(row, 1, "TRUE")
           worksheet.write(row, 3, current_itinerary.mode_of_transport)
           worksheet.write(row, 4, pricing[:load_type])
           worksheet.write(row, 5, ex_pricing[:effective_date])
@@ -171,17 +171,17 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/pricings/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/pricings/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'pricings_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "pricings_sheet")
     new_doc.get_signed_url
   end
 
@@ -197,9 +197,9 @@ module DocumentTools
     end
 
     aux_data = {
-      itineraries: {},
-      nexuses: {},
-      vehicle: {},
+      itineraries:   {},
+      nexuses:       {},
+      vehicle:       {},
       transit_times: {}
     }
     filename = options[:mot] ? "#{options[:mot]}_local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx" : "local_charges_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
@@ -229,26 +229,26 @@ module DocumentTools
                 worksheet.write(row, 7, fee[:currency])
                 worksheet.write(row, 8, fee[:rate_basis])
                 case fee[:rate_basis]
-                when 'PER_CONTAINER'
+                when "PER_CONTAINER"
                   worksheet.write(row, 15, fee[:value])
-                when 'PER_ITEM'
+                when "PER_ITEM"
                   worksheet.write(row, 12, fee[:value])
-                when 'PER_BILL'
+                when "PER_BILL"
                   worksheet.write(row, 14, fee[:value])
-                when 'PER_SHIPMENT'
+                when "PER_SHIPMENT"
                   worksheet.write(row, 13, fee[:value])
-                when 'PER_CBM_TON'
+                when "PER_CBM_TON"
                   worksheet.write(row, 9, fee[:ton])
                   worksheet.write(row, 10, fee[:cbm])
                   worksheet.write(row, 16, fee[:min])
-                when 'PER_CBM_KG'
+                when "PER_CBM_KG"
                   worksheet.write(row, 11, fee[:kg])
                   worksheet.write(row, 10, fee[:cbm])
                   worksheet.write(row, 16, fee[:min])
-                when 'PER_WM'
+                when "PER_WM"
                   worksheet.write(row, 17, range_fee[:rate])
                   worksheet.write(row, 16, fee[:min])
-                when 'PER_KG'
+                when "PER_KG"
                   worksheet.write(row, 11, range_fee[:rate])
                   worksheet.write(row, 16, fee[:min])
                 end
@@ -267,25 +267,25 @@ module DocumentTools
               worksheet.write(row, 7, fee[:currency])
               worksheet.write(row, 8, fee[:rate_basis])
               case fee[:rate_basis]
-              when 'PER_CONTAINER'
+              when "PER_CONTAINER"
                 worksheet.write(row, 15, fee[:value])
-              when 'PER_ITEM'
+              when "PER_ITEM"
                 worksheet.write(row, 12, fee[:value])
-              when 'PER_BILL'
+              when "PER_BILL"
                 worksheet.write(row, 14, fee[:value])
-              when 'PER_SHIPMENT'
+              when "PER_SHIPMENT"
                 worksheet.write(row, 13, fee[:value])
-              when 'PER_CBM_TON'
+              when "PER_CBM_TON"
                 worksheet.write(row, 9, fee[:ton])
                 worksheet.write(row, 10, fee[:cbm])
                 worksheet.write(row, 16, fee[:min])
-              when 'PER_CBM_KG'
+              when "PER_CBM_KG"
                 worksheet.write(row, 11, fee[:kg])
                 worksheet.write(row, 10, fee[:cbm])
                 worksheet.write(row, 16, fee[:min])
-              when 'PER_WM'
+              when "PER_WM"
                 worksheet.write(row, 17, fee[:value])
-              when 'PER_KG'
+              when "PER_KG"
                 worksheet.write(row, 11, fee[:kg])
                 worksheet.write(row, 16, fee[:min])
               end
@@ -297,17 +297,17 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/service_charges/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/service_charges/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'local_charges_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "local_charges_sheet")
     new_doc.get_signed_url
   end
 
@@ -337,17 +337,17 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/hubs/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/hubs/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'hubs_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "hubs_sheet")
     new_doc.get_signed_url
   end
 
@@ -393,17 +393,17 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/schedules/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/schedules/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'schedules_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "schedules_sheet")
     new_doc.get_signed_url
   end
 
@@ -438,17 +438,17 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/schedules/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/schedules/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'schedules_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "schedules_sheet")
     new_doc.get_signed_url
   end
 
@@ -466,44 +466,40 @@ module DocumentTools
     dir_fees = {}
 
     unfiltered_results.map do |ufr|
-      ufr_key = ''
-      if ufr['truckingPricing'].load_type == target_load_type && ufr['zipcode']
+      ufr_key = ""
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["zipcode"]
         ufr_key = "#{ufr['zipcode'][0]} - #{ufr['zipcode'][1]}_#{ufr['truckingPricing'].truck_type}"
-        unless results_by_truck_type[ufr['truckingPricing'].truck_type]
-          results_by_truck_type[ufr['truckingPricing'].truck_type] = []
+        unless results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
         end
-      elsif ufr['truckingPricing'].load_type == target_load_type && ufr['city']
+      elsif ufr["truckingPricing"].load_type == target_load_type && ufr["city"]
         ufr_key = "#{ufr['city'][0]}_#{ufr['truckingPricing'].truck_type}"
-        unless results_by_truck_type[ufr['truckingPricing'].truck_type]
-          results_by_truck_type[ufr['truckingPricing'].truck_type] = []
+        unless results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
         end
-      elsif ufr['truckingPricing'].load_type == target_load_type && ufr['distance']
+      elsif ufr["truckingPricing"].load_type == target_load_type && ufr["distance"]
         ufr_key = "#{ufr['distance'][0]} - #{ufr['distance'][1]}_#{ufr['truckingPricing'].truck_type}"
-        unless results_by_truck_type[ufr['truckingPricing'].truck_type]
-          results_by_truck_type[ufr['truckingPricing'].truck_type] = []
+        unless results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
         end
       end
-      if ufr['truckingPricing'].load_type == target_load_type && ufr['truckingPricing'].carriage == 'pre'
-        unless ufr['truckingPricing'].fees.empty?
-          unless dir_fees[ufr['truckingPricing'].truck_type]
-            dir_fees[ufr['truckingPricing'].truck_type] = {}
-          end
-          awesome_print ufr['truckingPricing'].fees
-          dir_fees[ufr['truckingPricing'].truck_type][:pre] = ufr['truckingPricing'].fees
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["truckingPricing"].carriage == "pre"
+        unless ufr["truckingPricing"].fees.empty?
+          dir_fees[ufr["truckingPricing"].truck_type] = {} unless dir_fees[ufr["truckingPricing"].truck_type]
+          awesome_print ufr["truckingPricing"].fees
+          dir_fees[ufr["truckingPricing"].truck_type][:pre] = ufr["truckingPricing"].fees
         end
       end
-      if ufr['truckingPricing'].load_type == target_load_type && ufr['truckingPricing'].carriage == 'on'
-        unless ufr['truckingPricing'].fees.empty?
-          unless dir_fees[ufr['truckingPricing'].truck_type]
-            dir_fees[ufr['truckingPricing'].truck_type] = {}
-          end
-          awesome_print ufr['truckingPricing'].fees
-          dir_fees[ufr['truckingPricing'].truck_type][:on] = ufr['truckingPricing'].fees
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["truckingPricing"].carriage == "on"
+        unless ufr["truckingPricing"].fees.empty?
+          dir_fees[ufr["truckingPricing"].truck_type] = {} unless dir_fees[ufr["truckingPricing"].truck_type]
+          awesome_print ufr["truckingPricing"].fees
+          dir_fees[ufr["truckingPricing"].truck_type][:on] = ufr["truckingPricing"].fees
         end
       end
-      if ufr['truckingPricing'].load_type == target_load_type && !carriage_reducer[ufr_key]
+      if ufr["truckingPricing"].load_type == target_load_type && !carriage_reducer[ufr_key]
         carriage_reducer[ufr_key] = true
-        results_by_truck_type[ufr['truckingPricing'].truck_type] << ufr
+        results_by_truck_type[ufr["truckingPricing"].truck_type] << ufr
       end
     end
 
@@ -519,43 +515,43 @@ module DocumentTools
 
     end
 
-    currency = first_result['truckingPricing'].rates.first[1][0]['rate']['currency']
-    rate_basis = first_result['truckingPricing'].rates.first[1][0]['rate']['rate_basis']
+    currency = first_result["truckingPricing"].rates.first[1][0]["rate"]["currency"]
+    rate_basis = first_result["truckingPricing"].rates.first[1][0]["rate"]["rate_basis"]
     # truck_type = first_result["truckingPricing"].truck_type
-    courier = first_result['truckingPricing'].courier
+    courier = first_result["truckingPricing"].courier
     header_format = workbook.add_format
     header_format.set_bold
-    zone_sheet = workbook.add_worksheet('Zones')
-    rates_sheet = workbook.add_worksheet('Rates')
-    fees_sheet = workbook.add_worksheet('Fees')
+    zone_sheet = workbook.add_worksheet("Zones")
+    rates_sheet = workbook.add_worksheet("Rates")
+    fees_sheet = workbook.add_worksheet("Fees")
 
     # Write Zones with identifiers
 
     header_values = %w[ZONE IDENTIFIER RANGE COUNTRY_CODE]
     row = 1
-    identifier = ''
+    identifier = ""
 
     header_values.each_with_index { |hv, i| zone_sheet.write(0, i, hv, header_format) }
     zone_row = 1
     results_by_truck_type.each do |_truck_type, results|
       results.each_with_index do |result, i|
         zone_sheet.write(zone_row, 0, i)
-        if result['zipcode']
-          identifier = 'zipcode'
-          if result['zipcode'][0] == result['zipcode'][1]
-            zone_sheet.write(zone_row, 1, result['zipcode'][1])
+        if result["zipcode"]
+          identifier = "zipcode"
+          if result["zipcode"][0] == result["zipcode"][1]
+            zone_sheet.write(zone_row, 1, result["zipcode"][1])
           else
             zone_sheet.write(zone_row, 2, "#{result['zipcode'][0]} - #{result['zipcode'][1]}")
           end
         end
-        if result['city']
-          identifier = 'city'
-          zone_sheet.write(zone_row, 1, result['city'][0])
+        if result["city"]
+          identifier = "city"
+          zone_sheet.write(zone_row, 1, result["city"][0])
         end
-        if result['distance']
-          identifier = 'distance'
-          if result['distance'][0] == result['distance'][1]
-            zone_sheet.write(zone_row, 1, result['distance'][1])
+        if result["distance"]
+          identifier = "distance"
+          if result["distance"][0] == result["distance"][1]
+            zone_sheet.write(zone_row, 1, result["distance"][1])
           else
             zone_sheet.write(zone_row, 2, "#{result['distance'][0]} - #{result['distance'][1]}")
           end
@@ -564,38 +560,38 @@ module DocumentTools
         # row += 1
       end
     end
-    zone_sheet.write(1, 6, 'Origin City')
+    zone_sheet.write(1, 6, "Origin City")
     zone_sheet.write(1, 7, hub.nexus.name)
-    zone_sheet.write(2, 6, 'Currency')
+    zone_sheet.write(2, 6, "Currency")
     zone_sheet.write(2, 7, currency)
-    zone_sheet.write(3, 6, 'Load Meterage Ratio')
-    zone_sheet.write(3, 7, first_result['truckingPricing'][:load_meterage]['ratio'])
-    zone_sheet.write(4, 6, 'Load Meterage Limit')
-    zone_sheet.write(4, 7, first_result['truckingPricing'][:load_meterage]['height_limit'])
-    zone_sheet.write(5, 6, 'CBM Ratio')
-    zone_sheet.write(5, 7, first_result['truckingPricing'][:cbm_ratio])
-    zone_sheet.write(6, 6, 'Rate Basis')
+    zone_sheet.write(3, 6, "Load Meterage Ratio")
+    zone_sheet.write(3, 7, first_result["truckingPricing"][:load_meterage]["ratio"])
+    zone_sheet.write(4, 6, "Load Meterage Limit")
+    zone_sheet.write(4, 7, first_result["truckingPricing"][:load_meterage]["height_limit"])
+    zone_sheet.write(5, 6, "CBM Ratio")
+    zone_sheet.write(5, 7, first_result["truckingPricing"][:cbm_ratio])
+    zone_sheet.write(6, 6, "Rate Basis")
     zone_sheet.write(6, 7, rate_basis)
-    zone_sheet.write(7, 6, 'Base')
-    zone_sheet.write(7, 7, first_result['truckingPricing'].rates.first[1][0]['rate']['base'] || 1)
-    zone_sheet.write(8, 6, 'Load Type')
-    zone_sheet.write(8, 7, first_result['truckingPricing'].load_type)
-    zone_sheet.write(9, 6, 'Identifier')
+    zone_sheet.write(7, 6, "Base")
+    zone_sheet.write(7, 7, first_result["truckingPricing"].rates.first[1][0]["rate"]["base"] || 1)
+    zone_sheet.write(8, 6, "Load Type")
+    zone_sheet.write(8, 7, first_result["truckingPricing"].load_type)
+    zone_sheet.write(9, 6, "Identifier")
     zone_sheet.write(9, 7, identifier)
-    zone_sheet.write(10, 6, 'Courier')
+    zone_sheet.write(10, 6, "Courier")
     zone_sheet.write(10, 7, courier.name)
 
     # Write zones with rates to Rate Sheet
 
-    rates_sheet.write(1, 0, 'ZONE')
-    rates_sheet.write(1, 1, 'TRUCK_TYPE')
-    rates_sheet.write(1, 2, 'MIN')
-    rates_sheet.write(2, 0, 'MIN')
+    rates_sheet.write(1, 0, "ZONE")
+    rates_sheet.write(1, 1, "TRUCK_TYPE")
+    rates_sheet.write(1, 2, "MIN")
+    rates_sheet.write(2, 0, "MIN")
     minimums = {}
     row = 3
     x = 3
 
-    first_result['truckingPricing'].rates.each do |key, rates_array|
+    first_result["truckingPricing"].rates.each do |key, rates_array|
       rates_array.each do |rate|
         next unless rate
         rates_sheet.write(0, x, key.downcase)
@@ -607,18 +603,18 @@ module DocumentTools
       results.each_with_index do |result, i|
         rates_sheet.write(row, 0, i)
         rates_sheet.write(row, 1, truck_type)
-        rates_sheet.write(row, 2, result['truckingPricing'].rates.first[1][0]['min_value'])
-        minimums[i] = result['truckingPricing'].rates.first[1][0]['min_value']
+        rates_sheet.write(row, 2, result["truckingPricing"].rates.first[1][0]["min_value"])
+        minimums[i] = result["truckingPricing"].rates.first[1][0]["min_value"]
         x = 3
-        result['truckingPricing'].rates.each do |_key, rates_array|
+        result["truckingPricing"].rates.each do |_key, rates_array|
           rates_array.each do |rate|
             next unless rate
-            if rate['min_value'] != minimums[i]
-              rates_sheet.write(3, x, rate['min_value'].round(2))
+            if rate["min_value"] != minimums[i]
+              rates_sheet.write(3, x, rate["min_value"].round(2))
             else
               rates_sheet.write(3, x, 0)
             end
-            rates_sheet.write(row, x, rate['rate']['value'].round(2))
+            rates_sheet.write(row, x, rate["rate"]["value"].round(2))
             x += 1
           end
         end
@@ -644,25 +640,25 @@ module DocumentTools
           fees_sheet.write(row, 5, currency)
           fees_sheet.write(row, 6, rate_basis)
           case fee[:rate_basis]
-          when 'PER_CONTAINER'
+          when "PER_CONTAINER"
             fees_sheet.write(row, 13, fee[:value])
-          when 'PER_ITEM'
+          when "PER_ITEM"
             fees_sheet.write(row, 10, fee[:value])
-          when 'PER_BILL'
+          when "PER_BILL"
             fees_sheet.write(row, 12, fee[:value])
-          when 'PER_SHIPMENT'
+          when "PER_SHIPMENT"
             fees_sheet.write(row, 11, fee[:value])
-          when 'PER_CBM_TON'
+          when "PER_CBM_TON"
             fees_sheet.write(row, 7, fee[:ton])
             fees_sheet.write(row, 8, fee[:cbm])
             fees_sheet.write(row, 14, fee[:min])
-          when 'PER_CBM_KG'
+          when "PER_CBM_KG"
             fees_sheet.write(row, 9, fee[:kg])
             fees_sheet.write(row, 8, fee[:cbm])
             fees_sheet.write(row, 14, fee[:min])
-          when 'PER_WM'
+          when "PER_WM"
             fees_sheet.write(row, 15, fee[:value])
-          when 'PERCENTAGE'
+          when "PERCENTAGE"
             fees_sheet.write(row, 16, fee[:value])
           end
           row += 1
@@ -671,19 +667,19 @@ module DocumentTools
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + '/downloads/trucking/' + filename
+    objKey = "documents/" + tenant.subdomain + "/downloads/trucking/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'schedules_sheet')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "schedules_sheet")
     new_doc.get_signed_url
- end
+  end
 
   def gdpr_download(user_id)
     user = User.find(user_id)
@@ -698,7 +694,7 @@ module DocumentTools
 
     header_format = workbook.add_format
     header_format.set_bold
-    user_sheet = workbook.add_worksheet('Account')
+    user_sheet = workbook.add_worksheet("Account")
     user_keys = %w[sign_in_count
                    last_sign_in_at
                    last_sign_in_ip
@@ -718,11 +714,11 @@ module DocumentTools
       user_sheet.write(row, 1, user[k])
       row += 1
     end
-    alias_sheet = workbook.add_worksheet('Aliases')
+    alias_sheet = workbook.add_worksheet("Aliases")
     row = 1
     user_aliases.each do |ua|
       ua.as_json.each do |k, value|
-        if k.to_s == 'location_id'
+        if k.to_s == "location_id"
           loc = Location.find(value)
           loc.set_geocoded_address_from_fields! unless loc.geocoded_address
           alias_sheet.write(row, 0, k.humanize)
@@ -736,11 +732,11 @@ module DocumentTools
       row += 1
     end
 
-    contacts_sheet = workbook.add_worksheet('Contacts')
+    contacts_sheet = workbook.add_worksheet("Contacts")
     row = 1
     user_contacts.each do |uc|
       uc.as_json.each do |k, value|
-        if k.to_s == 'location_id'
+        if k.to_s == "location_id"
           loc = Location.find(value)
           loc.set_geocoded_address_from_fields! unless loc.geocoded_address
           contacts_sheet.write(row, 0, k.humanize)
@@ -753,7 +749,7 @@ module DocumentTools
       end
       row += 1
     end
-    shipment_sheet = workbook.add_worksheet('Shipments')
+    shipment_sheet = workbook.add_worksheet("Shipments")
     shipment_headers = %w[origin_id
                           destination_id
                           imc_reference
@@ -781,22 +777,22 @@ module DocumentTools
       shipment_sheet.write(row, 7, shipment.planned_etd)
       shipment_sheet.write(row, 8, shipment.planned_eta)
       shipment_sheet.write(row, 9, "#{shipment.total_price['currency']} #{shipment.total_price['value'].to_d.round(2)}")
-      shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance['val'] ? "#{shipment.insurance['currency']} #{shipment.insurance['val'].to_d.round(2)}" : 'N/A')
-      shipment_sheet.write(row, 11, shipment.customs && shipment.customs['val'] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : 'N/A')
+      shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance["val"] ? "#{shipment.insurance['currency']} #{shipment.insurance['val'].to_d.round(2)}" : "N/A")
+      shipment_sheet.write(row, 11, shipment.customs && shipment.customs["val"] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : "N/A")
     end
     workbook.close
     s3 = Aws::S3::Client.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+      access_key_id:     ENV["AWS_KEY"],
+      secret_access_key: ENV["AWS_SECRET"],
+      region:            ENV["AWS_REGION"]
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + user.tenant.subdomain + '/downloads/gdpr/' + filename
+    objKey = "documents/" + user.tenant.subdomain + "/downloads/gdpr/" + filename
 
-    awsurl = 'https://s3-eu-west-1.amazonaws.com/imcdev/' + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
-    new_doc = user.documents.create(url: objKey, text: filename, doc_type: 'gdpr')
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = user.documents.create(url: objKey, text: filename, doc_type: "gdpr")
     new_doc.get_signed_url
   end
 end

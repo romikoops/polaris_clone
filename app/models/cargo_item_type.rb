@@ -10,8 +10,8 @@ class CargoItemType < ApplicationRecord
   private
 
   def set_description
-    dimensions_prefix = dimension_x && dimension_y ? "#{dimension_x}cm × #{dimension_y}cm " : ''
-    area_suffix = area ? ": #{area}" : ''
+    dimensions_prefix = dimension_x && dimension_y ? "#{dimension_x}cm × #{dimension_y}cm " : ""
+    area_suffix = area ? ": #{area}" : ""
     self.description = dimensions_prefix + category + area_suffix
   end
 end

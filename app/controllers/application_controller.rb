@@ -37,7 +37,7 @@ class ApplicationController < ActionController::API
   end
 
   def clear_shoryuken
-    file_path = Rails.root + '/log/shoryuken.log'
+    file_path = Rails.root + "/log/shoryuken.log"
     File.delete(file_path)
   end
 end

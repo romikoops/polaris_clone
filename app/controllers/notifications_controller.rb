@@ -5,13 +5,13 @@ class NotificationsController < ApplicationController
   include NotificationTools
   include Response
   def index
-    if current_user && current_user.role.name == 'shipper'
+    if current_user && current_user.role.name == "shipper"
       messages = get_messages_for_user(current_user)
       response_handler(messages)
-    elsif current_user && current_user.role.name == 'admin'
+    elsif current_user && current_user.role.name == "admin"
       messages = get_messages_for_admin(current_user)
       response_handler(messages)
-    elsif current_user && current_user.role.name == 'sub_admin'
+    elsif current_user && current_user.role.name == "sub_admin"
       messages = get_messages_for_manager(current_user)
       response_handler(messages)
     else
@@ -21,8 +21,8 @@ class NotificationsController < ApplicationController
 
   def send_message
     message = params[:message].as_json
-    isAdmin = current_user.role.name.include?('admin')
-    user = isAdmin ? Shipment.find_by_imc_reference(message['shipmentRef']).user : current_user
+    isAdmin = current_user.role.name.include?("admin")
+    user = isAdmin ? Shipment.find_by_imc_reference(message["shipmentRef"]).user : current_user
     resp = add_message_to_convo(user, message, isAdmin)
     response_handler(resp)
   end
@@ -48,12 +48,12 @@ class NotificationsController < ApplicationController
     end
     hubs = { startHub: {}, endHub: {} }
     @schedules = @shipment.schedule_set
-    hubs[:startHub] = Hub.find(@schedules.first['hub_route_key'].split('-')[0].to_i)
-    hubs[:endHub] = Hub.find(@schedules.last['hub_route_key'].split('-')[1].to_i)
+    hubs[:startHub] = Hub.find(@schedules.first["hub_route_key"].split("-")[0].to_i)
+    hubs[:endHub] = Hub.find(@schedules.last["hub_route_key"].split("-")[1].to_i)
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
-      tmp['signed_url'] = doc.get_signed_url
+      tmp["signed_url"] = doc.get_signed_url
       @documents << tmp
     end
     resp = { shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
@@ -63,20 +63,20 @@ class NotificationsController < ApplicationController
   def shipments_data
     results = {
       requested: [],
-      open: [],
-      finished: [],
-      ignored: []
+      open:      [],
+      finished:  [],
+      ignored:   []
     }
     params[:keys].each do |k|
       shipment = Shipment.find_by_imc_reference(k)
       case shipment.status
-      when 'requested'
+      when "requested"
         results[:requested] << shipment
-      when 'accepted' || 'in_progress'
+      when "accepted" || "in_progress"
         results[:open] << shipment
-      when 'declined' || 'finished'
+      when "declined" || "finished"
         results[:finished] << shipment
-      when 'ignored'
+      when "ignored"
         results[:ignored] << shipment
       end
     end

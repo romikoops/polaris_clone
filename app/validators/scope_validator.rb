@@ -16,25 +16,21 @@ class ScopeValidator < ActiveModel::EachValidator
     @value     = value
 
     unless value.is_a?(Hash)
-      add_error 'must be a Hash'
+      add_error "must be a Hash"
       return
     end
 
     value.deep_stringify_keys!
 
     unless value.deep_values.all? { |value| is_a_boolean?(value) || value.is_a?(String) }
-      add_error 'last level values must be Boolean or String'
+      add_error "last level values must be Boolean or String"
     end
 
     missing_scopes = SCOPES - value.keys
-    unless missing_scopes.empty?
-      add_error "is missing the following keys: #{missing_scopes.log_format}"
-    end
+    add_error "is missing the following keys: #{missing_scopes.log_format}" unless missing_scopes.empty?
 
     MODES_OF_TRANSPORT.each do |mode_of_transport|
-      unless has_mode_of_transport?(mode_of_transport)
-        add_error "must have '#{mode_of_transport}' mode of transport"
-      end
+      add_error "must have '#{mode_of_transport}' mode of transport" unless has_mode_of_transport?(mode_of_transport)
     end
 
     CARRIAGE_OPTIONS.each do |carriage_option|
@@ -51,13 +47,13 @@ class ScopeValidator < ActiveModel::EachValidator
   end
 
   def has_mode_of_transport?(mode_of_transport)
-    @value.dig('modes_of_transport', mode_of_transport) &&
-      (@value.dig('modes_of_transport', mode_of_transport).keys - LOAD_TYPES).empty?
+    @value.dig("modes_of_transport", mode_of_transport) &&
+      (@value.dig("modes_of_transport", mode_of_transport).keys - LOAD_TYPES).empty?
   end
 
   def has_carriage_option?(carriage_option)
-    @value.dig('carriage_options', carriage_option) &&
-      (@value.dig('carriage_options', carriage_option).keys - DIRECTIONS).empty?
+    @value.dig("carriage_options", carriage_option) &&
+      (@value.dig("carriage_options", carriage_option).keys - DIRECTIONS).empty?
   end
 
   def is_a_boolean?(arg)

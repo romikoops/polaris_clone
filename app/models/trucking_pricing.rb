@@ -16,17 +16,17 @@ class TruckingPricing < ApplicationRecord
     tt = Tenant.find_by_subdomain(to_tenant)
     ft.trucking_pricings.each do |tp|
       temp_tp = tp.as_json
-      temp_tp.delete('id')
+      temp_tp.delete("id")
       hub_id = Hub.find_by(name: Hub.find(tp.hub_id).name, tenant_id: tt.id).id
 
-      temp_tp['tenant_id'] = tt.id
+      temp_tp["tenant_id"] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
       nhts = hts.map do |ht|
         temp_ht = ht.as_json
-        temp_ht.delete('id')
-        temp_ht['hub_id'] = hub_id
-        temp_ht['trucking_pricing_id'] = ntp.id
+        temp_ht.delete("id")
+        temp_ht["hub_id"] = hub_id
+        temp_ht["trucking_pricing_id"] = ntp.id
         HubTrucking.create!(temp_ht)
       end
     end
@@ -45,7 +45,7 @@ class TruckingPricing < ApplicationRecord
     end
   end
 
-  def self.find_by_filter(args = {})
+  def self.find_by_filter(args={})
     find_by_filter_argument_errors(args)
 
     latitude     = args[:latitude]     || args[:location].try(:latitude)  || 0
@@ -92,8 +92,8 @@ class TruckingPricing < ApplicationRecord
     find_by_hub_ids([hub_id])
   end
 
-  def self.find_by_hub_ids(hub_ids = [])
-    raise ArgumentError, 'Must provide hub_ids or hub_id' if hub_ids.empty?
+  def self.find_by_hub_ids(hub_ids=[])
+    raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
 
     sanitized_query = sanitize_sql(["
       SELECT
@@ -148,9 +148,9 @@ class TruckingPricing < ApplicationRecord
 
     connection.exec_query(sanitized_query).map do |row|
       {
-        'truckingPricing' => find(row['trucking_pricing_id']),
-        row['ident_type'] => row['ident_values'].split(',').map { |range| range.split('*') },
-        'countryCode'     => row['country_code']
+        "truckingPricing" => find(row["trucking_pricing_id"]),
+        row["ident_type"] => row["ident_values"].split(",").map { |range| range.split("*") },
+        "countryCode"     => row["country_code"]
       }
     end
   end
@@ -180,7 +180,7 @@ class TruckingPricing < ApplicationRecord
   def values_without_rates_and_fees
     %w[carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type].sort.map do |key|
       self[key.to_sym]
-    end.join(', ')
+    end.join(", ")
   end
 
   private
@@ -193,7 +193,7 @@ class TruckingPricing < ApplicationRecord
     end
 
     if args[:location].try(:country).try(:code).nil? && args[:country_code].nil?
-      raise ArgumentError, 'Must provide country_code'
+      raise ArgumentError, "Must provide country_code"
     end
 
     if args.keys.size <= mandatory_args.length
@@ -214,6 +214,6 @@ class TruckingPricing < ApplicationRecord
   end
 
   def self.parse_sql_record(str)
-    str.gsub(/\(|\)|\"/, '').split(',')
+    str.gsub(/\(|\)|\"/, "").split(",")
   end
 end

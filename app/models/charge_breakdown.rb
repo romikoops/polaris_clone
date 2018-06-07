@@ -5,7 +5,7 @@ class ChargeBreakdown < ApplicationRecord
   belongs_to :itinerary
 
   validates :itinerary_id, uniqueness: {
-    scope: :shipment_id,
+    scope:   :shipment_id,
     message: lambda { |obj, _|
       itinerary_info = "#{obj.itinerary_id} (#{obj.itinerary.name})"
       "#{itinerary_info} is already taken for shipment_id #{obj.shipment_id}"
@@ -19,13 +19,13 @@ class ChargeBreakdown < ApplicationRecord
   end
 
   has_many :charge_categories, through: :charges do
-    def detail(level = 0)
+    def detail(level=0)
       where('charges.detail_level': level).uniq
     end
   end
 
   scope :selected, -> {
-    joins(:shipment).where('charge_breakdowns.itinerary_id = shipments.itinerary_id')
+    joins(:shipment).where("charge_breakdowns.itinerary_id = shipments.itinerary_id")
   }
 
   def charge(charge_category)
@@ -33,7 +33,7 @@ class ChargeBreakdown < ApplicationRecord
   end
 
   def grand_total
-    charge('grand_total')
+    charge("grand_total")
   end
 
   def to_schedule_charges

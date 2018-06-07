@@ -23,7 +23,7 @@ class OfferCalculator
     @truck_seconds_pre_carriage = 0
 
     @current_eta_in_search = DateTime.new
-    @total_price = { total: 0, currency: 'EUR' }
+    @total_price = { total: 0, currency: "EUR" }
 
     if params[:shipment][:aggregated_cargo_attributes]
       @shipment.aggregated_cargo.try(:destroy)
@@ -46,10 +46,8 @@ class OfferCalculator
     if @shipment.has_pre_carriage?
       @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
 
-      if @pickup_address.nil? || @pickup_address.zip_code.blank?
-        raise ApplicationError::InvalidPickupAddress
-      end
-      @shipment.trucking['pre_carriage']['location_id'] = @pickup_address.id
+      raise ApplicationError::InvalidPickupAddress if @pickup_address.nil? || @pickup_address.zip_code.blank?
+      @shipment.trucking["pre_carriage"]["location_id"] = @pickup_address.id
     end
 
     @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
@@ -59,7 +57,7 @@ class OfferCalculator
       if @delivery_address.nil? || @delivery_address.zip_code.blank?
         raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
       end
-      @shipment.trucking['on_carriage']['location_id'] = @delivery_address.id
+      @shipment.trucking["on_carriage"]["location_id"] = @delivery_address.id
     end
   end
 
@@ -122,7 +120,7 @@ class OfferCalculator
       destination_stop = itin.stops.where(hub_id: @destination_hubs).first
       origin_stop = itin.stops.where(hub_id: @origin_hubs).first
       origin_layovers = origin_stop.layovers.where(
-        'closing_date > ? AND closing_date < ?',
+        "closing_date > ? AND closing_date < ?",
         @current_etd_in_search,
         @current_etd_in_search + delay.days
       ).order(:etd).uniq
@@ -141,7 +139,7 @@ class OfferCalculator
 
   def add_trip_charges!
     charges = {}
-    @total_price[:cargo] = { value: 0, currency: '' }
+    @total_price[:cargo] = { value: 0, currency: "" }
 
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
@@ -181,12 +179,12 @@ class OfferCalculator
       trucking_fees_data = determine_trucking_fees(
         @pickup_address,
         trip[0].stop.hub,
-        'origin',
-        'export'
+        "origin",
+        "export"
       )
       create_charges_from_fees_data!(
         trucking_fees_data,
-        ChargeCategory.create(name: 'Trucking Pre-Carriage', code: 'trucking_pre')
+        ChargeCategory.create(name: "Trucking Pre-Carriage", code: "trucking_pre")
       )
 
       charges[sched_key][:trucking_pre] = trucking_fees_data
@@ -196,12 +194,12 @@ class OfferCalculator
       trucking_fees_data = determine_trucking_fees(
         @delivery_address,
         trip[1].stop.hub,
-        'destination',
-        'import'
+        "destination",
+        "import"
       )
       create_charges_from_fees_data!(
         trucking_fees_data,
-        ChargeCategory.create(name: 'Trucking On-Carriage', code: 'trucking_on')
+        ChargeCategory.create(name: "Trucking On-Carriage", code: "trucking_on")
       )
       charges[sched_key][:trucking_on] = trucking_fees_data
     end
@@ -213,7 +211,7 @@ class OfferCalculator
         trip[0].stop.hub,
         @shipment.load_type,
         @cargo_units,
-        'export',
+        "export",
         trip[0].itinerary.mode_of_transport,
         @user
       )
@@ -228,7 +226,7 @@ class OfferCalculator
         trip[1].stop.hub,
         @shipment.load_type,
         @cargo_units,
-        'import',
+        "import",
         trip[1].itinerary.mode_of_transport,
         @user
       )
@@ -246,17 +244,17 @@ class OfferCalculator
       iValue.each do |tKey, tValue|
         next unless tValue.length > 1 && @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]
         schedules.push(
-          id: SecureRandom.uuid,
-          total: @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]['total'],
-          itinerary_id: iKey,
-          eta: tValue[1].eta,
-          etd: tValue[0].etd,
-          closing_date: tValue[0].closing_date,
-          mode_of_transport: tValue[0].itinerary.mode_of_transport,
-          hub_route_key: "#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}",
-          tenant_id: @shipment.tenant_id,
-          trip_id: tKey,
-          origin_layover_id: tValue[0].id,
+          id:                     SecureRandom.uuid,
+          total:                  @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]["total"],
+          itinerary_id:           iKey,
+          eta:                    tValue[1].eta,
+          etd:                    tValue[0].etd,
+          closing_date:           tValue[0].closing_date,
+          mode_of_transport:      tValue[0].itinerary.mode_of_transport,
+          hub_route_key:          "#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}",
+          tenant_id:              @shipment.tenant_id,
+          trip_id:                tKey,
+          origin_layover_id:      tValue[0].id,
           destination_layover_id: tValue[1].id
         )
       end
@@ -267,13 +265,13 @@ class OfferCalculator
   def set_cargo_charges!(charges, trip, sched_key, mot)
     total_units = @cargo_units.reduce(0) { |sum, cargo_unit| sum += cargo_unit.try(:quantity).to_i }
 
-    charge_category = ChargeCategory.from_code('cargo')
+    charge_category = ChargeCategory.from_code("cargo")
     parent_charge = Charge.create(
       children_charge_category: charge_category,
-      charge_category: ChargeCategory.grand_total,
-      charge_breakdown: @charge_breakdown,
-      parent: @grand_total_charge,
-      price: Price.create(currency: @shipment.user.currency)
+      charge_category:          ChargeCategory.grand_total,
+      charge_breakdown:         @charge_breakdown,
+      parent:                   @grand_total_charge,
+      price:                    Price.create(currency: @shipment.user.currency)
     )
 
     @cargo_units.each do |cargo_unit|
@@ -291,8 +289,8 @@ class OfferCalculator
 
       cargo_unit_model = cargo_unit.class.to_s
       children_charge_category = ChargeCategory.find_or_create_by(
-        name: cargo_unit_model.humanize,
-        code: cargo_unit_model.underscore,
+        name:          cargo_unit_model.humanize,
+        code:          cargo_unit_model.underscore,
         cargo_unit_id: cargo_unit.id
       )
 
@@ -307,34 +305,34 @@ class OfferCalculator
   def create_charges_from_fees_data!(
     fees_data,
     children_charge_category,
-    charge_category = ChargeCategory.grand_total,
-    parent = @grand_total_charge
+    charge_category=ChargeCategory.grand_total,
+    parent=@grand_total_charge
   )
     parent_charge = Charge.create(
       children_charge_category: children_charge_category,
-      charge_category: charge_category,
-      charge_breakdown: @charge_breakdown,
-      parent: parent,
-      price: Price.create(fees_data['total'] || fees_data[:total])
+      charge_category:          charge_category,
+      charge_breakdown:         @charge_breakdown,
+      parent:                   parent,
+      price:                    Price.create(fees_data["total"] || fees_data[:total])
     )
       
     fees_data.each do |code, charge|
-      next if code.to_s == 'total' || charge.empty?
+      next if code.to_s == "total" || charge.empty?
 
       Charge.create(
         children_charge_category: ChargeCategory.from_code(code),
-        charge_category: children_charge_category,
-        charge_breakdown: @charge_breakdown,
-        parent: parent_charge,
-        price: Price.create(charge)
+        charge_category:          children_charge_category,
+        charge_breakdown:         @charge_breakdown,
+        parent:                   parent_charge,
+        price:                    Price.create(charge)
       )
     end
   end
 
   def path_key(cargo_unit, layovers)
     transport_category = layovers[0].trip.tenant_vehicle.vehicle.transport_categories.find_by(
-      name: 'any',
-      cargo_class: cargo_unit.try(:size_class) || 'lcl',
+      name:              "any",
+      cargo_class:       cargo_unit.try(:size_class) || "lcl",
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
       
@@ -345,29 +343,29 @@ class OfferCalculator
     load_type = @shipment.load_type
     if @shipment.has_pre_carriage?
       trucking_pricings = TruckingPricing.find_by_filter(
-        location: @pickup_address,
-        load_type: load_type,
-        tenant_id: @user.tenant_id,
-        truck_type: @shipment.trucking['pre_carriage']['truck_type'],
-        carriage: 'pre'
+        location:   @pickup_address,
+        load_type:  load_type,
+        tenant_id:  @user.tenant_id,
+        truck_type: @shipment.trucking["pre_carriage"]["truck_type"],
+        carriage:   "pre"
       )
-      @trucking_data['pre_carriage'] = {}
+      @trucking_data["pre_carriage"] = {}
       trucking_pricings.each do |trucking_pricing|
-        @trucking_data['pre_carriage'][trucking_pricing.hub_id] = trucking_pricing
+        @trucking_data["pre_carriage"][trucking_pricing.hub_id] = trucking_pricing
       end
     end
 
     if @shipment.has_on_carriage?
       trucking_pricings = TruckingPricing.find_by_filter(
-        location: @delivery_address,
-        load_type: load_type,
-        tenant_id: @user.tenant_id,
-        truck_type: @shipment.trucking['on_carriage']['truck_type'],
-        carriage: 'on'
+        location:   @delivery_address,
+        load_type:  load_type,
+        tenant_id:  @user.tenant_id,
+        truck_type: @shipment.trucking["on_carriage"]["truck_type"],
+        carriage:   "on"
       )
-      @trucking_data['on_carriage'] = {}
+      @trucking_data["on_carriage"] = {}
       trucking_pricings.each do |trucking_pricing|
-        @trucking_data['on_carriage'][trucking_pricing.hub_id] = trucking_pricing
+        @trucking_data["on_carriage"][trucking_pricing.hub_id] = trucking_pricing
       end
     end
   end
@@ -375,7 +373,7 @@ class OfferCalculator
   def determine_trucking_fees(location, hub, _target, direction)
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
-    carriage = direction == 'import' ? 'on_carriage' : 'pre_carriage'
+    carriage = direction == "import" ? "on_carriage" : "pre_carriage"
     trucking_pricing = @trucking_data[carriage][hub.id]
     price_results = calc_trucking_price(trucking_pricing, @cargo_units, km, direction)
   end
@@ -383,48 +381,48 @@ class OfferCalculator
   def convert_currencies!
     @shipment.schedules_charges.each do |key, svalue|
       raw_totals = {}
-      svalue['cargo'].each do |_id, charges|
-        if !raw_totals[charges['total']['currency']]
-          raw_totals[charges['total']['currency']] = charges['total']['value'].to_d
+      svalue["cargo"].each do |_id, charges|
+        if !raw_totals[charges["total"]["currency"]]
+          raw_totals[charges["total"]["currency"]] = charges["total"]["value"].to_d
         else
-          raw_totals[charges['total']['currency']] += charges['total']['value'].to_d
+          raw_totals[charges["total"]["currency"]] += charges["total"]["value"].to_d
         end
       end
 
-      unless svalue['import'].empty?
-        if !raw_totals[svalue['import']['total']['currency']]
-          raw_totals[svalue['import']['total']['currency']] = svalue['import']['total']['value'].to_d
+      unless svalue["import"].empty?
+        if !raw_totals[svalue["import"]["total"]["currency"]]
+          raw_totals[svalue["import"]["total"]["currency"]] = svalue["import"]["total"]["value"].to_d
         else
-          raw_totals[svalue['import']['total']['currency']] += svalue['import']['total']['value'].to_d
+          raw_totals[svalue["import"]["total"]["currency"]] += svalue["import"]["total"]["value"].to_d
         end
       end
 
-      unless svalue['export'].empty?
-        if !raw_totals[svalue['export']['total']['currency']]
-          raw_totals[svalue['export']['total']['currency']] = svalue['export']['total']['value'].to_d
+      unless svalue["export"].empty?
+        if !raw_totals[svalue["export"]["total"]["currency"]]
+          raw_totals[svalue["export"]["total"]["currency"]] = svalue["export"]["total"]["value"].to_d
         else
-          raw_totals[svalue['export']['total']['currency']] += svalue['export']['total']['value'].to_d
+          raw_totals[svalue["export"]["total"]["currency"]] += svalue["export"]["total"]["value"].to_d
         end
       end
 
-      if svalue['trucking_on'] && svalue['trucking_on']['total']
-        if !raw_totals[svalue['trucking_on']['total']['currency']]
-          raw_totals[svalue['trucking_on']['total']['currency']] = svalue['trucking_on']['total']['value'].to_f
+      if svalue["trucking_on"] && svalue["trucking_on"]["total"]
+        if !raw_totals[svalue["trucking_on"]["total"]["currency"]]
+          raw_totals[svalue["trucking_on"]["total"]["currency"]] = svalue["trucking_on"]["total"]["value"].to_f
         else
-          raw_totals[svalue['trucking_on']['total']['currency']] += svalue['trucking_on']['total']['value'].to_f
+          raw_totals[svalue["trucking_on"]["total"]["currency"]] += svalue["trucking_on"]["total"]["value"].to_f
         end
       end
 
-      if svalue['trucking_pre'] && svalue['trucking_pre']['total']
-        if !raw_totals[svalue['trucking_pre']['total']['currency']]
-          raw_totals[svalue['trucking_pre']['total']['currency']] = svalue['trucking_pre']['total']['value'].to_f
+      if svalue["trucking_pre"] && svalue["trucking_pre"]["total"]
+        if !raw_totals[svalue["trucking_pre"]["total"]["currency"]]
+          raw_totals[svalue["trucking_pre"]["total"]["currency"]] = svalue["trucking_pre"]["total"]["value"].to_f
         else
-          raw_totals[svalue['trucking_pre']['total']['currency']] += svalue['trucking_pre']['total']['value'].to_f
+          raw_totals[svalue["trucking_pre"]["total"]["currency"]] += svalue["trucking_pre"]["total"]["value"].to_f
         end
       end
 
       converted_totals = sum_and_convert(raw_totals, @user.currency)
-      @shipment.schedules_charges[key]['total'] = { value: converted_totals, currency: @user.currency }
+      @shipment.schedules_charges[key]["total"] = { value: converted_totals, currency: @user.currency }
 
       if @total_price[:total] == 0
         @total_price[:total] = converted_totals

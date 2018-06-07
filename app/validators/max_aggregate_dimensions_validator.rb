@@ -17,9 +17,7 @@ class MaxAggregateDimensionsValidator < ActiveModel::Validator
     sums = record.cargo_items.each_with_object(Hash.new(0)) do |cargo_item, return_h|
       dimension_names.each do |dimension_name|
         value = cargo_item.send(dimension_name)
-        if dimension_name == :chargeable_weight
-          value ||= cargo_item.calc_chargeable_weight(mode_of_transport)
-        end
+        value ||= cargo_item.calc_chargeable_weight(mode_of_transport) if dimension_name == :chargeable_weight
         return_h[dimension_name] += value * cargo_item.quantity
       end
     end
@@ -37,10 +35,10 @@ class MaxAggregateDimensionsValidator < ActiveModel::Validator
 
   def humanized_dimension_name(dimension_name)
     case dimension_name
-    when :dimension_x   then 'length'
-    when :dimension_y   then 'width'
-    when :dimension_z   then 'height'
-    when :payload_in_kg then 'weight'
+    when :dimension_x   then "length"
+    when :dimension_y   then "width"
+    when :dimension_z   then "height"
+    when :payload_in_kg then "weight"
     else dimension_name.to_s
     end
   end
