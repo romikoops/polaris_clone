@@ -27,20 +27,18 @@ export class FlashMessages extends Component {
   render () {
     const alerts = this.state.messages.map((message, i) => (
       // eslint-disable-next-line react/no-array-index-key
-      <Alert key={i} message={message} onClose={this.removeMessage} />
+      <Alert key={i} message={message} onClose={this.removeMessage} timeout={10000} />
     ))
     return (
-
-      <CSSTransition
-        transitionName="alerts"
-        transitionEnter={false}
-        transitionLeaveTimeout={500}
-      >
-        <div className="flex-none">
-          {alerts}
-        </div>
-      </CSSTransition>
-
+      <div style={{ zIndex: 9999 }}>
+        <CSSTransition
+          transitionName="alerts"
+          transitionEnter={false}
+          transitionLeaveTimeout={500}
+        >
+          <div>{alerts}</div>
+        </CSSTransition>
+      </div>
     )
   }
 }
