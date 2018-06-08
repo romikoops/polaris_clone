@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :max_dimensions_bundle do
-    mode_of_transport "MyString"
-    tenant_id 1
+    association :tenant
+    mode_of_transport "general"
     aggregate false
-    dimension_x "9.99"
-    dimension_y "9.99"
-    dimension_z "9.99"
-    payload_in_kg "9.99"
-    chargeable_weight "9.99"
+    dimension_x "500"
+    dimension_y "500"
+    dimension_z "500"
+    payload_in_kg "10_000"
+    chargeable_weight "10_000"
   end
 end

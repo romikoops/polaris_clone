@@ -66,8 +66,8 @@ class MaxDimensionsBundle < ApplicationRecord
       next if excluded_in_options?(options, mode_of_transport)
 
       create(max_dimensions_hash.merge(
-               tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
-             ))
+        tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
+      ))
     end.compact
   end
 
