@@ -2,7 +2,8 @@
 
 Tenant.all.each do |tenant|
   # Create admin
-  admin_check = tenant.users.find_by(email: "admin@#{tenant.subdomain}.com")
+  tld = tenant.web && tenant.web['tld'] ? tenant.web['tld'] : 'com'
+  admin_check = tenant.users.find_by(email: "admin@#{tenant.subdomain}.#{tld}")
   unless admin_check
     admin = tenant.users.new(
       role: Role.find_by_name('admin'),
@@ -12,7 +13,7 @@ Tenant.all.each do |tenant|
       last_name: 'Admin',
       phone: '123456789',
 
-      email: "admin@#{tenant.subdomain}.com",
+      email: "admin@#{tenant.subdomain}.#{tld}",
       password: 'demo123456789',
       password_confirmation: 'demo123456789',
 
@@ -21,7 +22,7 @@ Tenant.all.each do |tenant|
     # admin.skip_confirmation!
     admin.save!
   end
-  sub_admin_check = tenant.users.find_by(email: "subadmin@#{tenant.subdomain}.com")
+  sub_admin_check = tenant.users.find_by(email: "subadmin@#{tenant.subdomain}.#{tld}")
   next if sub_admin_check
   sub_admin = tenant.users.new(
     role: Role.find_by_name('sub_admin'),
@@ -31,7 +32,7 @@ Tenant.all.each do |tenant|
     last_name: 'Admin',
     phone: '123456789',
 
-    email: "subadmin@#{tenant.subdomain}.com",
+    email: "subadmin@#{tenant.subdomain}.#{tld}",
     password: 'demo123456789',
     password_confirmation: 'demo123456789',
 

@@ -41,13 +41,13 @@ class AdminSchedules extends Component {
       searchFilters: {
         mot: {}
       },
-      searchResults: this.props.scheduleData.itineraries || []
+      searchResults: this.props.scheduleData ? this.props.scheduleData.itineraries : []
     }
     this.toggleView = this.toggleView.bind(this)
   }
   componentWillMount () {
     if (this.props.scheduleData && this.props.scheduleData.itineraries) {
-      this.prepFilters()
+      this.prepFilters(this.props)
     }
   }
   componentDidMount () {
@@ -58,7 +58,7 @@ class AdminSchedules extends Component {
       nextProps.scheduleData &&
       nextProps.scheduleData.itineraries
     ) {
-      this.prepFilters()
+      this.prepFilters(nextProps)
     }
   }
 
@@ -104,8 +104,8 @@ class AdminSchedules extends Component {
       }
     })
   }
-  prepFilters () {
-    const { scheduleData } = this.props
+  prepFilters (props) {
+    const { scheduleData } = props
     if (!scheduleData) {
       return
     }

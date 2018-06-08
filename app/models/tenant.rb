@@ -45,17 +45,6 @@ class Tenant < ApplicationRecord
     users.joins(:role).where('roles.name': "admin").first
   end
 
-  def update_route_details
-    itineraries.map(&:set_scope!)
-  end
-
-  def mot_scope(options={})
-    mot = scope["modes_of_transport"]
-    mot = load_type_filter("container", mot)  if options[:only_container]
-    mot = load_type_filter("cargo_item", mot) if options[:only_cargo_item]
-    MotScope.find_by(mot_scope_attributes(mot))
-  end
-
   def email_for(branch_raw, mode_of_transport=nil)
     return nil unless branch_raw.is_a?(String) || branch_raw.is_a?(Symbol)
     branch = branch_raw.to_s

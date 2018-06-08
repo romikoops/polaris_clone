@@ -17,7 +17,6 @@ class OfferCalculator
 
     # Setting trucking also sets has_on_carriage and has_pre_carriage
     @shipment.trucking = trucking_params(params).to_h
-
     @delay = params[:shipment][:delay]
     @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
@@ -82,17 +81,22 @@ class OfferCalculator
     filter_itineraries!
 
     raise ApplicationError::NoRoute if @itineraries.nil?
-
+    
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
   end
 
   def filter_itineraries!
     return unless @cargo_units.first.is_a? CargoItem
+    unfiltered_itineraries = @itineraries.dup
 
     @itineraries.select! do |itinerary|
       @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) } &&
         @shipment.valid_for_itinerary?(itinerary)
+    end
+
+    if @itineraries.empty? && !unfiltered_itineraries.empty?
+      raise ApplicationError::InvalidItineraries
     end
   end
 
@@ -132,10 +136,9 @@ class OfferCalculator
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
-
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
-
+    
     @itineraries_hash = schedule_obj
   end
 
@@ -217,8 +220,9 @@ class OfferCalculator
         trip[0].itinerary.mode_of_transport,
         @user
       )
-      create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
-
+      unless local_charges_data.empty?
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
+      end
       charges[sched_key][:export] = local_charges_data
     end
 
@@ -231,8 +235,9 @@ class OfferCalculator
         trip[1].itinerary.mode_of_transport,
         @user
       )
-      create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
-
+      unless local_charges_data.empty?
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
+      end
       charges[sched_key][:import] = local_charges_data
     end
   end
@@ -284,6 +289,7 @@ class OfferCalculator
         total_units,
         @shipment.planned_pickup_date,
         mot)
+        
       next if charge_result.nil?
 
       cargo_unit_model = cargo_unit.class.to_s
@@ -314,7 +320,7 @@ class OfferCalculator
       parent:                   parent,
       price:                    Price.create(fees_data["total"] || fees_data[:total])
     )
-
+      
     fees_data.each do |code, charge|
       next if code.to_s == "total" || charge.empty?
 
@@ -334,7 +340,7 @@ class OfferCalculator
       cargo_class:       cargo_unit.try(:size_class) || "lcl",
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-
+      
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 
@@ -474,5 +480,8 @@ class OfferCalculator
     snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
     snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
     ActionController::Parameters.new(snakefied_location_hash)
+  end
+  def destroy_previous_charge_breakdown(itinerary_id)
+    ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
   end
 end

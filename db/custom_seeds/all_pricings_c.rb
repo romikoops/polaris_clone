@@ -73,6 +73,4 @@ Tenant.all.each do |tenant|
     req = { 'xlsx' => trucking }
     overwrite_city_trucking_rates(req, shipper)
   end
-
-  tenant.update_route_details # TODO: check if necessary
 end

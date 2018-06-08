@@ -5,7 +5,6 @@ class Itinerary < ApplicationRecord
   include ItineraryTools
 
   belongs_to :tenant
-  belongs_to :mot_scope, optional: true
   has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
   has_many :shipments, dependent: :destroy
@@ -137,6 +136,7 @@ class Itinerary < ApplicationRecord
           stats[:layovers][:number_created] += 1
         end
       end
+      p tmp_date
       tmp_date += 1.day
     end
     { results: results, stats: stats }
@@ -178,9 +178,10 @@ class Itinerary < ApplicationRecord
   def modes_of_transport
     exists = ->(mot) { !Itinerary.where(mode_of_transport: mot).limit(1).empty? }
     {
-      ocean: exists.call("ocean"),
-      air:   exists.call("air"),
-      rails: exists.call("rails")
+      ocean: exists.('ocean'),
+      air:   exists.('air'),
+      rail: exists.('rail'),
+      truck: exists.('truck')
     }
   end
 
@@ -191,9 +192,41 @@ class Itinerary < ApplicationRecord
   def last_stop
     stops.order(index: :desc).limit(1).first
   end
+  
+  def origin_stops
+    stops.where.not(id: last_stop.id).order(index: :asc)
+  end
+
+  def destination_stops
+    stops.where.not(id: first_stop.id).order(index: :desc)
+  end
 
   def first_nexus
-    stops.find_by(index: 0).hub.nexus
+    first_stop.hub.nexus
+  end
+
+  def last_nexus
+    last_stop.hub.nexus
+  end
+
+  def nexus_ids_for_target(target)
+    self.try("#{target}_nexus_ids".to_sym)
+  end
+
+  def origin_nexus_ids
+    origin_stops.joins(:hub).pluck('hubs.nexus_id')
+  end
+
+  def destination_nexus_ids
+    destination_stops.joins(:hub).pluck('hubs.nexus_id')
+  end
+
+  def origin_nexuses
+    Location.where(id: origin_nexus_ids)
+  end
+  
+  def destination_nexuses
+    Location.where(id: destination_nexus_ids)
   end
 
   def users_with_pricing
@@ -202,14 +235,6 @@ class Itinerary < ApplicationRecord
 
   def pricing_count
     pricings.count
-  end
-
-  def last_nexus
-    last_stop.hub.nexus
-  end
-
-  def self.mot_scoped(tenant_id, mot_scope_ids)
-    get_scoped_itineraries(tenant_id, mot_scope_ids)
   end
 
   def routes
@@ -256,6 +281,29 @@ class Itinerary < ApplicationRecord
     end
   end
 
+  def ordered_nexus_ids
+    stops.order(index: :asc).joins(:hub).pluck('hubs.nexus_id')
+  end
+  
+  def has_route?(origin_nexus_id, destination_nexus_id)
+    ordered_nexus_ids.include?(origin_nexus_id)      &&
+    ordered_nexus_ids.include?(destination_nexus_id) &&
+    ordered_nexus_ids.index(origin_nexus_id) < ordered_nexus_ids.index(destination_nexus_id)
+  end
+
+  def available_counterpart_nexus_ids_for_target_nexus_ids(target, counterpart_nexus_ids)
+    raise ArgumentError unless %w(origin destination).include?(target)
+    
+    counterpart_nexus_ids.map do |counterpart_nexus_id|
+      next unless ordered_nexus_ids.include?(counterpart_nexus_id)
+
+      counterpart_idx = ordered_nexus_ids.index(counterpart_nexus_id)
+
+      target_range = target == 'origin' ? 0...counterpart_idx : (counterpart_idx + 1)..-1
+      ordered_nexus_ids[target_range]
+    end.compact.flatten.uniq
+  end
+
   def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
     where("
       id IN (
@@ -294,21 +342,10 @@ class Itinerary < ApplicationRecord
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
-
+    
     itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
-  end
-
-  def set_scope!
-    scope_attributes_arr = modes_of_transport.select { |_k, v| v }.keys.map do |mode_of_transport|
-      load_types.map { |load_type| "#{mode_of_transport}_#{load_type}" }
-    end.flatten
-    scope_attributes = MotScope.given_attribute_names.each_with_object({}) do |attribute_name, h|
-      h[attribute_name] = scope_attributes_arr.include?(attribute_name)
-    end
-    self.mot_scope = MotScope.find_by(scope_attributes)
-    save!
   end
 
   def self.update_hubs
@@ -323,43 +360,28 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def as_options_json(options={})
+  def as_options_json(options = {})
     new_options = options.reverse_merge(
-      include: [
-        {
-          first_stop: {
-            include: {
-              hub: {
-                include: {
-                  nexus:    { only: %i[id name] },
-                  location: { only: %i[longitude latitude] }
-                },
-                only:    %i[id name]
-              }
+      include: {
+        stops: {
+          include: {
+            hub: {
+              include: {
+                nexus: { only: %i[id name] },
+                location: { only: %i[longitude latitude] }
+              },
+              only: %i[id name]
             }
           },
-          only:       [:id]
-        },
-        {
-          last_stop: {
-            include: {
-              hub: {
-                include: {
-                  nexus:    { only: %i[id name] },
-                  location: { only: %i[longitude latitude] }
-                },
-                only:    %i[id name]
-              }
-            },
-            only:    [:id]
-          }
+          only: %i[id index]
         }
-      ]
+      },
+      only: %i[id name mode_of_transport]
     )
     as_json(new_options)
   end
 
-  def as_pricing_json(_options={})
+  def as_pricing_json(_options = {})
     new_options = {
       users_with_pricing: users_with_pricing,
       pricing_count:      pricing_count

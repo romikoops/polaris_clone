@@ -34,13 +34,10 @@ module ShippingTools
     end
 
     itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
-
-    mot_scope_args = { ("only_" + load_type).to_sym => true }
-    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args)&.intercepting_scope_ids
-
     origins = []
     destinations = []
-    itineraries = current_user.tenant.itineraries.for_mot(mot_scope_ids).map do |itinerary|
+    itineraries = current_user.tenant.itineraries.map do |itinerary|
+      next if itinerary.pricings.for_load_type(load_type).empty?
       begin
         origins << {
           value: Location.find(itinerary.first_nexus.id).to_custom_hash,
@@ -56,7 +53,7 @@ module ShippingTools
       end
       itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
       itinerary
-    end
+    end.compact
     {
       shipment:                 shipment,
       all_nexuses:              { origins: origins.uniq, destinations: destinations.uniq },
@@ -69,21 +66,21 @@ module ShippingTools
 
   def self.get_offers(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
-    offer_calculatior = OfferCalculator.new(shipment, params, current_user)
+    offer_calculator = OfferCalculator.new(shipment, params, current_user)
 
-    offer_calculatior.calc_offer!
+    offer_calculator.calc_offer!
 
-    offer_calculatior.shipment.save!
+    offer_calculator.shipment.save!
     {
-      shipment:                   offer_calculatior.shipment,
-      total_price:                offer_calculatior.total_price,
-      has_pre_carriage:           offer_calculatior.has_pre_carriage,
-      has_on_carriage:            offer_calculatior.has_on_carriage,
-      schedules:                  offer_calculatior.schedules,
-      truck_seconds_pre_carriage: offer_calculatior.truck_seconds_pre_carriage,
-      originHubs:                 offer_calculatior.origin_hubs,
-      destinationHubs:            offer_calculatior.destination_hubs,
-      cargoUnits:                 offer_calculatior.shipment.cargo_units
+      shipment:                   offer_calculator.shipment,
+      total_price:                offer_calculator.total_price,
+      has_pre_carriage:           offer_calculator.has_pre_carriage,
+      has_on_carriage:            offer_calculator.has_on_carriage,
+      schedules:                  offer_calculator.schedules,
+      truck_seconds_pre_carriage: offer_calculator.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculator.origin_hubs,
+      destinationHubs:            offer_calculator.destination_hubs,
+      cargoUnits:                 offer_calculator.shipment.cargo_units
     }
   end
 
