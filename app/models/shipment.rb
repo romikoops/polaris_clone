@@ -135,11 +135,11 @@ class Shipment < ApplicationRecord
   end
 
   def has_on_carriage=(_value)
-    raise "This property is read only. Please write to trucking property instead."
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_pre_carriage=(_value)
-    raise "This property is read only. Please write to trucking property instead."
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_on_carriage?
@@ -148,6 +148,10 @@ class Shipment < ApplicationRecord
 
   def has_pre_carriage?
     has_pre_carriage
+  end
+
+  def has_carriage?(carriage)
+    send("has_#{carriage}_carriage?")
   end
 
   def mode_of_transport

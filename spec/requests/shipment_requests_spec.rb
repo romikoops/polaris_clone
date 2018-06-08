@@ -104,8 +104,14 @@ describe 'Shipment requests', type: :request do
             headers: {}
           )
 
-        stub_request(:get, 'https://api.fixer.io/latest?base=EUR')
-          .with(headers: { Host: 'api.fixer.io' })
+        stub_request(:get, "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=EUR")
+          .with(
+            headers: {
+              'Connection'=>'close',
+              'Host'=>'data.fixer.io',
+              'User-Agent'=>'http.rb/3.3.0'
+            }
+          )
           .to_return(status: 200, body: { base: 'EUR', rates: { AUD: 1.5983, BGN: 1.9558, BRL: 4.1892, CAD: 1.5557, CHF: 1.197, CNY: 7.7449, CZK: 25.34, DKK: 7.4477, GBP: 0.87608, HKD: 9.6568, HRK: 7.411, HUF: 310.52, IDR: 17_143.0, ILS: 4.3435, INR: 81.39, ISK: 123.3, JPY: 132.41, KRW: 1316.3, MXN: 22.742, MYR: 4.7924, NOK: 9.605, NZD: 1.7032, PHP: 64.179, PLN: 4.1677, RON: 4.6586, RUB: 75.738, SEK: 10.37, SGD: 1.6172, THB: 38.552, TRY: 4.9803, USD: 1.2309, ZAR: 14.801 } }.to_json, headers: {})
 
         post subdomain_shipment_get_offers_path(subdomain_id: 'demo', shipment_id: shipment.id), 

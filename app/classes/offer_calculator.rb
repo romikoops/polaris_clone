@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+Dir["#{Rails.root}/app/classes/offer_calculator_service/*.rb"].each { |file| require file }
+
 class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :delay, :trucking_data
   include CurrencyTools
@@ -59,14 +61,23 @@ class OfferCalculator
       end
       @shipment.trucking["on_carriage"]["location_id"] = @delivery_address.id
     end
+
+    @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(@shipment)
+    @hub_finder              = OfferCalculatorService::HubFinder.new(@shipment)
+    @itinerary_finder        = OfferCalculatorService::ItineraryFinder.new(@shipment)
   end
 
   def calc_offer!
-    determine_trucking_options!
+    @trucking_pricings = @trucking_pricing_finder.exec
+    @hubs              = @hub_finder.exec(@trucking_pricings)
+    @itineraries       = @itinerary_finder.exec(@hubs)
 
-    determine_itinerary!
+    # Temporarily here for legacy code to work
+    @origin_hubs      = @hubs[:origin]
+    @destination_hubs = @hubs[:destination]
+
+    # TBD - Not Refactored
     determine_current_etd_in_search!
-
     determine_layovers!
     add_trip_charges!
     convert_currencies!
@@ -74,17 +85,6 @@ class OfferCalculator
   end
 
   private
-
-  def determine_itinerary!
-    data = Itinerary.for_locations(@shipment, @trucking_data)
-    @itineraries = data[:itineraries]
-    filter_itineraries!
-
-    raise ApplicationError::NoRoute if @itineraries.nil?
-    
-    @origin_hubs = data[:origin_hubs]
-    @destination_hubs = data[:destination_hubs]
-  end
 
   def filter_itineraries!
     return unless @cargo_units.first.is_a? CargoItem
@@ -138,7 +138,7 @@ class OfferCalculator
       end
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
-    
+
     @itineraries_hash = schedule_obj
   end
 
@@ -344,37 +344,6 @@ class OfferCalculator
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 
-  def determine_trucking_options!
-    load_type = @shipment.load_type
-    if @shipment.has_pre_carriage?
-      trucking_pricings = TruckingPricing.find_by_filter(
-        location:   @pickup_address,
-        load_type:  load_type,
-        tenant_id:  @user.tenant_id,
-        truck_type: @shipment.trucking["pre_carriage"]["truck_type"],
-        carriage:   "pre"
-      )
-      @trucking_data["pre_carriage"] = {}
-      trucking_pricings.each do |trucking_pricing|
-        @trucking_data["pre_carriage"][trucking_pricing.hub_id] = trucking_pricing
-      end
-    end
-
-    if @shipment.has_on_carriage?
-      trucking_pricings = TruckingPricing.find_by_filter(
-        location:   @delivery_address,
-        load_type:  load_type,
-        tenant_id:  @user.tenant_id,
-        truck_type: @shipment.trucking["on_carriage"]["truck_type"],
-        carriage:   "on"
-      )
-      @trucking_data["on_carriage"] = {}
-      trucking_pricings.each do |trucking_pricing|
-        @trucking_data["on_carriage"][trucking_pricing.hub_id] = trucking_pricing
-      end
-    end
-  end
-
   def determine_trucking_fees(location, hub, _target, direction)
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
@@ -481,6 +450,7 @@ class OfferCalculator
     snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
     ActionController::Parameters.new(snakefied_location_hash)
   end
+
   def destroy_previous_charge_breakdown(itinerary_id)
     ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
   end
