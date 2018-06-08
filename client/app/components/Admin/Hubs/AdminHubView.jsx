@@ -184,7 +184,7 @@ export class AdminHubView extends Component {
     console.log('#### currentFee @@@@@@')
     console.log(currentFee)
     const {
-      hub, relatedHubs, routes, schedules, location, charges
+      hub, relatedHubs, routes, schedules, location, charges, customs
     } = hubData
     const { primary, secondary } = theme.colors
     const textStyle = gradientTextGenerator(primary, secondary)
@@ -487,6 +487,7 @@ export class AdminHubView extends Component {
             <AdminHubFees
               theme={theme}
               charges={charges}
+              customs={customs}
               adminDispatch={adminActions}
               loadType={currentFeeLoadType.value}
             />

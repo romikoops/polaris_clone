@@ -37,11 +37,18 @@ export class ChooseShipment extends Component {
   }
   render () {
     const { theme, messages, scope } = this.props
+    const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
     const allowedCargoTypes = { cargo_item: false, container: false }
     Object.keys(scope.modes_of_transport).forEach((mot) => {
-      allowedCargoTypes.cargo_item = scope.modes_of_transport[mot].cargo_item
-      allowedCargoTypes.container = scope.modes_of_transport[mot].container
+      allowedCargoTypeCount.cargo_item += scope.modes_of_transport[mot].cargo_item
+      allowedCargoTypeCount.container += scope.modes_of_transport[mot].container
     })
+    if (allowedCargoTypeCount.container > 0) {
+      allowedCargoTypes.container = true
+    }
+    if (allowedCargoTypeCount.cargo_item > 0) {
+      allowedCargoTypes.cargo_item = true
+    }
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ItinerariesController < ApplicationController
   before_action :require_login_and_role_is_admin
   include PricingTools
@@ -11,9 +13,7 @@ class Admin::ItinerariesController < ApplicationController
   def create
     new_itinerary_data = params[:itinerary].as_json
     itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
-    new_itinerary_data["stops"].each_with_index { |h, i|  itinerary.stops.create(hub_id: h, index: i)}
-    itinerary.set_scope!
-    current_user.tenant.update_route_details
+    new_itinerary_data["stops"].each_with_index { |h, i| itinerary.stops.create(hub_id: h, index: i) }
     response_handler(itinerary)
   end
 
@@ -41,7 +41,7 @@ class Admin::ItinerariesController < ApplicationController
     stops = itinerary.stops.order(:index)
     schedules = itinerary.prep_schedules(10)
     notes = itinerary.notes
-    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops, notes: notes}
+    resp = { hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops, notes: notes }
     response_handler(resp)
   end
 
@@ -49,7 +49,7 @@ class Admin::ItinerariesController < ApplicationController
     old_ids = Itinerary.pluck(:id)
     new_ids = []
 
-    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx = Roo::Spreadsheet.open(params["xlsx"])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
 
     itinerary_rows = first_sheet.parse
@@ -64,11 +64,11 @@ class Admin::ItinerariesController < ApplicationController
       location_data = itinerary_row[2..-1]
       current_hub_type = nil
       location_data.each_with_index do |el, i|
-        if i % 2 == 0
+        if i.even?
           current_hub_type = el
         else
           location = Location.find_by(location_type: "hub_#{current_hub_type.downcase}", hub_name: el)
-          rl = ItineraryLocation.find_or_create_by(itinerary: itinerary, location: location, position_in_hub_chain: (i+1)/2)
+          rl = ItineraryLocation.find_or_create_by(itinerary: itinerary, location: location, position_in_hub_chain: (i + 1) / 2)
           itinerary.update_attributes(starthub: rl.location) if i == 1
           itinerary.update_attributes(endhub: rl.location) if i == location_data.length - 1
         end

@@ -266,4 +266,10 @@
   .buffer_10 {
     margin: 10px 0;
   }
+  .flip_icon_horizontal {
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+  }
 }

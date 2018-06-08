@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTenantCargoItemTypes < ActiveRecord::Migration[5.1]
   def change
     create_table :tenant_cargo_item_types do |t|

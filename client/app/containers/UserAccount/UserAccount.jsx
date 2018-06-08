@@ -35,12 +35,21 @@ class UserAccount extends Component {
     this.setNavLink = this.setNavLink.bind(this)
   }
   componentDidMount () {
-    const { userDispatch, users, user } = this.props
+    const {
+      userDispatch,
+      users,
+      user,
+      shipments
+    } = this.props
+
     if (user && users && !users.loading && !users.dashboard) {
       userDispatch.getDashboard(user.id, false)
     }
     if (user && users && !users.hubs) {
       userDispatch.getHubs(false)
+    }
+    if (shipments && !shipments.requested) {
+      userDispatch.getShipments(false)
     }
   }
 
@@ -137,7 +146,7 @@ class UserAccount extends Component {
         <div className="layout-row flex layout-wrap layout-align-center">
           <NavBar className={`${styles.top_margin}`} />
           <div
-            className={`${defs.content_width} ${defs.spacing_md_bottom} ${
+            className={`flex-95 ${defs.spacing_md_bottom} ${
               styles.top_margin
             } layout-row flex-none`}
           >
@@ -152,10 +161,10 @@ class UserAccount extends Component {
                       theme={theme}
                       {...props}
                       user={user}
+                      dashboard={dashboard}
                       hubs={hubHash}
                       navFn={this.setUrl}
                       userDispatch={userDispatch}
-                      dashboard={dashboard}
                     />
                   )}
                 />

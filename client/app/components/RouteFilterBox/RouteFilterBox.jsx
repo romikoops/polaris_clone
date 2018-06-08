@@ -19,7 +19,9 @@ export class RouteFilterBox extends Component {
         : moment().format('DD/MM/YYYY'),
       selectedOption: {
         air: true,
-        ocean: true
+        ocean: true,
+        truck: true,
+        rail: true
       }
     }
     this.editFilterDay = this.editFilterDay.bind(this)
