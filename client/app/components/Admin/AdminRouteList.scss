@@ -1,6 +1,7 @@
 :local {
   .list {
-    overflow-y: auto;
+    overflow-y: scroll;
+    height: 425p
   }
   .listelement {
     border-bottom: 2px solid lightgrey;
@@ -23,5 +24,12 @@
   }
   .bottomSpace {
     margin-bottom: 20px;
+  }
+  .stop_count {
+    font-size: 12px;
+    margin: 0;
+  }
+  .container{
+    height: 450px;
   }
 }

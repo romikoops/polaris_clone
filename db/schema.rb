@@ -487,10 +487,10 @@ ActiveRecord::Schema.define(version: 20180606124541) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
@@ -645,6 +645,7 @@ ActiveRecord::Schema.define(version: 20180606124541) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"

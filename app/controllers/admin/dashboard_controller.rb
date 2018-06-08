@@ -16,7 +16,9 @@ class Admin::DashboardController < ApplicationController
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    @detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
+    @detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
+       itinerary.as_options_json(methods: :routes)
+    end
     @hubs = Hub.prepped(current_user)
     tenant = Tenant.find(current_user.tenant_id)
     @train_schedules = tenant.itineraries.where(mode_of_transport: "rail").limit(10).flat_map { |it| it.prep_schedules(5) }

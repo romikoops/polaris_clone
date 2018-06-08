@@ -27,7 +27,15 @@ export class AdminDashboardNew extends Component {
 
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      hoverId: false
+    }
+  }
+  handleRouteHover (id) {
+    this.setState((prevState) => {
+      const { hoverId } = prevState
+      return { hoverId: hoverId === id ? false : id }
+    })
   }
 
   render () {
@@ -36,11 +44,12 @@ export class AdminDashboardNew extends Component {
       clients,
       shipments,
       hubHash,
-      dashData
+      dashData,
+      adminDispatch
     } = this.props
+    const { hoverId } = this.state
 
     if (!dashData) return ''
-    // debugger // eslint-disable-line
     const { itineraries } = dashData
 
     const clientHash = {}
@@ -64,20 +73,23 @@ export class AdminDashboardNew extends Component {
 
     const header2 = (
       <div className="layout-row layout-padding flex-100 layout-align-center-center">
-        <img src="/app/assets/images/logos/logo_black.png" />
+        <img src="/app/assets/images/logos/logo_black.png" style={{ height: '90px' }} />
       </div>
     )
 
     const mapComponent = (
-      <div className="layout-row flex-100 layout-align-space-between-stretch">
-        <div className="flex-45 flex-sm-100">
+      <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
+        <div className="flex-gt-md-50 layout-padding flex-100">
           <ARouteList
-            shipments={preparedRequestedShipments}
+            itineraries={itineraries}
+            adminDispatch={adminDispatch}
+            hoverFn={e => this.handleRouteHover(e)}
           />
         </div>
-        <div className="flex-55 flex-sm-0">
+        <div className="flex-gt-md-50 layout-padding flex-100">
           <WMap
             itineraries={itineraries}
+            hoverId={hoverId}
           />
         </div>
       </div>
@@ -105,6 +117,7 @@ export class AdminDashboardNew extends Component {
         </div>
         <ShipCards
           admin
+          dispatches={adminDispatch}
           shipments={preparedRequestedShipments}
         />
         <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
@@ -117,16 +130,17 @@ export class AdminDashboardNew extends Component {
           component={mapComponent}
         />
         <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
-          <div className="flex-60 flex-sm-100">
+          <div className="flex-gt-md-60 flex-100">
             <AHubCards
               hubs={hubHash}
+              adminDispatch={adminDispatch}
             />
             <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
               <span className="flex-15"><u><b>See more</b></u></span>
               <div className={`flex-85 ${astyles.separator}`} />
             </div>
           </div>
-          <div className="flex-35 flex-sm-100">
+          <div className="flex-gt-md-35 flex-100">
             <AClientCards
               clients={clients}
             />
@@ -153,7 +167,13 @@ AdminDashboardNew.propTypes = {
     requested: PropTypes.arrayOf(PropTypes.shipment),
     finished: PropTypes.arrayOf(PropTypes.shipment)
   }),
-  hubHash: PropTypes.objectOf(PropTypes.hub)
+  hubHash: PropTypes.objectOf(PropTypes.hub),
+  adminDispatch: PropTypes.shape({
+    getDashboard: PropTypes.func,
+    getShipment: PropTypes.func,
+    getHub: PropTypes.func,
+    confirmShipment: PropTypes.func
+  }).isRequired
 }
 
 AdminDashboardNew.defaultProps = {

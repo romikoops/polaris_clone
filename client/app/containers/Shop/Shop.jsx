@@ -170,6 +170,7 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const { request, response, error } = bookingData
+    console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req } = this.state
 

@@ -1,55 +1,51 @@
 import React, { Component } from 'react'
+import { v4 } from 'uuid'
 import PropTypes from 'prop-types'
 import styles from './AdminRouteList.scss'
 
-function stationType (transportMode) {
-  let type
-
-  switch (transportMode) {
-    case 'ocean':
-      type = 'Port'
-      break
-    case 'air':
-      type = 'Airport'
-      break
-    case 'train':
-      type = 'Station'
-      break
-    default:
-      type = ''
-      break
-  }
-
-  return type
-}
-
-function listShipments (shipments) {
-  return shipments.length > 0 ? shipments.map(shipment => (
-    <div className={`layout-row layout-padding layout-align-space-around-stretch
+function listItineraries (itineraries, adminDispatch, hoverFn) {
+  return itineraries.length > 0 ? itineraries.map((itinerary) => {
+    const firstStopArray = itinerary.stops[0].hub.name.split(' ')
+    const firstStopType = firstStopArray.splice(-1)
+    const firstStopName = firstStopArray.join(' ')
+    const lastStopArray = itinerary.stops[itinerary.stops.length - 1].hub.name.split(' ')
+    const lastStopType = lastStopArray.splice(-1)
+    const lastStopName = lastStopArray.join(' ')
+    const stopCount = itinerary.stops.length - 2
+    return (
+      <div
+        className={`layout-row layout-padding layout-align-space-around-stretch
         ${styles.listelement}`}
-    >
-      <div className="layout-row flex-25 layout-align-center-center">
-        <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
-          <i className="fa fa-ship" />
+        key={v4()}
+        onClick={() => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
+        onMouseEnter={() => hoverFn(itinerary.id)}
+        onMouseLeave={() => hoverFn(itinerary.id)}
+      >
+        <div className="layout-row flex-25 layout-align-center-center">
+          <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
+            <i className="fa fa-ship" />
+          </div>
+        </div>
+        <div className="layout-column flex-25 layout-align-center-start">
+          <span className="layout-padding">
+            {firstStopName}<br />
+            {firstStopType}
+          </span>
+        </div>
+        <div className={`layout-row flex-25 layout-align-center-center ${styles.icon}`}>
+          <p className={`flex-none ${styles.stop_count}`}>
+            {stopCount > 0 ? `+ ${stopCount} stops` : 'direct'}
+          </p>
+        </div>
+        <div className="layout-column flex-25 layout-align-center-start">
+          <span className="layout-padding">
+            {lastStopName}<br />
+            {lastStopType}
+          </span>
         </div>
       </div>
-      <div className="layout-column flex-25 layout-align-center-start">
-        <span className="layout-padding">
-          {shipment.originHub.location.city}<br />
-          {stationType(shipment.originHub.data.hub_type)}
-        </span>
-      </div>
-      <div className={`layout-row flex-25 layout-align-center-center ${styles.icon}`}>
-        <i className="fa fa-angle-double-right" />
-      </div>
-      <div className="layout-column flex-25 layout-align-center-start">
-        <span className="layout-padding">
-          {shipment.destinationHub.location.city}<br />
-          {stationType(shipment.destinationHub.data.hub_type)}
-        </span>
-      </div>
-    </div>
-  )) : (<span className={`${styles.bottomSpace}`}>No routes available</span>)
+    )
+  }) : (<span className={`${styles.bottomSpace}`}>No routes available</span>)
 }
 
 export class AdminRouteList extends Component {
@@ -61,7 +57,9 @@ export class AdminRouteList extends Component {
 
   render () {
     const {
-      shipments
+      itineraries,
+      adminDispatch,
+      hoverFn
     } = this.props
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.container}`}>
@@ -69,7 +67,7 @@ export class AdminRouteList extends Component {
           <span><b>Routes</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list}`}>
-          {listShipments(shipments)}
+          {listItineraries(itineraries, adminDispatch, hoverFn)}
         </div>
       </div>
     )
@@ -77,11 +75,15 @@ export class AdminRouteList extends Component {
 }
 
 AdminRouteList.propTypes = {
-  shipments: PropTypes.arrayOf(PropTypes.shipment)
+  itineraries: PropTypes.arrayOf(PropTypes.itinerary),
+  adminDispatch: PropTypes.objectOf(PropTypes.func),
+  hoverFn: PropTypes.func
 }
 
 AdminRouteList.defaultProps = {
-  shipments: []
+  itineraries: [],
+  adminDispatch: {},
+  hoverFn: null
 }
 
 export default AdminRouteList

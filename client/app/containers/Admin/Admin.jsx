@@ -116,6 +116,7 @@ class Admin extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
               <Switch className="flex">
                 <Route
+                  exact
                   path="/admin/dashboard"
                   render={props => (
                     <AdminDashboardNew

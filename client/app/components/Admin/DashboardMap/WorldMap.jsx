@@ -44,50 +44,21 @@ export class WorldMap extends Component {
   }
 
   render () {
-    const { itineraries } = this.props
+    const { itineraries, hoverId } = this.props
     if (!itineraries) return ''
     /* eslint no-else-return: "off" */
-    const originArr = itineraries.map((itinerary) => {
-      if (itinerary.first_stop === undefined) {
-        return ''
-      } else {
-        const lat = itinerary.first_stop.hub.location.latitude
-        const lng = itinerary.first_stop.hub.location.longitude
-        const coordArr = [lng, lat]
-        return coordArr
-      }
+    const originArr = []
+    const destinationArr = []
+    const routeArr = []
+    itineraries.forEach((itinerary) => {
+      itinerary.routes.forEach((route) => {
+        originArr.push({ hovered: itinerary.id === hoverId, data: route.origin, id: itinerary.id })
+        destinationArr.push({
+          hovered: itinerary.id === hoverId, data: route.destination, id: itinerary.id
+        })
+        routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
+      })
     })
-    const destinationArr = itineraries.map((itinerary) => {
-      if (itinerary.last_stop === undefined) {
-        return ''
-      } else {
-        const lat = itinerary.last_stop.hub.location.latitude
-        const lng = itinerary.last_stop.hub.location.longitude
-        const coordArr = [lng, lat]
-        return coordArr
-      }
-    })
-    const routeArr = itineraries.map((itinerary, i) => {
-      if (itinerary.first_stop === undefined || itinerary.last_stop === undefined) {
-        return ''
-      } else {
-        const orilat = itinerary.first_stop.hub.location.latitude
-        const orilng = itinerary.first_stop.hub.location.longitude
-
-        const destlat = itinerary.last_stop.hub.location.latitude
-        const destlng = itinerary.last_stop.hub.location.longitude
-
-        const data = {
-          type: 'LineString',
-          id: i,
-          coordinates: [[orilng, orilat], [destlng, destlat]]
-        }
-
-        return data
-      }
-    })
-    /* eslint react/no-array-index-key: "off" */
-
     return (
       <div>
         <svg width={650} height={450} viewBox="0 0 900 450">
@@ -107,7 +78,7 @@ export class WorldMap extends Component {
             {
               this.state.worlddata.map((d, i) => (
                 <path
-                  key={`path-${i}`}
+                  key={`country-path-${d.id}-${i}`} // eslint-disable-line
                   d={geoPath().projection(projection())(d)}
                   className="country"
                   fill="#DEDEDE"
@@ -118,42 +89,42 @@ export class WorldMap extends Component {
               ))
             }
           </g>
-          {originArr.map((coordinates, i) => (
+          {originArr.map(origin => (
             <g className="markers">
               <circle
-                key={`marker-ori-${i}`}
-                cx={projection()(coordinates)[0]}
-                cy={projection()(coordinates)[1]}
+                key={`marker-origin-${origin.id}`}
+                cx={projection()(origin.data)[0]}
+                cy={projection()(origin.data)[1]}
                 r={10}
                 fill="#74AE93"
                 stroke="#FFFFFF"
                 className="marker"
-                onClick={() => this.handleMarkerClick(i)}
+                onClick={() => this.handleMarkerClick(origin.id)}
               />
             </g>
           ))
-          }{destinationArr.map((coordinates, i) => (
+          }{destinationArr.map(destination => (
             <g className="markers">
               <circle
-                key={`marker-${i}`}
-                cx={projection()(coordinates)[0]}
-                cy={projection()(coordinates)[1]}
+                key={`marker-${destination.id}`}
+                cx={projection()(destination.data)[0]}
+                cy={projection()(destination.data)[1]}
                 r={4}
                 fill="#008ACA"
                 stroke="#FFFFFF"
                 className="marker"
-                onClick={() => this.handleMarkerClick(i)}
+                onClick={() => this.handleMarkerClick(destination.id)}
               />
             </g>
           ))
           }{
-            routeArr.map((d, i) => (
+            routeArr.map(d => (
               <path
-                key={`path-${i}`}
-                d={geoPath().projection(projection())(d)}
+                key={`path-${d.id}`}
+                d={geoPath().projection(projection())(d.data)}
                 className="route"
                 fill="rgba(255, 255, 255, 0)"
-                stroke="grey"
+                stroke={d.hovered ? 'red' : 'grey'}
                 strokeLinecap="round"
                 strokeWidth={0.5}
               />

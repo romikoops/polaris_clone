@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
+import { v4 } from 'uuid'
 import styles from './ShipmentCard.scss'
+import AdminPromptConfirm from '../Admin/Prompt/Confirm'
 
 function stationType (transportMode) {
   let type
@@ -28,30 +30,82 @@ export class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {}
+    this.state = {
+      confirm: false
+    }
+  }
+  handleShipmentAction (id, action) {
+    const { dispatches, shipment } = this.props
+    dispatches.confirmShipment(shipment.id, action)
+  }
+  handleDeny () {
+    const { shipment } = this.props
+    this.handleShipmentAction(shipment.id, 'decline')
   }
 
+  handleAccept () {
+    const { shipment } = this.props
+    this.handleShipmentAction(shipment.id, 'accept')
+  }
+
+  handleIgnore () {
+    const { shipment } = this.props
+    this.handleShipmentAction(shipment.id, 'ignore')
+    this.closeConfirm()
+  }
+  confirmDelete () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+
+  handleEdit () {
+    const { shipment, dispatches } = this.props
+    dispatches.getShipment(shipment.id, true)
+  }
+  handleView () {
+    const { shipment, dispatches } = this.props
+    dispatches.getShipment(shipment.id, true)
+  }
   render () {
     const {
-      shipment
+      shipment,
+      theme
     } = this.props
+    const { confirm } = this.state
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text={`This will reject the requested shipment ${shipment.imc_reference}. This shipment can be still be recovered after being ignored`}
+        confirm={() => this.handleIgnore()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
 
     return (
       <div
+        key={v4()}
         className={
           `layout-column flex-100 layout-align-start-stretch
           ${styles.container} ${styles.relative}`
         }
       >
+        {confimPrompt}
         <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
-          <i className={`fa fa-check ${styles.check}`} />
-          <i className={`fa fa-edit ${styles.edit}`} />
-          <i className={`fa fa-trash ${styles.trash}`} />
+          <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
+          <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />
+          <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
         </div>
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
           <span className={`flex-100 ${styles.title}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
-        <div className={`layout-row flex-50 layout-align-space-between-stretch ${styles.section}`}>
+        <div className={`layout-row flex-50 layout-align-space-between-stretch ${styles.section}`} onClick={() => this.handleView()}>
           <div className={`layout-row flex-50 layout-align-space-between-stretch
               ${styles.relative}`}
           >
@@ -79,7 +133,7 @@ export class AdminShipmentCard extends Component {
               </div>
             </div>
           </div>
-          <div className="layout-column flex-40">
+          <div className="layout-column flex-40" onClick={() => this.handleView()}>
             <div className="layout-column flex-50 layout-align-center-stretch">
               <div className="layout-row flex-50 layout-align-start-stretch">
                 <div className="flex-20">
@@ -172,11 +226,15 @@ export class AdminShipmentCard extends Component {
 }
 
 AdminShipmentCard.propTypes = {
-  shipment: PropTypes.objectOf(PropTypes.shipment)
+  shipment: PropTypes.objectOf(PropTypes.shipment),
+  dispatches: PropTypes.objectOf(PropTypes.func),
+  theme: PropTypes.theme
 }
 
 AdminShipmentCard.defaultProps = {
-  shipment: {}
+  shipment: {},
+  dispatches: {},
+  theme: {}
 }
 
 export default AdminShipmentCard

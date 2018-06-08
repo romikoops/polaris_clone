@@ -55,8 +55,10 @@ class CargoItem < ApplicationRecord
     klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, itinerary)
     Module.const_set("AuxCargoItem", klass)
 
-    # Instantiates the auxiliary class and checks if the item is still valid,
-    # thereby applying the new validation.
-    Module::AuxCargoItem.new(given_attributes).valid?
+    # Instantiates the auxiliary class, sets the chargeable weight,
+    # and checks if the item is still valid, thereby applying the new validation.
+    aux_cargo_item = Module::AuxCargoItem.new(given_attributes)
+    aux_cargo_item.chargeable_weight = calc_chargeable_weight(itinerary.mode_of_transport)
+    aux_cargo_item.valid?
   end
 end

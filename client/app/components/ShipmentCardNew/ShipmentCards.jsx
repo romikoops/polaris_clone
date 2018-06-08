@@ -15,14 +15,17 @@ export class ShipmentCards extends Component {
   }
 
   listShipments (shipments) {
+    const { dispatches } = this.props
     return shipments.length > 0 ? shipments.map((shipment) => {
       const ShipCard = this.state.admin ? (
         <AShipCard
           shipment={shipment}
+          dispatches={dispatches}
         />
       ) : (
         <UShipCard
           shipment={shipment}
+          dispatches={dispatches}
         />
       )
 
@@ -30,7 +33,9 @@ export class ShipmentCards extends Component {
         <GBox
           title=""
           subtitle=""
-          flex={45}
+          flexMd={100}
+          flex={50}
+          flexGtLg={33}
           component={ShipCard}
         />
       )
@@ -44,7 +49,7 @@ export class ShipmentCards extends Component {
 
     return (
       <div className="layout-wrap flex-100 layout-row layout-align-space-between-start">
-        <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+        <div className={`layout-padding flex-100 layout-align-start-center  ${styles.greyBg}`}>
           <span><b>Requested Shipments</b></span>
         </div>
         {this.listShipments(shipments)}
@@ -55,12 +60,14 @@ export class ShipmentCards extends Component {
 
 ShipmentCards.propTypes = {
   admin: PropTypes.bool,
-  shipments: PropTypes.arrayOf(PropTypes.shipment)
+  shipments: PropTypes.arrayOf(PropTypes.shipment),
+  dispatches: PropTypes.objectOf(PropTypes.func)
 }
 
 ShipmentCards.defaultProps = {
   admin: false,
-  shipments: []
+  shipments: [],
+  dispatches: {}
 }
 
 export default ShipmentCards

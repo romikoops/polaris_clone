@@ -35,6 +35,8 @@ import getOffersBtnIsActive, {
 } from './getOffersBtnIsActive'
 import formatCargoItemTypes from './formatCargoItemTypes'
 import addressFieldsAreValid from './addressFieldsAreValid'
+import calcAvailableMotsForRoute,
+{ shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
 import getRequests from '../ShipmentLocationBox/getRequests'
 
 export class ShipmentDetails extends Component {
@@ -113,7 +115,8 @@ export class ShipmentDetails extends Component {
         noDangerousGoodsConfirmed: '',
         stackableGoodsConfirmed: ''
       },
-      prevRequestLoaded: false
+      prevRequestLoaded: false,
+      availableMotsForRoute: []
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -173,6 +176,11 @@ export class ShipmentDetails extends Component {
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
+    }
+
+    if (shouldUpdateAvailableMotsForRoute(this.state, nextState)) {
+      this.updateAvailableMotsForRoute()
+      return false
     }
 
     return !!(
@@ -282,6 +290,16 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  updateAvailableMotsForRoute () {
+    this.setState((prevState) => {
+      const { origin, destination } = prevState
+      const { itineraries } = this.props.shipmentData
+
+      const availableMotsForRoute = calcAvailableMotsForRoute(itineraries, origin, destination)
+      return { availableMotsForRoute }
+    })
+  }
+
   newContainerGrossWeight () {
     const container = this.state.containers.new
     return container.type ? container.tare_weight + container.weight : 0
@@ -335,7 +353,7 @@ export class ShipmentDetails extends Component {
 
   updateAirMaxDimensionsTooltips (value, divRef, suffixName) {
     const { maxDimensions } = this.props.shipmentData
-    if (!maxDimensions.air) return
+    if (!maxDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) return
 
     if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => { ReactTooltip.show(divRef) }, 500)
@@ -346,7 +364,9 @@ export class ShipmentDetails extends Component {
 
   updatedExcessChargeableWeightText (cargoItems) {
     const { maxAggregateDimensions } = this.props.shipmentData
-    if (!maxAggregateDimensions.air) return ''
+    if (!maxAggregateDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) {
+      return ''
+    }
 
     const totalChargeableWeight = cargoItems.reduce((sum, cargoItem) => (
       sum + +chargeableWeight(cargoItem, 'air')
@@ -597,6 +617,10 @@ export class ShipmentDetails extends Component {
     const {
       tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
+
+    console.log('this.state.availableMotsForRoute')
+    console.log(this.state.availableMotsForRoute)
+
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
@@ -639,6 +663,7 @@ export class ShipmentDetails extends Component {
           scope={scope}
           availableCargoItemTypes={formatCargoItemTypes(shipmentData.cargoItemTypes)}
           maxDimensions={shipmentData.maxDimensions}
+          availableMotsForRoute={this.state.availableMotsForRoute}
           toggleModal={name => this.toggleModal(name)}
         />
       )
@@ -989,7 +1014,7 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   getOffers: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.string),
+  messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
