@@ -178,10 +178,10 @@ class Itinerary < ApplicationRecord
   def modes_of_transport
     exists = ->(mot) { !Itinerary.where(mode_of_transport: mot).limit(1).empty? }
     {
-      ocean: exists.('ocean'),
-      air:   exists.('air'),
-      rail: exists.('rail'),
-      truck: exists.('truck')
+      ocean: exists.call("ocean"),
+      air:   exists.call("air"),
+      rail:  exists.call("rail"),
+      truck: exists.call("truck")
     }
   end
 
@@ -291,7 +291,7 @@ class Itinerary < ApplicationRecord
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
-    
+
     itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
