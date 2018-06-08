@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import PropTypes from 'prop-types'
 import styles from './AdminRouteList.scss'
 
-function listItineraries (itineraries, adminDispatch, hoverFn) {
+function listItineraries (itineraries, handleClick, hoverFn) {
   return itineraries.length > 0 ? itineraries.map((itinerary) => {
     const firstStopArray = itinerary.stops[0].hub.name.split(' ')
     const firstStopType = firstStopArray.splice(-1)
@@ -17,7 +17,7 @@ function listItineraries (itineraries, adminDispatch, hoverFn) {
         className={`layout-row layout-padding layout-align-space-around-stretch
         ${styles.listelement}`}
         key={v4()}
-        onClick={() => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
+        onClick={() => handleClick(itinerary)}
         onMouseEnter={() => hoverFn(itinerary.id)}
         onMouseLeave={() => hoverFn(itinerary.id)}
       >
@@ -58,7 +58,7 @@ export class AdminRouteList extends Component {
   render () {
     const {
       itineraries,
-      adminDispatch,
+      handleClick,
       hoverFn
     } = this.props
     return (
@@ -67,7 +67,7 @@ export class AdminRouteList extends Component {
           <span><b>Routes</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list}`}>
-          {listItineraries(itineraries, adminDispatch, hoverFn)}
+          {listItineraries(itineraries, handleClick, hoverFn)}
         </div>
       </div>
     )
@@ -76,13 +76,13 @@ export class AdminRouteList extends Component {
 
 AdminRouteList.propTypes = {
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
-  adminDispatch: PropTypes.objectOf(PropTypes.func),
+  handleClick: PropTypes.func,
   hoverFn: PropTypes.func
 }
 
 AdminRouteList.defaultProps = {
   itineraries: [],
-  adminDispatch: {},
+  handleClick: null,
   hoverFn: null
 }
 

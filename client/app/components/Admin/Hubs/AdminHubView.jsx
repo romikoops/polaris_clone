@@ -172,7 +172,7 @@ export class AdminHubView extends Component {
       currentFeeLoadType,
       currentFee,
       currentCustoms,
-      editing,
+      // editing,
       editedHub,
       confirm,
       mandatoryCharge,
@@ -189,7 +189,7 @@ export class AdminHubView extends Component {
     const { primary, secondary } = theme.colors
     const textStyle = gradientTextGenerator(primary, secondary)
     const gradientBackground = gradientGenerator(primary, secondary)
-    const hubPhoto = { background: hub.photo }
+    // const hubPhoto = { background: hub.photo }
     const relHubs = []
     relatedHubs.forEach((hubObj) => {
       if (hubObj.id !== hub.id) {
@@ -267,153 +267,153 @@ export class AdminHubView extends Component {
         <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
       )
     })
-    const editBox = (
-      <div
-        className={`${
-          styles.hub_edit_box
-        } flex-80 layout-row layout-align-start-center layout-wrap`}
-      >
-        <div className="flex-40 layout-row layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center input_box_full">
-            <input
-              type="text"
-              name="data-name"
-              onChange={e => this.handleEdit(e)}
-              value={editedHub.data.name}
-            />
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <div className="flex-100 layout-row layout-align-space-between-center input_box">
-              <input
-                type="text"
-                className="flex-33"
-                name="location-street_number"
-                placeholder="Street Number"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.street_number}
-              />
-              <input
-                type="text"
-                className="flex-66"
-                name="location-street"
-                placeholder="Street"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.street}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
-              <input
-                type="text"
-                className="flex-100"
-                name="location-city"
-                placeholder="City"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.city}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
-              <input
-                type="text"
-                className="flex-100"
-                name="location-zip_code"
-                placeholder="Zipcode"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.zip_code}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
-              <input
-                type="text"
-                className="flex-100"
-                placeholder="Country"
-                name="location-country"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.country}
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <div className="flex-50 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                className="flex-100"
-                placeholder="Latitude"
-                name="location-latitude"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.latitude}
-              />
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box">
-              <input
-                type="text"
-                className="flex-100"
-                placeholder="Longitude"
-                name="location-longitude"
-                onChange={e => this.handleEdit(e)}
-                value={editedHub.location.longitude}
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-end-center">
-            <div className={`${styles.action_btn} flex-none layout-row`}>
-              <RoundButton
-                theme={theme}
-                size="small"
-                text="Save"
-                handleNext={() => this.saveEdit()}
-                iconClass="fa-floppy-o"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-          <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `}>
-            <form>
-              <div
-                className={`${styles.upload_image} flex-none layout-row layout-align-center-center`}
-                onClick={e => this.clickUploaderInput(e)}
-              >
-                <p className={`${styles.upload_title}`}>Upload New Image</p>
-                <i className="fa fa-cloud-upload flex-none" />
-              </div>
-              <input
-                type="file"
-                onChange={e => this.handleImageUpload(e)}
-                name="hub_image"
-                ref={(input) => {
-                  this.uploaderInput = input
-                }}
-              />
-            </form>
-          </div>
-        </div>
-      </div>
-    )
-    const detailsBox = (
-      <div className="flex-40 layout-row layout-align-start-center layout-wrap">
-        <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none"> {hub.name}</p>
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center">
-          <address className="flex-none">
-            {`${location.street_number || ''} 
-            ${location.street || ''}`}{' '}
-            <br />
-            {location.city} <br />
-            {location.zip_code || ''} <br />
-            {location.country} <br />
-          </address>
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center">
-          <div className="flex-50 layout-row layout-align-start-center">
-            <p className="flex-none">{`Latitude ${location.latitude}`} </p>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-none"> {`Longitude: ${location.longitude}`} </p>
-          </div>
-        </div>
-      </div>
-    )
+    // const editBox = (
+    //   <div
+    //     className={`${
+    //       styles.hub_edit_box
+    //     } flex-80 layout-row layout-align-start-center layout-wrap`}
+    //   >
+    //     <div className="flex-40 layout-row layout-wrap">
+    //       <div className="flex-100 layout-row layout-align-start-center input_box_full">
+    //         <input
+    //           type="text"
+    //           name="data-name"
+    //           onChange={e => this.handleEdit(e)}
+    //           value={editedHub.data.name}
+    //         />
+    //       </div>
+    //       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+    //         <div className="flex-100 layout-row layout-align-space-between-center input_box">
+    //           <input
+    //             type="text"
+    //             className="flex-33"
+    //             name="location-street_number"
+    //             placeholder="Street Number"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.street_number}
+    //           />
+    //           <input
+    //             type="text"
+    //             className="flex-66"
+    //             name="location-street"
+    //             placeholder="Street"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.street}
+    //           />
+    //         </div>
+    //         <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
+    //           <input
+    //             type="text"
+    //             className="flex-100"
+    //             name="location-city"
+    //             placeholder="City"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.city}
+    //           />
+    //         </div>
+    //         <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
+    //           <input
+    //             type="text"
+    //             className="flex-100"
+    //             name="location-zip_code"
+    //             placeholder="Zipcode"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.zip_code}
+    //           />
+    //         </div>
+    //         <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
+    //           <input
+    //             type="text"
+    //             className="flex-100"
+    //             placeholder="Country"
+    //             name="location-country"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.country}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="flex-100 layout-row layout-align-start-center">
+    //         <div className="flex-50 layout-row layout-align-start-center input_box">
+    //           <input
+    //             type="text"
+    //             className="flex-100"
+    //             placeholder="Latitude"
+    //             name="location-latitude"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.latitude}
+    //           />
+    //         </div>
+    //         <div className="flex-50 layout-row layout-align-start-center input_box">
+    //           <input
+    //             type="text"
+    //             className="flex-100"
+    //             placeholder="Longitude"
+    //             name="location-longitude"
+    //             onChange={e => this.handleEdit(e)}
+    //             value={editedHub.location.longitude}
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="flex-100 layout-row layout-align-end-center">
+    //         <div className={`${styles.action_btn} flex-none layout-row`}>
+    //           <RoundButton
+    //             theme={theme}
+    //             size="small"
+    //             text="Save"
+    //             handleNext={() => this.saveEdit()}
+    //             iconClass="fa-floppy-o"
+    //           />
+    //         </div>
+    //       </div>
+    //     </div>
+    //     <div className="flex-40 layout-row layout-wrap layout-align-center-start">
+    //       <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `}>
+    //         <form>
+    //           <div
+    //             className={`${styles.upload_image} flex-none layout-row layout-align-center-center`}
+    //             onClick={e => this.clickUploaderInput(e)}
+    //           >
+    //             <p className={`${styles.upload_title}`}>Upload New Image</p>
+    //             <i className="fa fa-cloud-upload flex-none" />
+    //           </div>
+    //           <input
+    //             type="file"
+    //             onChange={e => this.handleImageUpload(e)}
+    //             name="hub_image"
+    //             ref={(input) => {
+    //               this.uploaderInput = input
+    //             }}
+    //           />
+    //         </form>
+    //       </div>
+    //     </div>
+    //   </div>
+    // )
+    // const detailsBox = (
+    //   <div className="flex-40 layout-row layout-align-start-center layout-wrap">
+    //     <div className="flex-100 layout-row layout-align-start-center">
+    //       <p className="flex-none"> {hub.name}</p>
+    //     </div>
+    //     <div className="flex-100 layout-row layout-align-start-center">
+    //       <address className="flex-none">
+    //         {`${location.street_number || ''} 
+    //         ${location.street || ''}`}{' '}
+    //         <br />
+    //         {location.city} <br />
+    //         {location.zip_code || ''} <br />
+    //         {location.country} <br />
+    //       </address>
+    //     </div>
+    //     <div className="flex-100 layout-row layout-align-start-center">
+    //       <div className="flex-50 layout-row layout-align-start-center">
+    //         <p className="flex-none">{`Latitude ${location.latitude}`} </p>
+    //       </div>
+    //       <div className="flex-100 layout-row layout-align-start-center">
+    //         <p className="flex-none"> {`Longitude: ${location.longitude}`} </p>
+    //       </div>
+    //     </div>
+    //   </div>
+    // )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         <div

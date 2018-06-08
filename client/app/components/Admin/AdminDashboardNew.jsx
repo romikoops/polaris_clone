@@ -82,11 +82,11 @@ export class AdminDashboardNew extends Component {
         <div className="flex-gt-md-50 layout-padding flex-100">
           <ARouteList
             itineraries={itineraries}
-            adminDispatch={adminDispatch}
+            handleClick={itinerary => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
             hoverFn={e => this.handleRouteHover(e)}
           />
         </div>
-        <div className="flex-gt-md-50 layout-padding flex-100">
+        <div className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100">
           <WMap
             itineraries={itineraries}
             hoverId={hoverId}

@@ -6,8 +6,8 @@ import worldMapData from './worldData'
 
 function projection () {
   return geoMercator()
-    .scale(100)
-    .translate([1000 / 2, 450 / 2])
+    .scale(150)
+    .translate([1000 / 3, 450 / 1.5])
 }
 
 /* eslint no-console: "off" */
@@ -45,7 +45,7 @@ export class WorldMap extends Component {
   }
 
   render () {
-    const { itineraries, hoverId } = this.props
+    const { itineraries, hoverId, height } = this.props
     if (!itineraries) return ''
     /* eslint no-else-return: "off" */
     const originArr = []
@@ -61,8 +61,8 @@ export class WorldMap extends Component {
       })
     })
     return (
-      <div>
-        <svg width={650} height={450} viewBox="0 0 900 450">
+      <div className="flex-100">
+        <svg width="100%" height={height || '100%'} viewBox="0 0 900 450">
           <defs>
             <marker
               id="mid"
