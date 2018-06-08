@@ -106,8 +106,9 @@ subdomains.each do |sub|
   #   password: "airfreightadmin",
   #   password_confirmation: "airfreightadmin",
 
-  #   confirmed_at: DateTime.new(2017, 1, 20)
-  # )
-  # # admin.skip_confirmation!
-  # admin_air.save!
+    #   confirmed_at: DateTime.new(2017, 1, 20)
+    # )
+    # # admin.skip_confirmation!
+    # admin_air.save!
+
 end
