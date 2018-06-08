@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserLocationsController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
@@ -16,10 +18,9 @@ class UserLocationsController < ApplicationController
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push({user: ul, location: ul.location})
+      resp.push(user: ul, location: ul.location)
     end
     response_handler(resp)
-
   end
 
   def update
@@ -34,7 +35,7 @@ class UserLocationsController < ApplicationController
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push({user: ul, location: ul.location})
+      resp.push(user: ul, location: ul.location)
     end
     response_handler(resp)
   end
@@ -49,17 +50,15 @@ class UserLocationsController < ApplicationController
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push({user: ul, location: ul.location})
+      resp.push(user: ul, location: ul.location)
     end
     response_handler(resp)
   end
 
-  
-
   def destroy
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.destroy
-    
-    response_handler({id: params[:id]})
+
+    response_handler(id: params[:id])
   end
 end

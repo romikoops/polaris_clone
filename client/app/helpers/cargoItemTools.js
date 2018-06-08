@@ -4,6 +4,7 @@ export function chargeableWeight (cargoItem, mot) {
   const effectiveKgPerCubicMeter = {
     air: 167,
     rail: 550,
+    truck: 333,
     ocean: 1000
   }
 

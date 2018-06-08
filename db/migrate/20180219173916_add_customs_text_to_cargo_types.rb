@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCustomsTextToCargoTypes < ActiveRecord::Migration[5.1]
   def change
     add_column :cargo_items, :customs_text, :string

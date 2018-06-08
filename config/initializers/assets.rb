@@ -1,4 +1,6 @@
-Rails.application.config.assets.precompile += %w( foundation_emails.css pdfs.scss.erb )
+# frozen_string_literal: true
 
-Rails.application.config.assets.paths << Rails.root.join("app", "assets", "fonts")
-Rails.application.config.assets.precompile += %w(.svg .eot .woff .ttf .otf)
+Rails.application.config.assets.precompile += %w[foundation_emails.css pdfs.scss.erb]
+
+Rails.application.config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+Rails.application.config.assets.precompile += %w[.svg .eot .woff .ttf .otf]

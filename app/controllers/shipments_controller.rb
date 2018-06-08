@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ShipmentsController < ApplicationController
   include ShippingTools
   include MongoTools
@@ -7,22 +9,22 @@ class ShipmentsController < ApplicationController
   def index
     @shipper = current_user
 
-    @requested_shipments = @shipper.shipments.where(status: %w(requested requested_by_unconfirmed_account))
-    @open_shipments = @shipper.shipments.where(status: %w(accepted in_progress))
-    @finished_shipments = @shipper.shipments.where(status: 'finished')
+    @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
+    @open_shipments = @shipper.shipments.where(status: %w[accepted in_progress])
+    @finished_shipments = @shipper.shipments.where(status: "finished")
     response_handler(
       requested: @requested_shipments,
-      open: @open_shipments,
-      finished: @finished_shipments
+      open:      @open_shipments,
+      finished:  @finished_shipments
     )
   end
 
-  def new 
-  end
+  def new; end
 
   def test_email
     tenant_notification_email(current_user, Shipment.first)
   end
+
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
@@ -47,7 +49,7 @@ class ShipmentsController < ApplicationController
     end
 
     locations = { origin: shipment.origin_nexus, destination: shipment.destination_nexus }
-  
+
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
       tmp_doc["signed_url"] = doc.get_signed_url
@@ -55,15 +57,15 @@ class ShipmentsController < ApplicationController
     end
 
     response_handler(
-      shipment:         shipment,
-      cargoItems:       shipment.cargo_items,
-      containers:       shipment.containers,
-      aggregatedCargo:  shipment.aggregated_cargo,
-      contacts:         contacts,
-      documents:        documents,
-      schedules:        shipment.schedule_set,
-      locations:        locations,
-      cargoItemTypes:   cargo_item_types
+      shipment:        shipment,
+      cargoItems:      shipment.cargo_items,
+      containers:      shipment.containers,
+      aggregatedCargo: shipment.aggregated_cargo,
+      contacts:        contacts,
+      documents:       documents,
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      cargoItemTypes:  cargo_item_types
     )
   end
 

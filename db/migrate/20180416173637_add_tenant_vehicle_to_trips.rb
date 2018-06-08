@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTenantVehicleToTrips < ActiveRecord::Migration[5.1]
   def change
     remove_column :trips, :vehicle_id, :integer

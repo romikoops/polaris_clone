@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IncotermsController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
@@ -17,7 +19,7 @@ class IncotermsController < ApplicationController
 
   def format_for_select_box(incoterms)
     incoterms.map do |incoterm|
-      {label: incoterm[:description], value: incoterm, code: incoterm[:code]}
+      { label: incoterm[:description], value: incoterm, code: incoterm[:code] }
     end
   end
 end

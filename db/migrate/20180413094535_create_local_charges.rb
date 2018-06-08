@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateLocalCharges < ActiveRecord::Migration[5.1]
   def change
     create_table :local_charges do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReworkTruckingPricing < ActiveRecord::Migration[5.1]
   def change
     remove_column :trucking_pricings, :direction, :string

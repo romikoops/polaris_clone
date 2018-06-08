@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateMandatoryCharges < ActiveRecord::Migration[5.1]
   def change
     add_column :hubs, :mandatory_charge_id, :integer
