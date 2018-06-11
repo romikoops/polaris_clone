@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module OfferCalculatorService
   class HubFinder < Base
-    def exec(trucking_pricings)
-      { origin: 'pre', destination: 'on' }.reduce({}) do |hubs, (target, carriage)|
+    def exec(_trucking_pricings)
+      { origin: "pre", destination: "on" }.reduce({}) do |hubs, (target, carriage)|
         hubs.merge(target => hubs_for_target(target, carriage))
       end
     end

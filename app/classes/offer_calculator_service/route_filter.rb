@@ -10,7 +10,7 @@ module OfferCalculatorService
           @shipment.valid_for_itinerary?(route.itinerary_id)
       end
 
-      # raise ApplicationError::InvalidRoutes if filtered_routes.empty?
+      raise ApplicationError::InvalidRoutes if filtered_routes.empty?
 
       filtered_routes
     end

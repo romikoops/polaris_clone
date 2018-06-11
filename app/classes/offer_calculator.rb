@@ -11,7 +11,6 @@ class OfferCalculator
   def initialize(shipment, params, user)
     @user             = user
     @shipment         = shipment
-    @itineraries      = []
     @itineraries_hash = {}
 
     @delay = params[:shipment][:delay]
@@ -27,14 +26,13 @@ class OfferCalculator
     @hubs              = @hub_finder.exec(@trucking_pricings)
     @routes            = @route_finder.exec(@hubs)
     @routes            = @route_filter.exec(@routes)
+    @schedules         = @schedule_finder.exec(@routes, @delay)
 
     # Temporarily here for legacy code to work
     @origin_hubs      = @hubs[:origin]
     @destination_hubs = @hubs[:destination]
 
     # TBD - Not Refactored
-    determine_current_etd_in_search!
-    determine_layovers!
     add_trip_charges!
     convert_currencies!
     prep_schedules!
@@ -48,6 +46,7 @@ class OfferCalculator
     @hub_finder              = OfferCalculatorService::HubFinder.new(shipment)
     @route_finder            = OfferCalculatorService::RouteFinder.new(shipment)
     @route_filter            = OfferCalculatorService::RouteFilter.new(shipment)
+    @schedule_finder         = OfferCalculatorService::ScheduleFinder.new(shipment)
   end
 
   def update_shipment
@@ -56,48 +55,6 @@ class OfferCalculator
     @shipment_update_handler.update_incoterm
     @shipment_update_handler.update_cargo_units
     @shipment_update_handler.update_selected_day
-  end
-
-  def determine_current_etd_in_search!
-    longest_trucking_time = 0
-
-    if shipment.has_pre_carriage?
-      google_directions = GoogleDirections.new(
-        @shipment.pickup_address.lat_lng_string,
-        @shipment.pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
-        @shipment.planned_pickup_date.to_i
-      )
-
-      driving_time = google_directions.driving_time_in_seconds
-      longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
-    end
-    @current_etd_in_search = @shipment.selected_day + longest_trucking_time.seconds + 3.days
-  rescue StandardError
-    raise ApplicationError::NoTruckingTime
-  end
-
-  def determine_layovers!
-    delay = @delay ? @delay.to_i : 20
-    schedule_obj = {}
-    @routes.each do |route|
-      destination_stop = Stop.find(route.destination_stop_id)
-      origin_stop      = Stop.find(route.origin_stop_id)
-      origin_layovers = origin_stop.layovers.where(
-        "closing_date > ? AND closing_date < ?",
-        @current_etd_in_search,
-        @current_etd_in_search + delay.days
-      ).order(:etd).uniq
-
-      trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|
-        return_hash[ol.trip_id] = [
-          ol,
-          Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
-        ]
-      end
-      schedule_obj[route.itinerary_id] = trip_layovers unless trip_layovers.empty?
-    end
-
-    @itineraries_hash = schedule_obj
   end
 
   def add_trip_charges!
