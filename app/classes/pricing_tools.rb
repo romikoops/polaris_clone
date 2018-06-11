@@ -26,7 +26,7 @@ module PricingTools
     final_pricing.with_indifferent_access
   end
 
-  def determine_local_charges(hub, load_type, cargos, direction, mot, user)
+  def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
                  cargo_unit.calc_chargeable_weight(mot)
@@ -40,11 +40,12 @@ module PricingTools
     end
 
     lt = load_type == "cargo_item" ? "lcl" : cargos[0].size_class
-    charge = hub.local_charges.find_by(load_type: lt, mode_of_transport: mot)
+    charge = hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
+    charge = charge || hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
     return {} if charge.nil?
     totals = { "total" => {} }
 
-    charge[direction].each do |k, fee|
+    charge.fees.each do |k, fee|
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"]
       totals[k]["value"] += fee_value(fee, cargo_hash)

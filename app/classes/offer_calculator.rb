@@ -134,6 +134,8 @@ class OfferCalculator
         @shipment.cargo_units,
         "export",
         trip[0].itinerary.mode_of_transport,
+        trip[0].trip.tenant_vehicle.id,
+        trip[1].stop.hub_id,
         @user
       )
       unless local_charges_data.empty?
@@ -149,6 +151,8 @@ class OfferCalculator
         @shipment.cargo_units,
         "import",
         trip[1].itinerary.mode_of_transport,
+        trip[0].trip.tenant_vehicle.id,
+        trip[0].stop.hub_id,
         @user
       )
       unless local_charges_data.empty?
