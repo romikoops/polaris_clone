@@ -12,8 +12,6 @@ class OfferCalculator
     @mongo            = get_client
     @user             = user
     @shipment         = shipment
-    @origin_hubs      = []
-    @destination_hubs = []
     @itineraries      = []
     @itineraries_hash = {}
 
@@ -23,6 +21,7 @@ class OfferCalculator
     @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
     @truck_seconds_pre_carriage = 0
+
 
     @current_eta_in_search = DateTime.new
     @total_price = { total: 0, currency: "EUR" }
@@ -65,12 +64,14 @@ class OfferCalculator
     @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(@shipment)
     @hub_finder              = OfferCalculatorService::HubFinder.new(@shipment)
     @itinerary_finder        = OfferCalculatorService::ItineraryFinder.new(@shipment)
+    @itinerary_filter        = OfferCalculatorService::ItineraryFilter.new(@shipment)
   end
 
   def calc_offer!
     @trucking_pricings = @trucking_pricing_finder.exec
     @hubs              = @hub_finder.exec(@trucking_pricings)
     @itineraries       = @itinerary_finder.exec(@hubs)
+    @itineraries       = @itinerary_filter.exec(@itineraries)
 
     # Temporarily here for legacy code to work
     @origin_hubs      = @hubs[:origin]
@@ -85,20 +86,6 @@ class OfferCalculator
   end
 
   private
-
-  def filter_itineraries!
-    return unless @cargo_units.first.is_a? CargoItem
-    unfiltered_itineraries = @itineraries.dup
-
-    @itineraries.select! do |itinerary|
-      @cargo_units.all? { |cargo_item| cargo_item.valid_for_itinerary?(itinerary) } &&
-        @shipment.valid_for_itinerary?(itinerary)
-    end
-
-    if @itineraries.empty? && !unfiltered_itineraries.empty?
-      raise ApplicationError::InvalidItineraries
-    end
-  end
 
   def determine_current_etd_in_search!
     longest_trucking_time = 0
