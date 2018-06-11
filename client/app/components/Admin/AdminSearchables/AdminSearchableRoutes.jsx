@@ -89,7 +89,8 @@ export class AdminSearchableRoutes extends Component {
       tooltip,
       icon,
       heading,
-      hideFilters
+      hideFilters,
+      tile
     } = this.props
     const { itineraries, hoverId } = this.state
 
@@ -137,6 +138,7 @@ export class AdminSearchableRoutes extends Component {
               <ARouteList
                 itineraries={itineraries}
                 limit={limit}
+                tile={tile}
                 handleClick={itinerary => this.handleClick(itinerary)}
                 hoverFn={e => this.handleRouteHover(e)}
               />
@@ -174,7 +176,8 @@ AdminSearchableRoutes.propTypes = {
   icon: PropTypes.string,
   tooltip: PropTypes.string,
   heading: PropTypes.string,
-  hideFilters: PropTypes.bool
+  hideFilters: PropTypes.bool,
+  tile: PropTypes.bool
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -187,7 +190,8 @@ AdminSearchableRoutes.defaultProps = {
   tooltip: '',
   showTooltip: false,
   heading: 'Routes',
-  hideFilters: false
+  hideFilters: false,
+  tile: false
 }
 
 export default AdminSearchableRoutes

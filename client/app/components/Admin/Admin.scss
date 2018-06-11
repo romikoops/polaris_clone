@@ -25,7 +25,10 @@
     top: 15px;
     left: 0px;
     z-index: 50;
-    background: lightgrey;
+    background:(211, 211,211,0.75);
+    h2 {
+      margin: 0;
+    }
   }
   .sec_title {
     min-height: 75px;

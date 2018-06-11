@@ -396,7 +396,7 @@ export class AdminHubView extends Component {
     //     </div>
     //     <div className="flex-100 layout-row layout-align-start-center">
     //       <address className="flex-none">
-    //         {`${location.street_number || ''} 
+    //         {`${location.street_number || ''}
     //         ${location.street || ''}`}{' '}
     //         <br />
     //         {location.city} <br />
