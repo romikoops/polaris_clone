@@ -298,24 +298,37 @@ class Itinerary < ApplicationRecord
     end.compact.flatten.uniq
   end
 
-  def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
-    where("
-      id IN (
-        SELECT d_stops.itinerary_id
+  def self.ids_with_route_stops_for(origin_hub_ids, destination_hub_ids)
+    sanitized_query = sanitize_sql(["
+      WITH itineraries_with_stops AS (
+        SELECT
+          destination_stops.itinerary_id AS itinerary_id,
+          origin_stops.id                AS origin_stop_id,
+          destination_stops.id           AS destination_stop_id
         FROM (
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN (?)
-        ) as o_stops
+        ) as origin_stops
         JOIN (
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN (?)
-        ) as d_stops
-        ON o_stops.itinerary_id = d_stops.itinerary_id
-        WHERE o_stops.index < d_stops.index
+        ) as destination_stops
+        ON origin_stops.itinerary_id = destination_stops.itinerary_id
+        WHERE origin_stops.index < destination_stops.index
       )
-    ", origin_hub_ids, destination_hub_ids)
+      SELECT
+        itineraries.id                             AS itinerary_id,
+        itineraries.mode_of_transport              AS mode_of_transport,
+        itineraries_with_stops.origin_stop_id      AS origin_stop_id,
+        itineraries_with_stops.destination_stop_id AS destination_stop_id
+      FROM itineraries
+      JOIN itineraries_with_stops ON itineraries.id = itineraries_with_stops.itinerary_id
+      WHERE itineraries.id IN (?)
+    ", origin_hub_ids, destination_hub_ids, ids])
+
+    connection.exec_query(sanitized_query).to_a
   end
 
   def self.for_locations(shipment, trucking_data)

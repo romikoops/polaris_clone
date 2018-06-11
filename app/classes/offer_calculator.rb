@@ -3,7 +3,7 @@
 Dir["#{Rails.root}/app/classes/offer_calculator_service/*.rb"].each { |file| require file }
 
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :delay, :trucking_data
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries_hash, :delay, :trucking_data
   include CurrencyTools
   include PricingTools
   include TruckingTools
@@ -25,8 +25,8 @@ class OfferCalculator
   def calc_offer!
     @trucking_pricings = @trucking_pricing_finder.exec
     @hubs              = @hub_finder.exec(@trucking_pricings)
-    @itineraries       = @itinerary_finder.exec(@hubs)
-    @itineraries       = @itinerary_filter.exec(@itineraries)
+    @routes            = @route_finder.exec(@hubs)
+    @routes            = @route_filter.exec(@routes)
 
     # Temporarily here for legacy code to work
     @origin_hubs      = @hubs[:origin]
@@ -46,8 +46,8 @@ class OfferCalculator
     @shipment_update_handler = OfferCalculatorService::ShipmentUpdateHandler.new(shipment, params)
     @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(shipment)
     @hub_finder              = OfferCalculatorService::HubFinder.new(shipment)
-    @itinerary_finder        = OfferCalculatorService::ItineraryFinder.new(shipment)
-    @itinerary_filter        = OfferCalculatorService::ItineraryFilter.new(shipment)
+    @route_finder            = OfferCalculatorService::RouteFinder.new(shipment)
+    @route_filter            = OfferCalculatorService::RouteFilter.new(shipment)
   end
 
   def update_shipment
@@ -79,9 +79,9 @@ class OfferCalculator
   def determine_layovers!
     delay = @delay ? @delay.to_i : 20
     schedule_obj = {}
-    @itineraries.each do |itin|
-      destination_stop = itin.stops.where(hub_id: @destination_hubs).first
-      origin_stop = itin.stops.where(hub_id: @origin_hubs).first
+    @routes.each do |route|
+      destination_stop = Stop.find(route.destination_stop_id)
+      origin_stop      = Stop.find(route.origin_stop_id)
       origin_layovers = origin_stop.layovers.where(
         "closing_date > ? AND closing_date < ?",
         @current_etd_in_search,
@@ -94,7 +94,7 @@ class OfferCalculator
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
-      schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
+      schedule_obj[route.itinerary_id] = trip_layovers unless trip_layovers.empty?
     end
 
     @itineraries_hash = schedule_obj
@@ -127,7 +127,7 @@ class OfferCalculator
       set_local_charges!(charges, trip, sched_key)
       set_trucking_charges!(charges, trip, sched_key)
 
-      itinerary = @itineraries.select { |it| it.id == itinerary_id }.first
+      itinerary = Itinerary.find(itinerary_id)
       set_cargo_charges!(charges, trip, sched_key, itinerary.mode_of_transport)
 
       @grand_total_charge.update_price!

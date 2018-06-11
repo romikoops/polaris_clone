@@ -259,10 +259,10 @@ class Shipment < ApplicationRecord
     end
   end
 
-  def valid_for_itinerary?(itinerary_arg)
+  def valid_for_itinerary?(itinerary_id)
     current_itinerary = itinerary
 
-    self.itinerary = itinerary_arg
+    self.itinerary_id = itinerary_id
     return_bool = valid?
 
     self.itinerary = current_itinerary
