@@ -38,7 +38,7 @@ exports[`props.pickup is false 1`] = `
             className="flex-none layout-row layout-align-center-center"
           >
             <i
-              className="fa fa-ship"
+              className="fa fa-ship "
             />
           </div>
           <div
@@ -270,7 +270,7 @@ exports[`shallow rendering 1`] = `
             className="flex-none layout-row layout-align-center-center"
           >
             <i
-              className="fa fa-ship"
+              className="fa fa-ship "
             />
           </div>
           <div

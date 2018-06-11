@@ -305,6 +305,7 @@ exports[`shallow rendering 1`] = `
     <ShipmentCargoItems
       addCargoItem={[Function]}
       availableCargoItemTypes={Array []}
+      availableMotsForRoute={Array []}
       cargoItems={Array []}
       deleteItem={[Function]}
       handleDelta={[Function]}

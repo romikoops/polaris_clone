@@ -23,7 +23,7 @@ exports[`shallow render 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-ship"
+            className="fa fa-ship "
           />
         </div>
         <div
