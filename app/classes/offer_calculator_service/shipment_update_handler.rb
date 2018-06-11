@@ -36,7 +36,13 @@ module OfferCalculatorService
     end
 
     def update_incoterm
-      @shipment.incoterm_id = params[:shipment][:incoterm]
+      @shipment.incoterm_id = @params[:shipment][:incoterm]
+    end
+
+    def update_selected_day
+      date = Chronic.parse(@params[:shipment][:selected_day], endian_precedence: :little)
+      date_limit = Date.today + 5.days
+      @shipment.selected_day = [date, date_limit].min
     end
 
     private
@@ -51,18 +57,18 @@ module OfferCalculatorService
 
     def cargo_items_params
       @params.require(:shipment).permit(
-        cargo_items_attributes: %i[
+        cargo_items_attributes: %i(
           payload_in_kg dimension_x dimension_y dimension_z
           quantity cargo_item_type_id dangerous_goods stackable
-        ]
+        )
       )[:cargo_items_attributes]
     end
 
     def containers_params
       @params.require(:shipment).permit(
-        containers_attributes: %i[
+        containers_attributes: %i(
           payload_in_kg sizeClass tareWeight quantity dangerous_goods
-        ]
+        )
       )[:containers_attributes].map do |container_attributes|
         container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }
       end

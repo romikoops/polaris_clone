@@ -26,11 +26,7 @@ class OfferCalculator
     @shipment_update_handler.update_trucking
     @shipment_update_handler.update_incoterm
     @shipment_update_handler.update_cargo_units
-
-    date = Chronic.parse(params[:shipment][:selected_day], endian_precedence: :little)
-    date_limit = Date.today + 5.days
-    @selected_day_attribute = @shipment.has_on_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
-    @shipment[@selected_day_attribute] = [date, date_limit].min
+    @shipment_update_handler.update_selected_day
 
     @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(@shipment)
     @hub_finder              = OfferCalculatorService::HubFinder.new(@shipment)
@@ -63,15 +59,15 @@ class OfferCalculator
 
     if shipment.has_pre_carriage?
       google_directions = GoogleDirections.new(
-        @pickup_address.lat_lng_string,
-        @pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
+        @shipment.pickup_address.lat_lng_string,
+        @shipment.pickup_address.furthest_hub(@origin_hubs).lat_lng_string,
         @shipment.planned_pickup_date.to_i
       )
 
       driving_time = google_directions.driving_time_in_seconds
       longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
     end
-    @current_etd_in_search = @shipment[@selected_day_attribute] + longest_trucking_time.seconds + 3.days
+    @current_etd_in_search = @shipment.selected_day + longest_trucking_time.seconds + 3.days
   rescue StandardError
     raise ApplicationError::NoTruckingTime
   end
@@ -141,7 +137,7 @@ class OfferCalculator
   def set_trucking_charges!(charges, trip, sched_key)
     if @shipment.has_pre_carriage?
       trucking_fees_data = determine_trucking_fees(
-        @pickup_address,
+        @shipment.pickup_address,
         trip[0].stop.hub,
         "origin",
         "export"
@@ -156,7 +152,7 @@ class OfferCalculator
 
     if @shipment.has_on_carriage?
       trucking_fees_data = determine_trucking_fees(
-        @delivery_address,
+        @shipment.delivery_address,
         trip[1].stop.hub,
         "destination",
         "import"

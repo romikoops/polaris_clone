@@ -116,6 +116,18 @@ class Shipment < ApplicationRecord
     send("#{load_type}s=", value)
   end
 
+  def selected_day_attribute
+    has_on_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
+  end
+
+  def selected_day
+    self[selected_day_attribute]
+  end
+
+  def selected_day=(value)
+    self[selected_day_attribute] = value
+  end
+
   def has_dangerous_goods?
     return aggregated_cargo.dangerous_goods? unless aggregated_cargo.nil?
     return cargo_units.any?(&:dangerous_goods) unless cargo_units.nil?
