@@ -137,7 +137,7 @@ class OfferCalculator
         @user
       )
       unless local_charges_data.empty?
-        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('export'))
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
       end
       charges[sched_key][:export] = local_charges_data
     end
@@ -152,7 +152,7 @@ class OfferCalculator
         @user
       )
       unless local_charges_data.empty?
-        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code('import'))
+        create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
       end
       charges[sched_key][:import] = local_charges_data
     end
@@ -207,7 +207,7 @@ class OfferCalculator
         total_units,
         @shipment.planned_pickup_date,
         mot)
-        
+
       next if charge_result.nil?
 
       cargo_unit_model = cargo_unit.class.to_s
@@ -238,7 +238,7 @@ class OfferCalculator
       parent:                   parent,
       price:                    Price.create(fees_data["total"] || fees_data[:total])
     )
-      
+
     fees_data.each do |code, charge|
       next if code.to_s == "total" || charge.empty?
 
@@ -258,7 +258,7 @@ class OfferCalculator
       cargo_class:       cargo_unit.try(:size_class) || "lcl",
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-      
+
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 

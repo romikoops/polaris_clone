@@ -1210,10 +1210,10 @@ module ExcelTools
     hub_rows = first_sheet.parse(hub_status: "STATUS", hub_type: "TYPE", hub_name: "NAME", hub_code: "CODE", latitude: "LATITUDE", longitude: "LONGITUDE", country: "COUNTRY", geocoded_address: "FULL_ADDRESS", photo: "PHOTO")
 
     hub_type_name = {
-      'ocean' => 'Port',
-      'air' => 'Airport',
-      'rail' => 'Railyard',
-      'truck' => 'Depot'
+      "ocean" => "Port",
+      "air"   => "Airport",
+      "rail"  => "Railyard",
+      "truck" => "Depot"
     }
     default_mandatory_charge = MandatoryCharge.find_by(pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false)
 

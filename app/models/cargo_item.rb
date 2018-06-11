@@ -6,8 +6,8 @@ class CargoItem < ApplicationRecord
     rail:     "0.550",
     ocean:    "1.000",
     trucking: "0.333",
-    truck: "0.333"
-  }.map_values { |v| BigDecimal.new(v) }
+    truck:    "0.333"
+  }.map_values { |v| BigDecimal(v) }
 
   DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
 
