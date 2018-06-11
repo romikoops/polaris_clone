@@ -214,9 +214,8 @@ module DocumentTools
       row = 1
       header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format) }
       results.each do |result|
-        %w[import export].each do |dir|
-          result[dir].deep_symbolize_keys!
-          result[dir].each do |key, fee|
+          result.deep_symbolize_keys!
+          result.each do |key, fee|
             if fee[:range] && !fee[:range].empty?
               fee[:range].each do |range_fee|
                 worksheet.write(row, 0, fee[:effective_date])
@@ -225,7 +224,7 @@ module DocumentTools
                 worksheet.write(row, 3, result[:mode_of_transport])
                 worksheet.write(row, 4, key)
                 worksheet.write(row, 5, result[:load_type])
-                worksheet.write(row, 6, dir)
+                worksheet.write(row, 6, result[:direction])
                 worksheet.write(row, 7, fee[:currency])
                 worksheet.write(row, 8, fee[:rate_basis])
                 case fee[:rate_basis]
@@ -263,7 +262,7 @@ module DocumentTools
               worksheet.write(row, 3, result[:mode_of_transport])
               worksheet.write(row, 4, key)
               worksheet.write(row, 5, result[:load_type])
-              worksheet.write(row, 6, dir)
+              worksheet.write(row, 6, result[:direction])
               worksheet.write(row, 7, fee[:currency])
               worksheet.write(row, 8, fee[:rate_basis])
               case fee[:rate_basis]
@@ -291,7 +290,6 @@ module DocumentTools
               end
               row += 1
             end
-          end
         end
       end
     end

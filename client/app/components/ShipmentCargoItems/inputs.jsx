@@ -55,7 +55,8 @@ export default function getInputs (
     !firstRenderInputs && nextStageAttempt &&
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
-  const maxDimensionsKey = availableMotsForRoute.every(mot => mot === 'air') ? 'air' : 'general'
+  const maxDimensionsKey = availableMotsForRoute.some(mot => mot !== 'air') || availableMotsForRoute.length === 0
+    ? 'general' : 'air'
   const maxDimensionsToApply = maxDimensions[maxDimensionsKey]
 
   inputs.colliType = (
@@ -73,6 +74,7 @@ export default function getInputs (
       </div>
     </div>
   )
+
   inputs.grossWeight = (
     <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
