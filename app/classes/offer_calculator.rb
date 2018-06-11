@@ -9,29 +9,17 @@ class OfferCalculator
   include TruckingTools
 
   def initialize(shipment, params, user)
-    @mongo            = get_client
     @user             = user
     @shipment         = shipment
     @itineraries      = []
     @itineraries_hash = {}
 
     @delay = params[:shipment][:delay]
-    @trucking_data = {}
     @truck_seconds_pre_carriage = 0
     @current_eta_in_search = DateTime.new
 
-    @shipment_update_handler = OfferCalculatorService::ShipmentUpdateHandler.new(shipment, params)
-
-    @shipment_update_handler.update_nexuses
-    @shipment_update_handler.update_trucking
-    @shipment_update_handler.update_incoterm
-    @shipment_update_handler.update_cargo_units
-    @shipment_update_handler.update_selected_day
-
-    @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(@shipment)
-    @hub_finder              = OfferCalculatorService::HubFinder.new(@shipment)
-    @itinerary_finder        = OfferCalculatorService::ItineraryFinder.new(@shipment)
-    @itinerary_filter        = OfferCalculatorService::ItineraryFilter.new(@shipment)
+    instantiate_service_classes(shipment, params)
+    update_shipment
   end
 
   def calc_offer!
@@ -53,6 +41,22 @@ class OfferCalculator
   end
 
   private
+
+  def instantiate_service_classes(shipment, params)
+    @shipment_update_handler = OfferCalculatorService::ShipmentUpdateHandler.new(shipment, params)
+    @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(shipment)
+    @hub_finder              = OfferCalculatorService::HubFinder.new(shipment)
+    @itinerary_finder        = OfferCalculatorService::ItineraryFinder.new(shipment)
+    @itinerary_filter        = OfferCalculatorService::ItineraryFilter.new(shipment)
+  end
+
+  def update_shipment
+    @shipment_update_handler.update_nexuses
+    @shipment_update_handler.update_trucking
+    @shipment_update_handler.update_incoterm
+    @shipment_update_handler.update_cargo_units
+    @shipment_update_handler.update_selected_day
+  end
 
   def determine_current_etd_in_search!
     longest_trucking_time = 0
