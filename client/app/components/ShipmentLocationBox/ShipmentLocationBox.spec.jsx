@@ -70,7 +70,7 @@ jest.mock('../TextHeading/TextHeading', () => ({
 // eslint-disable-next-line import/first
 import { ShipmentLocationBox } from './ShipmentLocationBox'
 
-const edittedShipment = {
+const editedShipment = {
   ...shipment,
   cargo_items_attributes: [],
   containers_attributes: [],
@@ -83,6 +83,8 @@ const edittedShipment = {
   destination_id: 12,
   has_on_carriage: false,
   has_pre_carriage: false,
+  origin: {},
+  destination: {},
   load_type: 'cargo_item'
 }
 
@@ -92,7 +94,7 @@ const propsBase = {
   gMaps,
   theme,
   user,
-  shipment: edittedShipment,
+  shipment: editedShipment,
   setTargetAddress: identity,
   handleAddressChange: identity,
   handleChangeCarriage: identity,
@@ -110,9 +112,13 @@ const propsBase = {
   origin: {
     number: 5
   },
+  destination: {
+    number: 2
+  },
+  shipmentData: {},
   routeIds: [1, 4, 5],
   prevRequest: {
-    shipment: edittedShipment
+    shipment: editedShipment
   }
 }
 
@@ -131,6 +137,11 @@ afterEach(() => {
   // eslint-disable-next-line no-global-assign
   Date = originalDate
 })
+
+/**
+ * Cannot test as `hubName={this.state.oSelect.label}`
+ * `Cannot read property 'label' of undefined`
+ */
 
 test.skip('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()

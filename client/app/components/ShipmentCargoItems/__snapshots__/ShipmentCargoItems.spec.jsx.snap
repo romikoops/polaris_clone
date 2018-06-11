@@ -186,6 +186,7 @@ exports[`shallow rendering 1`] = `
               <div
                 className="flex-90 layout-row input_box"
                 data-tip=""
+                onBlur={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -210,7 +211,7 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimension": "Maximum height is undefined",
+                      "maxDimension": "Maximum length is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
@@ -242,6 +243,7 @@ exports[`shallow rendering 1`] = `
               <div
                 className="flex-90 layout-row input_box"
                 data-tip=""
+                onBlur={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -266,7 +268,7 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimension": "Maximum height is undefined",
+                      "maxDimension": "Maximum width is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
@@ -291,6 +293,8 @@ exports[`shallow rendering 1`] = `
             >
               <div
                 className="flex-90 layout-row input_box"
+                data-tip=""
+                onBlur={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -364,7 +368,7 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimension": "Maximum height is undefined",
+                      "maxDimension": "Maximum weight is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
@@ -690,6 +694,7 @@ exports[`shallow rendering 1`] = `
                 <div
                   className="flex-90 layout-row input_box"
                   data-tip=""
+                  onBlur={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"
@@ -719,6 +724,7 @@ exports[`shallow rendering 1`] = `
                 <div
                   className="flex-90 layout-row input_box"
                   data-tip=""
+                  onBlur={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"
@@ -741,6 +747,8 @@ exports[`shallow rendering 1`] = `
               >
                 <div
                   className="flex-90 layout-row input_box"
+                  data-tip=""
+                  onBlur={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"

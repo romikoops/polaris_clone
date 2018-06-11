@@ -46,11 +46,14 @@ const propsBase = {
     modes_of_transport: {},
     dangerous_goods: false
   },
-  maxDimensions: { x: 44, y: 33, z: 22 }
+  maxDimensions: {
+    air: { x: 44, y: 33, z: 22 },
+    general: { x: 4, y: 3, z: 2 }
+  }
 }
 
 const createShallow = propsInput => shallow(<ShipmentCargoItems {...propsInput} />)
 
-test.skip('shallow rendering', () => {
+test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
