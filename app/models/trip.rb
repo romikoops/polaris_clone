@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Trip < ApplicationRecord
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
@@ -12,19 +14,19 @@ class Trip < ApplicationRecord
       t.save!
     end
   end
+
   def self.clear_dupes
     Trip.all.each do |trip|
       t = trip.as_json
       t.delete("id")
       dupes = Trip.where(t)
       dupes.each do |d|
-        if d.id != trip.id
-          d.destroy
-        end
+        d.destroy if d.id != trip.id
       end
     end
   end
+
   def vehicle
-    self.tenant_vehicle.vehicle
+    tenant_vehicle.vehicle
   end
 end

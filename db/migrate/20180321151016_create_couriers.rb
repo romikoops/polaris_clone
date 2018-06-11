@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateCouriers < ActiveRecord::Migration[5.1]
   def change
     create_table :couriers do |t|

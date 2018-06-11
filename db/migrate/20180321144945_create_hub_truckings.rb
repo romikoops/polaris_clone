@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHubTruckings < ActiveRecord::Migration[5.1]
   def change
     create_table :hub_truckings do |t|

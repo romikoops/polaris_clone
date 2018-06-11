@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HubTrucking < ApplicationRecord
   belongs_to :trucking_pricing
   belongs_to :hub
