@@ -109,7 +109,11 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_units
-    send("#{load_type}s")
+    aggregated_cargo ? [aggregated_cargo] : send("#{load_type}s").try(:to_a)
+  end
+
+  def cargo_units=(value)
+    send("#{load_type}s=", value)
   end
 
   def has_dangerous_goods?

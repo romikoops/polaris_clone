@@ -15,51 +15,22 @@ class OfferCalculator
     @itineraries      = []
     @itineraries_hash = {}
 
-    # Setting trucking also sets has_on_carriage and has_pre_carriage
-    @shipment.trucking = trucking_params(params).to_h
     @delay = params[:shipment][:delay]
-    @shipment.incoterm_id = params[:shipment][:incoterm]
     @trucking_data = {}
     @truck_seconds_pre_carriage = 0
-
-
     @current_eta_in_search = DateTime.new
-    @total_price = { total: 0, currency: "EUR" }
 
-    if params[:shipment][:aggregated_cargo_attributes]
-      @shipment.aggregated_cargo.try(:destroy)
-      @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params(params))
-      @cargo_units = [@shipment.aggregated_cargo]
-    else
-      cargo_unit_const = @shipment.load_type.camelize.constantize
-      plural_load_type = @shipment.load_type.pluralize
-      @shipment.send(plural_load_type).destroy_all
-      @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
-      @shipment.send("#{plural_load_type}=", @cargo_units)
-    end
+    @shipment_update_handler = OfferCalculatorService::ShipmentUpdateHandler.new(shipment, params)
+
+    @shipment_update_handler.update_nexuses
+    @shipment_update_handler.update_trucking
+    @shipment_update_handler.update_incoterm
+    @shipment_update_handler.update_cargo_units
 
     date = Chronic.parse(params[:shipment][:selected_day], endian_precedence: :little)
     date_limit = Date.today + 5.days
     @selected_day_attribute = @shipment.has_on_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
     @shipment[@selected_day_attribute] = [date, date_limit].min
-
-    @shipment.origin_nexus_id = params[:shipment][:origin][:nexus_id]
-    if @shipment.has_pre_carriage?
-      @pickup_address = Location.create_from_raw_params!(location_params(params, :origin))
-
-      raise ApplicationError::InvalidPickupAddress if @pickup_address.nil? || @pickup_address.zip_code.blank?
-      @shipment.trucking["pre_carriage"]["location_id"] = @pickup_address.id
-    end
-
-    @shipment.destination_nexus_id = params[:shipment][:destination][:nexus_id]
-    if @shipment.has_on_carriage?
-      @delivery_address = Location.create_from_raw_params!(location_params(params, :destination))
-
-      if @delivery_address.nil? || @delivery_address.zip_code.blank?
-        raise ApplicationError::InvalidDeliveryAddress unless @delivery_address
-      end
-      @shipment.trucking["on_carriage"]["location_id"] = @delivery_address.id
-    end
 
     @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(@shipment)
     @hub_finder              = OfferCalculatorService::HubFinder.new(@shipment)
@@ -131,6 +102,7 @@ class OfferCalculator
 
   def add_trip_charges!
     charges = {}
+    @total_price = { total: 0, currency: "EUR" }
     @total_price[:cargo] = { value: 0, currency: "" }
 
     @itineraries_hash.select! do |itinerary_id, trips|
@@ -202,7 +174,7 @@ class OfferCalculator
       local_charges_data = determine_local_charges(
         trip[0].stop.hub,
         @shipment.load_type,
-        @cargo_units,
+        @shipment.cargo_units,
         "export",
         trip[0].itinerary.mode_of_transport,
         @user
@@ -217,7 +189,7 @@ class OfferCalculator
       local_charges_data = determine_local_charges(
         trip[1].stop.hub,
         @shipment.load_type,
-        @cargo_units,
+        @shipment.cargo_units,
         "import",
         trip[1].itinerary.mode_of_transport,
         @user
@@ -255,7 +227,9 @@ class OfferCalculator
   end
 
   def set_cargo_charges!(charges, trip, sched_key, mot)
-    total_units = @cargo_units.reduce(0) { |sum, cargo_unit| sum += cargo_unit.try(:quantity).to_i }
+    total_units = @shipment.cargo_units.reduce(0) do |sum, cargo_unit|
+      sum + cargo_unit.try(:quantity).to_i
+    end
 
     charge_category = ChargeCategory.from_code("cargo")
     parent_charge = Charge.create(
@@ -266,7 +240,7 @@ class OfferCalculator
       price:                    Price.create(currency: @shipment.user.currency)
     )
 
-    @cargo_units.each do |cargo_unit|
+    @shipment.cargo_units.each do |cargo_unit|
       path_key = path_key(cargo_unit, trip)
 
       charge_result = send("determine_#{@shipment.load_type}_price",
@@ -336,7 +310,7 @@ class OfferCalculator
     km = google_directions.distance_in_km
     carriage = direction == "import" ? "on_carriage" : "pre_carriage"
     trucking_pricing = @trucking_data[carriage][hub.id]
-    price_results = calc_trucking_price(trucking_pricing, @cargo_units, km, direction)
+    price_results = calc_trucking_price(trucking_pricing, @shipment.cargo_units, km, direction)
   end
 
   def convert_currencies!
@@ -393,49 +367,6 @@ class OfferCalculator
     end
 
     @shipment.total_price = { value: @total_price[:total], currency: @user.currency }
-  end
-
-  private
-
-  def destroy_previous_charge_breakdown(itinerary_id)
-    ChargeBreakdown.find_by(shipment: @shipment, itinerary_id: itinerary_id).try(:destroy)
-  end
-
-  def trucking_params(params)
-    params.require(:shipment).require(:trucking).permit(
-      on_carriage: :truck_type, pre_carriage: :truck_type
-    )
-  end
-
-  def cargo_items_params(params)
-    params.require(:shipment).permit(
-      cargo_items_attributes: %i[
-        payload_in_kg dimension_x dimension_y dimension_z
-        quantity cargo_item_type_id dangerous_goods stackable
-      ]
-    )[:cargo_items_attributes]
-  end
-
-  def containers_params(params)
-    params.require(:shipment).permit(
-      containers_attributes: %i[
-        payload_in_kg sizeClass tareWeight quantity dangerous_goods
-      ]
-    )[:containers_attributes].map do |container_attributes|
-      container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }
-    end
-  end
-
-  def aggregated_cargo_params(params)
-    params.require(:shipment).require(:aggregated_cargo_attributes).permit(:weight, :volume)
-  end
-
-  def location_params(params, target)
-    unsafe_location_hash = params.require(:shipment).require(target).to_unsafe_hash
-    snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
-    snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
-    snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
-    ActionController::Parameters.new(snakefied_location_hash)
   end
 
   def destroy_previous_charge_breakdown(itinerary_id)
