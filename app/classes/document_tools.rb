@@ -51,56 +51,57 @@ module DocumentTools
     pricings.each_with_index do |pricing, _i|
       pricing.deep_symbolize_keys!
       next if pricing[:expiration_date] < DateTime.now
+      
       if !aux_data[:itineraries][pricing[:itinerary_id]]
         aux_data[:itineraries][pricing[:itinerary_id]] = Itinerary.find(pricing[:itinerary_id]).as_options_json
         current_itinerary = Itinerary.find(pricing[:itinerary_id])
       else
         current_itinerary = Itinerary.find(pricing[:itinerary_id])
      end
-      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
-        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]).hub.nexus
-        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
-      else
-        current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"]]
-      end
-      if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
-        aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]).hub.nexus
-        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
-      else
-        current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"]]
-      end
+     if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]]
+      aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]).hub.nexus
+      current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]]
+    else
+      current_origin = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]]
+    end
+    if !aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]]
+      aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]] = Stop.find(aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]).hub.nexus
+      current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]]
+    else
+      current_destination = aux_data[:nexuses][aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]]
+    end
 
-      destination_layover = ""
-      origin_layover = ""
-      unless aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"]
-        p current_itinerary
-        tmp_trip = current_itinerary.trips.last
-        if tmp_trip
-          tmp_layovers = current_itinerary.trips.last.layovers
+    destination_layover = ""
+    origin_layover = ""
+    unless aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]}"]
+      p current_itinerary
+      tmp_trip = current_itinerary.trips.last
+      if tmp_trip
+        tmp_layovers = current_itinerary.trips.last.layovers
 
-          tmp_layovers.each do |lay|
-            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["first_stop"]["id"].to_i
-              origin_layover = lay
-            end
-            if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["last_stop"]["id"].to_i
-              destination_layover = lay
-            end
+        tmp_layovers.each do |lay|
+          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"].to_i
+            origin_layover = lay
           end
-          diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86_400).to_i
-          # diff = destination_layover && origin_layover ? ((destination_layover.eta - origin_layover.etd) / 86400).to_i : ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
-          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"] = diff
-        else
-          aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"] = ""
+          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"].to_i
+            destination_layover = lay
+          end
         end
-      end
-      current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['first_stop']['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['last_stop']['id']}"]
-
-      if !aux_data[:vehicle][pricing[:transport_category_id]]
-        aux_data[:vehicle][pricing[:transport_category_id]] = TransportCategory.find(pricing[:transport_category_id]).vehicle
-        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
+        diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86_400).to_i
+        # diff = destination_layover && origin_layover ? ((destination_layover.eta - origin_layover.etd) / 86400).to_i : ((tmp_trip.end_date - tmp_trip.start_date) / 86400).to_i
+        aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]}"] = diff
       else
-        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
+        aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]}"] = ""
       end
+    end
+    current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].first["id"]}_#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"].last["id"]}"]
+
+    if !aux_data[:vehicle][pricing[:transport_category_id]]
+      aux_data[:vehicle][pricing[:transport_category_id]] = TransportCategory.find(pricing[:transport_category_id]).vehicle
+      current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
+    else
+      current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
+    end
       pricing[:data].each do |key, fee|
         if fee[:range] && !fee[:range].empty?
           fee[:range].each do |range_fee|
