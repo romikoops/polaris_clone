@@ -244,7 +244,7 @@ export class BookingConfirmation extends Component {
       </div>
     )
 
-    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
+    const feeHash = shipment.selected_offer
     const docView = []
     const missingDocs = []
     const docChecker = {

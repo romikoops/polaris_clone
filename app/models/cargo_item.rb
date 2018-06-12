@@ -46,19 +46,19 @@ class CargoItem < ApplicationRecord
     [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
   end
 
-  def valid_for_itinerary?(itinerary)
-    # This method determines whether the cargo_item would be valid, should the itinerary
-    # supplied as argument become the shipment's itinerary.
+  def valid_for_mode_of_transport?(mode_of_transport)
+    # This method determines whether the cargo_item would be valid, should the shipment's itinerary
+    # have the mode of transport supplied as argument.
 
     # Creates and auxiliary class, cloned from CargoItem, with one aditional
-    # validation, which depends on this itinerary's mode of transport.
-    klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, itinerary)
+    # validation, which depends on the mode of transport.
+    klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
     Module.const_set("AuxCargoItem", klass)
 
     # Instantiates the auxiliary class, sets the chargeable weight,
     # and checks if the item is still valid, thereby applying the new validation.
     aux_cargo_item = Module::AuxCargoItem.new(given_attributes)
-    aux_cargo_item.chargeable_weight = calc_chargeable_weight(itinerary.mode_of_transport)
+    aux_cargo_item.chargeable_weight = calc_chargeable_weight(mode_of_transport)
     aux_cargo_item.valid?
   end
 end
