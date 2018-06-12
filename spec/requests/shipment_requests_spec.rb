@@ -5,7 +5,8 @@ require_relative '../support/request_spec_helpers'
 
 describe 'Shipment requests', type: :request do
 
-  let(:shipment) { create(:shipment, load_type: load_type, direction: direction, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, containers: [container]) }
+  let(:trip) { create(:trip) }
+  let(:shipment) { create(:shipment, load_type: load_type, direction: direction, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { create(:location, hubs: [origin_hub]) }
   let(:destination_nexus) { create(:location, hubs: [destination_hub]) }
   let!(:itinerary) { create(:itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
@@ -15,8 +16,7 @@ describe 'Shipment requests', type: :request do
   let(:destination_stop) { create(:stop, index: 1, hub_id: destination_hub.id, layovers: [destination_layover]) }
   let(:origin_layover) { create(:layover, stop_index: 0, trip: trip) }
   let(:destination_layover) { create(:layover, stop_index: 1, trip: trip) }
-  let(:trip) { create(:trip) }
-  let(:container) { create(:container) }
+  let!(:container) { create(:container, shipment: shipment) }
   let!(:transport_category) { create(:transport_category, vehicle: trip.tenant_vehicle.vehicle) }
   let!(:pricing) { create(:pricing, tenant: tenant, transport_category: transport_category, itinerary: itinerary) }
   let(:schedules_charges) { { [origin_hub.id, destination_hub.id].join('-').to_sym => { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: { shipment.containers.last.id.to_s.to_sym => { total: { value: '1111.0', currency: 'EUR' }, BAS: { value: '1111.0', currency: 'EUR' } } }, total: { value: '1111.0', currency: 'EUR' } } } }

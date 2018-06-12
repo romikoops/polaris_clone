@@ -3,11 +3,7 @@
 module PricingTools
   include CurrencyTools
 
-  def get_user_price(path_key, user, shipment_date)
-    Rails.logger.debug "PATH KEY FOR PRICING #{path_key}"
-    first_stop_id, _last_stop_id, transport_category_id, = path_key.split("_")
-    itinerary_id = Stop.find(first_stop_id).itinerary_id
-
+  def get_user_price(itinerary_id, transport_category_id, user, shipment_date)
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
 
@@ -24,6 +20,14 @@ module PricingTools
     final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
 
     final_pricing.with_indifferent_access
+  end
+
+  def transport_category(cargo_unit, schedule)
+    schedule.trip.tenant_vehicle.vehicle.transport_categories.find_by(
+      name:              "any",
+      cargo_class:       cargo_unit.try(:size_class) || "lcl",
+      mode_of_transport: schedule.mode_of_transport
+    )
   end
 
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
@@ -82,8 +86,10 @@ module PricingTools
     totals
   end
 
-  def determine_cargo_item_price(cargo, pathKey, user, _quantity, shipment_date, mot)
-    pricing = get_user_price(pathKey, user, shipment_date)
+  def determine_cargo_item_price(cargo, schedule, user, _quantity, shipment_date, mot)
+    transport_category_id = transport_category(cargo, schedule)
+    pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
+
     return nil if pricing.nil?
     totals = { "total" => {} }
 
@@ -93,12 +99,12 @@ module PricingTools
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"]
 
-      totals[k]["value"] += if fee["hw_rate_basis"]
-                              heavy_weight_fee_value(fee, cargo)
-                            else
-
-                              fee_value(fee, get_cargo_hash(cargo, mot))
-                            end
+      totals[k]["value"] +=
+        if fee["hw_rate_basis"]
+          heavy_weight_fee_value(fee, cargo)
+        else
+          fee_value(fee, get_cargo_hash(cargo, mot))
+        end
     end
 
     converted = sum_and_convert_cargo(totals, user.currency)
@@ -108,8 +114,9 @@ module PricingTools
     totals
   end
 
-  def determine_container_price(container, pathKey, user, _quantity, shipment_date, mot)
-    pricing = get_user_price(pathKey, user, shipment_date)
+  def determine_container_price(container, schedule, user, _quantity, shipment_date, mot)
+    transport_category_id = transport_category(container, schedule)
+    pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
     return if pricing.nil?
     totals = { "total" => {} }
 

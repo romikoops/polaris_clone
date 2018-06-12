@@ -72,15 +72,11 @@ module ShippingTools
 
     offer_calculator.shipment.save!
     {
-      shipment:                   offer_calculator.shipment,
-      total_price:                offer_calculator.total_price,
-      has_pre_carriage:           offer_calculator.has_pre_carriage,
-      has_on_carriage:            offer_calculator.has_on_carriage,
-      schedules:                  offer_calculator.schedules,
-      truck_seconds_pre_carriage: offer_calculator.truck_seconds_pre_carriage,
-      originHubs:                 offer_calculator.origin_hubs,
-      destinationHubs:            offer_calculator.destination_hubs,
-      cargoUnits:                 offer_calculator.shipment.cargo_units
+      shipment:        offer_calculator.shipment,
+      schedules:       offer_calculator.detailed_schedules,
+      originHubs:      offer_calculator.hubs[:origin],
+      destinationHubs: offer_calculator.hubs[:destination],
+      cargoUnits:      offer_calculator.shipment.cargo_units
     }
   end
 
@@ -280,15 +276,15 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-            .permit(:street, :streetNumber, :zipCode, :city, :country)
-            .to_h.deep_transform_keys(&:underscore)
+      .permit(:street, :streetNumber, :zipCode, :city, :country)
+      .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id=nil)
     resource.require(:contact)
-            .permit(:companyName, :firstName, :lastName, :email, :phone)
-            .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+      .permit(:companyName, :firstName, :lastName, :email, :phone)
+      .to_h.deep_transform_keys(&:underscore)
+      .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
@@ -321,7 +317,6 @@ module ShippingTools
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
 
-    shipment.itinerary = Itinerary.find(@schedule["itinerary_id"])
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc

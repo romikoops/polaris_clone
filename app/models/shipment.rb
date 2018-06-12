@@ -47,6 +47,7 @@ class Shipment < ApplicationRecord
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
+  belongs_to :trip, optional: true
   belongs_to :transport_category, optional: true
   has_many :containers
   has_many :cargo_items

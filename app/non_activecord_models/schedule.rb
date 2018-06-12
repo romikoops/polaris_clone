@@ -6,6 +6,8 @@ class Schedule
   attr_accessor :id, :origin_hub_id, :destination_hub_id, :mode_of_transport,
     :total_price, :eta, :etd, :closing_date, :trip_id
 
+
+
   def origin_hub
     Hub.find origin_hub_id
   end
@@ -16,6 +18,20 @@ class Schedule
 
   def trip
     Trip.find trip_id
+  end
+
+  def to_detailed_hash
+    {
+      id:                id,
+      origin_hub:        origin_hub.as_json(only: %i(id name)),
+      destination_hub:   destination_hub.as_json(only: %i(id name)),
+      mode_of_transport: mode_of_transport,
+      total_price:       total_price,
+      eta:               eta,
+      etd:               etd,
+      closing_date:      closing_date,
+      trip_id:           trip_id
+    }
   end
 
   def self.from_routes(routes, current_etd_in_search, delay_in_days)
