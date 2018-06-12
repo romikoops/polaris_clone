@@ -10,6 +10,7 @@ import orderExportLCL from './orderExportLCL'
 
 const options = {
   headless: false,
+  log: false,
   slowMo: 250,
   url: BASE_URL
 }

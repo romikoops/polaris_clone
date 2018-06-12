@@ -117,7 +117,7 @@ export default async function init (options) {
 
     mark('waitFor', selector, count)
 
-    let counter = 20
+    let counter = 50
     let found = await page.$$eval(
       selector,
       (els, countValue) => els.length >= countValue,
@@ -147,13 +147,13 @@ export default async function init (options) {
   }
 
   /**
-   * It waits 2 seconds for selector with specified index contains specified text
+   * It waits 20 seconds for selector with specified index contains specified text
    */
   const waitForText = async (input) => {
     mark('waitForText', input.selector)
 
     const waitIndex = input.index === undefined ? 0 : input.index
-    let counter = 20
+    let counter = 50
     let found = false
 
     while (!found && counter > 0) {
@@ -172,7 +172,6 @@ export default async function init (options) {
         input.selector,
         els => els.map(el => el.textContent)
       )
-
       found = texts[waitIndex].includes(input.text)
     }
 
@@ -323,6 +322,7 @@ export default async function init (options) {
 
     return page.evaluate(selectFirstAvailableDayFn)
   }
+
   const takeScreenshot = async (label) => {
     const screenshotPath = `${SCREEN_DIR}/${label}.png`
 
@@ -336,6 +336,7 @@ export default async function init (options) {
 
     return screenshotPath
   }
+
   const shouldMatchScreenshot = async (label, tolerance, resetFlag) => {
     await delay(2 * DELAY)
     const filePath = `${SCREEN_DIR}/${label}.png`
