@@ -59,7 +59,7 @@ class TruckingPricing < ApplicationRecord
     city_name    = args[:city_name]    || args[:location].try(:city)
     country_code = args[:country_code] || args[:location].try(:country).try(:code)
 
-    joins(hub_truckings: [:trucking_destination, hub: :nexus])
+    joins(hub_truckings: %i[trucking_destination hub])
       .where('hubs.tenant_id': args[:tenant_id])
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
@@ -91,6 +91,7 @@ class TruckingPricing < ApplicationRecord
           )
         )
       ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
+      .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
   end
 
   def self.find_by_hub_id(hub_id)

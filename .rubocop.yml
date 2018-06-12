@@ -94,3 +94,18 @@ Naming/BinaryOperatorParameterName:
 Lint/Debugger:
   # Enabled: false
   Enabled: true # default
+
+
+######## Rules to be approved ########
+
+Style/DateTime:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%i':    '()'
+    '%w':    '()'

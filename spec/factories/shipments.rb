@@ -6,6 +6,7 @@ FactoryBot.define do
     association :origin_nexus, factory: :location
     association :destination_nexus, factory: :location
     association :itinerary
+    association :trip
     association :tenant
     load_type 'container'
   end

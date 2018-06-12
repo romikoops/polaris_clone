@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180606124541) do
+ActiveRecord::Schema.define(version: 20180612090653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,9 +56,9 @@ ActiveRecord::Schema.define(version: 20180606124541) do
 
   create_table "charge_breakdowns", force: :cascade do |t|
     t.integer "shipment_id"
-    t.integer "itinerary_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "trip_id"
   end
 
   create_table "charge_categories", force: :cascade do |t|
@@ -145,14 +145,16 @@ ActiveRecord::Schema.define(version: 20180606124541) do
   end
 
   create_table "customs_fees", force: :cascade do |t|
-    t.jsonb "import"
-    t.jsonb "export"
     t.string "mode_of_transport"
     t.string "load_type"
     t.integer "hub_id"
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_vehicle_id"
+    t.integer "counterpart_hub_id"
+    t.string "direction"
+    t.jsonb "fees"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -289,14 +291,16 @@ ActiveRecord::Schema.define(version: 20180606124541) do
   end
 
   create_table "local_charges", force: :cascade do |t|
-    t.jsonb "import"
-    t.jsonb "export"
     t.string "mode_of_transport"
     t.string "load_type"
     t.integer "hub_id"
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_vehicle_id"
+    t.integer "counterpart_hub_id"
+    t.string "direction"
+    t.jsonb "fees"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -645,6 +649,7 @@ ActiveRecord::Schema.define(version: 20180606124541) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"

@@ -47,6 +47,7 @@ class Shipment < ApplicationRecord
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
+  belongs_to :trip, optional: true
   belongs_to :transport_category, optional: true
   has_many :containers
   has_many :cargo_items
@@ -109,7 +110,23 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_units
-    send("#{load_type}s")
+    aggregated_cargo ? [aggregated_cargo] : send("#{load_type}s").try(:to_a)
+  end
+
+  def cargo_units=(value)
+    send("#{load_type}s=", value)
+  end
+
+  def selected_day_attribute
+    has_pre_carriage? ? :planned_pickup_date : :planned_origin_drop_off_date
+  end
+
+  def selected_day
+    self[selected_day_attribute]
+  end
+
+  def selected_day=(value)
+    self[selected_day_attribute] = value
   end
 
   def has_dangerous_goods?
@@ -135,11 +152,11 @@ class Shipment < ApplicationRecord
   end
 
   def has_on_carriage=(_value)
-    raise "This property is read only. Please write to trucking property instead."
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_pre_carriage=(_value)
-    raise "This property is read only. Please write to trucking property instead."
+    raise "This property is read only. Please write to the trucking property instead."
   end
 
   def has_on_carriage?
@@ -148,6 +165,10 @@ class Shipment < ApplicationRecord
 
   def has_pre_carriage?
     has_pre_carriage
+  end
+
+  def has_carriage?(carriage)
+    send("has_#{carriage}_carriage?")
   end
 
   def mode_of_transport
@@ -239,10 +260,10 @@ class Shipment < ApplicationRecord
     end
   end
 
-  def valid_for_itinerary?(itinerary_arg)
+  def valid_for_itinerary?(itinerary_id)
     current_itinerary = itinerary
 
-    self.itinerary = itinerary_arg
+    self.itinerary_id = itinerary_id
     return_bool = valid?
 
     self.itinerary = current_itinerary

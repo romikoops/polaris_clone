@@ -35,33 +35,17 @@ export class RouteResult extends Component {
     this.selectRoute = this.selectRoute.bind(this)
   }
   selectRoute () {
-    const { schedule, fees } = this.props
-    const schedKey = schedule.hub_route_key
-    const totalFees = fees[schedKey].total
-    this.props.selectResult({ schedule, total: totalFees })
+    const { schedule } = this.props
+    this.props.selectResult({ schedule, total: schedule.total_price })
   }
   render () {
     const {
       theme, schedule, pickup
     } = this.props
 
-    const schedKey = schedule.hub_route_key
+    const originHub = schedule.origin_hub
+    const destinationHub = schedule.destination_hub
 
-    const hubKeyArr = schedKey.split('-')
-    let originHub = {}
-    let destHub = {}
-    if (this.props.originHubs) {
-      this.props.originHubs.forEach((hub) => {
-        if (String(hub.id) === hubKeyArr[0]) {
-          originHub = hub
-        }
-      })
-      this.props.destinationHubs.forEach((hub) => {
-        if (String(hub.id) === hubKeyArr[1]) {
-          destHub = hub
-        }
-      })
-    }
     // const gradientFontStyle = {
     //     background:
     //         theme && theme.colors
@@ -107,10 +91,10 @@ export class RouteResult extends Component {
               <div className={`${styles.header_hub}`}>
                 <i className={`fa fa-flag-o ${styles.flag}`} />
                 <div className="flex-100 layout-row">
-                  <h4 className="flex-100"> {destHub.name} </h4>
+                  <h4 className="flex-100"> {destinationHub.name} </h4>
                 </div>
                 <div className="flex-100">
-                  <p className="flex-100"> {destHub.hub_code ? destHub.hub_code : ''} </p>
+                  <p className="flex-100"> {destinationHub.hub_code ? destinationHub.hub_code : ''} </p>
                 </div>
               </div>
             </div>
@@ -143,7 +127,7 @@ export class RouteResult extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>{`ETA ${RouteResult.returnHubType(destHub)} `}</h4>
+                <h4 className={styles.date_title}>{`ETA ${RouteResult.returnHubType(destinationHub)} `}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -170,8 +154,8 @@ export class RouteResult extends Component {
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <p className="flex-none">Total price: </p>
             <Price
-              value={this.props.fees[schedKey].total.value}
-              currency={this.props.fees[schedKey].total.currency}
+              value={schedule.total_price.value}
+              currency={schedule.total_price.currency}
             />
           </div>
           <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
@@ -195,15 +179,11 @@ RouteResult.propTypes = {
   fees: PropTypes.objectOf(PropTypes.shape({
     total: PropTypes.any
   })).isRequired,
-  originHubs: PropTypes.arrayOf(PropTypes.hub),
-  destinationHubs: PropTypes.arrayOf(PropTypes.hub),
   pickup: PropTypes.bool
 }
 RouteResult.defaultProps = {
   theme: null,
-  pickup: false,
-  originHubs: [],
-  destinationHubs: []
+  pickup: false
 }
 
 export default RouteResult

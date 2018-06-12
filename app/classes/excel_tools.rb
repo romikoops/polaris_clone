@@ -953,8 +953,16 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
-      hub_fees = {}
-      customs = {}
+      hub_fees = {
+        "general" => {
+          "general" => {}
+        }
+      }
+      customs = {
+        "general" => {
+          "general" => {}
+        }
+      }
 
       if hub
         rows = first_sheet.parse(
@@ -977,30 +985,83 @@ module ExcelTools
           effective_date:  "EFFECTIVE_DATE",
           expiration_date: "EXPIRATION_DATE",
           range_min:       "RANGE_MIN",
-          range_max:       "RANGE_MAX"
+          range_max:       "RANGE_MAX",
+          service_level:   "SERVICE LEVEL",
+          destination:     "DESTINATION"
         )
         next if rows.empty?
-        %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
-          hub_fees[lt] = {
-            "import"            => {},
-            "export"            => {},
-            "mode_of_transport" => rows[0][:mot].downcase,
-            "tenant_id"         => hub.tenant_id,
-            "hub_id"            => hub.id,
-            "load_type"         => lt
-          }
-          customs[lt] = {
-            "import"            => {},
-            "export"            => {},
-            "tenant_id"         => hub.tenant_id,
-            "hub_id"            => hub.id,
-            "mode_of_transport" => rows[0][:mot].downcase,
-            "load_type"         => lt
-          }
+        hub_type_name = {
+          'ocean' => 'Port',
+          'air' => 'Airport',
+          'rail' => 'Railyard',
+          'truck' => 'Depot'
+        }
+        counterparts = {}
+        tenant_vehicles = {}
+        rows.each do |row|
+          # 
+          if row[:destination]
+            counterpart_hub = Hub.find_by(name: "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}", tenant_id: user.tenant_id)
+            if !counterpart_hub
+              
+            end
+            counterpart_hub_id = counterpart_hub.id
+            hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id] 
+            customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id] 
+            counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
+          end
+            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] = TenantVehicle.find_by(
+              tenant_id:         user.tenant_id,
+              mode_of_transport: row[:mot].downcase,
+              name:              row[:service_level] || "standard"
+            )
+            
+            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level] || "standard", row[:mot].downcase, user.tenant_id)
+            tenant_vehicle = tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"]
+            if counterpart_hub_id
+              hub_fees[counterpart_hub_id][tenant_vehicle.id] = {}
+              customs[counterpart_hub_id][tenant_vehicle.id] = {}
+            else
+              hub_fees["general"][tenant_vehicle.id] = {}
+              customs["general"][tenant_vehicle.id] = {}
+            end
+        end
+        
+        hub_fees.each do |hub_key, tv_ids|
+          tv_ids.keys.each do |tv_id|
+            %w(export import).each do |direction|
+              hub_fees[hub_key][tv_id][direction] = {} if !hub_fees[hub_key][tv_id][direction]
+              customs[hub_key][tv_id][direction] = {} if !customs[hub_key][tv_id][direction]
+              %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
+                hub_fees[hub_key][tv_id][direction][lt] = {
+                  "fees"            => {},
+                  "direction"         => direction,
+                  "mode_of_transport" => rows[0][:mot].downcase,
+                  "tenant_id"         => hub.tenant_id,
+                  "hub_id"            => hub.id,
+                  "load_type"         => lt,
+                  "tenant_vehicle_id" => tv_id != "general" ? tv_id : nil,
+                  "counterpart_hub_id" => hub_key != "general" ? hub_key : nil
+                  
+                }
+                customs[hub_key][tv_id][direction][lt] = {
+                  "fees"            => {},
+                  "direction"         => direction,
+                  "tenant_id"         => hub.tenant_id,
+                  "hub_id"            => hub.id,
+                  "mode_of_transport" => rows[0][:mot].downcase,
+                  "load_type"         => lt,
+                  "tenant_vehicle_id" => tv_id != "general" ? tv_id : nil,
+                  "counterpart_hub_id" => hub_key != "general" ? hub_key : nil
+                  
+                }
+              end
+            end
+          end
         end
 
         rows.each do |row|
-          case row[:rate_basis]
+          case row[:rate_basis].upcase
           when "PER_SHIPMENT"
             charge = { currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
           when "PER_CONTAINER"
@@ -1028,38 +1089,65 @@ module ExcelTools
           when "PER_KG_RANGE"
             charge = { currency: row[:currency], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max] }
           end
-
+          
           charge[:expiration_date] = row[:expiration_date]
           charge[:effective_date] = row[:effective_date]
-
+        
           if row[:fee_code] != "CUST"
-            hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase, sheet_name)
+            hub_fees = local_charge_load_setter(
+              hub_fees,
+              charge,
+              row[:load_type].downcase,
+              row[:direction].downcase,
+              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id, 
+              row[:mot],
+              counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
+            )
           else
-            customs = local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase, sheet_name)
+            customs = local_charge_load_setter(
+              customs,
+              charge,
+              row[:load_type].downcase,
+              row[:direction].downcase,
+              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id,
+              row[:mot],
+              counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
+            )
           end
         end
       end
-
-      hub_fees.each do |k, v|
-        lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k)
-        if lc
-          lc.update_attributes(v)
-        else
-          hub.local_charges.create!(v)
+      hub_fees.each do |hub_key, tv_ids|
+        tv_ids.each do |tv_id, directions|
+          directions.each do |direction_key, load_type_values|
+            load_type_values.each do |k, v|
+              lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
+              if lc
+                lc.update_attributes(v)
+              else
+                hub.local_charges.create!(v)
+              end
+              results[:charges] << v
+              stats[:charges][:number_updated] += 1
+            end
+          end
         end
-        results[:charges] << v
-        stats[:charges][:number_updated] += 1
       end
-      customs.each do |k, v|
-        cf = hub.customs_fees.find_by(mode_of_transport: v["mode_of_transport"], load_type: k)
-        if cf
-          cf.update_attributes(v)
-        else
-          hub.customs_fees.create!(v)
-        end
+      hub_fees.each do |hub_key, tv_ids|
+        tv_ids.each do |tv_id, directions|
+          directions.each do |direction_key, load_type_values|
+            load_type_values.each do |k, v|
+              cf = hub.customs_fees.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
+              if cf
+                cf.update_attributes(v)
+              else
+                hub.customs_fees.create!(v)
+              end
 
-        results[:customs] << v
-        stats[:customs][:number_updated] += 1
+              results[:customs] << v
+              stats[:customs][:number_updated] += 1
+            end
+          end
+        end
       end
     end
     { stats: stats, results: results }
@@ -1387,7 +1475,7 @@ module ExcelTools
     nested_pricings = {}
 
     pricing_rows.each do |row|
-      pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:mot]}"
+      pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:mot]}_#{row[:vehicle]}"
       new_pricings[pricing_key] = {} unless new_pricings[pricing_key]
 
       effective_date = DateTime.parse(row[:effective_date].to_s)
@@ -1414,6 +1502,7 @@ module ExcelTools
       aux_data[pricing_key][:origin] ||= Location.find_by(name: row[:origin], location_type: "nexus")
       aux_data[pricing_key][:destination] ||= Location.find_by(name: row[:destination], location_type: "nexus")
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
+     
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
 
@@ -1602,26 +1691,19 @@ module ExcelTools
     "#{base_str}_rate".to_sym
   end
 
-  def local_charge_load_setter(all_charges, charge, load_type, direction, test)
+  def local_charge_load_setter(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     debug_message(charge)
     debug_message(all_charges)
-
-    if charge[:rate_basis].include? "RANGE"
-      if load_type === "fcl"
-        %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
-          debug_message(test)
-          debug_message(all_charges[lt])
-          debug_message(all_charges[lt][direction])
-          debug_message(charge)
-
-          set_range_fee(all_charges, charge, lt, direction)
+    if counterpart_hub_id == "general"
+      all_charges.keys.each do |ac_key|
+        if all_charges[ac_key][tenant_vehicle_id]
+          set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, ac_key)
         end
-      else
-        set_range_fee(all_charges, charge, load_type, direction)
-    end
-
+      end
     else
-      set_regular_fee(all_charges, charge, load_type, direction)
+      if all_charges[counterpart_hub_id][tenant_vehicle_id]
+       set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+      end
     end
     all_charges
   end
@@ -1630,29 +1712,45 @@ module ExcelTools
     puts message if DEBUG
   end
 
-  def set_regular_fee(all_charges, charge, load_type, direction)
+  def set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     if load_type === "fcl"
       %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
-        debug_message(all_charges[lt])
-        debug_message(all_charges[lt][direction])
-        debug_message(charge)
-
-        all_charges[lt][direction][charge[:key]] = charge
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]["fees"][charge[:key]] = charge
       end
     else
-      all_charges[load_type][direction][charge[:key]] = charge
+      if !all_charges[counterpart_hub_id] || 
+        !all_charges[counterpart_hub_id][tenant_vehicle_id] ||
+        !all_charges[counterpart_hub_id][tenant_vehicle_id][direction] ||
+        !all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]
+        byebug
+      end
+      all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = charge
     end
     all_charges
   end
+  def set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+    if charge[:rate_basis].include? "RANGE"
+      if load_type === "fcl"
+        %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
+        set_range_fee(all_charges, charge, lt, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+        end
+      else
+        set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+      end
+    else
+      set_regular_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+    end
 
-  def set_range_fee(all_charges, charge, load_type, direction)
+  end
+
+  def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     case charge[:rate_basis]
     when "PER_KG_RANGE"
       rate_value = charge[:kg]
     end
-    existing_charge = all_charges[load_type][direction][charge[:key]]
+    existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]]
     if existing_charge && existing_charge[:range]
-      all_charges[load_type][direction][charge[:key]][:range] << {
+      all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << {
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
         min:        charge[:range_min],
@@ -1660,7 +1758,7 @@ module ExcelTools
         rate:       rate_value
       }
     else
-      all_charges[load_type][direction][charge[:key]] = {
+      all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = {
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
         min:        charge[:min],
