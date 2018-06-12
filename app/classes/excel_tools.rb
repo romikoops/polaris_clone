@@ -588,7 +588,9 @@ module ExcelTools
       modifier_row.shift
       modifier_row.shift
       modifier_row.uniq.each do |mod|
-        modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
+        if mod != nil
+          modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
+        end
       end
       header_row = rates_sheet.row(4)
       header_row.shift
@@ -679,7 +681,7 @@ module ExcelTools
           end
           # awesome_print single_ident_values_and_country
           # awesome_print trucking_pricing_by_zone[row_key]
-
+          
           charges.each do |_k, fee|
             tmp_fee = fee.clone
             next unless tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type

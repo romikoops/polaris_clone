@@ -47,6 +47,11 @@ class TruckingPricing < ApplicationRecord
       end
     end
   end
+  def self.delete_existing_truckings(hub)
+    hub.trucking_pricings.delete_all
+    hub.hub_truckings.delete_all
+    
+  end
 
   def self.find_by_filter(args={})
     find_by_filter_argument_errors(args)
