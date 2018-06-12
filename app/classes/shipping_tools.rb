@@ -406,19 +406,19 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    if ENV['BETA'] !== "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.tenant_notification(user, shipment).deliver_later
     end
   end
 
   def self.shipper_notification_email(user, shipment)
-    if ENV['BETA'] !== "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.shipper_notification(user, shipment).deliver_later
     end
   end
 
   def shipper_confirmation_email(user, shipment)
-    if ENV['BETA'] !== "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.shipper_confirmation(
         user,
         shipment
@@ -450,7 +450,7 @@ module ShippingTools
   end
 
   def send_booking_emails(shipment)
-    if ENV['BETA'] !== "true"
+    if ENV['BETA'] != "true"
       shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_shipper.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
       trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_trucker.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
       consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_consolidator.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
