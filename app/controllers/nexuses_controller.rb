@@ -25,7 +25,6 @@ class NexusesController < ApplicationController
     
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
     itineraries   = current_user.tenant.itineraries.where(id: itinerary_ids)
-
     available_nexus_ids = itineraries.map do |itinerary|
       if nexus_ids.blank? || nexus_ids.empty?
         itinerary.nexus_ids_for_target(target)
