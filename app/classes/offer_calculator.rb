@@ -32,6 +32,8 @@ class OfferCalculator
     @origin_hubs      = @hubs[:origin]
     @destination_hubs = @hubs[:destination]
 
+    byebug
+
     # TBD - Not Refactored
     add_trip_charges!
     convert_currencies!
@@ -58,22 +60,13 @@ class OfferCalculator
   end
 
   def add_trip_charges!
-    charges = {}
+    charges_h = {}
     @total_price = { total: 0, currency: "EUR" }
     @total_price[:cargo] = { value: 0, currency: "" }
 
-    @itineraries_hash.select! do |itinerary_id, trips|
-      trip = trips.values.first
-
-      next unless trip && trip.length > 1
-      sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
-
-      next if charges[sched_key]
-
-      charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-
-      destroy_previous_charge_breakdown(itinerary_id)
-      @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: itinerary_id)
+    @schedules.each do |schedule|
+      destroy_previous_charge_breakdown(schedule.itinerary_id)
+      @charge_breakdown = ChargeBreakdown.create!(shipment: @shipment, itinerary_id: schedule.itinerary_id)
       @grand_total_charge = Charge.create(
         children_charge_category: ChargeCategory.grand_total,
         charge_category:          ChargeCategory.base_node,
@@ -81,25 +74,24 @@ class OfferCalculator
         price:                    Price.create(currency: @shipment.user.currency)
       )
 
-      set_local_charges!(charges, trip, sched_key)
-      set_trucking_charges!(charges, trip, sched_key)
+      calc_local_charges!(schedule)
+      calc_trucking_charges!(schedule)
 
       itinerary = Itinerary.find(itinerary_id)
-      set_cargo_charges!(charges, trip, sched_key, itinerary.mode_of_transport)
+      calc_cargo_charges!(trip, sched_key, itinerary.mode_of_transport)
 
       @grand_total_charge.update_price!
     end
 
-    charges.reject! { |_, charge| charge[:cargo].empty? }
-    raise ApplicationError::NoSchedulesCharges if charges.empty?
-    @shipment.schedules_charges = charges
+    raise ApplicationError::NoSchedulesCharges if charges_h.empty?
   end
 
-  def set_trucking_charges!(charges, trip, sched_key)
+  def calc_trucking_charges!(schedule)
+    return_h = {}
     if @shipment.has_pre_carriage?
       trucking_fees_data = determine_trucking_fees(
         @shipment.pickup_address,
-        trip[0].stop.hub,
+        schedule.origin_hub,
         "origin",
         "export"
       )
@@ -108,13 +100,13 @@ class OfferCalculator
         ChargeCategory.create(name: "Trucking Pre-Carriage", code: "trucking_pre")
       )
 
-      charges[sched_key][:trucking_pre] = trucking_fees_data
+      return_h[:trucking_pre] = trucking_fees_data
     end
 
     if @shipment.has_on_carriage?
       trucking_fees_data = determine_trucking_fees(
         @shipment.delivery_address,
-        trip[1].stop.hub,
+        schedule.destination_hub,
         "destination",
         "import"
       )
@@ -122,72 +114,51 @@ class OfferCalculator
         trucking_fees_data,
         ChargeCategory.create(name: "Trucking On-Carriage", code: "trucking_on")
       )
-      charges[sched_key][:trucking_on] = trucking_fees_data
+      return_h[:trucking_on] = trucking_fees_data
     end
+    return_h
   end
 
-  def set_local_charges!(charges, trip, sched_key)
+  def calc_local_charges!(schedule)
+    return_h = {}
+
     if @shipment.has_pre_carriage || trip[0].stop.hub.mandatory_charge.export_charges
       local_charges_data = determine_local_charges(
-        trip[0].stop.hub,
+        schedule.origin_hub,
         @shipment.load_type,
         @shipment.cargo_units,
         "export",
-        trip[0].itinerary.mode_of_transport,
-        trip[0].trip.tenant_vehicle.id,
-        trip[1].stop.hub_id,
+        schedule.mode_of_transport,
+        schedule.trip.tenant_vehicle.id,
+        schedule.destination_hub_id,
         @user
       )
       unless local_charges_data.empty?
         create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
       end
-      charges[sched_key][:export] = local_charges_data
+      return_h[:export] = local_charges_data
     end
 
     if @shipment.has_on_carriage || trip[1].stop.hub.mandatory_charge.import_charges
       local_charges_data = determine_local_charges(
-        trip[1].stop.hub,
+        schedule.destination_hub,
         @shipment.load_type,
         @shipment.cargo_units,
         "import",
-        trip[1].itinerary.mode_of_transport,
-        trip[0].trip.tenant_vehicle.id,
-        trip[0].stop.hub_id,
+        schedule.mode_of_transport,
+        schedule.trip.tenant_vehicle.id,
+        schedule.origin_hub_id,
         @user
       )
       unless local_charges_data.empty?
         create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
       end
-      charges[sched_key][:import] = local_charges_data
+      return_h[:import] = local_charges_data
     end
+    return_h
   end
 
-  def prep_schedules!
-    schedules = []
-
-    @itineraries_hash.each do |iKey, iValue|
-      iValue.each do |tKey, tValue|
-        next unless tValue.length > 1 && @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]
-        schedules.push(
-          id:                     SecureRandom.uuid,
-          total:                  @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]["total"],
-          itinerary_id:           iKey,
-          eta:                    tValue[1].eta,
-          etd:                    tValue[0].etd,
-          closing_date:           tValue[0].closing_date,
-          mode_of_transport:      tValue[0].itinerary.mode_of_transport,
-          hub_route_key:          "#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}",
-          tenant_id:              @shipment.tenant_id,
-          trip_id:                tKey,
-          origin_layover_id:      tValue[0].id,
-          destination_layover_id: tValue[1].id
-        )
-      end
-    end
-    @schedules = schedules
-  end
-
-  def set_cargo_charges!(charges, trip, sched_key, mot)
+  def calc_cargo_charges!(trip, sched_key, mot)
     total_units = @shipment.cargo_units.reduce(0) do |sum, cargo_unit|
       sum + cargo_unit.try(:quantity).to_i
     end
@@ -210,7 +181,8 @@ class OfferCalculator
         @user,
         total_units,
         @shipment.planned_pickup_date,
-        mot)
+        mot
+      )
 
       next if charge_result.nil?
 
@@ -223,10 +195,11 @@ class OfferCalculator
 
       create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
 
-      charges[sched_key][:cargo][cargo_unit.id] = charge_result
+      return_h[:cargo][cargo_unit.id] = charge_result
     end
 
     parent_charge.update_price!
+    return_h
   end
 
   def create_charges_from_fees_data!(
