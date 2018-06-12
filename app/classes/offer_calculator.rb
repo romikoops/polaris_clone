@@ -206,7 +206,7 @@ class OfferCalculator
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
     carriage = direction == "import" ? "on" : "pre"
-    byebug
+    
     trucking_pricing = @trucking_pricings[carriage].find { |trucking_pricing| trucking_pricing.preloaded_hub_id == hub.id }
     price_results = calc_trucking_price(trucking_pricing, @shipment.cargo_units, km, direction)
   end
