@@ -215,6 +215,10 @@ class Shipment < ApplicationRecord
     has_pre_carriage
   end
 
+  def selected_offer
+    charge_breakdowns.selected.to_nested_hash
+  end
+
   def cargo_charges
     schedule_set.reduce({}) do |cargo_charges, schedule|
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]

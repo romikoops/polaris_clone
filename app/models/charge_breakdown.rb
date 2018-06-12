@@ -36,8 +36,7 @@ class ChargeBreakdown < ApplicationRecord
     charge("grand_total")
   end
 
-  def to_schedule_charges
-    hub_route_key = "#{shipment.origin_hub.id}-#{shipment.destination_hub.hub.id}"
-    { hub_route_key => grand_total.deconstruct_tree_into_schedule_charge }.deep_stringify_keys
+  def to_nested_hash
+    grand_total.deconstruct_tree_into_schedule_charge.deep_stringify_keys
   end
 end
