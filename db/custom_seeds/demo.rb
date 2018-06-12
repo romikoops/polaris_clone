@@ -38,7 +38,7 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   puts 'distributions'
   require './distributions'
 end
-
+MandatoryCharge.create_all!
 puts 'tenants'
 require "#{Rails.root}/db/seed_classes/tenant_seeder.rb"
 TenantSeeder.exec
