@@ -229,7 +229,7 @@ module ShippingTools
     }
 
     {
-      shipment:        shipment,
+      shipment:        shipment.as_json(methods: :selected_offer),
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
