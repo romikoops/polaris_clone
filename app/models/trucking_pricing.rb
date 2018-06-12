@@ -8,6 +8,9 @@ class TruckingPricing < ApplicationRecord
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
+
+  SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
+
   # Validations
 
   # Class methods
@@ -183,10 +186,16 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
-  def values_without_rates_and_fees
-    %w[carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type].sort.map do |key|
-      self[key.to_sym]
-    end.join(", ")
+  def scoping_attributes
+    SCOPING_ATTRIBUTE_NAMES.each_with_object({}) do |attribute_name, obj|
+      obj[attribute_name] = self[attribute_name]
+    end
+  end
+
+  def scoping_attributes_sql_where
+    "WHERE " + scoping_attributes.map do |scoping_attribute_name, scoping_attribute_value|
+      "#{scoping_attribute_name} = #{scoping_attribute_value}"
+    end.join(" AND ")
   end
 
   private

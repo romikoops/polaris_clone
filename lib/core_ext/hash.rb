@@ -38,4 +38,8 @@ class Hash
       value.each_deep_key(&block) if value.is_a? Hash
     end
   end
+
+  def to_sql_where
+    "WHERE " + map { |k, v| v.is_a?(String) ? "#{k} = '#{v}'" : "#{k} = #{v}" }.join(" AND ")
+  end
 end
