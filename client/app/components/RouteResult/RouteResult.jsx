@@ -45,15 +45,6 @@ export class RouteResult extends Component {
 
     const originHub = schedule.origin_hub
     const destinationHub = schedule.destination_hub
-
-    // const gradientFontStyle = {
-    //     background:
-    //         theme && theme.colors
-    //             ? `-webkit-linear-gradient(left, ${
-    //                 theme.colors.brightPrimary
-    //             }, ${theme.colors.brightSecondary})`
-    //             : 'black'
-    // };
     const dashedLineStyles = {
       marginTop: '6px',
       height: '2px',
@@ -176,9 +167,6 @@ RouteResult.propTypes = {
   theme: PropTypes.theme,
   schedule: PropTypes.schedule.isRequired,
   selectResult: PropTypes.func.isRequired,
-  fees: PropTypes.objectOf(PropTypes.shape({
-    total: PropTypes.any
-  })).isRequired,
   pickup: PropTypes.bool
 }
 RouteResult.defaultProps = {

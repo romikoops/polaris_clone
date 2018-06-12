@@ -168,6 +168,7 @@ export class BookingConfirmation extends Component {
     } = shipmentData
     if (!shipment || !locations || !cargoItemTypes) return <h1> Loading</h1>
     const { acceptTerms, collapser } = this.state
+    // debugger // eslint-disable-line
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 
     const defaultTerms = [
@@ -244,7 +245,7 @@ export class BookingConfirmation extends Component {
       </div>
     )
 
-    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
+    const feeHash = shipment.selected_offer
     const docView = []
     const missingDocs = []
     const docChecker = {

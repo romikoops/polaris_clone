@@ -5,29 +5,15 @@ import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../..
 
 export function IncotermRow ({
   theme,
-  shipment,
   onCarriage,
   preCarriage,
   originFees,
   destinationFees,
   feeHash,
-  tenant,
-  firstStep
+  tenant
 }) {
+  // debugger // eslint-disable-line
   const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
-  const sumCargoFees = (cargos) => {
-    let total = 0.0
-    let curr = ''
-    if (!cargos) {
-      return ''
-    }
-    Object.keys(cargos).forEach((k) => {
-      total += parseFloat(cargos[k].total.value)
-      curr = cargos[k].total.currency
-    })
-
-    return { currency: curr, total: total.toFixed(2) }
-  }
 
   const selectedStyle =
     theme && theme.colors
@@ -51,8 +37,8 @@ export function IncotermRow ({
           styles.fee_value
         } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
       >
-        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).currency}</p>
-        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).total}</p>
+        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.currency}</p>
+        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.total}</p>
       </div>
     ) : (
       ''
@@ -223,9 +209,7 @@ IncotermRow.propTypes = {
   originFees: PropTypes.bool,
   destinationFees: PropTypes.bool,
   feeHash: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.tenant,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired,
-  firstStep: PropTypes.bool
+  tenant: PropTypes.tenant
 }
 
 IncotermRow.defaultProps = {
@@ -235,8 +219,7 @@ IncotermRow.defaultProps = {
   originFees: false,
   destinationFees: false,
   feeHash: {},
-  tenant: {},
-  firstStep: false
+  tenant: {}
 }
 
 export default IncotermRow
