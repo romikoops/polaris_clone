@@ -5,7 +5,8 @@ require_relative '../support/request_spec_helpers'
 
 describe 'Shipment requests', type: :request do
 
-  let(:shipment) { create(:shipment, load_type: load_type, direction: direction, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, containers: [container]) }
+  let(:trip) { create(:trip) }
+  let(:shipment) { create(:shipment, load_type: load_type, direction: direction, tenant: tenant, origin_nexus: origin_nexus, destination_nexus: destination_nexus, trip: itinerary.trips.first, itinerary: itinerary) }
   let(:origin_nexus) { create(:location, hubs: [origin_hub]) }
   let(:destination_nexus) { create(:location, hubs: [destination_hub]) }
   let!(:itinerary) { create(:itinerary, tenant: tenant, stops: [origin_stop, destination_stop], layovers: [origin_layover, destination_layover], trips: [trip]) }
@@ -15,8 +16,7 @@ describe 'Shipment requests', type: :request do
   let(:destination_stop) { create(:stop, index: 1, hub_id: destination_hub.id, layovers: [destination_layover]) }
   let(:origin_layover) { create(:layover, stop_index: 0, trip: trip) }
   let(:destination_layover) { create(:layover, stop_index: 1, trip: trip) }
-  let(:trip) { create(:trip) }
-  let(:container) { create(:container) }
+  let!(:container) { create(:container, shipment: shipment) }
   let!(:transport_category) { create(:transport_category, vehicle: trip.tenant_vehicle.vehicle) }
   let!(:pricing) { create(:pricing, tenant: tenant, transport_category: transport_category, itinerary: itinerary) }
   let(:schedules_charges) { { [origin_hub.id, destination_hub.id].join('-').to_sym => { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: { shipment.containers.last.id.to_s.to_sym => { total: { value: '1111.0', currency: 'EUR' }, BAS: { value: '1111.0', currency: 'EUR' } } }, total: { value: '1111.0', currency: 'EUR' } } } }
@@ -104,8 +104,14 @@ describe 'Shipment requests', type: :request do
             headers: {}
           )
 
-        stub_request(:get, 'https://api.fixer.io/latest?base=EUR')
-          .with(headers: { Host: 'api.fixer.io' })
+        stub_request(:get, "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=EUR")
+          .with(
+            headers: {
+              'Connection'=>'close',
+              'Host'=>'data.fixer.io',
+              'User-Agent'=>'http.rb/3.3.0'
+            }
+          )
           .to_return(status: 200, body: { base: 'EUR', rates: { AUD: 1.5983, BGN: 1.9558, BRL: 4.1892, CAD: 1.5557, CHF: 1.197, CNY: 7.7449, CZK: 25.34, DKK: 7.4477, GBP: 0.87608, HKD: 9.6568, HRK: 7.411, HUF: 310.52, IDR: 17_143.0, ILS: 4.3435, INR: 81.39, ISK: 123.3, JPY: 132.41, KRW: 1316.3, MXN: 22.742, MYR: 4.7924, NOK: 9.605, NZD: 1.7032, PHP: 64.179, PLN: 4.1677, RON: 4.6586, RUB: 75.738, SEK: 10.37, SGD: 1.6172, THB: 38.552, TRY: 4.9803, USD: 1.2309, ZAR: 14.801 } }.to_json, headers: {})
 
         post subdomain_shipment_get_offers_path(subdomain_id: 'demo', shipment_id: shipment.id), 

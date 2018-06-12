@@ -3,8 +3,8 @@ FactoryBot.define do
     association :shipment
 
     before(:create) do |charge_breakdown|
-      if charge_breakdown.itinerary_id.nil?
-        charge_breakdown.update!(itinerary_id: charge_breakdown.shipment.itinerary_id)
+      if charge_breakdown.trip_id.nil?
+        charge_breakdown.update!(itinerary_id: charge_breakdown.shipment.trip_id)
       end
     end
   end
