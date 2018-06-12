@@ -62,7 +62,12 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] = doc.get_signed_url
       @documents << tmp
     end
-    locations = { origin: @shipment.origin_nexus, destination: @shipment.destination_nexus }
+    locations = { 
+      origin: @shipment.origin_nexus, 
+      destination: @shipment.destination_nexus
+      origin_hub: @shipment.origin_hub, 
+      destination_hub: @shipment.destination_hub
+    }
     account_holder = @shipment.user
     resp = {
       shipment:        @shipment,
@@ -123,7 +128,7 @@ class Admin::ShipmentsController < ApplicationController
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
       when "accept"
-        @shipment.confirm!
+        @shipment.accept!
         shipper_confirmation_email(@shipment.user, @shipment)
         message = {
           title:       "Booking Accepted",

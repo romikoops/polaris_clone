@@ -13,15 +13,13 @@ module TruckingTools
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != "PERCENTAGE"
         results = fare_calculator(k, fee, cargo, km)
-
+        
         fees[k] = results
       else
         total_fees[k] = fee
       end
     end
-
     fees[:rate] = fare_calculator("rate", pricing[:rate], cargo, km)
-
     fees.each do |_k, fee|
       next unless fee
       if !result["value"]
@@ -81,6 +79,11 @@ module TruckingTools
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
     when "PER_CONTAINER"
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
+    when "PER_CONTAINER_KM"
+      value = (fee[:km] * (km * 2)) + fee[:unit]
+      min = fee[:min_value] || 0
+      final_value = [min, value].max
+      return { currency: fee[:currency], value: final_value, key: key }
     when "PER_CBM_TON"
       cbm_value = cargo["volume"] * fee[:cbm]
       ton_value = (cargo["weight"] / 1000) * fee[:ton]
@@ -162,6 +165,13 @@ module TruckingTools
       return {rate: result, fees: trucking_pricing["fees"]}
     when "unit"
       return { rate: trucking_pricing["rates"]["unit"][0]["rate"], fees: trucking_pricing["fees"] }
+    when "unit_per_km"
+      result = { rate_basis: "PER_CONTAINER_KM" }
+      result[:unit] = trucking_pricing["rates"]["unit"][0]["rate"]["value"]
+      result[:km] = trucking_pricing["rates"]["km"][0]["rate"]["value"]
+      result[:min_value] = trucking_pricing["rates"]["unit"][0]["min_value"]
+      result[:currency] = trucking_pricing["rates"]["unit"][0]["rate"]["currency"]
+      return {rate: result, fees: trucking_pricing["fees"]}
     end
     # end
     {}
