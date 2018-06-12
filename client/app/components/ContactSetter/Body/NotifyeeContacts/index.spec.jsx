@@ -11,12 +11,26 @@ const contact = {
   companyName: 'FOO_CONTACT_COMPANY'
 }
 
+const contactSecond = {
+  email: 'foo2@bar.baz',
+  phone: '0721452887',
+  firstName: 'Richard',
+  lastName: 'D',
+  companyName: 'BAR_CONTACT_COMPANY'
+}
+
 const propsBase = {
   theme,
-  notifyees: [{
-    contact,
-    location: {}
-  }],
+  notifyees: [
+    {
+      contact,
+      location: {}
+    },
+    {
+      contactSecond,
+      location: {}
+    }
+  ],
   showAddressBook: identity,
   removeFunc: identity
 }

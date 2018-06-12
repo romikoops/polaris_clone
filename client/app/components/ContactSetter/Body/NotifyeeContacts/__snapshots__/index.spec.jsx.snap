@@ -66,6 +66,38 @@ exports[`shallow render 1`] = `
           }
         />
       </div>
+      <div
+        className="flex-40 "
+        style={
+          Object {
+            "marginBottom": "20px",
+          }
+        }
+      >
+        <ContactSetterBodyNotifyeeContactsContactCard
+          contactData={
+            Object {
+              "contactSecond": Object {
+                "companyName": "BAR_CONTACT_COMPANY",
+                "email": "foo2@bar.baz",
+                "firstName": "Richard",
+                "lastName": "D",
+                "phone": "0721452887",
+              },
+              "location": Object {},
+            }
+          }
+          removeFunc={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
     </div>
   </div>
 </div>
