@@ -65,8 +65,6 @@ class Admin::ShipmentsController < ApplicationController
     locations = { 
       origin: @shipment.origin_nexus, 
       destination: @shipment.destination_nexus
-      origin_hub: @shipment.origin_hub, 
-      destination_hub: @shipment.destination_hub
     }
     account_holder = @shipment.user
     resp = {
