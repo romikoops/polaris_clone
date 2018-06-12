@@ -654,27 +654,27 @@ module ExcelTools
               awesome_print "#{row_zone_name} "
               w_min = weight_min_row[m_index] || 0
               r_min = row_min_value || 0
-              mod_cell = if defaults[mod_key]
-                           defaults[mod_key][m_index].clone.merge(
-                             min_value: [w_min, r_min].max,
-                             rate:      {
-                               value:      val,
-                               rate_basis: rate_basis,
-                               currency:   currency,
-                               base:       base
-                             }
-                           )
-                         else
-                           {
-                             min_value: 0,
-                             rate:      {
-                               value:      val,
-                               rate_basis: rate_basis,
-                               currency:   currency,
-                               base:       base
-                             }
-                           }
-                         end
+              if defaults[mod_key]
+                defaults[mod_key][m_index].clone.merge(
+                  min_value: [w_min, r_min].max,
+                  rate:      {
+                    value:      val,
+                    rate_basis: rate_basis,
+                    currency:   currency,
+                    base:       base
+                  }
+                )
+              else
+                {
+                  min_value: 0,
+                  rate:      {
+                    value:      val,
+                    rate_basis: rate_basis,
+                    currency:   currency,
+                    base:       base
+                  }
+                }
+              end
             end
           end
           # awesome_print single_ident_values_and_country
@@ -689,16 +689,17 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
           end
 
-          single_ident_values_and_country_with_timestamps = case identifier_type
-                                                            when "distance", "geometry_id"
-                                                              single_ident_values_and_country.map do |h|
-                                                                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
-                                                              end.join(", ")
-                                                            else
-                                                              single_ident_values_and_country.map do |h|
-                                                                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
-                                                              end.join(", ")
-            end
+          single_ident_values_and_country_with_timestamps =
+            case identifier_type
+            when "distance", "geometry_id"
+              single_ident_values_and_country.map do |h|
+                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+              end
+            else
+              single_ident_values_and_country.map do |h|
+                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+              end
+            end.join(", ")
 
           tp = trucking_pricing_by_zone[row_key]
 
