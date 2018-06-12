@@ -703,10 +703,6 @@ module ExcelTools
 
           tp = trucking_pricing_by_zone[row_key]
 
-          new_cols = %w[cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type]
-          new_cols.delete("cbm_ratio")     if load_type == "container"
-          new_cols.delete("load_meterage") if load_type == "container"
-
           # Find or update trucking_destinations
           td_query = <<-eos
             WITH
@@ -738,29 +734,21 @@ module ExcelTools
           with_statement = <<-eos
             WITH
               td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
-              matching_tps_without_rates_and_fees AS (
-                SELECT DISTINCT trucking_pricings.id, #{new_cols.join(', ')}
+              matching_tp_id_table AS (
+                SELECT DISTINCT trucking_pricings.id
                 FROM td_ids
                 JOIN hub_truckings
                   ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
                 JOIN trucking_pricings
-                  ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
-                WHERE hub_truckings.hub_id = #{hub_id}
+                  ON trucking_pricings.id = hub_truckings.trucking_pricing_id
+                #{tp.scoping_attributes.to_sql_where}
+                AND hub_truckings.hub_id = #{hub_id}
               ),
               hub_ids AS (
                 VALUES(#{hub_id})
               ),
               t_stamps AS (
                 VALUES(current_timestamp)
-              ),
-              tp AS (
-                SELECT * FROM (
-                  VALUES #{tp.to_postgres_insertable(new_cols)}
-                ) AS t(#{new_cols.join(', ')})
-              ),
-              matching_tp_id_table AS (
-                SELECT id FROM matching_tps_without_rates_and_fees
-                INNER JOIN tp USING (#{new_cols.join(', ')})
               )
           eos
 
@@ -773,7 +761,8 @@ module ExcelTools
               SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
             ) THEN
               #{with_statement}
-              UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w[fees rates])}
+              UPDATE trucking_pricings
+              SET (#{TruckingPricing.given_attribute_names.sort.join(', ')}) = #{tp.to_postgres_insertable}
               WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
 
               #{with_statement}
@@ -790,7 +779,7 @@ module ExcelTools
             ELSE
               #{with_statement},
               tp_ids AS (
-                INSERT INTO trucking_pricings(cargo_class, carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+                INSERT INTO trucking_pricings(#{TruckingPricing.given_attribute_names.sort.join(', ')})
                   VALUES #{tp.to_postgres_insertable}
                 RETURNING id
               )
