@@ -93,4 +93,19 @@ Naming/BinaryOperatorParameterName:
 # also they'll fail CI anyway.
 Lint/Debugger:
   # Enabled: false
-  Enabled: true
+  Enabled: true # default
+
+
+######## Rules to be approved ########
+
+Style/DateTime:
+  Enabled: false
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '()'
+    '%i':    '()'
+    '%w':    '()'

@@ -16,7 +16,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
 
 export class AdminDashboard extends Component {
-  static prepShipment (baseShipment, clients, hubsObj) {
+  static prepShipment (baseShipment, clients) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].first_name} ${clients[shipment.user_id].last_name}`
@@ -24,9 +24,6 @@ export class AdminDashboard extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
-    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
     return shipment
   }
   static dynamicSort (property) {

@@ -8,6 +8,9 @@ class TruckingPricing < ApplicationRecord
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
+
+  SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
+
   # Validations
 
   # Class methods
@@ -44,6 +47,11 @@ class TruckingPricing < ApplicationRecord
       end
     end
   end
+  def self.delete_existing_truckings(hub)
+    hub.trucking_pricings.delete_all
+    hub.hub_truckings.delete_all
+    
+  end
 
   def self.find_by_filter(args={})
     find_by_filter_argument_errors(args)
@@ -54,7 +62,7 @@ class TruckingPricing < ApplicationRecord
     city_name    = args[:city_name]    || args[:location].try(:city)
     country_code = args[:country_code] || args[:location].try(:country).try(:code)
 
-    joins(hub_truckings: [:trucking_destination, hub: :nexus])
+    joins(hub_truckings: %i[trucking_destination hub])
       .where('hubs.tenant_id': args[:tenant_id])
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
@@ -86,6 +94,7 @@ class TruckingPricing < ApplicationRecord
           )
         )
       ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
+      .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
   end
 
   def self.find_by_hub_id(hub_id)
@@ -177,10 +186,16 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
-  def values_without_rates_and_fees
-    %w[carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type].sort.map do |key|
-      self[key.to_sym]
-    end.join(", ")
+  def scoping_attributes
+    SCOPING_ATTRIBUTE_NAMES.each_with_object({}) do |attribute_name, obj|
+      obj[attribute_name] = self[attribute_name]
+    end
+  end
+
+  def scoping_attributes_sql_where
+    "WHERE " + scoping_attributes.map do |scoping_attribute_name, scoping_attribute_value|
+      "#{scoping_attribute_name} = #{scoping_attribute_value}"
+    end.join(" AND ")
   end
 
   private

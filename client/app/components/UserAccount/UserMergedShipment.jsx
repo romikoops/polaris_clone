@@ -11,7 +11,7 @@ export function UserMergedShipment ({ ship, viewShipment }) {
     >
       <div className={`flex-40 layout-row layout-align-start-center ${styles.ship_row_cell}`}>
         <p className="flex-none">
-          {ship.originHub} - {ship.destinationHub}
+          {ship.origin_hub.name} - {ship.destination_hub.name}
         </p>
       </div>
       <div className={`flex-15 layout-row layout-align-start-center ${styles.ship_row_cell}`}>

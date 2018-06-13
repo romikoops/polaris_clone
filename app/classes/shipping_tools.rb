@@ -72,15 +72,11 @@ module ShippingTools
 
     offer_calculator.shipment.save!
     {
-      shipment:                   offer_calculator.shipment,
-      total_price:                offer_calculator.total_price,
-      has_pre_carriage:           offer_calculator.has_pre_carriage,
-      has_on_carriage:            offer_calculator.has_on_carriage,
-      schedules:                  offer_calculator.schedules,
-      truck_seconds_pre_carriage: offer_calculator.truck_seconds_pre_carriage,
-      originHubs:                 offer_calculator.origin_hubs,
-      destinationHubs:            offer_calculator.destination_hubs,
-      cargoUnits:                 offer_calculator.shipment.cargo_units
+      shipment:        offer_calculator.shipment,
+      schedules:       offer_calculator.detailed_schedules,
+      originHubs:      offer_calculator.hubs[:origin],
+      destinationHubs: offer_calculator.hubs[:destination],
+      cargoUnits:      offer_calculator.shipment.cargo_units
     }
   end
 
@@ -128,39 +124,52 @@ module ShippingTools
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []
-
+    charge_breakdown = shipment.charge_breakdowns.selected
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
-      shipment.schedule_set.each do |ss|
-        key = ss["hub_route_key"]
-        insurance = { val: shipment_data[:insurance][:val].to_d, currency: "EUR" }
-        shipment.schedules_charges[key][:insurance] = insurance
-        shipment.insurance = insurance
-
-        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d
-        total_value = previous_total_value + (shipment_data[:insurance][:val].to_d || 0)
-        shipment.schedules_charges[key]["total"]["value"] = total_value
-
-        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
-      end
+      @insurance_charge = Charge.create(
+        children_charge_category: ChargeCategory.from_code("insurance"),
+        charge_category:          ChargeCategory.grand_total,
+        charge_breakdown:         charge_breakdown,
+        price:                    Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
+        parent:                   charge_breakdown.charge('grand_total')
+      )
     end
 
     if shipment_data[:customs][:total][:val].to_d > 0
-      shipment.schedule_set.each do |ss|
-        key = ss["hub_route_key"]
-        customs = {
-          val:        shipment_data[:customs][:total][:val].to_d,
-          currency:   shipment_data[:customs][:total][:currency],
-          hasUnknown: shipment_data[:customs][:total][:hasUnknown]
-        }
-        shipment.schedules_charges[key][:customs] = customs
-        shipment.customs = customs
-
-        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d
-        total_value = previous_total_value + (shipment_data[:customs][:total][:val].to_d || 0)
-        shipment.schedules_charges[key]["total"]["value"] = total_value
-
-        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
+      @customs_charge = Charge.create(
+        children_charge_category: ChargeCategory.from_code("customs"),
+        charge_category:          ChargeCategory.grand_total,
+        charge_breakdown:         charge_breakdown,
+        price:                    Price.create(
+                                    currency: shipment_data[:customs][:total][:currency],
+                                    value: shipment_data[:customs][:total][:val]
+                                  ),
+        parent:                   charge_breakdown.charge('grand_total')
+      )
+      if shipment_data[:customs][:import][:bool]
+        @import_customs_charge = Charge.create(
+          children_charge_category: ChargeCategory.from_code("import_customs"),
+          charge_category:          ChargeCategory.grand_total,
+          charge_breakdown:         charge_breakdown,
+          price:                    Price.create(
+                                      currency: shipment_data[:customs][:import][:currency],
+                                      value: shipment_data[:customs][:import][:val]
+                                    ),
+          parent:                  @customs_charge
+        )
+      end
+      if shipment_data[:customs][:export][:bool]
+        @export_customs_charge = Charge.create(
+          children_charge_category: ChargeCategory.from_code("export_customs"),
+          charge_category:          ChargeCategory.grand_total,
+          charge_breakdown:         charge_breakdown,
+          price:                    Price.create(
+                                      currency: shipment_data[:customs][:total][:currency],
+                                      value: shipment_data[:customs][:export][:val]
+                                    ),
+          parent:                  @customs_charge
+        )
       end
     end
     shipment.customs_credit = shipment_data[:customsCredit]
@@ -220,9 +229,9 @@ module ShippingTools
     shipment.planned_eta = shipment.schedule_set.last["eta"]
     shipment.closing_date = shipment.schedule_set.first["closing_date"]
     shipment.save!
-
-    origin_hub      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
-    destination_hub = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
+    
+    origin_hub      = shipment.origin_hub
+    destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     locations = {
@@ -233,7 +242,7 @@ module ShippingTools
     }
 
     {
-      shipment:        shipment,
+      shipment:        shipment.as_json(methods: :selected_offer),
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
@@ -280,15 +289,15 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-            .permit(:street, :streetNumber, :zipCode, :city, :country)
-            .to_h.deep_transform_keys(&:underscore)
+      .permit(:street, :streetNumber, :zipCode, :city, :country)
+      .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id=nil)
     resource.require(:contact)
-            .permit(:companyName, :firstName, :lastName, :email, :phone)
-            .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+      .permit(:companyName, :firstName, :lastName, :email, :phone)
+      .to_h.deep_transform_keys(&:underscore)
+      .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
@@ -302,7 +311,7 @@ module ShippingTools
     shipment.trip_id =      params[:schedule]["trip_id"]
     @schedule =             params[:schedule].as_json
 
-    shipment.itinerary = Itinerary.find(@schedule["itinerary_id"])
+    shipment.itinerary = Trip.find(@schedule["trip_id"]).itinerary
     case shipment.load_type
     when "cargo_item"
       @dangerous = false
@@ -313,15 +322,14 @@ module ShippingTools
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub      = Layover.find(@schedule["origin_layover_id"]).stop.hub
-    @destination_hub = Layover.find(@schedule["destination_layover_id"]).stop.hub
+    @origin_hub      = Hub.find(@schedule["origin_hub"]["id"])
+    @destination_hub = Hub.find(@schedule["destination_hub"]["id"])
 
     shipment.origin_hub        = @origin_hub
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
 
-    shipment.itinerary = Itinerary.find(@schedule["itinerary_id"])
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -355,14 +363,22 @@ module ShippingTools
       cargos = cargo_items
     end
 
-    shipment.transport_category = Trip.find(@schedule["trip_id"]).vehicle.transport_categories.find_by(name: "any", cargo_class: cargoKey)
+    shipment.transport_category = shipment.trip.vehicle.transport_categories.find_by(name: "any", cargo_class: cargoKey)
     shipment.save!
-
-    origin_customs_fee = @origin_hub.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
-    destination_customs_fee = @destination_hub.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
-
-    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
-    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+    origin_customs_fee = @origin_hub.get_customs(
+      customsKey,
+      shipment.mode_of_transport,
+      shipment.trip.tenant_vehicle_id,
+      shipment.destination_hub_id
+    )
+    destination_customs_fee = @destination_hub.get_customs(
+      customsKey,
+      shipment.mode_of_transport,
+      shipment.trip.tenant_vehicle_id,
+      shipment.origin_hub_id
+    )
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
     total_fees = { total: { value: 0, currency: current_user.currency } }
     total_fees[:total][:value] += import_fees["total"][:value] if import_fees["total"] && import_fees["total"][:value]
     total_fees[:total][:value] += export_fees["total"][:value] if export_fees["total"] && export_fees["total"][:value]
@@ -406,18 +422,24 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later
+    if ENV['BETA'] != "true"
+      ShipmentMailer.tenant_notification(user, shipment).deliver_later
+    end
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later
+    if ENV['BETA'] != "true"
+      ShipmentMailer.shipper_notification(user, shipment).deliver_later
+    end
   end
 
   def shipper_confirmation_email(user, shipment)
-    ShipmentMailer.shipper_confirmation(
-      user,
-      shipment
-    ).deliver_later
+    if ENV['BETA'] != "true"
+      ShipmentMailer.shipper_confirmation(
+        user,
+        shipment
+      ).deliver_later
+    end
   end
 
   def build_and_upload_pdf(args)
@@ -444,15 +466,16 @@ module ShippingTools
   end
 
   def send_booking_emails(shipment)
-    shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_shipper.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_trucker.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_consolidator.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_receiver.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    ShipmentMailer.summary_mail_shipper(shipment, "Booking_" + shipment.imc_reference + ".pdf", shipper_pdf).deliver_now
-    ShipmentMailer.summary_mail_trucker(shipment, "Booking_" + shipment.imc_reference + ".pdf", trucker_pdf).deliver_now
-    ShipmentMailer.summary_mail_consolidator(shipment, "Booking_" + shipment.imc_reference + ".pdf", consolidator_pdf).deliver_now
-    ShipmentMailer.summary_mail_receiver(shipment, "Booking_" + shipment.imc_reference + ".pdf", receiver_pdf).deliver_now
-
+    if ENV['BETA'] != "true"
+      shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_shipper.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_trucker.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_consolidator.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_receiver.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      ShipmentMailer.summary_mail_shipper(shipment, "Booking_" + shipment.imc_reference + ".pdf", shipper_pdf).deliver_now
+      ShipmentMailer.summary_mail_trucker(shipment, "Booking_" + shipment.imc_reference + ".pdf", trucker_pdf).deliver_now
+      ShipmentMailer.summary_mail_consolidator(shipment, "Booking_" + shipment.imc_reference + ".pdf", consolidator_pdf).deliver_now
+      ShipmentMailer.summary_mail_receiver(shipment, "Booking_" + shipment.imc_reference + ".pdf", receiver_pdf).deliver_now
+    end
     # TBD - Set up flash message
   end
 

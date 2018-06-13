@@ -8,7 +8,7 @@ class Hub < ApplicationRecord
   has_many :stops,    dependent: :destroy
   has_many :layovers, through: :stops
   has_many :hub_truckings
-  has_many :trucking_pricings, through: :hub_truckings
+  has_many :trucking_pricings, -> { distinct }, through: :hub_truckings
   has_many :local_charges
   has_many :customs_fees
   has_many :notes, dependent: :destroy
@@ -109,6 +109,24 @@ class Hub < ApplicationRecord
       ntps = TruckingPricing.create!(ntp)
       nht["trucking_pricing_id"] = ntps.id
       HubTrucking.create!(nht)
+    end
+  end
+  def get_customs(load_type, mot, tenant_vehicle_id, destination_hub_id)
+    dest_customs = self.customs_fees.find_by(
+      load_type: load_type, 
+      mode_of_transport: mot, 
+      tenant_vehicle_id: tenant_vehicle_id,
+      counterpart_hub_id: destination_hub_id
+    )
+    if dest_customs
+      return dest_customs
+    else
+      customs = self.customs_fees.find_by(
+        load_type: load_type, 
+        mode_of_transport: mot, 
+        tenant_vehicle_id: tenant_vehicle_id
+      )
+      return customs
     end
   end
 end

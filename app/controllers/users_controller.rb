@@ -9,10 +9,19 @@ class UsersController < ApplicationController
 
   def home
     @shipper = current_user
-
-    @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
-    @open_shipments = @shipper.shipments.where(status: %w[confirmed in_progress])
-    @finished_shipments = @shipper.shipments.where(status: "finished")
+    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    requested_shipments = Shipment.where(
+      status:    %w[requested requested_by_unconfirmed_account],
+      tenant_id: current_user.tenant_id
+    ).order(booking_placed_at: :desc)
+    open_shipments = Shipment.where(
+      status:    %w[in_progress confirmed],
+      tenant_id: current_user.tenant_id
+    ).order(booking_placed_at: :desc)
+    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
+    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
+    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
 
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false)

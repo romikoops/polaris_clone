@@ -73,5 +73,11 @@ FactoryBot.define do
         }
       end
     end
+
+    before(:create) do |tenant|
+      if tenant.max_dimensions.empty?
+        MaxDimensionsBundle.create_defaults_for(tenant, all: true)
+      end
+    end
   end
 end

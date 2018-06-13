@@ -8,3 +8,8 @@ before_script:
 rubocop:
   script:
     - bundle exec rubocop
+  only:
+    refs:
+      - master
+      - dev
+  allow_failure: true

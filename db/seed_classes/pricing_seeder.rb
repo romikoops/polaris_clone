@@ -17,7 +17,7 @@ class PricingSeeder
 
       # # Overwrite hubs from excel sheet
       puts '# Overwrite hubs from excel sheet'
-      hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+      hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
       req = { 'xlsx' => hubs }
       overwrite_hubs(req, shipper)
 
@@ -25,12 +25,12 @@ class PricingSeeder
       ### If dedicated == true, shipper.id is automatically inserted.
 
       puts '# Overwrite freight rates (fcl and lcl) from excel sheet'
-      public_pricings = File.open("#{Rails.root}/db/dummydata/3_2_standard_sheet.xlsx")
+      public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
       req = { 'xlsx' => public_pricings }
       overwrite_freight_rates(req, shipper, true)
 
       # puts "# Overwrite Local Charges From Sheet"
-      local_charges = File.open("#{Rails.root}/db/dummydata/2_local_charges.xlsx")
+      local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
       req = { 'xlsx' => local_charges }
       overwrite_local_charges(req, shipper)
       # Overwrite trucking data from excel sheet
