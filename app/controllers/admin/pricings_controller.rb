@@ -83,7 +83,7 @@ class Admin::PricingsController < ApplicationController
   def download_pricings
     options = params[:options].as_json.deep_symbolize_keys!
     options[:tenant_id] = current_user.tenant_id
-    url = write_pricings_to_sheet(options)
+    url = DocumentService::PricingWriter.new(options).perform
     response_handler(url: url, key: "pricing")
   end
 
