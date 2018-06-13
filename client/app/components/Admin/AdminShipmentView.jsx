@@ -246,30 +246,12 @@ export class AdminShipmentView extends Component {
       containers,
       aggregatedCargo,
       schedules,
-      locations,
       accountHolder
     } = shipmentData
     const {
       newTotal, showEditPrice, currency, showEditTime, newTimes, collapser
     } = this.state
-    const hubKeys = schedules[0].hub_route_key.split('-')
-    const hubsObj = {
-      startHub: {
-        data: locations.origin
-      },
-      endHub: {
-        data: locations.destination
-      }
-    }
 
-    hubs.forEach((c) => {
-      if (String(c.data.id) === hubKeys[0]) {
-        hubsObj.startHub = c
-      }
-      if (String(c.data.id) === hubKeys[1]) {
-        hubsObj.endHub = c
-      }
-    })
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
@@ -448,14 +430,6 @@ export class AdminShipmentView extends Component {
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
-      // ,
-      // customs_declaration: false,
-      // customs_value_declaration: false,
-      // eori: false,
-      // certificate_of_origin: false,
-      // dangerous_goods: false,
-      // bill_of_lading: false,
-      // invoice: false
     }
     const missingDocs = []
     if (documents) {
@@ -535,7 +509,7 @@ export class AdminShipmentView extends Component {
         </div>
       )
     const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.selected_offer
     const saveSection = (
       <div className={`${styles.time_edit_button}`}>
         {showEditTime ? (
@@ -690,7 +664,7 @@ export class AdminShipmentView extends Component {
           content={
             <div className="flex-100 layout-row layout-wrap" style={{ position: 'relative' }}>
               {saveSection}
-              <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+              <RouteHubBox shipment={shipment} route={schedules} theme={theme} />
               <div className="flex-100 layout-row layout-align-space-between-center">
                 <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">
@@ -702,42 +676,12 @@ export class AdminShipmentView extends Component {
                     </p>
                     {etdJSX}
                   </div>
-                  {shipment.has_pre_carriage ? (
-                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                      <div className="flex-100 layout-row layout-align-center-center">
-                        <p className="flex-none">With Pickup From:</p>
-                      </div>
-                      <address className={` ${styles.itinerary_address} flex-none`}>
-                        {`${locations.origin.street_number} ${locations.origin.street}`}, <br />
-                        {`${locations.origin.city}, ${' '} `}
-                        {`${locations.origin.zip_code}, `}
-                        {`${locations.origin.country}`} <br />
-                      </address>
-                    </div>
-                  ) : (
-                    ''
-                  )}
                 </div>
                 <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                     <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
                     {etaJSX}
                   </div>
-                  {shipment.has_on_carriage ? (
-                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                      <div className="flex-100 layout-row layout-align-center-center">
-                        <p className="flex-none">With Delivery To:</p>
-                      </div>
-                      <address className={` ${styles.itinerary_address} flex-none`}>
-                        {`${locations.destination.street_number} ${locations.destination.street}`} ,<br />
-                        {`${locations.destination.city}, ${' '} `}
-                        {`${locations.destination.zip_code}, `}
-                        {`${locations.destination.country}`} <br />
-                      </address>
-                    </div>
-                  ) : (
-                    ''
-                  )}
                 </div>
               </div>
             </div>

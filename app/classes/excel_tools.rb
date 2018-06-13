@@ -1503,7 +1503,7 @@ module ExcelTools
       aux_data[pricing_key] ||= {}
 
       if aux_data[pricing_key][:tenant_vehicle].blank?
-        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
+        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot], tenant_id: tenant.id)
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 

@@ -48,7 +48,10 @@ class ShipmentsController < ApplicationController
 
   def show
     shipment = Shipment.find(params[:id])
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    options = {
+      methods: [:selected_offer, :mode_of_transport],
+      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+    }
 
     cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type

@@ -30,7 +30,7 @@ export class FlashMessages extends Component {
       <Alert key={i} message={message} onClose={this.removeMessage} timeout={10000} />
     ))
     return (
-      <div style={{ zIndex: 9999 }}>
+      <div style={{ zIndex: 9999 }} >
         <CSSTransition
           transitionName="alerts"
           transitionEnter={false}

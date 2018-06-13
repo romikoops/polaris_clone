@@ -12,7 +12,6 @@ export function IncotermRow ({
   feeHash,
   tenant
 }) {
-  // debugger // eslint-disable-line
   const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
 
   const selectedStyle =
