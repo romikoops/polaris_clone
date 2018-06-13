@@ -68,6 +68,7 @@ export class CargoDetails extends Component {
   toggleSpecificCustoms (target) {
     const { setCustomsFee, customsData, shipmentData } = this.props
     const { customs } = shipmentData
+    debugger // eslint-disable-line
 
     const converted = customs[target].unknown ? 0 : customs[target].total.value
     const resp = customsData[target].bool

@@ -103,4 +103,22 @@ class Hub < ApplicationRecord
       HubTrucking.create!(nht)
     end
   end
+  def get_customs(load_type, mot, tenant_vehicle_id, destination_hub_id)
+    dest_customs = self.customs_fees.find_by(
+      load_type: load_type, 
+      mode_of_transport: mot, 
+      tenant_vehicle_id: tenant_vehicle_id,
+      counterpart_hub_id: destination_hub_id
+    )
+    if dest_customs
+      return dest_customs
+    else
+      customs = self.customs_fees.find_by(
+        load_type: load_type, 
+        mode_of_transport: mot, 
+        tenant_vehicle_id: tenant_vehicle_id
+      )
+      return customs
+    end
+  end
 end

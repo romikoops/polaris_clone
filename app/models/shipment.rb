@@ -89,6 +89,14 @@ class Shipment < ApplicationRecord
     Location.where(id: trucking.dig("on_carriage", "location_id")).first
   end
 
+  def pickup_address_with_country
+    pickup_address.as_json(include: :country)
+  end
+
+  def delivery_address_with_country
+    delivery_address.as_json(include: :country)
+  end
+
   def import?
     direction == "import"
   end
