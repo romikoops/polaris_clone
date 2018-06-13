@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
-import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
-import { AdminItineraryRow } from '../'
 import { Tooltip } from '../../Tooltip/Tooltip'
+import { WorldMap as WMap } from '../DashboardMap/WorldMap'
+import { AdminRouteList as ARouteList } from '../AdminRouteList'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      itineraries: props.itineraries
+      itineraries: props.itineraries,
+      hoverId: false
     }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -29,6 +30,12 @@ export class AdminSearchableRoutes extends Component {
     } else {
       adminDispatch.goTo('/admin/routes')
     }
+  }
+  handleRouteHover (id) {
+    this.setState((prevState) => {
+      const { hoverId } = prevState
+      return { hoverId: hoverId === id ? false : id }
+    })
   }
   handleClick (itinerary) {
     const { handleClick, adminDispatch } = this.props
@@ -75,75 +82,24 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs,
       theme,
       seeAll,
       limit,
       showTooltip,
       tooltip,
       icon,
-      adminDispatch,
       heading,
-      showDelete,
-      hideFilters
+      hideFilters,
+      tile
     } = this.props
-    const { itineraries } = this.state
-    let itinerariesArr = []
-    const viewLimit = limit || 15
-    if (itineraries && itineraries.length > 0) {
-      itinerariesArr = itineraries.map((rt, i) => {
-        if (i <= viewLimit) {
-          return (
-            <AdminItineraryRow
-              key={v4()}
-              hubs={hubs}
-              itinerary={rt}
-              theme={theme}
-              showDelete={showDelete}
-              adminDispatch={adminDispatch}
-              handleClick={this.handleClick}
-            />
-          )
-        }
-        return ''
-      })
-    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
-      itinerariesArr = itineraries.map((rt, i) => {
-        if (i <= viewLimit) {
-          return (
-            <AdminItineraryRow
-              key={v4()}
-              hubs={hubs}
-              itinerary={rt}
-              theme={theme}
-              showDelete={showDelete}
-              handleClick={this.handleClick}
-            />
-          )
-        }
-        return ''
-      })
-    }
-    const viewType =
-      itinerariesArr.length > 3 ? (
-        <div className="layout-row flex-100 layout-align-start-center ">
-          <div className="layout-row flex-none layout-align-start-center layout-wrap">
-            {itinerariesArr}
-          </div>
-        </div>
-      ) : (
-        <div className="layout-row flex-100 layout-align-start-center ">
-          <div className="layout-row flex-none layout-align-start-center layout-wrap">
-            {itinerariesArr}
-          </div>
-        </div>
-      )
+    const { itineraries, hoverId } = this.state
+
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${
             styles.searchable_header
-          }`}
+          } ${styles.overlay}`}
         >
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
@@ -170,7 +126,25 @@ export class AdminSearchableRoutes extends Component {
             </div> : '' }
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
-          {viewType}
+          <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
+
+            <div className="layout-padding flex-100">
+              <WMap
+                itineraries={itineraries}
+                hoverId={hoverId}
+                height={250}
+              />
+            </div><div className="layout-padding flex-100">
+              <ARouteList
+                itineraries={itineraries}
+                limit={limit}
+                tile={tile}
+                handleClick={itinerary => this.handleClick(itinerary)}
+                hoverFn={e => this.handleRouteHover(e)}
+              />
+            </div>
+
+          </div>
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
@@ -198,13 +172,12 @@ AdminSearchableRoutes.propTypes = {
   theme: PropTypes.theme,
   limit: PropTypes.number,
   itineraries: PropTypes.arrayOf(PropTypes.any),
-  hubs: PropTypes.arrayOf(PropTypes.hub).isRequired,
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
   tooltip: PropTypes.string,
   heading: PropTypes.string,
-  showDelete: PropTypes.bool,
-  hideFilters: PropTypes.bool
+  hideFilters: PropTypes.bool,
+  tile: PropTypes.bool
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -217,8 +190,8 @@ AdminSearchableRoutes.defaultProps = {
   tooltip: '',
   showTooltip: false,
   heading: 'Routes',
-  showDelete: false,
-  hideFilters: false
+  hideFilters: false,
+  tile: false
 }
 
 export default AdminSearchableRoutes

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::ShipmentsController < ApplicationController
   before_action :require_login_and_role_is_admin
   include ShippingTools
@@ -5,22 +7,23 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
+    options = {include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     @requested_shipments = Shipment.where(
-      status: %w(requested requested_by_unconfirmed_account),
+      status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
-    )
-    @documents['requested_shipments'] = Document.get_documents_for_array(@requested_shipments)
+    ).map{|shipment| shipment.as_json(options)}
+    @documents["requested_shipments"] = Document.get_documents_for_array(@requested_shipments)
     @open_shipments = Shipment.where(
-      status: %w(in_progress confirmed),
+      status:    %w[in_progress confirmed],
       tenant_id: current_user.tenant_id
     )
-    @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
-    @finished_shipments = Shipment.where(status: 'finished', tenant_id: current_user.tenant_id)
-    @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
+    @documents["open_shipments"] = Document.get_documents_for_array(@open_shipments)
+    @finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
+    @documents["finished_shipments"] = Document.get_documents_for_array(@finished_shipments)
     resp = {
       requested: @requested_shipments,
-      open: @open_shipments,
-      finished: @finished_shipments,
+      open:      @open_shipments,
+      finished:  @finished_shipments,
       documents: @documents
     }
     response_handler(resp)
@@ -34,7 +37,7 @@ class Admin::ShipmentsController < ApplicationController
     cargo_item_types = {}
 
     @cargo_items.each do |ci|
-      if ci && ci.hs_codes
+      if ci&.hs_codes
         ci.hs_codes.each do |hs|
           hs_codes << hs
         end
@@ -42,53 +45,53 @@ class Admin::ShipmentsController < ApplicationController
       cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)
     end
     @containers.each do |cn|
-      if cn && cn.hs_codes
-        cn.hs_codes.each do |hs|
-          hs_codes << hs
-        end
+      next unless cn&.hs_codes
+      cn.hs_codes.each do |hs|
+        hs_codes << hs
       end
     end
     # hsCodes = get_hs_code_hash(hs_codes)
     @shipment_contacts = @shipment.shipment_contacts
     @contacts = []
     @shipment_contacts.each do |sc|
-      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+      @contacts.push(contact: sc.contact, type: sc.contact_type, location: sc.contact.location)
     end
     @schedules = @shipment.schedule_set
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
-      tmp["signed_url"] =  doc.get_signed_url
+      tmp["signed_url"] = doc.get_signed_url
       @documents << tmp
     end
     locations = { origin: @shipment.origin_nexus, destination: @shipment.destination_nexus }
     account_holder = @shipment.user
+    options = {include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     resp = {
-      shipment: @shipment,
-      cargoItems: @cargo_items,
-      containers: @containers,
+      shipment:        @shipment.as_json(options),
+      cargoItems:      @cargo_items,
+      containers:      @containers,
       aggregatedCargo: @shipment.aggregated_cargo,
-      contacts: @contacts,
-      documents: @documents,
-      schedules: @schedules,
+      contacts:        @contacts,
+      documents:       @documents,
+      schedules:       @schedules,
       # hsCodes: hsCodes,
-      locations: locations,
-      cargoItemTypes: cargo_item_types,
-      accountHolder: account_holder
+      locations:       locations,
+      cargoItemTypes:  cargo_item_types,
+      accountHolder:   account_holder
     }
     response_handler(resp)
   end
 
   def edit_price
     shipment = Shipment.find(params[:id])
-    shipment.total_price = {value: params[:priceObj]["value"], currency: params[:priceObj]["currency"]}
+    shipment.total_price = { value: params[:priceObj]["value"], currency: params[:priceObj]["currency"] }
     shipment.save!
     message = {
-        title: 'Shipment Price Change',
-        message: "Your shipment #{shipment.imc_reference} has an updated price. Your new total is #{params[:priceObj]["currency"]} #{params[:priceObj]["value"]}. For any issues, please contact your support agent.",
-        shipmentRef: shipment.imc_reference
-      }
-      add_message_to_convo(shipment.user, message, true)
+      title:       "Shipment Price Change",
+      message:     "Your shipment #{shipment.imc_reference} has an updated price. Your new total is #{params[:priceObj]['currency']} #{params[:priceObj]['value']}. For any issues, please contact your support agent.",
+      shipmentRef: shipment.imc_reference
+    }
+    add_message_to_convo(shipment.user, message, true)
     response_handler(shipment)
   end
 
@@ -102,11 +105,11 @@ class Admin::ShipmentsController < ApplicationController
     shipment.schedule_set[0]["etd"] = new_etd
     shipment.save!
     message = {
-        title: 'Shipment Schedule Updated',
-        message: "Your shipment #{shipment.imc_reference} has an updated schedule. Your new estimated departure is #{params[:timeObj]["newEtd"]}, estimated to arrive at #{params[:timeObj]["newEta"]}. For any issues, please contact your support agent.",
-        shipmentRef: shipment.imc_reference
-      }
-      add_message_to_convo(shipment.user, message, true)
+      title:       "Shipment Schedule Updated",
+      message:     "Your shipment #{shipment.imc_reference} has an updated schedule. Your new estimated departure is #{params[:timeObj]['newEtd']}, estimated to arrive at #{params[:timeObj]['newEta']}. For any issues, please contact your support agent.",
+      shipmentRef: shipment.imc_reference
+    }
+    add_message_to_convo(shipment.user, message, true)
     response_handler(shipment)
   end
 
@@ -125,8 +128,8 @@ class Admin::ShipmentsController < ApplicationController
         @shipment.confirm!
         shipper_confirmation_email(@shipment.user, @shipment)
         message = {
-          title: 'Booking Accepted',
-          message: "Your booking has been accepted! If you have any further questions or edits to your booking please contact the support department.",
+          title:       "Booking Accepted",
+          message:     "Your booking has been accepted! If you have any further questions or edits to your booking please contact the support department.",
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
@@ -134,8 +137,8 @@ class Admin::ShipmentsController < ApplicationController
       when "decline"
         @shipment.decline!
         message = {
-          title: 'Booking Declined',
-          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and goods type. For more info contact us through the support channels.",
+          title:       "Booking Declined",
+          message:     "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and goods type. For more info contact us through the support channels.",
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
@@ -156,7 +159,6 @@ class Admin::ShipmentsController < ApplicationController
         # render 'edit'
       end
     end
-  
   end
 
   def document_action
@@ -165,31 +167,29 @@ class Admin::ShipmentsController < ApplicationController
     type = params[:type]
     text = params[:text]
     case type
-    when 'approve'
-      @document.approved = 'approved'
+    when "approve"
+      @document.approved = "approved"
       @document.save!
       message = {
-        title: 'Document Approved',
-        message: "Your document #{@document.text} was approved",
+        title:       "Document Approved",
+        message:     "Your document #{@document.text} was approved",
         shipmentRef: @document.shipment.imc_reference
       }
       add_message_to_convo(@user, message, true)
-    when 'reject'
-      @document.approved = 'rejected'
+    when "reject"
+      @document.approved = "rejected"
       @document.save!
       message = {
-        title: 'Document Rejected',
-        message: "Your document #{@document.text} was rejected: #{text}",
+        title:       "Document Rejected",
+        message:     "Your document #{@document.text} was rejected: #{text}",
         shipmentRef: @document.shipment.imc_reference
       }
       add_message_to_convo(@user, message, true)
     end
 
     tmp = @document.as_json
-    tmp["signed_url"] =  @document.get_signed_url
+    tmp["signed_url"] = @document.get_signed_url
     response_handler(tmp)
-
-    
   end
 
   private
@@ -202,6 +202,6 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def shipment_params
-    params.require(:shipment).permit(:total_price, :planned_pickup_date,:origin_id, :destination_id)
+    params.require(:shipment).permit(:total_price, :planned_pickup_date, :origin_id, :destination_id)
   end
 end

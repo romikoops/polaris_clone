@@ -1,0 +1,28 @@
+:local {
+  .city {
+    position: relative;
+    font-weight: bold;
+  }
+  .city:before, .city:after {
+    content: "";
+    position: absolute;
+  }
+  .city:before {
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background-image: -webkit-gradient(radial, right top, 10, 90% 0%, 150, from(#228150), to(#186793));
+    background-image: -webkit-radial-gradient(right top, 150px 230px, #228150, #186793);
+    background-image: -moz-radial-gradient(right top, farthest-corner, #228150 0%, #186793 50%);
+    z-index: -2;
+  }
+  .city:after {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: white;
+    z-index: -1;
+  }
+}

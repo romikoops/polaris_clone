@@ -1,22 +1,24 @@
-require 'cgi'
-require 'net/http'
-require 'open-uri'
-require 'nokogiri'
-require 'openssl'
-require 'base64'
+# frozen_string_literal: true
+
+require "cgi"
+require "net/http"
+require "open-uri"
+require "nokogiri"
+require "openssl"
+require "base64"
 
 class GoogleDirections
   # API Doc: https://developers.google.com/maps/documentation/directions/intro
-  BASE_URL  = 'https://maps.googleapis.com'
-  BASE_PATH = '/maps/api/directions/xml'
+  BASE_URL  = "https://maps.googleapis.com"
+  BASE_PATH = "/maps/api/directions/xml"
   DEFAULT_OPTIONS = {
-    key: Rails.application.secrets.google_maps_server_api_key,
-    language: "en",
-    alternative: "false",
-    mode: "driving",
+    key:           Rails.application.secrets.google_maps_server_api_key,
+    language:      "en",
+    alternative:   "false",
+    mode:          "driving",
     traffic_model: "pessimistic"
     # avoid: "tolls|highways|ferries"
-  }
+  }.freeze
 
   attr_reader :status, :doc, :xml, :origin, :destination, :departure_time, :options
 
@@ -24,12 +26,12 @@ class GoogleDirections
     @origin = origin
     @destination = destination
     @departure_time = set_departure_time(departure_time)
-    @options = opts.merge({origin: @origin, destination: @destination, departure_time: @departure_time}.compact)
-    path = BASE_PATH + '?' + querify(@options)
+    @options = opts.merge({ origin: @origin, destination: @destination, departure_time: @departure_time }.compact)
+    path = BASE_PATH + "?" + querify(@options)
     @url = BASE_URL + sign_path(path, @options)
     open(@url) { |io| @xml = io.read }
     @doc = Nokogiri::XML(@xml)
-    @status = @doc.css('status').text
+    @status = @doc.css("status").text
   end
 
   def set_departure_time(departure_time)
@@ -104,9 +106,7 @@ class GoogleDirections
     time_driven_after_last_full_rest = 0
 
     until seconds_of_tour_left <= 0
-      if time_driven_after_last_full_rest == 4.5 * 3600
-        resting_time += 45 * 60        
-      end
+      resting_time += 45 * 60 if time_driven_after_last_full_rest == 4.5 * 3600
 
       if time_driven_after_last_full_rest == 9 * 3600
         resting_time += 11 * 3600
@@ -122,8 +122,8 @@ class GoogleDirections
 
   def self.formatted_driving_time(seconds)
     seconds = seconds.to_i
-    days = seconds / 86400
-    rest_seconds = seconds % 86400
+    days = seconds / 86_400
+    rest_seconds = seconds % 86_400
 
     hours = rest_seconds / 3600
     rest_seconds = rest_seconds % 3600
@@ -206,15 +206,14 @@ class GoogleDirections
     end
   end
 
-
   def steps
-    @doc.css('html_instructions').map {|a| a.text } if successful?
+    @doc.css("html_instructions").map(&:text) if successful?
   end
 
   private
 
   def transcribe(location)
-    CGI::escape(location)
+    CGI.escape(location)
   end
 
   def querify(options)
@@ -231,16 +230,16 @@ class GoogleDirections
     return path unless options[:private_key]
 
     raw_private_key = url_safe_base64_decode(options[:private_key])
-    digest = OpenSSL::Digest.new('sha1')
+    digest = OpenSSL::Digest.new("sha1")
     raw_signature = OpenSSL::HMAC.digest(digest, raw_private_key, path)
     path + "&signature=#{url_safe_base64_encode(raw_signature)}"
   end
 
   def url_safe_base64_decode(base64_string)
-    Base64.decode64(base64_string.tr('-_', '+/'))
+    Base64.decode64(base64_string.tr("-_", "+/"))
   end
 
   def url_safe_base64_encode(raw)
-    Base64.encode64(raw).tr('+/', '-_').strip
+    Base64.encode64(raw).tr("+/", "-_").strip
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCargoGroupToCargos < ActiveRecord::Migration[5.1]
   def change
     add_column :cargo_items, :cargo_group_id, :string

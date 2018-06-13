@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 class MigratePricings < ActiveRecord::Migration[5.1]
-
   def change
-
     create_table :pricings do |t|
       t.decimal :wm_rate
       t.datetime :effective_date
@@ -35,6 +35,5 @@ class MigratePricings < ActiveRecord::Migration[5.1]
       t.references :tenant, index: true
       t.timestamps
     end
-
   end
 end

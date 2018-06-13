@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Incoterm < ApplicationRecord
   belongs_to :seller_incoterm_liability, class_name: "IncotermLiability"
   belongs_to :buyer_incoterm_liability, class_name: "IncotermLiability"
