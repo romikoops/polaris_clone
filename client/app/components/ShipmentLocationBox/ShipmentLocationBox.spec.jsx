@@ -142,7 +142,6 @@ afterEach(() => {
  * Cannot test as `hubName={this.state.oSelect.label}`
  * `Cannot read property 'label' of undefined`
  */
-
 test.skip('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })

@@ -23,7 +23,7 @@ const editedTenant = {
 const propsBase = {
   theme,
   feeHash: {
-    cargo: {},
+    cargo: { total: { value: 199, currency: 'USD' } },
     export: { value: 20, currency: 'EUR' },
     import: { value: 9, currency: 'EUR' },
     trucking_on: { value: 3, currency: 'EUR' }
@@ -37,11 +37,11 @@ const propsBase = {
   firstStep: false
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<IncotermRow {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('props.feeHash is empty object', () => {
+test('feeHash is empty object', () => {
   const props = {
     ...propsBase,
     feeHash: {}
@@ -49,7 +49,7 @@ test.skip('props.feeHash is empty object', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.onCarriage is true', () => {
+test('onCarriage is true', () => {
   const props = {
     ...propsBase,
     onCarriage: true
@@ -57,7 +57,7 @@ test.skip('props.onCarriage is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.preCarriage is true', () => {
+test('preCarriage is true', () => {
   const props = {
     ...propsBase,
     preCarriage: true
@@ -65,7 +65,7 @@ test.skip('props.preCarriage is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.destinationFees is true', () => {
+test('destinationFees is true', () => {
   const props = {
     ...propsBase,
     destinationFees: true
@@ -73,7 +73,7 @@ test.skip('props.destinationFees is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.firstStep is true', () => {
+test('firstStep is true', () => {
   const props = {
     ...propsBase,
     firstStep: true

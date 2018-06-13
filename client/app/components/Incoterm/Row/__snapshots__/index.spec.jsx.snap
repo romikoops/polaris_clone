@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.destinationFees is true 1`] = `
+exports[`destinationFees is true 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
 >
@@ -88,12 +88,12 @@ exports[`props.destinationFees is true 1`] = `
     >
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        USD
+      </p>
       <p
         className="flex-none no_m letter_3 center"
-      >
-        0.00
-      </p>
+      />
     </div>
   </div>
    
@@ -171,7 +171,7 @@ exports[`props.destinationFees is true 1`] = `
 </div>
 `;
 
-exports[`props.feeHash is empty object 1`] = `
+exports[`feeHash is empty object 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
 >
@@ -304,7 +304,7 @@ exports[`props.feeHash is empty object 1`] = `
 </div>
 `;
 
-exports[`props.firstStep is true 1`] = `
+exports[`firstStep is true 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
 >
@@ -392,12 +392,12 @@ exports[`props.firstStep is true 1`] = `
     >
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        USD
+      </p>
       <p
         className="flex-none no_m letter_3 center"
-      >
-        0.00
-      </p>
+      />
     </div>
   </div>
    
@@ -476,7 +476,7 @@ exports[`props.firstStep is true 1`] = `
 </div>
 `;
 
-exports[`props.onCarriage is true 1`] = `
+exports[`onCarriage is true 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
 >
@@ -564,12 +564,12 @@ exports[`props.onCarriage is true 1`] = `
     >
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        USD
+      </p>
       <p
         className="flex-none no_m letter_3 center"
-      >
-        0.00
-      </p>
+      />
     </div>
   </div>
    
@@ -647,7 +647,7 @@ exports[`props.onCarriage is true 1`] = `
 </div>
 `;
 
-exports[`props.preCarriage is true 1`] = `
+exports[`preCarriage is true 1`] = `
 <div
   className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
 >
@@ -734,12 +734,12 @@ exports[`props.preCarriage is true 1`] = `
     >
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        USD
+      </p>
       <p
         className="flex-none no_m letter_3 center"
-      >
-        0.00
-      </p>
+      />
     </div>
   </div>
    
@@ -906,12 +906,12 @@ exports[`shallow render 1`] = `
     >
       <p
         className="flex-none no_m letter_3 center"
-      />
+      >
+        USD
+      </p>
       <p
         className="flex-none no_m letter_3 center"
-      >
-        0.00
-      </p>
+      />
     </div>
   </div>
    

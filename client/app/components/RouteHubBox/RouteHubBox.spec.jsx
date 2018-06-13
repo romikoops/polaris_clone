@@ -1,31 +1,24 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, locations } from '../../mocks'
+import { theme, shipment, locations } from '../../mocks'
 
 import { RouteHubBox } from './RouteHubBox'
 
-const hubs = {
-  startHub: { location: { geocoded_address: 'FOO_ADDRESS' }, data: { name: 'FOO' } },
-  endHub: { location: { geocoded_address: 'BAR_ADDRESS' }, data: { name: 'BAR' } }
-}
+const editedShipment = {
+  ...shipment,
+  origin_hub: {
+    startHub: { location: { } }
+  },
+  destination_hub: {
+    startHub: { location: { } }
+  }
 
+}
 const propsBase = {
   theme,
-  route: [{ eta: 3 }, { etd: 2 }],
-  hubs,
-  locations
+  shipment: editedShipment
 }
 
-const createShallow = propsInput => shallow(<RouteHubBox {...propsInput} />)
-
-test.skip('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
-})
-
-test.skip('props.locations is falsy', () => {
-  const props = {
-    ...propsBase,
-    locations: false
-  }
-  expect(createShallow(props)).toMatchSnapshot()
+test('shallow rendering', () => {
+  expect(shallow(<RouteHubBox {...propsBase} />)).toMatchSnapshot()
 })

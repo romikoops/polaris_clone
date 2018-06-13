@@ -6,19 +6,19 @@ import { UserMergedShipment } from './UserMergedShipment'
 const propsBase = {
   viewShipment: identity,
   ship: {
-    originHub: 'FOO_ORIGIN',
-    destinationHub: 'FOO_DESTINATION',
+    origin_hub: { name: 'FOO_ORIGIN' },
+    destination_hub: { name: 'FOO_DESTINATION' },
     imc_reference: 'FOO_IMC',
     status: 'FOO_STATUS',
     incoterm: 'FOO_INCOTERM'
   }
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserMergedShipment {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('props.viewShipment is called', () => {
+test('props.viewShipment is called', () => {
   const props = {
     ...propsBase,
     viewShipment: jest.fn()

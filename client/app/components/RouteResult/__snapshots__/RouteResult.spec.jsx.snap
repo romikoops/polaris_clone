@@ -201,8 +201,9 @@ exports[`props.pickup is false 1`] = `
         Total price: 
       </p>
       <Price
+        currency="EUR"
         scale=""
-        value={12}
+        value={112}
       />
     </div>
     <div
@@ -433,8 +434,9 @@ exports[`shallow rendering 1`] = `
         Total price: 
       </p>
       <Price
+        currency="EUR"
         scale=""
-        value={12}
+        value={112}
       />
     </div>
     <div
