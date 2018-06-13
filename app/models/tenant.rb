@@ -4,6 +4,7 @@ class Tenant < ApplicationRecord
   include ImageTools
   extend MongoTools
   include MongoTools
+  has_many :shipments
   has_many :routes
   has_many :hubs
   has_many :routes
