@@ -153,7 +153,6 @@ export class BookingConfirmation extends Component {
       documents,
       locations,
       notifyees,
-      schedule,
       shipment,
       shipper
     } = shipmentData
@@ -180,7 +179,7 @@ export class BookingConfirmation extends Component {
       shipper, consignee, textStyle, shipment
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle })
-    const feeHash = shipment.schedules_charges[schedule.hub_route_key]
+    const feeHash = shipment.selected_offer
 
     const acceptedBtn = (
       <div className={BUTTON}>

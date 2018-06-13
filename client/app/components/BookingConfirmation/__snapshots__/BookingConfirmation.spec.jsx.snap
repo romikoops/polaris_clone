@@ -146,9 +146,18 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -287,7 +296,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -298,6 +307,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -368,7 +383,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -378,6 +393,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -1259,9 +1280,18 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -1400,7 +1430,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -1411,6 +1441,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -1481,7 +1517,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -1491,6 +1527,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -2429,9 +2471,18 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -2570,7 +2621,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -2581,6 +2632,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -2651,7 +2708,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -2661,6 +2718,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -3654,9 +3717,18 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -3811,7 +3883,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -3822,6 +3894,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 destinationFees={true}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -3892,7 +3970,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -3902,6 +3980,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -4769,9 +4853,18 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -4925,7 +5018,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -4936,6 +5029,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -5006,7 +5105,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -5016,6 +5115,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -5883,9 +5988,18 @@ exports[`shallow render 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -6024,7 +6138,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -6035,6 +6149,12 @@ exports[`shallow render 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -6105,7 +6225,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -6115,6 +6235,12 @@ exports[`shallow render 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -6982,9 +7108,18 @@ exports[`with cargo items 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -7123,7 +7258,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -7134,6 +7269,12 @@ exports[`with cargo items 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -7204,7 +7345,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -7214,6 +7355,12 @@ exports[`with cargo items 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -8298,9 +8445,18 @@ exports[`with containers 1`] = `
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "total": Object {
-                      "value": 87,
-                    },
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
                   },
                 },
                 "total_goods_value": Object {
@@ -8439,7 +8595,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -8450,6 +8606,12 @@ exports[`with containers 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -8520,7 +8682,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -8530,6 +8692,12 @@ exports[`with containers 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
