@@ -193,8 +193,8 @@ module DocumentTools
     results_by_hub = {}
     hubs.each do |hub|
       results_by_hub[hub.name] = []
-      results_by_hub[hub.name] += hub.local_charges
-      results_by_hub[hub.name] += hub.customs_fees
+      results_by_hub[hub.name] += hub.local_charges.map(&:as_json)
+      results_by_hub[hub.name] += hub.customs_fees.map(&:as_json)
     end
 
     aux_data = {
@@ -210,84 +210,92 @@ module DocumentTools
     header_format = workbook.add_format
     header_format.set_bold
     header_values = %w[EFFECTIVE_DATE EXPIRATION_DATE DESTINATION SERVICE_LEVEL FEE	MOT	FEE_CODE	LOAD_TYPE	DIRECTION	CURRENCY	RATE_BASIS	TON	CBM	KG	ITEM	SHIPMENT	BILL	CONTAINER	MINIMUM	WM]
+    
     results_by_hub.each do |hub, results|
       worksheet = workbook.add_worksheet(hub)
       row = 1
       header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format) }
       results.each do |result|
           result.deep_symbolize_keys!
-          result.each do |key, fee|
+          counterpart_hub_name = result[:counterpart_hub_id] ? Hub.find(result[:counterpart_hub_id]).name : ""
+          tenant_vehicle_name = result[:tenant_vehicle_id] ? TenantVehicle.find(result[:tenant_vehicle_id]).name : ""
+          next if !result[:fees]
+          result[:fees].each do |key, fee|
             if fee[:range] && !fee[:range].empty?
               fee[:range].each do |range_fee|
                 worksheet.write(row, 0, fee[:effective_date])
                 worksheet.write(row, 1, fee[:expiration_date])
-                worksheet.write(row, 2, fee[:name])
-                worksheet.write(row, 3, result[:mode_of_transport])
-                worksheet.write(row, 4, key)
-                worksheet.write(row, 5, result[:load_type])
-                worksheet.write(row, 6, result[:direction])
-                worksheet.write(row, 7, fee[:currency])
-                worksheet.write(row, 8, fee[:rate_basis])
+                worksheet.write(row, 2, counterpart_hub_name)
+                worksheet.write(row, 3, tenant_vehicle_name)
+                worksheet.write(row, 4, fee[:name])
+                worksheet.write(row, 5, result[:mode_of_transport])
+                worksheet.write(row, 6, key)
+                worksheet.write(row, 7, result[:load_type])
+                worksheet.write(row, 8, result[:direction])
+                worksheet.write(row, 9, fee[:currency])
+                worksheet.write(row, 10, fee[:rate_basis])
                 case fee[:rate_basis]
                 when "PER_CONTAINER"
-                  worksheet.write(row, 15, fee[:value])
+                  worksheet.write(row, 17, fee[:value])
                 when "PER_ITEM"
-                  worksheet.write(row, 12, fee[:value])
-                when "PER_BILL"
                   worksheet.write(row, 14, fee[:value])
+                when "PER_BILL"
+                  worksheet.write(row, 16, fee[:value])
                 when "PER_SHIPMENT"
-                  worksheet.write(row, 13, fee[:value])
+                  worksheet.write(row, 15, fee[:value])
                 when "PER_CBM_TON"
-                  worksheet.write(row, 9, fee[:ton])
-                  worksheet.write(row, 10, fee[:cbm])
-                  worksheet.write(row, 16, fee[:min])
+                  worksheet.write(row, 11, fee[:ton])
+                  worksheet.write(row, 12, fee[:cbm])
+                  worksheet.write(row, 18, fee[:min])
                 when "PER_CBM_KG"
-                  worksheet.write(row, 11, fee[:kg])
-                  worksheet.write(row, 10, fee[:cbm])
-                  worksheet.write(row, 16, fee[:min])
+                  worksheet.write(row, 13, fee[:kg])
+                  worksheet.write(row, 12, fee[:cbm])
+                  worksheet.write(row, 18, fee[:min])
                 when "PER_WM"
-                  worksheet.write(row, 17, range_fee[:rate])
-                  worksheet.write(row, 16, fee[:min])
+                  worksheet.write(row, 19, range_fee[:rate])
+                  worksheet.write(row, 18, fee[:min])
                 when "PER_KG"
-                  worksheet.write(row, 11, range_fee[:rate])
-                  worksheet.write(row, 16, fee[:min])
+                  worksheet.write(row, 13, range_fee[:rate])
+                  worksheet.write(row, 18, fee[:min])
                 end
-                worksheet.write(row, 18, range_fee[:min])
-                worksheet.write(row, 19, range_fee[:max])
+                worksheet.write(row, 20, range_fee[:min])
+                worksheet.write(row, 21, range_fee[:max])
                 row += 1
               end
             else
               worksheet.write(row, 0, fee[:effective_date])
               worksheet.write(row, 1, fee[:expiration_date])
-              worksheet.write(row, 2, fee[:name])
-              worksheet.write(row, 3, result[:mode_of_transport])
-              worksheet.write(row, 4, key)
-              worksheet.write(row, 5, result[:load_type])
-              worksheet.write(row, 6, result[:direction])
-              worksheet.write(row, 7, fee[:currency])
-              worksheet.write(row, 8, fee[:rate_basis])
+              worksheet.write(row, 2, counterpart_hub_name)
+              worksheet.write(row, 3, tenant_vehicle_name)
+              worksheet.write(row, 4, fee[:name])
+              worksheet.write(row, 5, result[:mode_of_transport])
+              worksheet.write(row, 6, key)
+              worksheet.write(row, 7, result[:load_type])
+              worksheet.write(row, 8, result[:direction])
+              worksheet.write(row, 9, fee[:currency])
+              worksheet.write(row, 10, fee[:rate_basis])
               case fee[:rate_basis]
               when "PER_CONTAINER"
-                worksheet.write(row, 15, fee[:value])
-              when "PER_ITEM"
-                worksheet.write(row, 12, fee[:value])
-              when "PER_BILL"
-                worksheet.write(row, 14, fee[:value])
-              when "PER_SHIPMENT"
-                worksheet.write(row, 13, fee[:value])
-              when "PER_CBM_TON"
-                worksheet.write(row, 9, fee[:ton])
-                worksheet.write(row, 10, fee[:cbm])
-                worksheet.write(row, 16, fee[:min])
-              when "PER_CBM_KG"
-                worksheet.write(row, 11, fee[:kg])
-                worksheet.write(row, 10, fee[:cbm])
-                worksheet.write(row, 16, fee[:min])
-              when "PER_WM"
                 worksheet.write(row, 17, fee[:value])
+              when "PER_ITEM"
+                worksheet.write(row, 14, fee[:value])
+              when "PER_BILL"
+                worksheet.write(row, 16, fee[:value])
+              when "PER_SHIPMENT"
+                worksheet.write(row, 15, fee[:value])
+              when "PER_CBM_TON"
+                worksheet.write(row, 11, fee[:ton])
+                worksheet.write(row, 12, fee[:cbm])
+                worksheet.write(row, 18, fee[:min])
+              when "PER_CBM_KG"
+                worksheet.write(row, 13, fee[:kg])
+                worksheet.write(row, 12, fee[:cbm])
+                worksheet.write(row, 18, fee[:min])
+              when "PER_WM"
+                worksheet.write(row, 19, fee[:value])
               when "PER_KG"
-                worksheet.write(row, 11, fee[:kg])
-                worksheet.write(row, 16, fee[:min])
+                worksheet.write(row, 13, fee[:kg])
+                worksheet.write(row, 18, fee[:min])
               end
               row += 1
             end

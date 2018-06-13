@@ -71,8 +71,9 @@ class Admin::ShipmentsController < ApplicationController
       destination: @shipment.destination_nexus
     }
     account_holder = @shipment.user
+    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     resp = {
-      shipment:        @shipment,
+      shipment:        @shipment.as_json(options),
       cargoItems:      @cargo_items,
       containers:      @containers,
       aggregatedCargo: @shipment.aggregated_cargo,

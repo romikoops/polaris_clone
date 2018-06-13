@@ -535,7 +535,7 @@ export class AdminShipmentView extends Component {
         </div>
       )
     const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.selected_offer
     const saveSection = (
       <div className={`${styles.time_edit_button}`}>
         {showEditTime ? (
@@ -690,7 +690,7 @@ export class AdminShipmentView extends Component {
           content={
             <div className="flex-100 layout-row layout-wrap" style={{ position: 'relative' }}>
               {saveSection}
-              <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+              <RouteHubBox shipment={shipment} route={schedules} theme={theme} />
               <div className="flex-100 layout-row layout-align-space-between-center">
                 <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">

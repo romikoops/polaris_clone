@@ -254,6 +254,7 @@ class Shipment < ApplicationRecord
 
       charge_breakdown = ChargeBreakdown.create!(shipment: self, trip: trip)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
+      charge_breakdown.charge('cargo').update_price!
     end
   end
 

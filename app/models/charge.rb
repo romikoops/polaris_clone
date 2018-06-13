@@ -47,7 +47,7 @@ class Charge < ApplicationRecord
         children_charge_category: children_charge_category, charge_category: charge_category,
         parent: parent
       )
-      unless charge_h["total"].nil?
+      unless charge_h["total"].nil? && key != "cargo"
         create_from_schedule_charges(charge_h, charge_breakdown, children_charge_category, charge)
       end
     end
