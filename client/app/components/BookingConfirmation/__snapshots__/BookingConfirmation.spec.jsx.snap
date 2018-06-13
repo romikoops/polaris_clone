@@ -136,9 +136,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -1252,9 +1249,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -2425,9 +2419,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -3653,9 +3644,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -4771,9 +4759,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -5888,9 +5873,6 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -6990,9 +6972,6 @@ exports[`with cargo items 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",
@@ -8309,9 +8288,6 @@ exports[`with containers 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={Array []}
-            locations={Object {}}
-            schedule={Object {}}
             shipment={
               Object {
                 "cargo_notes": "FOO_CARGO_NOTES",

@@ -28,11 +28,11 @@ const propsBase = {
 
 const createShallow = propsInput => shallow(<RouteResult {...propsInput} />)
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
 
-test('props.pickup is false', () => {
+test.skip('props.pickup is false', () => {
   const props = {
     ...propsBase,
     pickup: false

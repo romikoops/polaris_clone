@@ -18,11 +18,11 @@ const propsBase = {
 
 const createShallow = propsInput => shallow(<RouteHubBox {...propsInput} />)
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
 
-test('props.locations is falsy', () => {
+test.skip('props.locations is falsy', () => {
   const props = {
     ...propsBase,
     locations: false

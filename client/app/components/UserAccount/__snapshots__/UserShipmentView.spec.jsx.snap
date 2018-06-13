@@ -69,18 +69,35 @@ exports[`props.loading is true 1`] = `
         className="flex-100"
       >
         <RouteHubBox
-          hubs={
-            Object {
-              "endHub": Object {},
-              "startHub": Object {},
-            }
-          }
           route={
             Array [
               Object {
                 "hub_route_key": "FOO_HUB_ROUTE_KEY",
               },
             ]
+          }
+          shipment={
+            Object {
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "notes": "FOO_NOTES",
+              "schedules_charges": Object {
+                "FOO_HUB_ROUTE_KEY": Object {
+                  "foo": "FOO_ROUTE_KEY",
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+            }
           }
           theme={
             Object {
@@ -117,7 +134,6 @@ exports[`props.loading is true 1`] = `
                 19
               </p>
             </div>
-            
           </div>
           <div
             className="flex-40 layout-row layout-wrap layout-align-center-center"
@@ -136,7 +152,6 @@ exports[`props.loading is true 1`] = `
                 19
               </p>
             </div>
-            
           </div>
         </div>
       </div>
@@ -185,11 +200,6 @@ exports[`props.loading is true 1`] = `
           >
             <IncotermRow
               destinationFees={false}
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -243,11 +253,7 @@ exports[`props.loading is true 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermExtras
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
+              feeHash={Object {}}
               tenant={
                 Object {
                   "data": Object {
@@ -666,18 +672,35 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
         className="flex-100"
       >
         <RouteHubBox
-          hubs={
-            Object {
-              "endHub": Object {},
-              "startHub": Object {},
-            }
-          }
           route={
             Array [
               Object {
                 "hub_route_key": "FOO_HUB_ROUTE_KEY",
               },
             ]
+          }
+          shipment={
+            Object {
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "notes": "FOO_NOTES",
+              "schedules_charges": Object {
+                "FOO_HUB_ROUTE_KEY": Object {
+                  "foo": "FOO_ROUTE_KEY",
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+            }
           }
           theme={
             Object {
@@ -714,7 +737,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
           <div
             className="flex-40 layout-row layout-wrap layout-align-center-center"
@@ -733,7 +755,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
         </div>
       </div>
@@ -782,11 +803,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -840,11 +856,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermExtras
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
+              feeHash={Object {}}
               tenant={
                 Object {
                   "data": Object {
@@ -1318,18 +1330,35 @@ exports[`props.shipmentData.contacts is present 1`] = `
         className="flex-100"
       >
         <RouteHubBox
-          hubs={
-            Object {
-              "endHub": Object {},
-              "startHub": Object {},
-            }
-          }
           route={
             Array [
               Object {
                 "hub_route_key": "FOO_HUB_ROUTE_KEY",
               },
             ]
+          }
+          shipment={
+            Object {
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "notes": "FOO_NOTES",
+              "schedules_charges": Object {
+                "FOO_HUB_ROUTE_KEY": Object {
+                  "foo": "FOO_ROUTE_KEY",
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+            }
           }
           theme={
             Object {
@@ -1366,7 +1395,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
           <div
             className="flex-40 layout-row layout-wrap layout-align-center-center"
@@ -1385,7 +1413,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
         </div>
       </div>
@@ -1434,11 +1461,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -1492,11 +1514,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermExtras
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
+              feeHash={Object {}}
               tenant={
                 Object {
                   "data": Object {
@@ -2058,18 +2076,35 @@ exports[`props.shipmentData.documents is present 1`] = `
         className="flex-100"
       >
         <RouteHubBox
-          hubs={
-            Object {
-              "endHub": Object {},
-              "startHub": Object {},
-            }
-          }
           route={
             Array [
               Object {
                 "hub_route_key": "FOO_HUB_ROUTE_KEY",
               },
             ]
+          }
+          shipment={
+            Object {
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "notes": "FOO_NOTES",
+              "schedules_charges": Object {
+                "FOO_HUB_ROUTE_KEY": Object {
+                  "foo": "FOO_ROUTE_KEY",
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+            }
           }
           theme={
             Object {
@@ -2106,7 +2141,6 @@ exports[`props.shipmentData.documents is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
           <div
             className="flex-40 layout-row layout-wrap layout-align-center-center"
@@ -2125,7 +2159,6 @@ exports[`props.shipmentData.documents is present 1`] = `
                 19
               </p>
             </div>
-            
           </div>
         </div>
       </div>
@@ -2174,11 +2207,6 @@ exports[`props.shipmentData.documents is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -2232,11 +2260,7 @@ exports[`props.shipmentData.documents is present 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermExtras
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
+              feeHash={Object {}}
               tenant={
                 Object {
                   "data": Object {
@@ -2726,18 +2750,35 @@ exports[`shallow render 1`] = `
         className="flex-100"
       >
         <RouteHubBox
-          hubs={
-            Object {
-              "endHub": Object {},
-              "startHub": Object {},
-            }
-          }
           route={
             Array [
               Object {
                 "hub_route_key": "FOO_HUB_ROUTE_KEY",
               },
             ]
+          }
+          shipment={
+            Object {
+              "cargo_notes": "FOO_CARGO_NOTES",
+              "eori": 1234,
+              "has_on_carriage": false,
+              "has_pre_carriage": false,
+              "incoterm_text": "FOO_INCOTERM_TEXT",
+              "notes": "FOO_NOTES",
+              "schedules_charges": Object {
+                "FOO_HUB_ROUTE_KEY": Object {
+                  "foo": "FOO_ROUTE_KEY",
+                },
+              },
+              "total_goods_value": Object {
+                "currency": "USD",
+                "value": 15,
+              },
+              "total_price": Object {
+                "currency": "USD",
+                "value": 12,
+              },
+            }
           }
           theme={
             Object {
@@ -2774,7 +2815,6 @@ exports[`shallow render 1`] = `
                 19
               </p>
             </div>
-            
           </div>
           <div
             className="flex-40 layout-row layout-wrap layout-align-center-center"
@@ -2793,7 +2833,6 @@ exports[`shallow render 1`] = `
                 19
               </p>
             </div>
-            
           </div>
         </div>
       </div>
@@ -2842,11 +2881,6 @@ exports[`shallow render 1`] = `
           >
             <IncotermRow
               destinationFees={false}
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -2900,11 +2934,7 @@ exports[`shallow render 1`] = `
             className="flex-none content_width_booking layout-row layout-align-center-center"
           >
             <IncotermExtras
-              feeHash={
-                Object {
-                  "foo": "FOO_ROUTE_KEY",
-                }
-              }
+              feeHash={Object {}}
               tenant={
                 Object {
                   "data": Object {

@@ -15,11 +15,19 @@ test('shallow render', () => {
   expect(shallow(<ContactSetterNewContactWrapper {...propsBase} />)).toMatchSnapshot()
 })
 
-test('compName !== AddressBook', () => {
+test('contactType === notifyee && compName === ShipmentContactForm', () => {
   const props = {
-    ...propsBase
+    ...propsBase,
+    contactType: 'notifyee'
   }
   const wrapper = shallow(<ContactSetterNewContactWrapper {...props} />)
+  wrapper.setState({ compName: 'ShipmentContactForm' })
+
+  expect(wrapper).toMatchSnapshot()
+})
+
+test('compName !== AddressBook', () => {
+  const wrapper = shallow(<ContactSetterNewContactWrapper {...propsBase} />)
   wrapper.setState({ compName: 'ShipmentContactForm' })
 
   expect(wrapper).toMatchSnapshot()

@@ -37,11 +37,11 @@ const propsBase = {
   firstStep: false
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<IncotermRow {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.feeHash is empty object', () => {
+test.skip('props.feeHash is empty object', () => {
   const props = {
     ...propsBase,
     feeHash: {}
@@ -49,7 +49,7 @@ test('props.feeHash is empty object', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test('props.onCarriage is true', () => {
+test.skip('props.onCarriage is true', () => {
   const props = {
     ...propsBase,
     onCarriage: true
@@ -57,7 +57,7 @@ test('props.onCarriage is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test('props.preCarriage is true', () => {
+test.skip('props.preCarriage is true', () => {
   const props = {
     ...propsBase,
     preCarriage: true
@@ -65,7 +65,7 @@ test('props.preCarriage is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test('props.destinationFees is true', () => {
+test.skip('props.destinationFees is true', () => {
   const props = {
     ...propsBase,
     destinationFees: true
@@ -73,7 +73,7 @@ test('props.destinationFees is true', () => {
   expect(shallow(<IncotermRow {...props} />)).toMatchSnapshot()
 })
 
-test('props.firstStep is true', () => {
+test.skip('props.firstStep is true', () => {
   const props = {
     ...propsBase,
     firstStep: true
