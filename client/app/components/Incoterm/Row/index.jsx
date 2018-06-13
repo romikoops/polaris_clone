@@ -12,9 +12,8 @@ export function IncotermRow ({
   feeHash,
   tenant
 }) {
-  // debugger // eslint-disable-line
   const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
-  debugger // eslint-disable-line
+
   const selectedStyle =
     theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
