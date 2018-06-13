@@ -7,18 +7,22 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
-    @requested_shipments = Shipment.where(
+    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    requested_shipments = Shipment.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
     )
-    @documents["requested_shipments"] = Document.get_documents_for_array(@requested_shipments)
-    @open_shipments = Shipment.where(
+    @documents["requested_shipments"] = Document.get_documents_for_array(requested_shipments)
+    open_shipments = Shipment.where(
       status:    %w[in_progress confirmed],
       tenant_id: current_user.tenant_id
     )
-    @documents["open_shipments"] = Document.get_documents_for_array(@open_shipments)
-    @finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
-    @documents["finished_shipments"] = Document.get_documents_for_array(@finished_shipments)
+    @documents["open_shipments"] = Document.get_documents_for_array(open_shipments)
+    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
+    @documents["finished_shipments"] = Document.get_documents_for_array(finished_shipments)
+    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
+    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
     resp = {
       requested: @requested_shipments,
       open:      @open_shipments,
@@ -67,8 +71,16 @@ class Admin::ShipmentsController < ApplicationController
       destination: @shipment.destination_nexus
     }
     account_holder = @shipment.user
+    options = {
+      methods: [:selected_offer, :mode_of_transport],
+      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+    }
+    shipment_as_json = @shipment.as_json(options).merge(
+      pickup_address:   @shipment.pickup_address_with_country,
+      delivery_address: @shipment.delivery_address_with_country
+    )
     resp = {
-      shipment:        @shipment,
+      shipment:        shipment_as_json,
       cargoItems:      @cargo_items,
       containers:      @containers,
       aggregatedCargo: @shipment.aggregated_cargo,

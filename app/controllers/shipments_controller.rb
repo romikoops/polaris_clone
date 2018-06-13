@@ -8,10 +8,19 @@ class ShipmentsController < ApplicationController
 
   def index
     @shipper = current_user
-
-    @requested_shipments = @shipper.shipments.where(status: %w[requested requested_by_unconfirmed_account])
-    @open_shipments = @shipper.shipments.where(status: %w[accepted in_progress])
-    @finished_shipments = @shipper.shipments.where(status: "finished")
+    options = {methods: [:selected_offer], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    requested_shipments = Shipment.where(
+      status:    %w[requested requested_by_unconfirmed_account],
+      tenant_id: current_user.tenant_id
+    )
+    open_shipments = Shipment.where(
+      status:    %w[in_progress confirmed],
+      tenant_id: current_user.tenant_id
+    )
+    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
+    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
+    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
     response_handler(
       requested: @requested_shipments,
       open:      @open_shipments,
@@ -39,6 +48,10 @@ class ShipmentsController < ApplicationController
 
   def show
     shipment = Shipment.find(params[:id])
+    options = {
+      methods: [:selected_offer, :mode_of_transport],
+      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+    }
 
     cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
@@ -48,23 +61,24 @@ class ShipmentsController < ApplicationController
       { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
 
-    locations = { origin: shipment.origin_nexus, destination: shipment.destination_nexus }
-
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
       tmp_doc["signed_url"] = doc.get_signed_url
       tmp_doc
     end
 
+    shipment_as_json = shipment.as_json(options).merge(
+      pickup_address:   shipment.pickup_address_with_country,
+      delivery_address: shipment.delivery_address_with_country
+    )
     response_handler(
-      shipment:        shipment,
+      shipment:        shipment_as_json,
       cargoItems:      shipment.cargo_items,
       containers:      shipment.containers,
       aggregatedCargo: shipment.aggregated_cargo,
       contacts:        contacts,
       documents:       documents,
       schedules:       shipment.schedule_set,
-      locations:       locations,
       cargoItemTypes:  cargo_item_types
     )
   end

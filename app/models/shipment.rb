@@ -89,6 +89,14 @@ class Shipment < ApplicationRecord
     Location.where(id: trucking.dig("on_carriage", "location_id")).first
   end
 
+  def pickup_address_with_country
+    pickup_address.as_json(include: :country)
+  end
+
+  def delivery_address_with_country
+    delivery_address.as_json(include: :country)
+  end
+
   def import?
     direction == "import"
   end
@@ -242,9 +250,11 @@ class Shipment < ApplicationRecord
   def create_charge_breakdowns_from_schedules_charges!
     schedules_charges.map do |hub_route_key, schedule_charges|
       origin_hub_id, destination_hub_id = *hub_route_key.split("-").map(&:to_i)
-      itinerary = Itinerary.filter_by_hubs(origin_hub_id, destination_hub_id).first
-      charge_breakdown = ChargeBreakdown.create!(shipment: self, itinerary: itinerary)
+      next unless origin_hub_id == self.origin_hub_id && destination_hub_id == self.destination_hub_id
+
+      charge_breakdown = ChargeBreakdown.create!(shipment: self, trip: trip)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
+      charge_breakdown.charge('cargo').update_price!
     end
   end
 

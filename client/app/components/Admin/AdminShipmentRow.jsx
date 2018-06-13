@@ -32,13 +32,13 @@ export class AdminShipmentRow extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 1) {
+    if (loadType === 'cargo_item' && cargoCount > 2) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 1) {
+    } else if (loadType === 'cargo_item' && cargoCount === 2) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 1) {
+    } else if (loadType === 'container' && cargoCount > 2) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 1) {
+    } else if (loadType === 'container' && cargoCount === 2) {
       noun = 'Container'
     }
     return `${cargoCount} X ${noun}`
@@ -94,19 +94,14 @@ export class AdminShipmentRow extends Component {
     if (shipment.schedule_set.length < 1) {
       return ''
     }
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-      return ''
-    }
     const schedule = {}
-    const originHub = hubs[hubKeys[0]].data
-    const destHub = hubs[hubKeys[1]].data
+    const originHub = hubs[shipment.origin_hub_id].data
+    const destHub = hubs[shipment.destination_hub_id].data
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-
-    const feeHash = shipment.schedules_charges[shipment.schedule_set[0].hub_route_key]
+    const feeHash = shipment.selected_offer
     const dashedLineStyles = {
       marginTop: '6px',
       height: '2px',

@@ -189,7 +189,6 @@ export class UserShipmentView extends Component {
       containers,
       aggregatedCargo,
       schedules,
-      locations,
       accountHolder
     } = shipmentData
     const { collapser } = this.state
@@ -202,16 +201,6 @@ export class UserShipmentView extends Component {
       { label: 'Certificate Of Origin', value: 'certificate_of_origin' },
       { label: 'Dangerous Goods', value: 'dangerous_goods' }
     ]
-    const hubKeys = schedules[0].hub_route_key.split('-')
-    const hubsObj = { startHub: {}, endHub: {} }
-    hubs.forEach((c) => {
-      if (String(c.data.id) === hubKeys[0]) {
-        hubsObj.startHub = c
-      }
-      if (String(c.data.id) === hubKeys[1]) {
-        hubsObj.endHub = c
-      }
-    })
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -354,7 +343,7 @@ export class UserShipmentView extends Component {
         </div>)
       }
     })
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.selected_charge
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <ShipmentCard
@@ -383,7 +372,6 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-
         <ShipmentCard
           headingText="Itinerary"
           theme={theme}
@@ -391,7 +379,7 @@ export class UserShipmentView extends Component {
           handleCollapser={() => this.handleCollapser('itinerary')}
           content={
             <div className="flex-100">
-              <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+              <RouteHubBox shipment={shipment} route={schedules} theme={theme} />
               <div
                 className="flex-100 layout-row layout-align-space-between-center"
                 style={{ position: 'relative' }}
@@ -410,37 +398,39 @@ export class UserShipmentView extends Component {
                         : `${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
                     </p>
                   </div>
-                  {shipment.has_pre_carriage ? (
+                  {/* {shipment.has_pre_carriage ? (
                     <div className="flex-100 layout-row layout-align-center-start">
                       <address className="flex-none">
-                        {`${locations.origin.street_number} ${locations.origin.street}`} <br />
-                        {`${locations.origin.city}`} <br />
-                        {`${locations.origin.zip_code}`} <br />
-                        {`${locations.origin.country}`} <br />
+                        {`${shipment.pickup_address.street_number}
+                        ${shipment.pickup_address.street}`} <br />
+                        {`${shipment.pickup_address.city}`} <br />
+                        {`${shipment.pickup_address.zip_code}`} <br />
+                        {`${shipment.pickup_address.country.name}`} <br />
                       </address>
                     </div>
                   ) : (
                     ''
-                  )}
+                  )} */}
                 </div>
                 <div className="flex-40 layout-row layout-wrap layout-align-center-center">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                     <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
                     <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
                   </div>
-                  {shipment.has_on_carriage ? (
+                  {/* {shipment.has_on_carriage ? (
                     <div className="flex-100 layout-row layout-align-center-start">
                       <address className="flex-none">
-                        {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
+                        {`${shipment.delivery_address.street_number}
+                        ${shipment.delivery_address.street}`}{' '}
                         <br />
-                        {`${locations.destination.city}`} <br />
-                        {`${locations.destination.zip_code}`} <br />
-                        {`${locations.destination.country}`} <br />
+                        {`${shipment.delivery_address.city}`} <br />
+                        {`${shipment.delivery_address.zip_code}`} <br />
+                        {`${shipment.delivery_address.country.name}`} <br />
                       </address>
                     </div>
                   ) : (
                     ''
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

@@ -449,8 +449,8 @@ module ExcelTools
 
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type = zone_sheet.row(1)[1] == "CITY" ? "geometry_id" : zone_sheet.row(1)[1].downcase
-
+    identifier_type, identifier_modifier = zone_sheet.row(1)[1] == "CITY" ? "geometry_id" : determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
+    
     # START Load Zones ------------------------
 
     zones = {}
@@ -462,12 +462,22 @@ module ExcelTools
       if row_data[1] && !row_data[2]
         row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
         zip_char_length ||= row_zip.to_s.length
-        p zip_char_length
-        zones[zone_name] << { ident: row_zip, country: row_data[3] }
+        if identifier_type == 'distance' && identifier_modifier == 'return'
+          zones[zone_name] << { ident: (row_zip/2).ceil, country: row_data[3] }
+        else
+          zones[zone_name] << { ident: row_zip, country: row_data[3] }
+        end
+        
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete(" ").split("-")
         zip_char_length ||= range[0].length
-        zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
+        if identifier_type == 'distance' && identifier_modifier == 'return'
+          zones[zone_name] << { min: (range[0].to_i/2).ceil, max: (range[1].to_i/2).ceil, country: row_data[3] }
+        else
+          zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
+        end
+        
+        
       elsif row_data[1] && row_data[2]
         zones[zone_name] << {
           ident:     row_data[1],
@@ -656,27 +666,27 @@ module ExcelTools
               awesome_print "#{row_zone_name} "
               w_min = weight_min_row[m_index] || 0
               r_min = row_min_value || 0
-              if defaults[mod_key]
-                defaults[mod_key][m_index].clone.merge(
-                  min_value: [w_min, r_min].max,
-                  rate:      {
-                    value:      val,
-                    rate_basis: rate_basis,
-                    currency:   currency,
-                    base:       base
-                  }
-                )
-              else
-                {
-                  min_value: 0,
-                  rate:      {
-                    value:      val,
-                    rate_basis: rate_basis,
-                    currency:   currency,
-                    base:       base
-                  }
-                }
-              end
+              mod_cell = if defaults[mod_key]
+                           defaults[mod_key][m_index].clone.merge(
+                             min_value: [w_min, r_min].max,
+                             rate:      {
+                               value:      val,
+                               rate_basis: rate_basis,
+                               currency:   currency,
+                               base:       base
+                             }
+                           )
+                         else
+                           {
+                             min_value: 0,
+                             rate:      {
+                               value:      val,
+                               rate_basis: rate_basis,
+                               currency:   currency,
+                               base:       base
+                             }
+                           }
+                         end
             end
           end
           # awesome_print single_ident_values_and_country
@@ -691,19 +701,22 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
           end
 
-          single_ident_values_and_country_with_timestamps =
-            case identifier_type
-            when "distance", "geometry_id"
-              single_ident_values_and_country.map do |h|
-                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
-              end
-            else
-              single_ident_values_and_country.map do |h|
-                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
-              end
-            end.join(", ")
+          single_ident_values_and_country_with_timestamps = case identifier_type
+                                                            when "distance", "geometry_id"
+                                                              single_ident_values_and_country.map do |h|
+                                                                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+                                                              end.join(", ")
+                                                            else
+                                                              single_ident_values_and_country.map do |h|
+                                                                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+                                                              end.join(", ")
+            end
 
           tp = trucking_pricing_by_zone[row_key]
+
+          new_cols = %w[cargo_class carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type]
+          new_cols.delete("cbm_ratio")     if load_type == "container"
+          new_cols.delete("load_meterage") if load_type == "container"
 
           # Find or update trucking_destinations
           td_query = <<-eos
@@ -736,21 +749,29 @@ module ExcelTools
           with_statement = <<-eos
             WITH
               td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
-              matching_tp_id_table AS (
-                SELECT DISTINCT trucking_pricings.id
+              matching_tps_without_rates_and_fees AS (
+                SELECT DISTINCT trucking_pricings.id, #{new_cols.join(', ')}
                 FROM td_ids
                 JOIN hub_truckings
                   ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
                 JOIN trucking_pricings
-                  ON trucking_pricings.id = hub_truckings.trucking_pricing_id
-                #{tp.scoping_attributes.to_sql_where}
-                AND hub_truckings.hub_id = #{hub_id}
+                  ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+                WHERE hub_truckings.hub_id = #{hub_id}
               ),
               hub_ids AS (
                 VALUES(#{hub_id})
               ),
               t_stamps AS (
                 VALUES(current_timestamp)
+              ),
+              tp AS (
+                SELECT * FROM (
+                  VALUES #{tp.to_postgres_insertable(new_cols)}
+                ) AS t(#{new_cols.join(', ')})
+              ),
+              matching_tp_id_table AS (
+                SELECT id FROM matching_tps_without_rates_and_fees
+                INNER JOIN tp USING (#{new_cols.join(', ')})
               )
           eos
 
@@ -763,8 +784,7 @@ module ExcelTools
               SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
             ) THEN
               #{with_statement}
-              UPDATE trucking_pricings
-              SET (#{TruckingPricing.given_attribute_names.sort.join(', ')}) = #{tp.to_postgres_insertable}
+              UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w[fees rates])}
               WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
 
               #{with_statement}
@@ -781,7 +801,7 @@ module ExcelTools
             ELSE
               #{with_statement},
               tp_ids AS (
-                INSERT INTO trucking_pricings(#{TruckingPricing.given_attribute_names.sort.join(', ')})
+                INSERT INTO trucking_pricings(cargo_class, carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
                   VALUES #{tp.to_postgres_insertable}
                 RETURNING id
               )
@@ -976,7 +996,7 @@ module ExcelTools
           expiration_date: "EXPIRATION_DATE",
           range_min:       "RANGE_MIN",
           range_max:       "RANGE_MAX",
-          service_level:   "SERVICE LEVEL",
+          service_level:   "SERVICE_LEVEL",
           destination:     "DESTINATION"
         )
         next if rows.empty?
@@ -1483,7 +1503,7 @@ module ExcelTools
       aux_data[pricing_key] ||= {}
 
       if aux_data[pricing_key][:tenant_vehicle].blank?
-        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
+        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot], tenant_id: tenant.id)
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 
@@ -1792,5 +1812,15 @@ module ExcelTools
     raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
 
     geometry
+  end
+
+  def determine_identifier_type_and_modifier(identifier_type)
+    if identifier_type.include?('_')
+      return identifier_type.split('_').map{|str| str.downcase}
+    elsif identifier_type.include?(' ')
+      return identifier_type.split(' ').map{|str| str.downcase}
+    else
+      return [identifier_type.downcase, false]
+    end
   end
 end
