@@ -8,13 +8,13 @@ exports[`props.shipmentData is falsy 1`] = `
 
 exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -57,7 +57,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -70,24 +70,24 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -96,7 +96,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -136,16 +136,29 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -169,10 +182,10 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -187,10 +200,10 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -206,7 +219,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -246,7 +259,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -279,7 +292,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -290,7 +303,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -328,7 +340,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -351,7 +363,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -361,7 +373,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -419,7 +431,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -445,7 +457,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -489,15 +501,17 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -506,7 +520,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -560,7 +574,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -606,7 +620,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -622,7 +636,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -638,7 +652,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -654,7 +668,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -670,7 +684,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -691,7 +705,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -738,6 +752,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -758,6 +773,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -778,6 +794,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -798,6 +815,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -818,6 +836,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -838,6 +857,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -858,6 +878,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -878,6 +899,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -898,6 +920,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -921,7 +944,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -1004,11 +1027,15 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -1094,13 +1121,13 @@ exports[`props.shipmentData.cargoItemTypes is falsy 1`] = `
 
 exports[`props.shipmentData.documents is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1143,7 +1170,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -1156,24 +1183,24 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -1182,7 +1209,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1222,16 +1249,29 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -1255,10 +1295,10 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -1273,10 +1313,10 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -1292,7 +1332,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1332,7 +1372,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -1365,7 +1405,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -1376,7 +1416,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -1414,7 +1453,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -1437,7 +1476,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -1447,7 +1486,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -1505,7 +1544,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -1531,7 +1570,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1575,15 +1614,17 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -1592,7 +1633,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1638,7 +1679,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1684,7 +1725,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1700,7 +1741,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1716,7 +1757,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1732,7 +1773,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1748,7 +1789,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -1769,7 +1810,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -1887,6 +1928,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1907,6 +1949,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1927,6 +1970,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1947,6 +1991,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1967,6 +2012,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1987,6 +2033,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2007,6 +2054,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2027,6 +2075,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2047,6 +2096,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2070,7 +2120,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -2153,11 +2203,15 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -2237,13 +2291,13 @@ exports[`props.shipmentData.documents is truthy 1`] = `
 
 exports[`props.shipmentData.notifyees is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2286,7 +2340,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -2299,24 +2353,24 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -2325,7 +2379,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2365,16 +2419,29 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -2398,10 +2465,10 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -2416,10 +2483,10 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -2435,7 +2502,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2475,7 +2542,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -2508,7 +2575,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -2519,7 +2586,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -2557,7 +2623,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -2580,7 +2646,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -2590,7 +2656,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -2648,7 +2714,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -2674,7 +2740,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2718,15 +2784,17 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
             <div
@@ -2861,7 +2929,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2907,7 +2975,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -2953,7 +3021,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -2969,7 +3037,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -2985,7 +3053,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -3001,7 +3069,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -3017,7 +3085,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -3038,7 +3106,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -3085,6 +3153,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3105,6 +3174,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3125,6 +3195,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3145,6 +3216,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3165,6 +3237,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3185,6 +3258,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3205,6 +3279,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3225,6 +3300,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3245,6 +3321,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3268,7 +3345,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -3351,11 +3428,15 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -3435,13 +3516,13 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
 
 exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -3484,7 +3565,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -3497,24 +3578,24 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -3523,7 +3604,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -3563,16 +3644,29 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": true,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -3596,10 +3690,10 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -3614,10 +3708,10 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -3628,15 +3722,10 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-80 layout-row layout-align-center-start layout-wrap"
+                className="flex-100 layout-row layout-align-start-start"
               >
-                <p
-                  className="flex-100 letter_3"
-                >
-                  With Delivery to:
-                </p>
                 <address
-                  className="flex-90"
+                  className="flex-none"
                 >
                   9 BAR_STREET
                    
@@ -3654,7 +3743,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -3694,7 +3783,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -3727,7 +3816,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={true}
@@ -3738,7 +3827,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={true}
                 originFees={false}
                 preCarriage={false}
@@ -3776,7 +3864,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -3799,7 +3887,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -3809,7 +3897,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -3867,7 +3955,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -3893,7 +3981,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -3937,15 +4025,17 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -3954,7 +4044,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4000,7 +4090,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4046,7 +4136,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4062,7 +4152,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4078,7 +4168,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4094,7 +4184,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4110,7 +4200,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -4131,7 +4221,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4178,6 +4268,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4198,6 +4289,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4218,6 +4310,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4238,6 +4331,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4258,6 +4352,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4278,6 +4373,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4298,6 +4394,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4318,6 +4415,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4338,6 +4436,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4361,7 +4460,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -4444,11 +4543,15 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -4528,13 +4631,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
 
 exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4577,7 +4680,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -4590,24 +4693,24 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -4616,7 +4719,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4656,16 +4759,29 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": true,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -4689,10 +4805,10 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Collection:
                 </p>
@@ -4703,15 +4819,10 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-80 layout-row layout-align-center-start layout-wrap"
+                className="flex-100 layout-row layout-align-start-start"
               >
-                <p
-                  className="flex-100 letter_3"
-                >
-                  With Pickup from:
-                </p>
                 <address
-                  className="flex-90"
+                  className="flex-none"
                 >
                   7 FOO_STREET
                   ,
@@ -4727,10 +4838,10 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -4746,7 +4857,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -4786,7 +4897,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -4819,7 +4930,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -4830,7 +4941,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={true}
                 preCarriage={true}
@@ -4868,7 +4978,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -4891,7 +5001,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -4901,7 +5011,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -4959,7 +5069,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -4985,7 +5095,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5029,15 +5139,17 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -5046,7 +5158,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5092,7 +5204,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5138,7 +5250,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5154,7 +5266,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5170,7 +5282,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5186,7 +5298,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5202,7 +5314,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -5223,7 +5335,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5270,6 +5382,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5290,6 +5403,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5310,6 +5424,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5330,6 +5445,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5350,6 +5466,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5370,6 +5487,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5390,6 +5508,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5410,6 +5529,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5430,6 +5550,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5453,7 +5574,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -5536,11 +5657,15 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -5620,13 +5745,13 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5669,7 +5794,7 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -5682,24 +5807,24 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -5708,7 +5833,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5748,16 +5873,29 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -5781,10 +5919,10 @@ exports[`shallow render 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -5799,10 +5937,10 @@ exports[`shallow render 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -5818,7 +5956,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -5858,7 +5996,7 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -5891,7 +6029,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -5902,7 +6040,6 @@ exports[`shallow render 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -5940,7 +6077,7 @@ exports[`shallow render 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -5963,7 +6100,7 @@ exports[`shallow render 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -5973,7 +6110,7 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -6031,7 +6168,7 @@ exports[`shallow render 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -6057,7 +6194,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6101,15 +6238,17 @@ exports[`shallow render 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -6118,7 +6257,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6164,7 +6303,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6210,7 +6349,7 @@ exports[`shallow render 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6226,7 +6365,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6242,7 +6381,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6258,7 +6397,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6274,7 +6413,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -6295,7 +6434,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6342,6 +6481,7 @@ exports[`shallow render 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6362,6 +6502,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6382,6 +6523,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6402,6 +6544,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6422,6 +6565,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6442,6 +6586,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6462,6 +6607,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6482,6 +6628,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6502,6 +6649,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6525,7 +6673,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -6608,11 +6756,15 @@ exports[`shallow render 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -6692,13 +6844,13 @@ exports[`shallow render 1`] = `
 
 exports[`with cargo items 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6741,7 +6893,7 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -6754,24 +6906,24 @@ exports[`with cargo items 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -6780,7 +6932,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6820,16 +6972,29 @@ exports[`with cargo items 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -6853,10 +7018,10 @@ exports[`with cargo items 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -6871,10 +7036,10 @@ exports[`with cargo items 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -6890,7 +7055,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -6930,7 +7095,7 @@ exports[`with cargo items 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -6963,7 +7128,7 @@ exports[`with cargo items 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -6974,7 +7139,6 @@ exports[`with cargo items 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -7012,7 +7176,7 @@ exports[`with cargo items 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -7035,7 +7199,7 @@ exports[`with cargo items 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -7045,7 +7209,7 @@ exports[`with cargo items 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -7103,7 +7267,7 @@ exports[`with cargo items 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -7129,7 +7293,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -7173,15 +7337,17 @@ exports[`with cargo items 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -7190,7 +7356,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -7316,6 +7482,7 @@ exports[`with cargo items 1`] = `
                   "volume": 0.18,
                 }
               }
+              key="RANDOM_KEY"
               theme={
                 Object {
                   "colors": Object {
@@ -7436,6 +7603,7 @@ exports[`with cargo items 1`] = `
                   "volume": 1.75,
                 }
               }
+              key="RANDOM_KEY"
               theme={
                 Object {
                   "colors": Object {
@@ -7451,7 +7619,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -7497,7 +7665,7 @@ exports[`with cargo items 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7513,7 +7681,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7529,7 +7697,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7545,7 +7713,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7561,7 +7729,7 @@ exports[`with cargo items 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -7582,7 +7750,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -7629,6 +7797,7 @@ exports[`with cargo items 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7649,6 +7818,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7669,6 +7839,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7689,6 +7860,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7709,6 +7881,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7729,6 +7902,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7749,6 +7923,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7769,6 +7944,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7789,6 +7965,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7812,7 +7989,7 @@ exports[`with cargo items 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -7895,11 +8072,15 @@ exports[`with cargo items 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
@@ -7979,13 +8160,13 @@ exports[`with cargo items 1`] = `
 
 exports[`with containers 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
 >
   <div
-    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
   >
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8028,7 +8209,7 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <h4
-              className=" flex-none"
+              className="flex-none"
             >
               Shipment Reference:
             </h4>
@@ -8041,24 +8222,24 @@ exports[`with containers 1`] = `
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Status:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             />
           </div>
           <div
             className="flex-100 layout-row layout-wrap layout-align-space-between-start"
           >
             <p
-              className=" sec_subtitle_text_normal flex-none"
+              className="sec_subtitle_text_normal flex-none"
             >
               Created at:
             </p>
             <p
-              className=" sec_subtitle_text flex-none offset-5 "
+              className="sec_subtitle_text flex-none offset-5"
             >
               19
             </p>
@@ -8067,7 +8248,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8107,16 +8288,29 @@ exports[`with containers 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -8140,10 +8334,10 @@ exports[`with containers 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
@@ -8158,10 +8352,10 @@ exports[`with containers 1`] = `
               className="flex-40 layout-row layout-wrap layout-align-center-center"
             >
               <div
-                className="flex-80 layout-row layout-align-start-start layout-wrap"
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100  letter_3"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
@@ -8177,7 +8371,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8217,7 +8411,7 @@ exports[`with containers 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -8250,7 +8444,7 @@ exports[`with containers 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
                 destinationFees={false}
@@ -8261,7 +8455,6 @@ exports[`with containers 1`] = `
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -8299,7 +8492,7 @@ exports[`with containers 1`] = `
             </div>
           </div>
           <div
-            className="flex-100 layout-row layout-align-center-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
           >
             <div
               className="flex-100 layout-row layout-align-start-center"
@@ -8322,7 +8515,7 @@ exports[`with containers 1`] = `
                 />
               </div>
               <div
-                className="flex-30 layout-row layout-align-end-center layout-wrap"
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
               >
                 <h5
                   className="flex-none letter_3"
@@ -8332,7 +8525,7 @@ exports[`with containers 1`] = `
               </div>
             </div>
             <div
-              className=" flex-none content_width_booking layout-row layout-align-center-center"
+              className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermExtras
                 feeHash={
@@ -8390,7 +8583,7 @@ exports[`with containers 1`] = `
           </h3>
         </div>
         <div
-          className="flex-30 layout-row layout-align-end-center layout-wrap"
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
         >
           <h3
             className="flex-none letter_3"
@@ -8416,7 +8609,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8460,15 +8653,17 @@ exports[`with containers 1`] = `
           >
             <Contact
               contactType="Shipper"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
+              key="RANDOM_KEY"
               textStyle="#333"
             />
           </div>
           <div
-            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
           >
              
              
@@ -8477,7 +8672,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8534,6 +8729,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 250,
                 }
               }
+              key="RANDOM_KEY"
               theme={
                 Object {
                   "colors": Object {
@@ -8559,6 +8755,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 49,
                 }
               }
+              key="RANDOM_KEY"
               theme={
                 Object {
                   "colors": Object {
@@ -8574,7 +8771,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8620,7 +8817,7 @@ exports[`with containers 1`] = `
               className="flex-100 layout-row layout-align-start-center"
             >
               <div
-                className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -8636,7 +8833,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-10 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -8652,7 +8849,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -8668,7 +8865,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -8684,7 +8881,7 @@ exports[`with containers 1`] = `
                 </p>
               </div>
               <div
-                className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap"
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
               >
                 <p
                   className="flex-100"
@@ -8705,7 +8902,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="heading_style flex-100 layout-row layout-align-space-between-center"
@@ -8752,6 +8949,7 @@ exports[`with containers 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8772,6 +8970,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8792,6 +8991,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8812,6 +9012,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8832,6 +9033,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8852,6 +9054,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8872,6 +9075,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8892,6 +9096,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8912,6 +9117,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8935,7 +9141,7 @@ exports[`with containers 1`] = `
       </div>
     </div>
     <div
-      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
     >
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-center"
@@ -9018,11 +9224,15 @@ exports[`with containers 1`] = `
                 <ul
                   className="flex-100 terms_list"
                 >
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     FOO_TERM
                   </li>
-                  <li>
+                  <li
+                    key="RANDOM_KEY"
+                  >
                      
                     BAR_TERM
                   </li>
