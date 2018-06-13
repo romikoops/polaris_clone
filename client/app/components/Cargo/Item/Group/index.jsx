@@ -117,20 +117,36 @@ export class CargoItemGroup extends Component {
       </div>
     )
     return (
-      <div className={`${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
-        <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-40 layout-row layout-align-start-center">
-            <h5 className="flex-none">Cargo Unit</h5>
-            <div className="flex-5" />
-            <p className="flex-none">{group.groupAlias}</p>
+      <div className={`${styles.info}`}>
+        <div className="flex-100 layout-row layout-align-center-center">
+          <div className={`flex-5 layout-row layout-align-center-center ${styles.side_border}`}>
+            <p className={`flex-none layout-row layout-align-center-center ${styles.cargo_unit}`}>{group.groupAlias}</p>
           </div>
-          <div className="flex-40 layout-row layout-align-end-center">
-            <p className="flex-none">{`${group.quantity} X ${group.cargoType.category}`}</p>
+          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
+            <p className="flex-none layout-row layout-align-center-center">{`x ${group.quantity}`}</p>
+            <i className="flex-none layout-row layout-align-center-center fa fa-square" />
+          </div>
+          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
+            <div className="layout-column">
+              <p className="flex-none layout-row layout-align-center-center"><span>{group.cargoType.category}</span></p>
+              <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
+            </div>
+          </div>
+          <div className="flex-55 layout-row">
+            {aggViewer}
+          </div>
+          <div className="flex-5 layout-row">
+            <Toggle
+              className="flex-none"
+              id="unitView"
+              name="unitView"
+              checked={unitView}
+              onChange={e => this.handleViewToggle(e)}
+            />
           </div>
         </div>
 
-        <hr />
-        <div className="flex-100 layout-row layout-wrap layout-align-start">
+        {/* <div className="flex-100 layout-row layout-wrap layout-align-start">
           <div
             className={`${
               styles.detailed_row
@@ -154,12 +170,11 @@ export class CargoItemGroup extends Component {
             </div>
           </div>
           <hr className="flex-100" />
-        </div>
+        </div> */}
         <div className="flex-100 layout-row layout-align-none-start layout-wrap">
           {unitViewer}
-          {aggViewer}
         </div>
-        <hr className="flex-100" />
+        {/* <hr className="flex-100" /> */}
         {viewHSCodes ? (
           <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
             <i className="fa fa-eye clip flex-none" style={textStyle} />

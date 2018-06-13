@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './Admin.scss'
+import adminStyles from './Admin.scss'
 import { AdminSearchableShipments } from './AdminSearchables'
 import { adminDashboard as adminTip } from '../../constants'
 
@@ -98,10 +98,10 @@ export class AdminShipmentsIndex extends Component {
             <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
               <div
                 className={`flex-100 layout-row layout-align-space-between-center ${
-                  styles.sec_subheader
+                  adminStyles.sec_subheader
                 }`}
               >
-                <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+                <p className={` ${adminStyles.sec_subheader_text} flex-none`}> No Shipments yet</p>
               </div>
               <p className="flex-none"> As shipments are requested, they will appear here</p>
             </div>

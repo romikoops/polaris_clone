@@ -53,13 +53,13 @@
     font-size: 8px;
   }
   .clip {
-  
+
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
-  
+
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
@@ -212,7 +212,7 @@
     background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
-  
+
   }
   .hub_card {
     width: 240px;
@@ -574,7 +574,7 @@
   .new_margin {
   margin-bottom: 0px !important;
   padding-bottom: 0px
-   
+
   }
   .tooltip{
     max-width: 150px !important;
@@ -741,7 +741,7 @@
     width: 200px;
     height: 200px;
   }
-  .upload_btn_wrapper input[type=file] { 
+  .upload_btn_wrapper input[type=file] {
     width: 0;
     height: 0;
     opacity: 0;
@@ -757,7 +757,7 @@
   }
   .error {
     height: 40px !important;
-    
+
   }
   .file_error {
     overflow: hidden;
@@ -792,7 +792,7 @@
   }
   .action_header {
     background: lightslategray;
-    p, i{ 
+    p, i{
       font-size: 20px;
       color: white;
       margin: 5px;
@@ -856,8 +856,55 @@
      height: 0px;
      overflow: hidden;
    }
-
+   .title_grey {
+     background: #E0E0E0;
+     color: #212121;
+     height: 38px;
+     &:first-child {
+       padding-left: 15px;
+       margin: 0;
+       font-size: 18px;
+       font-weight: bold;
+     }
+   }
    .expander_icon i {
      font-size: 12px !important;
+   }
+   .no_margin_right {
+     margin-right: 0 !important;
+   }
+   .border_box {
+     border: 5px solid #E0E0E0;
+     margin-right: 25px;
+     &:last-child {
+       margin: 0 !important;
+     }
+   }
+   .margin_box {
+     margin-bottom: 25px;
+   }
+   .margin_box_right {
+     .border_box {
+       margin-right: 25px;
+      }
+   }
+   .button_row {
+     min-height: 130px;
+     button {
+       border-radius: 3px;
+       text-transform: uppercase;
+       font-weight: bold;
+       font-size: 21px;
+       letter-spacing: 0.02em;
+       padding: 10px 14px;
+       &:first-child {
+         color: white;
+         margin-right: 20px;
+       }
+       &:last-child {
+         color: #EB5757;
+         border: 3px solid #EB5757;
+       }
+     }
    }
 }
