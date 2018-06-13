@@ -16,7 +16,7 @@ export default function CargoItemGroupAggregated ({ group }) {
         <h4 className="flex-none"> Aggregate Values:</h4>
       </div> */}
       <div className={
-        `${styles.detailed_row} flex-100 ` +
+        `${styles.detailed_row_aggregated} flex-100 ` +
         'layout-row layout-wrap layout-align-none-center'
       }
       >

@@ -1,5 +1,6 @@
 :local {
   .info {
+    width: 100%;
     color: #333333;
     font-size: 16px;
     line-height: 18px;
@@ -7,6 +8,13 @@
     background: white;
     // border-radius: 2px;
     border-bottom: 2px solid #E0E0E0;
+    i {
+      transition: all 0.4s ease;
+      transform: rotate(-90deg);
+      &.collapsed {
+        transform: none;
+      }
+    }
     h4 {
     	font-weight: normal;
     }
@@ -21,51 +29,40 @@
 			}
 		}
   }
-  .open {
-    height: max-content;
-    overflow: visible;
-    visibility: normal;
-    width: 250px;
-    position: absolute;
-    z-index: 50;
-  }
-  .closed {
-    height: 0;
-    visibility: hidden;
-    overflow: hidden;
-  }
-  .hs_cell {
-    transition: all 1s bounce;
-    height: max-content;
-  }
-  .cell_data_toggle {
-    transition: all 1s bounce;
-    background: whitesmoke;
-  }
-  .panel {
-    padding: 0 10px;
-    overflow: hidden;
-    transition: all 2s linear;
-  }
-  .open_panel {
-    max-height: none !important;
-    opacity: 1 !important;
-  }
-  .closed_panel {
+  .row_collapsed {
     max-height: 0 !important;
-    opacity: 0;
   }
-  .closed_panel.panel {
-    padding: 0;
-  }
-  .closed_panel .detailed_row {
-    padding: 0;
-    margin-top: 0;
+  .unit_viewer {
+    height: 65px;
+    transition: all 1s ease;
+    overflow: hidden;
+    &:first-child {
+      height: 65px;
+    }
+    &.closed_panel {
+      height: 0;
+      opacity: 0;
+    }
   }
   .detailed_row {
+    border-top: 1px solid #E0E0E0;
+    padding: 5px 15px;
+    // margin-top: 5px;
+    span {
+      font-weight: bold;
+      font-size: 21px;
+    }
+    p:last-child {
+      font-size: 14px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      margin-top: 6px;
+    }
+  }
+  .detailed_row_aggregated {
     padding: 5px 15px;
     margin-top: 5px;
-    transition: all 1s linear;
+    transition: all 0.5s linear;
     span {
       font-weight: bold;
       font-size: 21px;
@@ -78,7 +75,19 @@
     }
   }
   .unit_data_cell {
-    padding: 5px;
+    p {
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.02em;
+      margin-top: 6px;
+    }
+    span {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    img {
+      margin-right: 14px;
+    }
   }
   .side_border {
     border-right: 1px solid #E0E0E0;
@@ -99,5 +108,11 @@
       letter-spacing: 0.02em;
       height: 75px;
     }
+  }
+  .icon_cargo_item {
+    background-size: cover;
+    width: 18%;
+    min-height: 40px;
+    margin-left: 14px;
   }
 }

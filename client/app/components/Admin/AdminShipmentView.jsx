@@ -54,8 +54,7 @@ export class AdminShipmentView extends Component {
       newTimes: {
         eta: '',
         etd: ''
-      },
-      collapser: {}
+      }
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
@@ -81,14 +80,7 @@ export class AdminShipmentView extends Component {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'decline')
   }
-  handleCollapser (key) {
-    this.setState({
-      collapser: {
-        ...this.state.collapser,
-        [key]: !this.state.collapser[key]
-      }
-    })
-  }
+
   handleCurrencySelect (selection) {
     this.setState({ currency: selection })
   }
@@ -166,7 +158,12 @@ export class AdminShipmentView extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoItemGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+      resultArray.push(<CargoItemGroup
+        shipment={shipmentData.shipment}
+        group={cargoGroups[k]}
+        theme={theme}
+        hsCodes={hsCodes}
+      />)
     })
     return resultArray
   }
@@ -250,9 +247,8 @@ export class AdminShipmentView extends Component {
       locations
     } = shipmentData
     const {
-      newTotal, showEditPrice, currency, showEditTime, newTimes
+      showEditTime, newTimes
     } = this.state
-    const hubKeys = schedules[0].hub_route_key.split('-')
     const hubsObj = {
       startHub: {
         data: locations.origin
@@ -263,10 +259,10 @@ export class AdminShipmentView extends Component {
     }
 
     hubs.forEach((c) => {
-      if (String(c.data.id) === hubKeys[0]) {
+      if (String(c.data.id) === schedules[0].origin_hub_id) {
         hubsObj.startHub = c
       }
-      if (String(c.data.id) === hubKeys[1]) {
+      if (String(c.data.id) === schedules[0].destination_hub_id) {
         hubsObj.endHub = c
       }
     })
@@ -322,7 +318,6 @@ export class AdminShipmentView extends Component {
 
     const nArray = []
     const docView = []
-
     let shipperContact = ''
     let consigneeContact = ''
     if (contacts) {
@@ -533,7 +528,7 @@ export class AdminShipmentView extends Component {
     //     </div>
     //   )
     // const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
-    const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
+    const feeHash = shipment.selected_offer
     // const saveSection = (
     //   <div className={`${adminStyles.time_edit_button}`}>
     //     {showEditTime ? (
@@ -675,7 +670,7 @@ export class AdminShipmentView extends Component {
           <div className={`layout-row flex-40 ${styles.hub_box_shipment}`}>
             <div className={`${styles.info_hub_box} flex-60 layout-column`}>
               <h3>{hubsObj.startHub.data.name}</h3>
-              <p className={styles.address}>{hubsObj.startHub.location.geocoded_address}</p>
+              <p className={styles.address}>{hubsObj.startHub.data.geocoded_address}</p>
               <p><span>{shipment.has_pre_carriage
                 ? 'ETC'
                 : 'ETD'}</span></p>
@@ -699,7 +694,7 @@ export class AdminShipmentView extends Component {
           <div className={`layout-row flex-40 ${styles.hub_box_shipment}`}>
             <div className={`${styles.info_hub_box} flex-60 layout-column`}>
               <h3>{hubsObj.endHub.data.name}</h3>
-              <p className={styles.address}>{hubsObj.endHub.location.geocoded_address}</p>
+              <p className={styles.address}>{hubsObj.endHub.data.geocoded_address}</p>
               <p><span>ETA</span></p>
               <p>{etaJSX}</p>
             </div>
@@ -768,7 +763,7 @@ export class AdminShipmentView extends Component {
                 <p>Cargo items</p>
               </div>
               <hr />
-              <h2 className="layout-align-end-center layout-row flex">{feeHash.total.value} {shipment.total_goods_value.currency}</h2>
+              <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
             </div>
           </div>
         </div>
