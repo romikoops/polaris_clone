@@ -47,10 +47,10 @@ class TruckingPricing < ApplicationRecord
       end
     end
   end
+
   def self.delete_existing_truckings(hub)
     hub.trucking_pricings.delete_all
-    hub.hub_truckings.delete_all
-    
+    hub.hub_truckings.delete_all  
   end
 
   def self.find_by_filter(args={})
@@ -70,6 +70,7 @@ class TruckingPricing < ApplicationRecord
       .where(cargo_class_condition(args))
       .where(truck_type_condition(args))
       .where(nexuses_condition(args))
+      .where(hubs_condition(args))
       .where("
         (
           (trucking_destinations.zipcode IS NOT NULL)
@@ -85,12 +86,7 @@ class TruckingPricing < ApplicationRecord
         ) OR (
           (trucking_destinations.distance IS NOT NULL)
           AND (
-            trucking_destinations.distance = (
-              SELECT ROUND(ST_Distance(
-                ST_Point(hubs.longitude, hubs.latitude)::geography,
-                ST_Point(:longitude, :latitude)::geography
-              ) / 500)
-            )
+            trucking_destinations.distance = #{distance_to_match(args)}
           )
         )
       ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
@@ -226,6 +222,22 @@ class TruckingPricing < ApplicationRecord
 
   def self.nexuses_condition(args)
     args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
+  end
+
+  def self.hubs_condition(args)
+    args[:hub_ids] ? { 'hubs.id': args[:hub_ids] } : {}
+  end
+
+  def self.distance_to_match(args)
+    sanitize_sql(
+      args[:distance] ||
+      "(
+        SELECT ROUND(ST_Distance(
+          ST_Point(hubs.longitude, hubs.latitude)::geography,
+          ST_Point(:longitude, :latitude)::geography
+        ) / 500)
+      )"
+    )
   end
 
   def self.parse_sql_record(str)
