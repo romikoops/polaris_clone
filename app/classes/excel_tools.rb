@@ -996,7 +996,7 @@ module ExcelTools
           expiration_date: "EXPIRATION_DATE",
           range_min:       "RANGE_MIN",
           range_max:       "RANGE_MAX",
-          service_level:   "SERVICE LEVEL",
+          service_level:   "SERVICE_LEVEL",
           destination:     "DESTINATION"
         )
         next if rows.empty?

@@ -225,15 +225,14 @@ module ShippingTools
       tmp
     end
 
-    shipment.planned_etd = shipment.schedule_set.first["etd"]
-    shipment.planned_eta = shipment.schedule_set.last["eta"]
-    shipment.closing_date = shipment.schedule_set.first["closing_date"]
+   
     shipment.save!
     
     origin_hub      = shipment.origin_hub
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
+    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     locations = {
       startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
       endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
@@ -242,7 +241,7 @@ module ShippingTools
     }
 
     {
-      shipment:        shipment.as_json(methods: :selected_offer),
+      shipment:        shipment.as_json(options),
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
@@ -329,7 +328,9 @@ module ShippingTools
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
-
+    shipment.planned_etd = shipment.schedule_set.first["etd"]
+    shipment.planned_eta = shipment.schedule_set.last["eta"]
+    shipment.closing_date = shipment.schedule_set.first["closing_date"]
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -392,12 +393,12 @@ module ShippingTools
       startHub: { data: @origin_hub,      location: @origin_hub.nexus },
       endHub:   { data: @destination_hub, location: @destination_hub.nexus }
     }
-
+    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
 
     {
-      shipment:       shipment,
+      shipment:       shipment.as_json(options),
       hubs:           hubs,
       contacts:       @contacts,
       userLocations:  @user_locations,

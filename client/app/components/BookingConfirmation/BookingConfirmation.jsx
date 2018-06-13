@@ -155,7 +155,6 @@ export class BookingConfirmation extends Component {
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
-      schedule,
       locations,
       shipper,
       consignee,
@@ -168,8 +167,6 @@ export class BookingConfirmation extends Component {
     } = shipmentData
     if (!shipment || !locations || !cargoItemTypes) return <h1> Loading</h1>
     const { acceptTerms, collapser } = this.state
-    const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
-
     const defaultTerms = [
       'You verify that all the information provided above is true',
       `You agree to our Terms and Conditions and the General Conditions of the
@@ -383,7 +380,7 @@ export class BookingConfirmation extends Component {
                   styles.inner_wrapper
                 } flex-100 layout-row layout-wrap layout-align-start-start`}
               >
-                <RouteHubBox hubs={hubsObj} schedule={schedule} theme={theme} />
+                <RouteHubBox shipment={shipment} theme={theme} />
                 <div
                   className="flex-100 layout-row layout-align-space-between-center"
                   style={{ position: 'relative' }}

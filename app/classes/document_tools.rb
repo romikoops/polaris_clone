@@ -209,7 +209,7 @@ module DocumentTools
 
     header_format = workbook.add_format
     header_format.set_bold
-    header_values = %w[EFFECTIVE_DATE EXPIRATION_DATE FEE	MOT	FEE_CODE	LOAD_TYPE	DIRECTION	CURRENCY	RATE_BASIS	TON	CBM	KG	ITEM	SHIPMENT	BILL	CONTAINER	MINIMUM	WM]
+    header_values = %w[EFFECTIVE_DATE EXPIRATION_DATE DESTINATION SERVICE_LEVEL FEE	MOT	FEE_CODE	LOAD_TYPE	DIRECTION	CURRENCY	RATE_BASIS	TON	CBM	KG	ITEM	SHIPMENT	BILL	CONTAINER	MINIMUM	WM]
     results_by_hub.each do |hub, results|
       worksheet = workbook.add_worksheet(hub)
       row = 1
