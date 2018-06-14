@@ -139,7 +139,7 @@ class OfferCalculator
         hub_data[:distance],
         direction
       )
-
+        
       children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
       create_charges_from_fees_data!(
         trucking_fees_data, children_charge_category, charge_category, parent_charge

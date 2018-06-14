@@ -589,6 +589,7 @@ module ExcelTools
       row_truck_type = "default" if !row_truck_type || row_truck_type == ""
       load_type = meta[:load_type] == "container" ? "container" : "cargo_item"
       cargo_class = meta[:cargo_class]
+      direction = meta[:direction] == "import" ? "on" : "pre"
       awesome_print meta
       courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
       rate_num_rows = rates_sheet.last_row
@@ -641,8 +642,7 @@ module ExcelTools
         single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
         single_country_values = single_ident_values_and_country.map { |h| h[:country] }
 
-        %w[pre on].each do |direction|
-          trucking_pricing_by_zone[row_key] = TruckingPricing.new(
+          trucking_pricing = TruckingPricing.new(
             rates:         {},
             fees:          {},
             carriage:      direction,
@@ -660,7 +660,7 @@ module ExcelTools
           )
           stats[:trucking_pricings][:number_created] += 1
           modifier_position_objs.each do |mod_key, mod_indexes|
-            trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
+            trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
               awesome_print "#{row_zone_name} "
@@ -689,16 +689,13 @@ module ExcelTools
               end
             end
           end
-          # awesome_print single_ident_values_and_country
-          # awesome_print trucking_pricing_by_zone[row_key]
-          
           charges.each do |_k, fee|
             tmp_fee = fee.clone
             next unless tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type
 
             tmp_fee.delete(:direction)
             tmp_fee.delete(:truck_type)
-            trucking_pricing_by_zone[row_key][:fees][tmp_fee[:key]] = tmp_fee
+            trucking_pricing[:fees][tmp_fee[:key]] = tmp_fee
           end
 
           single_ident_values_and_country_with_timestamps =
@@ -713,7 +710,7 @@ module ExcelTools
               end
             end.join(", ")
 
-          tp = trucking_pricing_by_zone[row_key]
+          tp = trucking_pricing
 
           # Find or update trucking_destinations
           td_query = <<-eos
@@ -810,7 +807,6 @@ module ExcelTools
 
           ActiveRecord::Base.connection.execute(insertion_query)
         end
-      end
     end
     # END Rates ------------------------
     end_time = DateTime.now

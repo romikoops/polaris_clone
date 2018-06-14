@@ -167,7 +167,7 @@ class TenantSeeder
           },
           air: {
             container: false,
-            cargo_item: false
+            cargo_item: true
           }
         },
         links: {
