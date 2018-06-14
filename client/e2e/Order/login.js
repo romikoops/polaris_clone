@@ -19,22 +19,21 @@ export default async function login (puppeteer) {
     waitForSelectors,
     url
   } = puppeteer
-
   /**
-     * There are several buttons
-     */
+   * There are several buttons
+   */
   expect(await count(BUTTONS)).toBeGreaterThan(4)
 
   /**
-     * Click on home login link
-     */
+   * Click on home login link
+   */
   expect(await exists(LOGIN_LINK_HOME)).toBeTruthy()
-  await click(LOGIN_LINK_HOME)
+  expect(await click(LOGIN_LINK_HOME)).toBeTruthy()
 
   /**
-     * Fill username and password
-     * Click submit form
-     */
+   * Fill username and password
+   * Click submit form
+   */
   expect(await waitForSelectors(USER, PASSWORD)).toBeTruthy()
   await fill(USER, DEMO_USER)
   await fill(PASSWORD, DEMO_PASSWORD)

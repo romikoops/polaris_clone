@@ -92,49 +92,82 @@ export default async function init (options) {
     page.on('console', log)
   }
 
-  const $ = async (...input) => {
-    mark('$', input[0])
+  const getHandle$ = async (selector) => {
+    const handle = page.evaluateHandle(x => document.querySelector(x), selector)
 
-    const result = await page.$eval(...input)
+    const ok = page.evaluate(el => el !== null, handle)
+
+    if (!ok) {
+      await handle.dispose()
+
+      return false
+    }
+
+    return handle
+  }
+
+  const getHandle$$ = async (selector) => {
+    const handle = page.evaluateHandle(x => document.querySelectorAll(x), selector)
+
+    const ok = page.evaluate(el => el.length > 0, handle)
+
+    if (!ok) {
+      await handle.dispose()
+
+      return false
+    }
+
+    return handle
+  }
+
+  const $ = async (selector, fn, additional) => {
+    const handle = await getHandle$(selector)
+
+    if (handle === false) {
+      return false
+    }
+    const result = await page.evaluate(fn, handle, additional)
+    await handle.dispose()
+    await delay(STEP_DELAY)
+
+    return result
+  }
+  const $$ = async (selector, fn, additional) => {
+    const handle = await getHandle$$(selector)
+
+    if (handle === false) {
+      return false
+    }
+    const result = await page.evaluate(fn, handle, additional)
+    await handle.dispose()
     await delay(STEP_DELAY)
 
     return result
   }
 
-  const $$ = async (...input) => {
-    mark('$$', input[0])
+  const count = (selector) => {
+    mark('count', selector)
 
-    const result = await page.$$eval(...input)
-    await delay(STEP_DELAY)
-
-    return result
+    return $$(selector, els => els.length)
   }
 
   const waitFor = async (selectorInput, countInput = 1) => {
-    const { selector, count } = typeof selectorInput === 'object'
+    const { selector, count: countValue } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, count: countInput }
 
-    mark('waitFor', selector, count)
+    mark('waitFor', selector, countValue)
 
     let counter = 50
-    let found = await page.$$eval(
-      selector,
-      (els, countValue) => els.length >= countValue,
-      count
-    )
+    let counted = await count(selector)
 
-    while (!found && counter > 0) {
+    while (counted < countValue && counter > 0) {
       counter -= 1
       await delay(DELAY)
-      found = await page.$$eval(
-        selector,
-        (els, countValue) => els.length >= countValue,
-        count
-      )
+      counted = await count(selector)
     }
 
-    return found
+    return counted >= countValue
   }
 
   const waitForSelectors = async (...selectors) => {
@@ -159,18 +192,15 @@ export default async function init (options) {
     while (!found && counter > 0) {
       counter -= 1
       await delay(DELAY)
-      const countResult = await page.$$eval(
-        input.selector,
-        els => els.length
-      )
+      const countResult = await count(input.selector)
 
       if (countResult < waitIndex + 1) {
         continue
       }
 
-      const texts = await page.$$eval(
+      const texts = await $$(
         input.selector,
-        els => els.map(el => el.textContent)
+        els => Array.from(els).map(el => el.textContent)
       )
       found = texts[waitIndex].includes(input.text)
     }
@@ -184,22 +214,23 @@ export default async function init (options) {
     return page.evaluate(() => window.location.href)
   }
 
-  const focus = (selector) => {
+  const focus = async (selector) => {
     mark('focus', selector)
 
-    return $(selector, el => el.focus())
-  }
+    const handle = await getHandle$(selector)
+    if (handle === false) {
+      return false
+    }
+    await handle.focus()
+    await handle.dispose()
 
-  const count = (selector) => {
-    mark('count', selector)
-
-    return page.$$eval(selector, els => els.length)
+    return true
   }
 
   const exists = (selector) => {
     mark('exists', selector)
 
-    return page.$$eval(selector, els => els.length > 0)
+    return $$(selector, els => els.length > 0)
   }
 
   const click = async (selectorInput, indexInput) => {
@@ -210,10 +241,12 @@ export default async function init (options) {
     mark('click', selector, index)
 
     if (index === undefined) {
-      if (await exists(selector) === false) {
+      const handle = await getHandle$(selector)
+      if (handle === false) {
         return false
       }
-      await $(selector, el => el.click())
+      await handle.click()
+      await handle.dispose()
 
       return true
     }
@@ -227,8 +260,29 @@ export default async function init (options) {
     if (await exists(selector) === false) {
       return false
     }
+    const texts = await page.evaluate(
+      (sel) => {
+        const els = document.querySelectorAll(sel)
 
-    return $$(selector, clickWithTextFn, text)
+        return Array.from(els).map(el => el.textContent)
+      },
+      selector
+    )
+    const index = texts.indexOf(text)
+
+    if (index === -1) {
+      return false
+    }
+    await page.evaluate(
+      (sel, i) => {
+        const els = document.querySelectorAll(sel)
+        els[i].click()
+      },
+      selector,
+      index
+    )
+
+    return true
   }
 
   const clickWithPartialText = async (selector, text) => {
@@ -237,8 +291,29 @@ export default async function init (options) {
     if (await exists(selector) === false) {
       return false
     }
+    const texts = await page.evaluate(
+      (sel) => {
+        const els = document.querySelectorAll(sel)
 
-    return $$(selector, clickWithPartialTextFn, text)
+        return Array.from(els).map(el => el.textContent)
+      },
+      selector
+    )
+    const index = texts.findIndex(x => x.includes(text))
+
+    if (index === -1) {
+      return false
+    }
+    await page.evaluate(
+      (sel, i) => {
+        const els = document.querySelectorAll(sel)
+        els[i].click()
+      },
+      selector,
+      index
+    )
+
+    return true
   }
 
   const waitAndClick = async (input) => {
@@ -418,28 +493,6 @@ function clickWhichSelector (els, i) {
   }
 
   els[index].click()
-
-  return true
-}
-
-function clickWithTextFn (els, text) {
-  const filtered = els.filter(x => x.textContent === text)
-
-  if (filtered.length === 0) {
-    return false
-  }
-  filtered[0].click()
-
-  return true
-}
-
-function clickWithPartialTextFn (els, text) {
-  const filtered = els.filter(x => x.textContent.includes(text))
-
-  if (filtered.length === 0) {
-    return false
-  }
-  filtered[0].click()
 
   return true
 }
