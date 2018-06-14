@@ -463,7 +463,7 @@ module ExcelTools
         row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
         zip_char_length ||= row_zip.to_s.length
         if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { ident: (row_zip/2).ceil, country: row_data[3] }
+          zones[zone_name] << { ident: (row_zip/2.0).ceil, country: row_data[3] }
         else
           zones[zone_name] << { ident: row_zip, country: row_data[3] }
         end
@@ -472,7 +472,7 @@ module ExcelTools
         range = row_data[2].delete(" ").split("-")
         zip_char_length ||= range[0].length
         if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { min: (range[0].to_i/2).ceil, max: (range[1].to_i/2).ceil, country: row_data[3] }
+          zones[zone_name] << { min: (range[0].to_i/2.0).ceil, max: (range[1].to_i/2.0).ceil, country: row_data[3] }
         else
           zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
         end
