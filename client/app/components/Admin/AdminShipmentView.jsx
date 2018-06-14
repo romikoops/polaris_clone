@@ -323,7 +323,7 @@ export class AdminShipmentView extends Component {
     if (contacts) {
       contacts.forEach((n) => {
         if (n.type === 'notifyee') {
-          nArray.push(<div className={`${styles.contact_box} flex-100 layout-wrap layout-column`}>
+          nArray.push(<div className={`${styles.contact_box} ${styles.notifyee_box} flex-100 layout-wrap layout-column`}>
             <div className="layout-column flex">
               <div className={`${styles.info_row} flex-100 layout-row`}>
                 <i className={`${adminStyles.icon} fa fa-user flex-none`} style={textStyle} />
@@ -791,75 +791,101 @@ export class AdminShipmentView extends Component {
         <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_right}`}>
           <div className="layout-column flex">
             <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Cargo Details</p>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className="flex-100 layout-row layout-wrap layout-align-start-stretch">
               {cargoView}
             </div>
           </div>
         </div>
         <div className={`layout-row flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_box} ${adminStyles.no_margin_right}`}>
-          <div className="flex-20 layout-row offset-5 layout-align-start-start layout-wrap">
-            {shipment.total_goods_value ? (
-              <p className="flex-100">
-                Total Value of Goods:
-                <span>{shipment.total_goods_value.value}
-                  {shipment.total_goods_value.currency}
-                </span>
-              </p>
-            ) : (
-              <p className="flex-100">
-                  Total Value of Goods: <span />
-              </p>
-            )}
+          <div className={`layout-column flex-50 ${styles.column_info}`}>
+            <div className="flex-30 layout-row offset-5 layout-align-start-center layout-wrap">
+              {shipment.total_goods_value ? (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">Total Value of Goods:</span>
+                  <p className="flex-60 layout-row">
+                    {shipment.total_goods_value.value}
+                    {shipment.total_goods_value.currency}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">Total Value of Goods:</span>
+                  <p className="flex-60 layout-row">
+                      -
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="flex-30 layout-row offset-5 layout-align-start-center layout-wrap">
+              {shipment.eori ? (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">EORI number:</span>
+                  <p className="flex-60 layout-row">
+                    {shipment.eori}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">EORI number:</span>
+                  <p className="flex-60 layout-row">
+                    -
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="flex-30 layout-row offset-5 layout-align-start-start layout-wrap">
+              {shipment.incoterm_text ? (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">Incoterm:</span>
+                  <p className="flex-60 layout-row">
+                    {shipment.incoterm_text}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-40 layout-row">Incoterm:</span>
+                  <p className="flex-60 layout-row">
+                    -
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-          <div className="flex-20 layout-row offset-5 layout-align-start-start layout-wrap">
-            {shipment.eori ? (
-              <p className="flex-100">
-                EORI number: <span>{shipment.eori}</span>
-              </p>
-            ) : (
-              <p className="flex-100">
-                  EORI number: <span />
-              </p>
-            )}
-          </div>
-          <div className="flex-20 layout-row offset-5 layout-align-start-start layout-wrap">
-            {shipment.cargo_notes ? (
-              <p className="flex-100">
-                Description of Goods: <span>{shipment.cargo_notes}</span>
-              </p>
-            ) : (
-              <p className="flex-100">
-                  Description of Goods: <span />
-              </p>
-            )}
-          </div>
-          <div className="flex-20 layout-row offset-5 layout-align-start-start layout-wrap">
-            {shipment.notes ? (
-              <p className="flex-100">
-                Notes: <span>{shipment.notes}</span>
-              </p>
-            ) : (
-              <p className="flex-100">
-                  Notes: <span />
-              </p>
-            )}
-          </div>
-          <div className="flex-20 layout-row offset-5 layout-align-start-start layout-wrap">
-            {shipment.incoterm_text ? (
-              <p className="flex-100">
-                Incoterm: <span>{shipment.incoterm_text}</span>
-              </p>
-            ) : (
-              <p className="flex-100">
-                  Incoterm: <span />
-              </p>
-            )}
+          <div className={`layout-column flex-50 ${styles.column_info}`}>
+            <div className="flex-50 layout-row offset-5 layout-align-start-start layout-wrap">
+              {shipment.cargo_notes ? (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-20 layout-row">Description of Goods:</span>
+                  <p className="flex-80 layout-row">
+                    {shipment.cargo_notes}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span>Description of Goods:</span>
+                </div>
+              )}
+            </div>
+            <div className="flex-50 layout-row offset-5 layout-align-start-start layout-wrap">
+              {shipment.notes ? (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span className="flex-20 layout-row">Notes:</span>
+                  <p className="flex-80 layout-row">
+                    {shipment.notes}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <span>Notes:</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_right}`}>
           <div className="layout-column flex">
             <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Documents</p>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
               {missingDocs}
             </div>
           </div>

@@ -87,6 +87,16 @@
       color: #4F4F4F;
     }
   }
+  .notifyee_box {
+    overflow: auto;
+    > :first-child {
+      border-bottom: 2px solid #E0E0E0;
+      margin-right: 20px;
+    }
+    h4 {
+        font-size: 14px;
+      }
+  }
   .padding_bottom_contact {
     min-height: 45px;
   }
@@ -118,6 +128,26 @@
     span {
       font-weight: bold;
       line-height: 33px;
+    }
+  }
+  .column_info {
+    padding-right: 20px;
+    margin-top: 20px;
+    > * {
+      border-bottom: 2px solid #E0E0E0;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+    p {
+      margin: 0;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    span {
+      font-size: 15px;
+      line-height: unset;
+      margin-right: 14px;
     }
   }
   .font_adjustaments {

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
-import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
-import { gradientTextGenerator } from '../../../../helpers'
+// import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoItemGroupAggregated from './Aggregated'
 import { LOAD_TYPES } from '../../../../constants'
 
@@ -34,30 +34,11 @@ export class CargoItemGroup extends Component {
   }
   render () {
     const {
-      group, hsCodes, theme, viewHSCodes, shipment
+      group, shipment
     } = this.props
-    const { viewer, unitView, collapsed } = this.state
-    const textStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
-    const toggleCSS = `
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          ${theme.colors.brightPrimary} 0%,
-          ${theme.colors.brightSecondary} 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    `
-    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+    const { unitView, collapsed } = this.state
+    const showTooltip = true
+    const tooltipId = v4()
     const unitArr = (
       <div
         key={v4()}
@@ -68,19 +49,35 @@ export class CargoItemGroup extends Component {
         <div className="flex-10 layout-row layout-align-center-center">
           <p className="flex-none" style={{ fontSize: '10px' }}>Single Item</p>
         </div>
-        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img tooltip="Length" src="https://image.ibb.co/edttEd/Group_5_5.png" alt="Group_5_5" border="0" />
-          <p className="flex-none"><span>{group.items[0].dimension_y}</span> cm</p>
-        </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img tooltip="Width" src="https://image.ibb.co/cdRkSy/Group_5_4.png" alt="Group_5_4" border="0" />
+          <img data-for={tooltipId} data-tip="Length" src="https://image.ibb.co/cdRkSy/Group_5_4.png" alt="Group_5_4" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
           <p className="flex-none"><span>{group.items[0].dimension_x}</span> cm</p>
         </div>
 
         <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
-          <img tooltip="Height" src="https://image.ibb.co/f9QR0J/Group_5.png" alt="Group_5" border="0" />
+          <img data-for={tooltipId} data-tip="Height" src="https://image.ibb.co/f9QR0J/Group_5.png" alt="Group_5" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
           <p className="flex-none"><span>{group.items[0].dimension_z}</span> cm</p>
+        </div>
+
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Width" src="https://image.ibb.co/edttEd/Group_5_5.png" alt="Group_5_5" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
+          <p className="flex-none"><span>{group.items[0].dimension_y}</span> cm</p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
@@ -94,7 +91,9 @@ export class CargoItemGroup extends Component {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
-                {(group.items[0].dimension_y * group.items[0].dimension_x * group.items[0].dimension_y / 1000000).toFixed(2)}
+                {(group.items[0].dimension_y *
+                group.items[0].dimension_x *
+                group.items[0].dimension_y / 1000000).toFixed(2)}
               </span> m<sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">Volume</p>
@@ -106,7 +105,6 @@ export class CargoItemGroup extends Component {
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
         </div>
-        {/* <hr className="flex-100" /> */}
       </div>
     )
     // const unitStyle = unitView ? styles.open_panel : styles.closed_panel
@@ -124,7 +122,7 @@ export class CargoItemGroup extends Component {
     )
     return (
       <div className={`${styles.info}`}>
-        <div className="flex-100 layout-row layout-align-center-center">
+        <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
           <div className={`flex-5 layout-row layout-align-center-center ${styles.side_border}`}>
             <p className={`flex-none layout-row layout-align-center-center ${styles.cargo_unit}`}>{group.groupAlias}</p>
           </div>
@@ -150,22 +148,8 @@ export class CargoItemGroup extends Component {
             onClick={this.handleCollapser}
             onChange={e => this.handleViewToggle(e)}
           >
-            {/* <ToggleUnitRow
-              collapsed
-              content={unitViewer}
-              handleCollapser={e => this.handleViewToggle(e)}
-            /> */}
             <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
           </div>
-          {/* <div className="flex-5 layout-row">
-            <Toggle
-              className="flex-none"
-              id="unitView"
-              name="unitView"
-              checked={unitView}
-              onChange={e => this.handleViewToggle(e)}
-            />
-          </div> */}
         </div>
 
         <div className={`${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`}>
@@ -173,7 +157,7 @@ export class CargoItemGroup extends Component {
             {unitArr}
           </div>
         </div>
-        {viewHSCodes ? (
+        {/* {viewHSCodes ? (
           <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
             <i className="fa fa-eye clip flex-none" style={textStyle} />
             <p className="offset-5 flex-none">View Hs Codes</p>
@@ -186,22 +170,20 @@ export class CargoItemGroup extends Component {
         ) : (
           ''
         )}
-        {styleTagJSX}
+        {styleTagJSX} */}
       </div>
     )
   }
 }
 CargoItemGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
-  viewHSCodes: PropTypes.bool,
-  theme: PropTypes.theme,
-  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // viewHSCodes: PropTypes.bool,
+  // hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   shipment: PropTypes.objectOf(PropTypes.any)
 }
 
 CargoItemGroup.defaultProps = {
-  viewHSCodes: false,
-  theme: false,
+  // viewHSCodes: false,
   shipment: {}
 }
 
