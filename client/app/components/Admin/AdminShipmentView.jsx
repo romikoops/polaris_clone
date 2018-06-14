@@ -52,8 +52,12 @@ export class AdminShipmentView extends Component {
       newTotal: 0,
       showEditTime: false,
       newTimes: {
-        eta: '',
-        etd: ''
+        eta: {
+          day: new Date(moment(this.props.shipmentData.shipment.planned_eta).format())
+        },
+        etd: {
+          day: new Date(moment(this.props.shipmentData.shipment.planned_etd).format())
+        }
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
@@ -199,19 +203,19 @@ export class AdminShipmentView extends Component {
   saveNewTime () {
     const { newTimes } = this.state
     const { adminDispatch, shipmentData } = this.props
-    const etaTimes = newTimes.eta.time.split(':').map(t => parseInt(t, 10))
-    const etdTimes = newTimes.etd.time.split(':').map(t => parseInt(t, 10))
+    const { shipment } = shipmentData
+
     const newEta = moment(newTimes.eta.day)
       .startOf('day')
-      .add(etaTimes[0], 'hours')
-      .add(etaTimes[1], 'minutes')
       .format('lll')
     const newEtd = moment(newTimes.etd.day)
       .startOf('day')
-      .add(etdTimes[0], 'hours')
-      .add(etdTimes[1], 'minutes')
       .format('lll')
+
     const timeObj = { newEta, newEtd }
+    shipment.planned_eta = moment(newTimes.eta.day)
+    shipment.planned_etd = moment(newTimes.etd.day)
+
     adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
     this.toggleEditTime()
   }
@@ -266,22 +270,6 @@ export class AdminShipmentView extends Component {
         hubsObj.endHub = c
       }
     })
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format())
-      },
-      month: new Date(
-        moment()
-          .add(7, 'days')
-          .format('YYYY'),
-        moment()
-          .add(7, 'days')
-          .format('M') - 1
-      ),
-      name: 'dayPicker'
-    }
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -550,9 +538,40 @@ export class AdminShipmentView extends Component {
     //   </div>
     // )
 
+    const dayPickerPropsEtd = {
+      disabledDays: {
+        after: newTimes.eta.day,
+        before: new Date()
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsEta = {
+      disabledDays: {
+        before: newTimes.etd.day < new Date() ? new Date() : newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
     const etdJSX = showEditTime ? (
-      <div className="flex-100 layout-row">
-        <div className="flex-65 layout-row input_box_full">
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
           <DayPickerInput
             name="dayPicker"
             placeholder="DD/MM/YYYY"
@@ -561,28 +580,19 @@ export class AdminShipmentView extends Component {
             parseDate={parseDate}
             value={newTimes.etd.day}
             onDayChange={e => this.handleDayChange(e, 'etd')}
-            dayPickerProps={dayPickerProps}
-          />
-        </div>
-        <div className="flex-35 layout-row input_box_full">
-          <input
-            type="time"
-            value={newTimes.etd.time}
-            onChange={e => this.handleTimeChange(e, 'etd')}
+            dayPickerProps={dayPickerPropsEtd}
           />
         </div>
       </div>
     ) : (
-      <p className="flex-none letter_3">
-        {shipment.has_pre_carriage
-          ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`
-          : `${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
     const etaJSX = showEditTime ? (
-      <div className="flex-100 layout-row">
-        <div className="flex-65 layout-row input_box_full">
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
           <DayPickerInput
             name="dayPicker"
             placeholder="DD/MM/YYYY"
@@ -591,19 +601,12 @@ export class AdminShipmentView extends Component {
             parseDate={parseDate}
             value={newTimes.eta.day}
             onDayChange={e => this.handleDayChange(e, 'eta')}
-            dayPickerProps={dayPickerProps}
-          />
-        </div>
-        <div className="flex-35 layout-row input_box_full">
-          <input
-            type="time"
-            value={newTimes.eta.time}
-            onChange={e => this.handleTimeChange(e, 'eta')}
+            dayPickerProps={dayPickerPropsEta}
           />
         </div>
       </div>
     ) : (
-      <p className="flex-none letter_3">
+      <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
@@ -671,10 +674,36 @@ export class AdminShipmentView extends Component {
             <div className={`${styles.info_hub_box} flex-60 layout-column`}>
               <h3>{hubsObj.startHub.data.name}</h3>
               <p className={styles.address}>{hubsObj.startHub.data.geocoded_address}</p>
-              <p><span>{shipment.has_pre_carriage
-                ? 'ETC'
-                : 'ETD'}</span></p>
-              <p>{etdJSX}</p>
+              <div className="layout-row layout-align-start-center">
+                <div className="layout-column flex-60 layout-align-center-start">
+                  <span>
+                    ETD
+                  </span>
+                  <div className="layout-row layout-align-start-center">
+                    {etdJSX}
+                  </div>
+                </div>
+                <div className="layout-row flex-40 layout-align-center-stretch">
+                  {this.state.showEditTime ? (
+                    <span className="layout-column flex-100 layout-align-center-stretch">
+                      <div
+                        onClick={this.saveNewTime}
+                        className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
+                      >
+                        <i className="fa fa-check" />
+                      </div>
+                      <div
+                        onClick={this.toggleEditTime}
+                        className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
+                      >
+                        <i className="fa fa-times" />
+                      </div>
+                    </span>
+                  ) : (
+                    <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
+                  )}
+                </div>
+              </div>
             </div>
             <div className={`layout-column flex-40 ${styles.image}`} style={bg1} />
             <div className="flex-30 layout-row">
@@ -695,8 +724,34 @@ export class AdminShipmentView extends Component {
             <div className={`${styles.info_hub_box} flex-60 layout-column`}>
               <h3>{hubsObj.endHub.data.name}</h3>
               <p className={styles.address}>{hubsObj.endHub.data.geocoded_address}</p>
-              <p><span>ETA</span></p>
-              <p>{etaJSX}</p>
+              <div className="layout-row layout-align-start-center">
+                <div className="layout-column flex-60 layout-align-center-start">
+                  <span>ETA</span>
+                  <div className="layout-row layout-align-start-center">
+                    {etaJSX}
+                  </div>
+                </div>
+                <div className="layout-row flex-40 layout-align-center-center">
+                  {this.state.showEditTime ? (
+                    <span className="layout-column flex-100 layout-align-center-stretch">
+                      <div
+                        onClick={this.saveNewTime}
+                        className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
+                      >
+                        <i className="fa fa-check" />
+                      </div>
+                      <div
+                        onClick={this.toggleEditTime}
+                        className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
+                      >
+                        <i className="fa fa-times" />
+                      </div>
+                    </span>
+                  ) : (
+                    <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
+                  )}
+                </div>
+              </div>
             </div>
             <div className={`layout-column flex-40 ${styles.image}`} style={bg2} />
           </div>

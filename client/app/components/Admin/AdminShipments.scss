@@ -62,6 +62,30 @@
       color: #4F4F4F;
       min-height: 90px;
     }
+    .editIcon {
+      color: #F2C94C;
+      cursor: pointer;
+    }
+    .date {
+      padding-top: 6px;
+    }
+    input {
+      width: 100%;
+    }
+    .save {
+      margin: 0px 10px 1px;
+      border: 1px solid #219653;
+      font-size: 15px;
+      color: #219653;
+      cursor: pointer;
+    }
+    .cancel {
+      margin: 0px 10px;
+      border: 1px solid red;
+      font-size: 15px;
+      color: red;
+      cursor: pointer;
+    }
   }
   .contact_box {
     padding-left: 30px;

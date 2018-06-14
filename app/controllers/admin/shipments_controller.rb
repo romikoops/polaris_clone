@@ -108,6 +108,11 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def edit_time
+    options = {
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+    }
+
     shipment = Shipment.find(params[:id])
     new_etd = DateTime.parse(params[:timeObj]["newEtd"])
     new_eta = DateTime.parse(params[:timeObj]["newEta"])
@@ -122,7 +127,7 @@ class Admin::ShipmentsController < ApplicationController
       shipmentRef: shipment.imc_reference
     }
     add_message_to_convo(shipment.user, message, true)
-    response_handler(shipment)
+    response_handler(shipment.as_json(options))
   end
 
   def edit
