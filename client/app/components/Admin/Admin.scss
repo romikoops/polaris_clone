@@ -921,4 +921,11 @@
        }
      }
    }
+
+  @media only screen and (max-width: 960px) {
+    .border_box {
+      margin-right: 0 !important;
+      margin-bottom: 25px;
+    }
+  }
 }

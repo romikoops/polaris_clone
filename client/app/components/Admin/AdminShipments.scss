@@ -225,4 +225,13 @@
       margin-top: 0;
     }
   }
+
+  @media only screen and (max-width: 960px) {
+    .info_row {
+      padding-right: 20px;
+      &.last-margin {
+        border: 0 !important;
+      }
+    }
+  }
 }
