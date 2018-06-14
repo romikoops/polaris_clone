@@ -29,8 +29,8 @@ module DocumentService
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
 
-        key_origin =  aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
-        key_destination =aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
+        key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
+        key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
           layover = layover_hash(current_itinerary, pricing)
           destination_layover = layover[:destination_layover]
@@ -143,9 +143,9 @@ module DocumentService
       tmp_trip = current_itinerary.trips.last
       key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
       key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
-      destination_layover = ""
-      origin_layover = ""
       if tmp_trip
+        destination_layover = nil
+        origin_layover = nil
         tmp_layovers = current_itinerary.trips.last.layovers
         tmp_layovers.each do |lay|
           if lay.stop_id == key_origin.to_i
