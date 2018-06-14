@@ -10,7 +10,7 @@ class Container < ApplicationRecord
 
   belongs_to :shipment
 
-  before_validation :set_gross_weight, :set_weight_class
+  before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class
 
   validates :size_class,    presence: true
   validates :weight_class,  presence: true
@@ -49,5 +49,10 @@ class Container < ApplicationRecord
     which_weight_step = which_weight_step.to_d
 
     self.weight_class = "<= #{which_weight_step}t"
+  end
+
+  def sync_cargo_class
+    self.cargo_class ||= size_class
+    self.size_class  ||= cargo_class
   end
 end

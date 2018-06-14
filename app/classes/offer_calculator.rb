@@ -22,11 +22,11 @@ class OfferCalculator
   end
 
   def calc_offer!
-    @trucking_pricings = @trucking_pricing_finder.exec
-    @hubs              = @hub_finder.exec(@trucking_pricings)
-    @routes            = @route_finder.exec(@hubs)
-    @routes            = @route_filter.exec(@routes)
-    @schedules         = @schedule_finder.exec(@routes, @delay, @hubs)
+    @hubs          = @hub_finder.exec
+    @trucking_data = @trucking_data_builder.exec(@hubs)
+    @routes        = @route_finder.exec(@hubs)
+    @routes        = @route_filter.exec(@routes)
+    @schedules     = @schedule_finder.exec(@routes, @delay, @hubs)
 
     # TBD - Not Refactored
     add_trip_charges!
@@ -36,8 +36,8 @@ class OfferCalculator
 
   def instantiate_service_classes(shipment, params)
     @shipment_update_handler = OfferCalculatorService::ShipmentUpdateHandler.new(shipment, params)
-    @trucking_pricing_finder = OfferCalculatorService::TruckingPricingFinder.new(shipment)
     @hub_finder              = OfferCalculatorService::HubFinder.new(shipment)
+    @trucking_data_builder   = OfferCalculatorService::TruckingDataBuilder.new(shipment)
     @route_finder            = OfferCalculatorService::RouteFinder.new(shipment)
     @route_filter            = OfferCalculatorService::RouteFilter.new(shipment)
     @schedule_finder         = OfferCalculatorService::ScheduleFinder.new(shipment)
@@ -109,31 +109,43 @@ class OfferCalculator
   end
 
   def calc_trucking_charges!(schedule)
-    if @shipment.has_pre_carriage?
-      trucking_fees_data = determine_trucking_fees(
-        @shipment.pickup_address,
-        schedule.origin_hub,
-        "origin",
-        "export"
-      )
-      create_charges_from_fees_data!(
-        trucking_fees_data,
-        ChargeCategory.create(name: "Trucking Pre-Carriage", code: "trucking_pre")
-      )
-    end
+    { "export" => "pre", "import" => "on" }.each do |direction, carriage|
+      next unless @shipment.has_carriage?(carriage)
 
-    if @shipment.has_on_carriage?
-      trucking_fees_data = determine_trucking_fees(
-        @shipment.delivery_address,
-        schedule.destination_hub,
-        "destination",
-        "import"
+
+      hub = schedule.hub_for_carriage(carriage)
+
+      create_trucking_charges(direction, carriage, hub)
+    end
+  end
+
+  def create_trucking_charges(direction, carriage, hub)
+    charge_category = ChargeCategory.find_or_create_by(
+      name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
+    )
+
+    parent_charge = create_parent_charge(charge_category)
+
+    hub_data = @trucking_data[carriage][hub.id]
+
+    hub_data[:trucking_pricings].each do |trucking_pricing|
+      cargo_class = trucking_pricing.cargo_class
+      cargo_units = @shipment.cargo_units.where(cargo_class: cargo_class)
+      next if cargo_units.empty?
+
+      trucking_fees_data = calc_trucking_price(
+        trucking_pricing,
+        cargo_units,
+        hub_data[:distance],
+        direction
       )
+        
+      children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
       create_charges_from_fees_data!(
-        trucking_fees_data,
-        ChargeCategory.create(name: "Trucking On-Carriage", code: "trucking_on")
+        trucking_fees_data, children_charge_category, charge_category, parent_charge
       )
     end
+    parent_charge.update_price!
   end
 
   def calc_cargo_charges!(schedule)
@@ -142,13 +154,7 @@ class OfferCalculator
     end
 
     charge_category = ChargeCategory.from_code("cargo")
-    parent_charge = Charge.create(
-      children_charge_category: charge_category,
-      charge_category:          ChargeCategory.grand_total,
-      charge_breakdown:         @charge_breakdown,
-      parent:                   @grand_total_charge,
-      price:                    Price.create(currency: @shipment.user.currency)
-    )
+    parent_charge = create_parent_charge(charge_category)
 
     @shipment.cargo_units.each do |cargo_unit|
       charge_result = send("determine_#{@shipment.load_type}_price",
@@ -173,6 +179,16 @@ class OfferCalculator
     end
 
     parent_charge.update_price!
+  end
+
+  def create_parent_charge(children_charge_category)
+    Charge.create(
+      children_charge_category: children_charge_category,
+      charge_category:          ChargeCategory.grand_total,
+      charge_breakdown:         @charge_breakdown,
+      parent:                   @grand_total_charge,
+      price:                    Price.create(currency: @shipment.user.currency)
+    )
   end
 
   def create_charges_from_fees_data!(
@@ -200,15 +216,6 @@ class OfferCalculator
         price:                    Price.create(charge)
       )
     end
-  end
-
-  def determine_trucking_fees(location, hub, _target, direction)
-    google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
-    km = google_directions.distance_in_km
-    carriage = direction == "import" ? "on" : "pre"
-    
-    trucking_pricing = @trucking_pricings[carriage].find { |trucking_pricing| trucking_pricing.preloaded_hub_id == hub.id }
-    price_results = calc_trucking_price(trucking_pricing, @shipment.cargo_units, km, direction)
   end
 
   def destroy_previous_charge_breakdown(trip_id)
