@@ -433,7 +433,7 @@ export class ShipmentLocationBox extends Component {
     this.infowindow.close()
     this.marker.setVisible(false)
     if (!place.geometry) {
-      window.alert(`No details available for input: '${place.name}'`)
+      console.error(`No details available for input: '${place.name}'`)
       return
     }
 
