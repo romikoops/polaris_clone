@@ -105,14 +105,13 @@ const barCargoItem = {
   cargo_item_type_id: 'bar',
   size_class: 'BAR_SIZE_CLASS'
 }
-
 const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
 const shipment = {
   ...shipmentData.shipment,
-  schedules_charges: {
-    FOO_HUB_ROUTE_KEY: {
-      total: { value: 87 }
-    }
+  selected_offer: {
+    customs: { val: 12 },
+    insurance: { val: 5 },
+    total: { value: 87 }
   }
 }
 const editedShipmentData = {
