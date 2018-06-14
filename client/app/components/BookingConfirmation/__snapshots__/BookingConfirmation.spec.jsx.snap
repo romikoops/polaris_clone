@@ -136,16 +136,38 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -274,7 +296,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -285,12 +307,17 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -356,7 +383,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -366,6 +393,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -1222,16 +1255,38 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -1360,7 +1415,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -1371,12 +1426,17 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -1442,7 +1502,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -1452,6 +1512,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -2365,16 +2431,38 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -2503,7 +2591,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -2514,12 +2602,17 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -2585,7 +2678,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -2595,6 +2688,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -3563,16 +3662,38 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": true,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -3722,7 +3843,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -3733,12 +3854,17 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 destinationFees={true}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={true}
                 originFees={false}
                 preCarriage={false}
@@ -3804,7 +3930,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -3814,6 +3940,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -4656,16 +4788,38 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": true,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -4814,7 +4968,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -4825,12 +4979,17 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={true}
                 preCarriage={true}
@@ -4896,7 +5055,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -4906,6 +5065,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -5748,16 +5913,38 @@ exports[`shallow render 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -5886,7 +6073,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -5897,12 +6084,17 @@ exports[`shallow render 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -5968,7 +6160,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -5978,6 +6170,12 @@ exports[`shallow render 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -6820,16 +7018,38 @@ exports[`with cargo items 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -6958,7 +7178,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -6969,12 +7189,17 @@ exports[`with cargo items 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -7040,7 +7265,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -7050,6 +7275,12 @@ exports[`with cargo items 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
@@ -8107,16 +8338,38 @@ exports[`with containers 1`] = `
           className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <RouteHubBox
-            hubs={
+            shipment={
               Object {
-                "endHub": "FOO_END_HUB",
-                "startHub": "FOO_START_HUB",
-              }
-            }
-            locations={Object {}}
-            schedule={
-              Object {
-                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "FOO_HUB_ROUTE_KEY": Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
               }
             }
             theme={
@@ -8245,7 +8498,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 87.00
+                  USD 70.00
                 </h5>
               </div>
             </div>
@@ -8256,12 +8509,17 @@ exports[`with containers 1`] = `
                 destinationFees={false}
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
                   }
                 }
-                firstStep={false}
                 onCarriage={false}
                 originFees={false}
                 preCarriage={false}
@@ -8327,7 +8585,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 0.00 
+                  USD 17.00 
                 </h5>
               </div>
             </div>
@@ -8337,6 +8595,12 @@ exports[`with containers 1`] = `
               <IncotermExtras
                 feeHash={
                   Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
                     "total": Object {
                       "value": 87,
                     },
