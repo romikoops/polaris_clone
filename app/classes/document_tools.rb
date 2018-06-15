@@ -188,19 +188,22 @@ module DocumentTools
     pages = {}
     test_array = []
     zones = []
-    if unfiltered_results.first["distance"]
+    
+    filtered_results = unfiltered_results.select{|ufr| ufr["truckingPricing"][:load_type] == target_load_type}
+    if filtered_results.first["distance"]
       identifier = 'distance'
-    elsif unfiltered_results.first["zipcode"]
+    elsif filtered_results.first["zipcode"]
       identifier = 'zipcode'
-    elsif unfiltered_results.first["city"]
+    elsif filtered_results.first["city"]
       identifier = 'city'
     end
-    if unfiltered_results.first["truckingPricing"].identifier_modifier
-      identifier = "#{identifier}_#{unfiltered_results.first["truckingPricing"].identifier_modifier}"
+    if filtered_results.first["truckingPricing"].identifier_modifier
+      identifier = "#{identifier}_#{filtered_results.first["truckingPricing"].identifier_modifier}"
     end
-    
-    unfiltered_results.select{|ufr| ufr["truckingPricing"][:load_type] == target_load_type}
-    .sort_by! { |res| res[identifier][0][0].to_i }.each do |ufr|      
+    if identifier == 'distance'
+      filtered_results.sort_by! { |res| res[identifier][0][0].to_i }
+    end
+    filtered_results.each do |ufr|      
       meta = {
         city: hub.nexus.name,
         currency: ufr["truckingPricing"].rates.first[1][0]["rate"]["currency"],
