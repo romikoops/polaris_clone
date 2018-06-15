@@ -486,6 +486,7 @@ module ExcelTools
         }
       end
     end
+    
 
     all_ident_values_and_countries = {}
     zones.each do |zone_name, idents_and_countries|
@@ -656,7 +657,8 @@ module ExcelTools
             courier:       courier,
             modifier:      modifier,
             truck_type:    row_truck_type,
-            tenant_id:     tenant.id
+            tenant_id:     tenant.id,
+            identifier_modifier: identifier_modifier
           )
           stats[:trucking_pricings][:number_created] += 1
           modifier_position_objs.each do |mod_key, mod_indexes|
@@ -711,7 +713,7 @@ module ExcelTools
             end.join(", ")
 
           tp = trucking_pricing
-
+          
           # Find or update trucking_destinations
           td_query = <<-eos
             WITH
@@ -1751,6 +1753,8 @@ module ExcelTools
       }
     else
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = {
+        effective_date: charge[:effective_date],
+        expiration_date: charge[:expiration_date],
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
         min:        charge[:min],

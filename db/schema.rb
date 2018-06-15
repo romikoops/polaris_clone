@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180612090653) do
+ActiveRecord::Schema.define(version: 20180614143412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -598,6 +598,7 @@ ActiveRecord::Schema.define(version: 20180612090653) do
     t.jsonb "rates"
     t.jsonb "fees"
     t.string "cargo_class"
+    t.string "identifier_modifier"
   end
 
   create_table "user_locations", force: :cascade do |t|
