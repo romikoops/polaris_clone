@@ -67,7 +67,7 @@ export class ShipmentLocationBox extends Component {
       },
       autoTextOrigin: '',
       autoTextDest: '',
-      autocomplete: {
+      autoListener: {
         origin: false,
         destination: false
       },
@@ -108,6 +108,7 @@ export class ShipmentLocationBox extends Component {
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
     this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
+    this.removeAutocompleteListener = this.removeAutocompleteListener.bind(this)
   }
 
   componentWillMount () {
@@ -139,6 +140,12 @@ export class ShipmentLocationBox extends Component {
       this.setState({ speciality })
     }
   }
+
+  componentWillUnmount () {
+    const { map } = this.state;
+    ['origin', 'destination'].forEach(target => this.removeAutocompleteListener(map, target))
+  }
+
   setDestNexus (event) {
     this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
 
@@ -384,8 +391,12 @@ export class ShipmentLocationBox extends Component {
     const input = document.getElementById(target)
     const autocomplete = new this.props.gMaps.places.Autocomplete(input)
     autocomplete.bindTo('bounds', map)
-    this.setState({ autoListener: { ...this.state.autoListener, [target]: autocomplete } })
-    this.autocompleteListener(map, autocomplete, target)
+
+    this.removeAutocompleteListener(map, target)
+
+    const autoListener = this.addAutocompleteListener(map, autocomplete, target)
+
+    this.setState({ autoListener: { ...this.state.autoListener, [target]: autoListener } })
   }
 
   postToggleAutocomplete (target) {
@@ -402,7 +413,12 @@ export class ShipmentLocationBox extends Component {
     this.setState({ [key]: value })
   }
 
-  autocompleteListener (aMap, autocomplete, target) {
+  removeAutocompleteListener (aMap, target) {
+    const autoListener = this.state.autoListener[target]
+    autoListener && autoListener.remove()
+  }
+
+  addAutocompleteListener (aMap, autocomplete, target) {
     this.infowindow = new this.props.gMaps.InfoWindow()
     this.infowindowContent = document.getElementById('infowindow-content')
     this.infowindow.setContent(this.infowindowContent)
@@ -412,7 +428,7 @@ export class ShipmentLocationBox extends Component {
       anchorPoint: new this.props.gMaps.Point(0, -29)
     })
     if (autocomplete.getPlace()) this.handlePlaceChange(aMap, autocomplete, target)
-    autocomplete.addListener('place_changed', () => {
+    return autocomplete.addListener('place_changed', () => {
       this.handlePlaceChange(aMap, autocomplete.getPlace(), target)
     })
   }
@@ -433,7 +449,7 @@ export class ShipmentLocationBox extends Component {
     this.infowindow.close()
     this.marker.setVisible(false)
     if (!place.geometry) {
-      window.alert(`No details available for input: '${place.name}'`)
+      console.error(`No details available for input: '${place.name}'`)
       return
     }
 
@@ -498,6 +514,7 @@ export class ShipmentLocationBox extends Component {
 
   scopeNexusOptions (nexusIds, target) {
     getRequests.nexuses(nexusIds, target, this.props.routeIds, (data) => {
+      console.log(Object.values(data)[0])
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
