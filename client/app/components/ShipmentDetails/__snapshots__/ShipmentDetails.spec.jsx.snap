@@ -160,9 +160,9 @@ exports[`shallow rendering 1`] = `
             dayPickerProps={
               Object {
                 "disabledDays": Object {
-                  "before": 1970-01-01T00:00:00.019Z,
+                  "before": 2017-06-13T01:41:20.000Z,
                 },
-                "month": 1920-06-30T21:00:00.000Z,
+                "month": 2017-06-13T01:41:20.000Z,
                 "name": "dayPicker",
               }
             }

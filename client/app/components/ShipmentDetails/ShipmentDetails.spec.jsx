@@ -133,8 +133,24 @@ const propsBase = {
   user
 }
 
-const createShallow = propsInput => shallow(<ShipmentDetails {...propsInput} />)
+let originalDate
+const constantDate = new Date('2017-06-13T04:41:20')
+beforeEach(() => {
+  // eslint-disable-next-line no-global-assign
+  originalDate = Date
+  // eslint-disable-next-line no-global-assign
+  Date = class extends Date {
+    constructor () {
+      return constantDate
+    }
+  }
+})
+
+afterEach(() => {
+  // eslint-disable-next-line no-global-assign
+  Date = originalDate
+})
 
 test('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+  expect(shallow(<ShipmentDetails {...propsBase} />)).toMatchSnapshot()
 })
