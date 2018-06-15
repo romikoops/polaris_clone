@@ -50,7 +50,7 @@ module DocumentTools
       worksheet.write(row, 3, hub.hub_code)
       worksheet.write(row, 4, hub.location.latitude)
       worksheet.write(row, 5, hub.location.longitude)
-      worksheet.write(row, 6, hub.location.country)
+      worksheet.write(row, 6, hub.location.country.name)
       worksheet.write(row, 7, hub.location.geocoded_address)
       row += 1
     end

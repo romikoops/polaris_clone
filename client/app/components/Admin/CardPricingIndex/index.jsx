@@ -251,41 +251,16 @@ export default class CardPricingIndex extends Component {
                   <p className="flex-100">Download Air Pricings Sheet</p>
                   <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
                 </div>
-              </div>
-            </div>
-            {/* <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${
-                  adminStyles.action_header
-                } flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">Create New Hub</p>
-                </div>
-                <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.new ? adminStyles.open_filter : adminStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
                 <div
                   className={`${
                     adminStyles.action_section
                   } flex-100 layout-row layout-wrap layout-align-center-center`}
                 >
-                  {newButton}
+                  <p className="flex-100">Download Rail Pricings Sheet</p>
+                  <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'rail' }} />
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
           {lastUpdate !== ''
             ? <p className="flex-100">{`Last updated at: ${moment(lastUpdate).format('lll')} `}</p>

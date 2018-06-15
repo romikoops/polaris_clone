@@ -1753,6 +1753,8 @@ module ExcelTools
       }
     else
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = {
+        effective_date: charge[:effective_date],
+        expiration_date: charge[:expiration_date],
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
         min:        charge[:min],
