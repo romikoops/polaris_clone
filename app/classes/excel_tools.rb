@@ -1008,22 +1008,35 @@ module ExcelTools
             customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id] 
             counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
           end
-            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] = TenantVehicle.find_by(
+          if row[:service_level]
+            tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] = TenantVehicle.find_by(
               tenant_id:         user.tenant_id,
               mode_of_transport: row[:mot].downcase,
-              name:              row[:service_level] || "standard"
-            )
+              name:              row[:service_level]
+            ).try(:id)
             
-            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level] || "standard", row[:mot].downcase, user.tenant_id)
-            tenant_vehicle = tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"]
-            if counterpart_hub_id
-              hub_fees[counterpart_hub_id][tenant_vehicle.id] = {}
-              customs[counterpart_hub_id][tenant_vehicle.id] = {}
-            else
-              hub_fees["general"][tenant_vehicle.id] = {}
-              customs["general"][tenant_vehicle.id] = {}
-            end
+            tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level], row[:mot].downcase, user.tenant_id).id
+            tenant_vehicle_id = tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"]
+          else
+            tenant_vehicle_id = "general"
+          end
+          if !tenant_vehicles["standard-#{row[:mot].downcase}"]
+            tenant_vehicles["standard-#{row[:mot].downcase}"] = TenantVehicle.find_by(
+              tenant_id:         user.tenant_id,
+              mode_of_transport: row[:mot].downcase,
+              name:              row[:service_level]
+            ).try(:id)
+            tenant_vehicles["standard-#{row[:mot].downcase}"] ||= Vehicle.create_from_name("standard", row[:mot].downcase, user.tenant_id).id
+          end
+          if counterpart_hub_id
+            hub_fees[counterpart_hub_id][tenant_vehicle_id] = {}
+            customs[counterpart_hub_id][tenant_vehicle_id] = {}
+          else
+            hub_fees["general"][tenant_vehicle_id] = {}
+            customs["general"][tenant_vehicle_id] = {}
+          end
         end
+        
         
         hub_fees.each do |hub_key, tv_ids|
           tv_ids.keys.each do |tv_id|
@@ -1097,7 +1110,7 @@ module ExcelTools
               charge,
               row[:load_type].downcase,
               row[:direction].downcase,
-              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id, 
+              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general", 
               row[:mot],
               counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
             )
@@ -1107,7 +1120,7 @@ module ExcelTools
               charge,
               row[:load_type].downcase,
               row[:direction].downcase,
-              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id,
+              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
               row[:mot],
               counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
             )
@@ -1632,6 +1645,9 @@ module ExcelTools
       cargo_pricings.each do |cargo_key, pricing_data|
         new_pricing_data = pricing_data.clone
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
+        if !transport_category
+          
+        end
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 
@@ -1691,12 +1707,22 @@ module ExcelTools
   def local_charge_load_setter(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     debug_message(charge)
     debug_message(all_charges)
-    if counterpart_hub_id == "general"
+    if counterpart_hub_id == "general" && tenant_vehicle_id != 'general'
       all_charges.keys.each do |ac_key|
         if all_charges[ac_key][tenant_vehicle_id]
           set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, ac_key)
         end
       end
+      
+    elsif counterpart_hub_id == "general" && tenant_vehicle_id == 'general'
+      all_charges.keys.each do |ac_key|
+        all_charges[ac_key].keys.each do |tv_key|
+          if all_charges[ac_key][tv_key]
+            set_general_local_fee(all_charges, charge, load_type, direction, tv_key, mot, ac_key)
+          end
+        end
+      end
+      
     else
       if all_charges[counterpart_hub_id][tenant_vehicle_id]
        set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
