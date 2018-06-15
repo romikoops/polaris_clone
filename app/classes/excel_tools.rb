@@ -463,7 +463,7 @@ module ExcelTools
         row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
         zip_char_length ||= row_zip.to_s.length
         if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { ident: (row_zip/2).ceil, country: row_data[3] }
+          zones[zone_name] << { ident: (row_zip/2.0).ceil, country: row_data[3] }
         else
           zones[zone_name] << { ident: row_zip, country: row_data[3] }
         end
@@ -472,7 +472,7 @@ module ExcelTools
         range = row_data[2].delete(" ").split("-")
         zip_char_length ||= range[0].length
         if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { min: (range[0].to_i/2).ceil, max: (range[1].to_i/2).ceil, country: row_data[3] }
+          zones[zone_name] << { min: (range[0].to_i/2.0).ceil, max: (range[1].to_i/2.0).ceil, country: row_data[3] }
         else
           zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
         end
@@ -486,6 +486,7 @@ module ExcelTools
         }
       end
     end
+    
 
     all_ident_values_and_countries = {}
     zones.each do |zone_name, idents_and_countries|
@@ -656,7 +657,8 @@ module ExcelTools
             courier:       courier,
             modifier:      modifier,
             truck_type:    row_truck_type,
-            tenant_id:     tenant.id
+            tenant_id:     tenant.id,
+            identifier_modifier: identifier_modifier
           )
           stats[:trucking_pricings][:number_created] += 1
           modifier_position_objs.each do |mod_key, mod_indexes|
@@ -711,7 +713,7 @@ module ExcelTools
             end.join(", ")
 
           tp = trucking_pricing
-
+          
           # Find or update trucking_destinations
           td_query = <<-eos
             WITH
@@ -1751,6 +1753,8 @@ module ExcelTools
       }
     else
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = {
+        effective_date: charge[:effective_date],
+        expiration_date: charge[:expiration_date],
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
         min:        charge[:min],

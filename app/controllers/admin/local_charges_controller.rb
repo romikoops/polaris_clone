@@ -24,7 +24,7 @@ class Admin::LocalChargesController < ApplicationController
   def download_local_charges
     options = params[:options].as_json.deep_symbolize_keys!
     options[:tenant_id] = current_user.tenant_id
-    url = write_local_charges_to_sheet(options)
+    url = DocumentService::LocalChargesWriter.new(options).perform
     response_handler(url: url, key: "local_charges")
   end
 

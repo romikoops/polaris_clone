@@ -47,7 +47,9 @@ class GoogleDirections
   end
 
   def public_url
-    "http://maps.google.com/maps?saddr=#{transcribe(geocoded_start_address)}&daddr=#{transcribe(geocoded_end_address)}&hl=#{@options[:language]}&ie=UTF8"
+    url = "http://maps.google.com/maps?saddr=#{transcribe(geocoded_start_address)}"
+    url << "&daddr=#{transcribe(geocoded_end_address)}&hl=#{@options[:language]}&ie=UTF8"
+    url
   end
 
   def successful?

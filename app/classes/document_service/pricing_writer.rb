@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DocumentService
   class PricingWriter
     include WritingTool
@@ -26,16 +28,15 @@ module DocumentService
         current_origin        = origin_aux_data[:location]
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
-        destination_layover   = ""
-        origin_layover        = ""
-        unless aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]['id']}"]
-          p current_itinerary
+
+        key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
+        key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
+        unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
           layover = layover_hash(current_itinerary, pricing)
-          destination_layover =layover[:destination_layover]
+          destination_layover = layover[:destination_layover]
           origin_layover = layover[:origin_layover]
         end
-
-        current_transit_time = aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']}"]
+        current_transit_time = aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
         vehicle_hash = vehicle_aux_data(aux_data, pricing)
         current_vehicle = vehicle_hash[:current_vehicle]
         aux_data = vehicle_hash[:aux_data]
@@ -73,7 +74,7 @@ module DocumentService
         next unless pricing[:exceptions] && !pricing[:exceptions].empty?
         pricing[:exceptions].each do |ex_pricing|
           ex_pricing[:data].each do |key, fee|
-            data = ['TRUE', nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
+            data = ["TRUE", nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
             if fee[:hw_threshold]
               data << fee[:hw_threshold]
             else
@@ -99,10 +100,8 @@ module DocumentService
       itinerary = itinerary(pricing[:itinerary_id])
       if !aux_data[:itineraries][pricing[:itinerary_id]]
         aux_data[:itineraries][pricing[:itinerary_id]] = itinerary.as_options_json
-        current_itinerary = itinerary
-      else
-        current_itinerary = itinerary
       end
+      itinerary
     end
 
     def pricings_getter(tenant_id)
@@ -115,12 +114,10 @@ module DocumentService
 
     def vehicle_aux_data(aux_data, pricing)
       if !aux_data[:vehicle][pricing[:transport_category_id]]
-        aux_data[:vehicle][pricing[:transport_category_id]] = transport_category(pricing[:transport_category_id]).vehicle
-        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
-      else
-        current_vehicle = aux_data[:vehicle][pricing[:transport_category_id]]
+        vehicle = transport_category(pricing[:transport_category_id]).vehicle
+        aux_data[:vehicle][pricing[:transport_category_id]] = vehicle
       end
-      { current_vehicle: current_vehicle, aux_data: aux_data }
+      { current_vehicle: aux_data[:vehicle][pricing[:transport_category_id]], aux_data: aux_data }
     end
 
     def transport_category(transport_category_id)
@@ -129,46 +126,50 @@ module DocumentService
 
     def location_and_aux_data(pricing, key1, key2)
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
-      location = nil
       if !aux_data[:nexuses][stop_id]
         aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus
-        location = aux_data[:nexuses][stop_id]
-      else
-        location = aux_data[:nexuses][stop_id]
       end
-      { location: location, aux_data: aux_data }
+      { location: aux_data[:nexuses][stop_id], aux_data: aux_data }
     end
 
     def pricing_sheet_header_text
-      %w[CUSTOMER_ID  NESTED  CARRIER MOT CARGO_TYPE  EFFECTIVE_DATE  EXPIRATION_DATE ORIGIN  DESTINATION TRANSIT_TIME  WM_RATE VEHICLE FEE CURRENCY  RATE_BASIS  RATE_MIN  RATE  HW_THRESHOLD  HW_RATE_BASIS MIN_RANGE MAX_RANGE]
+      %w(CUSTOMER_ID NESTED CARRIER MOT CARGO_TYPE
+        EFFECTIVE_DATE EXPIRATION_DATE ORIGIN DESTINATION
+        TRANSIT_TIME WM_RATE VEHICLE FEE CURRENCY RATE_BASIS
+        RATE_MIN RATE HW_THRESHOLD HW_RATE_BASIS MIN_RANGE MAX_RANGE)
     end
 
     def layover_hash(current_itinerary, pricing)
       tmp_trip = current_itinerary.trips.last
+      key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
+      key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
       if tmp_trip
-        tmp_layovers = current_itinerary.trips.last.layovers
         destination_layover = nil
         origin_layover = nil
-
+        tmp_layovers = current_itinerary.trips.last.layovers
         tmp_layovers.each do |lay|
-          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"].to_i
+          if lay.stop_id == key_origin.to_i
             origin_layover = lay
           end
-          if lay.stop_id == aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"].to_i
+          if lay.stop_id == key_destination.to_i
             destination_layover = lay
           end
         end
         diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86_400).to_i
-        aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']}"] = diff
+        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = diff
       else
-        aux_data[:transit_times]["#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']}_#{aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']}"] = ""
+        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ""
       end
 
       { destination_layover: destination_layover, origin_layover: origin_layover, aux_data: aux_data }
     end
 
     def get_tenant_pricings_by_mot(tenant_id, mot)
-      Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).flat_map { |it| it.pricings.map(&:as_json) }
+      Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).flat_map { |itin| map_itin_pricings(itin) }
+    end
+
+    def map_itin_pricings(itin)
+      itin.pricings.map(&:as_json)
     end
   end
 end
