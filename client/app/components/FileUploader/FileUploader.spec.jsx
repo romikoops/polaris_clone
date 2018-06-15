@@ -4,9 +4,16 @@ import { theme, identity } from '../../mocks'
 
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({ data: [] }))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('react-router', () => ({
   // eslint-disable-next-line react/prop-types
   Link: ({ props }) => <a {...props}>link</a>

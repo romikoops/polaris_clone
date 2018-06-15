@@ -4,9 +4,16 @@ import { shallow } from 'enzyme'
 jest.mock('react-slick', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <span>{children}</span>)
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 // eslint-disable-next-line
 import { Carousel } from './Carousel'
 

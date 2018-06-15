@@ -8,10 +8,16 @@ jest.mock('../../components/Admin/AdminNavItem', () => {
 
   return { AdminNavItem }
 })
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
 
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 
 // eslint-disable-next-line
 import { NavSidebar } from './NavSidebar'

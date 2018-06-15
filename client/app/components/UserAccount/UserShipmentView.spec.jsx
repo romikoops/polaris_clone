@@ -10,9 +10,16 @@ import { theme, identity, shipmentData, tenant, user, match, location } from '..
 jest.mock('react-select', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <div>{children}</div>)
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../../constants', () => {
   const moment = () => ({
     format: () => 19,

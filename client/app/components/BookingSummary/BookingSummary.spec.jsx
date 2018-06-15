@@ -8,9 +8,16 @@ jest.mock('react-redux', () => ({
 jest.mock('react-router-dom', () => ({
   withRouter: x => x
 }))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 // eslint-disable-next-line
 import BookingSummary from './BookingSummary'
 

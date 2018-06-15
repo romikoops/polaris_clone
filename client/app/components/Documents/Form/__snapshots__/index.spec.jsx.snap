@@ -95,7 +95,7 @@ exports[`multiple is true 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY"
+      data-for="RANDOM_KEY_2"
       data-tip="FOO_TOOLTIP"
     >
       <form>
@@ -111,7 +111,7 @@ exports[`multiple is true 1`] = `
         <Component
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY"
+          id="RANDOM_KEY_2"
         />
         <input
           name="FOO_TYPE"
@@ -174,7 +174,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY"
+      data-for="RANDOM_KEY_0"
       data-tip="FOO_TOOLTIP"
     >
       <form>
@@ -190,7 +190,7 @@ exports[`shallow render 1`] = `
         <Component
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY"
+          id="RANDOM_KEY_0"
         />
         <input
           name="FOO_TYPE"
@@ -258,7 +258,7 @@ exports[`theme is falsy 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY"
+      data-for="RANDOM_KEY_4"
       data-tip="FOO_TOOLTIP"
     >
       <form>
@@ -278,7 +278,7 @@ exports[`theme is falsy 1`] = `
         <Component
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY"
+          id="RANDOM_KEY_4"
         />
         <input
           name="FOO_TYPE"
@@ -346,7 +346,7 @@ exports[`viewer is true 1`] = `
   >
     <div
       className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
-      data-for="RANDOM_KEY"
+      data-for="RANDOM_KEY_3"
       data-tip="FOO_TOOLTIP"
     >
       <form>
@@ -362,7 +362,7 @@ exports[`viewer is true 1`] = `
         <Component
           className="tooltip"
           effect="solid"
-          id="RANDOM_KEY"
+          id="RANDOM_KEY_3"
         />
         <input
           name="FOO_TYPE"

@@ -7,9 +7,16 @@ import {
   tenant
 } from '../../mocks'
 
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x
 }))

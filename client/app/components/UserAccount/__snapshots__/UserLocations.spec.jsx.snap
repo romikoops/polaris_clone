@@ -30,7 +30,7 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex-33"
-    key="RANDOM_KEY"
+    key="RANDOM_KEY_0"
   >
     <div
       className="location-box"
@@ -117,7 +117,7 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex-33"
-    key="RANDOM_KEY"
+    key="RANDOM_KEY_1"
   >
     <div
       className="location-box"

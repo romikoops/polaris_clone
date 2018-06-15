@@ -2,9 +2,16 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, user } from '../../mocks'
 
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('react-select', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <div>{children}</div>)

@@ -20,7 +20,7 @@ exports[`shallow rendering 1`] = `
         />
         <div
           className="layout-column layout-align-start-center flex-none"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_0"
           onClick={[Function]}
           style={
             Object {
@@ -74,7 +74,7 @@ exports[`shallow rendering 1`] = `
         </div>
         <div
           className="layout-column layout-align-start-center flex-none"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_1"
           onClick={[Function]}
           style={
             Object {
@@ -113,7 +113,7 @@ exports[`shallow rendering 1`] = `
         </div>
         <div
           className="layout-column layout-align-start-center flex-none"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_2"
           onClick={[Function]}
           style={
             Object {

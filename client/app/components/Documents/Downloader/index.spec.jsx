@@ -9,14 +9,18 @@ jest.mock('../../../helpers', () => ({
   authHeader: x => x,
   gradientTextGenerator: x => x
 }))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../../../actions', () => ({
   documentActions: x => x
-}))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
 }))
 jest.mock('isomorphic-fetch', () =>
   () => Promise.resolve({ data: [] }))

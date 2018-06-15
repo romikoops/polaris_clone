@@ -2,9 +2,16 @@ import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { identity, theme } from '../../mocks'
 
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
   Tooltip: ({ children }) => <span>{children}</span>

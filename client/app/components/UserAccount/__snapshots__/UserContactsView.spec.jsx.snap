@@ -207,7 +207,7 @@ exports[`props.loading is true 1`] = `
     </div>
     <AdminAddressTile
       address={[Function]}
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_1"
       theme={
         Object {
           "colors": Object {
@@ -329,7 +329,7 @@ exports[`shallow render 1`] = `
     </div>
     <AdminAddressTile
       address={[Function]}
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_0"
       theme={
         Object {
           "colors": Object {
@@ -454,7 +454,7 @@ exports[`state.editBool is true 1`] = `
     </div>
     <AdminAddressTile
       address={[Function]}
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_3"
       theme={
         Object {
           "colors": Object {

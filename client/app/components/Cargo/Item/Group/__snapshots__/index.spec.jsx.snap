@@ -86,7 +86,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_1"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -352,7 +352,7 @@ exports[`shallow render 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_0"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -604,7 +604,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_3"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -856,7 +856,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_5"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"

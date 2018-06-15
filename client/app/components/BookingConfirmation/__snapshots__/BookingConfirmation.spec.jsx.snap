@@ -525,12 +525,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_43"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_44"
               textStyle="#333"
             />
           </div>
@@ -776,7 +776,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_45"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -797,7 +797,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_46"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -818,7 +818,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_47"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -839,7 +839,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_48"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -860,7 +860,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_49"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -881,7 +881,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_50"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -902,7 +902,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_51"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -923,7 +923,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_52"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -944,7 +944,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_53"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1052,13 +1052,13 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_54"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_55"
                   >
                      
                     BAR_TERM
@@ -1662,12 +1662,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_56"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_57"
               textStyle="#333"
             />
           </div>
@@ -1976,7 +1976,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_58"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -1997,7 +1997,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_59"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2018,7 +2018,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_60"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2039,7 +2039,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_61"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2060,7 +2060,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_62"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2081,7 +2081,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_63"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2102,7 +2102,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_64"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2123,7 +2123,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_65"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2144,7 +2144,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_66"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2252,13 +2252,13 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_67"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_68"
                   >
                      
                     BAR_TERM
@@ -2856,12 +2856,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_69"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_70"
               textStyle="#333"
             />
           </div>
@@ -2871,7 +2871,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
              
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_71"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -2912,7 +2912,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_72"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -2953,7 +2953,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_73"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -3225,7 +3225,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_74"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3246,7 +3246,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_75"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3267,7 +3267,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_76"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3288,7 +3288,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_77"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3309,7 +3309,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_78"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3330,7 +3330,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_79"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3351,7 +3351,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_80"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3372,7 +3372,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_81"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3393,7 +3393,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_82"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3501,13 +3501,13 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_83"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_84"
                   >
                      
                     BAR_TERM
@@ -4121,12 +4121,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_98"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_99"
               textStyle="#333"
             />
           </div>
@@ -4364,7 +4364,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_100"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4385,7 +4385,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_101"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4406,7 +4406,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_102"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4427,7 +4427,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_103"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4448,7 +4448,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_104"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4469,7 +4469,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_105"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4490,7 +4490,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_106"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4511,7 +4511,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_107"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4532,7 +4532,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_108"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4640,13 +4640,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_109"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_110"
                   >
                      
                     BAR_TERM
@@ -5259,12 +5259,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_85"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_86"
               textStyle="#333"
             />
           </div>
@@ -5502,7 +5502,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_87"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5523,7 +5523,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_88"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5544,7 +5544,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_89"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5565,7 +5565,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_90"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5586,7 +5586,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_91"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5607,7 +5607,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_92"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5628,7 +5628,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_93"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5649,7 +5649,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_94"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5670,7 +5670,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_95"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5778,13 +5778,13 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_96"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_97"
                   >
                      
                     BAR_TERM
@@ -6382,12 +6382,12 @@ exports[`shallow render 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_0"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_1"
               textStyle="#333"
             />
           </div>
@@ -6625,7 +6625,7 @@ exports[`shallow render 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_2"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6646,7 +6646,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_3"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6667,7 +6667,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_4"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6688,7 +6688,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_5"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6709,7 +6709,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_6"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6730,7 +6730,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_7"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6751,7 +6751,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_8"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6772,7 +6772,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_9"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6793,7 +6793,7 @@ exports[`shallow render 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_10"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -6901,13 +6901,13 @@ exports[`shallow render 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_11"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_12"
                   >
                      
                     BAR_TERM
@@ -7505,12 +7505,12 @@ exports[`with cargo items 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_30"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_31"
               textStyle="#333"
             />
           </div>
@@ -7650,7 +7650,7 @@ exports[`with cargo items 1`] = `
                   "volume": 0.18,
                 }
               }
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_28"
               theme={
                 Object {
                   "colors": Object {
@@ -7771,7 +7771,7 @@ exports[`with cargo items 1`] = `
                   "volume": 1.75,
                 }
               }
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_29"
               theme={
                 Object {
                   "colors": Object {
@@ -7965,7 +7965,7 @@ exports[`with cargo items 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_32"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -7986,7 +7986,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_33"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8007,7 +8007,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_34"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8028,7 +8028,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_35"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8049,7 +8049,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_36"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8070,7 +8070,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_37"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8091,7 +8091,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_38"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8112,7 +8112,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_39"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8133,7 +8133,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_40"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8241,13 +8241,13 @@ exports[`with cargo items 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_41"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_42"
                   >
                      
                     BAR_TERM
@@ -8845,12 +8845,12 @@ exports[`with containers 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_15"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_16"
               textStyle="#333"
             />
           </div>
@@ -8921,7 +8921,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 250,
                 }
               }
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_13"
               theme={
                 Object {
                   "colors": Object {
@@ -8947,7 +8947,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 49,
                 }
               }
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_14"
               theme={
                 Object {
                   "colors": Object {
@@ -9141,7 +9141,7 @@ exports[`with containers 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_17"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9162,7 +9162,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_18"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9183,7 +9183,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_19"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9204,7 +9204,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_20"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9225,7 +9225,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_21"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9246,7 +9246,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_22"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9267,7 +9267,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_23"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9288,7 +9288,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_24"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9309,7 +9309,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY"
+              key="RANDOM_KEY_25"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9417,13 +9417,13 @@ exports[`with containers 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_26"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY"
+                    key="RANDOM_KEY_27"
                   >
                      
                     BAR_TERM

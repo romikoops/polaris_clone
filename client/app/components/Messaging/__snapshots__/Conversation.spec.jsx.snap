@@ -57,7 +57,7 @@ exports[`shallow render 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_0"
             message="FOO_MESSAGE"
             tenant={
               Object {
@@ -95,7 +95,7 @@ exports[`shallow render 1`] = `
             }
           />
           <Message
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_1"
             message="BAR_MESSAGE"
             tenant={
               Object {
@@ -334,7 +334,7 @@ exports[`theme is falsy 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_2"
             message="FOO_MESSAGE"
             tenant={
               Object {
@@ -365,7 +365,7 @@ exports[`theme is falsy 1`] = `
             }
           />
           <Message
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_3"
             message="BAR_MESSAGE"
             tenant={
               Object {
@@ -524,7 +524,7 @@ exports[`with admin user 1`] = `
                 "password": "pwd",
               }
             }
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_8"
             message="FOO_MESSAGE"
             tenant={
               Object {
@@ -571,7 +571,7 @@ exports[`with admin user 1`] = `
                 "password": "pwd",
               }
             }
-            key="RANDOM_KEY"
+            key="RANDOM_KEY_9"
             message="BAR_MESSAGE"
             tenant={
               Object {

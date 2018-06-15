@@ -277,7 +277,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
       >
         <div
           className="separator flex-100"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_3"
         >
           <hr />
         </div>
@@ -770,7 +770,7 @@ exports[`props.nextStageAttempt is true 1`] = `
       >
         <div
           className="separator flex-100"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_1"
         >
           <hr />
         </div>
@@ -1263,7 +1263,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
       >
         <div
           className="separator flex-100"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_2"
         >
           <hr />
         </div>
@@ -1756,7 +1756,7 @@ exports[`shallow rendering 1`] = `
       >
         <div
           className="separator flex-100"
-          key="RANDOM_KEY"
+          key="RANDOM_KEY_0"
         >
           <hr />
         </div>

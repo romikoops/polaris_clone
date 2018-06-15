@@ -3,7 +3,7 @@
 exports[`selected || !options is false 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY"
+  data-for="RANDOM_KEY_6"
   data-tip="FOO_TOOLTIP"
 >
   <div
@@ -30,7 +30,7 @@ exports[`selected || !options is false 1`] = `
 exports[`shallow render 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY"
+  data-for="RANDOM_KEY_0"
   data-tip="FOO_TOOLTIP"
 >
   <form>
@@ -56,7 +56,7 @@ exports[`shallow render 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY"
+      id="RANDOM_KEY_0"
       insecure={true}
       resizeHide={true}
       wrapper="div"
@@ -73,7 +73,7 @@ exports[`shallow render 1`] = `
 exports[`state.error is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY"
+  data-for="RANDOM_KEY_4"
   data-tip="FOO_TOOLTIP"
 >
   <form>
@@ -99,7 +99,7 @@ exports[`state.error is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY"
+      id="RANDOM_KEY_4"
       insecure={true}
       resizeHide={true}
       wrapper="div"
@@ -116,7 +116,7 @@ exports[`state.error is true 1`] = `
 exports[`state.selected is true 1`] = `
 <div
   className="flex-none layout-row upload_btn_wrapper "
-  data-for="RANDOM_KEY"
+  data-for="RANDOM_KEY_2"
   data-tip="FOO_TOOLTIP"
 >
   <form>
@@ -142,7 +142,7 @@ exports[`state.selected is true 1`] = `
     <ReactTooltip
       className="tooltip"
       effect="solid"
-      id="RANDOM_KEY"
+      id="RANDOM_KEY_2"
       insecure={true}
       resizeHide={true}
       wrapper="div"

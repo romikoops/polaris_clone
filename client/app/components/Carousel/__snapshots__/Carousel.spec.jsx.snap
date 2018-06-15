@@ -14,7 +14,7 @@ exports[`props.fade is true 1`] = `
   >
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_2"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -49,7 +49,7 @@ exports[`props.fade is true 1`] = `
     </div>
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_3"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -102,7 +102,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_0"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"
@@ -134,7 +134,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="slick_slide flex-none layout-row layout-align-center-center"
-      key="RANDOM_KEY"
+      key="RANDOM_KEY_1"
     >
       <div
         className="inner_wrapper flex-100 layout-row layout-align-center-center"

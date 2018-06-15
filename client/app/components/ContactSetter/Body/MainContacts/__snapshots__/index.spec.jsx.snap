@@ -6,7 +6,7 @@ exports[`shallow render 1`] = `
 >
   <div
     className="flex"
-    key="RANDOM_KEY"
+    key="RANDOM_KEY_0"
   >
      
     <ShipmentContactsBoxMainContactsContactCard
@@ -37,7 +37,7 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex-20 layout-row layout-align-center-center"
-    key="RANDOM_KEY"
+    key="RANDOM_KEY_2"
   >
     <i
       className="fa fa-angle-double-right dir_icon clip"
@@ -46,7 +46,7 @@ exports[`shallow render 1`] = `
   </div>
   <div
     className="flex"
-    key="RANDOM_KEY"
+    key="RANDOM_KEY_1"
   >
      
     <ShipmentContactsBoxMainContactsContactCard

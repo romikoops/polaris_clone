@@ -8,9 +8,16 @@ import { theme, identity, shipment } from '../../mocks'
  * but `static switchIcon (sched) {`
  */
 
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../../constants', () => {
   const moment = input => ({
     format: () => input,

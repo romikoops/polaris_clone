@@ -13,19 +13,19 @@ exports[`shallow render 1`] = `
     >
       <styled.div
         delay={3}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_0"
       />
       <styled.div
         delay={2}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_1"
       />
       <styled.div
         delay={1}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_2"
       />
       <styled.div
         delay={0}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_3"
       />
     </div>
   </div>
@@ -45,19 +45,19 @@ exports[`theme is falsy 1`] = `
     >
       <styled.div
         delay={3}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_4"
       />
       <styled.div
         delay={2}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_5"
       />
       <styled.div
         delay={1}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_6"
       />
       <styled.div
         delay={0}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_7"
       />
     </div>
   </div>
@@ -77,19 +77,19 @@ exports[`theme.logoLarge is truthy 1`] = `
     >
       <styled.div
         delay={3}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_8"
       />
       <styled.div
         delay={2}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_9"
       />
       <styled.div
         delay={1}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_10"
       />
       <styled.div
         delay={0}
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_11"
       />
     </div>
   </div>

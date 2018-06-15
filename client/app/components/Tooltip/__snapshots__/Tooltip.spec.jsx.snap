@@ -6,7 +6,7 @@ exports[`shallow render 1`] = `
 >
   <i
     className=" fa FOO_ICON"
-    data-for="RANDOM_KEY"
+    data-for="RANDOM_KEY_0"
     data-tip="FOO_TOOLTEXT"
     style={
       Object {
@@ -17,7 +17,7 @@ exports[`shallow render 1`] = `
   <ReactTooltip
     className="tooltip_box"
     effect="solid"
-    id="RANDOM_KEY"
+    id="RANDOM_KEY_0"
     insecure={true}
     resizeHide={true}
     wrapper="div"

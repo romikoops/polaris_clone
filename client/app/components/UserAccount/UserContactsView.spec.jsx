@@ -9,9 +9,16 @@ import { theme, contact, identity, match } from '../../mocks'
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x
 }))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 jest.mock('../Admin', () => ({
   // eslint-disable-next-line react/prop-types
   AdminAddressTile: ({ children }) => <div>{children}</div>

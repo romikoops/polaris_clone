@@ -3,7 +3,7 @@
 exports[`shallow render 1`] = `
 <div
   className="layout-row contact_card"
-  key="RANDOM_KEY"
+  key="RANDOM_KEY_0"
 >
   <i
     className="remove_icon fa fa-trash"

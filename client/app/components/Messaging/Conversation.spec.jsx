@@ -18,10 +18,16 @@ jest.mock('react-scroll', () => ({
   scroller: { scrollTo: x => x }
 }))
 
-jest.mock('uuid', () => ({
-  // eslint-disable-next-line react/prop-types
-  v4: () => 'RANDOM_KEY'
-}))
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 // eslint-disable-next-line
 import { Conversation } from './Conversation'
 
