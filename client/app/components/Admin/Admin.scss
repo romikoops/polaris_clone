@@ -718,9 +718,6 @@
     i {
       color: red;
     }
-    p {
-      margin-left: 10px;
-    }
   }
   .hub_edit_box {
     input {
@@ -922,10 +919,17 @@
      }
    }
 
+    .services_box .border_right {
+      border-color: transparent !important;
+    }
+
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;
       margin-bottom: 25px;
+      &.no_margin_bottom {
+        margin-bottom: 0 !important;
+      }
     }
   }
 }

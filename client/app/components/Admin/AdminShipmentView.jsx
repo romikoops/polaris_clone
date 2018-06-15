@@ -430,7 +430,7 @@ export class AdminShipmentView extends Component {
       ''
     )
 
-    const statusInProcess = (shipment.status === 'in process') ? (
+    const statusInProcess = (shipment.status === 'in_process') ? (
       <div style={gradientStyle} className={`layout-row flex-10 layout-align-center-center ${styles.status_box_process} ${adminStyles.border_box}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
@@ -462,7 +462,7 @@ export class AdminShipmentView extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-25 layout-padding layout-align-start-center layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -477,7 +477,7 @@ export class AdminShipmentView extends Component {
     }
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
-        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center ${adminStyles.no_doc}`}>
+        missingDocs.push(<div className={`flex-25 layout-padding layout-row layout-align-start-center ${adminStyles.no_doc}`}>
           <div className="flex-none layout-row layout-align-center-center">
             <i className="flex-none fa fa-ban" />
           </div>
@@ -487,76 +487,7 @@ export class AdminShipmentView extends Component {
         </div>)
       }
     })
-
-    // const actionsBox =
-    //   shipment && shipment.status === 'requested' ? (
-    //     <div className="flex-100 layout-row layout-align-space-between-center">
-    //       <div className="flex-40 layout-row layout-align-start-center">
-    //         <h4 className="flex-none letter_3">Actions</h4>
-    //       </div>
-    //       <div className="flex-40 layout-row layout-align-space-between-center">
-    //         <div className="flex-none layout-row">
-    //           <RoundButton
-    //             theme={theme}
-    //             size="small"
-    //             text="Deny"
-    //             iconClass="fa-trash"
-    //             handleNext={this.handleDeny}
-    //           />
-    //         </div>
-    //         <div className="flex-none offset-5 layout-row">
-    //           <RoundButton
-    //             theme={theme}
-    //             size="small"
-    //             text="Accept"
-    //             iconClass="fa-check"
-    //             active
-    //             handleNext={this.handleAccept}
-    //           />
-    //         </div>
-    //       </div>
-    //     </div>
-    //   ) : (
-    //     <div className="flex-100 layout-row layout-align-space-between-center">
-    //       <div className="flex-40 layout-row layout-align-start-center">
-    //         <h4 className="flex-none letter_3">Actions</h4>
-    //       </div>
-    //       <div className="flex-30 layout-row layout-align-end-center">
-    //         <div className="flex-none layout-row">
-    //           <RoundButton
-    //             theme={theme}
-    //             size="small"
-    //             text="Finished"
-    //             iconClass="fa-check"
-    //             active
-    //             handleNext={() => this.handleFinished()}
-    //           />
-    //         </div>
-    //       </div>
-    //     </div>
-    //   )
-    // const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
     const feeHash = shipment.selected_offer
-    // const saveSection = (
-    //   <div className={`${adminStyles.time_edit_button}`}>
-    //     {showEditTime ? (
-    //       <div className="flex-100 layout-row layout-align-space-between">
-    //         <div onClick={this.saveNewTime}>
-    //           <i className="fa fa-check clip pointy" style={textStyle} />
-    //         </div>
-    //         <div onClick={this.toggleEditTime}>
-    //           <i className="fa fa-times pointy" style={{ color: 'red' }} />
-    //         </div>
-    //       </div>
-    //     ) : (
-    //       <div className="flex-100 layout-row layout-align-end">
-    //         <div onClick={this.toggleEditTime}>
-    //           <i className="fa fa-pencil clip pointy" style={textStyle} />
-    //         </div>
-    //       </div>
-    //     )}
-    //   </div>
-    // )
 
     const etdJSX = showEditTime ? (
       <div className="flex-100 layout-row">
@@ -721,8 +652,8 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`${adminStyles.border_box} ${adminStyles.no_margin_right} ${adminStyles.margin_box} layout-row flex-100`}>
-          <div className={`flex-50 layout-row ${styles.services_box}`}>
+        <div className={`${adminStyles.border_box} ${adminStyles.no_margin_right} ${adminStyles.margin_box} layout-sm-column layout-xs-column layout-row flex-100`}>
+          <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
@@ -749,7 +680,7 @@ export class AdminShipmentView extends Component {
               </div>
             </div>
           </div>
-          <div className={`flex-30 layout-row ${styles.services_box} ${styles.border_right}`}>
+          <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
             <div className="layout-column flex-100">
               <h3>Additional Services</h3>
               <div className="">
@@ -764,13 +695,12 @@ export class AdminShipmentView extends Component {
               </div>
             </div>
           </div>
-          <div className={`flex-20 layout-row layout-align-center-center ${styles.services_box}`}>
+          <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
             <div className="layout-column flex-100">
-              <div className="layout-row flex-100">
-                <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 ${styles.quantity_square}`}>x1</span>
-                <p>Cargo items</p>
+              <div className="layout-row layout-align-sm-end-center layout-align-xs-end-center flex-100">
+                <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 ${styles.quantity_square}`}>x1</span>
+                <p className="layout-align-sm-end-center layout-align-xs-end-center">Cargo items</p>
               </div>
-              <hr />
               <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
             </div>
           </div>
@@ -804,87 +734,93 @@ export class AdminShipmentView extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_box} ${adminStyles.no_margin_right}`}>
-          <div className={`layout-column flex-50 ${styles.column_info}`}>
-            <div className="flex-30 layout-row offset-5 layout-align-start-center layout-wrap">
+        <div className={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_box} ${adminStyles.no_margin_right}`}>
+          <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+            <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
               {shipment.total_goods_value ? (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">Total Value of Goods:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                     {shipment.total_goods_value.value}
                     {shipment.total_goods_value.currency}
                   </p>
                 </div>
               ) : (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">Total Value of Goods:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                       -
                   </p>
                 </div>
               )}
             </div>
-            <div className="flex-30 layout-row offset-5 layout-align-start-center layout-wrap">
+            <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
               {shipment.eori ? (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">EORI number:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                     {shipment.eori}
                   </p>
                 </div>
               ) : (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">EORI number:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                     -
                   </p>
                 </div>
               )}
             </div>
-            <div className="flex-30 layout-row offset-5 layout-align-start-start layout-wrap">
+            <div className="flex-33 layout-row offset-5 layout-align-start-start layout-wrap">
               {shipment.incoterm_text ? (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">Incoterm:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-column layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-start-center layout-row">Incoterm:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                     {shipment.incoterm_text}
                   </p>
                 </div>
               ) : (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-40 layout-row">Incoterm:</span>
-                  <p className="flex-60 layout-row">
+                <div className="flex-100 layout-column layout-align-start-start">
+                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
+                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                     -
                   </p>
                 </div>
               )}
             </div>
           </div>
-          <div className={`layout-column flex-50 ${styles.column_info}`}>
-            <div className="flex-50 layout-row offset-5 layout-align-start-start layout-wrap">
+          <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+            <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
               {shipment.cargo_notes ? (
                 <div className="flex-100 layout-row layout-align-start-center">
                   <span className="flex-20 layout-row">Description of Goods:</span>
-                  <p className="flex-80 layout-row">
+                  <p className="flex-80 layout-padding layout-row">
                     {shipment.cargo_notes}
                   </p>
                 </div>
               ) : (
                 <div className="flex-100 layout-row layout-align-start-center">
-                  <span>Description of Goods:</span>
+                  <span className="flex-20 layout-row">Description of Goods:</span>
+                  <p className="flex-80 layout-padding layout-row">
+                    -
+                  </p>
                 </div>
               )}
             </div>
-            <div className="flex-50 layout-row offset-5 layout-align-start-start layout-wrap">
+            <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
               {shipment.notes ? (
                 <div className="flex-100 layout-row layout-align-start-center">
                   <span className="flex-20 layout-row">Notes:</span>
-                  <p className="flex-80 layout-row">
+                  <p className="flex-80 layout-padding layout-row">
                     {shipment.notes}
                   </p>
                 </div>
               ) : (
                 <div className="flex-100 layout-row layout-align-start-center">
-                  <span>Notes:</span>
+                  <span className="flex-20 layout-row">Notes:</span>
+                  <p className="flex-80 layout-padding layout-row">
+                    -
+                  </p>
                 </div>
               )}
             </div>

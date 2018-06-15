@@ -6,7 +6,7 @@ import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
 // import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoItemGroupAggregated from './Aggregated'
-import { LOAD_TYPES } from '../../../../constants'
+import { LOAD_TYPES, LOAD_SIZES } from '../../../../constants'
 
 export class CargoItemGroup extends Component {
   constructor (props) {
@@ -51,7 +51,7 @@ export class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip="Length" src="https://image.ibb.co/cdRkSy/Group_5_4.png" alt="Group_5_4" border="0" />
+          <img data-for={tooltipId} data-tip="Length" src={LOAD_SIZES.length} alt="Group_5_4" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
@@ -60,8 +60,8 @@ export class CargoItemGroup extends Component {
           <p className="flex-none"><span>{group.items[0].dimension_x}</span> cm</p>
         </div>
 
-        <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip="Height" src="https://image.ibb.co/f9QR0J/Group_5.png" alt="Group_5" border="0" />
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Height" src={LOAD_SIZES.height} alt="Group_5" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
@@ -70,8 +70,8 @@ export class CargoItemGroup extends Component {
           <p className="flex-none"><span>{group.items[0].dimension_z}</span> cm</p>
         </div>
 
-        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <img data-for={tooltipId} data-tip="Width" src="https://image.ibb.co/edttEd/Group_5_5.png" alt="Group_5_5" border="0" />
+        <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Width" src={LOAD_SIZES.width} alt="Group_5_5" border="0" />
           {
             showTooltip
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
@@ -82,7 +82,8 @@ export class CargoItemGroup extends Component {
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{group.items[0].payload_in_kg}</span> kg</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
           </div>
         </div>
@@ -94,14 +95,14 @@ export class CargoItemGroup extends Component {
                 {(group.items[0].dimension_y *
                 group.items[0].dimension_x *
                 group.items[0].dimension_y / 1000000).toFixed(2)}
-              </span> m<sup>3</sup>
+              </span> &nbsp;m<sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">Volume</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].chargeable_weight).toFixed(2)}</span> kg</p>
+            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].chargeable_weight).toFixed(2)}</span> &nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
         </div>
@@ -136,7 +137,7 @@ export class CargoItemGroup extends Component {
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <div className="layout-column">
-              <p className="flex-none layout-row layout-align-center-center"><span>{group.cargoType.category}</span></p>
+              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{group.cargoType.category}</span></p>
               <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
             </div>
           </div>
