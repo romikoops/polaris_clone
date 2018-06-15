@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DocumentService
   class LocalChargesWriter
     include WritingTool
@@ -24,16 +26,18 @@ module DocumentService
           result.deep_symbolize_keys!
           counterpart_hub_name = hub_name(result)
           tenant_vehicle_name = vehicle_name(result)
-          next if !result[:fees]
+          next unless result[:fees]
           result[:fees].each do |key, fee|
             write_data = local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name)
             if fee[:range] && !fee[:range].empty?
               fee[:range].each do |range_fee|
-                worksheet = worksheet_builder(worksheet, row, 0, write_data, fee, range_fee)
+                worksheet = worksheet_builder({worksheet: worksheet, row: row, start: 0,
+                  data: write_data, fee: fee}, range_fee)
                 row += 1
               end
             else
-              worksheet = worksheet_builder(worksheet, row, 0, write_data, fee)
+              worksheet = worksheet_builder({worksheet: worksheet, row: row, start: 0,
+                  data: write_data, fee: fee})
               row += 1
             end
           end
@@ -62,7 +66,10 @@ module DocumentService
     end
 
     def local_write_data(fee, key, result, counterpart_hub_name, tenant_vehicle_name)
-      [fee[:effective_date], fee[:expiration_date], counterpart_hub_name, tenant_vehicle_name, fee[:name], result[:mode_of_transport], key, result[:load_type], result[:direction], fee[:currency], fee[:rate_basis]]
+      data = [fee[:effective_date], fee[:expiration_date], counterpart_hub_name, tenant_vehicle_name, fee[:name]]
+      data << result[:mode_of_transport] << key << result[:load_type]
+      data << result[:direction] << fee[:currency] << fee[:rate_basis]
+      data
     end
 
     def tenant_hubs
@@ -84,19 +91,23 @@ module DocumentService
     end
 
     def local_charges_header_test
-      %w[EFFECTIVE_DATE EXPIRATION_DATE DESTINATION SERVICE_LEVEL FEE MOT FEE_CODE  LOAD_TYPE DIRECTION CURRENCY  RATE_BASIS  TON CBM KG  ITEM  SHIPMENT  BILL  CONTAINER MINIMUM WM RANGE_MIN RANGE_MAX]
+      %w(EFFECTIVE_DATE EXPIRATION_DATE
+      DESTINATION SERVICE_LEVEL FEE MOT
+      FEE_CODE LOAD_TYPE DIRECTION CURRENCY
+      RATE_BASIS TON CBM KG ITEM SHIPMENT
+      BILL CONTAINER MINIMUM WM RANGE_MIN RANGE_MAX)
     end
 
-    def worksheet_builder(worksheet, row, start, data, fee, range_fee = nil)
-      worksheet = write_to_sheet(worksheet, row, start, data)
+    def worksheet_builder(options, range_fee=nil)
+      worksheet = write_to_sheet(options[:worksheet], options[:row], options[:start], options[:data])
       if range_fee
-        worksheet_conditional_builder(worksheet,  row, fee, range_fee)
+        worksheet_conditional_builder(worksheet,  options[:row], options[:fee], range_fee)
       else
-        worksheet_conditional_builder(worksheet,  row, fee)
+        worksheet_conditional_builder(worksheet,  options[:row], options[:fee])
       end
     end
 
-    def worksheet_conditional_builder(worksheet,  row, fee, range_fee = nil)
+    def worksheet_conditional_builder(worksheet,  row, fee, range_fee=nil)
       case fee[:rate_basis]
       when "PER_CONTAINER"
         worksheet.write(row, 17, fee[:value])

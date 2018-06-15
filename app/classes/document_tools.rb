@@ -359,11 +359,12 @@ module DocumentTools
       region:            ENV["AWS_REGION"]
     )
     file = open(dir)
-    objKey = "documents/" + tenant.subdomain + "/downloads/trucking/" + filename
+    # byebug
+    obj_key = "documents/#{tenant.subdomain}/downloads/trucking/#{filename}"
 
-    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
-    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "schedules_sheet")
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + obj_key
+    s3.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: obj_key, text: filename, doc_type: "schedules_sheet")
     new_doc.get_signed_url
   end
 
