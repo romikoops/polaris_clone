@@ -11,6 +11,8 @@ subdomains = [
   { cloudfront: 'E2IQ14Z9Z5JEGN', subdomain: 'greencarrier-sandbox' }
 ]
 
+puts "Seeding Distributions..."
+
 subdomains.each do |s|
   tenant = Tenant.find_by_subdomain(s[:subdomain])
   if tenant
