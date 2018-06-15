@@ -196,7 +196,7 @@ module DocumentTools
       identifier = 'city'
     end
     if unfiltered_results.first["truckingPricing"].identifier_modifier
-      identifier = "#{identifier}_#{ufr["truckingPricing"].identifier_modifier}"
+      identifier = "#{identifier}_#{unfiltered_results.first["truckingPricing"].identifier_modifier}"
     end
     
     unfiltered_results.select{|ufr| ufr["truckingPricing"][:load_type] == target_load_type}
