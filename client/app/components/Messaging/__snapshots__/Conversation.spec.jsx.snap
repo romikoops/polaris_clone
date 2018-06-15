@@ -84,6 +84,7 @@ exports[`shallow render 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,
@@ -121,6 +122,7 @@ exports[`shallow render 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,
@@ -261,6 +263,7 @@ exports[`state.showDetails is true 1`] = `
       user={
         Object {
           "company_name": "FOO_COMPANY",
+          "currency": "EUR",
           "email": "foo@bar.baz",
           "first_name": "John",
           "guest": false,
@@ -351,6 +354,7 @@ exports[`theme is falsy 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,
@@ -381,6 +385,7 @@ exports[`theme is falsy 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,
@@ -546,6 +551,7 @@ exports[`with admin user 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,
@@ -592,6 +598,7 @@ exports[`with admin user 1`] = `
             user={
               Object {
                 "company_name": "FOO_COMPANY",
+                "currency": "EUR",
                 "email": "foo@bar.baz",
                 "first_name": "John",
                 "guest": false,

@@ -30,6 +30,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row"
     >
       <Price
+        currency="EUR"
         scale="0.75"
         value={7}
       />
@@ -52,6 +53,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row"
     >
       <Price
+        currency="EUR"
         scale="0.75"
         value={7}
       />
@@ -74,6 +76,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row"
     >
       <Price
+        currency="EUR"
         scale="0.75"
         value={25}
       />

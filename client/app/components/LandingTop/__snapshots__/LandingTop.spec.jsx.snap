@@ -30,6 +30,7 @@ exports[`theme has truthy properties 1`] = `
         user={
           Object {
             "company_name": "FOO_COMPANY",
+            "currency": "EUR",
             "email": "foo@bar.baz",
             "first_name": "John",
             "guest": false,
@@ -206,6 +207,7 @@ exports[`user.role_id is 1 1`] = `
         user={
           Object {
             "company_name": "FOO_COMPANY",
+            "currency": "EUR",
             "email": "foo@bar.baz",
             "first_name": "John",
             "guest": false,
@@ -350,6 +352,7 @@ exports[`user.role_id is 2 1`] = `
         user={
           Object {
             "company_name": "FOO_COMPANY",
+            "currency": "EUR",
             "email": "foo@bar.baz",
             "first_name": "John",
             "guest": false,

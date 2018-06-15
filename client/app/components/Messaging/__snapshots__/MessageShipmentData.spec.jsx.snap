@@ -380,6 +380,7 @@ exports[`shallow render 1`] = `
           }
         />
         <Price
+          currency="EUR"
           scale=""
           value={12}
         />

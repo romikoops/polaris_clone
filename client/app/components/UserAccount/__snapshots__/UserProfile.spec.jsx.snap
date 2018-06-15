@@ -46,6 +46,7 @@ exports[`props.aliases is truthy 1`] = `
           user={
             Object {
               "company_name": "FOO_COMPANY",
+              "currency": "EUR",
               "email": "foo@bar.baz",
               "first_name": "John",
               "guest": false,
@@ -77,6 +78,7 @@ exports[`props.aliases is truthy 1`] = `
               className="flex-none"
             >
               Current Selection: 
+              EUR
             </p>
           </div>
         </div>
@@ -222,8 +224,8 @@ exports[`props.aliases is truthy 1`] = `
             }
             value={
               Object {
-                "label": undefined,
-                "value": undefined,
+                "label": "EUR",
+                "value": "EUR",
               }
             }
           />
@@ -352,6 +354,7 @@ exports[`props.aliases is truthy 1`] = `
       user={
         Object {
           "company_name": "FOO_COMPANY",
+          "currency": "EUR",
           "email": "foo@bar.baz",
           "first_name": "John",
           "guest": false,
@@ -558,6 +561,7 @@ exports[`shallow render 1`] = `
           user={
             Object {
               "company_name": "FOO_COMPANY",
+              "currency": "EUR",
               "email": "foo@bar.baz",
               "first_name": "John",
               "guest": false,
@@ -589,6 +593,7 @@ exports[`shallow render 1`] = `
               className="flex-none"
             >
               Current Selection: 
+              EUR
             </p>
           </div>
         </div>
@@ -734,8 +739,8 @@ exports[`shallow render 1`] = `
             }
             value={
               Object {
-                "label": undefined,
-                "value": undefined,
+                "label": "EUR",
+                "value": "EUR",
               }
             }
           />
@@ -830,6 +835,7 @@ exports[`shallow render 1`] = `
       user={
         Object {
           "company_name": "FOO_COMPANY",
+          "currency": "EUR",
           "email": "foo@bar.baz",
           "first_name": "John",
           "guest": false,
@@ -1058,6 +1064,7 @@ exports[`state.editBool is true 1`] = `
               className="flex-none"
             >
               Current Selection: 
+              EUR
             </p>
           </div>
         </div>
@@ -1203,8 +1210,8 @@ exports[`state.editBool is true 1`] = `
             }
             value={
               Object {
-                "label": undefined,
-                "value": undefined,
+                "label": "EUR",
+                "value": "EUR",
               }
             }
           />
@@ -1299,6 +1306,7 @@ exports[`state.editBool is true 1`] = `
       user={
         Object {
           "company_name": "FOO_COMPANY",
+          "currency": "EUR",
           "email": "foo@bar.baz",
           "first_name": "John",
           "guest": false,

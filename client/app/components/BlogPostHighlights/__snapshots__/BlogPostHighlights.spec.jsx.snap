@@ -46,12 +46,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={1}
+                trimWhitespace={false}
               >
                 How Digitalisation is changing shipping
                  
-              </Component>
+              </Truncate>
                
             </h3>
           </div>
@@ -67,12 +69,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={4}
+                trimWhitespace={false}
               >
                 With the sheer amount of freight crossing the globe on a daily basis, our means of co-ordinating the massive flow of information ahs had to continuously evolve and adapt. Digitalisation has allowed companies, big and small to keep up with the ever
                  
-              </Component>
+              </Truncate>
             </p>
           </div>
         </div>
@@ -81,6 +85,13 @@ exports[`shallow render 1`] = `
         >
           <RoundButton
             active={true}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
+            handleNext={null}
+            icon=""
+            iconClass=""
+            size=""
             text="Read More"
             theme={null}
           />
@@ -117,12 +128,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={1}
+                trimWhitespace={false}
               >
                 With greater supply and even higher demand, efficiency gains have never been more important
                  
-              </Component>
+              </Truncate>
                
             </h3>
           </div>
@@ -138,12 +151,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={4}
+                trimWhitespace={false}
               >
                 With the global freight market under pressure from both supply and demand sides, it has become increasingly important to eek out every last bit of productivity from your existing resources
                  
-              </Component>
+              </Truncate>
             </p>
           </div>
         </div>
@@ -152,6 +167,13 @@ exports[`shallow render 1`] = `
         >
           <RoundButton
             active={true}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
+            handleNext={null}
+            icon=""
+            iconClass=""
+            size=""
             text="Read More"
             theme={null}
           />
@@ -188,12 +210,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={1}
+                trimWhitespace={false}
               >
                 Blockchain is coming: How you can begin to get ready for the next big leap in freight
                  
-              </Component>
+              </Truncate>
                
             </h3>
           </div>
@@ -209,12 +233,14 @@ exports[`shallow render 1`] = `
               className="flex-100"
             >
                
-              <Component
+              <Truncate
+                ellipsis="…"
                 lines={4}
+                trimWhitespace={false}
               >
                 The global shipping industry is the backbone upon which the modern world is built. However, fraud, theft and other problems continue to drive up prices for consumers around the world. A small group  of companies are working to bring the power and protection of blockchain technologies to the wolrd of freight
                  
-              </Component>
+              </Truncate>
             </p>
           </div>
         </div>
@@ -223,6 +249,13 @@ exports[`shallow render 1`] = `
         >
           <RoundButton
             active={true}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
+            handleNext={null}
+            icon=""
+            iconClass=""
+            size=""
             text="Read More"
             theme={null}
           />

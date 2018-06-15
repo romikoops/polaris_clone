@@ -8,11 +8,12 @@ export const theme = {
 }
 
 export const user = {
-  guest: false,
   company_name: 'FOO_COMPANY',
-  first_name: 'John',
-  last_name: 'Doe',
+  currency: 'EUR',
   email: 'foo@bar.baz',
+  first_name: 'John',
+  guest: false,
+  last_name: 'Doe',
   phone: '6345789'
 }
 

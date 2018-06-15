@@ -17,6 +17,7 @@ exports[`shallow rendering when props.size is small 1`] = `
     user={
       Object {
         "company_name": "FOO_COMPANY",
+        "currency": "EUR",
         "email": "foo@bar.baz",
         "first_name": "John",
         "guest": false,
