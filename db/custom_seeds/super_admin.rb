@@ -76,6 +76,8 @@
 #   )
 # super_admin.save!
 
+puts "Seeding Super Admin..."
+
 super_admin_demo = Tenant.find_by_subdomain('demo').users.new(
   role: Role.find_by_name('super_admin'),
 
@@ -90,4 +92,5 @@ super_admin_demo = Tenant.find_by_subdomain('demo').users.new(
 
   confirmed_at: DateTime.new(2017, 1, 20)
 )
-super_admin_demo.save!
+
+puts "Super Admin already existed" unless super_admin_demo.save

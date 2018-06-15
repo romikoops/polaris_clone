@@ -2,7 +2,7 @@ Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 
 class MainSeeder
   def self.perform(options = {})
-    require "#{Rails.root}/db/custom_seeds/geometries" unless options[:without_geometries]
+    GeometrySeeder.perform unless options[:without_geometries]
 
     Dir.chdir("#{Rails.root}/db/custom_seeds/") do
       require './distributions'
@@ -18,6 +18,7 @@ class MainSeeder
     end
     VehicleSeeder.perform(options[:tenant_filter] || {})
     PricingSeeder.perform(options[:tenant_filter] || {})
+    TenantSeeder.perform(options[:tenant_filter] || {})
     TruckingPricingSeeder.perform(options[:tenant_filter] || {})
   end
 end
