@@ -2,8 +2,13 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from 'prop-types'
 import styles from './AdminRouteList.scss'
+import { gradientGenerator, switchIcon } from '../../helpers'
 
-function listItineraries (itineraries, handleClick, hoverFn) {
+function listItineraries (itineraries, handleClick, hoverFn, theme) {
+  const gradientStyle =
+    theme && theme.colors
+      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: '#E0E0E0' }
   return itineraries.length > 0 ? itineraries.map((itinerary) => {
     const firstStopArray = itinerary.stops[0].hub.name.split(' ')
     const firstStopType = firstStopArray.splice(-1)
@@ -12,6 +17,7 @@ function listItineraries (itineraries, handleClick, hoverFn) {
     const lastStopType = lastStopArray.splice(-1)
     const lastStopName = lastStopArray.join(' ')
     const stopCount = itinerary.stops.length - 2
+    const modeOfTransport = itinerary.mode_of_transport
     return (
       <div
         className={`layout-row layout-padding layout-align-space-around-stretch
@@ -22,8 +28,8 @@ function listItineraries (itineraries, handleClick, hoverFn) {
         onMouseLeave={() => hoverFn(itinerary.id)}
       >
         <div className="layout-row flex-25 layout-align-center-center">
-          <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
-            <i className="fa fa-ship" />
+          <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
+            {switchIcon(modeOfTransport)}
           </div>
         </div>
         <div className="layout-column flex-25 layout-align-center-start">
@@ -59,7 +65,8 @@ export class AdminRouteList extends Component {
     const {
       itineraries,
       handleClick,
-      hoverFn
+      hoverFn,
+      theme
     } = this.props
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.container}`}>
@@ -67,7 +74,7 @@ export class AdminRouteList extends Component {
           <span><b>Routes</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list}`}>
-          {listItineraries(itineraries, handleClick, hoverFn)}
+          {listItineraries(itineraries, handleClick, hoverFn, theme)}
         </div>
       </div>
     )
@@ -77,13 +84,15 @@ export class AdminRouteList extends Component {
 AdminRouteList.propTypes = {
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
   handleClick: PropTypes.func,
-  hoverFn: PropTypes.func
+  hoverFn: PropTypes.func,
+  theme: PropTypes.theme
 }
 
 AdminRouteList.defaultProps = {
   itineraries: [],
   handleClick: null,
-  hoverFn: null
+  hoverFn: null,
+  theme: null
 }
 
 export default AdminRouteList

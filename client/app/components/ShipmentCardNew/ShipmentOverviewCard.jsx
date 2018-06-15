@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import { UserShipmentCard as UShipCard } from './UserShipmentCard'
-import { AdminShipmentCard as AShipCard } from './AdminShipmentCard'
-import styles from './ShipmentCards.scss'
+import { UserShipmentCard } from './UserShipmentCard'
+import { AdminShipmentCardNew } from './AdminShipmentCardNew'
+import styles from './ShipmentOverviewCard.scss'
 
-export class ShipmentCards extends Component {
+export class ShipmentOverviewCard extends Component {
   constructor (props) {
     super(props)
 
@@ -15,15 +15,21 @@ export class ShipmentCards extends Component {
   }
 
   listShipments (shipments) {
-    const { dispatches } = this.props
+    const {
+      dispatches,
+      theme,
+      hubs
+    } = this.props
     return shipments.length > 0 ? shipments.map((shipment) => {
       const ShipCard = this.state.admin ? (
-        <AShipCard
+        <AdminShipmentCardNew
           shipment={shipment}
           dispatches={dispatches}
+          theme={theme}
+          hubs={hubs}
         />
       ) : (
-        <UShipCard
+        <UserShipmentCard
           shipment={shipment}
           dispatches={dispatches}
         />
@@ -58,16 +64,16 @@ export class ShipmentCards extends Component {
   }
 }
 
-ShipmentCards.propTypes = {
+ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func)
 }
 
-ShipmentCards.defaultProps = {
+ShipmentOverviewCard.defaultProps = {
   admin: false,
   shipments: [],
   dispatches: {}
 }
 
-export default ShipmentCards
+export default ShipmentOverviewCard

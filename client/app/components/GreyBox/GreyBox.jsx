@@ -18,7 +18,7 @@ export function GreyBox (props) {
         `layout-row ${flex === 0 ? 'flex' : ('flex-' + flex)}
            ${flexGtLg === 0 ? '' : ('flex-gt-lg-' + flexGtLg)}
            ${flexMd === 0 ? '' : ('flex-md-' + flexMd)}
-          flex-sm-100 flex-xs-100 layout-wrap layout-padding layout-align-center-center
+          flex-sm-100 flex-xs-100 layout-align-center-center
           ${padding ? styles.boxpadding : ''}
           ${fullWidth ? styles.fullWidth : ''}`
       }

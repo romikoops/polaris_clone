@@ -35,6 +35,14 @@ export class AdminHubCard extends Component {
       hub
     } = this.props
 
+    const bg =
+      hub.data && hub.data.photo
+        ? { backgroundImage: `url(${hub.data.photo})` }
+        : {
+          backgroundImage:
+            'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
+        }
+
     return (
       <div
         className={
@@ -44,12 +52,12 @@ export class AdminHubCard extends Component {
       >
         <div className={`layout-column flex-100 ${styles.city}`}>
           <div className="layout-column layout-padding flex-50 layout-align-center-start">
-            <span>{hub ? hub.location.city : ''}<br />
+            <p>{hub ? hub.location.city : ''}<br />
               {hub ? stationType(hub.data.hub_type) : ''}
-            </span>
+            </p>
           </div>
           <div className="layout-column flex-50">
-            <img className="flex-100" src="/app/assets/images/dashboard/stockholm.png" />
+            <span className="flex-100" style={bg} />
           </div>
         </div>
       </div>

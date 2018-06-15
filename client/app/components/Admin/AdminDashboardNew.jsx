@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import { ShipmentCards as ShipCards } from '../ShipmentCardNew/ShipmentCards'
-import { AdminHubCards as AHubCards } from './AdminHubCards'
-import { AdminClientCards as AClientCards } from './AdminClientCards'
-import { AdminRouteList as ARouteList } from './AdminRouteList'
-import { WorldMap as WMap } from './DashboardMap/WorldMap'
+import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
+import { AdminHubCardNew } from './AdminHubCardNew'
+import { AdminClientCardIndex } from './AdminClientCardIndex'
+import { AdminRouteList } from './AdminRouteList'
+import { WorldMap } from './DashboardMap/WorldMap'
+import { gradientTextGenerator } from '../../helpers'
 // import { TextHeading } from '../TextHeading/TextHeading'
-import astyles from './AdminDashboardNew.scss'
+import styles from './AdminDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
 
 export class AdminDashboardNew extends Component {
@@ -32,11 +33,27 @@ export class AdminDashboardNew extends Component {
       hoverId: false
     }
   }
+
   handleRouteHover (id) {
     this.setState((prevState) => {
       const { hoverId } = prevState
       return { hoverId: hoverId === id ? false : id }
     })
+  }
+
+  handleViewHubs () {
+    const { adminDispatch } = this.props
+    adminDispatch.getHubs(true)
+  }
+
+  handleViewClients () {
+    const { adminDispatch } = this.props
+    adminDispatch.getClients(true)
+  }
+
+  handleViewShipments () {
+    const { adminDispatch } = this.props
+    adminDispatch.getShipments(true)
   }
 
   render () {
@@ -46,7 +63,8 @@ export class AdminDashboardNew extends Component {
       shipments,
       hubHash,
       dashData,
-      adminDispatch
+      adminDispatch,
+      theme
     } = this.props
     const { hoverId } = this.state
 
@@ -60,35 +78,32 @@ export class AdminDashboardNew extends Component {
       })
     }
 
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
+
     const preparedRequestedShipments = shipments.requested ? shipments.requested
       .map(s => AdminDashboardNew.prepShipment(s, clientHash, hubHash)) : []
 
-    const header1 = (
-      <div className={`layout-row flex-100 layout-align-start-center ${astyles.headerElement}`}>
-        <span className="layout-row flex-20 layout-align-center-center">
-          <i className={`fa fa-user ${astyles.bigProfile}`} />
-        </span>
-        <span className={`${astyles.welcome}`}>Welcome back, <b>{user.first_name}</b></span>
-      </div>
-    )
-
-    const header2 = (
-      <div className="layout-row layout-padding flex-100 layout-align-center-center">
-        <img src="/app/assets/images/logos/logo_black.png" style={{ height: '90px' }} />
-      </div>
-    )
+    // const header2 = (
+    //   <div className="layout-row layout-padding flex-100 layout-align-center-center">
+    //     <img src="/app/assets/images/logos/logo_black.png" style={{ height: '90px' }} />
+    //   </div>
+    // )
 
     const mapComponent = (
       <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
         <div className="flex-gt-md-50 layout-padding flex-100">
-          <ARouteList
+          <AdminRouteList
             itineraries={itineraries}
             handleClick={itinerary => adminDispatch.loadItinerarySchedules(itinerary.id, true)}
             hoverFn={e => this.handleRouteHover(e)}
+            theme={theme}
           />
         </div>
         <div className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100">
-          <WMap
+          <WorldMap
             itineraries={itineraries}
             hoverId={hoverId}
           />
@@ -99,55 +114,55 @@ export class AdminDashboardNew extends Component {
     return (
       <div
         className={
-          `layout-row flex-100 layout-wrap layout-align-start-center ${astyles.container}`
+          `layout-row flex-100 layout-wrap layout-align-start-center ${styles.container}`
         }
       >
         <div
           className={
-            `layout-row flex-100 layout-align-space-between-start ${astyles.header}`
+            `layout-row flex-100 layout-align-space-between-start ${styles.header}`
           }
         >
-          <GBox
-            flex={70}
-            component={header1}
-          />
-          <GBox
-            flex={25}
-            component={header2}
-          />
+          <div className={`layout-row flex-100 layout-align-start-center ${styles.headerElement}`}>
+            <span className="layout-row flex-10 layout-align-center-center">
+              <i className={`fa fa-user clip ${styles.bigProfile}`} style={gradientFontStyle} />
+            </span>
+            <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name} {'<3'}</b></span>
+          </div>
         </div>
-        <ShipCards
+        <ShipmentOverviewCard
           admin
           dispatches={adminDispatch}
           shipments={preparedRequestedShipments}
+          theme={theme}
+          hubs={hubHash}
         />
-        <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
-          <span className="flex-15"><u><b>See more shipments</b></u></span>
-          <div className={`flex-85 ${astyles.separator}`} />
+        <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+          <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
+          <div className={`flex-85 ${styles.separator}`} />
         </div>
         <GBox
-          padding
           flex={100}
           component={mapComponent}
         />
         <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
           <div className="flex-gt-md-60 flex-100">
-            <AHubCards
+            <AdminHubCardNew
               hubs={hubHash}
               adminDispatch={adminDispatch}
             />
-            <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
-              <span className="flex-15"><u><b>See more</b></u></span>
-              <div className={`flex-85 ${astyles.separator}`} />
+            <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+              <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>See more</b></u></span>
+              <div className={`flex-85 ${styles.separator}`} />
             </div>
           </div>
           <div className="flex-gt-md-35 flex-100">
-            <AClientCards
+            <AdminClientCardIndex
               clients={clients}
+              theme={theme}
             />
-            <div className={`layout-row flex-100 layout-align-center-center ${astyles.space}`}>
-              <span className="flex-20"><u><b>See more</b></u></span>
-              <div className={`flex-80 ${astyles.separator}`} />
+            <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
+              <span className="flex-20" onClick={() => this.handleViewClients()}><u><b>See more</b></u></span>
+              <div className={`flex-80 ${styles.separator}`} />
             </div>
           </div>
         </div>
@@ -159,6 +174,7 @@ export class AdminDashboardNew extends Component {
 AdminDashboardNew.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
+  theme: PropTypes.theme,
   dashData: PropTypes.shape({
     schedules: PropTypes.array
   }),
@@ -178,6 +194,7 @@ AdminDashboardNew.propTypes = {
 }
 
 AdminDashboardNew.defaultProps = {
+  theme: null,
   user: {},
   dashData: null,
   clients: [],

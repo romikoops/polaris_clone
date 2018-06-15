@@ -4,6 +4,14 @@
     margin: 15px 0;
     position: relative;
   }
+  .card_link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+  }
   .itinerary_row {
     background-color: #FCFCFC;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
@@ -304,9 +312,6 @@
     position: relative;
     width: max-content;
     min-width: 100%;
-  }
-  .route_price {
-
   }
   .route_price h3 {
     margin: 0;
@@ -915,6 +920,9 @@
          border: 3px solid #EB5757;
        }
      }
+   }
+   .deselected_icon {
+     color: #E0E0E0;
    }
 
     .services_box .border_right {

@@ -2,13 +2,16 @@
   .greyBg {
     background-color: lightgrey;
     margin-bottom: 20px;
+    height: 35px;
   }
   .hub {
-    margin-bottom: 20px;
     padding: 10px;
   }
-  .container { 
+  .container {
     height: 400px;
+  }
+  .scrolling {
+    height: 320px;
     overflow-y: scroll;
   }
 }

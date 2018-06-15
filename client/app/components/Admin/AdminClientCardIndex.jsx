@@ -2,13 +2,37 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import styles from './AdminClientCards.scss'
+import styles from './AdminClientCardIndex.scss'
+import { gradientTextGenerator } from '../../helpers'
 
-function listClients (clients) {
+function listClients (clients, theme) {
+  const gradientFontStyle =
+    theme && theme.colors
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+      : { color: '#E0E0E0' }
   return clients.length > 0 ? clients.map((client) => {
     const clientCard = (
-      <div className="layout-row flex-100 layout-align-space-between-stretch">
+
+      <div className={`layout-row flex-100 layout-align-space-between-stretch ${styles.client_box}`}>
         <div className="layout-column flex-50 layout-align-center-stretch">
+          <div className="layout-row flex-50 layout-align-start-center">
+            <div className="flex-20 layout-row layout-align-center-center">
+              <i className="fa fa-user clip" style={gradientFontStyle} />
+            </div>
+            <div>
+              <h4>{client.first_name} {client.last_name}</h4>
+            </div>
+          </div>
+          <div className="layout-row flex-50 layout-align-start-center">
+            <span className="flex-20 layout-row layout-align-center-center">
+              <i className="fa fa-building clip" style={gradientFontStyle} />
+            </span>
+            <span className={`flex-80 layout-row layout-align-start-center ${styles.grey}`}>
+              <p>{client.company_name}</p>
+            </span>
+          </div>
+        </div>
+        {/* <div className="layout-column flex-50 layout-align-center-stretch">
           <div className="layout-row flex-50 layout-align-start-stretch">
             <div className="flex-20">
               <i className={`fa fa-user ${styles.profileIcon}`} />
@@ -21,7 +45,7 @@ function listClients (clients) {
             </span>
             <span className={`flex-80 ${styles.grey}`}>{client.company_name}</span>
           </div>
-        </div>
+        </div> */}
         <span className={`layout-column layout-align-center-end flex-25 ${styles.smallText}`}>
           <b>Last active</b><br />
           <span className={`${styles.grey}`}>
@@ -44,7 +68,7 @@ function listClients (clients) {
   }) : (<span className={`${styles.listelement}`}>No shipments available</span>)
 }
 
-export class AdminClientCards extends Component {
+export class AdminClientCardIndex extends Component {
   constructor (props) {
     super(props)
 
@@ -53,7 +77,7 @@ export class AdminClientCards extends Component {
 
   render () {
     const {
-      clients
+      clients, theme
     } = this.props
 
     return (
@@ -61,20 +85,22 @@ export class AdminClientCards extends Component {
         <div className={`layout-padding layout-align-start-center ${styles.greyBg}`}>
           <span><b>Clients</b></span>
         </div>
-        <div className={`layout-align-start-stretch ${styles.list}`}>
-          {listClients(clients)}
+        <div className={`layout-align-start-stretch ${styles.list} ${styles.scrolling}`}>
+          {listClients(clients, theme)}
         </div>
       </div>
     )
   }
 }
 
-AdminClientCards.propTypes = {
-  clients: PropTypes.arrayOf(PropTypes.client)
+AdminClientCardIndex.propTypes = {
+  clients: PropTypes.arrayOf(PropTypes.client),
+  theme: PropTypes.theme
 }
 
-AdminClientCards.defaultProps = {
-  clients: []
+AdminClientCardIndex.defaultProps = {
+  clients: [],
+  theme: null
 }
 
-export default AdminClientCards
+export default AdminClientCardIndex

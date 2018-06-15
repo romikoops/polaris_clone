@@ -3,30 +3,11 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
 import styles from './ShipmentCard.scss'
+import adminStyles from '../Admin/Admin.scss'
 import AdminPromptConfirm from '../Admin/Prompt/Confirm'
+import { gradientTextGenerator, gradientGenerator, switchIcon } from '../../helpers'
 
-function stationType (transportMode) {
-  let type
-
-  switch (transportMode) {
-    case 'ocean':
-      type = 'Port'
-      break
-    case 'air':
-      type = 'Airport'
-      break
-    case 'train':
-      type = 'Station'
-      break
-    default:
-      type = ''
-      break
-  }
-
-  return type
-}
-
-export class AdminShipmentCard extends Component {
+export class AdminShipmentCardNew extends Component {
   constructor (props) {
     super(props)
 
@@ -73,8 +54,31 @@ export class AdminShipmentCard extends Component {
   render () {
     const {
       shipment,
-      theme
+      theme,
+      hubs
     } = this.props
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
+    const bg1 =
+      hubs.startHub && hubs.startHub.location && hubs.startHub.location.photo
+        ? { backgroundImage: `url(${hubs.startHub.location.photo})` }
+        : {
+          backgroundImage:
+            'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
+        }
+    const bg2 =
+      hubs.endHub && hubs.endHub.location && hubs.endHub.location.photo
+        ? { backgroundImage: `url(${hubs.endHub.location.photo})` }
+        : {
+          backgroundImage:
+            'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
+        }
     const { confirm } = this.state
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
@@ -97,55 +101,60 @@ export class AdminShipmentCard extends Component {
         }
       >
         {confimPrompt}
+        <div className={adminStyles.card_link} onClick={() => this.handleView()} />
         <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
           <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
           <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />
           <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
         </div>
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
-          <span className={`flex-100 ${styles.title}`}>Ref: <b>{shipment.imc_reference}</b></span>
+          <span className={`flex-100 ${styles.ref_row_card}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
-        <div className={`layout-row flex-50 layout-align-space-between-stretch ${styles.section}`} onClick={() => this.handleView()}>
-          <div className={`layout-row flex-50 layout-align-space-between-stretch
+        <div className={`layout-row flex-100 layout-align-space-between-stretch ${styles.section}`} onClick={() => this.handleView()}>
+          <div className={`layout-row flex-55 layout-align-space-between-stretch
               ${styles.relative}`}
           >
-            <div className={`layout-column flex-45 ${styles.city}`}>
-              <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <span>{shipment.originHub ? shipment.originHub.location.city : ''}<br />
-                  {shipment.originHub ? stationType(shipment.originHub.data.hub_type) : ''}
-                </span>
+
+            <div className={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_right}`}>
+              <div className="flex-60 layout-align-center-start">
+                <p>{shipment.origin_hub.name}</p>
               </div>
-              <div className="layout-column flex-50">
-                <img className="flex-100" src="/app/assets/images/dashboard/stockholm.png" />
-              </div>
-            </div>
-            <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
-              <i className="fa fa-ship" />
-            </div>
-            <div className={`layout-column flex-45 ${styles.city}`}>
-              <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <span>{shipment.destinationHub ? shipment.destinationHub.location.city : ''}<br />
-                  {shipment.destinationHub ? stationType(shipment.destinationHub.data.hub_type) : ''}
-                </span>
-              </div>
-              <div className="layout-column flex-50">
-                <img className="flex-100" src="/app/assets/images/dashboard/shanghai.png" />
+              <div className="layout-column flex-40">
+                <span className="flex-100" style={bg1} />
               </div>
             </div>
+
+            <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
+              {switchIcon(shipment.mode_of_transport, gradientFontStyle)}
+            </div>
+
+            <div className={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_left}`}>
+              <div className="flex-60 layout-align-center-start">
+                <p>{shipment.destination_hub.name}</p>
+              </div>
+              <div className="layout-column flex-40">
+                <span className="flex-100" style={bg2} />
+              </div>
+            </div>
+
           </div>
-          <div className="layout-column flex-40" onClick={() => this.handleView()}>
+          <div className={`layout-column flex-40 ${styles.user_info}`} onClick={() => this.handleView()}>
             <div className="layout-column flex-50 layout-align-center-stretch">
-              <div className="layout-row flex-50 layout-align-start-stretch">
-                <div className="flex-20">
-                  <i className={`fa fa-user ${styles.profileIcon}`} />
+              <div className="layout-row flex-50 layout-align-start-start">
+                <div className="flex-20 layout-row layout-align-center-center">
+                  <i className="fa fa-user clip" style={gradientFontStyle} />
                 </div>
-                <div className="flex-80">{shipment.clientName}</div>
+                <div className="flex-80 layout-row layout-align-start-start">
+                  <h4>{shipment.clientName}</h4>
+                </div>
               </div>
               <div className="layout-row flex-50 layout-align-start-stretch">
-                <span className="flex-20">
-                  <i className={`fa fa-building ${styles.profileIcon}`} />
+                <span className="flex-20 layout-row layout-align-center-center">
+                  <i className="fa fa-building clip" style={gradientFontStyle} />
                 </span>
-                <span className={`flex-80 ${styles.grey}`}>{shipment.companyName}</span>
+                <span className={`flex-80 layout-row layout-align-start-center ${styles.grey}`}>
+                  <p>{shipment.companyName}</p>
+                </span>
               </div>
             </div>
             <div className={`layout-row flex-50 layout-align-end-end ${styles.smallText}`}>
@@ -157,31 +166,31 @@ export class AdminShipmentCard extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row flex-25 layout-align-start-stretch
+        <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
         >
-          <div className="layout-column flex-25">
+          <div className="layout-column flex-20">
             <span className="flex-100"><b>Pickup Date</b><br />
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_pickup_date).format('DD/MM/YYYY')}
               </span>
             </span>
           </div>
-          <div className="layout-column flex-25">
+          <div className="layout-column flex-20">
             <span className="flex-100"><b>ETD</b><br />
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_etd).format('DD/MM/YYYY')}
               </span>
             </span>
           </div>
-          <div className="layout-column flex-25">
+          <div className="layout-column flex-20">
             <span className="flex-100"><b>ETA</b><br />
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
             </span>
           </div>
-          <div className="layout-column flex-25">
+          <div className="layout-column flex-40">
             <span className="flex-100"><b>Estimated Transit Time</b><br />
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days
@@ -194,7 +203,7 @@ export class AdminShipmentCard extends Component {
         >
           <div className="layout-row flex-60 layout-align-start-center">
             <div className="layout-row flex-15">
-              <div className={`layout-row layout-align-center-center ${styles.greenIcon}`}>
+              <div className={`layout-row layout-align-center-center ${styles.green_icon}`} style={gradientStyle}>
                 <span className={`${styles.smallText}`}>
                   <b>x</b><span className={`${styles.bigText}`}>1</span>
                 </span>
@@ -202,11 +211,19 @@ export class AdminShipmentCard extends Component {
             </div>
             <span className="flex-30">Cargo item</span>
             <span className={`flex-30 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
-              <i className={`fa fa-check-square ${styles.darkgreen}`} />
+              {shipment.pickup_address ? (
+                <i className="fa fa-check-square clip" style={gradientFontStyle} />
+              ) : (
+                <i className={`fa fa-check-square ${adminStyles.deselected_icon}`} />
+              )}
               <span> pickup</span>
             </span>
             <span className="flex-30">
-              <i className={`fa fa-check-square ${styles.grey}`} />
+              {shipment.delivery_address ? (
+                <i className="fa fa-check-square clip" style={gradientFontStyle} />
+              ) : (
+                <i className={`fa fa-check-square ${adminStyles.deselected_icon}`} />
+              )}
               <span> delivery</span>
             </span>
           </div>
@@ -225,16 +242,18 @@ export class AdminShipmentCard extends Component {
   }
 }
 
-AdminShipmentCard.propTypes = {
+AdminShipmentCardNew.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func),
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
-AdminShipmentCard.defaultProps = {
+AdminShipmentCardNew.defaultProps = {
   shipment: {},
   dispatches: {},
-  theme: {}
+  theme: {},
+  hubs: {}
 }
 
-export default AdminShipmentCard
+export default AdminShipmentCardNew

@@ -2,6 +2,10 @@
   .city {
     position: relative;
     font-weight: bold;
+    span {
+      background-size: cover;
+      background-position: center;
+    }
   }
   .city:before, .city:after {
     content: "";

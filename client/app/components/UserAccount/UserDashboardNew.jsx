@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import { ShipmentCards as ShipCards } from '../ShipmentCardNew/ShipmentCards'
+import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
 import styles from './UserDashboardNew.scss'
 // import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
 
@@ -78,7 +78,7 @@ export class UserDashboardNew extends Component {
             component={header2}
           />
         </div>
-        <ShipCards
+        <ShipmentOverviewCard
           shipments={preparedRequestedShipments}
         />
         <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>

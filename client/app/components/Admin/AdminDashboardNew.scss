@@ -6,12 +6,12 @@
     height: 100%;
   }
   .header {
+    height: 100%;
     margin: 20px 0px;
-    height: 200px;
-    min-height: 200px;
   }
   .headerElement {
     padding: 20px 30px;
+    padding-left: 0;
   }
   .welcome {
     font-size: 25px;
@@ -22,6 +22,9 @@
   }
   .space {
     margin-bottom: 20px;
+    span {
+      cursor: pointer;
+    }
   }
   .separator {
     height: 1px;
@@ -29,7 +32,6 @@
   }
   .bigProfile {
     font-size: 60px;
-    background: -webkit-linear-gradient(0deg, #0089CF 0%, #0DB14B 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

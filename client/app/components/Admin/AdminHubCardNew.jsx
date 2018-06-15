@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { AdminHubCard as AHubCard } from './AdminHubCard'
+import { AdminHubCard } from './AdminHubCard'
 import styles from './AdminHubCards.scss'
 
 function listHubs (hubs, adminDispatch) {
-  return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hub) => {
+  return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hubKey) => {
     const HubCard = (
       <div
         className={`flex-25 flex-gt-lg-15 ${styles.hub}`}
-        onClick={() => adminDispatch.getHub(hub, true)}
+        onClick={() => adminDispatch.getHub(hubKey, true)}
       >
-        <AHubCard
-          hub={hubs[hub]}
+        <AdminHubCard
+          hub={hubs[hubKey]}
         />
       </div>
     )
@@ -20,7 +20,7 @@ function listHubs (hubs, adminDispatch) {
   }) : (<span className={`${styles.hub}`}>No hubs available</span>)
 }
 
-export class AdminHubCards extends Component {
+export class AdminHubCardNew extends Component {
   constructor (props) {
     super(props)
 
@@ -38,20 +38,22 @@ export class AdminHubCards extends Component {
         <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
           <span><b>Hubs</b></span>
         </div>
-        {listHubs(hubs, adminDispatch)}
+        <div className={`layout-wrap layout-row flex-100 layout-align-space-between-stretch ${styles.scrolling}`}>
+          {listHubs(hubs, adminDispatch)}
+        </div>
       </div>
     )
   }
 }
 
-AdminHubCards.propTypes = {
+AdminHubCardNew.propTypes = {
   adminDispatch: PropTypes.objectOf(PropTypes.func),
   hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
-AdminHubCards.defaultProps = {
+AdminHubCardNew.defaultProps = {
   hubs: {},
   adminDispatch: {}
 }
 
-export default AdminHubCards
+export default AdminHubCardNew
