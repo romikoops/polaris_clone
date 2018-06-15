@@ -17,9 +17,9 @@ subdomains.each do |sub|
   # tenant.hubs.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # puts '# Overwrite hubs from excel sheet'
-  # hubs = File.open("#{Rails.root}/db/dummydata/ez_hubs.xlsx")
-  # req = { 'xlsx' => hubs }
-  # overwrite_hubs(req, shipper)
+  hubs = File.open("#{Rails.root}/db/dummydata/ez_hubs.xlsx")
+  req = { 'xlsx' => hubs }
+  overwrite_hubs(req, shipper)
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/ez_launch_rates.xlsx")
   req = { 'xlsx' => public_pricings }
