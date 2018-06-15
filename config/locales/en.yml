@@ -37,7 +37,7 @@ en:
       http_code: 400
       code: 1000
       message: "No route matches the selected origin and destination."
-    invalid_itineraries:
+    invalid_routes:
       http_code: 400
       code: 1001
       message: "
