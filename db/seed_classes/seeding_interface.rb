@@ -1,7 +1,7 @@
 class SeedingInterface
   def initialize(args = {})
     @actions         = args[:actions]         || args["actions"]         || {}
-    @welcome_message = args[:welcome_message] || args["welcome_message"] || ""
+    @welcome_message = args[:welcome_message] || args["welcome_message"]
     add_exit_action
   end
 
@@ -12,7 +12,7 @@ class SeedingInterface
       log_list_of_actions
       log_choose_your_action_text
       
-      ask_user_for_options
+      @options = ask_user_for_options
       run_chosen_actions
       
       break if should_exit?
@@ -41,17 +41,26 @@ class SeedingInterface
   end
 
   def run_chosen_actions
+    system "clear"
     @actions.each do |action_name, action|
+      next unless @options.include?(action_name) || run_all?
       puts
-      action.call if @options.include?(action_name) || run_all?
+      action.call
+      puts
     end
   end
 
   def ask_user_for_options
-    @options = STDIN.gets.chomp.gsub(/\D/, "").chars.map { |n| @actions.keys[n.to_i - 1] }
+    raw_user_input       = STDIN.gets.chomp
+    sanitized_user_input = raw_user_input.gsub(/[^(\d|,)]/, "")
+    option_indexes       = sanitized_user_input.split(",")
+
+    option_indexes.map { |n| @actions.keys[n.to_i - 1] }
   end
 
   def log_welcome_message
+    return if @welcome_message.nil?
+
     size = @welcome_message.size
     puts "=" * 50
     print " " * ((50 - size) / 2)
@@ -61,13 +70,14 @@ class SeedingInterface
 
   def log_list_of_actions
     @actions.keys.each_with_index do |action_name, i|
-      puts "#{i + 1} - #{action_name.to_s.humanize.capitalize}"
+      alignment_buffer = " " * (3 - (i + 1).to_s.size)
+      puts "#{i + 1}#{alignment_buffer}-  #{action_name.to_s.humanize.capitalize}"
     end
   end
 
   def log_choose_your_action_text
     puts
-    puts "Choose your Actions (ex: '124' will execute no. 1, 2 & 4)"
+    puts "Choose your Actions (ex: '1,2,4' will execute no. 1, 2 & 4)"
     puts
     puts "[ Press Enter to execute all ]"
     puts
@@ -75,7 +85,6 @@ class SeedingInterface
   end
 
   def log_separator
-    puts " "
     puts "=" * 50
     puts " "
   end
