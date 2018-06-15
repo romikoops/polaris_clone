@@ -10,31 +10,6 @@ import {
   user
 } from '../../mocks'
 
-jest.mock('react-scroll', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('formsy-react', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../CargoDetails/CargoDetails', () => ({
-  // eslint-disable-next-line react/prop-types
-  CargoDetails: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../ContactSetter/ContactSetter', () => ({
-  // eslint-disable-next-line react/prop-types
-  ContactSetter: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RouteHubBox/RouteHubBox', () => ({
-  // eslint-disable-next-line react/prop-types
-  RouteHubBox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ children }) => <button>{children}</button>
-}))
-// eslint-disable-next-line
 import { BookingDetails } from './BookingDetails'
 
 const editedShipmentData = {

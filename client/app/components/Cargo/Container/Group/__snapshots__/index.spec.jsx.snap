@@ -67,9 +67,15 @@ exports[`props.viewHSCodes is true 1`] = `
         <div
           className="flex-5"
         />
-        <Component
+        <Toggle
           checked={false}
           className="flex-none"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
           id="unitView"
           name="unitView"
           onChange={[Function]}
@@ -88,7 +94,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_2"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -226,7 +232,11 @@ exports[`props.viewHSCodes is true 1`] = `
   >
     <i
       className="fa fa-eye clip flex-none"
-      style="#333"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
     />
     <p
       className="offset-5 flex-none"
@@ -322,9 +332,15 @@ exports[`shallow render 1`] = `
         <div
           className="flex-5"
         />
-        <Component
+        <Toggle
           checked={false}
           className="flex-none"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
           id="unitView"
           name="unitView"
           onChange={[Function]}
@@ -343,7 +359,7 @@ exports[`shallow render 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_1"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -563,9 +579,15 @@ exports[`state.unitView is true 1`] = `
         <div
           className="flex-5"
         />
-        <Component
+        <Toggle
           checked={true}
           className="flex-none"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
           id="unitView"
           name="unitView"
           onChange={[Function]}
@@ -584,7 +606,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_4"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"
@@ -804,9 +826,15 @@ exports[`state.viewer is true 1`] = `
         <div
           className="flex-5"
         />
-        <Component
+        <Toggle
           checked={false}
           className="flex-none"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
           id="unitView"
           name="unitView"
           onChange={[Function]}
@@ -825,7 +853,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY"
+        key="RANDOM_KEY_6"
       >
         <div
           className="flex-100 layout-row layout-align-start-center"

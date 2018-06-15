@@ -2,19 +2,16 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
 
-jest.mock('../../../../helpers', () => ({
-  gradientTextGenerator: x => x
-}))
-jest.mock('uuid', () => ({
-  v4: () => 'RANDOM_KEY'
-}))
-jest.mock('../../../HsCodes/HsCodeViewer', () => ({
-  // eslint-disable-next-line react/prop-types
-  HsCodeViewer: ({ children }) => <div>{children}</div>
-}))
-jest.mock('react-toggle', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
+jest.mock('uuid', () => {
+  let counter = 0
+  const v4 = () => {
+    ++counter
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
 // eslint-disable-next-line
 import { CargoContainerGroup } from './'
 

@@ -2,10 +2,7 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import { CardLink } from './CardLink'
 
-import {
-  theme,
-  identity
-} from '../../mocks'
+import { theme, identity } from '../../mocks'
 
 const propsBase = {
   text: 'FOO_TEXT',
@@ -55,9 +52,8 @@ test('handleClick is called', () => {
     handleClick: jest.fn()
   }
   const wrapper = mount(<CardLink {...props} />)
-
   const clickableDiv = wrapper.find('.card_link').first()
-
   clickableDiv.simulate('click')
+
   expect(props.handleClick).toHaveBeenCalled()
 })

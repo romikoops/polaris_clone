@@ -93,9 +93,10 @@ export const match = {
 }
 
 export const shipments = {
+  direction: 'export',
+  finished: [],
   open: [],
-  requested: [],
-  finished: []
+  requested: []
 }
 
 export const shipment = {

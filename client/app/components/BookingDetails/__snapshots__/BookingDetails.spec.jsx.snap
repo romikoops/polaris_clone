@@ -69,10 +69,13 @@ exports[`shallow render 1`] = `
     className="wrapper_contact_setter flex-100 layout-row"
   >
     <ContactSetter
+      consignee={Object {}}
       contacts={Array []}
       finishBookingAttempted={false}
+      notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipper={Object {}}
       theme={
         Object {
           "colors": Object {
@@ -81,12 +84,38 @@ exports[`shallow render 1`] = `
           },
         }
       }
+      userLocations={Array []}
     />
   </div>
-  <[object Object]
+  <Formsy
     className="flex-100"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
     onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
     onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
   >
     <CargoDetails
       currencies={
@@ -113,18 +142,21 @@ exports[`shallow render 1`] = `
         }
       }
       deleteCode={[Function]}
+      eori=""
       finishBookingAttempted={false}
       handleChange={[Function]}
       handleHsTextChange={[Function]}
       handleInsurance={[Function]}
       handleTotalGoodsCurrency={[Function]}
       hsTexts={Object {}}
+      incotermText=""
       insurance={
         Object {
           "bool": null,
           "val": 0,
         }
       }
+      notes=""
       setCustomsFee={[Function]}
       setHsCode={[Function]}
       shipmentData={
@@ -243,6 +275,13 @@ exports[`shallow render 1`] = `
           >
             <RoundButton
               active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={null}
+              icon=""
+              iconClass=""
+              size=""
               text="Review Booking"
               theme={
                 Object {
@@ -267,9 +306,14 @@ exports[`shallow render 1`] = `
         className="content_width flex-none content-width layout-row layout-align-start-center"
       >
         <RoundButton
+          active={false}
           back={true}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
           iconClass="fa-angle-left"
+          size=""
           text="Back to dashboard"
           theme={
             Object {
@@ -282,7 +326,7 @@ exports[`shallow render 1`] = `
         />
       </div>
     </div>
-  </[object Object]>
+  </Formsy>
 </div>
 `;
 
@@ -303,17 +347,46 @@ exports[`theme is falsy 1`] = `
     className="wrapper_contact_setter flex-100 layout-row"
   >
     <ContactSetter
+      consignee={Object {}}
       contacts={Array []}
       finishBookingAttempted={false}
+      notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipper={Object {}}
       theme={null}
+      userLocations={Array []}
     />
   </div>
-  <[object Object]
+  <Formsy
     className="flex-100"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
     onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
     onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
   >
     <CargoDetails
       currencies={
@@ -340,18 +413,21 @@ exports[`theme is falsy 1`] = `
         }
       }
       deleteCode={[Function]}
+      eori=""
       finishBookingAttempted={false}
       handleChange={[Function]}
       handleHsTextChange={[Function]}
       handleInsurance={[Function]}
       handleTotalGoodsCurrency={[Function]}
       hsTexts={Object {}}
+      incotermText=""
       insurance={
         Object {
           "bool": null,
           "val": 0,
         }
       }
+      notes=""
       setCustomsFee={[Function]}
       setHsCode={[Function]}
       shipmentData={
@@ -463,6 +539,13 @@ exports[`theme is falsy 1`] = `
           >
             <RoundButton
               active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={null}
+              icon=""
+              iconClass=""
+              size=""
               text="Review Booking"
               theme={null}
             />
@@ -480,14 +563,19 @@ exports[`theme is falsy 1`] = `
         className="content_width flex-none content-width layout-row layout-align-start-center"
       >
         <RoundButton
+          active={false}
           back={true}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
           iconClass="fa-angle-left"
+          size=""
           text="Back to dashboard"
           theme={null}
         />
       </div>
     </div>
-  </[object Object]>
+  </Formsy>
 </div>
 `;
