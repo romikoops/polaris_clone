@@ -2,14 +2,21 @@
   .status_box_requested {
     border-color: transparent;
     p {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
       letter-spacing: 0.06em;
       margin: 0;
       text-transform: uppercase;
-      background-color: white;
       height: 28px;
-      width: 110px;
+      width: 100px;
+      position: relative;
+      z-index: 10000000;
+    }
+    div {
+      background-color: white;
+      position: absolute;
+      height: 28px;
+      width: 6.5vw;
     }
   }
   .status_box {
@@ -53,7 +60,6 @@
     }
     h3 {
       font-size: 26px;
-      color: #4F4F4F;
     }
     .address {
       line-height: 22px;
@@ -84,6 +90,12 @@
       color: red;
       cursor: pointer;
     }
+  }
+  .light_green {
+    color: #6FCF97;
+  }
+  .light_red {
+    color: #EB5757;
   }
   .contact_box {
     padding-left: 30px;
@@ -163,8 +175,6 @@
     }
     p {
       margin: 0;
-      padding-top: 10px;
-      padding-bottom: 10px;
     }
     span {
       font-size: 15px;
@@ -176,9 +186,9 @@
     p {
       font-size: 12px;
       letter-spacing: 0.02em;
-      color: #4F4F4F;
       margin: 0;
       margin-top: 20px;
+      color: #4F4F4F;
     }
     h5 {
       margin: 0;
@@ -196,7 +206,7 @@
   }
   .ref_row {
     p:first-child {
-      font-size: 24px;
+      font-size: 20px;
       letter-spacing: 0.02em;
       color: #333333;
     }
@@ -240,7 +250,8 @@
       color: #E0E0E0;
     }
     h4 {
-      margin-top: 0;
+      margin: 0;
+      margin-bottom: 12px;
     }
   }
   .border_right {
@@ -250,12 +261,20 @@
     border-bottom: 2px solid #E0E0E0;
   }
 
+  @media only screen and (max-width: 1024px) {
+    .status_box_requested div {
+        width: 11vw;
+    }
+  }
   @media only screen and (max-width: 960px) {
     .info_row {
       padding-right: 20px;
       &.last-margin {
         border: 0 !important;
       }
+    }
+    .status_box_requested div {
+        width: 14vw;
     }
     .no_border_top {
       border-top: 5px solid #E0E0E0 !important;

@@ -872,32 +872,29 @@
      color: #212121;
      height: 38px;
      &:first-child {
-       padding-left: 15px;
-       margin: 0;
-       font-size: 18px;
-       font-weight: bold;
+      padding-left: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 18px;
+      font-weight: bold;
      }
    }
    .expander_icon i {
      font-size: 12px !important;
    }
-   .no_margin_right {
-     margin-right: 0 !important;
-   }
    .border_box {
      border: 5px solid #E0E0E0;
-     margin-right: 25px;
-     &:last-child {
-       margin: 0 !important;
-     }
    }
-   .margin_box {
+   .margin_bottom {
      margin-bottom: 25px;
    }
    .margin_box_right {
-     .border_box {
+     > * {
        margin-right: 25px;
+       &:last-child {
+        margin: 0 !important;
       }
+     }
    }
    .button_row {
      min-height: 130px;
@@ -914,6 +911,7 @@
        }
        &:last-child {
          color: #EB5757;
+         background-color: white;
          border: 3px solid #EB5757;
        }
      }

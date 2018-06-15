@@ -2,20 +2,20 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-import { CargoItemGroup } from '../Cargo/Item/Group'
-import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import { CargoContainerGroup } from '../Cargo/Container/Group'
-import PropTypes from '../../prop-types'
+import { CargoItemGroup } from '../../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
+import { CargoContainerGroup } from '../../Cargo/Container/Group'
+import PropTypes from '../../../prop-types'
 // import { RoundButton } from '../RoundButton/RoundButton'
-import { moment, documentTypes } from '../../constants'
-import { gradientTextGenerator, gradientGenerator, switchIcon } from '../../helpers'
-import adminStyles from './Admin.scss'
+import { moment, documentTypes } from '../../../constants'
+import { gradientTextGenerator, gradientGenerator, switchIcon } from '../../../helpers'
+import adminStyles from '../Admin.scss'
 // import { NamedSelect } from '../NamedSelect/NamedSelect'
 // import { IncotermRow } from '../Incoterm/Row'
 // import ShipmentCard from '../ShipmentCard/ShipmentCard'
 // import { IncotermExtras } from '../Incoterm/Extras'
-import DocumentsForm from '../Documents/Form'
-import styles from './AdminShipments.scss'
+import DocumentsForm from '../../Documents/Form'
+import styles from '../AdminShipments.scss'
 // import admin from '../../reducers/admin.reducer'
 
 export class AdminShipmentView extends Component {
@@ -291,14 +291,10 @@ export class AdminShipmentView extends Component {
       theme && theme.colors
         ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
-    const textStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
     const selectedStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
+        : { color: '#E0E0E0' }
     const deselectedStyle = {
       ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
       opacity: '0.5'
@@ -314,11 +310,11 @@ export class AdminShipmentView extends Component {
           nArray.push(<div className={`${styles.contact_box} ${styles.notifyee_box} flex-100 layout-wrap layout-column`}>
             <div className="layout-column flex">
               <div className={`${styles.info_row} flex-100 layout-row`}>
-                <i className={`${adminStyles.icon} fa fa-user flex-none`} style={textStyle} />
+                <i className={`${adminStyles.icon} fa fa-user flex-none`} style={selectedStyle} />
                 <h4>{n.contact.first_name} {n.contact.last_name}</h4>
               </div>
               <div className={`${styles.info_row} flex-100 layout-row`}>
-                <i className={`${adminStyles.icon} fa fa-building flex-none`} style={textStyle} />
+                <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
                 <p>{n.contact.company_name}</p>
               </div>
             </div>
@@ -333,26 +329,26 @@ export class AdminShipmentView extends Component {
               <div className="layout-column layout-sm-row flex-sm-100">
                 <div className="layout-sm-column flex-sm-30">
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-user flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-user flex-none`} style={selectedStyle} />
                     <h4>{n.contact.first_name} {n.contact.last_name}</h4>
                   </div>
                   <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
                     <p>{n.contact.company_name}</p>
                   </div>
                 </div>
                 <div className="layout-sm-column flex-sm-40">
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={selectedStyle} />
                     <p>{n.contact.email}</p>
                   </div>
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={selectedStyle} />
                     <p>{n.contact.phone}</p>
                   </div>
                 </div>
                 <div className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}>
-                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={textStyle} />
+                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={selectedStyle} />
                   <p>{n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
                     <strong>{n.location ? `${n.location.zip_code} ${n.location.city}` : ''}</strong> <br />
                     {/* {n.location ? `${n.location.country}` : ''} */}
@@ -368,26 +364,26 @@ export class AdminShipmentView extends Component {
               <div className="layout-column layout-sm-row flex-sm-100">
                 <div className="layout-sm-column flex-sm-30">
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-user flex-none layout-align-center-center`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-user flex-none layout-align-center-center`} style={selectedStyle} />
                     <h4>{n.contact.first_name} {n.contact.last_name}</h4>
                   </div>
                   <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
                     <p>{n.contact.company_name}</p>
                   </div>
                 </div>
                 <div className="layout-sm-column flex-sm-40">
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={selectedStyle} />
                     <p>{n.contact.email}</p>
                   </div>
                   <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={textStyle} />
+                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={selectedStyle} />
                     <p>{n.contact.phone}</p>
                   </div>
                 </div>
                 <div className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}>
-                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={textStyle} />
+                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={selectedStyle} />
                   <p>{n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
                     <strong>{n.location ? `${n.location.zip_code} ${n.location.city}` : ''}</strong> <br />
                     {/* {n.location ? `${n.location.country}` : ''} */}
@@ -411,15 +407,16 @@ export class AdminShipmentView extends Component {
     }
 
     const statusRequested = (shipment.status === 'requested') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 layout-align-center-center ${styles.status_box_requested} ${adminStyles.border_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_requested}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+        <div className="lol" />
       </div>
     ) : (
       ''
     )
 
     const statusInProcess = (shipment.status === 'in_process') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 layout-align-center-center ${styles.status_box_process} ${adminStyles.border_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_process}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
     ) : (
@@ -427,7 +424,7 @@ export class AdminShipmentView extends Component {
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 layout-align-center-center ${styles.status_box} ${adminStyles.border_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
     ) : (
@@ -549,66 +546,27 @@ export class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-
-    // const totalPrice = showEditPrice ? (
-    //   <div className="flex-30 layout-row">
-    //     <div className="flex-40 layout-row input_box_full">
-    //       <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
-    //     </div>
-    //     <div className="offset-5 flex-35 layout-row input_box_full">
-    //       <NamedSelect
-    //         name=""
-    //         className="flex-100"
-    //         placeholder="Currency"
-    //         options={currencyOptions}
-    //         value={currency}
-    //         onChange={this.handleCurrencySelect}
-    //       />
-    //     </div>
-    //     <div className="flex layout-row layout-align-space-around-center">
-    //       <div onClick={this.saveNewPrice}>
-    //         <i className="fa fa-check clip pointy" style={textStyle} />
-    //       </div>
-    //       <div onClick={this.toggleEditPrice}>
-    //         <i className="fa fa-times pointy" style={{ color: 'red' }} />
-    //       </div>
-    //     </div>
-    //   </div>
-    // ) : (
-    //   <div className="flex-30 layout-row layout-align-end-center">
-    //     <h3 className="flex-none letter_3">
-    //       {parseFloat(shipment.total_price.value).toFixed(2)} {shipment.total_price.currency}
-    //     </h3>
-    //     <div
-    //       className="flex-20 layout-row layout-align-center-center pointy"
-    //       onClick={this.toggleEditPrice}
-    //     >
-    //       <i className="fa fa-pencil clip" style={textStyle} />
-    //     </div>
-    //   </div>
-    // )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="layout-row flex-100">
-          <div className={`layout-row flex-85 ${adminStyles.title_grey} ${adminStyles.border_box}`}>
+        <div className={`${adminStyles.margin_box_right} layout-row flex-100`}>
+          <div className={`layout-row flex-85 flex-md-75 flex-sm-70 flex-xs-40 layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
           {statusRequested}
           {statusInProcess}
           {statusFinished}
-          <div className={`layout-row flex-5 layout-align-center-center ${adminStyles.border_box}`}>
-            <i className="fa fa-check" onClick={this.handleAccept} />
-            <i className="fa fa-trash" onClick={this.handleDeny} />
+          <div className={`layout-row flex-5 flex-md-10 flex-sm-10 flex-xs-15 layout-align-space-around-center ${adminStyles.border_box}`}>
+            <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
+            <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
           </div>
         </div>
 
         <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
-          <p className="layout-row flex-20">Ref: <span>{shipment.imc_reference}</span></p>
-          <hr className="layout-row flex-55" />
-          <p className="layout-row flex-25 layout-align-end-center"><strong>Placed at:</strong> {createdDate}</p>
+          <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
+          <hr className="layout-row flex-md-40 flex-55" />
+          <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.margin_box}`}>
+        <div className={`layout-row flex-100 ${adminStyles.margin_bottom}`}>
           <div className={`layout-row flex-40 ${styles.hub_box_shipment}`}>
             <div className={`${styles.info_hub_box} flex-60 layout-column`}>
               <h3>{hubsObj.startHub.data.name}</h3>
@@ -696,39 +654,73 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.info_delivery}`}>
-          <div className="flex-30 layout-row">
-            <i className="flex-none fa fa-check-square" />
-            <h4>Pick-up</h4>
+        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>
+          <div className="layout-column flex-60 layout-align-center-stretch">
+            <div className="layout-row flex-100 layout-align-start-start">
+              <i className="flex-5 fa fa-check-square" style={shipment.pickup_address ? selectedStyle : { color: '#E0E0E0' }} />
+              <div className="flex-95 layout-column">
+                <h4>Pick-up</h4>
+                <div className="layout-row flex-100 layout-align-start-start">
+                  {shipment.pickup_address ? (
+                    <div
+                      className="layout-row flex-offset-10 flex-50 flex-md-60
+                          flex-sm-80 layout-align-start-center"
+                    >
+                      <i className={`fa fa-map-marker ${styles.markerIcon}`} style={selectedStyle} />
+                      <span className={`${styles.smallText}`}>
+                        {shipment.pickup_address}
+                      </span>
+                    </div>
+                  ) : ''}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex-30 layout-row">
-            <i className="flex-none fa fa-check-square" />
-            <h4>Delivery</h4>
+          <div className="layout-column flex-40 layout-align-center-stretch">
+            <div className="layout-row flex-100 layout-align-start-center">
+              <i className="flex-5 fa fa-check-square" style={shipment.delivery_address ? selectedStyle : { color: '#E0E0E0' }} />
+              <div className="flex-95 layout-column">
+                <h4>Delivery</h4>
+                <div className="layout-row flex-100 layout-align-start-start">
+                  {shipment.delivery_address ? (
+                    <div
+                      className="layout-row flex-offset-10 flex-50 flex-md-60
+                          flex-sm-80 layout-align-start-center"
+                    >
+                      <i className={`fa fa-map-marker ${styles.markerIcon}`} style={selectedStyle} />
+                      <span className={`${styles.smallText}`}>
+                        {shipment.delivery_address}
+                      </span>
+                    </div>
+                  ) : ''}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className={`${adminStyles.border_box} ${adminStyles.no_margin_right} ${adminStyles.margin_box} layout-sm-column layout-xs-column layout-row flex-100`}>
+        <div className={`${adminStyles.border_box} ${adminStyles.margin_bottom} layout-sm-column layout-xs-column layout-row flex-100`}>
           <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                   <p>Pre-Carriage</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                   <p>On-Carriage</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-file-text clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                   <p>Origin Documentation</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-file-text-o clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                   <p>Destination Documentation</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-ship clip flex-none layout-align-center-center" style={selectedStyle} />
                   <p>Freight</p>
                 </div>
@@ -739,11 +731,11 @@ export class AdminShipmentView extends Component {
             <div className="layout-column flex-100">
               <h3>Additional Services</h3>
               <div className="">
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Customs</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_box}`}>
+                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
                   <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Insurance</p>
                 </div>
@@ -761,7 +753,7 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`layout-row layout-xs-column layout-sm-column ${adminStyles.margin_box} ${adminStyles.margin_box_right}`}>
+        <div className={`layout-row layout-xs-column layout-sm-column ${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
           <div className={`${adminStyles.border_box} layout-row flex-lg-40 flex-gt-sm-100`}>
             <div className="layout-row layout-wrap flex-100">
               <p className={`layout-align-start-center flex-100 layout-row ${adminStyles.title_grey}`}>Shipper</p>
@@ -781,7 +773,7 @@ export class AdminShipmentView extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_right}`}>
+        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_box_right}`}>
           <div className="layout-column flex">
             <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Cargo Details</p>
             <div className="flex-100 layout-row layout-wrap layout-align-start-stretch">
@@ -789,7 +781,7 @@ export class AdminShipmentView extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_box} ${adminStyles.no_margin_right}`}>
+        <div className={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}>
           <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
             <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
               {shipment.total_goods_value ? (
@@ -881,7 +873,7 @@ export class AdminShipmentView extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_right}`}>
+        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_box_right}`}>
           <div className="layout-column flex">
             <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Documents</p>
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
@@ -890,86 +882,6 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
         {/* <ShipmentCard
-          headingText="Cargo Details"
-          theme={theme}
-          collapsed={collapser.cargo}
-          handleCollapser={() => this.handleCollapser('cargo')}
-          content={
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              {cargoView}
-            </div>
-          }
-        /> */}
-        {/* <ShipmentCard
-          headingText="Additional Info"
-          theme={theme}
-          collapsed={collapser.extra_info}
-          handleCollapser={() => this.handleCollapser('extra_info')}
-          content={
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <div className="flex-100 layout-row layout-align-start-center">
-                {shipment.total_goods_value ? (
-                  <div className="flex-45 layout-row offset-5 layout-align-start-start layout-wrap">
-                    <p className="flex-100">
-                      <b>Total Value of Goods:</b>
-                    </p>
-                    <p className="flex-100 no_m">{`${shipment.total_goods_value.currency} ${
-                      shipment.total_goods_value.value
-                    }`}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {shipment.eori ? (
-                  <div
-                    className="flex-45 offset-10 layout-row
-                        layout-align-start-start layout-wrap"
-                  >
-                    <p className="flex-100">
-                      <b>EORI number:</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.eori}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              <div className="flex-100 layout-row layout-align-space-around-center">
-                {shipment.cargo_notes ? (
-                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
-                    <p className="flex-100">
-                      <b>Description of Goods:</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.cargo_notes}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {shipment.notes ? (
-                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
-                    <p className="flex-100">
-                      <b>Notes:</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.notes}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-                {shipment.incoterm_text ? (
-                  <div className="flex-45 offset-5 layout-row layout-align-start-start layout-wrap">
-                    <p className="flex-100">
-                      <b>Incoterm:</b>
-                    </p>
-                    <p className="flex-100 no_m">{shipment.incoterm_text}</p>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
-          }
-        />
-        <ShipmentCard
           headingText="Documents"
           theme={theme}
           collapsed={collapser.documents}
@@ -992,8 +904,8 @@ export class AdminShipmentView extends Component {
           }
         /> */}
         <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-          <button className={`${styles.button_accept}`} style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-          <button className={`${styles.button_refuse}`} onClick={this.handleDeny}>Refuse</button>
+          <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
+          <button onClick={this.handleDeny}>Refuse</button>
         </div>
       </div>
     )
