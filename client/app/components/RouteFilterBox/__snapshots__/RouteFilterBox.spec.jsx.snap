@@ -36,9 +36,9 @@ exports[`props.pickup is false 1`] = `
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "before": Date {},
+              "before": 2017-06-13T01:41:20.000Z,
             },
-            "month": Date {},
+            "month": 2017-06-13T01:41:20.000Z,
             "name": "dayPicker",
           }
         }
@@ -174,9 +174,9 @@ exports[`shallow rendering 1`] = `
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "before": Date {},
+              "before": 2017-06-13T01:41:20.000Z,
             },
-            "month": Date {},
+            "month": 2017-06-13T01:41:20.000Z,
             "name": "dayPicker",
           }
         }

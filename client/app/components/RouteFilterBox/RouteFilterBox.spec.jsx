@@ -51,15 +51,17 @@ const propsBase = {
   shipment: {}
 }
 
-const createShallow = propsInput => shallow(<RouteFilterBox {...propsInput} />)
-
 let originalDate
-
+const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
   // eslint-disable-next-line no-global-assign
   originalDate = Date
   // eslint-disable-next-line no-global-assign
-  Date = () => 1462361249717
+  Date = class extends Date {
+    constructor () {
+      return constantDate
+    }
+  }
 })
 
 afterEach(() => {
@@ -68,7 +70,7 @@ afterEach(() => {
 })
 
 test('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+  expect(shallow(<RouteFilterBox {...propsBase} />)).toMatchSnapshot()
 })
 
 test('props.pickup is false', () => {
@@ -76,5 +78,5 @@ test('props.pickup is false', () => {
     ...propsBase,
     pickup: false
   }
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<RouteFilterBox {...props} />)).toMatchSnapshot()
 })

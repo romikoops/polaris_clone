@@ -69,12 +69,16 @@ const propsBase = {
 }
 
 let originalDate
-
+const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
   // eslint-disable-next-line no-global-assign
   originalDate = Date
   // eslint-disable-next-line no-global-assign
-  Date = () => 1462361249717
+  Date = class extends Date {
+    constructor () {
+      return constantDate
+    }
+  }
 })
 
 afterEach(() => {
