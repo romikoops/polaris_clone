@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ConverterHashes
-  humanized_mot_and_load_type = {
+  {
     ocean: {
       container:  "Ocean FCL",
       cargo_item: "Ocean LCL"
