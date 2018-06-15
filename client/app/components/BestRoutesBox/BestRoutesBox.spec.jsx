@@ -1,11 +1,7 @@
 import * as React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import { theme, identity, user, shipmentData } from '../../mocks'
 
-jest.mock('../Price/Price', () => ({
-  // eslint-disable-next-line react/prop-types
-  Price: ({ children }) => <div>{children}</div>
-}))
 jest.mock('../../helpers', () => ({
   gradientGenerator: x => x
 }))
@@ -20,12 +16,24 @@ jest.mock('../../constants', () => {
 import { BestRoutesBox } from './BestRoutesBox'
 
 const propsBase = {
-  theme,
-  user,
   chooseResult: identity,
-  shipmentData
+  shipmentData,
+  theme,
+  user
 }
 
 test('shallow render', () => {
   expect(shallow(<BestRoutesBox {...propsBase} />)).toMatchSnapshot()
+})
+
+test('chooseResult is called', () => {
+  const props = {
+    ...propsBase,
+    chooseResult: jest.fn()
+  }
+  const wrapper = mount(<BestRoutesBox {...props} />)
+  const clickableDiv = wrapper.find('.best_card').first()
+  clickableDiv.simulate('click')
+
+  expect(props.chooseResult).toHaveBeenCalled()
 })

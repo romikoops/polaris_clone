@@ -31,6 +31,7 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
+        value={7}
       />
     </div>
   </div>
@@ -52,6 +53,7 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
+        value={7}
       />
     </div>
   </div>
@@ -73,6 +75,7 @@ exports[`shallow render 1`] = `
     >
       <Price
         scale="0.75"
+        value={25}
       />
     </div>
   </div>

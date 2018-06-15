@@ -145,8 +145,11 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -1279,8 +1282,11 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -2470,8 +2476,11 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -3716,8 +3725,11 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -4852,8 +4864,11 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -5987,8 +6002,11 @@ exports[`shallow render 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -7107,8 +7125,11 @@ exports[`with cargo items 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {
@@ -8444,8 +8465,11 @@ exports[`with containers 1`] = `
                 "incoterm_text": "FOO_INCOTERM_TEXT",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
+                  "BAR_HUB_ROUTE_KEY": Object {
+                    "total": 25,
+                  },
                   "FOO_HUB_ROUTE_KEY": Object {
-                    "foo": "FOO_ROUTE_KEY",
+                    "total": 7,
                   },
                 },
                 "selected_offer": Object {

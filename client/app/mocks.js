@@ -35,14 +35,14 @@ export const req = {
 }
 
 const schedulesInShipmentData = [
-  { hub_route_key: 'FOO_HUB_ROUTE_KEY' }
+  { hub_route_key: 'FOO_HUB_ROUTE_KEY' },
+  { hub_route_key: 'BAR_HUB_ROUTE_KEY' }
 ]
 
 export const shipmentInShipmentData = {
   schedules_charges: {
-    [schedulesInShipmentData[0].hub_route_key]: {
-      foo: 'FOO_ROUTE_KEY'
-    }
+    FOO_HUB_ROUTE_KEY: { total: 7 },
+    BAR_HUB_ROUTE_KEY: { total: 25 }
   },
   total_goods_value: {
     value: 15,

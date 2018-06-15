@@ -39,8 +39,11 @@ exports[`shallow render 1`] = `
         "incoterm_text": "FOO_INCOTERM_TEXT",
         "notes": "FOO_NOTES",
         "schedules_charges": Object {
+          "BAR_HUB_ROUTE_KEY": Object {
+            "total": 25,
+          },
           "FOO_HUB_ROUTE_KEY": Object {
-            "foo": "FOO_ROUTE_KEY",
+            "total": 7,
           },
         },
         "total_goods_value": Object {
@@ -153,6 +156,9 @@ exports[`shallow render 1`] = `
             Object {
               "hub_route_key": "FOO_HUB_ROUTE_KEY",
             },
+            Object {
+              "hub_route_key": "BAR_HUB_ROUTE_KEY",
+            },
           ],
           "shipment": Object {
             "cargo_notes": "FOO_CARGO_NOTES",
@@ -162,8 +168,11 @@ exports[`shallow render 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
+              "BAR_HUB_ROUTE_KEY": Object {
+                "total": 25,
+              },
               "FOO_HUB_ROUTE_KEY": Object {
-                "foo": "FOO_ROUTE_KEY",
+                "total": 7,
               },
             },
             "total_goods_value": Object {
@@ -373,6 +382,9 @@ exports[`theme is falsy 1`] = `
             Object {
               "hub_route_key": "FOO_HUB_ROUTE_KEY",
             },
+            Object {
+              "hub_route_key": "BAR_HUB_ROUTE_KEY",
+            },
           ],
           "shipment": Object {
             "cargo_notes": "FOO_CARGO_NOTES",
@@ -382,8 +394,11 @@ exports[`theme is falsy 1`] = `
             "incoterm_text": "FOO_INCOTERM_TEXT",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
+              "BAR_HUB_ROUTE_KEY": Object {
+                "total": 25,
+              },
               "FOO_HUB_ROUTE_KEY": Object {
-                "foo": "FOO_ROUTE_KEY",
+                "total": 7,
               },
             },
             "total_goods_value": Object {
