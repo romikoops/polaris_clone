@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ShipperSeeder
   DUMMY_LOCATIONS = [
     {
@@ -71,10 +72,10 @@ class ShipperSeeder
 
   def self.perform(filter={})
     Tenant.where(filter).each do |tenant|
-      next unless find_user_for_tenant(tenant).nil?
-
-      shipper = new_shipper(tenant)
+      shipper = find_shipper_for_tenant(tenant).nil?
+      shipper ||= new_shipper(tenant)
       shipper.save!
+
       add_dummy_locations_to_shipper(shipper)
       add_dummy_contacts_to_shipper(shipper)
     end
@@ -86,7 +87,7 @@ class ShipperSeeder
     tenant.web && tenant.web['tld'] ? tenant.web['tld'] : 'com'
   end
 
-  def self.find_user_for_tenant(tenant)
+  def self.find_shipper_for_tenant(tenant)
     tenant.users.find_by(email: "demo@#{tenant.subdomain}.#{tld(tenant)}")
   end
 
@@ -113,14 +114,15 @@ class ShipperSeeder
   def self.add_dummy_contacts_to_shipper(shipper)
     DUMMY_CONTACTS.each_with_index do |contact_hash, i|
       if should_insert_domain?(contact_hash[:email])
-        contact_hash[:email] = contact_hash[:email].gsub(/\*\*subdomain\*\*/, tenant.subdomain)
+        contact_hash[:email] = contact_hash[:email].gsub("**subdomain**", shipper.tenant.subdomain)
       end
-      contact[:location_id] = Location.find_or_create_by(DUMMY_LOCATIONS[i]).id
+      contact_hash[:location_id] = Location.find_or_create_by(DUMMY_LOCATIONS[i]).id
       shipper.contacts.create(contact_hash)
     end
   end
 
   def self.should_insert_domain?(email)
-    email.match(/\*\*(?<wilcard_text>.*)\*\*/)[:wilcard_text] == "subdomain"
+    match_data = email.match(/\*\*(?<wilcard_text>.*)\*\*/)
+    match_data && match_data[:wilcard_text] == "subdomain"
   end
 end

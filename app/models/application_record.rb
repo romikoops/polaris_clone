@@ -35,6 +35,34 @@ class ApplicationRecord < ActiveRecord::Base
     sanitize_sql(*args)
   end
 
+  def self.reset_all_tables_except(*models)
+    Rails.application.eager_load!
+    models_to_delete = ApplicationRecord.descendants - models
+    models_to_delete.each_with_index do |model, i|
+      if i > 1000
+        puts "could not deletet the following models:
+          #{models_to_delete[1001..-1].log_format}".red
+        break
+      end
+      model.delete_all
+    rescue StandardError
+      models_to_delete << model
+    end
+    models_to_delete
+  end
+
+  def self.test_logic
+    arr = [1, 2]
+    arr.each do |elem|
+      begin
+        raise if elem < arr.last
+      rescue
+        arr << elem
+      end
+    end
+    arr
+  end
+
   private
 
   def sanitize_sql(*args)

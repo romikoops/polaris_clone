@@ -1503,7 +1503,8 @@ module ExcelTools
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
 
-      if aux_data[pricing_key][:itinerary].blank?
+      itinerary = aux_data[pricing_key][:itinerary]
+      if itinerary.blank?
         itinerary_name = "#{aux_data[pricing_key][:origin].name} - #{aux_data[pricing_key][:destination].name}"
         itinerary = tenant.itineraries.find_by(mode_of_transport: row[:mot], name: itinerary_name)
         if itinerary.blank?
