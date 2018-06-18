@@ -14,7 +14,6 @@ export default async function chooseSenderReceiver (puppeteer) {
     waitFor,
     waitAndClick
   } = puppeteer
-  await puppeteer.saveStep('chooseSenderReceiver.0')
 
   /**
    * Click on 'Choose a sender' and select first sender
@@ -29,5 +28,4 @@ export default async function chooseSenderReceiver (puppeteer) {
   expect(await click(CHOOSE_RECEIVER)).toBeTruthy()
   expect(await waitAndClick(SELECT_RECEIVER_SENDER)).toBeTruthy()
   expect(await waitFor(RECEIVER_LOADED)).toBeTruthy()
-  await puppeteer.saveStep('chooseSenderReceiver.1')
 }

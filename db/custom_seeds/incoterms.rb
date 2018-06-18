@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+puts "Destroying Incoterms..."
 IncotermScope.destroy_all
 IncotermCharge.destroy_all
 IncotermLiability.destroy_all
 Incoterm.destroy_all
+
+puts "Seeding Incoterms..."
 
 incoterms = [
   {

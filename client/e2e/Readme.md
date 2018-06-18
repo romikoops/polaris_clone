@@ -6,17 +6,13 @@
 
 2. Start with `docker-compose up --remove-orphans`
 
-3. If test was successful, You should find multiple screens in `./client/e2e/_screens` folder.
-
 ## How to run e2e tests locally
 
-1. Have a running `Rails`(***rails server***) and `Webpack`(***npm start***)
+1. `yarn install`
 
-2. Install e2e dependencies in folder `./client/e2e/` with yarn not `npm` - `yarn install`
+2. Run `yarn test` for standard e2e test settings
 
-3. Run `yarn test`(again with `yarn`) for running test without artificial delay.
-
-4. Or run `yarn dev` for e2e test with additional delay.
+3. Or run `yarn dev` for e2e test with additional delay
 
 ## Visual regression testing
 
@@ -24,9 +20,8 @@ Created in order to confirm that refactored component has the same visual repres
 We are using method `shouldMatchScreenshot` declared in `./_modules/init.js`.
 
 ```javascript
-/**
- * ./Order/steps/clickReviewBooking.js
- */
+// ./Order/steps/clickReviewBooking.js
+
 export default async function clickReviewBooking (puppeteer) {
   expect(await puppeteer.clickWithText('p', 'Review Booking')).toBeTruthy()
   expect(await puppeteer.page.waitForSelector('i.fa-ship')).toBeTruthy()

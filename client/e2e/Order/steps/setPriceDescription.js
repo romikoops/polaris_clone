@@ -1,6 +1,4 @@
 export default async function setPriceDescription (puppeteer) {
-  await puppeteer.saveStep('setPriceDescription.0')
-
   /**
    * Set price of goods
    */
@@ -11,5 +9,4 @@ export default async function setPriceDescription (puppeteer) {
    * Set description of goods
    */
   await puppeteer.inputWithTab(2, 'foo')
-  await puppeteer.saveStep('setPriceDescription.1')
 }

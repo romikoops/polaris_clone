@@ -25,7 +25,6 @@ export async function selectOriginDestinationWithClick (puppeteer) {
     focus,
     selectWithTab
   } = puppeteer
-  await puppeteer.saveStep('selectOriginDestinationWithClick.0')
 
   await focus('body')
   await selectWithTab(3)
@@ -41,5 +40,4 @@ export async function selectOriginDestinationWithClick (puppeteer) {
   await page.mouse.click(x + 10, y + 40)
   await delay(LONG_DELAY)
   await selectWithTab(7)
-  await puppeteer.saveStep('selectOriginDestinationWithClick.1')
 }

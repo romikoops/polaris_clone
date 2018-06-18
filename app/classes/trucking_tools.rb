@@ -36,6 +36,7 @@ module TruckingTools
     total_fees.each do |tk, tfee|
       extra_fees_results[tk] = tfee[:value] * fees[:rate][:value]
     end
+    
     extra_fees_results.each do |_ek, evalue|
       result["value"] += evalue
     end
@@ -81,7 +82,7 @@ module TruckingTools
     when "PER_CONTAINER"
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
     when "PER_CONTAINER_KM"
-      value = (fee[:km] * (km * 2)) + fee[:unit]
+      value = (fee[:km] * km) + fee[:unit]
       min = fee[:min_value] || 0
       final_value = [min, value].max
       return { currency: fee[:currency], value: final_value, key: key }

@@ -4,8 +4,6 @@ const FINISH_BOOKING_LOADED = {
 }
 
 export default async function clickReviewBooking (puppeteer) {
-  await puppeteer.saveStep('clickReviewBooking.0')
-
   expect(await puppeteer.clickWithText('p', 'Review Booking')).toBeTruthy()
   expect(await puppeteer.waitForText(FINISH_BOOKING_LOADED)).toBeTruthy()
 
@@ -13,5 +11,4 @@ export default async function clickReviewBooking (puppeteer) {
 
   const finishBookingURL = await puppeteer.url()
   expect(finishBookingURL.endsWith('finish_booking')).toBeTruthy()
-  await puppeteer.saveStep('clickReviewBooking.1')
 }

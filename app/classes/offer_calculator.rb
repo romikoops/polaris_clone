@@ -71,7 +71,7 @@ class OfferCalculator
       schedule.to_detailed_hash
     end
 
-    raise ApplicationError::NoSchedulesCharges if @grand_total_charge.children.empty?
+    raise ApplicationError::NoSchedulesCharges if !@grand_total_charge || @grand_total_charge.children.empty?
   end
 
   def calc_local_charges!(schedule)

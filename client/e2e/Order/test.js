@@ -3,14 +3,13 @@ no-ex-assign: "off", block-scoped-var: "off", "no-console": "off" */
 import open from 'open'
 import init from '../_modules/init'
 import { BASE_URL } from '../_modules/constants'
-import { isDocker } from '../_modules/isDocker'
 
 import login from './login'
 import orderExportFCL from './orderExportFCL'
 import orderExportLCL from './orderExportLCL'
 
 const options = {
-  headless: isDocker(),
+  headless: true,
   log: true,
   slowMo: 250,
   url: BASE_URL
@@ -32,12 +31,11 @@ test.only('successful login and placing an export LCL order', async () => {
     await puppeteer.browser.close()
   } catch (e) {
     console.log(e)
-    console.log(await puppeteer.takeScreenshot('error', isDocker()))
+    const { screen } = await puppeteer.catchError({})
 
+    console.log(e, screen)
     puppeteer.onError()
-    if (!isDocker()) {
-      open(screen)
-    }
+    open(screen)
   }
 })
 

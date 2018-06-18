@@ -31,21 +31,24 @@ module PricingTools
   end
 
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
-    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+    cargo_hash =  cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot)
+                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
                else
-                 cargo_unit.payload_in_kg
+                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
                end
+               
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]   += cargo_unit.try(:volume) || 0
+      return_h[:volume]   += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
 
       return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
-    lt = load_type == "cargo_item" ? "lcl" : cargos[0].size_class
-    charge = hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge = charge || hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
+    lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
+    
+    charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
+    charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
+    # 
     return {} if charge.nil?
     totals = { "total" => {} }
 
@@ -63,12 +66,12 @@ module PricingTools
   def calc_customs_fees(charge, cargos, _load_type, user, mot)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot)
+                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
                else
-                 cargo_unit.payload_in_kg
+                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
                end
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += cargo_unit.try(:volume) || 0
+      return_h[:volume]          += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
       return_h[:weight]          += (cargo_unit.try(:weight) || weight)
     end
 

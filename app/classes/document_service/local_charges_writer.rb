@@ -108,6 +108,9 @@ module DocumentService
     end
 
     def worksheet_conditional_builder(worksheet,  row, fee, range_fee=nil)
+      # if range_fee
+      #   byebug
+      # end
       case fee[:rate_basis]
       when "PER_CONTAINER"
         worksheet.write(row, 17, fee[:value])
@@ -133,6 +136,13 @@ module DocumentService
           worksheet.write(row, 19, fee[:value])
         end
       when "PER_KG"
+        if range_fee
+          worksheet.write(row, 13, range_fee[:rate])
+        else
+          worksheet.write(row, 13, fee[:kg])
+        end
+        worksheet.write(row, 18, fee[:min])
+      when "PER_KG_RANGE"
         if range_fee
           worksheet.write(row, 13, range_fee[:rate])
         else

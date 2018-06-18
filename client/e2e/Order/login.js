@@ -17,11 +17,8 @@ export default async function login (puppeteer) {
     fill,
     page,
     waitForSelectors,
-    saveStep,
     url
   } = puppeteer
-  await saveStep('login.0')
-
   /**
    * There are several buttons
    */
@@ -32,7 +29,6 @@ export default async function login (puppeteer) {
    */
   expect(await exists(LOGIN_LINK_HOME)).toBeTruthy()
   expect(await click(LOGIN_LINK_HOME)).toBeTruthy()
-  await saveStep('login.1')
 
   /**
    * Fill username and password
@@ -42,7 +38,6 @@ export default async function login (puppeteer) {
   await fill(USER, DEMO_USER)
   await fill(PASSWORD, DEMO_PASSWORD)
   await click(LOGIN_BUTTON)
-  await saveStep('login.2')
 
   /**
    *  Wait for navigation change
@@ -52,5 +47,4 @@ export default async function login (puppeteer) {
 
   const currentURL = await url()
   expect(currentURL.endsWith('/account')).toBeTruthy()
-  await saveStep('login.3')
 }

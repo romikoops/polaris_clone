@@ -542,15 +542,15 @@ module MultiTenantTools
     end
 
     puts "Seed vehicles"
-    VehicleSeeder.exec
+    VehicleSeeder.perform
 
     puts "Seed prcings"
-    PricingSeeder.exec
+    PricingSeeder.perform
   end
 
   def quick_seed(subdomain)
     puts "Seed prcings"
-    PricingSeeder.exec(subdomain: subdomain)
+    PricingSeeder.perform(subdomain: subdomain)
   end
 
   def do_customs(subdomain)

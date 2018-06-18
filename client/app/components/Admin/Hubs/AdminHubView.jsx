@@ -44,16 +44,17 @@ export class AdminHubView extends Component {
         this.checkAndSetCharges(nextProps)
       }
       if (
-        nextProps.hubData.mandatoryCharge !== this.state.mandatoryCharge
+        !this.state.mandatoryCharge || (nextProps.hubData.mandatoryCharges !== this.state.mandatoryCharge)
       ) {
-        const { mandatoryCharge } = nextProps.hubData
-        this.setState({ mandatoryCharge })
+        const { mandatoryCharges } = nextProps.hubData
+        this.setState({ mandatoryCharge: mandatoryCharges })
       }
     }
   }
 
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
+
     return routes.filter(x => x.id === id)[0]
   }
   toggleHubActive () {
@@ -174,6 +175,7 @@ export class AdminHubView extends Component {
     if (!hubData) {
       return ''
     }
+    // debugger // eslint-disable-line
     console.log('#### currentFee @@@@@@')
     console.log(currentFee)
     const {
@@ -258,6 +260,7 @@ export class AdminHubView extends Component {
 
     const schedArr = schedules.map((sched) => {
       const tmpItin = this.getItineraryFromLayover(sched.itinerary_id)
+
       return (
         <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
       )
@@ -409,6 +412,29 @@ export class AdminHubView extends Component {
         </div>
       </div>
     )
+    const toggleCSS = `
+    .react-toggle--checked .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        ${theme.colors.brightPrimary} 0%,
+        ${theme.colors.primary} 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle-track {
+      background: linear-gradient(
+        90deg,
+        ${theme.colors.brightSecondary} 0%,
+        ${theme.colors.secondary} 100%
+      ) !important;
+      border: 0.5px solid rgba(0, 0, 0, 0);
+    }
+    .react-toggle:hover .react-toggle-track{
+      background: rgba(0, 0, 0, 0.5) !important;
+    }
+  `
+    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         <div
@@ -477,44 +503,46 @@ export class AdminHubView extends Component {
               loadType={currentCustomsLoadType.value}
             />
           </div>
-          { mandatoryCharge
-            ? <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-              <div className="flex-100 layout-row layout-align-start-center">
-                <TextHeading theme={theme} text="Mandatory Charges" size={3} />
+          {/* {mandatoryCharge
+            ?  */}
+          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading theme={theme} text="Mandatory Charges" size={3} />
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none">Import Fees</p>
+                <Toggle
+                  value={mandatoryCharge.import_fees || false}
+                  onChange={e => this.handleToggle(e, 'import_charges')}
+                />
               </div>
-              <div className="flex-100 layout-row layout-align-start-center">
-                <div className="flex-50 layout-row layout-align-space-around-center">
-                  <p className="flex-none">Import Fees</p>
-                  <Toggle
-                    value={mandatoryCharge.import_fees || false}
-                    onChange={e => this.handleToggle(e, 'import_charges')}
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none">Export Fees</p>
+                <Toggle
+                  value={mandatoryCharge.export_fees || false}
+                  onChange={e => this.handleToggle(e, 'export_charges')}
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-end-center">
+              {mandatoryCharge !== this.props.hubData.mandatoryCharges ? (
+                <div className={`${styles.action_btn} flex-none layout-row`}>
+                  <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Save"
+                    active
+                    handleNext={() => this.saveMandatoryChargeEdit()}
+                    iconClass="fa-floppy-o"
                   />
                 </div>
-                <div className="flex-50 layout-row layout-align-space-around-center">
-                  <p className="flex-none">Import Fees</p>
-                  <Toggle
-                    value={mandatoryCharge.export_fees || false}
-                    onChange={e => this.handleToggle(e, 'export_charges')}
-                  />
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-align-end-center">
-                {mandatoryCharge !== this.props.hubData.mandatoryCharge ? (
-                  <div className={`${styles.action_btn} flex-none layout-row`}>
-                    <RoundButton
-                      theme={theme}
-                      size="small"
-                      text="Save"
-                      active
-                      handleNext={() => this.saveMandatoryChargeEdit()}
-                      iconClass="fa-floppy-o"
-                    />
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div> : '' }
+              ) : (
+                ''
+              )}
+            </div>
+          </div>
+          {/* // : ''} */}
           <AdminSearchableRoutes
             itineraries={routes}
             theme={theme}
@@ -557,6 +585,7 @@ export class AdminHubView extends Component {
             </div>
           </div>
         </div>
+        {styleTagJSX}
       </div>
     )
   }
@@ -577,7 +606,7 @@ AdminHubView.propTypes = {
     charges: PropTypes.array,
     customs: PropTypes.array,
     location: PropTypes.objectOf(PropTypes.any),
-    mandatoryCharge: PropTypes.objectOf(PropTypes.any)
+    mandatoryCharges: PropTypes.objectOf(PropTypes.any)
   })
 }
 
