@@ -369,12 +369,14 @@ module ShippingTools
     origin_customs_fee = @origin_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
+      "export",
       shipment.trip.tenant_vehicle_id,
       shipment.destination_hub_id
     )
     destination_customs_fee = @destination_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
+      "import",
       shipment.trip.tenant_vehicle_id,
       shipment.origin_hub_id
     )
