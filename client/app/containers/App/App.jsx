@@ -13,7 +13,7 @@ import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
 import { appActions, authenticationActions, userActions } from '../../actions'
-import { defaultTheme } from '../../constants'
+import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
@@ -27,19 +27,29 @@ class App extends Component {
       const subdomain = getSubdomain()
       appDispatch.fetchTenantIfNeeded(subdomain)
     }
+    this.isUserExpired()
   }
   componentDidMount () {
     const { appDispatch } = this.props
     const subdomain = getSubdomain()
     appDispatch.fetchTenantIfNeeded(subdomain)
     appDispatch.fetchCurrencies()
-    // dispatch(anonymousLogin());
+    this.isUserExpired()
   }
   componentDidUpdate (prevProps) {
+    // this.isUserExpired()
     if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
       // const subdomain = getSubdomain();
       const { appDispatch, selectedSubdomain } = this.props
       appDispatch.fetchTenantIfNeeded(selectedSubdomain)
+    }
+  }
+  isUserExpired () {
+    const { appDispatch } = this.props
+    const { localStorage } = window
+    const auth = JSON.parse(localStorage.getItem('authHeader'))
+    if (auth && moment.unix(auth.expiry).isBefore(moment())) {
+      appDispatch.goTo('/signout')
     }
   }
   render () {
