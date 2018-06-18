@@ -13,6 +13,7 @@ module DocumentService
       workbook_hash = add_worksheet_to_workbook(create_workbook(@directory), header_values)
       @workbook = workbook_hash[:workbook]
       @worksheet = workbook_hash[:worksheet]
+      @mandatory_charges = @hubs.each_with_object({}) {|hub, r_hash| r_hash[hub.id] = hub.mandatory_charge}
     end
 
     def perform
@@ -34,10 +35,14 @@ module DocumentService
       worksheet.write(row, 5, hub.location.longitude)
       worksheet.write(row, 6, hub.location.country.name)
       worksheet.write(row, 7, hub.location.geocoded_address)
+      worksheet.write(row, 8, @mandatory_charges[hub.id].import_charges)
+      worksheet.write(row, 9, @mandatory_charges[hub.id].export_charges)
+      worksheet.write(row, 10, @mandatory_charges[hub.id].pre_carriage)
+      worksheet.write(row, 11, @mandatory_charges[hub.id].on_carriage)
     end
 
     def header_values
-      %w(STATUS TYPE NAME CODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS)
+      %w(STATUS TYPE NAME CODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE ON_CARRIAGE)
     end
   end
 end
