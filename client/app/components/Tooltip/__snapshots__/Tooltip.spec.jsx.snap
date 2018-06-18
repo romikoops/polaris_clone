@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="icon_placement "
+>
+  <i
+    className=" fa FOO_ICON"
+    data-for="RANDOM_KEY_0"
+    data-tip="FOO_TOOLTEXT"
+    style={
+      Object {
+        "color": "FOO_COLOR",
+      }
+    }
+  />
+  <ReactTooltip
+    className="tooltip_box"
+    effect="solid"
+    id="RANDOM_KEY_0"
+    insecure={true}
+    resizeHide={true}
+    wrapper="div"
+  />
+</div>
+`;

@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <TextHeading
+      size={1}
+      text="Shipments"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center border_divider"
+  >
+    <div>
+      No open shipments available
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <div>
+      No requested shipments available
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center"
+  >
+    <div>
+      No finished shipments available
+    </div>
+  </div>
+</div>
+`;

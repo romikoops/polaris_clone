@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="content_width_booking"
+>
+  <div
+    className="trucking_details layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="flex-100"
+    >
+      <TextHeading
+        color=""
+        size={3}
+        text="Trucking Details"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="carriage_sec disabled flex-50 layout-row layout-wrap"
+      >
+        <div
+          className="overlay"
+        />
+        <div
+          className="flex-100"
+        >
+          <h5>
+            Pre-Carriage
+          </h5>
+        </div>
+        <div
+          className="flex-100 layout-column layout-align-space-around"
+        >
+          <div
+            className="form_group layout-row layout-align-start-end"
+          >
+            <input
+              checked={false}
+              id="pre_carriage-FOO"
+              name="pre_carriage_truck"
+              onChange={[Function]}
+              type="radio"
+              value="pre_carriage_truck"
+            />
+            <label
+              htmlFor="pre_carriage-FOO"
+            >
+              FOO
+            </label>
+            <Tooltip
+              color=""
+              icon="fa-info-circle"
+              text="FOO"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toolText=""
+              wrapperClassName="tooltip"
+            />
+          </div>
+          <div
+            className="form_group layout-row layout-align-start-end"
+          >
+            <input
+              checked={false}
+              id="pre_carriage-BAR"
+              name="pre_carriage_truck"
+              onChange={[Function]}
+              type="radio"
+              value="pre_carriage_truck"
+            />
+            <label
+              htmlFor="pre_carriage-BAR"
+            >
+              BAR
+            </label>
+            <Tooltip
+              color=""
+              icon="fa-info-circle"
+              text="BAR"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toolText=""
+              wrapperClassName="tooltip"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="carriage_sec disabled flex-50 layout-row layout-wrap"
+      >
+        <div
+          className="overlay"
+        />
+        <div
+          className="flex-100"
+        >
+          <h5>
+            On-Carriage
+          </h5>
+        </div>
+        <div
+          className="flex-100 layout-column layout-align-space-around"
+        >
+          <div
+            className="form_group layout-row layout-align-start-end"
+          >
+            <input
+              checked={false}
+              id="on_carriage-FOO"
+              name="on_carriage_truck"
+              onChange={[Function]}
+              type="radio"
+              value="on_carriage_truck"
+            />
+            <label
+              htmlFor="on_carriage-FOO"
+            >
+              FOO
+            </label>
+            <Tooltip
+              color=""
+              icon="fa-info-circle"
+              text="FOO"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toolText=""
+              wrapperClassName="tooltip"
+            />
+          </div>
+          <div
+            className="form_group layout-row layout-align-start-end"
+          >
+            <input
+              checked={false}
+              id="on_carriage-BAR"
+              name="on_carriage_truck"
+              onChange={[Function]}
+              type="radio"
+              value="on_carriage_truck"
+            />
+            <label
+              htmlFor="on_carriage-BAR"
+            >
+              BAR
+            </label>
+            <Tooltip
+              color=""
+              icon="fa-info-circle"
+              text="BAR"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              toolText=""
+              wrapperClassName="tooltip"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

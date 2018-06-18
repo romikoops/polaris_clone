@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="card_link_row layout-row flex-100 layout-align-space-around-center"
+>
+  <CardLink
+    allowedCargoTypes={Object {}}
+    code=""
+    handleClick={[Function]}
+    img="FOO_IMG1"
+    key="FOO_NAME1"
+    options={Object {}}
+    path="FOO_URL1"
+    selectedType="FOO_SELECTED_TYPE"
+    text="FOO_NAME1"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <CardLink
+    allowedCargoTypes={Object {}}
+    code=""
+    handleClick={[Function]}
+    img="FOO_IMG2"
+    key="FOO_NAME2"
+    options={Object {}}
+    path="FOO_URL2"
+    selectedType="FOO_SELECTED_TYPE"
+    text="FOO_NAME2"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
