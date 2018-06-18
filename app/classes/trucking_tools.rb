@@ -248,9 +248,11 @@ module TruckingTools
     end
   end
 
-  def calc_trucking_price(trucking_pricing, cargos, km, direction)
+  def calc_trucking_price(trucking_pricing, cargos, km, carriage)
+    direction = carriage == "pre" ? "export" : "import"
     cargo_object = trucking_pricing.load_type == "container" ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
     trucking_pricings = {}
+
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
