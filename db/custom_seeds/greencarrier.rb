@@ -10,9 +10,9 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.where(role_id: 2).first
-  # tenant.itineraries.destroy_all
-  # tenant.local_charges.destroy_all
-  # tenant.customs_fees.destroy_all
+  tenant.itineraries.destroy_all
+  tenant.local_charges.destroy_all
+  tenant.customs_fees.destroy_all
   # tenant.trucking_pricings.destroy_all
   # tenant.hubs.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
@@ -21,9 +21,9 @@ subdomains.each do |sub|
   # req = { 'xlsx' => hubs }
   # overwrite_hubs(req, shipper)
 
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-  # req = { 'xlsx' => public_pricings }
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
+  req = { 'xlsx' => public_pricings }
+  overwrite_freight_rates(req, shipper, true)
 
   # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
