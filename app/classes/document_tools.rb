@@ -30,46 +30,6 @@ module DocumentTools
     @url = signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
   end
 
-  def write_hubs_to_sheet(options)
-    tenant = Tenant.find(options[:tenant_id])
-    hubs = tenant.hubs
-    filename = "hubs_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
-    dir = "tmp/#{filename}"
-    workbook = WriteXLSX.new(dir)
-
-    header_format = workbook.add_format
-    header_format.set_bold
-    worksheet = workbook.add_worksheet
-    header_values = %w[STATUS	TYPE	NAME	CODE	LATITUDE	LONGITUDE	COUNTRY	FULL_ADDRESS	]
-    row = 1
-    header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format) }
-    hubs.each do |hub|
-      worksheet.write(row, 0, hub.hub_status)
-      worksheet.write(row, 1, hub.hub_type)
-      worksheet.write(row, 2, hub.nexus.name)
-      worksheet.write(row, 3, hub.hub_code)
-      worksheet.write(row, 4, hub.location.latitude)
-      worksheet.write(row, 5, hub.location.longitude)
-      worksheet.write(row, 6, hub.location.country.name)
-      worksheet.write(row, 7, hub.location.geocoded_address)
-      row += 1
-    end
-    workbook.close
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
-    file = open(dir)
-    # byebug
-    objKey = "documents/" + tenant.subdomain + "/downloads/hubs/" + filename
-
-    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
-    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: "hubs_sheet")
-    new_doc.get_signed_url
-  end
-
   def write_schedules_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
     if options[:mode_of_transport] && !options[:itinerary_id]
@@ -171,6 +131,7 @@ module DocumentTools
     new_doc.get_signed_url
   end
 
+  # refactored
   def write_trucking_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
     hub = Hub.find(options[:hub_id])
