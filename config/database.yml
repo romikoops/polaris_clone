@@ -24,7 +24,7 @@ default: &default
 
 development:
   <<: *default
-  database: imcr_development_seeds
+  database: imcr_development
   # database: ebdb
 
   # adapter: postgis
