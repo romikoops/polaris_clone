@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-45 layout-row"
+>
+  <div
+    className="flex-10 layout-column layout-align-start-center"
+  >
+    <i
+      className=" icon fa fa-envelope-open-o flex-none"
+      style={Object {}}
+    />
+  </div>
+  <div
+    className="flex-90 layout-row layout-wrap layout-align-start-start"
+  >
+    <h3
+      style={
+        Object {
+          "fontWeight": "normal",
+        }
+      }
+    />
+    <div
+      className="flex-100 layout-row layout-align-space-between-start"
+    >
+      <div
+        className="flex-60 layout-row layout-wrap layout-align-center-start"
+      >
+        <p
+          className="contact_text flex-100"
+        >
+          John
+           
+          Doe
+        </p>
+        <p
+          className="contact_text flex-100"
+        >
+          FOO_COMPANY
+        </p>
+        <p
+          className="contact_text flex-100"
+        >
+          foo@bar.baz
+        </p>
+        <p
+          className="contact_text flex-100"
+        >
+          6345789
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+      >
+        <p
+          className="contact_text address_buffer flex-100 center"
+        >
+          Address
+        </p>
+        <address
+          className=" address flex-100 center"
+        >
+           
+          <br />
+          <br />
+        </address>
+      </div>
+    </div>
+  </div>
+</div>
+`;

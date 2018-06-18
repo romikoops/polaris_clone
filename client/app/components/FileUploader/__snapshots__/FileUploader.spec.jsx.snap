@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-none layout-row upload_btn_wrapper "
+  data-for="RANDOM_KEY_0"
+  data-tip="FOO_TOOLTIP"
+>
+  <form>
+    <RoundButton
+      active={true}
+      handleNext={[Function]}
+      size="small"
+      text="Upload"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <Component
+      className="tooltip"
+      effect="solid"
+      id="RANDOM_KEY_0"
+    />
+    <input
+      name="FOO_TYPE"
+      onChange={[Function]}
+      type="file"
+    />
+  </form>
+</div>
+`;
+
+exports[`square is true 1`] = `
+<div
+  className="flex-none layout-row upload_btn_wrapper "
+  data-for="RANDOM_KEY_1"
+  data-tip="FOO_TOOLTIP"
+>
+  <form>
+    <SquareButton
+      active={true}
+      back={false}
+      border={true}
+      disabled={false}
+      handleDisabled={null}
+      handleNext={[Function]}
+      icon=""
+      iconClass=""
+      size="small"
+      text="Upload"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <Component
+      className="tooltip"
+      effect="solid"
+      id="RANDOM_KEY_1"
+    />
+    <input
+      name="FOO_TYPE"
+      onChange={[Function]}
+      type="file"
+    />
+  </form>
+</div>
+`;

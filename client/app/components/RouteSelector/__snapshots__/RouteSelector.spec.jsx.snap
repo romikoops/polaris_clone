@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-start selector"
+>
+  <div
+    className="content_width layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-none layput-row layout-align-start-center"
+        >
+          <TextHeading
+            color=""
+            size={2}
+            text="Available Routes"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="input_box flex-none layput-row layout-align-start-center"
+        >
+          <input
+            name="search"
+            onChange={[Function]}
+            placeholder="Search route"
+            type="text"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+      >
+        <RouteOption
+          key="RANDOM_KEY_0"
+          route={
+            Object {
+              "id": 24680,
+            }
+          }
+          routeSelected={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

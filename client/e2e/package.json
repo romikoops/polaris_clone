@@ -1,0 +1,35 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "End-to-end tests",
+  "main": "index.js",
+  "scripts": {
+    "debug": "STEP_DELAY=200 jest --detectOpenHandles",
+    "test": "STEP_DELAY=200 jest",
+    "dev": "STEP_DELAY=1000 jest"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
+    "moduleFileExtensions": [
+      "js",
+      "json"
+    ],
+    "testRegex": "test.js$"
+  },
+  "dependencies": {
+    "color-diff": "^0.1.5",
+    "concat-stream": "^1.5.0",
+    "lodash": "^4.17.3",
+    "open": "^0.0.5",
+    "parse-color": "^1.0.0",
+    "pngjs": "^3.0.1",
+    "puppeteer": "^1.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.39",
+    "@babel/preset-env": "7.0.0-beta.39",
+    "babel-core": "^7.0.0-0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.1.0"
+  }
+}

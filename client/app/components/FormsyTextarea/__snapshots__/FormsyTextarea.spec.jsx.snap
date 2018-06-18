@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="FOO_WRAPPER_CLASS_NAME wrapper_input"
+>
+  <textarea
+    className="FOO_CLASS_NAME"
+    disabled={false}
+    id="FOO_ID"
+    name="FOO_NAME"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="FOO_PLACEHOLDER"
+    rows={3}
+    style={Object {}}
+    type="FOO_TYPE"
+    value=""
+  />
+  <span
+    className="error_message"
+    style={Object {}}
+  />
+</div>
+`;
+
+exports[`submitAttempted is true 1`] = `
+<div
+  className="FOO_WRAPPER_CLASS_NAME wrapper_input"
+>
+  <textarea
+    className="FOO_CLASS_NAME"
+    disabled={false}
+    id="FOO_ID"
+    name="FOO_NAME"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    placeholder="FOO_PLACEHOLDER"
+    rows={3}
+    style={
+      Object {
+        "background": "rgba(232, 114, 88, 0.3)",
+        "borderColor": "rgba(232, 114, 88, 0.01)",
+        "color": "rgba(211, 104, 80, 1)",
+      }
+    }
+    type="FOO_TYPE"
+    value=""
+  />
+  <span
+    className="error_message"
+    style={Object {}}
+  />
+</div>
+`;

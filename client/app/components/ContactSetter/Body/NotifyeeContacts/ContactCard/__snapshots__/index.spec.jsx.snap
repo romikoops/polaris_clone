@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row contact_card"
+  key="RANDOM_KEY_0"
+>
+  <i
+    className="remove_icon fa fa-trash"
+    onClick={[Function]}
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-start"
+  >
+    <i
+      className="user_icon fa fa-user clip"
+      style={
+        Object {
+          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+        }
+      }
+    />
+    <h3
+      className="contact_name"
+    >
+      John
+       
+      Doe
+       
+      <br />
+      <span
+        className="secondary_info"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+          FOO_CONTACT_COMPANY
+           
+        </Truncate>
+      </span>
+    </h3>
+  </div>
+</div>
+`;

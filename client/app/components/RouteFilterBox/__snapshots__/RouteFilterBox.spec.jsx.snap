@@ -1,0 +1,277 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.pickup is false 1`] = `
+<div
+  className="filterbox"
+>
+  <div
+    className="pickup_date"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Closing Date"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row dpb"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center dpb_icon"
+      >
+        <i
+          className="flex-none fa fa-calendar"
+        />
+      </div>
+      <[object Object]
+        className="dpb_picker"
+        dayPickerProps={
+          Object {
+            "disabledDays": Object {
+              "before": 2017-06-13T01:41:20.000Z,
+            },
+            "month": 2017-06-13T01:41:20.000Z,
+            "name": "dayPicker",
+          }
+        }
+        format="DD/MM/YYYY"
+        formatDate={[Function]}
+        onDayChange={[Function]}
+        parseDate={[Function]}
+        placeholder="DD/MM/YYYY"
+        value={19}
+      />
+    </div>
+  </div>
+  <div
+    className="haulage"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Haulage"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          Pre Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          On Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="mode_of_transport"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Mode of transport"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div>
+    <p
+      style={
+        Object {
+          "fontSize": "12px",
+          "marginTop": "0",
+        }
+      }
+    >
+      * Transit time (T/T) not guaranteed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="filterbox"
+>
+  <div
+    className="pickup_date"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Pickup Date"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row dpb"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center dpb_icon"
+      >
+        <i
+          className="flex-none fa fa-calendar"
+        />
+      </div>
+      <[object Object]
+        className="dpb_picker"
+        dayPickerProps={
+          Object {
+            "disabledDays": Object {
+              "before": 2017-06-13T01:41:20.000Z,
+            },
+            "month": 2017-06-13T01:41:20.000Z,
+            "name": "dayPicker",
+          }
+        }
+        format="DD/MM/YYYY"
+        formatDate={[Function]}
+        onDayChange={[Function]}
+        parseDate={[Function]}
+        placeholder="DD/MM/YYYY"
+        value={19}
+      />
+    </div>
+  </div>
+  <div
+    className="haulage"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Haulage"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          Pre Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          On Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="mode_of_transport"
+  >
+    <div>
+      <TextHeading
+        size={4}
+        text="Mode of transport"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div>
+    <p
+      style={
+        Object {
+          "fontSize": "12px",
+          "marginTop": "0",
+        }
+      }
+    >
+      * Transit time (T/T) not guaranteed
+    </p>
+  </div>
+</div>
+`;
