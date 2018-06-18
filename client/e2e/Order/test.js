@@ -9,8 +9,8 @@ import orderExportFCL from './orderExportFCL'
 import orderExportLCL from './orderExportLCL'
 
 const options = {
-  headless: false,
-  log: false,
+  headless: true,
+  log: true,
   slowMo: 250,
   url: BASE_URL
 }

@@ -1,6 +1,12 @@
 # End-to-end tests
 
-## How to run e2e tests
+## How to run e2e tests with Docker
+
+1. Build with `docker build -t e2e .`
+
+2. Start with `docker-compose up --remove-orphans`
+
+## How to run e2e tests locally
 
 1. `yarn install`
 
