@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './AdminHubCard.scss'
+import { gradientBorderGenerator } from '../../helpers'
+import GradientBorder from '../GradientBorder'
 
 function stationType (transportMode) {
   let type
@@ -32,8 +34,13 @@ export class AdminHubCard extends Component {
 
   render () {
     const {
-      hub
+      hub, theme
     } = this.props
+
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
 
     const bg =
       hub.data && hub.data.photo
@@ -50,27 +57,36 @@ export class AdminHubCard extends Component {
           ${styles.container} ${styles.relative}`
         }
       >
-        <div className={`layout-column flex-100 ${styles.city}`}>
-          <div className="layout-column layout-padding flex-50 layout-align-center-start">
-            <p>{hub ? hub.location.city : ''}<br />
-              {hub ? stationType(hub.data.hub_type) : ''}
-            </p>
-          </div>
-          <div className="layout-column flex-50">
-            <span className="flex-100" style={bg} />
-          </div>
-        </div>
+        <GradientBorder
+          wrapperClassName={`layout-column flex-100 ${styles.city}`}
+          gradient={gradientBorderStyle}
+          className="layout-column flex-100"
+          content={(
+            <div className="layout-column flex-100">
+              <div className="layout-column layout-padding flex-50 layout-align-center-start">
+                <p>{hub ? hub.location.city : ''}<br />
+                  {hub ? stationType(hub.data.hub_type) : ''}
+                </p>
+              </div>
+              <div className="layout-column flex-50">
+                <span className="flex-100" style={bg} />
+              </div>
+            </div>
+          )}
+        />
       </div>
     )
   }
 }
 
 AdminHubCard.propTypes = {
-  hub: PropTypes.hub
+  hub: PropTypes.hub,
+  theme: PropTypes.theme
 }
 
 AdminHubCard.defaultProps = {
-  hub: {}
+  hub: {},
+  theme: null
 }
 
 export default AdminHubCard

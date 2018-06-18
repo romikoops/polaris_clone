@@ -5,7 +5,13 @@ import { v4 } from 'uuid'
 import styles from './ShipmentCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 import AdminPromptConfirm from '../Admin/Prompt/Confirm'
-import { gradientTextGenerator, gradientGenerator, switchIcon } from '../../helpers'
+import {
+  gradientTextGenerator,
+  gradientGenerator,
+  gradientBorderGenerator,
+  switchIcon
+} from '../../helpers'
+import GradientBorder from '../GradientBorder'
 
 export class AdminShipmentCardNew extends Component {
   constructor (props) {
@@ -57,6 +63,7 @@ export class AdminShipmentCardNew extends Component {
       theme,
       hubs
     } = this.props
+
     const gradientStyle =
       theme && theme.colors
         ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
@@ -65,6 +72,11 @@ export class AdminShipmentCardNew extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
+
     const bg1 =
       hubs.startHub && hubs.startHub.location && hubs.startHub.location.photo
         ? { backgroundImage: `url(${hubs.startHub.location.photo})` }
@@ -79,6 +91,7 @@ export class AdminShipmentCardNew extends Component {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
+
     const { confirm } = this.state
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
@@ -115,27 +128,42 @@ export class AdminShipmentCardNew extends Component {
               ${styles.relative}`}
           >
 
-            <div className={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_right}`}>
-              <div className="flex-60 layout-align-center-start">
-                <p>{shipment.origin_hub.name}</p>
-              </div>
-              <div className="layout-column flex-40">
-                <span className="flex-100" style={bg1} />
-              </div>
-            </div>
+            <GradientBorder
+              wrapperClassName={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_right}`}
+              gradient={gradientBorderStyle}
+              className="layout-column flex-100"
+              content={(
+                <div className="layout-column flex-100">
+                  <div className={`flex-60 layout-align-center-start ${styles.hub_name}`}>
+                    <p>{shipment.origin_hub.name}</p>
+                  </div>
+                  <div className="layout-column flex-40">
+                    <span className="flex-100" style={bg1} />
+                  </div>
+                </div>
+              )}
+            />
+
 
             <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
               {switchIcon(shipment.mode_of_transport, gradientFontStyle)}
             </div>
 
-            <div className={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_left}`}>
-              <div className="flex-60 layout-align-center-start">
-                <p>{shipment.destination_hub.name}</p>
-              </div>
-              <div className="layout-column flex-40">
-                <span className="flex-100" style={bg2} />
-              </div>
-            </div>
+            <GradientBorder
+              wrapperClassName={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_left}`}
+              gradient={gradientBorderStyle}
+              className="layout-column flex-100"
+              content={(
+                <div className="layout-column flex-100">
+                  <div className={`flex-60 layout-align-center-start ${styles.hub_name}`}>
+                    <p>{shipment.destination_hub.name}</p>
+                  </div>
+                  <div className="layout-column flex-40">
+                    <span className="flex-100" style={bg2} />
+                  </div>
+                </div>
+              )}
+            />
 
           </div>
           <div className={`layout-column flex-40 ${styles.user_info}`} onClick={() => this.handleView()}>

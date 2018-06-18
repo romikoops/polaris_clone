@@ -106,6 +106,7 @@ export class AdminDashboardNew extends Component {
           <WorldMap
             itineraries={itineraries}
             hoverId={hoverId}
+            theme={theme}
           />
         </div>
       </div>
@@ -126,7 +127,7 @@ export class AdminDashboardNew extends Component {
             <span className="layout-row flex-10 layout-align-center-center">
               <i className={`fa fa-user clip ${styles.bigProfile}`} style={gradientFontStyle} />
             </span>
-            <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name} {'<3'}</b></span>
+            <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
           </div>
         </div>
         <ShipmentOverviewCard
@@ -149,6 +150,7 @@ export class AdminDashboardNew extends Component {
             <AdminHubCardNew
               hubs={hubHash}
               adminDispatch={adminDispatch}
+              theme={theme}
             />
             <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
               <span className="flex-15" onClick={() => this.handleViewHubs()}><u><b>See more</b></u></span>

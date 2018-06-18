@@ -45,7 +45,7 @@ export class WorldMap extends Component {
   }
 
   render () {
-    const { itineraries, hoverId, height } = this.props
+    const { itineraries, hoverId, height, theme } = this.props
     if (!itineraries) return ''
     /* eslint no-else-return: "off" */
     const originArr = []
@@ -97,7 +97,7 @@ export class WorldMap extends Component {
                 cx={projection()(origin.data)[0]}
                 cy={projection()(origin.data)[1]}
                 r={10}
-                fill="#74AE93"
+                fill={theme && theme.colors ? theme.colors.secondary : '#0A557D'}
                 stroke="#FFFFFF"
                 className="marker"
                 onClick={() => this.handleMarkerClick(origin.id)}
@@ -111,7 +111,7 @@ export class WorldMap extends Component {
                 cx={projection()(destination.data)[0]}
                 cy={projection()(destination.data)[1]}
                 r={4}
-                fill="#008ACA"
+                fill={theme && theme.colors ? theme.colors.primary : '#FD8836'}
                 stroke="#FFFFFF"
                 className="marker"
                 onClick={() => this.handleMarkerClick(destination.id)}

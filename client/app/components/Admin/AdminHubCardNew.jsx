@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { AdminHubCard } from './AdminHubCard'
 import styles from './AdminHubCards.scss'
 
-function listHubs (hubs, adminDispatch) {
+function listHubs (hubs, adminDispatch, theme) {
   return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hubKey) => {
     const HubCard = (
       <div
@@ -12,6 +12,7 @@ function listHubs (hubs, adminDispatch) {
       >
         <AdminHubCard
           hub={hubs[hubKey]}
+          theme={theme}
         />
       </div>
     )
@@ -30,7 +31,8 @@ export class AdminHubCardNew extends Component {
   render () {
     const {
       hubs,
-      adminDispatch
+      adminDispatch,
+      theme
     } = this.props
 
     return (
@@ -39,7 +41,7 @@ export class AdminHubCardNew extends Component {
           <span><b>Hubs</b></span>
         </div>
         <div className={`layout-wrap layout-row flex-100 layout-align-space-between-stretch ${styles.scrolling}`}>
-          {listHubs(hubs, adminDispatch)}
+          {listHubs(hubs, adminDispatch, theme)}
         </div>
       </div>
     )
@@ -48,12 +50,14 @@ export class AdminHubCardNew extends Component {
 
 AdminHubCardNew.propTypes = {
   adminDispatch: PropTypes.objectOf(PropTypes.func),
-  hubs: PropTypes.objectOf(PropTypes.hub)
+  hubs: PropTypes.objectOf(PropTypes.hub),
+  theme: PropTypes.theme
 }
 
 AdminHubCardNew.defaultProps = {
   hubs: {},
-  adminDispatch: {}
+  adminDispatch: {},
+  theme: null
 }
 
 export default AdminHubCardNew
