@@ -72,7 +72,7 @@ class ShipperSeeder
 
   def self.perform(filter={})
     Tenant.where(filter).each do |tenant|
-      shipper = find_shipper_for_tenant(tenant).nil?
+      shipper = find_shipper_for_tenant(tenant)
       shipper ||= new_shipper(tenant)
       shipper.save!
 
@@ -107,7 +107,10 @@ class ShipperSeeder
 
   def self.add_dummy_locations_to_shipper(shipper)
     DUMMY_LOCATIONS.each do |location_hash|
-      shipper.locations << Location.create_and_geocode(location_hash)
+      location = Location.create_and_geocode(location_hash)
+      next if shipper.locations.include?(location)
+
+      shipper.locations << location
     end
   end
 
@@ -117,7 +120,10 @@ class ShipperSeeder
         contact_hash[:email] = contact_hash[:email].gsub("**subdomain**", shipper.tenant.subdomain)
       end
       contact_hash[:location_id] = Location.find_or_create_by(DUMMY_LOCATIONS[i]).id
-      shipper.contacts.create(contact_hash)
+      contact = Contact.create(contact_hash)
+      next if shipper.contacts.include?(contact)
+
+      shipper.contacts << contact
     end
   end
 

@@ -15,6 +15,31 @@ Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 
 
 tenant_subdomains = TenantSeeder::TENANT_DATA.map { |data| data[:subdomain] }
+table_names       = TableDropper.all_table_names
+
+
+### Drop Tables ###
+  ## Choose Tables to Drop
+choose_tables_to_drop_actions = table_names.each_with_object({}) do |table_name, obj|
+  obj[table_name.underscore] = -> { TableDropper.perform(only: [table_name.constantize]) }
+end
+choose_tables_to_drop = SeedingInterface.new(actions: choose_tables_to_drop_actions)
+  
+  ## Choose Exceptions
+choose_exceptions_actions = table_names.each_with_object({}) do |table_name, obj|
+  obj[table_name.underscore] = -> { TableDropper.perform(except: [table_name.constantize]) }
+end
+choose_tables_to_drop = SeedingInterface.new(actions: choose_exceptions_actions)
+  
+  ## Main
+drop_tables_actions = {
+  drop_all_tables:       -> { TableDropper.perform },
+  choose_tables_to_drop: -> { choose_tables_to_drop.init },
+  choose_exceptions:     -> { choose_exceptions.init }
+}
+
+drop_tables = SeedingInterface.new(actions: drop_tables_actions)
+
 
 ### Full Seed ###
 
@@ -58,6 +83,7 @@ trucking_pricings = SeedingInterface.new(actions: trucking_pricings_actions)
 
 main = SeedingInterface.new(
   actions: {
+    drop_tables:                  -> { drop_tables.init },
     full_seed:                    -> { full_seed.init },
     full_seed_without_geometries: -> { full_seed_without_geometries.init },
     pricings:                     -> { puts "(!) Not implemented" },
