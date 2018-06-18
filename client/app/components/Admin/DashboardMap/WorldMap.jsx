@@ -45,7 +45,9 @@ export class WorldMap extends Component {
   }
 
   render () {
-    const { itineraries, hoverId, height, theme } = this.props
+    const {
+      itineraries, hoverId, height, theme
+    } = this.props
     if (!itineraries) return ''
     /* eslint no-else-return: "off" */
     const originArr = []

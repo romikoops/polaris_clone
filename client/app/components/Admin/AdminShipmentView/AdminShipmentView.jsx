@@ -6,17 +6,18 @@ import { CargoItemGroup } from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import PropTypes from '../../../prop-types'
-// import { RoundButton } from '../RoundButton/RoundButton'
 import { moment, documentTypes } from '../../../constants'
-import { gradientTextGenerator, gradientGenerator, switchIcon } from '../../../helpers'
+import {
+  gradientTextGenerator,
+  gradientGenerator,
+  gradientBorderGenerator,
+  switchIcon
+} from '../../../helpers'
 import adminStyles from '../Admin.scss'
-// import { NamedSelect } from '../NamedSelect/NamedSelect'
-// import { IncotermRow } from '../Incoterm/Row'
-// import ShipmentCard from '../ShipmentCard/ShipmentCard'
-// import { IncotermExtras } from '../Incoterm/Extras'
 import DocumentsForm from '../../Documents/Form'
 import styles from '../AdminShipments.scss'
-// import admin from '../../reducers/admin.reducer'
+import GradientBorder from '../../GradientBorder'
+import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -299,6 +300,15 @@ export class AdminShipmentView extends Component {
       ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
       opacity: '0.5'
     }
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 450)
+        : { background: 'black' }
+
+    const gradientBorderStyleSmall =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 90)
+        : { background: 'black' }
 
     const nArray = []
     const docView = []
@@ -407,10 +417,14 @@ export class AdminShipmentView extends Component {
     }
 
     const statusRequested = (shipment.status === 'requested') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_requested}`}>
-        <p className="layout-align-center-center layout-row"> {shipment.status} </p>
-        <div className="lol" />
-      </div>
+      <GradientBorder
+        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${styles.status_box_requested}`}
+        gradient={gradientBorderStyleSmall}
+        className="layout-row flex-100 layout-align-center-center"
+        content={(
+          <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+        )}
+      />
     ) : (
       ''
     )
@@ -548,7 +562,7 @@ export class AdminShipmentView extends Component {
     )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className={`${adminStyles.margin_box_right} layout-row flex-100`}>
+        <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
           <div className={`layout-row flex-85 flex-md-75 flex-sm-70 flex-xs-40 layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
@@ -567,47 +581,24 @@ export class AdminShipmentView extends Component {
           <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
         </div>
         <div className={`layout-row flex-100 ${adminStyles.margin_bottom}`}>
-          <div className={`layout-row flex-40 ${styles.hub_box_shipment}`}>
-            <div className={`${styles.info_hub_box} flex-60 layout-column`}>
-              <h3>{hubsObj.startHub.data.name}</h3>
-              <p className={styles.address}>{hubsObj.startHub.data.geocoded_address}</p>
-              <div className="layout-row layout-align-start-center">
-                <div className="layout-column flex-60 layout-align-center-start">
-                  <span>
-                    ETD
-                  </span>
-                  <div className="layout-row layout-align-start-center">
-                    {etdJSX}
-                  </div>
-                </div>
-                <div className="layout-row flex-40 layout-align-center-stretch">
-                  {this.state.showEditTime ? (
-                    <span className="layout-column flex-100 layout-align-center-stretch">
-                      <div
-                        onClick={this.saveNewTime}
-                        className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-                      >
-                        <i className="fa fa-check" />
-                      </div>
-                      <div
-                        onClick={this.toggleEditTime}
-                        className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-                      >
-                        <i className="fa fa-times" />
-                      </div>
-                    </span>
-                  ) : (
-                    <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
-                  )}
-                </div>
+
+          <GradientBorder
+            wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+            gradient={gradientBorderStyle}
+            className="layout-row flex"
+            content={(
+              <div className="layout-row flex-100">
+                <ShipmentOverviewShowCard
+                  et={etdJSX}
+                  hubs={hubsObj}
+                  bg={bg1}
+                  editTime={this.state.showEditTime}
+                  handleSaveTime={this.saveNewTime}
+                  toggleEditTime={this.toggleEditTime}
+                />
               </div>
-            </div>
-            <div className={`layout-column flex-40 ${styles.image}`} style={bg1} />
-            <div className="flex-30 layout-row">
-              <i className="flex-none fa fa-check-square" />
-              <h4>Pick-up</h4>
-            </div>
-          </div>
+            )}
+          />
           <div className="layout-row flex-20 layout-align-center-center">
             <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
               <div className="layout-align-center-center layout-row" style={gradientStyle}>
@@ -617,41 +608,51 @@ export class AdminShipmentView extends Component {
               <h5>{moment(schedules[0].eta).diff(moment(schedules[0].etd), 'days')} days{' '}</h5>
             </div>
           </div>
-          <div className={`layout-row flex-40 ${styles.hub_box_shipment}`}>
-            <div className={`${styles.info_hub_box} flex-60 layout-column`}>
-              <h3>{hubsObj.endHub.data.name}</h3>
-              <p className={styles.address}>{hubsObj.endHub.data.geocoded_address}</p>
-              <div className="layout-row layout-align-start-center">
-                <div className="layout-column flex-60 layout-align-center-start">
-                  <span>ETA</span>
+
+          <GradientBorder
+            wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+            gradient={gradientBorderStyle}
+            className="layout-row flex"
+            content={(
+              <div className="layout-row flex-100">
+                <div className={`${styles.info_hub_box} flex-60 layout-column`}>
+                  <h3>{hubsObj.endHub.data.name}</h3>
+                  <p className={styles.address}>{hubsObj.endHub.data.geocoded_address}</p>
                   <div className="layout-row layout-align-start-center">
-                    {etaJSX}
+                    <div className="layout-column flex-60 layout-align-center-start">
+                      <span>
+                        ETD
+                      </span>
+                      <div className="layout-row layout-align-start-center">
+                        {etaJSX}
+                      </div>
+                    </div>
+                    <div className="layout-row flex-40 layout-align-center-center">
+                      {this.state.showEditTime ? (
+                        <span className="layout-column flex-100 layout-align-center-stretch">
+                          <div
+                            onClick={this.saveNewTime}
+                            className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
+                          >
+                            <i className="fa fa-check" />
+                          </div>
+                          <div
+                            onClick={this.toggleEditTime}
+                            className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
+                          >
+                            <i className="fa fa-times" />
+                          </div>
+                        </span>
+                      ) : (
+                        <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="layout-row flex-40 layout-align-center-center">
-                  {this.state.showEditTime ? (
-                    <span className="layout-column flex-100 layout-align-center-stretch">
-                      <div
-                        onClick={this.saveNewTime}
-                        className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-                      >
-                        <i className="fa fa-check" />
-                      </div>
-                      <div
-                        onClick={this.toggleEditTime}
-                        className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-                      >
-                        <i className="fa fa-times" />
-                      </div>
-                    </span>
-                  ) : (
-                    <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
-                  )}
-                </div>
+                <div className={`layout-column flex-40 ${styles.image}`} style={bg2} />
               </div>
-            </div>
-            <div className={`layout-column flex-40 ${styles.image}`} style={bg2} />
-          </div>
+            )}
+          />
         </div>
 
         <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>

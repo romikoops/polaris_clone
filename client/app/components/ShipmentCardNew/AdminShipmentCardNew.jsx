@@ -74,7 +74,7 @@ export class AdminShipmentCardNew extends Component {
         : { color: 'black' }
     const gradientBorderStyle =
       theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 150)
         : { background: 'black' }
 
     const bg1 =
@@ -123,10 +123,11 @@ export class AdminShipmentCardNew extends Component {
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
           <span className={`flex-100 ${styles.ref_row_card}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
-        <div className={`layout-row flex-100 layout-align-space-between-stretch ${styles.section}`} onClick={() => this.handleView()}>
-          <div className={`layout-row flex-55 layout-align-space-between-stretch
-              ${styles.relative}`}
-          >
+        <div
+          className={`layout-row flex-100 layout-align-space-between-stretch ${styles.section}`}
+          onClick={() => this.handleView()}
+        >
+          <div className={`layout-row flex-55 layout-align-space-between-stretch ${styles.relative}`}>
 
             <GradientBorder
               wrapperClassName={`layout-column layout-align-end-stretch flex-50 ${styles.city} ${styles.margin_right}`}
@@ -143,7 +144,6 @@ export class AdminShipmentCardNew extends Component {
                 </div>
               )}
             />
-
 
             <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
               {switchIcon(shipment.mode_of_transport, gradientFontStyle)}
