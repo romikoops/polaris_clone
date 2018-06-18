@@ -197,9 +197,6 @@ module DocumentTools
     elsif filtered_results.first["city"]
       identifier = 'city'
     end
-    if filtered_results.first["truckingPricing"].identifier_modifier
-      identifier = "#{identifier}_#{filtered_results.first["truckingPricing"].identifier_modifier}"
-    end
     if identifier == 'distance'
       filtered_results.sort_by! { |res| res[identifier][0][0].to_i }
     end
@@ -235,7 +232,7 @@ module DocumentTools
       unless dir_fees[meta[:direction]]
         dir_fees[meta[:direction]] = ufr["truckingPricing"].fees
       end
-      
+      # byebug
       unless zones.include?({idents: ufr[identifier], country_code: ufr["countryCode"]})
         zones.push({idents: ufr[identifier], country_code: ufr["countryCode"]})
       end
@@ -247,21 +244,31 @@ module DocumentTools
     fees_sheet = workbook.add_worksheet("Fees")
 
     # Write Zones with identifiers
-
-    header_values = ["ZONE", identifier.upcase,  "RANGE", "COUNTRY_CODE"]
+    if filtered_results.first["truckingPricing"].identifier_modifier
+      identifier_to_write = "#{identifier}_#{filtered_results.first["truckingPricing"].identifier_modifier}"
+    else
+      identifier_to_write = identifier
+    end
+    # byebug
+    header_values = ["ZONE", identifier_to_write.upcase,  "RANGE", "COUNTRY_CODE"]
     row = 1
-    identifier = ""
 
     header_values.each_with_index { |hv, i| zone_sheet.write(0, i, hv, header_format) }
     zone_row = 1
     zones.each_with_index do |zone_array, zone|
+      # byebug
       zone_array[:idents].each do |zone_data|
         zone_sheet.write(zone_row, 0, zone)
         if zone_data[0] == zone_data[1]
           zone_sheet.write(zone_row, 1, zone_data[1])
           zone_sheet.write(zone_row, 3, zone_array[:country_code])
         else
-          zone_sheet.write(zone_row, 2, "#{zone_data[0]} - #{zone_data[1]}")
+          if identifier_to_write.include?("return")
+            zone_1 = zone_data[0].to_f > 0 ? ((zone_data[0].to_f * 2) - 1).to_i : 0
+            zone_sheet.write(zone_row, 2, "#{zone_1} - #{(zone_data[1].to_f * 2)}")
+          else
+            zone_sheet.write(zone_row, 2, "#{zone_data[0]} - #{zone_data[1]}")
+          end
           zone_sheet.write(zone_row, 3, zone_array[:country_code])
         end
         zone_row += 1
@@ -343,12 +350,17 @@ module DocumentTools
           result["truckingPricing"].rates.each do |_key, rates_array|
             rates_array.each do |rate|
               next unless rate
+              if identifier == "distance" && result["truckingPricing"].identifier_modifier == "return" && _key == 'km'
+                rate_value = (rate["rate"]["value"] / 2).round(2)
+              else
+                rate_value = rate["rate"]["value"].round(2)
+              end
               if rate["min_value"]
                 rates_sheet.write(row, 1, rate["min_value"].round(2))
               else
                 rates_sheet.write(row, 1, 0)
               end
-              rates_sheet.write(row, x, rate["rate"]["value"].round(2))
+              rates_sheet.write(row, x, rate_value)
               x += 1
             end
           end
