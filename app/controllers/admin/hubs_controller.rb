@@ -61,7 +61,7 @@ class Admin::HubsController < ApplicationController
   end
 
   def download_hubs
-    url = write_hubs_to_sheet(tenant_id: current_user.tenant_id)
+    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id).perform
     response_handler(url: url, key: "hubs")
   end
 
