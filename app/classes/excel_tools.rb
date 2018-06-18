@@ -1314,7 +1314,21 @@ module ExcelTools
       hubs:    [],
       nexuses: []
     }
-    hub_rows = first_sheet.parse(hub_status: "STATUS", hub_type: "TYPE", hub_name: "NAME", hub_code: "CODE", latitude: "LATITUDE", longitude: "LONGITUDE", country: "COUNTRY", geocoded_address: "FULL_ADDRESS", photo: "PHOTO")
+    hub_rows = first_sheet.parse(
+      hub_status: "STATUS",
+      hub_type: "TYPE",
+      hub_name: "NAME",
+      hub_code: "CODE",
+      latitude: "LATITUDE",
+      longitude: "LONGITUDE",
+      country: "COUNTRY",
+      geocoded_address: "FULL_ADDRESS",
+      photo: "PHOTO",
+      import_charges: "IMPORT_CHARGES",
+      export_charges: "EXPORT_CHARGES",
+      pre_carriage: "PRE_CARRIAGE",
+      on_carriage: "ON_CARRIAGE"
+    )
 
     hub_type_name = {
       "ocean" => "Port",
@@ -1322,12 +1336,21 @@ module ExcelTools
       "rail"  => "Railyard",
       "truck" => "Depot"
     }
+    
     default_mandatory_charge = MandatoryCharge.find_by(pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false)
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
       country = Country.geo_find_by_name(hub_row[:country])
-
+      
+      mandatory_charge_values = {
+        pre_carriage: hub_row[:pre_carriage] || false,
+        on_carriage: hub_row[:on_carriage] || false,
+        import_charges: hub_row[:import_charges] || false,
+        export_charges: hub_row[:export_charges] || false
+      }
+      mandatory_charge = MandatoryCharge.find_by(mandatory_charge_values)
+      mandatory_charge ||= default_mandatory_charge
       nexus = Location.find_by(
         name:          hub_row[:hub_name],
         location_type: "nexus",
@@ -1372,7 +1395,7 @@ module ExcelTools
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: default_mandatory_charge
+          mandatory_charge: mandatory_charge
         )
 
         results[:hubs] << hub
@@ -1388,7 +1411,7 @@ module ExcelTools
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: default_mandatory_charge
+          mandatory_charge: mandatory_charge
         )
         results[:hubs] << hub
         stats[:hubs][:number_created] += 1

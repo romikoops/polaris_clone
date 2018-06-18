@@ -55,7 +55,7 @@ class Admin::HubsController < ApplicationController
       charges:         charges,
       customs:         customs,
       location:        hub.location,
-      madatoryCharges: mandatory_charges
+      mandatoryCharges: mandatory_charges
     }
     response_handler(resp)
   end
