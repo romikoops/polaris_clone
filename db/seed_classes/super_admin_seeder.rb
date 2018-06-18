@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class SuperAdminSeeder
-  def perform
+  def self.perform
     puts "Seeding Super Admin..."
     tenant = Tenant.find_by(subdomain: "demo")
 
-    if tenant.nil?
-      puts "Cannot seed super admin without tenant 'demo'".red
-    end
+    puts "Cannot seed super admin without tenant 'demo'".red if tenant.nil?
 
     super_admin_demo = Tenant.find_by_subdomain('demo').users.new(
       role: Role.find_by_name('super_admin'),
