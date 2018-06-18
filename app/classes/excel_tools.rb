@@ -1148,7 +1148,7 @@ module ExcelTools
           end
         end
       end
-      hub_fees.each do |hub_key, tv_ids|
+      customs.each do |hub_key, tv_ids|
         tv_ids.each do |tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
