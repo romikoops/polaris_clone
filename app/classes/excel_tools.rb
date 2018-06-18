@@ -449,7 +449,7 @@ module ExcelTools
 
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type, identifier_modifier = zone_sheet.row(1)[1] == "CITY" ? "geometry_id" : determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
+    identifier_type, identifier_modifier = determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
 
     # START Load Zones ------------------------
 
@@ -665,6 +665,9 @@ module ExcelTools
             trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
+              if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
+                val = val * 2
+              end
               awesome_print "#{row_zone_name} "
               w_min = weight_min_row[m_index] || 0
               r_min = row_min_value || 0
@@ -1131,6 +1134,8 @@ module ExcelTools
         tv_ids.each do |tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
+              v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
+              # byebug
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if lc
                 lc.update_attributes(v)
@@ -1147,6 +1152,7 @@ module ExcelTools
         tv_ids.each do |tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
+              v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
               cf = hub.customs_fees.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if cf
                 cf.update_attributes(v)
@@ -1707,6 +1713,7 @@ module ExcelTools
   def local_charge_load_setter(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     debug_message(charge)
     debug_message(all_charges)
+    
     if counterpart_hub_id == "general" && tenant_vehicle_id != 'general'
       all_charges.keys.each do |ac_key|
         if all_charges[ac_key][tenant_vehicle_id]
@@ -1831,7 +1838,9 @@ module ExcelTools
   end
 
   def determine_identifier_type_and_modifier(identifier_type)
-    if identifier_type.include?('_')
+    if identifier_type == "CITY"
+      return "geometry_id"
+    elsif identifier_type.include?('_')
       return identifier_type.split('_').map{|str| str.downcase}
     elsif identifier_type.include?(' ')
       return identifier_type.split(' ').map{|str| str.downcase}
