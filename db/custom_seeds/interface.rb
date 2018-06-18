@@ -29,13 +29,13 @@ choose_tables_to_drop = SeedingInterface.new(actions: choose_tables_to_drop_acti
 choose_exceptions_actions = table_names.each_with_object({}) do |table_name, obj|
   obj[table_name.underscore] = -> { TableDropper.perform(except: [table_name.constantize]) }
 end
-choose_tables_to_drop = SeedingInterface.new(actions: choose_exceptions_actions)
+choose_exceptions = SeedingInterface.new(actions: choose_exceptions_actions)
   
   ## Main
 drop_tables_actions = {
-  drop_all_tables:       -> { TableDropper.perform },
-  choose_tables_to_drop: -> { choose_tables_to_drop.init },
-  choose_exceptions:     -> { choose_exceptions.init }
+  drop_all_tables:         -> { TableDropper.perform },
+  choose_tables_to_drop__: -> { choose_tables_to_drop.init },
+  choose_exceptions__:     -> { choose_exceptions.init }
 }
 
 drop_tables = SeedingInterface.new(actions: drop_tables_actions)
@@ -83,13 +83,13 @@ trucking_pricings = SeedingInterface.new(actions: trucking_pricings_actions)
 
 main = SeedingInterface.new(
   actions: {
-    drop_tables:                  -> { drop_tables.init },
-    full_seed:                    -> { full_seed.init },
-    full_seed_without_geometries: -> { full_seed_without_geometries.init },
-    pricings:                     -> { puts "(!) Not implemented" },
-    trucking_pricings:            -> { trucking_pricings.init },
-    shipments:                    -> { puts "(!) Not implemented" },
-    geometries:                   -> { GeometrySeeder.perform }
+    drop_tables__:                  -> { drop_tables.init },
+    full_seed__:                    -> { full_seed.init },
+    full_seed_without_geometries__: -> { full_seed_without_geometries.init },
+    pricings:                       -> { puts "(!) Not implemented" },
+    trucking_pricings__:            -> { trucking_pricings.init },
+    shipments:                      -> { puts "(!) Not implemented" },
+    geometries:                     -> { GeometrySeeder.perform }
   },
   welcome_message: "Welcome to the ItsMyCargo Seeding Interface"
 )

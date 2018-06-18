@@ -6,6 +6,7 @@ class SeedingInterface
   end
 
   def init
+    system "clear"
     log_welcome_message
 
     loop do
@@ -71,8 +72,13 @@ class SeedingInterface
   def log_list_of_actions
     @actions.keys.each_with_index do |action_name, i|
       alignment_buffer = " " * (3 - (i + 1).to_s.size)
-      puts "#{i + 1}#{alignment_buffer}-  #{action_name.to_s.humanize.capitalize}"
+      
+      puts "#{i + 1}#{alignment_buffer}-  #{action_log_format(action_name)}"
     end
+  end
+
+  def action_log_format(action_name)
+    action_name.to_s.gsub("__", " [+]").humanize.capitalize
   end
 
   def log_choose_your_action_text
