@@ -63,11 +63,11 @@ class OfferCalculator
       )
 
       calc_local_charges!(schedule)
-      calc_trucking_charges!(schedule)
+      create_trucking_charges(schedule)
       calc_cargo_charges!(schedule)
 
       @grand_total_charge.update_price!
-      schedule.total_price = @grand_total_charge.price.as_json(only: [:value, :currency])
+      schedule.total_price = @grand_total_charge.price.as_json(only: %i(value currency))
       schedule.to_detailed_hash
     end
 
@@ -108,44 +108,25 @@ class OfferCalculator
     end
   end
 
-  def calc_trucking_charges!(schedule)
-    { "export" => "pre", "import" => "on" }.each do |direction, carriage|
-      next unless @shipment.has_carriage?(carriage)
+  def create_trucking_charges(schedule)
+    @trucking_data.each do |carriage, data|
+      charge_category = ChargeCategory.find_or_create_by(
+        name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
+      )
 
+      parent_charge = create_parent_charge(charge_category)
 
       hub = schedule.hub_for_carriage(carriage)
+      hub_data = data[hub.id]
 
-      create_trucking_charges(direction, carriage, hub)
+      hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
+        children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
+        create_charges_from_fees_data!(
+          trucking_charges, children_charge_category, charge_category, parent_charge
+        )
+      end
+      parent_charge.update_price!
     end
-  end
-
-  def create_trucking_charges(direction, carriage, hub)
-    charge_category = ChargeCategory.find_or_create_by(
-      name: "Trucking #{carriage.capitalize}-Carriage", code: "trucking_#{carriage}"
-    )
-
-    parent_charge = create_parent_charge(charge_category)
-
-    hub_data = @trucking_data[carriage][hub.id]
-
-    hub_data[:trucking_pricings].each do |trucking_pricing|
-      cargo_class = trucking_pricing.cargo_class
-      cargo_units = @shipment.cargo_units.where(cargo_class: cargo_class)
-      next if cargo_units.empty?
-
-      trucking_fees_data = calc_trucking_price(
-        trucking_pricing,
-        cargo_units,
-        hub_data[:distance],
-        direction
-      )
-        
-      children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
-      create_charges_from_fees_data!(
-        trucking_fees_data, children_charge_category, charge_category, parent_charge
-      )
-    end
-    parent_charge.update_price!
   end
 
   def calc_cargo_charges!(schedule)
