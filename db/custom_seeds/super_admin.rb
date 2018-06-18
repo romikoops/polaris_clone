@@ -78,6 +78,8 @@
 
 puts "Seeding Super Admin..."
 
+tenant = Tenant.find_by(subdomain: "demo")
+
 super_admin_demo = Tenant.find_by_subdomain('demo').users.new(
   role: Role.find_by_name('super_admin'),
 
