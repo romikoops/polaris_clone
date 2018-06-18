@@ -302,12 +302,7 @@ export class AdminShipmentView extends Component {
     }
     const gradientBorderStyle =
       theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 450)
-        : { background: 'black' }
-
-    const gradientBorderStyleSmall =
-      theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 90)
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
     const nArray = []
@@ -419,7 +414,7 @@ export class AdminShipmentView extends Component {
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
         wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${styles.status_box_requested}`}
-        gradient={gradientBorderStyleSmall}
+        gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
           <p className="layout-align-center-center layout-row"> {shipment.status} </p>

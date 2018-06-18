@@ -39,7 +39,7 @@ export class AdminHubCard extends Component {
 
     const gradientBorderStyle =
       theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 150)
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
     const bg =
