@@ -165,7 +165,7 @@ class Admin::TruckingController < ApplicationController
   def download
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
-    url = write_trucking_to_sheet(options)
+    url = DocumentService::TruckingWriter.new(options).perform
     response_handler(url: url, key: "trucking")
   end
 

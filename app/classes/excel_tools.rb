@@ -449,7 +449,7 @@ module ExcelTools
 
     num_rows = zone_sheet.last_row
     zip_char_length = nil
-    identifier_type, identifier_modifier = zone_sheet.row(1)[1] == "CITY" ? "geometry_id" : determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
+    identifier_type, identifier_modifier = determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
 
     # START Load Zones ------------------------
 
@@ -665,6 +665,9 @@ module ExcelTools
             trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
+              if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
+                val = val * 2
+              end
               awesome_print "#{row_zone_name} "
               w_min = weight_min_row[m_index] || 0
               r_min = row_min_value || 0
@@ -1008,22 +1011,35 @@ module ExcelTools
             customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id] 
             counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
           end
-            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] = TenantVehicle.find_by(
+          if row[:service_level]
+            tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] = TenantVehicle.find_by(
               tenant_id:         user.tenant_id,
               mode_of_transport: row[:mot].downcase,
-              name:              row[:service_level] || "standard"
-            )
+              name:              row[:service_level]
+            ).try(:id)
             
-            tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level] || "standard", row[:mot].downcase, user.tenant_id)
-            tenant_vehicle = tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"]
-            if counterpart_hub_id
-              hub_fees[counterpart_hub_id][tenant_vehicle.id] = {}
-              customs[counterpart_hub_id][tenant_vehicle.id] = {}
-            else
-              hub_fees["general"][tenant_vehicle.id] = {}
-              customs["general"][tenant_vehicle.id] = {}
-            end
+            tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level], row[:mot].downcase, user.tenant_id).id
+            tenant_vehicle_id = tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"]
+          else
+            tenant_vehicle_id = "general"
+          end
+          if !tenant_vehicles["standard-#{row[:mot].downcase}"]
+            tenant_vehicles["standard-#{row[:mot].downcase}"] = TenantVehicle.find_by(
+              tenant_id:         user.tenant_id,
+              mode_of_transport: row[:mot].downcase,
+              name:              row[:service_level]
+            ).try(:id)
+            tenant_vehicles["standard-#{row[:mot].downcase}"] ||= Vehicle.create_from_name("standard", row[:mot].downcase, user.tenant_id).id
+          end
+          if counterpart_hub_id
+            hub_fees[counterpart_hub_id][tenant_vehicle_id] = {}
+            customs[counterpart_hub_id][tenant_vehicle_id] = {}
+          else
+            hub_fees["general"][tenant_vehicle_id] = {}
+            customs["general"][tenant_vehicle_id] = {}
+          end
         end
+        
         
         hub_fees.each do |hub_key, tv_ids|
           tv_ids.keys.each do |tv_id|
@@ -1097,7 +1113,7 @@ module ExcelTools
               charge,
               row[:load_type].downcase,
               row[:direction].downcase,
-              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id, 
+              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general", 
               row[:mot],
               counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
             )
@@ -1107,7 +1123,7 @@ module ExcelTools
               charge,
               row[:load_type].downcase,
               row[:direction].downcase,
-              tenant_vehicles["#{row[:service_level] || "standard"}-#{row[:mot].downcase}"].id,
+              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
               row[:mot],
               counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
             )
@@ -1118,6 +1134,8 @@ module ExcelTools
         tv_ids.each do |tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
+              v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
+              # byebug
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if lc
                 lc.update_attributes(v)
@@ -1134,6 +1152,7 @@ module ExcelTools
         tv_ids.each do |tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
+              v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
               cf = hub.customs_fees.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if cf
                 cf.update_attributes(v)
@@ -1295,7 +1314,21 @@ module ExcelTools
       hubs:    [],
       nexuses: []
     }
-    hub_rows = first_sheet.parse(hub_status: "STATUS", hub_type: "TYPE", hub_name: "NAME", hub_code: "CODE", latitude: "LATITUDE", longitude: "LONGITUDE", country: "COUNTRY", geocoded_address: "FULL_ADDRESS", photo: "PHOTO")
+    hub_rows = first_sheet.parse(
+      hub_status: "STATUS",
+      hub_type: "TYPE",
+      hub_name: "NAME",
+      hub_code: "CODE",
+      latitude: "LATITUDE",
+      longitude: "LONGITUDE",
+      country: "COUNTRY",
+      geocoded_address: "FULL_ADDRESS",
+      photo: "PHOTO",
+      import_charges: "IMPORT_CHARGES",
+      export_charges: "EXPORT_CHARGES",
+      pre_carriage: "PRE_CARRIAGE",
+      on_carriage: "ON_CARRIAGE"
+    )
 
     hub_type_name = {
       "ocean" => "Port",
@@ -1303,12 +1336,21 @@ module ExcelTools
       "rail"  => "Railyard",
       "truck" => "Depot"
     }
+    
     default_mandatory_charge = MandatoryCharge.find_by(pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false)
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
       country = Country.geo_find_by_name(hub_row[:country])
-
+      
+      mandatory_charge_values = {
+        pre_carriage: hub_row[:pre_carriage] || false,
+        on_carriage: hub_row[:on_carriage] || false,
+        import_charges: hub_row[:import_charges] || false,
+        export_charges: hub_row[:export_charges] || false
+      }
+      mandatory_charge = MandatoryCharge.find_by(mandatory_charge_values)
+      mandatory_charge ||= default_mandatory_charge
       nexus = Location.find_by(
         name:          hub_row[:hub_name],
         location_type: "nexus",
@@ -1353,7 +1395,7 @@ module ExcelTools
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: default_mandatory_charge
+          mandatory_charge: mandatory_charge
         )
 
         results[:hubs] << hub
@@ -1369,7 +1411,7 @@ module ExcelTools
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: default_mandatory_charge
+          mandatory_charge: mandatory_charge
         )
         results[:hubs] << hub
         stats[:hubs][:number_created] += 1
@@ -1636,6 +1678,9 @@ module ExcelTools
       cargo_pricings.each do |cargo_key, pricing_data|
         new_pricing_data = pricing_data.clone
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
+        if !transport_category
+          
+        end
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 
@@ -1695,12 +1740,23 @@ module ExcelTools
   def local_charge_load_setter(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     debug_message(charge)
     debug_message(all_charges)
-    if counterpart_hub_id == "general"
+    
+    if counterpart_hub_id == "general" && tenant_vehicle_id != 'general'
       all_charges.keys.each do |ac_key|
         if all_charges[ac_key][tenant_vehicle_id]
           set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, ac_key)
         end
       end
+      
+    elsif counterpart_hub_id == "general" && tenant_vehicle_id == 'general'
+      all_charges.keys.each do |ac_key|
+        all_charges[ac_key].keys.each do |tv_key|
+          if all_charges[ac_key][tv_key]
+            set_general_local_fee(all_charges, charge, load_type, direction, tv_key, mot, ac_key)
+          end
+        end
+      end
+      
     else
       if all_charges[counterpart_hub_id][tenant_vehicle_id]
        set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
@@ -1809,7 +1865,9 @@ module ExcelTools
   end
 
   def determine_identifier_type_and_modifier(identifier_type)
-    if identifier_type.include?('_')
+    if identifier_type == "CITY"
+      return "geometry_id"
+    elsif identifier_type.include?('_')
       return identifier_type.split('_').map{|str| str.downcase}
     elsif identifier_type.include?(' ')
       return identifier_type.split(' ').map{|str| str.downcase}

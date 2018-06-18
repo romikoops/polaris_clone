@@ -55,13 +55,13 @@ class Admin::HubsController < ApplicationController
       charges:         charges,
       customs:         customs,
       location:        hub.location,
-      madatoryCharges: mandatory_charges
+      mandatoryCharges: mandatory_charges
     }
     response_handler(resp)
   end
 
   def download_hubs
-    url = write_hubs_to_sheet(tenant_id: current_user.tenant_id)
+    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id).perform
     response_handler(url: url, key: "hubs")
   end
 

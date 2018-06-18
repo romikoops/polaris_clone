@@ -43,9 +43,11 @@ module PricingTools
       return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
-    lt = load_type == "cargo_item" ? "lcl" : cargos[0].size_class
-    charge = hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge = charge || hub.local_charges.find_by(load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
+    lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
+    
+    charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
+    charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
+    # byebug
     return {} if charge.nil?
     totals = { "total" => {} }
 

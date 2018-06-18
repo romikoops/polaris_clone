@@ -92,3 +92,4 @@ typings/
 .env
 # /config/database.yml
 .idea
+.DS_Store

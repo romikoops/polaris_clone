@@ -14,7 +14,7 @@ subdomains.each do |sub|
   # tenant.local_charges.destroy_all
   # tenant.customs_fees.destroy_all
   # # # tenant.trucking_pricings.delete_all
-  tenant.hubs.destroy_all
+  # tenant.hubs.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # # # puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/gs_hubs.xlsx")
@@ -37,6 +37,12 @@ subdomains.each do |sub|
   puts 'GS Warehouse LTL'
   hub = tenant.hubs.find_by_name('GS Warehouse Depot')
   trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ltl.xlsx")
+  req = { 'xlsx' => trucking }
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  awesome_print 'City rates done'
+  puts 'GS Warehouse LTL'
+  hub = tenant.hubs.find_by_name('GS Warehouse Depot')
+  trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ftl.xlsx")
   req = { 'xlsx' => trucking }
   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   awesome_print 'City rates done'

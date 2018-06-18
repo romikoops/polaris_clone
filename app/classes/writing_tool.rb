@@ -2,9 +2,9 @@ module WritingTool
   include AwsConfig
   def write_to_aws(dir, tenant, filename, doc_type)
     file = open(dir)
-    objKey = "documents/#{tenant.subdomain}/downloads/#{doc_type}/#{filename}"
-    aws_client.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: "application/vnd.ms-excel", acl: "private")
-    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: doc_type)
+    obj_key = "documents/#{tenant.subdomain}/downloads/#{doc_type}/#{filename}"
+    aws_client.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: "application/vnd.ms-excel", acl: "private")
+    new_doc = tenant.documents.create(url: obj_key, text: filename, doc_type: doc_type)
     new_doc.get_signed_url
   end
 
