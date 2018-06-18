@@ -1802,9 +1802,12 @@ class TenantSeeder
     update_max_dimensions!(tenant)
   end
 
-  def self.exec(tenant_data = TENANT_DATA)
-    tenant_data.each do |tenant_attr|
-      awesome_print tenant_attr[:subdomain]
+  def self.perform(filter = {})
+    puts "Seeding Tenants..."
+    TENANT_DATA.each do |tenant_attr|
+      next unless filter.all? { |k, v| tenant_attr[k] == v }
+
+      puts "  - #{tenant_attr[:subdomain]}..."
       other_data = tenant_attr.delete(:other_data) || {}
 
       tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])

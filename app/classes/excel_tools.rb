@@ -1545,11 +1545,12 @@ module ExcelTools
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
 
-      if aux_data[pricing_key][:itinerary].blank?
+      itinerary = aux_data[pricing_key][:itinerary]
+      if itinerary.blank?
         itinerary_name = "#{aux_data[pricing_key][:origin].name} - #{aux_data[pricing_key][:destination].name}"
         itinerary = tenant.itineraries.find_by(mode_of_transport: row[:mot], name: itinerary_name)
         if itinerary.blank?
-          itinerary = tenant.itineraries.create!(mode_of_transport: row[:mot], name: itinerary_name)
+          itinerary = tenant.itineraries.new(mode_of_transport: row[:mot], name: itinerary_name)
           stats[:itineraries][:number_created] += 1
         else
           stats[:itineraries][:number_updated] += 1
@@ -1558,19 +1559,22 @@ module ExcelTools
       end
 
       aux_data[pricing_key][:stops_in_order] = aux_data[pricing_key][:hub_ids].map.with_index do |h, i|
-        temp_stop = aux_data[pricing_key][:itinerary].stops.find_by(hub_id: h, index: i)
-        if temp_stop
-          stats[:stops][:number_updated] += 1
-        else
-          temp_stop = aux_data[pricing_key][:itinerary].stops.create!(hub_id: h, index: i)
+        stop = itinerary.stops.find_by(hub_id: h, index: i)
+
+        if stop.nil?
+          stop = Stop.new(hub_id: h, index: i)
           stats[:stops][:number_created] += 1
+        else
+          stats[:stops][:number_updated] += 1
         end
-        results[:stops] << temp_stop
-        temp_stop
+
+        raise "Stop cannot be nil" if stop.nil?
+
+        results[:stops] << stop
+        stop
       end
-      # if row[:destination] == 'Singapore'
-      #
-      # end
+      itinerary.stops << results[:stops]
+      itinerary.save!
 
       steps_in_order = []
       (aux_data[pricing_key][:stops_in_order].length - 1).times do

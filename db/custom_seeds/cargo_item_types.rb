@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+puts "Destroying Cargo Item Types..."
 TenantCargoItemType.destroy_all
 CargoItemType.destroy_all
+
+puts "Seeding Cargo Item Types..."
 cargo_item_types_data = [
   {
     category: 'Pallet',

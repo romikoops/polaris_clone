@@ -3,7 +3,7 @@
 class PricingSeeder
   extend ExcelTools
 
-  def self.exec(filter = {})
+  def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       shipper = tenant.users.second
       tenant.itineraries.destroy_all
