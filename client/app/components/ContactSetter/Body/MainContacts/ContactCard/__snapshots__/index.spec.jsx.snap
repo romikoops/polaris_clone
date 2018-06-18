@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap contact_card"
+  style={
+    Object {
+      "borderColor": "#fafafa",
+    }
+  }
+>
+  <i
+    className="edit_icon fa fa-pencil-square-o"
+    onClick={[Function]}
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-start"
+  >
+    <i
+      className="main_icon fa fa-user"
+      style={
+        Object {
+          "0": "#",
+          "1": "3",
+          "2": "3",
+          "3": "3",
+        }
+      }
+    />
+    <h3
+      className="contact_name"
+    >
+      John
+       
+      Doe
+       
+      <br />
+      <span
+        className="secondary_info"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+          FOO_CONTACT_COMPANY
+           
+        </Truncate>
+      </span>
+    </h3>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-start"
+  >
+    <i
+      className="main_icon fa fa-map-marker"
+      style={
+        Object {
+          "0": "#",
+          "1": "3",
+          "2": "3",
+          "3": "3",
+        }
+      }
+    />
+    <p
+      className="secondary_info"
+    >
+       
+      <br />
+      <b>
+         
+         
+      </b>
+    </p>
+  </div>
+  <div
+    className="contact_data_sec flex-100 layout-row layout-wrap layout-align-center-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-start-center"
+    >
+      <i
+        className="fa fa-envelope flex-none"
+        style={
+          Object {
+            "0": "#",
+            "1": "3",
+            "2": "3",
+            "3": "3",
+          }
+        }
+      />
+      <p
+        className="contact_data"
+      >
+         
+        foo@bar.baz
+         
+      </p>
+    </div>
+    <div
+      className="offset-5 flex-none layout-row layout-align-start-center"
+    >
+      <i
+        className="fa fa-phone flex-none"
+        style={
+          Object {
+            "0": "#",
+            "1": "3",
+            "2": "3",
+            "3": "3",
+          }
+        }
+      />
+      <p
+        className="contact_data"
+      >
+         
+        0761452887
+         
+      </p>
+    </div>
+  </div>
+</div>
+`;

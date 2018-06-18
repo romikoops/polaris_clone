@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compName !== AddressBook 1`] = `
+<div
+  className="new_contact_wrapper  "
+>
+  <div
+    className="back_arrow"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-arrow-left"
+    />
+     Back to Address Book
+  </div>
+  <div
+    className="title_sec layout-row layout-align-center"
+  >
+    <ContactSetterNewContactWrapperTitle
+      contactType="FOO"
+    />
+  </div>
+  <div
+    className="body"
+  >
+    <ShipmentContactForm
+      contactType=""
+      handleChange={null}
+      setContact={null}
+      theme={null}
+    />
+  </div>
+</div>
+`;
+
+exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
+<div
+  className="new_contact_wrapper new_contact_wrapper_thin "
+>
+  <div
+    className="back_arrow"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-arrow-left"
+    />
+     Back to Address Book
+  </div>
+  <div
+    className="title_sec layout-row layout-align-center"
+  >
+    <ContactSetterNewContactWrapperTitle
+      contactType="notifyee"
+    />
+  </div>
+  <div
+    className="body"
+  >
+    <ShipmentContactForm
+      contactType=""
+      handleChange={null}
+      setContact={null}
+      theme={null}
+    />
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="new_contact_wrapper  "
+>
+  <div
+    className="title_sec layout-row layout-align-center"
+  >
+    <ContactSetterNewContactWrapperTitle
+      contactType="FOO"
+    />
+  </div>
+  <div
+    className="body"
+  >
+    <AddressBook
+      addContact={[Function]}
+      contacts={Array []}
+      theme={null}
+    />
+  </div>
+</div>
+`;

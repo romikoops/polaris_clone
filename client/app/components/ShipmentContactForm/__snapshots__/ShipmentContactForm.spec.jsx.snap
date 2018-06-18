@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="wrapper_form flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <[object Object]
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+    mapping={[Function]}
+    name="form"
+    onInvalidSubmit={[Function]}
+    onValidSubmit={[Function]}
+    style={
+      Object {
+        "padding": "8px 20px",
+      }
+    }
+  >
+    <div
+      className="flex layout-row"
+    >
+      <CompanyDetailsSection
+        contactData={
+          Object {
+            "contact": Object {},
+            "location": Object {},
+          }
+        }
+        setContactAttempted={false}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <AddressDetailsSection
+      contactData={
+        Object {
+          "contact": Object {},
+          "location": Object {},
+        }
+      }
+      handlePlaceChange={[Function]}
+      setContactAttempted={false}
+      setContactBtn={
+        <RoundButton
+          active={true}
+          size="small"
+          text="Set "
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </[object Object]>
+</div>
+`;
