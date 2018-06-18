@@ -34,17 +34,13 @@ class SeedingInterface
   end
 
   def should_exit?
-    @options.include?(:exit) || run_all?
-  end
-
-  def run_all?
-    @options.empty?
+    @options.include?(:exit)
   end
 
   def run_chosen_actions
     system "clear"
     @actions.each do |action_name, action|
-      next unless @options.include?(action_name) || run_all?
+      next unless @options.include?(action_name)
       puts
       action.call
       puts
@@ -84,8 +80,6 @@ class SeedingInterface
   def log_choose_your_action_text
     puts
     puts "Choose your Actions (ex: '1,2,4' will execute no. 1, 2 & 4)"
-    puts
-    puts "[ Press Enter to execute all ]"
     puts
     print " > "
   end
