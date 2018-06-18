@@ -7,6 +7,7 @@ import PropTypes from '../../../../prop-types'
 // import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoItemGroupAggregated from './Aggregated'
 import { LOAD_TYPES, LOAD_SIZES } from '../../../../constants'
+import { gradientTextGenerator } from '../../../../helpers'
 
 export class CargoItemGroup extends Component {
   constructor (props) {
@@ -34,8 +35,12 @@ export class CargoItemGroup extends Component {
   }
   render () {
     const {
-      group, shipment
+      group, shipment, theme
     } = this.props
+    const gradientTextStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
     const { unitView, collapsed } = this.state
     const showTooltip = true
     const tooltipId = v4()
@@ -149,7 +154,7 @@ export class CargoItemGroup extends Component {
             onClick={this.handleCollapser}
             onChange={e => this.handleViewToggle(e)}
           >
-            <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
+            <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`} style={gradientTextStyle} />
           </div>
         </div>
 
@@ -180,12 +185,14 @@ CargoItemGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
   // viewHSCodes: PropTypes.bool,
   // hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  shipment: PropTypes.objectOf(PropTypes.any)
+  shipment: PropTypes.objectOf(PropTypes.any),
+  theme: PropTypes.theme
 }
 
 CargoItemGroup.defaultProps = {
   // viewHSCodes: false,
-  shipment: {}
+  shipment: {},
+  theme: null
 }
 
 export default CargoItemGroup

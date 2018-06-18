@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { v4 } from 'uuid'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../../Cargo/Item/Group'
@@ -18,6 +17,8 @@ import DocumentsForm from '../../Documents/Form'
 import styles from '../AdminShipments.scss'
 import GradientBorder from '../../GradientBorder'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
+import ContactDetailsRow from './ContactDetailsRow'
+import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -305,101 +306,7 @@ export class AdminShipmentView extends Component {
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
-    const nArray = []
     const docView = []
-    let shipperContact = ''
-    let consigneeContact = ''
-    if (contacts) {
-      contacts.forEach((n) => {
-        if (n.type === 'notifyee') {
-          nArray.push(<div className={`${styles.contact_box} ${styles.notifyee_box} flex-100 layout-wrap layout-column`}>
-            <div className="layout-column flex">
-              <div className={`${styles.info_row} flex-100 layout-row`}>
-                <i className={`${adminStyles.icon} fa fa-user flex-none`} style={selectedStyle} />
-                <h4>{n.contact.first_name} {n.contact.last_name}</h4>
-              </div>
-              <div className={`${styles.info_row} flex-100 layout-row`}>
-                <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
-                <p>{n.contact.company_name}</p>
-              </div>
-            </div>
-          </div>)
-          if (nArray.length % 2 === 1) {
-            nArray.push(<div key={v4()} className="flex-45 layout-row" />)
-          }
-        }
-        if (n.type === 'shipper') {
-          shipperContact = (
-            <div className={`${styles.contact_box} flex-100 layout-wrap layout-column`}>
-              <div className="layout-column layout-sm-row flex-sm-100">
-                <div className="layout-sm-column flex-sm-30">
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-user flex-none`} style={selectedStyle} />
-                    <h4>{n.contact.first_name} {n.contact.last_name}</h4>
-                  </div>
-                  <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
-                    <p>{n.contact.company_name}</p>
-                  </div>
-                </div>
-                <div className="layout-sm-column flex-sm-40">
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={selectedStyle} />
-                    <p>{n.contact.email}</p>
-                  </div>
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={selectedStyle} />
-                    <p>{n.contact.phone}</p>
-                  </div>
-                </div>
-                <div className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}>
-                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={selectedStyle} />
-                  <p>{n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
-                    <strong>{n.location ? `${n.location.zip_code} ${n.location.city}` : ''}</strong> <br />
-                    {/* {n.location ? `${n.location.country}` : ''} */}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
-        }
-        if (n.type === 'consignee') {
-          consigneeContact = (
-            <div className={`${styles.contact_box} flex-100 layout-wrap layout-column`}>
-              <div className="layout-column layout-sm-row flex-sm-100">
-                <div className="layout-sm-column flex-sm-30">
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-user flex-none layout-align-center-center`} style={selectedStyle} />
-                    <h4>{n.contact.first_name} {n.contact.last_name}</h4>
-                  </div>
-                  <div className={`${styles.info_row} ${styles.padding_bottom_contact} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-building flex-none`} style={selectedStyle} />
-                    <p>{n.contact.company_name}</p>
-                  </div>
-                </div>
-                <div className="layout-sm-column flex-sm-40">
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-envelope flex-none`} style={selectedStyle} />
-                    <p>{n.contact.email}</p>
-                  </div>
-                  <div className={`${styles.info_row} flex-100 layout-row`}>
-                    <i className={`${adminStyles.icon} fa fa-phone flex-none`} style={selectedStyle} />
-                    <p>{n.contact.phone}</p>
-                  </div>
-                </div>
-                <div className={`${styles.info_row} ${styles.last_margin} flex-100 layout-row layout-align-sm-center-center flex-sm-30`}>
-                  <i className={`${adminStyles.icon} fa fa-map flex-none`} style={selectedStyle} />
-                  <p>{n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
-                    <strong>{n.location ? `${n.location.zip_code} ${n.location.city}` : ''}</strong> <br />
-                    {/* {n.location ? `${n.location.country}` : ''} */}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
-        }
-      })
-    }
     let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
@@ -644,6 +551,7 @@ export class AdminShipmentView extends Component {
                     </div>
                   </div>
                 </div>
+                {console.log(shipmentData)}
                 <div className={`layout-column flex-40 ${styles.image}`} style={bg2} />
               </div>
             )}
@@ -749,134 +657,129 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`layout-row layout-xs-column layout-sm-column ${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
-          <div className={`${adminStyles.border_box} layout-row flex-lg-40 flex-gt-sm-100`}>
-            <div className="layout-row layout-wrap flex-100">
-              <p className={`layout-align-start-center flex-100 layout-row ${adminStyles.title_grey}`}>Shipper</p>
-              {shipperContact}
+        <ContactDetailsRow
+          contacts={contacts}
+          style={selectedStyle}
+        />
+
+        <AlternativeGreyBox
+          title="Cargo Details"
+          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+          contentClassName="layout-column flex"
+          content={cargoView}
+        />
+
+        <AlternativeGreyBox
+          wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
+            ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}
+          contentClassName="layout-row flex-100"
+          content={(
+            <div className="layout-column flex-100">
+              <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+                <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
+                  {shipment.total_goods_value ? (
+                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                        {shipment.total_goods_value.value}
+                        {shipment.total_goods_value.currency}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                          -
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
+                  {shipment.eori ? (
+                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                        {shipment.eori}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                          -
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-33 layout-row offset-5 layout-align-start-start layout-wrap">
+                  {shipment.incoterm_text ? (
+                    <div className="flex-100 layout-column layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-start-center layout-row">Incoterm:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                        {shipment.incoterm_text}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex-100 layout-column layout-align-start-start">
+                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
+                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                          -
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+                <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
+                  {shipment.cargo_notes ? (
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <span className="flex-20 layout-row">Description of Goods:</span>
+                      <p className="flex-80 layout-padding layout-row">
+                        {shipment.cargo_notes}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <span className="flex-20 layout-row">Description of Goods:</span>
+                      <p className="flex-80 layout-padding layout-row">
+                          -
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
+                  {shipment.notes ? (
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <span className="flex-20 layout-row">Notes:</span>
+                      <p className="flex-80 layout-padding layout-row">
+                        {shipment.notes}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <span className="flex-20 layout-row">Notes:</span>
+                      <p className="flex-80 layout-padding layout-row">
+                          -
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className={`${adminStyles.border_box} layout-row flex-lg-40 flex-gt-sm-100`}>
-            <div className="layout-row layout-wrap flex-100">
-              <p className={`layout-align-start-center flex-100 layout-row ${adminStyles.title_grey}`}>Consignee</p>
-              {consigneeContact}
-            </div>
-          </div>
-          <div className={`${adminStyles.border_box} layout-row flex-lg-20 flex-gt-sm-100`}>
-            <div className="layout-row layout-wrap flex-100">
-              <p className={`layout-align-start-center flex-100 layout-row ${adminStyles.title_grey}`}>Notifyees</p>
-              {nArray}
-            </div>
-          </div>
-        </div>
-        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_box_right}`}>
-          <div className="layout-column flex">
-            <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Cargo Details</p>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-stretch">
-              {cargoView}
-            </div>
-          </div>
-        </div>
-        <div className={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100 ${adminStyles.border_box} ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}>
-          <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-            <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-              {shipment.total_goods_value ? (
-                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                    {shipment.total_goods_value.value}
-                    {shipment.total_goods_value.currency}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                      -
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-              {shipment.eori ? (
-                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                    {shipment.eori}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                    -
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="flex-33 layout-row offset-5 layout-align-start-start layout-wrap">
-              {shipment.incoterm_text ? (
-                <div className="flex-100 layout-column layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-start-center layout-row">Incoterm:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                    {shipment.incoterm_text}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-100 layout-column layout-align-start-start">
-                  <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
-                  <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                    -
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-            <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
-              {shipment.cargo_notes ? (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-20 layout-row">Description of Goods:</span>
-                  <p className="flex-80 layout-padding layout-row">
-                    {shipment.cargo_notes}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-20 layout-row">Description of Goods:</span>
-                  <p className="flex-80 layout-padding layout-row">
-                    -
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
-              {shipment.notes ? (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-20 layout-row">Notes:</span>
-                  <p className="flex-80 layout-padding layout-row">
-                    {shipment.notes}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <span className="flex-20 layout-row">Notes:</span>
-                  <p className="flex-80 layout-padding layout-row">
-                    -
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className={`layout-row flex-100 ${adminStyles.border_box} ${adminStyles.no_margin_box_right}`}>
-          <div className="layout-column flex">
-            <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>Documents</p>
+          )}
+        />
+
+        <AlternativeGreyBox
+          title="Documents"
+          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+          contentClassName="layout-column flex"
+          content={(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
               {missingDocs}
             </div>
-          </div>
-        </div>
+          )}
+        />
+
         {/* <ShipmentCard
           headingText="Documents"
           theme={theme}
