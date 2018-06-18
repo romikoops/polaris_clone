@@ -20,7 +20,7 @@ class VehicleSeeder
     lcl
   ].freeze
 
-  def self.exec(filter = {})
+  def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       VEHICLE_NAMES.each do |vehicle_name|
         mot = vehicle_name.split('_')[0]

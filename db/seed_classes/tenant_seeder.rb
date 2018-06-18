@@ -1603,6 +1603,177 @@ class TenantSeeder
           "Barrel"
         ]
       }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#687F93",
+          secondary: "#F3f3f3",
+          brightPrimary: "#C1C9D0",
+          brightSecondary: "#7D8C9A"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/german-shipping/German_Shipping_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/truck_bg_1.jpg"
+      },
+      addresses: {
+        main:"Marlowring 19, 22525 Hamburg"
+      },
+      phones:{
+        main:"+49 40 370 89 188",
+        support: "+49 40 370 89 188"
+      },
+      emails: {
+        sales: {
+          general: "info@german-shipping.com"
+        },
+        support: {
+          general: "info@german-shipping.com"
+        }
+      },
+      subdomain: "german-shipping",
+      name: "German Shipping GmbH & Co. KG",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: false,
+            cargo_item: false
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          },
+          truck: {
+            container: true,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        fixed_currency: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "German Shipping GmbH & Co. KG is to discuss the validity of the presented prices with the product owners."
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#2458AB",
+          secondary: "#FFFFFF",
+          brightPrimary: "#3586BA",
+          brightSecondary: "#1C98FC"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/logos/austral/Austral_Logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+      },
+      addresses: {
+        main:"Südportal 3, 6th floor, 22848 Norderstedt"
+      },
+      phones:{
+        main:"+49 40 94362200",
+        support: "+49 40 94362200"
+      },
+      emails: {
+        sales: {
+          general: "service@austral-logistics.de"
+        },
+        support: {
+          general: "service@austral-logistics.de"
+        }
+      },
+      subdomain: "austral-logistics",
+      name: "Austral Logistics GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: false,
+            cargo_item: false
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: true
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        fixed_currency: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Austral Logistics GmbH is to discuss the validity of the presented prices with the product owners."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ]
+      }
     }
   ].freeze
 
@@ -1631,9 +1802,12 @@ class TenantSeeder
     update_max_dimensions!(tenant)
   end
 
-  def self.exec(tenant_data = TENANT_DATA)
-    tenant_data.each do |tenant_attr|
-      awesome_print tenant_attr[:subdomain]
+  def self.perform(filter = {})
+    puts "Seeding Tenants..."
+    TENANT_DATA.each do |tenant_attr|
+      next unless filter.all? { |k, v| tenant_attr[k] == v }
+
+      puts "  - #{tenant_attr[:subdomain]}..."
       other_data = tenant_attr.delete(:other_data) || {}
 
       tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])

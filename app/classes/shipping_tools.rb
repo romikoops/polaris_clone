@@ -369,12 +369,14 @@ module ShippingTools
     origin_customs_fee = @origin_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
+      "export",
       shipment.trip.tenant_vehicle_id,
       shipment.destination_hub_id
     )
     destination_customs_fee = @destination_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
+      "import",
       shipment.trip.tenant_vehicle_id,
       shipment.origin_hub_id
     )
@@ -396,9 +398,12 @@ module ShippingTools
     options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-
+    shipment_as_json = shipment.as_json(options).merge(
+      pickup_address:   shipment.pickup_address_with_country,
+      delivery_address: shipment.delivery_address_with_country
+    )
     {
-      shipment:       shipment.as_json(options),
+      shipment:       shipment_as_json,
       hubs:           hubs,
       contacts:       @contacts,
       userLocations:  @user_locations,

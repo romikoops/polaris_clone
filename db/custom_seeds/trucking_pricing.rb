@@ -2,8 +2,8 @@
 
 require "#{Rails.root}/db/seed_classes/trucking_pricing_seeder.rb"
 
-TruckingPricingSeeder.exec(subdomain: 'demo')
-TruckingPricingSeeder.exec(subdomain: 'greencarrier')
-# TruckingPricingSeeder.exec(subdomain: 'easyshipping')
-# TruckingPricingSeeder.exec(subdomain: 'hartrodt')
-# TruckingPricingSeeder.exec(subdomain: 'saco')
+TruckingPricingSeeder.perform(subdomain: 'demo')
+TruckingPricingSeeder.perform(subdomain: 'greencarrier')
+# TruckingPricingSeeder.perform(subdomain: 'easyshipping')
+# TruckingPricingSeeder.perform(subdomain: 'hartrodt')
+# TruckingPricingSeeder.perform(subdomain: 'saco')

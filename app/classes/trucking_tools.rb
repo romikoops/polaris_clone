@@ -20,7 +20,7 @@ module TruckingTools
       end
     end
     fees[:rate] = fare_calculator("rate", pricing[:rate], cargo, km)
-    
+
     fees.each do |_k, fee|
       next unless fee
       if !result["value"]
@@ -36,6 +36,7 @@ module TruckingTools
     total_fees.each do |tk, tfee|
       extra_fees_results[tk] = tfee[:value] * fees[:rate][:value]
     end
+    
     extra_fees_results.each do |_ek, evalue|
       result["value"] += evalue
     end
@@ -49,7 +50,7 @@ module TruckingTools
 
   def fare_calculator(key, fee, cargo, km)
     fee.symbolize_keys!
-
+    
     case fee[:rate_basis]
     when "PER_KG"
       val = cargo["weight"] * fee[:value]
@@ -81,7 +82,7 @@ module TruckingTools
     when "PER_CONTAINER"
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
     when "PER_CONTAINER_KM"
-      value = (fee[:km] * (km * 2)) + fee[:unit]
+      value = (fee[:km] * km) + fee[:unit]
       min = fee[:min_value] || 0
       final_value = [min, value].max
       return { currency: fee[:currency], value: final_value, key: key }
@@ -105,18 +106,19 @@ module TruckingTools
   def handle_range_fee(fee, cargo)
     weight_kg = cargo[:weight]
     min = fee["min"] || 0
-    case fee["rate_basis"]
+    case fee[:rate_basis]
     when "PER_KG_RANGE"
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
+      fee_range = fee[:range].find do |range|
+        weight_kg >= range[:min] && weight_kg <= range[:max]
       end
-      value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
+      value = fee_range.nil? ? 0 : fee_range[:rate] * weight_kg
       return [value, min].max
     when "PER_CONTAINER_RANGE"
-      fee_range = fee["range"].find do |range|
-        weight_kg >= range["min"] && weight_kg <= range["max"]
+      fee_range = fee[:range].find do |range|
+        weight_kg >= range[:min] && weight_kg <= range[:max]
       end
-      value = fee_range.nil? ? 0 : fee_range["rate"]
+      
+      value = fee_range.nil? ? 0 : fee_range[:rate]
       return [value, min].max
     end
 
@@ -125,8 +127,10 @@ module TruckingTools
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
     return {} if cargo_values["weight"] == 0
+    
     case trucking_pricing.modifier
     when "kg"
+      
       trucking_pricing["rates"]["kg"].each do |rate|
         if cargo_values["weight"] <= rate["max_kg"].to_d && cargo_values["weight"] >= rate["min_kg"].to_d
           rate["rate"]["min_value"] = rate["min_value"]
@@ -263,8 +267,8 @@ module TruckingTools
     trucking_pricings.each do |key, tp|
       fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km) if tp
     end
-
     total = { value: 0, currency: "" }
+    
     fees.each do |_key, trucking_fee|
       unless trucking_fee.empty?
         total[:value] += trucking_fee[:value]

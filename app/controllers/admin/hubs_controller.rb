@@ -50,20 +50,20 @@ class Admin::HubsController < ApplicationController
     # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     resp = {
-      hub: hub.as_json({include:[ { nexus: {}, only: %i[name]} ]}),
-      routes: routes,
-      relatedHubs: related_hubs,
-      schedules: layovers,
-      charges: charges,
-      customs: customs,
-      location: hub.location,
-      madatoryCharges: mandatory_charges
+      hub:             hub,
+      routes:          routes,
+      relatedHubs:     related_hubs,
+      schedules:       layovers,
+      charges:         charges,
+      customs:         customs,
+      location:        hub.location,
+      mandatoryCharges: mandatory_charges
     }
     response_handler(resp)
   end
 
   def download_hubs
-    url = write_hubs_to_sheet(tenant_id: current_user.tenant_id)
+    url = DocumentService::HubsWriter.new(tenant_id: current_user.tenant_id).perform
     response_handler(url: url, key: "hubs")
   end
 

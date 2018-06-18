@@ -75,11 +75,15 @@ class Admin::ShipmentsController < ApplicationController
     }
     account_holder = @shipment.user
     options = {
-      methods: %i(selected_offer mode_of_transport),
-      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+      methods: [:selected_offer, :mode_of_transport],
+      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
     }
+    shipment_as_json = @shipment.as_json(options).merge(
+      pickup_address:   @shipment.pickup_address_with_country,
+      delivery_address: @shipment.delivery_address_with_country
+    )
     resp = {
-      shipment:        @shipment.as_json(options),
+      shipment:        shipment_as_json,
       cargoItems:      @cargo_items,
       containers:      @containers,
       aggregatedCargo: @shipment.aggregated_cargo,

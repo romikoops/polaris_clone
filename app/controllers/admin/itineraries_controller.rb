@@ -11,10 +11,20 @@ class Admin::ItinerariesController < ApplicationController
   end
 
   def create
-    new_itinerary_data = params[:itinerary].as_json
-    itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
-    new_itinerary_data["stops"].each_with_index { |h, i| itinerary.stops.create(hub_id: h, index: i) }
-    response_handler(itinerary)
+    itinerary = Itinerary.find_or_initialize_by(itinerary_params)
+    stops     = params["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
+
+    itinerary.stops = stops
+    if itinerary.save
+      response_handler(itinerary)
+    else
+      error = ApplicationError.new(
+        http_code: 400,
+        code:      SecureRandom.uuid,
+        message:   itineraries.errors.full_messages.join("\n")
+      )
+      response_handler(error)
+    end
   end
 
   def destroy
@@ -88,5 +98,15 @@ class Admin::ItinerariesController < ApplicationController
       flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end
+  end
+
+  private
+
+  def itinerary_params
+    {
+      mode_of_transport: params["mot"],
+      name:              params["name"],
+      tenant_id:         current_user.tenant_id
+    }
   end
 end

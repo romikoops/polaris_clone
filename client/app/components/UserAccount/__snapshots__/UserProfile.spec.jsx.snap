@@ -1,0 +1,1466 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.aliases is truthy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding"
+  >
+    <h1
+      className="sec_title_text flex-none cli"
+      style="#333"
+    >
+      Profile
+    </h1>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Account Details 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-start-center"
+      >
+        <ProfileBox
+          edit={[Function]}
+          style="#333"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-end-center layout-wrap"
+      >
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <h3
+              className="flex-none"
+            >
+               Currency Settings:
+            </h3>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <p
+              className="flex-none"
+            >
+              Current Selection: 
+              EUR
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <Styled(Component)
+            className="select"
+            clearable={false}
+            name="currency"
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "label": "EUR",
+                  "value": "EUR",
+                },
+                Object {
+                  "label": "AUD",
+                  "value": "AUD",
+                },
+                Object {
+                  "label": "BGN",
+                  "value": "BGN",
+                },
+                Object {
+                  "label": "BRL",
+                  "value": "BRL",
+                },
+                Object {
+                  "label": "CAD",
+                  "value": "CAD",
+                },
+                Object {
+                  "label": "CHF",
+                  "value": "CHF",
+                },
+                Object {
+                  "label": "CNY",
+                  "value": "CNY",
+                },
+                Object {
+                  "label": "CZK",
+                  "value": "CZK",
+                },
+                Object {
+                  "label": "DKK",
+                  "value": "DKK",
+                },
+                Object {
+                  "label": "GBP",
+                  "value": "GBP",
+                },
+                Object {
+                  "label": "HKD",
+                  "value": "HKD",
+                },
+                Object {
+                  "label": "HRK",
+                  "value": "HRK",
+                },
+                Object {
+                  "label": "HUF",
+                  "value": "HUF",
+                },
+                Object {
+                  "label": "IDR",
+                  "value": "IDR",
+                },
+                Object {
+                  "label": "ILS",
+                  "value": "ILS",
+                },
+                Object {
+                  "label": "INR",
+                  "value": "INR",
+                },
+                Object {
+                  "label": "JPY",
+                  "value": "JPY",
+                },
+                Object {
+                  "label": "KRW",
+                  "value": "KRW",
+                },
+                Object {
+                  "label": "MXN",
+                  "value": "MXN",
+                },
+                Object {
+                  "label": "MYR",
+                  "value": "MYR",
+                },
+                Object {
+                  "label": "NOK",
+                  "value": "NOK",
+                },
+                Object {
+                  "label": "NZD",
+                  "value": "NZD",
+                },
+                Object {
+                  "label": "PHP",
+                  "value": "PHP",
+                },
+                Object {
+                  "label": "PLN",
+                  "value": "PLN",
+                },
+                Object {
+                  "label": "RON",
+                  "value": "RON",
+                },
+                Object {
+                  "label": "RUB",
+                  "value": "RUB",
+                },
+                Object {
+                  "label": "SEK",
+                  "value": "SEK",
+                },
+                Object {
+                  "label": "SGD",
+                  "value": "SGD",
+                },
+                Object {
+                  "label": "THB",
+                  "value": "THB",
+                },
+                Object {
+                  "label": "TRY",
+                  "value": "TRY",
+                },
+                Object {
+                  "label": "USD",
+                  "value": "USD",
+                },
+                Object {
+                  "label": "ZAR",
+                  "value": "ZAR",
+                },
+              ]
+            }
+            value={
+              Object {
+                "label": "EUR",
+                "value": "EUR",
+              }
+            }
+          />
+          <div
+            className="flex-100 layout-row layout-align-end-center btn_row btn_alignment"
+          >
+            <RoundButton
+              active={true}
+              handleNext={[Function]}
+              iconClass="fa-floppy-o"
+              size="small"
+              text="Save"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Aliases 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+    >
+      <div
+        className="pointy margin flex-33"
+        key="addNewAliasButton"
+        onClick={[Function]}
+      >
+        <div
+          className="location-box new-address layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <div
+              className="plus-icon"
+            />
+          </div>
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <h3>
+              Add Alias
+            </h3>
+          </div>
+        </div>
+      </div>
+      <AdminClientTile
+        client={
+          Object {
+            "foo": 0,
+          }
+        }
+        deleteFn={[Function]}
+        deleteable={true}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <AdminClientTile
+        client={
+          Object {
+            "bar": 1,
+          }
+        }
+        deleteFn={[Function]}
+        deleteable={true}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Saved Locations 
+      </p>
+    </div>
+    <UserLocations
+      locations={Array []}
+      makePrimary={[Function]}
+      setNav={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+        }
+      }
+      userDispatch={
+        Object {
+          "deleteAlias": [Function],
+          "makePrimary": [Function],
+          "newAlias": [Function],
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.user is falsy 1`] = `""`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding"
+  >
+    <h1
+      className="sec_title_text flex-none cli"
+      style="#333"
+    >
+      Profile
+    </h1>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Account Details 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-start-center"
+      >
+        <ProfileBox
+          edit={[Function]}
+          style="#333"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-end-center layout-wrap"
+      >
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <h3
+              className="flex-none"
+            >
+               Currency Settings:
+            </h3>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <p
+              className="flex-none"
+            >
+              Current Selection: 
+              EUR
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <Styled(Component)
+            className="select"
+            clearable={false}
+            name="currency"
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "label": "EUR",
+                  "value": "EUR",
+                },
+                Object {
+                  "label": "AUD",
+                  "value": "AUD",
+                },
+                Object {
+                  "label": "BGN",
+                  "value": "BGN",
+                },
+                Object {
+                  "label": "BRL",
+                  "value": "BRL",
+                },
+                Object {
+                  "label": "CAD",
+                  "value": "CAD",
+                },
+                Object {
+                  "label": "CHF",
+                  "value": "CHF",
+                },
+                Object {
+                  "label": "CNY",
+                  "value": "CNY",
+                },
+                Object {
+                  "label": "CZK",
+                  "value": "CZK",
+                },
+                Object {
+                  "label": "DKK",
+                  "value": "DKK",
+                },
+                Object {
+                  "label": "GBP",
+                  "value": "GBP",
+                },
+                Object {
+                  "label": "HKD",
+                  "value": "HKD",
+                },
+                Object {
+                  "label": "HRK",
+                  "value": "HRK",
+                },
+                Object {
+                  "label": "HUF",
+                  "value": "HUF",
+                },
+                Object {
+                  "label": "IDR",
+                  "value": "IDR",
+                },
+                Object {
+                  "label": "ILS",
+                  "value": "ILS",
+                },
+                Object {
+                  "label": "INR",
+                  "value": "INR",
+                },
+                Object {
+                  "label": "JPY",
+                  "value": "JPY",
+                },
+                Object {
+                  "label": "KRW",
+                  "value": "KRW",
+                },
+                Object {
+                  "label": "MXN",
+                  "value": "MXN",
+                },
+                Object {
+                  "label": "MYR",
+                  "value": "MYR",
+                },
+                Object {
+                  "label": "NOK",
+                  "value": "NOK",
+                },
+                Object {
+                  "label": "NZD",
+                  "value": "NZD",
+                },
+                Object {
+                  "label": "PHP",
+                  "value": "PHP",
+                },
+                Object {
+                  "label": "PLN",
+                  "value": "PLN",
+                },
+                Object {
+                  "label": "RON",
+                  "value": "RON",
+                },
+                Object {
+                  "label": "RUB",
+                  "value": "RUB",
+                },
+                Object {
+                  "label": "SEK",
+                  "value": "SEK",
+                },
+                Object {
+                  "label": "SGD",
+                  "value": "SGD",
+                },
+                Object {
+                  "label": "THB",
+                  "value": "THB",
+                },
+                Object {
+                  "label": "TRY",
+                  "value": "TRY",
+                },
+                Object {
+                  "label": "USD",
+                  "value": "USD",
+                },
+                Object {
+                  "label": "ZAR",
+                  "value": "ZAR",
+                },
+              ]
+            }
+            value={
+              Object {
+                "label": "EUR",
+                "value": "EUR",
+              }
+            }
+          />
+          <div
+            className="flex-100 layout-row layout-align-end-center btn_row btn_alignment"
+          >
+            <RoundButton
+              active={true}
+              handleNext={[Function]}
+              iconClass="fa-floppy-o"
+              size="small"
+              text="Save"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Aliases 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+    >
+      <div
+        className="pointy margin flex-33"
+        key="addNewAliasButton"
+        onClick={[Function]}
+      >
+        <div
+          className="location-box new-address layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <div
+              className="plus-icon"
+            />
+          </div>
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <h3>
+              Add Alias
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Saved Locations 
+      </p>
+    </div>
+    <UserLocations
+      locations={Array []}
+      makePrimary={[Function]}
+      setNav={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+        }
+      }
+      userDispatch={
+        Object {
+          "deleteAlias": [Function],
+          "makePrimary": [Function],
+          "newAlias": [Function],
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.editBool is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding"
+  >
+    <h1
+      className="sec_title_text flex-none cli"
+      style="#333"
+    >
+      Profile
+    </h1>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Account Details 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="flex-50 layout-row layout-align-start-center"
+      >
+        <EditProfileBox
+          close={[Function]}
+          handleChange={[Function]}
+          onSave={[Function]}
+          style="#333"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={Object {}}
+        />
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-end-center layout-wrap"
+      >
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <h3
+              className="flex-none"
+            >
+               Currency Settings:
+            </h3>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-end-center layout-wrap"
+          >
+            <p
+              className="flex-none"
+            >
+              Current Selection: 
+              EUR
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-75 layout-row layout-align-end-center layout-wrap"
+        >
+          <Styled(Component)
+            className="select"
+            clearable={false}
+            name="currency"
+            onChange={[Function]}
+            options={
+              Array [
+                Object {
+                  "label": "EUR",
+                  "value": "EUR",
+                },
+                Object {
+                  "label": "AUD",
+                  "value": "AUD",
+                },
+                Object {
+                  "label": "BGN",
+                  "value": "BGN",
+                },
+                Object {
+                  "label": "BRL",
+                  "value": "BRL",
+                },
+                Object {
+                  "label": "CAD",
+                  "value": "CAD",
+                },
+                Object {
+                  "label": "CHF",
+                  "value": "CHF",
+                },
+                Object {
+                  "label": "CNY",
+                  "value": "CNY",
+                },
+                Object {
+                  "label": "CZK",
+                  "value": "CZK",
+                },
+                Object {
+                  "label": "DKK",
+                  "value": "DKK",
+                },
+                Object {
+                  "label": "GBP",
+                  "value": "GBP",
+                },
+                Object {
+                  "label": "HKD",
+                  "value": "HKD",
+                },
+                Object {
+                  "label": "HRK",
+                  "value": "HRK",
+                },
+                Object {
+                  "label": "HUF",
+                  "value": "HUF",
+                },
+                Object {
+                  "label": "IDR",
+                  "value": "IDR",
+                },
+                Object {
+                  "label": "ILS",
+                  "value": "ILS",
+                },
+                Object {
+                  "label": "INR",
+                  "value": "INR",
+                },
+                Object {
+                  "label": "JPY",
+                  "value": "JPY",
+                },
+                Object {
+                  "label": "KRW",
+                  "value": "KRW",
+                },
+                Object {
+                  "label": "MXN",
+                  "value": "MXN",
+                },
+                Object {
+                  "label": "MYR",
+                  "value": "MYR",
+                },
+                Object {
+                  "label": "NOK",
+                  "value": "NOK",
+                },
+                Object {
+                  "label": "NZD",
+                  "value": "NZD",
+                },
+                Object {
+                  "label": "PHP",
+                  "value": "PHP",
+                },
+                Object {
+                  "label": "PLN",
+                  "value": "PLN",
+                },
+                Object {
+                  "label": "RON",
+                  "value": "RON",
+                },
+                Object {
+                  "label": "RUB",
+                  "value": "RUB",
+                },
+                Object {
+                  "label": "SEK",
+                  "value": "SEK",
+                },
+                Object {
+                  "label": "SGD",
+                  "value": "SGD",
+                },
+                Object {
+                  "label": "THB",
+                  "value": "THB",
+                },
+                Object {
+                  "label": "TRY",
+                  "value": "TRY",
+                },
+                Object {
+                  "label": "USD",
+                  "value": "USD",
+                },
+                Object {
+                  "label": "ZAR",
+                  "value": "ZAR",
+                },
+              ]
+            }
+            value={
+              Object {
+                "label": "EUR",
+                "value": "EUR",
+              }
+            }
+          />
+          <div
+            className="flex-100 layout-row layout-align-end-center btn_row btn_alignment"
+          >
+            <RoundButton
+              active={true}
+              handleNext={[Function]}
+              iconClass="fa-floppy-o"
+              size="small"
+              text="Save"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Aliases 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+    >
+      <div
+        className="pointy margin flex-33"
+        key="addNewAliasButton"
+        onClick={[Function]}
+      >
+        <div
+          className="location-box new-address layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <div
+              className="plus-icon"
+            />
+          </div>
+          <div
+            className="layout-row layout-align-center flex-100"
+          >
+            <h3>
+              Add Alias
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         Saved Locations 
+      </p>
+    </div>
+    <UserLocations
+      locations={Array []}
+      makePrimary={[Function]}
+      setNav={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+        }
+      }
+      userDispatch={
+        Object {
+          "deleteAlias": [Function],
+          "makePrimary": [Function],
+          "newAlias": [Function],
+        }
+      }
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding section "
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className="sec_header_text flex-none"
+      >
+         GDPR - Your data 
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Here you can download all the data that ItsMyCargo has related to your account.
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <Component
+          options={
+            Object {
+              "userId": undefined,
+            }
+          }
+          target="gdpr"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the  Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-75 layout-row layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right
+        </p>
+      </div>
+      <div
+        className="flex-25 layout-row layout-align-end-center"
+      >
+        <RoundButton
+          active={true}
+          handleNext={[Function]}
+          size="small"
+          text="Opt Out"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

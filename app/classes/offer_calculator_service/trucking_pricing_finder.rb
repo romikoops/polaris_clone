@@ -2,26 +2,22 @@
 
 module OfferCalculatorService
   class TruckingPricingFinder < Base
-    def initialize(shipment)
-      @shipment = shipment
+    def initialize(args = {})
+      @address          = args[:address]
+      @trucking_details = args[:trucking_details]
+      @carriage         = args[:carriage]
+      super(args[:shipment])
     end
 
-    def exec
-      %w(pre on)
-        .select { |carriage| @shipment.has_carriage?(carriage) }
-        .map { |carriage| [carriage, trucking_pricings(carriage)] }.to_h
-    end
-
-    private
-
-    def trucking_pricings(carriage, address=nil)
-      trucking_details = @shipment.trucking["#{carriage}_carriage"]
+    def exec(hub_id, distance)
       TruckingPricing.find_by_filter(
-        location:   address || Location.find(trucking_details["location_id"]),
+        location:   @address,
         load_type:  @shipment.load_type,
         tenant_id:  @shipment.tenant_id,
-        truck_type: trucking_details["truck_type"],
-        carriage:   carriage
+        truck_type: @trucking_details["truck_type"],
+        carriage:   @carriage,
+        hub_ids:    [hub_id],
+        distance:   distance.round
       )
     end
   end

@@ -370,7 +370,7 @@ AdminDashboard.defaultProps = {
   loading: false,
   dashData: null,
   clients: [],
-  hubs: {},
+  hubs: [],
   hubHash: {}
 }
 

@@ -1,0 +1,469 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.contactData is falsy 1`] = `""`;
+
+exports[`props.contactData.location is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none clip"
+      style="#333"
+    >
+      Overview
+    </p>
+    <div
+      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
+    >
+      <RoundButton
+        active={true}
+        handleNext={[Function]}
+        iconClass="fa-chevron-left"
+        size="small"
+        text="Back"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Details 
+      </p>
+    </div>
+    <ProfileBox
+      edit={[Function]}
+      style="#333"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <AdminSearchableShipments
+      hubs={
+        Array [
+          Object {},
+        ]
+      }
+      limit={5}
+      shipments={
+        Array [
+          Object {
+            "clientName": "",
+            "companyName": "",
+            "destinationHub": "",
+            "originHub": "",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "foo-bar",
+              },
+            ],
+          },
+        ]
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      title="Related Shipments"
+    />
+  </div>
+</div>
+`;
+
+exports[`props.loading is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none clip"
+      style="#333"
+    >
+      Overview
+    </p>
+    <div
+      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
+    >
+      <RoundButton
+        active={true}
+        handleNext={[Function]}
+        iconClass="fa-chevron-left"
+        size="small"
+        text="Back"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Details 
+      </p>
+    </div>
+    <ProfileBox
+      edit={[Function]}
+      style="#333"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <AdminSearchableShipments
+      hubs={
+        Array [
+          Object {},
+        ]
+      }
+      limit={5}
+      shipments={
+        Array [
+          Object {
+            "clientName": "",
+            "companyName": "",
+            "destinationHub": "",
+            "originHub": "",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "foo-bar",
+              },
+            ],
+          },
+        ]
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      title="Related Shipments"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Locations
+      </p>
+    </div>
+    <AdminAddressTile
+      address={[Function]}
+      key="RANDOM_KEY_1"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none clip"
+      style="#333"
+    >
+      Overview
+    </p>
+    <div
+      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
+    >
+      <RoundButton
+        active={true}
+        handleNext={[Function]}
+        iconClass="fa-chevron-left"
+        size="small"
+        text="Back"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Details 
+      </p>
+    </div>
+    <ProfileBox
+      edit={[Function]}
+      style="#333"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <AdminSearchableShipments
+      hubs={
+        Array [
+          Object {},
+        ]
+      }
+      limit={5}
+      shipments={
+        Array [
+          Object {
+            "clientName": "",
+            "companyName": "",
+            "destinationHub": "",
+            "originHub": "",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "foo-bar",
+              },
+            ],
+          },
+        ]
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      title="Related Shipments"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Locations
+      </p>
+    </div>
+    <AdminAddressTile
+      address={[Function]}
+      key="RANDOM_KEY_0"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`state.editBool is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center sec_title"
+  >
+    <p
+      className=" sec_title_text flex-none clip"
+      style="#333"
+    >
+      Overview
+    </p>
+    <div
+      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
+    >
+      <RoundButton
+        active={true}
+        handleNext={[Function]}
+        iconClass="fa-chevron-left"
+        size="small"
+        text="Back"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Details 
+      </p>
+    </div>
+    <EditProfileBox
+      close={[Function]}
+      handleChange={[Function]}
+      onSave={[Function]}
+      style="#333"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={Object {}}
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <AdminSearchableShipments
+      hubs={
+        Array [
+          Object {},
+        ]
+      }
+      limit={5}
+      shipments={
+        Array [
+          Object {
+            "clientName": "",
+            "companyName": "",
+            "destinationHub": "",
+            "originHub": "",
+            "schedule_set": Array [
+              Object {
+                "hub_route_key": "foo-bar",
+              },
+            ],
+          },
+        ]
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      title="Related Shipments"
+    />
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-start-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center sec_header"
+    >
+      <p
+        className=" sec_header_text flex-none"
+      >
+         Locations
+      </p>
+    </div>
+    <AdminAddressTile
+      address={[Function]}
+      key="RANDOM_KEY_3"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;

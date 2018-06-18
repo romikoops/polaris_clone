@@ -118,7 +118,7 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_units
-    aggregated_cargo ? [aggregated_cargo] : send("#{load_type}s").try(:to_a)
+    send("#{load_type}s")
   end
 
   def cargo_units=(value)
@@ -254,6 +254,7 @@ class Shipment < ApplicationRecord
 
       charge_breakdown = ChargeBreakdown.create!(shipment: self, trip: trip)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
+      charge_breakdown.charge('cargo').update_price!
     end
   end
 

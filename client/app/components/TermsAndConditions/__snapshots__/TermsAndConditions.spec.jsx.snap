@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering when props.size is small 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap"
+>
+  <Connect(Header)
+    noMessages={true}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+    user={
+      Object {
+        "company_name": "FOO_COMPANY",
+        "currency": "EUR",
+        "email": "foo@bar.baz",
+        "first_name": "John",
+        "guest": false,
+        "last_name": "Doe",
+        "phone": "6345789",
+      }
+    }
+  />
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="terms_and_conditions content_width_booking"
+    >
+      <h3>
+        No Terms and Conditions Available
+      </h3>
+    </div>
+  </div>
+</div>
+`;

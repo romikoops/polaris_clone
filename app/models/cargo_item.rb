@@ -17,6 +17,7 @@ class CargoItem < ApplicationRecord
   belongs_to :cargo_item_type
 
   before_validation :set_chargeable_weight!
+  before_validation :set_default_cargo_class!, on: :create
 
   CustomValidations.cargo_item_max_dimensions(self)
 
@@ -60,5 +61,11 @@ class CargoItem < ApplicationRecord
     aux_cargo_item = Module::AuxCargoItem.new(given_attributes)
     aux_cargo_item.chargeable_weight = calc_chargeable_weight(mode_of_transport)
     aux_cargo_item.valid?
+  end
+
+  private
+
+  def set_default_cargo_class!
+    self.cargo_class ||= "lcl"
   end
 end

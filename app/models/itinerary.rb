@@ -16,22 +16,7 @@ class Itinerary < ApplicationRecord
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
   # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
-  def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
-    tenant = Tenant.find(tenant_id)
-    stops = tenant.stops
-      .where(hub_id: hub_ids)
-      .group("stops.id, stops.itinerary_id")
-    stops = stops.first.is_a?(Array) ? stops : [stops]
-    itineraries = stops.select { |itinerary_group| itinerary_group.size == hub_ids.size }
-      .map { |itinerary_group| itinerary_group[0].itinerary }
-      .select { |itinerary| itinerary.mode_of_transport == mot && vehicle_id == vehicle_id }
-
-    if itineraries.empty?
-      tenant.itineraries.create!(mode_of_transport: mot, vehicle_id: vehicle_id, name: name)
-    else
-      itineraries.first
-    end
-  end
+  validate :must_have_stops
 
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
     results = {
@@ -416,5 +401,11 @@ class Itinerary < ApplicationRecord
       pricing_count:      pricing_count
     }.merge(attributes)
     # as_json(new_options)
+  end
+
+  private
+
+  def must_have_stops
+    errors.add(:base, "Itinerary must have stops") if stops.empty?
   end
 end

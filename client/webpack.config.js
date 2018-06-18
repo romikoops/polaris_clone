@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const NodeEnvPlugin = require('node-env-webpack-plugin')
@@ -95,6 +96,13 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.css' : '[name].css',
       chunkFilename: "[id].css"
-    })
-  ]
+    }),
+    NodeEnvPlugin.isProduction
+      ? false
+      : new BrowserSyncPlugin({
+        host: 'localhost',
+        port: 3001,
+        proxy: 'http://localhost:8080/'
+      })
+  ].filter(Boolean)
 };

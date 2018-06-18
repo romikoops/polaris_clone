@@ -6,14 +6,19 @@ class Schedule
   attr_accessor :id, :origin_hub_id, :destination_hub_id, :mode_of_transport,
     :total_price, :eta, :etd, :closing_date, :trip_id
 
-
-
   def origin_hub
     Hub.find origin_hub_id
   end
 
   def destination_hub
     Hub.find destination_hub_id
+  end
+
+  def hub_for_carriage(carriage)
+    return origin_hub      if carriage == "pre"
+    return destination_hub if carriage == "on"
+
+    raise ArgumentError, "carriage must be 'pre' or 'on'"
   end
 
   def trip
