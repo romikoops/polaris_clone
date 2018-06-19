@@ -77,7 +77,7 @@ class App extends Component {
           tenant &&
           tenant.data &&
           user.tenant_id !== tenant.data.id &&
-          user.role_id !== 3 ? (
+            user.role.name !== 'super_admin' ? (
               <Redirect to="/signout" />
             ) : (
               ''

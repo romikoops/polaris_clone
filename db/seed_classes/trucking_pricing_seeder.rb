@@ -4,7 +4,7 @@ class TruckingPricingSeeder
   extend ExcelTools
   DIRECTIONS = %w[import export].freeze
 
-  def self.perform(filter = {})    
+  def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       puts "Deleting trucking pricings for #{tenant.name}..."
       tenant.trucking_pricings.delete_all
@@ -12,7 +12,7 @@ class TruckingPricingSeeder
 
       puts "Seeding trucking pricings for #{tenant.name}..."
 
-      shipper = tenant.users.where(role_id: 2).first
+      shipper = tenant.users.shipper.first
       hub = tenant.hubs.find_by_name('Shanghai Port')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
       req = { 'xlsx' => trucking }

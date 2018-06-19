@@ -555,7 +555,7 @@ module MultiTenantTools
 
   def do_customs(subdomain)
     t = Tenant.find_by_subdomain(subdomain)
-    shipper = t.users.where(role_id: 2).first
+    shipper = t.users.shipper.first
     puts "# Overwrite Local Charges From Sheet"
     local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
     req = { "xlsx" => local_charges }
@@ -564,7 +564,7 @@ module MultiTenantTools
 
   def quick_fix(subdomain)
     t = Tenant.find_by_subdomain(subdomain)
-    shipper = t.users.where(role_id: 2).first
+    shipper = t.users.shipper.first
     public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
     req = { "xlsx" => public_pricings }
     overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)

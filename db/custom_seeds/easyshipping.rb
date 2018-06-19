@@ -9,7 +9,7 @@ subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
 
-  shipper = tenant.users.where(role_id: 2).first
+  shipper = tenant.users.shipper.first
   tenant.itineraries.destroy_all
   tenant.local_charges.destroy_all
   tenant.customs_fees.destroy_all
@@ -54,5 +54,5 @@ subdomains.each do |sub|
   trucking = File.open("#{Rails.root}/db/dummydata/ez_trucking_copenhagen_port_ftl.xlsx")
   req = { 'xlsx' => trucking }
   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
- 
+
 end
