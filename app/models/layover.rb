@@ -4,6 +4,9 @@ class Layover < ApplicationRecord
   belongs_to :stop
   belongs_to :itinerary
   belongs_to :trip
+
+  scope :hub_id, ->(hub_id) { joins(:stop).where('stops.hub_id': hub_id) }
+
   def self.determine_schedules
     schedule_obj = {}
     shipment.itineraries.each do |itin|

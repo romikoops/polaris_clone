@@ -59,7 +59,6 @@ class Admin::ShipmentsController < ApplicationController
     @shipment_contacts.each do |sc|
       @contacts.push(contact: sc.contact, type: sc.contact_type, location: sc.contact.location)
     end
-    @schedules = @shipment.schedule_set
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
@@ -86,7 +85,6 @@ class Admin::ShipmentsController < ApplicationController
       aggregatedCargo: @shipment.aggregated_cargo,
       contacts:        @contacts,
       documents:       @documents,
-      schedules:       @schedules,
       # hsCodes: hsCodes,
       locations:       locations,
       cargoItemTypes:  cargo_item_types,
@@ -114,8 +112,6 @@ class Admin::ShipmentsController < ApplicationController
     new_eta = DateTime.parse(params[:timeObj]["newEta"])
     shipment.planned_eta = new_eta
     shipment.planned_etd = new_etd
-    shipment.schedule_set[0]["eta"] = new_eta
-    shipment.schedule_set[0]["etd"] = new_etd
     shipment.save!
     message = {
       title:       "Shipment Schedule Updated",

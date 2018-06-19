@@ -81,6 +81,18 @@ class Shipment < ApplicationRecord
 
   # Instance methods
 
+  def origin_layover
+    return nil if trip.nil?
+
+    trip.layovers.hub_id(origin_hub_id)
+  end
+
+  def destination_layover
+    return nil if trip.nil?
+
+    trip.layovers.hub_id(destination_hub_id)
+  end
+
   def pickup_address
     Location.where(id: trucking.dig("pre_carriage", "location_id")).first
   end
@@ -225,26 +237,6 @@ class Shipment < ApplicationRecord
 
   def selected_offer
     charge_breakdowns.selected.to_nested_hash
-  end
-
-  def cargo_charges
-    schedule_set.reduce({}) do |cargo_charges, schedule|
-      cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
-    end
-  end
-
-  def eta_catchup
-    ships = Shipment.all
-    ships.each do |s|
-      scheds = []
-      s.schedule_set.each do |ss|
-        scheds.push(Schedule.find(ss["id"]))
-      end
-      next unless scheds.first&.etd && scheds.last && scheds.last.eta
-      s.planned_etd = scheds.first.etd
-      s.planned_eta = scheds.last.eta
-      s.save!
-    end
   end
 
   def create_charge_breakdowns_from_schedules_charges!

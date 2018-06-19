@@ -245,7 +245,6 @@ module ShippingTools
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
-      schedule:        shipment.schedule_set.first,
       locations:       locations,
       consignee:       consignee,
       notifyees:       notifyees,
@@ -306,7 +305,6 @@ module ShippingTools
     shipment.total_price =    params[:total]
     shipment.customs_credit = params[:customs_credit]
 
-    shipment.schedule_set = [params[:schedule]]
     shipment.trip_id =      params[:schedule]["trip_id"]
     @schedule =             params[:schedule].as_json
 
@@ -328,9 +326,9 @@ module ShippingTools
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
-    shipment.planned_etd = shipment.schedule_set.first["etd"]
-    shipment.planned_eta = shipment.schedule_set.last["eta"]
-    shipment.closing_date = shipment.schedule_set.first["closing_date"]
+    shipment.closing_date      = @schedule["closing_date"]
+    shipment.planned_etd       = @schedule["etd"]
+    shipment.planned_eta       = @schedule["eta"]
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
