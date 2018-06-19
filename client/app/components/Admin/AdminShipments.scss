@@ -259,6 +259,12 @@
     color: #4F4F4F;
     margin-top: 8px;
   }
+  .margin_fixes p {
+    margin-left: 15px;
+  }
+  .info_values {
+    margin: 0;
+  }
 
   @media only screen and (max-width: 1024px) {
     .status_box_requested div {
