@@ -38,7 +38,8 @@ subdomains.each do |sub|
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = File.open("#{Rails.root}/db/dummydata/st_trucking_hamburg_port.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 
   # admin_sea = tenant.users.new(
   #   role: Role.find_by_name('admin'),
