@@ -7,12 +7,12 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-import defaults from '../../styles/default_classes.scss'
+// import defaults from '../../styles/default_classes.scss'
 import { colorSVG, determineSpecialism } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
-import { Modal } from '../Modal/Modal'
-import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
-import { RoundButton } from '../RoundButton/RoundButton'
+// import { Modal } from '../Modal/Modal'
+// import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
+// import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
@@ -142,8 +142,7 @@ export class ShipmentLocationBox extends Component {
   }
 
   componentWillUnmount () {
-    const { map } = this.state;
-    ['origin', 'destination'].forEach(target => this.removeAutocompleteListener(map, target))
+    ['origin', 'destination'].forEach(target => this.removeAutocompleteListener(target))
   }
 
   setDestNexus (event) {
@@ -392,7 +391,7 @@ export class ShipmentLocationBox extends Component {
     const autocomplete = new this.props.gMaps.places.Autocomplete(input)
     autocomplete.bindTo('bounds', map)
 
-    this.removeAutocompleteListener(map, target)
+    this.removeAutocompleteListener(target)
 
     const autoListener = this.addAutocompleteListener(map, autocomplete, target)
 
@@ -413,7 +412,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({ [key]: value })
   }
 
-  removeAutocompleteListener (aMap, target) {
+  removeAutocompleteListener (target) {
     const autoListener = this.state.autoListener[target]
     autoListener && autoListener.remove()
   }
@@ -718,7 +717,7 @@ export class ShipmentLocationBox extends Component {
   }
   render () {
     const {
-      allNexuses, shipmentDispatch, scope, shipmentData, nextStageAttempts, origin, destination
+      allNexuses, scope, shipmentData, nextStageAttempts, origin, destination
     } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -1025,28 +1024,10 @@ export class ShipmentLocationBox extends Component {
       }
       return ''
     }
-    const { theme, user } = this.props
+    const { theme } = this.props
     const { shipment } = shipmentData
     const errorClass =
       originFieldsHaveErrors || destinationFieldsHaveErrors ? styles.with_errors : ''
-    const routeModal = (
-      <Modal
-        component={
-          <AvailableRoutes
-            user={user}
-            theme={theme}
-            routes={shipmentData.itineraries}
-            routeSelected={this.selectedRoute}
-            userDispatch={shipmentDispatch}
-            initialCompName="UserAccount"
-          />
-        }
-        width="48vw"
-        verticalPadding="30px"
-        horizontalPadding="15px"
-        parentToggle={this.toggleModal}
-      />
-    )
 
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
@@ -1061,21 +1042,10 @@ export class ShipmentLocationBox extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-        <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-          <div className={`layout-row flex-none layout-align-start ${defaults.content_width}`}>
-            <RoundButton
-              text="Show All Routes"
-              handleNext={this.toggleModal}
-              theme={theme}
-              active
-            />
-          </div>
-        </div>
         <div
           className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`}
         >
           <div className={`${styles.map_container} layout-row flex-none layout-align-start-start`}>
-            {this.state.showModal ? routeModal : ''}
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
                 styles.input_box
@@ -1175,7 +1145,7 @@ ShipmentLocationBox.propTypes = {
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
-  user: PropTypes.user,
+  // user: PropTypes.user,
   setNotesIds: PropTypes.func,
   shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
@@ -1187,10 +1157,10 @@ ShipmentLocationBox.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
-  shipmentDispatch: PropTypes.shape({
-    goTo: PropTypes.func,
-    getDashboard: PropTypes.func
-  }).isRequired,
+  // shipmentDispatch: PropTypes.shape({
+  //   goTo: PropTypes.func,
+  //   getDashboard: PropTypes.func
+  // }).isRequired,
   origin: PropTypes.objectOf(PropTypes.any).isRequired,
   destination: PropTypes.objectOf(PropTypes.any).isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.number),
@@ -1203,7 +1173,7 @@ ShipmentLocationBox.propTypes = {
 ShipmentLocationBox.defaultProps = {
   nextStageAttempts: 0,
   theme: null,
-  user: null,
+  // user: null,
   shipmentData: null,
   setNotesIds: null,
   routeIds: [],
