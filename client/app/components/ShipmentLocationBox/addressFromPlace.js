@@ -9,10 +9,6 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     fullAddress: ''
   }
   console.log(place)
-  if (!place) {
-    // eslint-disable-next-line no-debugger
-    debugger
-  }
 
   place.address_components.forEach((ac) => {
     if (ac.types.includes('street_number')) {
