@@ -155,7 +155,7 @@ class OfferCalculator
 
     charge_category = ChargeCategory.from_code("cargo")
     parent_charge = create_parent_charge(charge_category)
-
+    byebug
     @shipment.cargo_units.each do |cargo_unit|
       charge_result = send("determine_#{@shipment.load_type}_price",
         cargo_unit,
@@ -165,7 +165,7 @@ class OfferCalculator
         @shipment.planned_pickup_date,
         schedule.mode_of_transport
       )
-
+        byebug
       next if charge_result.nil?
 
       cargo_unit_model = cargo_unit.class.to_s
