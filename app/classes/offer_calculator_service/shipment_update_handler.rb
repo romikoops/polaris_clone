@@ -29,6 +29,7 @@ module OfferCalculatorService
       if aggregated_cargo_shipment?
         @shipment.aggregated_cargo.try(:destroy)
         @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params)
+        @shipment.aggregated_cargo.set_chargeable_weight!
       else
         destroy_previous_cargo_units
         @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
@@ -95,7 +96,7 @@ module OfferCalculatorService
     end
 
     def location_params(target)
-      unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash
+      unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash.deep_symbolize_keys
       snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
       snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
       snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)

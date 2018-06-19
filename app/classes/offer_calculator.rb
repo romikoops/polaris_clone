@@ -6,7 +6,7 @@ class OfferCalculator
   attr_reader :shipment, :detailed_schedules, :hubs
   include CurrencyTools
   include PricingTools
-  include TruckingTools
+  # include TruckingTools
 
   def initialize(shipment, params, user)
     @user             = user
@@ -75,11 +75,16 @@ class OfferCalculator
   end
 
   def calc_local_charges!(schedule)
+    if @shipment.aggregated_cargo
+      cargo_units = [@shipment.aggregated_cargo]
+    else
+      cargo_units = @shipment.cargo_units
+    end
     if @shipment.has_pre_carriage || schedule.origin_hub.mandatory_charge.export_charges
       local_charges_data = determine_local_charges(
         schedule.origin_hub,
         @shipment.load_type,
-        @shipment.cargo_units,
+        cargo_units,
         "export",
         schedule.mode_of_transport,
         schedule.trip.tenant_vehicle.id,
@@ -90,18 +95,20 @@ class OfferCalculator
         create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
       end
     end
-
+    
     if @shipment.has_on_carriage || schedule.destination_hub.mandatory_charge.import_charges
+      
       local_charges_data = determine_local_charges(
         schedule.destination_hub,
         @shipment.load_type,
-        @shipment.cargo_units,
+        cargo_units,
         "import",
         schedule.mode_of_transport,
         schedule.trip.tenant_vehicle.id,
         schedule.origin_hub_id,
         @user
       )
+      
       unless local_charges_data.empty?
         create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
       end
@@ -121,6 +128,7 @@ class OfferCalculator
 
       hub_data[:trucking_charge_data].each do |cargo_class, trucking_charges|
         children_charge_category = ChargeCategory.from_code("trucking_#{cargo_class}")
+        
         create_charges_from_fees_data!(
           trucking_charges, children_charge_category, charge_category, parent_charge
         )
