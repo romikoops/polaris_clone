@@ -217,7 +217,7 @@
     padding-right: 20px;
     hyphens: auto;
     p {
-      margin-top: 0;
+      margin:0;
     }
     i {
       font-size: 25px;
@@ -242,7 +242,6 @@
     }
     h4 {
       margin: 0;
-      margin-bottom: 12px;
     }
   }
   .border_right {
@@ -250,6 +249,15 @@
   }
   .border_bottom {
     border-bottom: 2px solid #E0E0E0;
+  }
+  .check_square {
+    font-size: 32px !important;
+  }
+  .carriage_address p {
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #4F4F4F;
+    margin-top: 8px;
   }
 
   @media only screen and (max-width: 1024px) {

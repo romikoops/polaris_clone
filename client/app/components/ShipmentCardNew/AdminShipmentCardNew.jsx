@@ -135,10 +135,12 @@ export class AdminShipmentCardNew extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className={`flex-60 layout-align-center-start ${styles.hub_name}`}>
-                    <p>{shipment.origin_hub.name}</p>
+                  <div className="layout-align-center-center flex-100">
+                    <div className={`flex-100 layout-align-center-center ${styles.hub_name}`}>
+                      <p className="layout-align-center-center flex-100">{shipment.origin_hub.name}</p>
+                    </div>
                   </div>
-                  <div className="layout-column flex-40">
+                  <div className="layout-column flex-100">
                     <span className="flex-100" style={bg1} />
                   </div>
                 </div>
@@ -155,10 +157,10 @@ export class AdminShipmentCardNew extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className={`flex-60 layout-align-center-start ${styles.hub_name}`}>
+                  <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
                     <p>{shipment.destination_hub.name}</p>
                   </div>
-                  <div className="layout-column flex-40">
+                  <div className="layout-column flex-100">
                     <span className="flex-100" style={bg2} />
                   </div>
                 </div>
