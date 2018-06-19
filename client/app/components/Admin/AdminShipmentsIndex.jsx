@@ -120,11 +120,9 @@ export class AdminShipmentsIndex extends Component {
           </Tab>
         </Tabs>
 
-
-
         {mergedOpenShipments.length === 0 &&
-        mergedReqShipments.length === 0 &&
-        mergedFinishedShipments.length === 0 ? (
+          mergedReqShipments.length === 0 &&
+          mergedFinishedShipments.length === 0 ? (
             <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
               <div
                 className={`flex-100 layout-row layout-align-space-between-center ${

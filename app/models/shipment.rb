@@ -232,6 +232,21 @@ class Shipment < ApplicationRecord
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
     end
   end
+  
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      methods: [:selected_offer, :mode_of_transport],
+      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+    )
+    as_json(new_options)
+  end
+
+  def with_address_options_json(options={})
+    shipment_hash = as_options_json(options).merge(
+      pickup_address:   pickup_address_with_country,
+      delivery_address: delivery_address_with_country
+    )
+  end
 
   def eta_catchup
     ships = Shipment.all
