@@ -4,6 +4,7 @@ import { moment } from '../../constants'
 import { Price } from '../Price/Price'
 import { Tooltip } from '../Tooltip/Tooltip'
 import PropTypes from '../../prop-types'
+import { switchIcon } from '../../helpers'
 
 export class MessageShipmentData extends Component {
   static switchIcon (sched) {
@@ -22,6 +23,7 @@ export class MessageShipmentData extends Component {
         icon = <i className="fa fa-ship" />
         break
     }
+
     return icon
   }
   static dashedGradient (color1, color2) {
@@ -43,10 +45,8 @@ export class MessageShipmentData extends Component {
     if (!shipmentData) {
       return ''
     }
-    const { hubs, schedules, shipment } = shipmentData
+    const { shipment } = shipmentData
     const total = parseFloat(shipment.total_price.value, 10)
-    const { startHub, endHub } = hubs
-    const route = schedules[0]
     const gradientFontStyle = {
       background:
         theme && theme.colors
@@ -63,6 +63,7 @@ export class MessageShipmentData extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
+
     return (
       <div
         className={`flex-90 layout-row layout-wrap layout-align-center-start 
@@ -79,12 +80,12 @@ export class MessageShipmentData extends Component {
                       style={gradientFontStyle}
                     />
                   </div>
-                  <h4 className="flex-85"> {startHub.name} </h4>
+                  <h4 className="flex-85"> {shipment.origin_hub.name} </h4>
                 </div>
               </div>
               <div className={` flex ${styles.connection_graphics}`}>
                 <div className="flex-none layout-row layout-align-center-center">
-                  {MessageShipmentData.switchIcon(route)}
+                  {switchIcon(shipment.mode_of_transport)}
                 </div>
                 <div style={dashedLineStyles} />
               </div>
@@ -93,7 +94,7 @@ export class MessageShipmentData extends Component {
                   <div className="flex-15 layout-row layout-align-center-center">
                     <i className={`fa fa-flag-o clip ${styles.flag}`} style={gradientFontStyle} />
                   </div>
-                  <h4 className="flex-85"> {endHub.name} </h4>
+                  <h4 className="flex-85"> {shipment.destination_hub.name} </h4>
                 </div>
               </div>
             </div>
@@ -126,11 +127,11 @@ export class MessageShipmentData extends Component {
               <div className="flex-100 layout-row layout-align-center">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(route.etd).format('YYYY-MM-DD')}{' '}
+                  {moment(shipment.planned_etd).format('YYYY-MM-DD')}{' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(route.etd).format('HH:mm')}{' '}
+                  {moment(shipment.planned_etd).format('HH:mm')}{' '}
                 </p>
               </div>
             </div>
@@ -144,11 +145,11 @@ export class MessageShipmentData extends Component {
               <div className="flex-100 layout-row layout-align-center">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(route.eta).format('YYYY-MM-DD')}{' '}
+                  {moment(shipment.planned_eta).format('YYYY-MM-DD')}{' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(route.eta).format('HH:mm')}{' '}
+                  {moment(shipment.planned_eta).format('HH:mm')}{' '}
                 </p>
               </div>
             </div>
@@ -188,7 +189,7 @@ export class MessageShipmentData extends Component {
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">
-                <p className="flex-none"> {route.mode_of_transport} </p>
+                <p className="flex-none"> {shipment.mode_of_transport} </p>
               </div>
             </div>
             <div
