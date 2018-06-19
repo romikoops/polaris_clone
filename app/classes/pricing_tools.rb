@@ -92,7 +92,7 @@ module PricingTools
   def determine_cargo_item_price(cargo, schedule, user, _quantity, shipment_date, mot)
     transport_category_id = transport_category(cargo, schedule)
     pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
-    byebug
+    
     return nil if pricing.nil?
     totals = { "total" => {} }
 
@@ -109,7 +109,7 @@ module PricingTools
           fee_value(fee, get_cargo_hash(cargo, mot))
         end
     end
-    byebug
+    
 
     converted = sum_and_convert_cargo(totals, user.currency)
     cargo.try(:unit_price=, value: converted, currency: user.currency)
