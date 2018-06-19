@@ -34,7 +34,6 @@ export class AdminShipmentsIndex extends Component {
   }
 
   render () {
-    console.log(this.props)
     // const {selectedShipment} = this.state;
     const {
       theme,
@@ -65,10 +64,8 @@ export class AdminShipmentsIndex extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
           <Tab
-            isActive
-            iconClassName="icon-class-0"
-            linkClassName="link-class-0"
             tabTitle="Requested"
+            theme={theme}
           >
             <AdminSearchableShipments
               handleClick={this.viewShipment}
@@ -83,10 +80,8 @@ export class AdminShipmentsIndex extends Component {
             />
           </Tab>
           <Tab
-            isActive
-            iconClassName="icon-class-0"
-            linkClassName="link-class-0"
             tabTitle="Open"
+            theme={theme}
           >
             <AdminSearchableShipments
               handleClick={this.viewShipment}
@@ -101,10 +96,8 @@ export class AdminShipmentsIndex extends Component {
             />
           </Tab>
           <Tab
-            isActive
-            iconClassName="icon-class-0"
-            linkClassName="link-class-0"
             tabTitle="Finished"
+            theme={theme}
           >
             <AdminSearchableShipments
               handleClick={this.viewShipment}

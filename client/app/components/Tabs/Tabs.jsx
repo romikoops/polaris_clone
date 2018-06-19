@@ -1,10 +1,10 @@
-import React, { PureComponent, PropTypes } from 'react'
+import React, { PureComponent } from 'react'
 
 export default class Tabs extends PureComponent {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      activeTabIndex: this.props.defaultActiveTabIndex
+      activeTabIndex: this.props.defaultActiveTabIndex ? this.props.defaultActiveTabIndex : 0
     }
     this.handleTabClick = this.handleTabClick.bind(this)
   }
@@ -35,22 +35,16 @@ export default class Tabs extends PureComponent {
 
   render () {
     return (
-      <div className="tabs">
-        <ul className="tabs-nav nav navbar-nav navbar-left">
-          {this.renderChildrenWithTabsApiAsProps()}
-        </ul>
+      <div className="layout-column flex-100">
+        <div className="layout-row flex-100">
+          <div className="layout-row flex-25">
+            {this.renderChildrenWithTabsApiAsProps()}
+          </div>
+        </div>
         <div className="tabs-active-content">
           {this.renderActiveTabContent()}
         </div>
       </div>
     )
   }
-}
-
-Tabs.propTypes = {
-  // defaultActiveTabIndex: PropTypes.number
-}
-
-Tabs.defaultProps = {
-  defaultActiveTabIndex: 0
 }
