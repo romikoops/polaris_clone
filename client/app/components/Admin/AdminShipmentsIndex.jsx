@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import adminStyles from './Admin.scss'
 import { AdminSearchableShipments } from './AdminSearchables'
 import { adminDashboard as adminTip } from '../../constants'
+import Tabs from '../Tabs/Tabs'
+import Tab from '../Tabs/Tab'
 
 export class AdminShipmentsIndex extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -17,6 +19,7 @@ export class AdminShipmentsIndex extends Component {
     const hubDestination = shipment.schedule_set[0].destination_hub_id
     shipment.originHub = hubsObj[hubOrigin] ? hubsObj[hubOrigin].name : ''
     shipment.destinationHub = hubsObj[hubDestination] ? hubsObj[hubDestination].name : ''
+
     return shipment
   }
   constructor (props) {
@@ -60,39 +63,65 @@ export class AdminShipmentsIndex extends Component {
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedReqShipments}
-          title="Requested Shipments"
-          theme={theme}
-          handleShipmentAction={handleShipmentAction}
-          tooltip={adminTip.requested}
-          seeAll={false}
-        />
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedOpenShipments}
-          title="Open Shipments"
-          theme={theme}
-          handleShipmentAction={handleShipmentAction}
-          tooltip={adminTip.open}
-          seeAll={false}
-        />
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedFinishedShipments}
-          title="Finished Shipments"
-          theme={theme}
-          handleAction={handleShipmentAction}
-          tooltip={adminTip.finished}
-          seeAll={false}
-        />
+        <Tabs>
+          <Tab
+            isActive
+            iconClassName="icon-class-0"
+            linkClassName="link-class-0"
+            tabTitle="Requested"
+          >
+            <AdminSearchableShipments
+              handleClick={this.viewShipment}
+              hubs={hubHash}
+              adminDispatch={adminDispatch}
+              shipments={mergedReqShipments}
+              title="Requested Shipments"
+              theme={theme}
+              handleShipmentAction={handleShipmentAction}
+              tooltip={adminTip.requested}
+              seeAll={false}
+            />
+          </Tab>
+          <Tab
+            isActive
+            iconClassName="icon-class-0"
+            linkClassName="link-class-0"
+            tabTitle="Open"
+          >
+            <AdminSearchableShipments
+              handleClick={this.viewShipment}
+              hubs={hubHash}
+              adminDispatch={adminDispatch}
+              shipments={mergedOpenShipments}
+              title="Open Shipments"
+              theme={theme}
+              handleShipmentAction={handleShipmentAction}
+              tooltip={adminTip.open}
+              seeAll={false}
+            />
+          </Tab>
+          <Tab
+            isActive
+            iconClassName="icon-class-0"
+            linkClassName="link-class-0"
+            tabTitle="Finished"
+          >
+            <AdminSearchableShipments
+              handleClick={this.viewShipment}
+              hubs={hubHash}
+              adminDispatch={adminDispatch}
+              shipments={mergedFinishedShipments}
+              title="Finished Shipments"
+              theme={theme}
+              handleAction={handleShipmentAction}
+              tooltip={adminTip.finished}
+              seeAll={false}
+            />
+          </Tab>
+        </Tabs>
+
+
+
         {mergedOpenShipments.length === 0 &&
         mergedReqShipments.length === 0 &&
         mergedFinishedShipments.length === 0 ? (

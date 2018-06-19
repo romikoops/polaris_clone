@@ -3,8 +3,9 @@ import PropTypes from '../../prop-types'
 
 export default function Tab (props) {
   const {
-    linkClassName, isActive, onClick, tabIndex, iconClassName
+    linkClassName, isActive, onClick, tabIndex, tabTitle
   } = props
+
   return (
     <li className="tab">
       <a
@@ -14,7 +15,7 @@ export default function Tab (props) {
           onClick(tabIndex)
         }}
       >
-        <i className={`tab-icon ${iconClassName}`} />
+        {tabTitle}
       </a>
     </li>
   )

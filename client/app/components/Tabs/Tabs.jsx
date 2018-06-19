@@ -48,7 +48,7 @@ export default class Tabs extends PureComponent {
 }
 
 Tabs.propTypes = {
-  defaultActiveTabIndex: PropTypes.number
+  // defaultActiveTabIndex: PropTypes.number
 }
 
 Tabs.defaultProps = {
