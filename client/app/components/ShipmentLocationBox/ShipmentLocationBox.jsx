@@ -395,7 +395,9 @@ export class ShipmentLocationBox extends Component {
 
     const autoListener = this.addAutocompleteListener(map, autocomplete, target)
 
-    this.setState({ autoListener: { ...this.state.autoListener, [target]: autoListener } })
+    this.setState(prevState => (
+      { autoListener: { ...prevState.autoListener, [target]: autoListener } }
+    ))
   }
 
   postToggleAutocomplete (target) {
