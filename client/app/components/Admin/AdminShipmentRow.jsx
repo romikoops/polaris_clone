@@ -89,14 +89,14 @@ export class AdminShipmentRow extends Component {
   }
 
   render () {
-    const { theme, shipment, hubs } = this.props
+    const { theme, shipment } = this.props
     const { confirm } = this.state
     if (shipment.schedule_set.length < 1) {
       return ''
     }
     const schedule = {}
-    const originHub = hubs[shipment.origin_hub_id].data
-    const destHub = hubs[shipment.destination_hub_id].data
+    const originHub = shipment.origin_hub
+    const destHub = shipment.destination_hub
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -149,6 +149,7 @@ export class AdminShipmentRow extends Component {
     ) : (
       ''
     )
+    const pickupDropoffDate = shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
 
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
@@ -234,11 +235,11 @@ export class AdminShipmentRow extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(shipment.planned_pickup_date).format('DD/MM/YYYY')}{' '}
+                  {moment(pickupDropoffDate).format('DD/MM/YYYY')}{' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(shipment.planned_pickup_date).format('HH:mm')}{' '}
+                  {moment(pickupDropoffDate).format('HH:mm')}{' '}
                 </p>
               </div>
             </div>
@@ -295,13 +296,11 @@ AdminShipmentRow.propTypes = {
   theme: PropTypes.theme,
   handleSelect: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,
-  shipment: PropTypes.shipment.isRequired,
-  hubs: PropTypes.objectOf(PropTypes.hub)
+  shipment: PropTypes.shipment.isRequired
 }
 
 AdminShipmentRow.defaultProps = {
-  theme: null,
-  hubs: []
+  theme: null
 }
 
 export default AdminShipmentRow

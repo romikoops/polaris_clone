@@ -13,9 +13,6 @@ export class AdminShipmentsIndex extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
-    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
     return shipment
   }
   constructor (props) {
