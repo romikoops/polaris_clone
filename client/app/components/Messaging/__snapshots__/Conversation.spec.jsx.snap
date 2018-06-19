@@ -63,6 +63,12 @@ exports[`shallow render 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -101,6 +107,12 @@ exports[`shallow render 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -340,6 +352,12 @@ exports[`theme is falsy 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -371,6 +389,12 @@ exports[`theme is falsy 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -530,6 +554,12 @@ exports[`with admin user 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -577,6 +607,12 @@ exports[`with admin user 1`] = `
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
