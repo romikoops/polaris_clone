@@ -27,8 +27,11 @@ module UsersDeviseTokenAuth
       @headers.each do |k, v|
         response.headers[k] = v
       end
-      @resource = @resource.expanded
-      super
+
+      render json: {
+        status: 'success',
+        data:   @resource.token_validation_response
+      }
     end
 
     protected
