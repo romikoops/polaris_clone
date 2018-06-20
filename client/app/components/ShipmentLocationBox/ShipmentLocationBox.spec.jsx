@@ -1,6 +1,13 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { route, user, gMaps, shipment, identity, theme } from '../../mocks'
+import {
+  gMaps,
+  identity,
+  route,
+  shipment,
+  theme,
+  user
+} from '../../mocks'
 
 jest.mock('../../constants', () => {
   const format = () => 19
