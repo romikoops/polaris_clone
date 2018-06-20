@@ -68,7 +68,7 @@ class UsersController < ApplicationController
     end
 
     headers = @user.create_new_auth_token
-    response_handler(user: @user.expanded, headers: headers)
+    response_handler(user: @user.token_validation_response, headers: headers)
   end
 
   def currencies

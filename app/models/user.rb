@@ -41,6 +41,10 @@ class User < ApplicationRecord
   has_many :user_managers
   has_many :pricings
 
+  %i(admin shipper super_admin sub_admin).each do |role_name|
+    scope role_name, -> { joins(:role).where("roles.name": role_name) }
+  end
+
   PERMITTED_PARAMS = %i[
     email password
     guest tenant_id confirm_password password_confirmation
@@ -144,7 +148,13 @@ class User < ApplicationRecord
 
   # Devise Token Auth override
   def token_validation_response
-    as_json(except: %i[tokens created_at updated_at], include: :optin_status)
+    as_json(
+      except: %i(tokens created_at updated_at optin_status_id role_id),
+      include: {
+        optin_status: { except: %i(created_at updated_at) },
+        role: { except: %i(created_at updated_at) }
+      }
+    )
   end
 
   # Override devise method to include additional info as opts hash

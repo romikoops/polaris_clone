@@ -237,6 +237,7 @@ class AdminSchedules extends Component {
 
     const listView = (
       <AdminSearchableRoutes
+        className="flex-100"
         itineraries={results}
         theme={theme}
         hubs={hubs}

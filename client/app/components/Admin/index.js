@@ -1,4 +1,5 @@
 export * from './AdminDashboard'
+export * from './AdminDashboardNew'
 
 export { default as AdminHubs } from './Hubs/AdminHubs'
 export * from './Hubs/AdminHubsIndex'
@@ -46,7 +47,7 @@ export * from './AdminClientView'
 export { default as AdminShipments } from './AdminShipments'
 export * from './AdminShipmentsIndex'
 export * from './AdminShipmentRow'
-export * from './AdminShipmentView'
+export * from './AdminShipmentView/AdminShipmentView'
 
 export { default as AdminScheduleGenerator } from './AdminScheduleGenerator'
 export * from './AdminScheduleLine'

@@ -7,6 +7,7 @@ import { AdminShipmentRow } from '../'
 import { UserShipmentRow } from '../../UserAccount'
 import { Tooltip } from '../../Tooltip/Tooltip'
 import { TextHeading } from '../../TextHeading/TextHeading'
+// import { ShipmentOverviewCard } from '../../ShipmentCardNew/ShipmentOverviewCard'
 
 export class AdminSearchableShipments extends Component {
   constructor (props) {
@@ -47,6 +48,7 @@ export class AdminSearchableShipments extends Component {
       this.setState({
         shipments: this.props.shipments
       })
+
       return
     }
     const search = (keys) => {
@@ -64,6 +66,7 @@ export class AdminSearchableShipments extends Component {
       const fuse = new Fuse(this.props.shipments, options)
       const results = fuse.search(event.target.value)
       const exactResult = results.find(result => result.score === 0)
+
       return exactResult ? [exactResult.item] : results.map(result => result.item)
     }
 
@@ -81,6 +84,7 @@ export class AdminSearchableShipments extends Component {
   }
   limitArray (shipments) {
     const { limit } = this.props
+
     return limit ? shipments.slice(0, limit) : shipments
   }
   render () {
@@ -88,7 +92,7 @@ export class AdminSearchableShipments extends Component {
       hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip, user
     } = this.props
     const { shipments } = this.state
-    console.log(this.props.shipments)
+    // console.log(this.props.shipments)
     let shipmentsArr
     if (shipments.length) {
       shipmentsArr = this.limitArray(shipments).map(ship =>
@@ -148,10 +152,12 @@ export class AdminSearchableShipments extends Component {
         </div>
       </div>
     )
+
     return (
       <div
         className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
       >
+        {console.log(handleShipmentAction)}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${
             styles.searchable_header

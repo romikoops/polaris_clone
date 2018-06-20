@@ -217,22 +217,23 @@ class Itinerary < ApplicationRecord
   end
 
   def routes
-    stops.order(:index).to_a.combination(2).map do |stop|
-      if !stop[0].hub || !stop[1].hub
-        stop[0].itinerary.destroy
+    stops.order(:index).to_a.combination(2).map do |stop_array|
+      if !stop_array[0].hub || !stop_array[1].hub
+        stop_array[0].itinerary.destroy
         return
       end
-      detailed_hash(
-        stop,
-        nexus_names:        true,
-        nexus_ids:          true,
-        stop_ids:           true,
-        hub_ids:            true,
-        hub_names:          true,
-        modes_of_transport: true
-      )
+      {
+        origin: stop_array[0].hub.lng_lat_array,
+        destination: stop_array[1].hub.lng_lat_array,
+        line: {
+          type: 'LineString',
+          id: "#{self.id}-#{stop_array[0].index}",
+          coordinates: [stop_array[0].hub.lng_lat_array, stop_array[1].hub.lng_lat_array]
+        }
+      }
     end
   end
+
 
   def detailed_hash(stop_array, options={})
     origin = stop_array[0]

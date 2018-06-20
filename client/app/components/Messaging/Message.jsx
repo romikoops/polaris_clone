@@ -30,7 +30,7 @@ export class Message extends Component {
     const {
       message, theme, tenant, user, client
     } = this.props
-    const isAdmin = user.role_id === 1
+    const isAdmin = user.role.name === 'admin'
     const messageStyle =
       message.sender_id === message.user_id ? styles.user_style : styles.tenant_style
     const UserMessage = styled.div`

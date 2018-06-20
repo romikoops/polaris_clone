@@ -6,14 +6,15 @@ import { AdminLayoverRow, AdminHubTile } from '../'
 import { AdminSearchableRoutes } from '../AdminSearchables'
 import styles from '../Admin.scss'
 import { RoundButton } from '../../RoundButton/RoundButton'
-import { adminClicked as clickTool, cargoClassOptions } from '../../../constants'
+import { adminClicked as clickTool, cargoClassOptions, API_KEY } from '../../../constants'
 import { TextHeading } from '../../TextHeading/TextHeading'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import { AdminHubFees } from './Fees'
 import { AdminCustomsSetter } from '../Customs/Setter'
 import AdminPromptConfirm from '../Prompt/Confirm'
-
+import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
+import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType } from '../../../helpers'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -31,6 +32,10 @@ export class AdminHubView extends Component {
     this.checkAndSetCharges(this.props)
   }
   componentWillReceiveProps (nextProps) {
+    if (!this.state.mapWidth) {
+      const mapWidth = this.mapElement ? this.mapElement.clientWidth : '1000'
+      this.setState({ mapWidth })
+    }
     if (!this.state.editedHub.data.name) {
       this.setState({
         editedHub: { data: nextProps.hubData.hub, location: nextProps.hubData.location }
@@ -158,6 +163,7 @@ export class AdminHubView extends Component {
     const { editedHub } = this.state
     adminActions.editHub(hubData.hub.id, editedHub)
   }
+
   render () {
     const {
       theme, hubData, hubs, hubHash, adminActions
@@ -167,25 +173,23 @@ export class AdminHubView extends Component {
       currentFeeLoadType,
       currentFee,
       currentCustoms,
-      editing,
+      // editing,
       editedHub,
       confirm,
-      mandatoryCharge
+      mandatoryCharge,
+      mapWidth
     } = this.state
-    if (!hubData) {
+    if (!hubData || !theme) {
       return ''
     }
 
     const {
-      hub, relatedHubs, routes, schedules, location
+      hub, relatedHubs, routes, schedules, location, charges, customs
     } = hubData
-
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
+    const { primary, secondary } = theme.colors
+    const textStyle = gradientTextGenerator(primary, secondary)
+    const gradientBackground = gradientGenerator(primary, secondary)
+    // const hubPhoto = { background: hub.photo }
     const relHubs = []
     relatedHubs.forEach((hubObj) => {
       if (hubObj.id !== hub.id) {
@@ -256,6 +260,7 @@ export class AdminHubView extends Component {
       </div>
     )
 
+    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=${mapWidth}x167&key=${API_KEY}&markers=color:red|${location.latitude},${location.longitude}&zoom=10&scale=2`
     const schedArr = schedules.map((sched) => {
       const tmpItin = this.getItineraryFromLayover(sched.itinerary_id)
 
@@ -392,7 +397,7 @@ export class AdminHubView extends Component {
         </div>
         <div className="flex-100 layout-row layout-align-start-center">
           <address className="flex-none">
-            {`${location.street_number || ''} 
+            {`${location.street_number || ''}
             ${location.street || ''}`}{' '}
             <br />
             {location.city} <br />
@@ -441,42 +446,72 @@ export class AdminHubView extends Component {
           } flex-80 layout-row layout-wrap layout-align-start-start`}
         >
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title} buffer_10`}
           >
-            <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-              {hub.name}
-            </p>
+            <div className={`flex layout-row layout-align-start-center ${hubStyles.header_bar_grey}`}>
+              <p className="flex-none">
+                Hub
+              </p>
+            </div>
+            <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_active_button}`} style={textStyle}>
+              <p className="flex-none">
+                {hub.hub_status}
+              </p>
+            </div>
+            <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_action_buttons}`}>
+              <div className="flex-none layout-row layout-align-center-center">
+                <i className="flex-none fa fa-pencil" />
+              </div>
+              <div className="flex-none layout-row layout-align-center-center">
+                <i className="flex-none fa fa-times" />
+              </div>
+            </div>
+
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-start">
-            {editing ? editBox : detailsBox}
+          <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
+            <div className={`flex layout-row layout-align-center-center ${hubStyles.hub_title}`} style={gradientBackground} >
+              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
+                <div className="flex-70 layout-row layout-align-start-center">
+                  <h3 className="flex-none"> {hub.nexus.name}</h3>
+                </div>
+                <div className="flex-30 layout-row layout-align-end-center">
+                  <div className="flex-none layout-row layout-align-center-center">
+                    <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
+                  </div>
+                  <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
+                    {switchIcon(hub.hub_type)}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={`flex-none layout-row ${hubStyles.lat_lng_box}`}>
+              <div className="flex-50 layout-column layout-align-center-center">
+                <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                <p className={`flex-90 ${hubStyles.lat_lng}`}>Latitude</p>
+              </div>
+              <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
+              <div className="flex-50 layout-column layout-align-center-center">
+                <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                <p className={`flex-90 ${hubStyles.lat_lng}`}>Longitude</p>
+              </div>
+            </div>
           </div>
 
-          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            <div
-              className={`flex-100 layout-row layout-align-space-between-center ${
-                styles.sec_header
-              }`}
-            >
-              <p className={` ${styles.sec_header_text} flex-none`}> Related Hubs</p>
+          <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
+            <div className={`flex-25 layout-row layout-align-center-center ${hubStyles.hub_photo}`} style={gradientBackground} >
+              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_photo_content}`} >
+                <img src={hub.photo} alt="" />
+              </div>
             </div>
-            {relHubs}
+            <div className={`flex layout-row ${hubStyles.map_box}`} ref={mapElement => this.mapElement = mapElement} >
+              <img src={staticMapUrl} alt="" />
+            </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
-            <div className="flex-50 layout-row layout-align-start-center">
-              <TextHeading theme={theme} text="Fees & Charges" size={3} />
-            </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <NamedSelect
-                className={styles.select}
-                options={cargoClassOptions}
-                onChange={e => this.filterChargesByLoadType(e, 'fees')}
-                value={currentFeeLoadType}
-                name="currentFeeLoadType"
-              />
-            </div>
             <AdminHubFees
               theme={theme}
-              charges={currentFee}
+              charges={charges}
+              customs={customs}
               adminDispatch={adminActions}
               loadType={currentFeeLoadType.value}
             />
