@@ -1,0 +1,17 @@
+:local {
+  .greyBg {
+    background-color: lightgrey;
+    margin-bottom: 20px;
+    height: 35px;
+  }
+  .hub {
+    padding: 10px;
+  }
+  .container {
+    height: 400px;
+  }
+  .scrolling {
+    height: 320px;
+    overflow-y: scroll;
+  }
+}

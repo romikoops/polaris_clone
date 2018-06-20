@@ -137,7 +137,7 @@ class SideNav extends Component {
     ]
 
     const { user } = props
-    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
+    const isAdmin = user.role.name === 'admin' || user.role.name === 'super_admin' || user.role.name === 'sub_admin'
     const links = isAdmin ? this.adminLinks : this.userLinks
     const superAdminLink = {
       key: 'super-admin',
@@ -146,7 +146,7 @@ class SideNav extends Component {
       url: '/admin/superadmin',
       target: 'superadmin'
     }
-    if (user.role_id === 3 && links.indexOf(superAdminLink) < 0) {
+    if (user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }
     links.forEach((link, i) => {
@@ -254,7 +254,7 @@ class SideNav extends Component {
   render () {
     const { theme, user, expand } = this.props
 
-    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
+    const isAdmin = user.role.name === 'admin' || user.role.name === 'super_admin' || user.role.name === 'sub_admin'
     const links = isAdmin ? this.adminLinks : this.userLinks
 
     const textStyle = {

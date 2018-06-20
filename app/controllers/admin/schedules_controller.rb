@@ -11,9 +11,10 @@ class Admin::SchedulesController < ApplicationController
     train_schedules = tenant.itineraries.where(mode_of_transport: "train").flat_map { |it| it.trips.limit(10).order(:start_date) }
     ocean_schedules = tenant.itineraries.where(mode_of_transport: "ocean").flat_map { |it| it.trips.limit(10).order(:start_date) }
     air_schedules = tenant.itineraries.where(mode_of_transport: "air").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = itineraries.map(&:as_options_json)
-    response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, detailedItineraries: detailed_itineraries)
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
+      itinerary.as_options_json(methods: :routes)
+    end
+    response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries)
   end
 
   def show

@@ -410,14 +410,13 @@ function getSchedules (redirect) {
 
     adminService.getSchedules().then(
       (data) => {
-        dispatch(alertActions.success('Fetching Schedules successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/schedules'))
         }
-        dispatch(success(data))
+        dispatch(alertActions.success('Fetching Schedules successful'))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }

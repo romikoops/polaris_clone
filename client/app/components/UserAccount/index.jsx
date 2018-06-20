@@ -4,6 +4,7 @@ export { default as UserLocations } from './UserLocations'
 export { default as UserPassword } from './UserPassword'
 export { default as UserProfile } from './UserProfile'
 export { default as UserDashboard } from './UserDashboard'
+export { default as UserDashboardNew } from './UserDashboardNew'
 
 export { default as UserShipments } from './UserShipments'
 export { default as UserShipmentRow } from './UserShipmentRow'

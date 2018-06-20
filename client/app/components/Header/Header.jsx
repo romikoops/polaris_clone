@@ -81,7 +81,7 @@ class Header extends Component {
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const accountLinks = [
-      user && user.role_id === 2
+      user && user.role.name === 'shipper'
         ? {
           url: '/account',
           text: 'Account',
