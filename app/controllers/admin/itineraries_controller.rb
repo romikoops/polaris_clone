@@ -7,7 +7,8 @@ class Admin::ItinerariesController < ApplicationController
 
   def index
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    response_handler(itineraries)
+    as_json_itineraries = itineraries.map { |itinerary| itinerary.as_options_json(methods: :routes) }
+    response_handler(as_json_itineraries)
   end
 
   def create
