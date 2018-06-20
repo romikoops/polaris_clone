@@ -145,14 +145,6 @@ module TruckingTools
           return { rate: rate["rate"], fees: trucking_pricing["fees"] }
         end
       end
-      
-      if cargo_values["volume"] < trucking_pricing["rates"]["cbm"].first["min_cbm"].to_d
-        trucking_pricing["rates"]["cbm"].first["rate"]["min_value"] = trucking_pricing["rates"]["cbm"].first["min_value"]
-        return {rate: trucking_pricing["rates"]["cbm"].first["rate"], fees: trucking_pricing["fees"]}
-      elsif cargo_values["volume"] > trucking_pricing["rates"]["cbm"].last["max_cbm"].to_d
-        trucking_pricing["rates"]["cbm"].last["rate"]["min_value"] = trucking_pricing["rates"]["cbm"].last["min_value"]
-        return {rate: trucking_pricing["rates"]["cbm"].last["rate"], fees: trucking_pricing["fees"]}
-      end
     when "cbm_kg"
       result = { rate_basis: "PER_CBM_KG" }
       trucking_pricing["rates"]["kg"].each do |rate|
