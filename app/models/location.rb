@@ -105,7 +105,6 @@ class Location < ApplicationRecord
   end
 
   def self.create_and_geocode(raw_location_params)
-    byebug
     location = Location.find_or_create_by(location_params(raw_location_params))
     location.geocode_from_address_fields! if location.geocoded_address.nil?
 
