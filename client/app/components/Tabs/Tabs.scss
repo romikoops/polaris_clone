@@ -1,0 +1,40 @@
+:local {
+  .tab {
+    min-height: 40px;
+    margin-right: 35px;
+    position: relative;
+    cursor: pointer;
+    .gradient {
+      top: 0;
+      left: 0;
+      right: -3px;
+      bottom: -3px;
+      z-index: -2;
+      position: absolute;
+    }
+  }
+  .tab:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: white;
+    z-index: 0;
+  }
+  .content {
+    z-index: 1;
+    padding-bottom: 15px !important;
+  }
+  a.active {
+    font-weight: bold;
+  }
+  a.disabled {
+    color: #BDBDBD;
+    &:hover {
+      border-bottom-color: #4F4F4F !important;
+      color: #4F4F4F;
+    }
+  }
+}

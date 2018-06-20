@@ -21,6 +21,7 @@ end
 #       - tenant_id: integer 
 #    - status: string
 #    - load_type: string
+#  (
 #    - planned_pickup_date: datetime
 #    - planned_origin_drop_off_date: datetime
 #    - trucking: jsonb 
@@ -34,6 +35,7 @@ end
 #    - planned_eta: datetime 
 #    - planned_etd: datetime 
 #    - closing_date: datetime 
+#  )
 #       - trip_id: integer 
 #           - itinerary_id: integer 
 #    - customs_credit: boolean 
@@ -49,6 +51,7 @@ end
 #    - transport_category_id: integer 
 #    - incoterm_id: integer 
 #    - incoterm_text: string 
+# 
 #    - uuid: string
 #    - imc_reference: string
 #    - created_at: datetime 

@@ -7,7 +7,10 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    options = {
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+    }
     requested_shipments = Shipment.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
@@ -65,8 +68,8 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] = doc.get_signed_url
       @documents << tmp
     end
-    locations = { 
-      origin: @shipment.origin_nexus, 
+    locations = {
+      origin: @shipment.origin_nexus,
       destination: @shipment.destination_nexus
     }
     account_holder = @shipment.user
@@ -74,10 +77,7 @@ class Admin::ShipmentsController < ApplicationController
       methods: [:selected_offer, :mode_of_transport],
       include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
     }
-    shipment_as_json = @shipment.as_json(options).merge(
-      pickup_address:   @shipment.pickup_address_with_country,
-      delivery_address: @shipment.delivery_address_with_country
-    )
+    shipment_as_json = @shipment.with_address_options_json
     resp = {
       shipment:        shipment_as_json,
       cargoItems:      @cargo_items,
@@ -107,6 +107,11 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def edit_time
+    options = {
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+    }
+
     shipment = Shipment.find(params[:id])
     new_etd = DateTime.parse(params[:timeObj]["newEtd"])
     new_eta = DateTime.parse(params[:timeObj]["newEta"])
@@ -119,7 +124,7 @@ class Admin::ShipmentsController < ApplicationController
       shipmentRef: shipment.imc_reference
     }
     add_message_to_convo(shipment.user, message, true)
-    response_handler(shipment)
+    response_handler(shipment.as_json(options))
   end
 
   def edit

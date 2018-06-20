@@ -99,7 +99,6 @@ class TruckingPricing < ApplicationRecord
 
   def self.find_by_hub_ids(hub_ids=[])
     raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
-
     sanitized_query = sanitize_sql(["
       SELECT
         trucking_pricing_id,

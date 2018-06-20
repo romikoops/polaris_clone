@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
-import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
+import { AdminDashboardNew, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
@@ -35,6 +35,7 @@ class Admin extends Component {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
     adminDispatch.getHubs(false)
+    adminDispatch.getShipments(false)
   }
   setUrl (target) {
     const { adminDispatch } = this.props
@@ -115,12 +116,15 @@ class Admin extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
               <Switch className="flex">
                 <Route
+                  exact
                   path="/admin/dashboard"
                   render={props => (
-                    <AdminDashboard
+                    <AdminDashboardNew
+                      user={user}
                       theme={theme}
                       {...props}
                       clients={clients}
+                      shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}
                       dashData={dashboard}

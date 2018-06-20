@@ -4,9 +4,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { AdminShipmentView, AdminShipmentsIndex } from './'
+import { AdminShipmentsIndex } from './'
+import { AdminShipmentView } from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
-import { TextHeading } from '../TextHeading/TextHeading'
+// import { TextHeading } from '../TextHeading/TextHeading'
 import { AdminShipmentsGroup } from './Shipments/Group'
 
 class AdminShipments extends Component {
@@ -63,7 +64,7 @@ class AdminShipments extends Component {
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
-          <TextHeading theme={theme} size={1} text="Shipments" />
+          {/* <TextHeading theme={theme} size={1} text="Shipments" /> */}
         </div>
         <Switch className="flex">
           <Route

@@ -1542,7 +1542,7 @@ class TenantSeeder
             href: "www.example2.com",
             link_text: "example2",
             text: "This is just an example2."
-          }         
+          }
         ]
       },
       subdomain: "trucking",

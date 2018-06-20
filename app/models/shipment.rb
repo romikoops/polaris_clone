@@ -3,7 +3,7 @@
 class Shipment < ApplicationRecord
   extend ShippingTools
   include ActiveModel::Validations
-  STATUSES = %w[
+  STATUSES = %w(
     booking_process_started
     requested_by_unconfirmed_account
     requested
@@ -12,9 +12,9 @@ class Shipment < ApplicationRecord
     declined
     ignored
     finished
-  ].freeze
+  ).freeze
   LOAD_TYPES = TransportCategory::LOAD_TYPES
-  DIRECTIONS = %w[import export].freeze
+  DIRECTIONS = %w(import export).freeze
 
   # Validations
   { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
@@ -73,7 +73,7 @@ class Shipment < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
-  %i[ocean air rail].each do |mot|
+  %i(ocean air rail).each do |mot|
     scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
   end
 
@@ -239,20 +239,35 @@ class Shipment < ApplicationRecord
     charge_breakdowns.selected.to_nested_hash
   end
 
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+    )
+    as_json(new_options)
+  end
+
+  def with_address_options_json(options={})
+    as_options_json(options).merge(
+      pickup_address:   pickup_address_with_country,
+      delivery_address: delivery_address_with_country
+    )
+  end
+
   def create_charge_breakdowns_from_schedules_charges!
     schedules_charges.map do |hub_route_key, schedule_charges|
       origin_hub_id, destination_hub_id = *hub_route_key.split("-").map(&:to_i)
-      next unless origin_hub_id == self.origin_hub_id && destination_hub_id == self.destination_hub_id
+      next unless origin_hub_id == origin_hub_id && destination_hub_id == destination_hub_id
 
       charge_breakdown = ChargeBreakdown.create!(shipment: self, trip: trip)
       Charge.create_from_schedule_charges(schedule_charges, charge_breakdown)
-      charge_breakdown.charge('cargo').update_price!
+      charge_breakdown.charge("cargo").update_price!
     end
   end
 
   def self.create_all_empty_charge_breakdowns!
     where.not(id: ChargeBreakdown.pluck(:shipment_id).uniq, schedules_charges: {})
-         .each(&:create_charge_breakdowns_from_schedules_charges!)
+      .each(&:create_charge_breakdowns_from_schedules_charges!)
   end
 
   def self.update_refactor_shipments
@@ -260,8 +275,8 @@ class Shipment < ApplicationRecord
       itinerary = s.itinerary
       s.destination_nexus = itinerary.last_stop.hub.nexus
       s.origin_nexus = itinerary.first_stop.hub.nexus
-      s.trucking["on_carriage"]["location_id"] = itinerary.last_stop.hub.id if s.has_on_carriage
-      s.trucking["pre_carriage"]["location_id"] = itinerary.first_stop.hub.id if s.has_pre_carriage
+      s.trucking["on_carriage"]["location_id"] ||= itinerary.last_stop.hub.id if s.has_on_carriage
+      s.trucking["pre_carriage"]["location_id"] ||= itinerary.first_stop.hub.id if s.has_pre_carriage
       s.save!
     end
   end
@@ -280,7 +295,7 @@ class Shipment < ApplicationRecord
   private
 
   def update_carriage_properties!
-    %w[on_carriage pre_carriage].each do |carriage|
+    %w(on_carriage pre_carriage).each do |carriage|
       self["has_#{carriage}"] = !trucking.dig(carriage, "truck_type").blank?
     end
   end
