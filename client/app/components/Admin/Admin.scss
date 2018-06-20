@@ -164,25 +164,26 @@
   }
   .input_box {
     height: 38px;
-    width: 170px;
-    border: 1px solid #F2F2F2;
+    width: 100px;
+    border: 0;
     border-radius: 3px;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    background-color: transparent;
+    margin-top: -70px;
+    margin-bottom: 50px;
   }
   .inpu_box_right_margin {
     margin-right: 10px;
   }
   .input_box input {
     height: 38px;
-    border: 1px solid #F2F2F2;
-    background-color: #F9F9F9;
+    border: 1px solid #BDBDBD;
+    background-color: transparent;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
     min-width: 80%;
-    max-width: 80%;
+    max-width: 100%;
     &:focus {
-      outline: none;
+      outline: 1px solid #E0E0E0;
     }
   }
   .dpb_picker div input{

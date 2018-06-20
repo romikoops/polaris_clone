@@ -143,7 +143,6 @@ export class AdminShipmentCardNew extends Component {
                   <div className="layout-align-center-center flex-100">
                     <div className={`flex-100 layout-align-center-center ${styles.hub_name}`}>
                       <p className="layout-align-center-center flex-100">{shipment.origin_hub.name}</p>
-                      {console.log(shipment.origin_hub.name)}
                     </div>
                   </div>
                   <div className="layout-column flex-100">

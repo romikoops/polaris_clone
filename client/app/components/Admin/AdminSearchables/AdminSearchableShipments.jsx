@@ -171,7 +171,7 @@ export class AdminSearchableShipments extends Component {
               </div> */}
             </div>
           </div>
-          <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
+          <div className={`${styles.input_box} flex-40 layout-row layout-align-end-center`}>
             <input
               type="text"
               name="search"

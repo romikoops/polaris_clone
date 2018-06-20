@@ -8,10 +8,6 @@ export default function Tab (props) {
     linkClassName, isActive, onClick, tabIndex, tabTitle, theme
   } = props
 
-  // const gradientBorderStyle =
-  //   theme && theme.colors
-  //     ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
-  //     : { background: 'black' }
   const borderGradient =
     theme && theme.colors
       ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, '-180deg')
@@ -21,7 +17,7 @@ export default function Tab (props) {
   }
 
   return (
-    <div className={`layout-row flex-33 layout-align-center-center ${styles.tab}`}>
+    <div className={`layout-row flex-gt-lg-33 flex-md-45 layout-align-center-center ${styles.tab}`}>
       <div className={styles.gradient} style={isActive ? borderGradient : deselectedStyle} />
       <div className={`${styles.content}`}>
         <a
@@ -31,7 +27,7 @@ export default function Tab (props) {
             onClick(tabIndex)
           }}
         >
-          {tabTitle}
+          <p>{tabTitle}</p>
         </a>
       </div>
     </div>

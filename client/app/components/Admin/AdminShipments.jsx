@@ -57,7 +57,7 @@ class AdminShipments extends Component {
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
-      return <h1>NO SHIPMENTS DATA</h1>
+      return <h1>NO SHIPMENTS DATA (OR REFRESH PAGE)</h1>
     }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
