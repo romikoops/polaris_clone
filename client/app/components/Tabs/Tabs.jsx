@@ -37,7 +37,7 @@ export default class Tabs extends PureComponent {
     return (
       <div className="layout-column flex-100">
         <div className="layout-row flex-100">
-          <div className="layout-row flex-25">
+          <div className="layout-row flex-40">
             {this.renderChildrenWithTabsApiAsProps()}
           </div>
         </div>

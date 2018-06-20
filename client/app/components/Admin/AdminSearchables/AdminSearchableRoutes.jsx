@@ -5,7 +5,7 @@ import styles from '../Admin.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
 import { Tooltip } from '../../Tooltip/Tooltip'
 import { WorldMap as WMap } from '../DashboardMap/WorldMap'
-import { AdminRouteList as ARouteList } from '../AdminRouteList'
+import { AdminRouteList } from '../AdminRouteList'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
@@ -135,7 +135,7 @@ export class AdminSearchableRoutes extends Component {
                 height={250}
               />
             </div><div className="layout-padding flex-100">
-              <ARouteList
+              <AdminRouteList
                 itineraries={itineraries}
                 limit={limit}
                 tile={tile}

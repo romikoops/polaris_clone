@@ -19,7 +19,9 @@ export class ShipmentOverviewCard extends Component {
     const {
       dispatches,
       theme,
-      hubs
+      hubs,
+      handleSelect,
+      handleAction
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
@@ -29,6 +31,8 @@ export class ShipmentOverviewCard extends Component {
           dispatches={dispatches}
           theme={theme}
           hubs={hubs}
+          handleSelect={handleSelect}
+          handleAction={handleAction}
         />
       ) : (
         <UserShipmentCard
@@ -52,14 +56,19 @@ export class ShipmentOverviewCard extends Component {
 
   render () {
     const {
-      shipments
+      shipments,
+      showTitle
     } = this.props
 
     return (
       <div className="layout-wrap flex-100 layout-row layout-align-space-between-start">
-        <div className={`layout-padding flex-100 layout-align-start-center  ${styles.greyBg}`}>
-          <span><b>Requested Shipments</b></span>
-        </div>
+        {showTitle ? (
+          <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+            <span><b>Requested Shipments</b></span>
+          </div>
+        ) : (
+          ''
+        )}
         {this.listShipments(shipments)}
       </div>
     )
@@ -69,18 +78,20 @@ export class ShipmentOverviewCard extends Component {
 ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
-  dispatches: PropTypes.objectOf(PropTypes.func),
+  dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
+  handleSelect: PropTypes.func.isRequired,
+  handleAction: PropTypes.func.isRequired,
   theme: PropTypes.theme,
-  hubs: PropTypes.objectOf(PropTypes.hub)
-
+  hubs: PropTypes.objectOf(PropTypes.hub),
+  showTitle: PropTypes.bool
 }
 
 ShipmentOverviewCard.defaultProps = {
   admin: false,
   shipments: [],
-  dispatches: {},
   theme: null,
-  hubs: {}
+  hubs: {},
+  showTitle: false
 }
 
 export default ShipmentOverviewCard

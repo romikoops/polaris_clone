@@ -32,6 +32,8 @@ export class AdminDashboardNew extends Component {
     this.state = {
       hoverId: false
     }
+    this.handleClick = this.handleClick.bind(this)
+    this.handleShipmentAction = this.handleShipmentAction.bind(this)
   }
 
   handleRouteHover (id) {
@@ -54,6 +56,18 @@ export class AdminDashboardNew extends Component {
   handleViewShipments () {
     const { adminDispatch } = this.props
     adminDispatch.getShipments(true)
+  }
+  handleShipmentAction (id, action) {
+    const { adminDispatch } = this.props
+    adminDispatch.confirmShipment(id, action)
+  }
+  handleClick (shipment) {
+    const { handleClick, adminDispatch } = this.props
+    if (handleClick) {
+      handleClick(shipment)
+    } else {
+      adminDispatch.getShipment(shipment.id, true)
+    }
   }
 
   render () {
@@ -85,12 +99,6 @@ export class AdminDashboardNew extends Component {
 
     const preparedRequestedShipments = shipments.requested ? shipments.requested
       .map(s => AdminDashboardNew.prepShipment(s, clientHash, hubHash)) : []
-
-    // const header2 = (
-    //   <div className="layout-row layout-padding flex-100 layout-align-center-center">
-    //     <img src="/app/assets/images/logos/logo_black.png" style={{ height: '90px' }} />
-    //   </div>
-    // )
 
     const mapComponent = (
       <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
@@ -132,10 +140,13 @@ export class AdminDashboardNew extends Component {
         </div>
         <ShipmentOverviewCard
           admin
+          showTitle
+          handleSelect={this.handleClick}
           dispatches={adminDispatch}
           shipments={preparedRequestedShipments}
           theme={theme}
           hubs={hubHash}
+          handleAction={this.handleShipmentAction}
         />
         <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
           <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
@@ -180,6 +191,7 @@ AdminDashboardNew.propTypes = {
   dashData: PropTypes.shape({
     schedules: PropTypes.array
   }),
+  handleClick: PropTypes.func,
   clients: PropTypes.arrayOf(PropTypes.client),
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),
@@ -199,6 +211,7 @@ AdminDashboardNew.defaultProps = {
   theme: null,
   user: {},
   dashData: null,
+  handleClick: null,
   clients: [],
   shipments: {},
   hubHash: {}
