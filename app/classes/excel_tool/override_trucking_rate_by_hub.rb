@@ -77,7 +77,7 @@ module ExcelTool
             trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
               val = row_data[m_index]
               next unless val
-              trucking_rates(weight_min_row, val, meta, row_min_value)
+              trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
             end
           end
 
@@ -252,6 +252,7 @@ module ExcelTool
       modifier_row = rates_sheet.row(3)
       modifier_row.shift
       modifier_row.shift
+      modifier_position_objs = {}
       modifier_row.uniq.each do |mod|
         if mod != nil
           modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
@@ -280,7 +281,7 @@ module ExcelTool
       )
     end
 
-    def trucking_rates(weight_min_row, val, meta, row_min_value)
+    def trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
       if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         val = val * 2
       end
