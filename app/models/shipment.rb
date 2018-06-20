@@ -25,18 +25,20 @@ class Shipment < ApplicationRecord
   validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
+  validate :user_tenant_match
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
-  before_validation :assign_uuid, :generate_imc_reference, :set_default_trucking, on: :create
+  before_validation :assign_uuid, :generate_imc_reference,
+    :set_default_trucking, :set_tenant,
+    on: :create
   before_validation :update_carriage_properties!
 
   # ActiveRecord associations
-  belongs_to :user, optional: true
-  belongs_to :consignee, optional: true
+  belongs_to :user
   belongs_to :tenant
   has_many :documents
   has_many :shipment_contacts
@@ -339,5 +341,15 @@ class Shipment < ApplicationRecord
 
   def set_default_trucking
     self.trucking ||= { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }
+  end
+
+  def set_tenant
+    self.tenant_id ||= user.tenant_id
+  end
+
+  def user_tenant_match
+    return if tenant_id == user.tenant_id
+
+    errors.add(:user, "tenant_id does not match the shipment's tenant_id")
   end
 end
