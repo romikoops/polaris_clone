@@ -7,6 +7,9 @@ module ExcelTool
       :all_ident_values_and_countries, :charges, :hub_id
       
     def initialize(args)
+      p "============================================"
+      pp args
+      p "+++++++++++++++++++++++++++++++++++++++++++++++"
       params = args[:params]
       @hub_id = args[:hub_id]
       @stats = _stats
@@ -123,7 +126,7 @@ module ExcelTool
 
         if row_data[1] && !row_data[2]
           row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
-          zip_char_length ||= row_zip.to_s.length
+          @zip_char_length ||= row_zip.to_s.length
           if identifier_type == 'distance' && identifier_modifier == 'return'
             zones[zone_name] << { ident: (row_zip/2.0).ceil, country: row_data[3] }
           else
@@ -132,7 +135,7 @@ module ExcelTool
 
         elsif !row_data[1] && row_data[2]
           range = row_data[2].delete(" ").split("-")
-          zip_char_length ||= range[0].length
+          @zip_char_length ||= range[0].length
           if identifier_type == 'distance' && identifier_modifier == 'return'
             zones[zone_name] << { min: (range[0].to_i/2.0).ceil, max: (range[1].to_i/2.0).ceil, country: row_data[3] }
           else
@@ -442,5 +445,15 @@ module ExcelTool
         return [identifier_type.downcase, false]
       end
     end
+
+    def generate_meta_from_sheet(sheet)
+      meta = {}
+      sheet.row(1).each_with_index do |key, i|
+        next if key.nil?
+        meta[key.downcase] = sheet.row(2)[i]
+      end
+      meta.deep_symbolize_keys!
+    end
+
   end
 end
