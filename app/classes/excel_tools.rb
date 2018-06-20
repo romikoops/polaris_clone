@@ -441,6 +441,7 @@ module ExcelTools
     defaults = {}
     trucking_pricing_by_zone = {}
     hub = Hub.find(hub_id)
+    
     tenant = hub.tenant
     xlsx = Roo::Spreadsheet.open(params["xlsx"])
     sheets = xlsx.sheets.clone
@@ -460,6 +461,7 @@ module ExcelTools
       zones[zone_name] = [] if zones[zone_name].nil?
 
       if row_data[1] && !row_data[2]
+        next if row_data[0] == " "
         row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
         zip_char_length ||= row_zip.to_s.length
         if identifier_type == 'distance' && identifier_modifier == 'return'
@@ -469,6 +471,7 @@ module ExcelTools
         end
 
       elsif !row_data[1] && row_data[2]
+        next if row_data[2] == " "
         range = row_data[2].delete(" ").split("-")
         zip_char_length ||= range[0].length
         if identifier_type == 'distance' && identifier_modifier == 'return'
@@ -593,6 +596,16 @@ module ExcelTools
       direction = meta[:direction] == "import" ? "on" : "pre"
       awesome_print meta
       courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
+      scoping_attributes_hash = {
+        load_type: load_type,
+        cargo_class: cargo_class,
+        courier_id: courier.id,
+        truck_type: row_truck_type,
+        carriage: direction
+      }
+      old_tp_ids = hub.trucking_pricings.where(scoping_attributes_hash).ids
+      hub.hub_truckings.where(trucking_pricing_id: old_tp_ids).delete_all
+      TruckingPricing.where(id: old_tp_ids).delete_all
       rate_num_rows = rates_sheet.last_row
       modifier_position_objs = {}
       modifier_row = rates_sheet.row(3)
@@ -638,7 +651,7 @@ module ExcelTools
 
         single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
 
-        next if single_ident_values_and_country.first.nil?
+        next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
 
         single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
         single_country_values = single_ident_values_and_country.map { |h| h[:country] }
@@ -1135,7 +1148,7 @@ module ExcelTools
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
               v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
-              # byebug
+              
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if lc
                 lc.update_attributes(v)
