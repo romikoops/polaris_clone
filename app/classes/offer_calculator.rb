@@ -65,11 +65,12 @@ class OfferCalculator
       calc_local_charges!(schedule)
       create_trucking_charges(schedule)
       calc_cargo_charges!(schedule)
-
       @grand_total_charge.update_price!
       schedule.total_price = @grand_total_charge.price.as_json(only: %i(value currency))
-      schedule.to_detailed_hash
-    end
+      detailed_schedule = schedule.to_detailed_hash
+      next if detailed_schedule.dig(:total_price, "value").zero?
+      detailed_schedule
+    end.compact
 
     raise ApplicationError::NoSchedulesCharges if !@grand_total_charge || @grand_total_charge.children.empty?
   end
