@@ -78,7 +78,7 @@ class UsersController < ApplicationController
   end
 
   def download_gdpr
-    url = gdpr_download(current_user.id)
+    url = DocumentService::GdprWriter.new(user_id: current_user.id).perform
     response_handler(url: url, key: "gdpr")
   end
 
