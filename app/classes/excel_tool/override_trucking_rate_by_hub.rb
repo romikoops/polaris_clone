@@ -7,9 +7,6 @@ module ExcelTool
       :all_ident_values_and_countries, :charges, :hub_id
       
     def initialize(args)
-      p "============================================"
-      pp args
-      p "+++++++++++++++++++++++++++++++++++++++++++++++"
       params = args[:params]
       @hub_id = args[:hub_id]
       @stats = _stats
