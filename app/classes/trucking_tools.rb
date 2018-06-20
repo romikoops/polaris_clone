@@ -143,6 +143,7 @@ module TruckingTools
     when "cbm"
       trucking_pricing["rates"]["cbm"].each do |rate|
         if cargo_values["volume"] <= rate["max_cbm"].to_d && cargo_values["volume"] >= rate["min_cbm"].to_d
+          
           rate["rate"]["min_value"] = rate["min_value"]
           return { rate: rate["rate"], fees: trucking_pricing["fees"] }
         end

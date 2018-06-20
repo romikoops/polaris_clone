@@ -74,6 +74,14 @@ class Hub < ApplicationRecord
     "#{location.latitude},#{location.longitude}"
   end
 
+  def lat_lng_array
+    [location.latitude, location.longitude]
+  end
+  def lng_lat_array
+    # loc = location
+    [location.longitude, location.latitude]
+  end
+
   def distance_to(loc)
     Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [location.latitude, location.longitude])
   end
@@ -122,5 +130,15 @@ class Hub < ApplicationRecord
       )
       return customs
     end
+  end
+
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      include: {
+        nexus:    { only: %i[id name] },
+        location: { only: %i[longitude latitude] }
+      }
+    )
+    as_json(new_options)
   end
 end

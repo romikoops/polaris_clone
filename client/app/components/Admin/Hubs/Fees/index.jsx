@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Toggle from 'react-toggle'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
 import '../../../../styles/day-picker-custom.css'
 import styles from '../../Admin.scss'
 import styles2 from './index.scss'
-import { NamedSelect } from '../../../NamedSelect/NamedSelect'
-import { RoundButton } from '../../../RoundButton/RoundButton'
-import AdminPromptConfirm from '../../Prompt/Confirm'
 import {
-  currencyOptions
-  // cargoClassOptions
+  currencyOptions,
+  cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  chargeGlossary,
   rateBasises,
   lclPricingSchema,
   fclPricingSchema,
@@ -21,9 +15,9 @@ import {
   rateBasisSchema,
   moment
 } from '../../../../constants'
-import { TextHeading } from '../../../TextHeading/TextHeading'
+import { gradientGenerator } from '../../../../helpers'
+import FeeRow from './FeeRow'
 
-const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
 // const cargoClassOpts = cargoClassOptions
@@ -42,6 +36,7 @@ export class AdminHubFees extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   static prepForSelect (arr, labelKey, valueKey, glossary) {
@@ -53,13 +48,28 @@ export class AdminHubFees extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectOptions: {},
+      selectOptions: {
+        customs: {},
+        charges: {}
+      },
+      editor: {
+        charges: {
+          import: {},
+          export: {}
+        },
+        customs: {
+          import: {},
+          export: {}
+        }
+      },
       edit: false,
-      direction: 'import'
+      direction: 'import',
+      selectedCargoClass: 'lcl'
     }
     // this.editPricing = lclSchema
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
+    this.handleDayChange = this.handleDayChange.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
     this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
@@ -71,49 +81,73 @@ export class AdminHubFees extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.charges.hub_id) {
-      this.setAllFromOptions(nextProps.charges)
+    if (nextProps.charges[0].hub_id) {
+      this.setAllFromOptions(nextProps.charges.filter(c => c.direction === 'import' && c.load_type === 'lcl')[0], 'charges')
+      this.setAllFromOptions(nextProps.customs.filter(c => c.direction === 'import' && c.load_type === 'lcl')[0], 'customs')
     }
-    if (this.state.charges !== nextProps.charges) {
-      this.setState({ charges: nextProps.charges })
+    if (this.state.charges !== nextProps.charges || this.state.customs !== nextProps.customs) {
+      this.setState({
+        charges: nextProps.charges,
+        customs: nextProps.customs
+      })
     }
   }
+  setCargoClass (type) {
+    this.setState({ selectedCargoClass: type })
+  }
 
-  setAllFromOptions (charges) {
+  setAllFromOptions (charges, target) {
     const newObj = { import: {}, export: {} }
     const tmpObj = {}
-
-    if (!charges.import) {
+    if (!charges.fees) {
       return
     }
-    ['import', 'export'].forEach((dir) => {
-      Object.keys(charges[dir]).forEach((key) => {
-        if (!newObj[dir][key]) {
-          newObj[dir][key] = {}
+    Object.keys(charges.fees).forEach((key) => {
+      if (!newObj[charges.direction][key]) {
+        newObj[charges.direction][key] = {}
+      }
+      if (!tmpObj[key]) {
+        tmpObj[key] = {}
+      }
+      let opts
+      Object.keys(charges.fees[key]).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOpts.slice()
+          newObj[charges.direction][key][chargeKey] = AdminHubFees.selectFromOptions(
+            opts,
+            charges.fees[key][chargeKey]
+          )
+        } else if (chargeKey === 'rate_basis') {
+          opts = rateOpts.slice()
+          newObj[charges.direction][key][chargeKey] = AdminHubFees.selectFromOptions(
+            opts,
+            charges.fees[key][chargeKey]
+          )
         }
-        if (!tmpObj[key]) {
-          tmpObj[key] = {}
-        }
-        let opts
-        Object.keys(charges[dir][key]).forEach((chargeKey) => {
-          if (chargeKey === 'currency') {
-            opts = currencyOpts.slice()
-            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
-              opts,
-              charges[dir][key][chargeKey]
-            )
-          } else if (chargeKey === 'rate_basis') {
-            opts = rateOpts.slice()
-            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
-              opts,
-              charges[dir][key][chargeKey]
-            )
-          }
-        })
       })
     })
 
-    this.setState({ selectOptions: newObj })
+    this.setState(prevState => (
+      {
+        editor: {
+          ...prevState.editor,
+          [target]: {
+            ...prevState.editor[target],
+            [charges.direction]: charges
+          }
+        },
+        selectOptions: {
+          ...prevState.selectOptions,
+          [target]: {
+            ...prevState.selectOptions[target],
+            [charges.load_type]: {
+              ...prevState.selectOptions[charges.load_type],
+              ...newObj
+            }
+          }
+        }
+      }
+    ))
   }
 
   handleTopLevelSelect (selection) {
@@ -125,27 +159,33 @@ export class AdminHubFees extends Component {
       }
     })
   }
-  handleDayChange (e, direction, key, chargeKey) {
+  handleDayChange (e, direction, key, chargeKey, target) {
     console.log(e, direction, key, chargeKey)
     this.setState({
-      charges: {
-        ...this.state.charges,
-        [direction]: {
-          ...this.state.charges[direction],
-          [key]: {
-            ...this.state.charges[direction][key],
-            [chargeKey]: moment(e).format('YYYY/MM/DD')
+      editor: {
+        ...this.state.editor,
+        [target]: {
+          ...this.state.editor[target],
+          [direction]: {
+            ...this.state.editor[target][direction],
+            fees: {
+              ...this.state.editor[target][direction].fees,
+              [key]: {
+                ...this.state.editor[target][direction].fees[key],
+                [chargeKey]: moment(e).format('YYYY/MM/DD')
+              }
+            }
           }
         }
       }
     })
   }
 
-  handleSelect (selection) {
+  handleSelect (selection, target) {
     const { direction } = this.state
     const nameKeys = selection.name.split('-')
     if (nameKeys[2] === 'rate_basis') {
-      const price = this.state.charges[nameKeys[0]][nameKeys[1]]
+      const price = this.state.charge[nameKeys[0]][nameKeys[1]]
       const newSchema = rateBasisSchema[selection.value]
       Object.keys(newSchema).forEach((k) => {
         if (price[k] && newSchema[k] && k !== 'rate_basis') {
@@ -153,43 +193,61 @@ export class AdminHubFees extends Component {
         }
       })
       this.setState({
-        charges: {
-          ...this.state.charges,
-          [nameKeys[0]]: {
-            ...this.state.charges[nameKeys[0]],
-            [nameKeys[1]]: newSchema
+        editor: {
+          ...this.state.editor,
+          [target]: {
+            ...this.state.editor[target],
+            [direction]: {
+              ...this.state.editor[target][direction],
+              fees: {
+                ...this.state.editor[target][direction].fees,
+                [nameKeys[1]]: newSchema
+              }
+            }
           }
         },
         selectOptions: {
           ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[direction],
-            [nameKeys[1]]: {
-              ...this.state.selectOptions[nameKeys[0]][nameKeys[1]],
-              [nameKeys[2]]: selection
+          [target]: {
+            ...this.state.selectOptions[target],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[target][nameKeys[0]],
+              [nameKeys[1]]: {
+                ...this.state.selectOptions[target][nameKeys[0]][nameKeys[1]],
+                [nameKeys[2]]: selection
+              }
             }
           }
         }
       })
     } else {
       this.setState({
-        charges: {
-          ...this.state.charges,
-          [nameKeys[0]]: {
-            ...this.state.charges[nameKeys[0]],
-            [nameKeys[1]]: {
-              ...this.state.charges[nameKeys[0]][nameKeys[2]],
-              [nameKeys[2]]: parseInt(selection.value, 10)
+        editor: {
+          ...this.state.editor,
+          [target]: {
+            ...this.state.editor[target],
+            [nameKeys[0]]: {
+              ...this.state.editor[target][nameKeys[0]],
+              fees: {
+                ...this.state.editor[target][nameKeys[0]].fees,
+                [nameKeys[1]]: {
+                  ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
+                  [nameKeys[2]]: parseInt(selection.value, 10)
+                }
+              }
             }
           }
         },
         selectOptions: {
           ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[nameKeys[0]],
-            [nameKeys[1]]: {
-              ...this.state.selectOptions[nameKeys[0]][nameKeys[1]],
-              [nameKeys[2]]: selection
+          [target]: {
+            ...this.state.selectOptions[target],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[target][nameKeys[0]],
+              [nameKeys[1]]: {
+                ...this.state.selectOptions[target][nameKeys[0]][nameKeys[1]],
+                [nameKeys[2]]: selection
+              }
             }
           }
         }
@@ -204,17 +262,23 @@ export class AdminHubFees extends Component {
     delete charges[key]
     this.setState({ charges })
   }
-  handleChange (event) {
+  handleChange (event, target) {
     const { name, value } = event.target
     const nameKeys = name.split('-')
     this.setState({
-      charges: {
-        ...this.state.charges,
-        [nameKeys[0]]: {
-          ...this.state.charges[nameKeys[0]],
-          [nameKeys[1]]: {
-            ...this.state.charges[nameKeys[0]][nameKeys[1]],
-            [nameKeys[2]]: parseInt(value, 10)
+      editor: {
+        ...this.state.editor,
+        [target]: {
+          ...this.state.editor[target],
+          [nameKeys[0]]: {
+            ...this.state.editor[target][nameKeys[0]],
+            fees: {
+              ...this.state.editor[target][nameKeys[0]].fees,
+              [nameKeys[1]]: {
+                ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
+                [nameKeys[2]]: parseInt(value, 10)
+              }
+            }
           }
         }
       }
@@ -259,20 +323,15 @@ export class AdminHubFees extends Component {
     this.setState({ selectOptions: newObj, charges })
   }
 
-  confirmDelete () {
-    this.setState({
-      confirm: true
-    })
-  }
-  closeConfirm () {
-    this.setState({ confirm: false })
-  }
-
-  saveEdit () {
-    const { charges } = this.state
-    this.props.adminDispatch.editLocalCharges(charges.nexus_id, charges)
-    this.closeConfirm()
-    this.toggleEdit()
+  saveEdit (target) {
+    const { editor, direction } = this.state
+    // debugger // eslint-disable-line
+    const charges = editor[target][direction]
+    if (target === 'charges') {
+      this.props.adminDispatch.editLocalCharges(charges)
+    } else {
+      this.props.adminDispatch.editCustomsFees(charges)
+    }
   }
   handleDirectionChange (e) {
     const { directionBool } = this.state
@@ -288,327 +347,153 @@ export class AdminHubFees extends Component {
       })
     }
   }
+  renderCargoClassButtons () {
+    const { selectedCargoClass, charges } = this.state
+    const { theme } = this.props
+    const { primary, secondary } = theme.colors
+    const bgStyle = gradientGenerator(primary, secondary)
+
+    return cargoClassOptions.map((cargoClass, i) => {
+      const hasCargoClass = charges
+        .filter(charge => charge.load_type === cargoClass.value).length > 0
+      const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#E0E0E0' }
+      const innerStyle = selectedCargoClass === cargoClass.value ? styles2.cargo_class_button_selected : ''
+      const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
+
+      return (<div
+        className={`flex-25 layout-row layout-align-start-center ${inactiveStyle} ${styles2.cargo_class_button}`}
+        style={buttonStyle}
+        onClick={hasCargoClass ? () => this.setCargoClass(cargoClass.value) : null}
+      >
+        <div className={`flex-none layout-row layout-align-center-center ${innerStyle} ${styles2.cargo_class_button_inner}`}>
+          <p className="flex-none">{cargoClass.label}</p>
+        </div>
+        { i !== cargoClassOptions.length - 1 ? <div className={`flex-none ${styles2.cargo_class_divider}`} /> : ''}
+      </div>)
+    })
+  }
 
   render () {
-    const { theme, loadType } = this.props
+    const { theme } = this.props
 
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
     const {
       selectOptions,
-      edit,
-      showPanel,
+      // edit,
+      // showPanel,
       direction,
       directionBool,
       charges,
-      confirm
+      selectedCargoClass,
+      customs
     } = this.state
-    console.log('#### charges @@@@@@')
-    console.log(charges)
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format())
-      },
-      month: new Date(
-        moment()
-          .add(7, 'days')
-          .format('YYYY'),
-        moment()
-          .add(7, 'days')
-          .format('M') - 1
-      ),
-      name: 'dayPicker'
-    }
-    const panel = []
-    const viewPanel = []
     // let gloss
-    const toggleCSS = `
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          ${theme.colors.brightPrimary} 0%,
-          ${theme.colors.primary} 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          ${theme.colors.brightSecondary} 0%,
-          ${theme.colors.secondary} 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    `
-    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const gloss = chargeGloss
+    const { primary, secondary } = theme.colors
+    const bgStyle = gradientGenerator(primary, secondary)
 
-    if (!charges || (charges && !charges[direction])) {
+    if (!charges || (charges && !charges[0])) {
       return ''
     }
-    const confimPrompt = confirm ? (
-      <AdminPromptConfirm
+
+    // const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
+    // const feesToAdd = Object.keys(feeSchema.data).map((key) => {
+    //   if (!charges[key]) {
+    //     return (
+    //       <div
+    //         key={key}
+    //         className="flex-33 layout-row layout-align-start-center"
+    //         onClick={() => this.addFeeToPricing(key)}
+    //       >
+    //         <i className="fa fa-plus clip flex-none" style={textStyle} />
+    //         <div className="flex-5" />
+    //         <p className="flex-none">
+    //           {key} - {gloss[key]}{' '}
+    //         </p>
+    //       </div>
+    //     )
+    //   }
+    //   return ''
+    // })
+    // const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
+    const impStyle = directionBool ? styles2.toggle_off : styles2.toggle_on
+    const expStyle = directionBool ? styles2.toggle_on : styles2.toggle_off
+    const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass && charge.direction === direction)[0]
+    const currentCustoms = customs.filter(custom => custom.load_type === selectedCargoClass && custom.direction === direction)[0]
+    const editCharge = this.state.editor.charges[direction]
+    const editCustoms = this.state.editor.customs[direction]
+    const feeRows = Object.keys(currentCharge.fees).map((ck) => {
+      const fee = currentCharge.fees[ck]
+
+      return (<FeeRow
+        className="flex-100"
         theme={theme}
-        heading="Are you sure?"
-        text="These changes will be instantly available in your store"
-        confirm={() => this.saveEdit()}
-        deny={() => this.closeConfirm()}
-      />
-    ) : (
-      ''
-    )
-    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'effective_date', 'expiration_date', 'range']
-    Object.keys(charges[direction]).forEach((key) => {
-      const cells = []
-      const viewCells = []
-      Object.keys(charges[direction][key]).forEach((chargeKey) => {
-        if (!dnrKeys.includes(chargeKey)) {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className={`flex-95 layout-row ${styles.editor_input}`}>
-              <input
-                type="number"
-                value={charges[direction][key][chargeKey]}
-                onChange={this.handleChange}
-                name={`${direction}-${key}-${chargeKey}`}
-              />
-            </div>
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">
-              {charges[direction][key][chargeKey]} {charges[direction][key].currency}
-            </p>
-          </div>)
-        } else if (chargeKey === 'rate_basis') {
-          cells.push(<div
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <NamedSelect
-              name={`${direction}-${key}-${chargeKey}`}
-              classes={`${styles.select}`}
-              value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
-              options={rateOpts}
-              className="flex-100"
-              onChange={this.handleSelect}
-            />
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
-          </div>)
-        } else if (chargeKey === 'expiration_date' || chargeKey === 'effective_date') {
-          cells.push(<div
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            } ${styles2.dpb}`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <DayPickerInput
-              name="dayPicker"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-              value={charges[direction][key][chargeKey]}
-              onDayChange={e => this.handleDayChange(e, direction, key, chargeKey)}
-              dayPickerProps={dayPickerProps}
-            />
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">{moment(charges[direction][key][chargeKey]).format('ll')}</p>
-          </div>)
-        } else if (chargeKey === 'currency') {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className="flex-95 layout-row">
-              <NamedSelect
-                name={`${direction}-${key}-currency`}
-                classes={`${styles.select}`}
-                value={selectOptions ? selectOptions[direction][key].currency : ''}
-                options={currencyOpts}
-                className="flex-100"
-                onChange={this.handleSelect}
-              />
-            </div>
-          </div>)
-        }
-      })
-      panel
-        .push(<div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${
-              styles.price_subheader
-            }`}
-          >
-            <p className="flex-none">
-              {key} - {gloss[key]}
-            </p>
-            <div
-              className="flex-none layout-row layout-align-center-center"
-              onClick={() => this.deleteFee(key)}
-            >
-              <i className="fa fa-trash clip" style={textStyle} />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
-        </div>)
-      viewPanel.push(<div
-        className={`flex-100 layout-row layout-align-none-center layout-wrap ${
-          styles.expand_panel
-        }`}
-      >
-        <div
-          className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}
-        >
-          <p className="flex-none">
-            {key} - {gloss[key]}
-          </p>
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center">{viewCells}</div>
-      </div>)
+        fee={fee}
+        selectOptions={selectOptions.charges[currentCharge.load_type]}
+        direction={direction}
+        editCharge={editCharge}
+        handleDateEdit={this.handleDayChange}
+        handleSelect={this.handleSelect}
+        handleChange={this.handleChange}
+        saveEdit={e => this.saveEdit(e)}
+        target="charges"
+      />)
+    })
+    const customsRows = Object.keys(currentCustoms.fees).map((ck) => {
+      const fee = currentCustoms.fees[ck]
+
+      return (<FeeRow
+        className="flex-100"
+        theme={theme}
+        fee={fee}
+        editCharge={editCustoms}
+        selectOptions={selectOptions.customs[currentCustoms.load_type]}
+        direction={direction}
+        handleDateEdit={this.handleDayChange}
+        handleSelect={this.handleSelect}
+        handleChange={this.handleChange}
+        saveEdit={e => this.saveEdit(e)}
+        target="customs"
+      />)
     })
 
-    const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
-    const feesToAdd = Object.keys(feeSchema.data).map((key) => {
-      if (!charges[key]) {
-        return (
-          <div
-            key={key}
-            className="flex-33 layout-row layout-align-start-center"
-            onClick={() => this.addFeeToPricing(key)}
-          >
-            <i className="fa fa-plus clip flex-none" style={textStyle} />
-            <div className="flex-5" />
-            <p className="flex-none">
-              {key} - {gloss[key]}{' '}
-            </p>
-          </div>
-        )
-      }
-      return ''
-    })
-    const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
-    const impStyle = directionBool ? styles.toggle_off : styles.toggle_on
-    const expStyle = directionBool ? styles.toggle_on : styles.toggle_off
     return (
-      <div
-        className={` ${styles.fee_box} flex-none layout-row layout-wrap layout-align-center-center`}
-      >
-        <div
-          className=" flex-none layout-row layout-wrap layout-align-center-start"
-          style={{ position: 'relative' }}
-        >
-          <div className="flex-95 layout-row layout-wrap layout-align-center-start">
-            <div className="flex-100 layout-row">
-              <div className="flex-50 layout-row layout-align-start-center">
-                <TextHeading theme={theme} text={direction.label} size={4} />
-              </div>
-              <div className="flex-40 layout-row layout-align-end-center">
-                <p className={`${impStyle} flex-none five_m`}>Import</p>
-                <p />
-                <Toggle checked={directionBool} onChange={e => this.handleDirectionChange(e)} />
-                <p className={`${expStyle} flex-none five_m`}>Export</p>
-              </div>
-              <div
-                className="flex-10 layout-row layout-align-end-center"
-                onClick={() => this.toggleEdit()}
-              >
-                <i className="fa fa-pencil clip flex-none" style={textStyle} />
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap" style={{ position: 'relative' }}>
-              {edit ? panel : viewPanel}
-            </div>
-            {edit ? (
-              <div className="flex-100 layout-row layout-align-end-center">
-                <div
-                  className="
-              flex-50
-              layout-align-end-center
-              layout-row"
-                  style={{ margin: '15px' }}
-                >
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="Add Fee"
-                    active
-                    handleNext={this.showAddFeePanel}
-                    P
-                    iconClass="fa-plus"
-                  />
-                </div>
-                <div
-                  className="flex-50
-layout-align-end-center layout-row"
-                  style={{ margin: '15px' }}
-                >
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="Save"
-                    active
-                    handleNext={() => this.confirmDelete()}
-                    iconClass="fa-floppy-o"
-                  />
-                </div>
-              </div>
-            ) : (
-              ''
-            )}
+      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
+          <div className="flex-30 layout-row layout-align-start-center">
+            <p className={`flex-none ${styles2.text}`} >Fees & Charges</p>
           </div>
-          <div
-            className={`flex-100 layout-row layout-align-center-center layout-wrap ${
-              styles.add_hub_fee_panel
-            } ${panelViewClass}`}
-          >
+          <div className="flex-30 layout-row layout-align-end-center">
             <div
-              className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`}
-              onClick={this.showAddFeePanel}
+              className={`flex-none layout-row layout-align-center-center ${styles2.toggle} ${impStyle}`}
+              style={bgStyle}
+              onClick={() => this.handleDirectionChange()}
             >
-              <i className="fa fa-times clip" style={textStyle} />
+              <p className="flex-none">Import</p>
             </div>
-            <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-              {feesToAdd}
+            <div
+              className={`flex-none layout-row layout-align-center-center ${styles2.toggle} ${expStyle}`}
+              style={bgStyle}
+              onClick={() => this.handleDirectionChange()}
+            >
+              <p className="flex-none">Export</p>
             </div>
           </div>
         </div>
-        {styleTagJSX}
-        {confimPrompt}
+        <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+          <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
+            {this.renderCargoClassButtons()}
+          </div>
+          <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
+            {feeRows}
+          </div>
+          <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.header_bar_grey}`}>
+            <div className="flex-30 layout-row layout-align-start-center">
+              <p className={`flex-none ${styles2.text}`} >Customs</p>
+            </div>
+          </div>
+          <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
+            {customsRows}
+          </div>
+        </div>
       </div>
     )
   }
@@ -616,13 +501,13 @@ layout-align-end-center layout-row"
 AdminHubFees.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  charges: PropTypes.objectOf(PropTypes.any),
-  loadType: PropTypes.string
+  charges: PropTypes.arrayOf(PropTypes.any),
+  customs: PropTypes.arrayOf(PropTypes.any)
 }
 AdminHubFees.defaultProps = {
   theme: {},
-  charges: {},
-  loadType: 'lcl'
+  charges: [],
+  customs: []
 }
 
 export default AdminHubFees

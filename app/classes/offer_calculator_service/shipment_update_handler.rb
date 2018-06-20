@@ -18,7 +18,6 @@ module OfferCalculatorService
 
       { origin: "pre", destination: "on" }.each do |target, carriage|
         next unless @shipment.has_carriage?(carriage)
-        byebug
         location = Location.create_from_raw_params!(location_params(target))
         raise_trucking_address_error(target) if trucking_address_invalid?(location)
         @shipment.trucking["#{carriage}_carriage"]["location_id"] = location.id

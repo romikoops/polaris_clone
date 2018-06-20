@@ -104,10 +104,10 @@ export class LandingTop extends Component {
                   `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
                 }
               >
-                {((user && user.role_id === 2) || !user) && findRates}
+                {((user && user.role.name === 'shipper') || !user) && findRates}
                 {(!user || user.guest) && loginLink}
-                {user && !user.guest && user.role_id === 2 && myAccount}
-                {user && user.role_id === 1 && toAdmin}
+                {user && !user.guest && user.role.name === 'shipper' && myAccount}
+                {user && user.role.name === 'admin' && toAdmin}
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className="flex-none layout-row layout-align-start-center">

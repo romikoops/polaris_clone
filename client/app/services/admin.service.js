@@ -379,21 +379,21 @@ function editShipmentPrice (id, priceObj) {
   }
   return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
 }
-function editLocalCharges (id, data) {
+function editLocalCharges (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ data })
   }
-  return fetch(`${BASE_URL}/admin/local_charges/${id}/edit`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/${data.id}/edit`, requestOptions).then(handleResponse)
 }
-function editCustomsFees (id, data) {
+function editCustomsFees (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ data })
   }
-  return fetch(`${BASE_URL}/admin/customs_fees/${id}/edit`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/customs_fees/${data.id}/edit`, requestOptions).then(handleResponse)
 }
 function editShipmentTime (id, timeObj) {
   const requestOptions = {

@@ -18,7 +18,7 @@ class Admin::PricingsController < ApplicationController
     pricings = Pricing.where(tenant_id: current_user.tenant_id).order(updated_at: :desc)
     detailed_itineraries = itineraries.map(&:as_pricing_json)
     @pricings = pricings.map(&:as_json)
-    last_updated = pricings.first.updated_at
+    last_updated = pricings.first ? pricings.first.updated_at : DateTime.now
 
     response_handler(itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, lastUpdate: last_updated)
   end

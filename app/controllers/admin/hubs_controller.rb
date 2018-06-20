@@ -41,14 +41,16 @@ class Admin::HubsController < ApplicationController
     related_hubs = hub.nexus.hubs
     location = hub.location
     layovers = hub.layovers.limit(20)
-    routes = hub.stops.map(&:itinerary).map(&:as_options_json)
+    routes = hub.stops.map(&:itinerary).map do |itinerary|
+      itinerary.as_options_json(methods: :routes)
+    end
     customs = hub.customs_fees
     charges = hub.local_charges
     mandatory_charges = hub.mandatory_charge
     # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     resp = {
-      hub:             hub,
+      hub:             hub.as_options_json,
       routes:          routes,
       relatedHubs:     related_hubs,
       schedules:       layovers,

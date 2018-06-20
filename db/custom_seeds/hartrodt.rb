@@ -2,7 +2,7 @@
 
 tenant = Tenant.find_by_subdomain(sub)
 
-shipper = tenant.users.where(role_id: 2).first
+shipper = tenant.users.shipper.first
 puts '# Overwrite hubs from excel sheet'
 hubs = File.open("#{Rails.root}/db/dummydata/ht_hubs.xlsx")
 req = { 'xlsx' => hubs }
