@@ -19,23 +19,32 @@ table_names       = TableDropper.all_table_names
 
 
 ### Drop Tables ###
-  ## Choose Tables to Drop
-choose_tables_to_drop_actions = table_names.each_with_object({}) do |table_name, obj|
-  obj[table_name.underscore] = -> { TableDropper.perform(only: [table_name.constantize]) }
+
+def tables_chosen_from_interface(prompt_verb)
+  table_names = TableDropper.all_table_names
+
+  choose_table_interface = ChooseOptionInterface.new(
+    options: table_names,
+    prompt_text: "Please choose one or more tables #{prompt_verb}. " \
+                 "(ex: '1,2,4' will choose no. 1, 2 & 4)"
+  )
+
+  choose_table_interface.run
+  choose_table_interface.chosen_options.map(&:constantize)
 end
-choose_tables_to_drop = ActionInterface.new(actions: choose_tables_to_drop_actions)
-  
-  ## Choose Exceptions
-choose_exceptions_actions = table_names.each_with_object({}) do |table_name, obj|
-  obj[table_name.underscore] = -> { TableDropper.perform(except: [table_name.constantize]) }
+
+def choose_tables_to_drop
+  TableDropper.perform(only: tables_chosen_from_interface("to drop"))
 end
-choose_exceptions = ActionInterface.new(actions: choose_exceptions_actions)
+
+def choose_exceptions
+  TableDropper.perform(except: tables_chosen_from_interface("not to drop"))
+end
   
-  ## Main
 drop_tables_actions = {
   drop_all_tables:         -> { TableDropper.perform },
-  choose_tables_to_drop__: -> { choose_tables_to_drop.init },
-  choose_exceptions__:     -> { choose_exceptions.init }
+  choose_tables_to_drop__: -> { choose_tables_to_drop },
+  choose_exceptions__:     -> { choose_exceptions }
 }
 
 drop_tables = ActionInterface.new(actions: drop_tables_actions)

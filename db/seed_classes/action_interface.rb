@@ -59,15 +59,10 @@ class ActionInterface
   end
 
   def action_log_format(action_name)
-    action_name.to_s.gsub("__", " [+]").humanize.capitalize
+    action_name.to_s.gsub("__", " [+]").underscore.humanize
   end
 
   def log_choose_your_action_text
     log_prompt_text("Choose your Actions (ex: '1,2,4' will execute no. 1, 2 & 4)")
-  end
-
-  def log_separator
-    puts "=" * 50
-    puts " "
   end
 end

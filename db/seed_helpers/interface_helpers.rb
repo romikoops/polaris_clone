@@ -4,7 +4,7 @@ module InterfaceHelpers
       alignment_buffer = " " * (3 - (i + 1).to_s.size)
       formatted_option = block_given? ? yield(option) : option_log_format(option)
       
-      puts "#{i + 1}#{alignment_buffer}-  #{formatted_option}"
+      puts " #{i + 1}#{alignment_buffer}-  #{formatted_option}"
     end
   end
 
@@ -31,9 +31,13 @@ module InterfaceHelpers
     puts "=" * 50
   end
 
+  def log_separator
+    puts "=" * 50, nil
+  end
+
   private
 
   def option_log_format(option)
-    option.to_s.humanize.capitalize
+    option.to_s.underscore.humanize
   end
 end

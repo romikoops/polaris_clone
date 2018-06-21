@@ -14,5 +14,6 @@ class ChooseOptionInterface
     log_numbered_list(@options)
     log_prompt_text(@prompt_text)
     @chosen_options = ask_user_for_options(@options)
+    log_separator
   end
 end
