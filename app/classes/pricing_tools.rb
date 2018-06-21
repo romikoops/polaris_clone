@@ -135,7 +135,7 @@ module PricingTools
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
     return if cargo_rate_value.nil? || cargo_rate_value == 0
     container.unit_price = { value: cargo_rate_value, currency: user.currency }
-    totals["total"] = { value: cargo_rate_value * container.quantity, currency: user.currency }
+    totals["total"] = { value: cargo_rate_value, currency: user.currency }
     totals
   end
 
