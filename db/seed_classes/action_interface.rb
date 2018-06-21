@@ -1,4 +1,8 @@
-class SeedingInterface
+require "#{Rails.root}/db/seed_helpers/interface_helpers.rb"
+
+class ActionInterface
+  include InterfaceHelpers
+
   def initialize(args = {})
     @actions         = args[:actions]         || args["actions"]         || {}
     @welcome_message = args[:welcome_message] || args["welcome_message"]
@@ -13,7 +17,7 @@ class SeedingInterface
       log_list_of_actions
       log_choose_your_action_text
       
-      @options = ask_user_for_options
+      @options = ask_user_for_options(@actions.keys)
       run_chosen_actions
       
       break if should_exit?
@@ -29,8 +33,7 @@ class SeedingInterface
   end
 
   def exit
-    puts
-    puts "Exiting..."
+    puts nil, "Exiting..."
   end
 
   def should_exit?
@@ -47,30 +50,12 @@ class SeedingInterface
     end
   end
 
-  def ask_user_for_options
-    raw_user_input       = STDIN.gets.chomp
-    sanitized_user_input = raw_user_input.gsub(/[^(\d|,)]/, "")
-    option_indexes       = sanitized_user_input.split(",")
-
-    option_indexes.map { |n| @actions.keys[n.to_i - 1] }
-  end
-
   def log_welcome_message
-    return if @welcome_message.nil?
-
-    size = @welcome_message.size
-    puts "=" * 50
-    print " " * ((50 - size) / 2)
-    puts @welcome_message
-    puts "=" * 50
+    log_in_title_format(@welcome_message)
   end
 
   def log_list_of_actions
-    @actions.keys.each_with_index do |action_name, i|
-      alignment_buffer = " " * (3 - (i + 1).to_s.size)
-      
-      puts "#{i + 1}#{alignment_buffer}-  #{action_log_format(action_name)}"
-    end
+    log_numbered_list(@actions.keys) { |action_name| action_log_format(action_name) }
   end
 
   def action_log_format(action_name)
@@ -78,10 +63,7 @@ class SeedingInterface
   end
 
   def log_choose_your_action_text
-    puts
-    puts "Choose your Actions (ex: '1,2,4' will execute no. 1, 2 & 4)"
-    puts
-    print " > "
+    log_prompt_text("Choose your Actions (ex: '1,2,4' will execute no. 1, 2 & 4)")
   end
 
   def log_separator

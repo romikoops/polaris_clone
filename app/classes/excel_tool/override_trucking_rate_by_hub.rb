@@ -421,5 +421,23 @@ module ExcelTool
       meta.deep_symbolize_keys!
     end
 
+    private
+
+    def find_geometry(idents_and_country)
+      geometry = Geometry.cascading_find_by_names(
+        idents_and_country[:sub_ident],
+        idents_and_country[:ident]
+      )
+
+      if geometry.nil?
+        geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+        coordinates = geocoder_results.first.geometry["location"]
+        geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+      end
+
+      raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
+
+      geometry
+    end
   end
 end
