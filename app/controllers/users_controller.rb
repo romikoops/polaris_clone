@@ -3,7 +3,6 @@
 class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
-  include DocumentTools
   skip_before_action :require_authentication!, only: :currencies
   skip_before_action :require_non_guest_authentication!, only: %i[update set_currency currencies]
 
