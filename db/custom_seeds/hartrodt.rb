@@ -18,23 +18,27 @@ overwrite_local_charges(req, shipper)
 hub = tenant.hubs.find_by_name('Hamburg Port')
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ftl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ltl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 hub = tenant.hubs.find_by_name('Frankfurt Airport')
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ftl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ltl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 hub = tenant.hubs.find_by_name('Hamburg Airport')
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ftl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ltl.xlsx")
 req = { 'xlsx' => trucking }
-overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform

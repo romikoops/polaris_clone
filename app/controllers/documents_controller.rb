@@ -2,7 +2,7 @@
 
 class DocumentsController < ApplicationController
   skip_before_action :require_authentication!
-  include DocumentTools
+
   def  download_redirect
     @url = Document.get_file_url(params[:document_id])
     redirect_to @url

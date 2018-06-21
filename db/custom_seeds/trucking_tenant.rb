@@ -1,5 +1,4 @@
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(trucking trucking-sandbox)
@@ -37,30 +36,31 @@ subdomains.each do |sub|
     hub = tenant.hubs.find_by_name("Copenhagen Depot")
     trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     puts "Hamburg Depot"
     hub = tenant.hubs.find_by_name("Hamburg Depot")
     trucking = File.open("#{Rails.root}/db/dummydata/trucking_trucking_hamburg_ltl.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     puts "Hamburg Depot"
     hub = tenant.hubs.find_by_name("Hamburg Depot")
     trucking = File.open("#{Rails.root}/db/dummydata/trucking_trucking_hamburg_port_ftl.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     puts "Gothenburg Depot ftl"
     hub = tenant.hubs.find_by_name("Gothenburg Depot")
     trucking = File.open("#{Rails.root}/db/dummydata/trucking_trucking_gothenburg_port_ftl.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     puts "Gothenburg Depot ltl"
     hub = tenant.hubs.find_by_name("Gothenburg Depot")
     trucking = File.open("#{Rails.root}/db/dummydata/trucking_trucking_gothenburg_port.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     awesome_print "City rates done"
-
-
-
-
 end
