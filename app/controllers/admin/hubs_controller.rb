@@ -4,7 +4,7 @@ class Admin::HubsController < ApplicationController
   include ExcelTools
   include ItineraryTools
   include Response
-  include DocumentTools
+  include PricingTools
   before_action :require_login_and_role_is_admin
 
   def index
