@@ -2,7 +2,7 @@
 
 class Admin::LocalChargesController < ApplicationController
   include ExcelTools
-  include DocumentTools
+
   def edit
     data = params[:data].as_json
     id = data["id"]

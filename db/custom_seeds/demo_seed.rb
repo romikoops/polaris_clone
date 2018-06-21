@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(greencarrier)
@@ -181,7 +180,8 @@ subdomains.each do |sub|
   # }
   # # gothenburg_ltl_url = write_trucking_to_sheet(gothenburg_options_ltl)
   # #  awesome_print gothenburg_ltl_url
-  gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
+  # gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
+  gothenburg_ftl_url = DocumentService::TruckingWriter.new(gothenburg_options_ftl).perform
    awesome_print gothenburg_ftl_url
   # shanghai_ltl_url = write_trucking_to_sheet(shanghai_options)
   #  awesome_print shanghai_ltl_url
