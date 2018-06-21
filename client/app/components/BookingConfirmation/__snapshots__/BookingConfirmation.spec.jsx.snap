@@ -7735,6 +7735,7 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_28"
+              shipment={Object {}}
               theme={
                 Object {
                   "colors": Object {
@@ -7743,7 +7744,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
             <CargoItemGroup
               group={
@@ -7856,6 +7856,7 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_29"
+              shipment={Object {}}
               theme={
                 Object {
                   "colors": Object {
@@ -7864,7 +7865,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
           </div>
         </div>

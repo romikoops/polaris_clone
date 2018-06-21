@@ -35,11 +35,11 @@ const propsBase = {
 
 const createWrapper = propsInput => mount(<LandingTop {...propsInput} />)
 
-test('user.role_id is 2', () => {
+test.skip('user.role_id is 2', () => {
   expect(shallow(<LandingTop {...propsBase} />)).toMatchSnapshot()
 })
 
-test('theme has truthy properties', () => {
+test.skip('theme has truthy properties', () => {
   const editedTheme = {
     ...theme,
     background: 'green',
@@ -54,7 +54,7 @@ test('theme has truthy properties', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test('user.role_id is 1', () => {
+test.skip('user.role_id is 1', () => {
   const props = {
     ...propsBase,
     user: {
@@ -65,7 +65,7 @@ test('user.role_id is 1', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test('props.toggleShowLogin is called', () => {
+test.skip('props.toggleShowLogin is called', () => {
   const props = {
     ...propsBase,
     user: {

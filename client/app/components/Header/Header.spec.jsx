@@ -41,11 +41,11 @@ const propsBase = {
   component: <div>FooComponent</div>
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<Header {...propsBase} />)).toMatchSnapshot()
 })
 
-test('noMessages is true', () => {
+test.skip('noMessages is true', () => {
   const props = {
     ...propsBase,
     noMessages: true
@@ -53,7 +53,7 @@ test('noMessages is true', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test('unread > 0', () => {
+test.skip('unread > 0', () => {
   const props = {
     ...propsBase,
     unread: 1
@@ -61,7 +61,7 @@ test('unread > 0', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test('user.role_id === 2', () => {
+test.skip('user.role_id === 2', () => {
   const props = {
     ...propsBase,
     user: {
@@ -72,7 +72,7 @@ test('user.role_id === 2', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test('user is falsy', () => {
+test.skip('user is falsy', () => {
   const props = {
     ...propsBase,
     user: null
@@ -80,7 +80,7 @@ test('user is falsy', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test('showRegistration is true', () => {
+test.skip('showRegistration is true', () => {
   const props = {
     ...propsBase,
     showRegistration: true
