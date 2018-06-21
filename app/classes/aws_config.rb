@@ -24,4 +24,15 @@ module AwsConfig
   def path(shipment)
     "documents/" + shipment["uuid"]
   end
+
+  def create_on_aws(file, shipment)
+    obj_key = path(shipment) + "/" + file.name
+    public_awsurl = awsurl + obj_key
+    aws_signer.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: file.content_type, acl: "private")
+    shipment.documents.create(url: public_awsurl, shipment_id: shipment["uuid"], text: file.name)
+  end
+
+  def get_file_url(key)
+    aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
+  end
 end

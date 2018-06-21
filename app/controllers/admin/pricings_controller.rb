@@ -4,14 +4,9 @@ class Admin::PricingsController < ApplicationController
   include ExcelTools
   include PricingTools
   include ItineraryTools
-  include DocumentTools
-
   before_action :require_login_and_role_is_admin
 
   def index
-    # @ded_pricings = Pricing.where.not(customer_id: nil)
-    # @open_pricings = Pricing.where(customer_id: nil)
-
     @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)

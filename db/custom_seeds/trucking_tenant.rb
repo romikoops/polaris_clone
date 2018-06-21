@@ -1,5 +1,4 @@
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(trucking trucking-sandbox)
@@ -64,8 +63,4 @@ subdomains.each do |sub|
     # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
     ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     awesome_print "City rates done"
-
-
-
-
 end

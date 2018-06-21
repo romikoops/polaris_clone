@@ -3,7 +3,6 @@
 class Admin::TruckingController < ApplicationController
   include ExcelTools
   include TruckingTools
-  include DocumentTools
 
   before_action :require_login_and_role_is_admin
 
@@ -115,8 +114,6 @@ class Admin::TruckingController < ApplicationController
     if params[:file]
       req = { "xlsx" => params[:file] }
       resp = ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: current_user, hub_id: params[:id]).perform
-      # resp = overwrite_zonal_trucking_rates_by_hub(req, current_user, params[:id])
-
       response_handler(resp)
     else
       response_handler(false)
