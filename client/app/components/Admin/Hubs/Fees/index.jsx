@@ -11,7 +11,6 @@ import {
   rateBasises,
   lclPricingSchema,
   fclPricingSchema,
-  // cargoGlossary,
   rateBasisSchema,
   moment
 } from '../../../../constants'
@@ -20,10 +19,6 @@ import FeeRow from './FeeRow'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
-// const cargoClassOpts = cargoClassOptions
-// const lclSchema = lclPricingSchema
-// const fclSchema = fclPricingSchema
-// const cargoGloss = cargoGlossary
 
 export class AdminHubFees extends Component {
   static selectFromOptions (options, value) {
@@ -66,7 +61,6 @@ export class AdminHubFees extends Component {
       direction: 'import',
       selectedCargoClass: 'lcl'
     }
-    // this.editPricing = lclSchema
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
@@ -81,9 +75,12 @@ export class AdminHubFees extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
+    const { direction, selectedCargoClass } = this.state
     if (nextProps.charges[0].hub_id) {
-      this.setAllFromOptions(nextProps.charges.filter(c => c.direction === 'import' && c.load_type === 'lcl')[0], 'charges')
-      this.setAllFromOptions(nextProps.customs.filter(c => c.direction === 'import' && c.load_type === 'lcl')[0], 'customs')
+      this.setAllFromOptions(nextProps.charges
+        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
+      this.setAllFromOptions(nextProps.customs
+        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'customs')
     }
     if (this.state.charges !== nextProps.charges || this.state.customs !== nextProps.customs) {
       this.setState({
@@ -92,8 +89,9 @@ export class AdminHubFees extends Component {
       })
     }
   }
+
   setCargoClass (type) {
-    this.setState({ selectedCargoClass: type })
+    this.setState({ selectedCargoClass: type }, () => { this.prepAllOptions() })
   }
 
   setAllFromOptions (charges, target) {
@@ -148,6 +146,15 @@ export class AdminHubFees extends Component {
         }
       }
     ))
+  }
+  prepAllOptions () {
+    const {
+      direction, selectedCargoClass, charges, customs
+    } = this.state
+    this.setAllFromOptions(charges
+      .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
+    this.setAllFromOptions(customs
+      .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'customs')
   }
 
   handleTopLevelSelect (selection) {
@@ -378,42 +385,19 @@ export class AdminHubFees extends Component {
 
     const {
       selectOptions,
-      // edit,
-      // showPanel,
+
       direction,
       directionBool,
       charges,
       selectedCargoClass,
       customs
     } = this.state
-    // let gloss
     const { primary, secondary } = theme.colors
     const bgStyle = gradientGenerator(primary, secondary)
 
     if (!charges || (charges && !charges[0])) {
       return ''
     }
-
-    // const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
-    // const feesToAdd = Object.keys(feeSchema.data).map((key) => {
-    //   if (!charges[key]) {
-    //     return (
-    //       <div
-    //         key={key}
-    //         className="flex-33 layout-row layout-align-start-center"
-    //         onClick={() => this.addFeeToPricing(key)}
-    //       >
-    //         <i className="fa fa-plus clip flex-none" style={textStyle} />
-    //         <div className="flex-5" />
-    //         <p className="flex-none">
-    //           {key} - {gloss[key]}{' '}
-    //         </p>
-    //       </div>
-    //     )
-    //   }
-    //   return ''
-    // })
-    // const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
     const impStyle = directionBool ? styles2.toggle_off : styles2.toggle_on
     const expStyle = directionBool ? styles2.toggle_on : styles2.toggle_off
     const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass && charge.direction === direction)[0]

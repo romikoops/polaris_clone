@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
-import Toggle from 'react-toggle'
 import PropTypes from '../../../prop-types'
-import { AdminLayoverRow, AdminHubTile } from '../'
-import { AdminSearchableRoutes } from '../AdminSearchables'
+import { AdminHubTile } from '../'
 import styles from '../Admin.scss'
-import { RoundButton } from '../../RoundButton/RoundButton'
-import { adminClicked as clickTool, API_KEY } from '../../../constants'
-import { TextHeading } from '../../TextHeading/TextHeading'
+import { adminClicked as clickTool } from '../../../constants'
 import { AdminHubFees } from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
-import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize } from '../../../helpers'
+import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize, gradientBorderGenerator } from '../../../helpers'
 import MandatoryChargeBox from './MandatoryChargeBox'
 import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'
+import { AdminHubEdit } from './AdminHubEdit'
+import { SimpleMap as Map } from '../../Maps/SimpleMap'
+import GmapsWrapper from '../../../hocs/GmapsWrapper'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -23,7 +22,8 @@ export class AdminHubView extends Component {
     this.state = {
       currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
       editedHub: { data: {}, location: {} },
-      mandatoryCharge: {}
+      mandatoryCharge: {},
+      editView: false
     }
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
@@ -115,22 +115,16 @@ export class AdminHubView extends Component {
   }
 
   toggleEdit () {
-    const { editing } = this.state
-    if (!editing) {
+    const { editView } = this.state
+    if (!editView) {
       this.setState({
-        editing: true
+        editView: true
       })
     } else {
-      this.setState({ editing: false })
+      this.setState({ editView: false })
     }
   }
-  handleImageUpload (e) {
-    const { adminActions, hubData } = this.props
-    const { hub } = hubData
-    const file = e.target.files[0]
-    adminActions.newHubImage(hub.id, file)
-    this.toggleEdit()
-  }
+
   handleEdit (e) {
     const { name, value } = e.target
     const nameKeys = name.split('-')
@@ -145,10 +139,6 @@ export class AdminHubView extends Component {
     })
   }
 
-  clickUploaderInput (e) {
-    e.preventDefault()
-    this.uploaderInput.click()
-  }
   saveEdit () {
     const { adminActions, hubData } = this.props
     const { editedHub } = this.state
@@ -157,24 +147,27 @@ export class AdminHubView extends Component {
 
   render () {
     const {
-      theme, hubData, hubs, hubHash, adminActions
+      theme, hubData, hubHash, adminActions
     } = this.props
     const {
       currentFeeLoadType,
-      // editedHub,
+      editView,
       confirm,
-      mandatoryCharge,
-      mapWidth
+      mandatoryCharge
     } = this.state
     if (!hubData || !theme) {
       return ''
     }
 
     const {
-      hub, relatedHubs, routes, schedules, location, charges, customs
+      hub, relatedHubs, routes, location, charges, customs
     } = hubData
+    if (!hub) {
+      return ''
+    }
     const { primary, secondary } = theme.colors
     const textStyle = gradientTextGenerator(primary, secondary)
+    const borderStyle = gradientBorderGenerator(primary, secondary)
     const gradientBackground = gradientGenerator(primary, secondary)
     const gradientIcon = gradientTextGenerator(primary, secondary)
     // const hubPhoto = { background: hub.photo }
@@ -202,208 +195,38 @@ export class AdminHubView extends Component {
       ''
     )
     const activate = (
-      <div className={`${styles.action_btn} flex-none layout-row`}>
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Activate"
-          active
-          handleNext={this.toggleHubActive}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
-    const editBtn = (
-      <div className={`${styles.action_btn} flex-none layout-row`}>
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Edit"
-          active
-          handleNext={() => this.toggleEdit()}
-          iconClass="fa-pencil"
-        />
+      <div
+        className={`flex-none layout-row pointy layout-align-center-center ${hubStyles.header_bar_inactive_button}`}
+        style={borderStyle}
+        onClick={this.toggleHubActive}
+      >
+        <div className={`flex-none layout-row layout-align-center-center ${hubStyles.inactive_inner}`}>
+          <p className="flex-none">
+            {capitalize(hub.hub_status)}
+          </p>
+        </div>
+
       </div>
     )
     const deactivate = (
-      <div className={`${styles.action_btn} flex-none layout-row`}>
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Deactivate"
-          handleNext={this.toggleHubActive}
-          iconClass="fa-ban"
-        />
-      </div>
-    )
-    const deleteBtn = (
-      <div className={`${styles.action_btn} flex-none layout-row`}>
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Delete"
-          handleNext={() => this.confirmDelete()}
-          iconClass="fa-trash"
-        />
+      <div
+        className={`flex-none layout-row pointy layout-align-center-center ${hubStyles.header_bar_active_button}`}
+        style={textStyle}
+        onClick={this.toggleHubActive}
+      >
+        <p className="flex-none">
+          {capitalize(hub.hub_status)}
+        </p>
       </div>
     )
 
-    const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=${mapWidth}x167&key=${API_KEY}&markers=color:red|${location.latitude},${location.longitude}&zoom=10&scale=2`
-    const schedArr = schedules.map((sched) => {
-      const tmpItin = this.getItineraryFromLayover(sched.itinerary_id)
-
-      return (
-        <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
-      )
-    })
-    // debugger // eslint-disable-line
-    // const editBox = (
-    //   <div
-    //     className={`${
-    //       styles.hub_edit_box
-    //     } flex-80 layout-row layout-align-start-center layout-wrap`}
-    //   >
-    //     <div className="flex-40 layout-row layout-wrap">
-    //       <div className="flex-100 layout-row layout-align-start-center input_box_full">
-    //         <input
-    //           type="text"
-    //           name="data-name"
-    //           onChange={e => this.handleEdit(e)}
-    //           value={editedHub.data.name}
-    //         />
-    //       </div>
-    //       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-    //         <div className="flex-100 layout-row layout-align-space-between-center input_box">
-    //           <input
-    //             type="text"
-    //             className="flex-33"
-    //             name="location-street_number"
-    //             placeholder="Street Number"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.street_number}
-    //           />
-    //           <input
-    //             type="text"
-    //             className="flex-66"
-    //             name="location-street"
-    //             placeholder="Street"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.street}
-    //           />
-    //         </div>
-    //         <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
-    //           <input
-    //             type="text"
-    //             className="flex-100"
-    //             name="location-city"
-    //             placeholder="City"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.city}
-    //           />
-    //         </div>
-    //         <div className="flex-50 layout-row layout-align-space-between-center input_box_full">
-    //           <input
-    //             type="text"
-    //             className="flex-100"
-    //             name="location-zip_code"
-    //             placeholder="Zipcode"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.zip_code}
-    //           />
-    //         </div>
-    //         <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
-    //           <input
-    //             type="text"
-    //             className="flex-100"
-    //             placeholder="Country"
-    //             name="location-country"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.country}
-    //           />
-    //         </div>
-    //       </div>
-    //       <div className="flex-100 layout-row layout-align-start-center">
-    //         <div className="flex-50 layout-row layout-align-start-center input_box">
-    //           <input
-    //             type="text"
-    //             className="flex-100"
-    //             placeholder="Latitude"
-    //             name="location-latitude"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.latitude}
-    //           />
-    //         </div>
-    //         <div className="flex-50 layout-row layout-align-start-center input_box">
-    //           <input
-    //             type="text"
-    //             className="flex-100"
-    //             placeholder="Longitude"
-    //             name="location-longitude"
-    //             onChange={e => this.handleEdit(e)}
-    //             value={editedHub.location.longitude}
-    //           />
-    //         </div>
-    //       </div>
-    //       <div className="flex-100 layout-row layout-align-end-center">
-    //         <div className={`${styles.action_btn} flex-none layout-row`}>
-    //           <RoundButton
-    //             theme={theme}
-    //             size="small"
-    //             text="Save"
-    //             handleNext={() => this.saveEdit()}
-    //             iconClass="fa-floppy-o"
-    //           />
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-    //       <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `}>
-    //         <form>
-    //           <div
-    //             className={`${styles.upload_image} flex-none layout-row layout-align-center-center`}
-    //             onClick={e => this.clickUploaderInput(e)}
-    //           >
-    //             <p className={`${styles.upload_title}`}>Upload New Image</p>
-    //             <i className="fa fa-cloud-upload flex-none" />
-    //           </div>
-    //           <input
-    //             type="file"
-    //             onChange={e => this.handleImageUpload(e)}
-    //             name="hub_image"
-    //             ref={(input) => {
-    //               this.uploaderInput = input
-    //             }}
-    //           />
-    //         </form>
-    //       </div>
-    //     </div>
-    //   </div>
-    // )
-    // const detailsBox = (
-    //   <div className="flex-40 layout-row layout-align-start-center layout-wrap">
-    //     <div className="flex-100 layout-row layout-align-start-center">
-    //       <p className="flex-none"> {hub.name}</p>
-    //     </div>
-    //     <div className="flex-100 layout-row layout-align-start-center">
-    //       <address className="flex-none">
-    //         {`${location.street_number || ''}
-    //         ${location.street || ''}`}{' '}
-    //         <br />
-    //         {location.city} <br />
-    //         {location.zip_code || ''} <br />
-    //         {location.country} <br />
-    //       </address>
-    //     </div>
-    //     <div className="flex-100 layout-row layout-align-start-center">
-    //       <div className="flex-50 layout-row layout-align-start-center">
-    //         <p className="flex-none">{`Latitude ${location.latitude}`} </p>
-    //       </div>
-    //       <div className="flex-100 layout-row layout-align-start-center">
-    //         <p className="flex-none"> {`Longitude: ${location.longitude}`} </p>
-    //       </div>
-    //     </div>
-    //   </div>
-    // )
+    const editorModal = (<AdminHubEdit
+      hub={hub}
+      theme={theme}
+      saveHub={this.saveHub}
+      adminDispatch={adminActions}
+      close={() => this.toggleEdit()}
+    />)
     const toggleCSS = `
     .react-toggle--checked .react-toggle-track {
       background: linear-gradient(
@@ -441,11 +264,12 @@ export class AdminHubView extends Component {
       />))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+        {editView ? editorModal : '' }
         <div
           className={`${
             styles.component_view
-          } flex-80 layout-row layout-wrap layout-align-start-start`}
+          } flex-95 layout-row layout-wrap layout-align-start-start`}
         >
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title} buffer_10`}
@@ -455,16 +279,13 @@ export class AdminHubView extends Component {
                 Hub
               </p>
             </div>
-            <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_active_button}`} style={textStyle}>
-              <p className="flex-none">
-                {capitalize(hub.hub_status)}
-              </p>
-            </div>
+            {hub.hub_status === 'active' ? deactivate : activate}
+
             <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_action_buttons}`}>
-              <div className="flex-none layout-row layout-align-center-center">
+              <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.toggleEdit()} >
                 <i className={`flex-none fa fa-pencil ${hubStyles.edit_icon}`} />
               </div>
-              <div className="flex-none layout-row layout-align-center-center">
+              <div className="flex-none layout-row pointy layout-align-center-center" onClick={() => this.confirmDelete()}>
                 <i className={`flex-none fa fa-times ${hubStyles.delete_icon}`} />
               </div>
             </div>
@@ -519,7 +340,13 @@ export class AdminHubView extends Component {
               </div>
             </div>
             <div className={`flex layout-row ${hubStyles.map_box}`} ref={(mapElement) => { this.mapElement = mapElement }} >
-              <img src={staticMapUrl} alt="" />
+              <GmapsWrapper
+                theme={theme}
+                component={Map}
+                location={hub.location}
+                height="170px"
+                zoom={12}
+              />
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
@@ -549,71 +376,7 @@ export class AdminHubView extends Component {
               />
             </div>
           </div>
-          {/* {mandatoryCharge
-            ?  */}
-          {/* <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <TextHeading theme={theme} text="Mandatory Charges" size={3} />
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none">Import Fees</p>
-                <Toggle
-                  value={mandatoryCharge.import_fees || false}
-                  onChange={e => this.handleToggle(e, 'import_charges')}
-                />
-              </div>
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none">Export Fees</p>
-                <Toggle
-                  value={mandatoryCharge.export_fees || false}
-                  onChange={e => this.handleToggle(e, 'export_charges')}
-                />
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-align-end-center">
-              {mandatoryCharge !== this.props.hubData.mandatoryCharges ? (
-                <div className={`${styles.action_btn} flex-none layout-row`}>
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="Save"
-                    active
-                    handleNext={() => this.saveMandatoryChargeEdit()}
-                    iconClass="fa-floppy-o"
-                  />
-                </div>
-              ) : (
-                ''
-              )}
-            </div>
-          </div> */}
-
           {confimPrompt}
-        </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div className="flex-100 layout-row layout-align-center-center">
-              <h2 className="flex-none letter_3"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-              >
-                <i className="flex-none fa fa-pencil" />
-                <p className="flex-none">Manage Hub</p>
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                {hub.hub_status === 'active' ? deactivate : activate}
-                {editBtn}
-                {deleteBtn}
-              </div>
-            </div>
-          </div>
         </div>
         {styleTagJSX}
       </div>
@@ -623,7 +386,6 @@ export class AdminHubView extends Component {
 AdminHubView.propTypes = {
   theme: PropTypes.theme,
   hubHash: PropTypes.objectOf(PropTypes.hub),
-  hubs: PropTypes.arrayOf(PropTypes.hub),
   adminActions: PropTypes.shape({
     getHub: PropTypes.func,
     activateHub: PropTypes.func
@@ -643,8 +405,7 @@ AdminHubView.propTypes = {
 AdminHubView.defaultProps = {
   theme: null,
   hubData: {},
-  hubHash: {},
-  hubs: []
+  hubHash: {}
 }
 
 export default AdminHubView

@@ -70,7 +70,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-    response_handler(hub)
+    response_handler(hub.as_options_json)
   end
 
   def delete
@@ -92,7 +92,7 @@ class Admin::HubsController < ApplicationController
     s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: file.content_type, acl: "public-read")
     hub.photo = awsurl
     hub.save!
-    response_handler(hub)
+    response_handler(hub.as_options_json)
   end
 
   def update
@@ -100,9 +100,12 @@ class Admin::HubsController < ApplicationController
     location = hub.location
     new_loc = params[:location].as_json
     new_hub = params[:data].as_json
+    country_name = new_loc.delete("country")
+    country = Country.find_by_name(country_name)
+    new_loc[:country_id] = country.id
     hub.update_attributes(new_hub)
     location.update_attributes(new_loc)
-    response_handler(hub: hub, location: location)
+    response_handler(hub: hub.as_options_json, location: location)
   end
 
   def overwrite
