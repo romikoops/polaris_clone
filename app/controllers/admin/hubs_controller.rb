@@ -33,7 +33,7 @@ class Admin::HubsController < ApplicationController
     new_mandatory_charge = MandatoryCharge.find_by(nmc)
     hub.mandatory_charge = new_mandatory_charge
     hub.save!
-    response_handler(hub: hub, mandatoryCharge: hub.mandatory_charge)
+    response_handler(hub: hub.as_options_json, mandatoryCharge: hub.mandatory_charge)
   end
 
   def show

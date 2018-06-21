@@ -125,6 +125,14 @@ module ShippingTools
       contact
     end || []
     charge_breakdown = shipment.charge_breakdowns.selected
+    existing_insurance_charge = charge_breakdown.charge('insurance')
+    if existing_insurance_charge
+      existing_insurance_charge.destroy
+    end
+    existing_customs_charge = charge_breakdown.charge('customs')
+    if existing_customs_charge
+      existing_customs_charge.destroy
+    end
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
@@ -135,7 +143,7 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-
+    
     if shipment_data[:customs][:total][:val].to_d > 0
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),

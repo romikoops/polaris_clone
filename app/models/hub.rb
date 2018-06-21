@@ -136,7 +136,11 @@ class Hub < ApplicationRecord
     new_options = options.reverse_merge(
       include: {
         nexus:    { only: %i[id name] },
-        location: { only: %i[longitude latitude] }
+        location: {
+          include: {
+            country: { only: %i[name]}
+          }
+        }
       }
     )
     as_json(new_options)

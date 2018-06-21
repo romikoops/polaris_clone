@@ -95,8 +95,9 @@ module OfferCalculatorService
     end
 
     def location_params(target)
-      unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash.deep_symbolize_keys
+      unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash
       snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
+      snakefied_location_hash.deep_symbolize_keys!
       snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
       snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
       ActionController::Parameters.new(snakefied_location_hash)

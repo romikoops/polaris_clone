@@ -947,7 +947,7 @@ export class ShipmentLocationBox extends Component {
           <input
             name="destination-zipCode"
             className={
-              `flex-90 ${styles.zipCode} ` +
+              `flex-90 ${styles.zipCode} ${styles.input}` +
               `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
             }
             onChange={this.handleAddressChange}

@@ -14,10 +14,23 @@
     background: #E0E0E0;
     margin-right: 18px;
   }
+  .header_bar_grey_text {
+    font-family: Helvetica Neue;
+    line-height: normal;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    margin-left: 25px;
+  }
   .header_bar_active_button {
     height: 38px;
     margin-right: 18px;
     width: 80px;
+    color: white;
+    font-family: Helvetica Neue;
+    line-height: 19px;
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.06em;
   }
   .header_bar_action_buttons {
     border: 5px solid #E0E0E0;
@@ -26,10 +39,10 @@
     div {
       height: 30px;
       width: 30px;
-      .fa-pencil { 
+      .edit_icon { 
         color: #F2C94C;
       }
-      .fa-times {
+      .delete_icon {
         color: #EB5757;
       }
     }
@@ -65,11 +78,23 @@
       margin-right: 20px;
     }
   }
-  .lat_lng_box {
+  .location_data_box {
+    border: 1px solid #4F4F4F;
     margin-left: 20px;
+    height: 80px;
+  }
+  .lat_lng_box {
     width: 240px;
     height: 80px;
-    border: 1px solid #4F4F4F;
+    box-sizing: border-box;
+    position: relative;
+    padding: 10px;
+  }
+  .address_box {
+    
+    width: 240px;
+    height: 80px;
+    border-right: 1px solid #4F4F4F;
     box-sizing: border-box;
     position: relative;
     padding: 10px;
@@ -116,4 +141,36 @@
       height: 100%;
     }
   }
+  .location_icon {
+    i {
+      margin: 5px;
+      font-size: 28px;
+    }
+  }
+  .address_part_1 {
+    font-style: normal;
+    font-weight: normal;
+    line-height: 26px;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    margin-top: 5px;
+    margin-bottom: 2px;
+  }
+  .address_part_2 {
+    font-style: normal;
+    font-weight: bold;
+    line-height: 26px;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    margin-top: 2px;
+    margin-bottom: 5px;
+  }
+  .save_icon_btn {
+    font-size: 20px;
+    margin-right: 15px;
+    p {
+      margin-right: 5px;
+    }
+  }
+  
 }

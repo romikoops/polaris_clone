@@ -865,8 +865,9 @@ export class ShipmentDetails extends Component {
               </div>
             </div>
           )}
-
-          {cargoDetails}
+          <div className="flex-100 layout-row layout-align-center-center">
+            {cargoDetails}
+          </div>
         </div>
         <div
           className={

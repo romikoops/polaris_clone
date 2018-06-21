@@ -12,7 +12,10 @@ import { AdminHubFees } from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
-import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType } from '../../../helpers'
+import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize } from '../../../helpers'
+import MandatoryChargeBox from './MandatoryChargeBox'
+import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
+import ItineraryRow from '../Itineraries/ItineraryRow'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -106,10 +109,9 @@ export class AdminHubView extends Component {
   closeConfirm () {
     this.setState({ confirm: false })
   }
-  saveMandatoryChargeEdit () {
+  saveMandatoryChargeEdit (newMandatoryCharge) {
     const { adminActions, hubData } = this.props
-    const { mandatoryCharge } = this.state
-    adminActions.updateHubMandatoryCharges(hubData.hub.id, mandatoryCharge)
+    adminActions.updateHubMandatoryCharges(hubData.hub.id, newMandatoryCharge)
   }
 
   toggleEdit () {
@@ -142,14 +144,7 @@ export class AdminHubView extends Component {
       }
     })
   }
-  handleToggle (ev, key) {
-    this.setState({
-      mandatoryCharge: {
-        ...this.state.mandatoryCharge,
-        [key]: !this.state.mandatoryCharge[key]
-      }
-    })
-  }
+
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
@@ -181,6 +176,7 @@ export class AdminHubView extends Component {
     const { primary, secondary } = theme.colors
     const textStyle = gradientTextGenerator(primary, secondary)
     const gradientBackground = gradientGenerator(primary, secondary)
+    const gradientIcon = gradientTextGenerator(primary, secondary)
     // const hubPhoto = { background: hub.photo }
     const relHubs = []
     relatedHubs.forEach((hubObj) => {
@@ -430,6 +426,19 @@ export class AdminHubView extends Component {
     }
   `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+    const addressString1 = `${hub.location.street_number || ''} ${hub.location.street || ''}, ${hub.location.zip_code || ''}`
+    const addressString2 = `${hub.location.city || ''} ${hub.location.country.name || ''}`
+    const mandatoryChargeBox = (<MandatoryChargeBox
+      mandatoryCharge={mandatoryCharge}
+      theme={theme}
+      saveChanges={e => this.saveMandatoryChargeEdit(e)}
+    />)
+    const itinerariesBox = routes.map(r =>
+      (<ItineraryRow
+        itinerary={r}
+        theme={theme}
+        adminDispatch={adminActions}
+      />))
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
@@ -442,27 +451,27 @@ export class AdminHubView extends Component {
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title} buffer_10`}
           >
             <div className={`flex layout-row layout-align-start-center ${hubStyles.header_bar_grey}`}>
-              <p className="flex-none">
+              <p className={`flex-none ${hubStyles.header_bar_grey_text}`}>
                 Hub
               </p>
             </div>
             <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_active_button}`} style={textStyle}>
               <p className="flex-none">
-                {hub.hub_status}
+                {capitalize(hub.hub_status)}
               </p>
             </div>
             <div className={`flex-none layout-row layout-align-center-center ${hubStyles.header_bar_action_buttons}`}>
               <div className="flex-none layout-row layout-align-center-center">
-                <i className="flex-none fa fa-pencil" />
+                <i className={`flex-none fa fa-pencil ${hubStyles.edit_icon}`} />
               </div>
               <div className="flex-none layout-row layout-align-center-center">
-                <i className="flex-none fa fa-times" />
+                <i className={`flex-none fa fa-times ${hubStyles.delete_icon}`} />
               </div>
             </div>
 
           </div>
           <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
-            <div className={`flex layout-row layout-align-center-center ${hubStyles.hub_title}`} style={gradientBackground} >
+            <div className={`flex flex-xs-100 flex-sm-100 layout-row layout-align-center-center ${hubStyles.hub_title}`} style={gradientBackground} >
               <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
                 <div className="flex-70 layout-row layout-align-start-center">
                   <h3 className="flex-none"> {hub.nexus.name}</h3>
@@ -477,15 +486,28 @@ export class AdminHubView extends Component {
                 </div>
               </div>
             </div>
-            <div className={`flex-none layout-row ${hubStyles.lat_lng_box}`}>
-              <div className="flex-50 layout-column layout-align-center-center">
-                <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.latitude}</p>
-                <p className={`flex-90 ${hubStyles.lat_lng}`}>Latitude</p>
+            <div className={`flex layout-row flex-xs-100 flex-sm-100 ${hubStyles.location_data_box}`}>
+              <div className={`flex-55 layout-row ${hubStyles.address_box}`}>
+                <div className={`flex-none layout-column layout-align-center-center ${hubStyles.location_icon}`}>
+                  <i className="flex-none fa fa-map-marker clip" style={gradientIcon} />
+                </div>
+                <div className="flex layout-column layout-align-space-around-start">
+                  <div className="flex-none layout-row layout-wrap ">
+                    <p className={`flex-100  ${hubStyles.address_part_1}`}>{addressString1}</p>
+                    <p className={`flex-100  ${hubStyles.address_part_2}`}>{addressString2}</p>
+                  </div>
+                </div>
               </div>
-              <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
-              <div className="flex-50 layout-column layout-align-center-center">
-                <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.longitude}</p>
-                <p className={`flex-90 ${hubStyles.lat_lng}`}>Longitude</p>
+              <div className={`flex-45 layout-row ${hubStyles.lat_lng_box}`}>
+                <div className="flex-50 layout-column layout-align-center-center">
+                  <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                  <p className={`flex-90 ${hubStyles.lat_lng}`}>Latitude</p>
+                </div>
+                <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
+                <div className="flex-50 layout-column layout-align-center-center">
+                  <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                  <p className={`flex-90 ${hubStyles.lat_lng}`}>Longitude</p>
+                </div>
               </div>
             </div>
           </div>
@@ -509,9 +531,27 @@ export class AdminHubView extends Component {
               loadType={currentFeeLoadType.value}
             />
           </div>
+          <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
+            <div className="flex-100 flex-gt-sm-33 layout-row layout-align-start-center">
+              <AlternativeGreyBox
+                wrapperClassName="layout-row flex-100 layout-align-center-center"
+                contentClassName="layout-row flex-100 layout-wrap"
+                title="Mandatory Charges"
+                content={mandatoryChargeBox}
+              />
+            </div>
+            <div className="flex-100 flex-gt-sm-60 layout-row layout-align-start-center">
+              <AlternativeGreyBox
+                wrapperClassName="layout-row flex-100 layout-align-center-center"
+                contentClassName="layout-row flex-100 layout-wrap"
+                title="Itineraries"
+                content={itinerariesBox}
+              />
+            </div>
+          </div>
           {/* {mandatoryCharge
             ?  */}
-          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+          {/* <div className="flex-100 layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
               <TextHeading theme={theme} text="Mandatory Charges" size={3} />
             </div>
@@ -547,24 +587,8 @@ export class AdminHubView extends Component {
                 ''
               )}
             </div>
-          </div>
-          {/* // : ''} */}
-          <AdminSearchableRoutes
-            itineraries={routes}
-            theme={theme}
-            hubs={hubs}
-            adminDispatch={adminActions}
-          />
-          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            <div
-              className={`flex-100 layout-row layout-align-space-between-center ${
-                styles.sec_header
-              }`}
-            >
-              <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
-            </div>
-            {schedArr}
-          </div>
+          </div> */}
+
           {confimPrompt}
         </div>
         <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
