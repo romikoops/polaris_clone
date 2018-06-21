@@ -145,7 +145,7 @@ class OfferCalculator
 
     charge_category = ChargeCategory.from_code("cargo")
     parent_charge = create_parent_charge(charge_category)
-    cargo_unit_array = @shipment.cargo_units.empty? ? [@shipment.aggregated_cargo] : @shipment.cargo_units
+    cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
     cargo_unit_array.each do |cargo_unit|
       charge_result = send("determine_#{@shipment.load_type}_price",
         cargo_unit,
