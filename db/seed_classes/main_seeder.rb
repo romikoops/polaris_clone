@@ -13,9 +13,9 @@ class MainSeeder
       require './roles'
       require './incoterms'
       require './cargo_item_types'
-      TenantSeeder.perform(tenant_filter_options)
-      require './admin'
     end
+    TenantSeeder.perform(tenant_filter_options)
+    AdminSeeder.perform(tenant_filter_options)
     SuperAdminSeeder.perform
     ShipperSeeder.perform(tenant_filter_options)
     VehicleSeeder.perform(tenant_filter_options)

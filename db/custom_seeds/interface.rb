@@ -6,7 +6,7 @@ Dir["#{Rails.root}/db/seed_classes/*.rb"].each { |file| require file }
 #   puts "This is a test"
 # end
 
-# SeedingInterface.new(
+# ActionInterface.new(
 #   actions: {
 #     run_my_test_action: -> { test_me },
 #   },
@@ -19,50 +19,58 @@ table_names       = TableDropper.all_table_names
 
 
 ### Drop Tables ###
-  ## Choose Tables to Drop
-choose_tables_to_drop_actions = table_names.each_with_object({}) do |table_name, obj|
-  obj[table_name.underscore] = -> { TableDropper.perform(only: [table_name.constantize]) }
+
+def tables_chosen_from_interface(prompt_verb)
+  table_names = TableDropper.all_table_names
+
+  choose_table_interface = ChooseOptionInterface.new(
+    options: table_names,
+    prompt_text: "Please choose one or more tables #{prompt_verb}. " \
+                 "(ex: '1,2,4' will choose no. 1, 2 & 4)"
+  )
+
+  choose_table_interface.run
+  choose_table_interface.chosen_options.map(&:constantize)
 end
-choose_tables_to_drop = SeedingInterface.new(actions: choose_tables_to_drop_actions)
-  
-  ## Choose Exceptions
-choose_exceptions_actions = table_names.each_with_object({}) do |table_name, obj|
-  obj[table_name.underscore] = -> { TableDropper.perform(except: [table_name.constantize]) }
+
+def choose_tables_to_drop
+  TableDropper.perform(only: tables_chosen_from_interface("to drop"))
 end
-choose_exceptions = SeedingInterface.new(actions: choose_exceptions_actions)
+
+def choose_exceptions
+  TableDropper.perform(except: tables_chosen_from_interface("not to drop"))
+end
   
-  ## Main
 drop_tables_actions = {
   drop_all_tables:         -> { TableDropper.perform },
-  choose_tables_to_drop__: -> { choose_tables_to_drop.init },
-  choose_exceptions__:     -> { choose_exceptions.init }
+  choose_tables_to_drop__: -> { choose_tables_to_drop },
+  choose_exceptions__:     -> { choose_exceptions }
 }
 
-drop_tables = SeedingInterface.new(actions: drop_tables_actions)
+drop_tables = ActionInterface.new(actions: drop_tables_actions)
 
 
 ### Full Seed ###
 
-full_seed_actions = { all_tenants: -> { MainSeeder.perform } }
-tenant_subdomains.each_with_object(full_seed_actions) do |subdomain, obj|
-  obj[subdomain] = -> { MainSeeder.perform(tenant_filter: { subdomain: subdomain }) }
+def full_seed_options_from_interface
+  tenant_subdomains = TenantSeeder::TENANT_DATA.map { |data| data[:subdomain] }
+
+  choose_tenant_interface = ChooseOptionInterface.new(
+    options: [:all_tenants, *tenant_subdomains],
+    prompt_text: "Please choose one or more tenants. (ex: '1,2,4' will choose no. 1, 2 & 4)"
+  )
+  choose_tenant_interface.run
+  chosen_options = choose_tenant_interface.chosen_options
+  chosen_options.include?(:all_tenants) ? {} : { tenant_filter: { subdomain: chosen_options } }
 end
 
-full_seed = SeedingInterface.new(actions: full_seed_actions)
-
-
-### Full Seed Without Geometries ###
-
-full_seed_without_geometries_actions = {
-  all_tenants: -> { MainSeeder.perform(without_geometries: true) }
-}
-tenant_subdomains.each_with_object(full_seed_without_geometries_actions) do |subdomain, obj|
-  obj[subdomain] = -> {
-    MainSeeder.perform(tenant_filter: { subdomain: subdomain }, without_geometries: true)
-  }
+def full_seed
+  MainSeeder.perform(full_seed_options_from_interface)
 end
 
-full_seed_without_geometries = SeedingInterface.new(actions: full_seed_without_geometries_actions)
+def full_seed_without_geometries
+  MainSeeder.perform(full_seed_options_from_interface.merge(without_geometries: true))
+end
 
 
 ### Trucking Pricings ###
@@ -71,21 +79,19 @@ trucking_pricings_actions = {
   all_tenants: -> { TruckingPricingSeeder.perform }
 }
 tenant_subdomains.each_with_object(trucking_pricings_actions) do |subdomain, obj|
-  obj[subdomain] = -> {
-    TruckingPricingSeeder.perform(subdomain: subdomain)
-  }
+  obj[subdomain] = -> { TruckingPricingSeeder.perform(subdomain: subdomain) }
 end
 
-trucking_pricings = SeedingInterface.new(actions: trucking_pricings_actions)
+trucking_pricings = ActionInterface.new(actions: trucking_pricings_actions)
 
 
 ########## MAIN ##########
 
-main = SeedingInterface.new(
+main = ActionInterface.new(
   actions: {
     drop_tables__:                  -> { drop_tables.init },
-    full_seed__:                    -> { full_seed.init },
-    full_seed_without_geometries__: -> { full_seed_without_geometries.init },
+    full_seed__:                    -> { full_seed },
+    full_seed_without_geometries__: -> { full_seed_without_geometries },
     pricings:                       -> { puts "(!) Not implemented" },
     trucking_pricings__:            -> { trucking_pricings.init },
     shipments:                      -> { puts "(!) Not implemented" },
@@ -95,4 +101,3 @@ main = SeedingInterface.new(
 )
 
 main.init
-
