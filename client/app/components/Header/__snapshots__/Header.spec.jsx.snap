@@ -49,7 +49,7 @@ exports[`noMessages is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/account",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -115,7 +115,7 @@ exports[`shallow render 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/account",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -194,7 +194,7 @@ exports[`showRegistration is true 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/account",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",
@@ -273,7 +273,7 @@ exports[`unread > 0 1`] = `
                 "fontAwesomeIcon": "fa-cog",
                 "key": "settings",
                 "text": "Account",
-                "url": "/admin/dashboard",
+                "url": "/account",
               },
               Object {
                 "fontAwesomeIcon": "fa-sign-out",

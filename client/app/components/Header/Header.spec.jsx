@@ -19,7 +19,6 @@ jest.mock('react-redux', () => ({
 }))
 // eslint-disable-next-line
 import Header from './Header'
-
 const propsBase = {
   tenant,
   theme,
@@ -41,11 +40,11 @@ const propsBase = {
   component: <div>FooComponent</div>
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<Header {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('noMessages is true', () => {
+test('noMessages is true', () => {
   const props = {
     ...propsBase,
     noMessages: true
@@ -53,7 +52,7 @@ test.skip('noMessages is true', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test.skip('unread > 0', () => {
+test('unread > 0', () => {
   const props = {
     ...propsBase,
     unread: 1
@@ -61,7 +60,7 @@ test.skip('unread > 0', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test.skip('user.role_id === 2', () => {
+test('user.role_id === 2', () => {
   const props = {
     ...propsBase,
     user: {
@@ -72,7 +71,7 @@ test.skip('user.role_id === 2', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test.skip('user is falsy', () => {
+test('user is falsy', () => {
   const props = {
     ...propsBase,
     user: null
@@ -80,7 +79,7 @@ test.skip('user is falsy', () => {
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })
 
-test.skip('showRegistration is true', () => {
+test('showRegistration is true', () => {
   const props = {
     ...propsBase,
     showRegistration: true

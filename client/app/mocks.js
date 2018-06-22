@@ -8,6 +8,7 @@ export const theme = {
 }
 
 export const user = {
+  role: { name: 'shipper' },
   company_name: 'FOO_COMPANY',
   currency: 'EUR',
   email: 'foo@bar.baz',

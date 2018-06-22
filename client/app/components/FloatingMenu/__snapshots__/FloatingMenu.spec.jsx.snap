@@ -31,6 +31,9 @@ exports[`shallow render 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
           }
         }
       />
@@ -90,6 +93,9 @@ exports[`theme is falsy 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
           }
         }
       />
