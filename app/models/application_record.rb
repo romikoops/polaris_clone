@@ -2,6 +2,7 @@
 
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  include AwsConfig
 
   def self.given_attribute_names
     attribute_names - %w[id created_at updated_at]

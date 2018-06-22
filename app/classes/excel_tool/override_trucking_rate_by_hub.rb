@@ -1,21 +1,15 @@
 # frozen_string_literal: true
 
 module ExcelTool
-  class OverrideTruckingRateByHub
-    attr_reader :results, :stats, :defaults, :trucking_pricing_by_zone, :hub, :tenant, :xlsx, :sheets, :zone_sheet,
+  class OverrideTruckingRateByHub < ExcelTool::BaseTool
+    attr_reader :defaults, :trucking_pricing_by_zone, :sheets, :zone_sheet,
       :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
-      :all_ident_values_and_countries, :charges, :hub_id
+      :all_ident_values_and_countries, :charges
       
-    def initialize(args)
-      params = args[:params]
-      @hub_id = args[:hub_id]
-      @stats = _stats
-      @results = _results
+    def post_initialize(args)
       @defaults = {}
       @trucking_pricing_by_zone = {}
-      @hub = Hub.find(@hub_id)
       @tenant = @hub.tenant
-      @xlsx = open_file(params["xlsx"])
       @sheets = @xlsx.sheets.clone
       @zone_sheet = @xlsx.sheet(sheets[0]).clone
       @fees_sheet = @xlsx.sheet(sheets[1]).clone
@@ -87,32 +81,6 @@ module ExcelTool
           ActiveRecord::Base.connection.execute(insertion_query)
         end
       end
-    end
-
-    def _stats
-      {
-        type:                  "trucking",
-        trucking_pricings:     {
-          number_updated: 0,
-          number_created: 0
-        },
-        trucking_destinations: {
-          number_updated: 0,
-          number_created: 0
-        }
-      }
-    end
-
-    def _results
-      {
-        trucking_pricings:     [],
-        trucking_destinations: []
-      }
-      
-    end
-
-    def open_file(file)
-      Roo::Spreadsheet.open(file)
     end
 
     def load_zones
@@ -453,5 +421,23 @@ module ExcelTool
       meta.deep_symbolize_keys!
     end
 
+    private
+
+    def find_geometry(idents_and_country)
+      geometry = Geometry.cascading_find_by_names(
+        idents_and_country[:sub_ident],
+        idents_and_country[:ident]
+      )
+
+      if geometry.nil?
+        geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+        coordinates = geocoder_results.first.geometry["location"]
+        geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+      end
+
+      raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
+
+      geometry
+    end
   end
 end
