@@ -379,6 +379,14 @@ function editShipmentPrice (id, priceObj) {
   }
   return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
 }
+function editShipmentServicePrice (id, priceObj) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ priceObj })
+  }
+  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_service_price`, requestOptions).then(handleResponse)
+}
 function editLocalCharges (id, data) {
   const requestOptions = {
     method: 'POST',
@@ -515,6 +523,7 @@ export const adminService = {
   assignManager,
   viewTrucking,
   editShipmentPrice,
+  editShipmentServicePrice,
   editShipmentTime,
   editLocalCharges,
   deleteHub,

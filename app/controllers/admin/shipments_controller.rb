@@ -111,6 +111,33 @@ class Admin::ShipmentsController < ApplicationController
     response_handler(shipment)
   end
 
+  def edit_service_price
+    options = {
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+    }
+
+    priceObj = params[:priceObj]
+
+    shipment = Shipment.find(params[:shipment_id])
+    charge_breakdown = shipment.charge_breakdowns.selected
+	  charge = charge_breakdown.charge(priceObj["charge_category"])
+    new_price = Price.new(value: priceObj["value"], currency: priceObj["currency"])
+    charge.edited_price = new_price
+
+    if charge.save
+      response_handler(shipment.as_json(options))
+	  else
+		  # TBD - handle invalid record error
+      error = ApplicationError.new(
+        http_code: 400,
+        code:      SecureRandom.uuid,
+        message:   shipments.errors.full_messages.join("\n")
+      )
+      response_handler(error)
+	  end
+  end
+
   def edit_time
     options = {
       methods: %i(selected_offer mode_of_transport),

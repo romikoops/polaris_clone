@@ -4,6 +4,7 @@ class Charge < ApplicationRecord
   include CurrencyTools
 
   belongs_to :price
+  belongs_to :edited_price, class_name: "Price", optional: true
   belongs_to :charge_category
   belongs_to :children_charge_category,
     foreign_key: "children_charge_category_id", class_name: "ChargeCategory"
@@ -23,7 +24,7 @@ class Charge < ApplicationRecord
       [key, charge.deconstruct_tree_into_schedule_charge]
     end.to_h
 
-    { total: price.given_attributes }.merge(children_charges)
+    { total: price.given_attributes, edited_total: edited_price.try(:given_attributes) }.merge(children_charges)
   end
 
   def self.create_from_schedule_charges(
