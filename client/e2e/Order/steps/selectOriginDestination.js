@@ -11,7 +11,7 @@ export default async function selectOriginDestination (puppeteer) {
   } = puppeteer
 
   await focus('body')
-  await selectWithTab(3)
+  await selectWithTab(2)
   await selectWithTab(7)
 }
 

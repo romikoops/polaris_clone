@@ -4,7 +4,8 @@
   "description": "End-to-end tests",
   "main": "index.js",
   "scripts": {
-    "debug": "STEP_DELAY=200 jest --detectOpenHandles",
+    "docker": "PUPPETEER_HEADLESS=true jest",
+    "clean": "sudo rm -rf -d _screens/*.png",
     "test": "STEP_DELAY=200 jest",
     "dev": "STEP_DELAY=1000 jest"
   },
