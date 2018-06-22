@@ -32,6 +32,22 @@ class Hub < ApplicationRecord
     end
   end
 
+  def self.group_ids_by_nexus(hub_ids)
+    sanitized_query = sanitize_sql(["
+      SELECT
+        hubs.nexus_id,
+        STRING_AGG(hubs.id::text, ',') AS serialized_hub_ids
+      FROM hubs
+      WHERE hubs.id IN (?)
+      GROUP BY hubs.nexus_id
+    ", hub_ids])
+
+    groups = connection.execute(sanitized_query).to_a
+    groups.each_with_object({}) do |group, obj|
+      obj[group["nexus_id"]] = group["serialized_hub_ids"].split(",").map(&:to_i)
+    end
+  end
+
   def self.create_from_nexus(nexus, mot, tenant_id)
     nexus.hubs.find_or_create_by(
       nexus_id:  nexus.id,

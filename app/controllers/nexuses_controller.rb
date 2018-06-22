@@ -21,24 +21,32 @@ class NexusesController < ApplicationController
 
   def find_available_nexuses
     nexus_ids = params[:nexus_ids].split(",").map(&:to_i)
+    hub_ids   = params[:hub_ids].split(",").map(&:to_i)
     target    = params[:target]
 
     itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
-    itineraries = current_user.tenant.itineraries.where(id: itinerary_ids)
-    available_nexus_ids = itineraries.map do |itinerary|
-      if nexus_ids.blank? || nexus_ids.empty?
-        itinerary.nexus_ids_for_target(target)
+    itineraries = current_user.tenant.itineraries.joins(:stops)
+      .where(id: itinerary_ids)
+      .where('stops.hub_id': hub_ids)
+
+    available_hub_ids = itineraries.map do |itinerary|
+      if hub_ids.blank?
+        itinerary.hub_ids_for_target(target)
       else
-        itinerary.available_counterpart_nexus_ids_for_target_nexus_ids(target, nexus_ids)
+        itinerary.available_counterpart_hub_ids_for_target_hub_ids(target, hub_ids)
       end
     end.flatten.uniq
 
-    Location.where(id: available_nexus_ids)
+    Hub.where(id: available_hub_ids).group_by_nexus
   end
 
-  def format_for_select_box(nexuses)
+  def format_for_select_box(available_hub_ids_grouped_by_nexus)
+    Location.where(id: available_hub_ids_grouped_by_nexus.keys).map
     nexuses.map do |nexus|
-      { label: nexus[:name], value: nexus }
+      {
+        label: nexus[:name],
+        value: nexus.merge(hub_ids: available_hub_ids_grouped_by_nexus[nexus.id])
+      }
     end
   end
 end
