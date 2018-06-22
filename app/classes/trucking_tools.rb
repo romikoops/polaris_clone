@@ -20,7 +20,7 @@ module TruckingTools
       end
     end
     fees[:rate] = fare_calculator("rate", pricing[:rate], cargo, km)
-
+    
     fees.each do |_k, fee|
       next unless fee
       if !result["value"]
@@ -30,7 +30,6 @@ module TruckingTools
       end
       result["currency"] = fee[:currency]
     end
-
     extra_fees_results = {}
 
     total_fees.each do |tk, tfee|
@@ -91,6 +90,10 @@ module TruckingTools
       ton_value = (cargo["weight"] / 1000) * fee[:ton]
       min = fee[:min_value] || 0
       return_value = [ton_value, cbm_value, min].max
+    when "PER_CBM"
+      cbm_value = cargo["volume"] * (fee[:value] || fee[:cbm])
+      min = fee[:min_value] || 0
+      return_value = [cbm_value, min].max
       return { currency: fee[:currency], value: return_value, key: key }
     when "PER_CBM_KG"
       cbm_value = cargo["volume"] * fee[:cbm]
@@ -262,12 +265,14 @@ module TruckingTools
       fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km) if tp
     end
     total = { value: 0, currency: "" }
-    
     fees.each do |_key, trucking_fee|
-      unless trucking_fee.empty?
-        total[:value] += trucking_fee[:value]
-        total[:currency] = trucking_fee[:currency]
-      end
+      next if trucking_fee.empty?
+
+      total[:value] += trucking_fee[:value]
+      total[:currency] = trucking_fee[:currency]
+    end
+    if total[:currency] == "" && total[:value] == 0
+      total[:currency] = trucking_pricing.tenant.currency
     end
 
     fees[:total] = total

@@ -25,11 +25,29 @@ export class PlaceSearch extends Component {
     this.selectLocation = this.selectLocation.bind(this)
     this.setMarker = this.setMarker.bind(this)
     this.handleAuto = this.handleAuto.bind(this)
+    this.setInitialMarker = this.setInitialMarker.bind(this)
   }
 
   componentDidMount () {
-    this.initMap()
+    this.initMap(this.setInitialMarker)
   }
+  componentWillReceiveProps (nextProps) {
+    const { location } = nextProps
+    if (location && this.state.autoText.location === '') {
+      this.setState({ autoText: { location: location.geocoded_address } })
+    }
+    this.setInitialMarker()
+  }
+  setInitialMarker () {
+    const { location } = this.props
+    if (location && location.latitude && location.longitude) {
+      this.setMarker({
+        lat: location.latitude,
+        lng: location.longitude
+      }, location.name)
+    }
+  }
+
   setMarker (location, name) {
     const { markers, map } = this.state
     const { theme } = this.props
@@ -67,7 +85,7 @@ export class PlaceSearch extends Component {
     const { name, value } = event.target
     this.setState({ autoText: { [name]: value } })
   }
-  initMap () {
+  initMap (callback) {
     const mapsOptions = {
       center: {
         lat: 55.675647,
@@ -80,7 +98,9 @@ export class PlaceSearch extends Component {
     }
 
     const map = new this.props.gMaps.Map(document.getElementById('map'), mapsOptions)
-    this.setState({ map })
+    this.setState({ map }, () => {
+      callback()
+    })
     this.initAutocomplete(map)
   }
 
@@ -109,6 +129,7 @@ export class PlaceSearch extends Component {
       const place = autocomplete.getPlace()
       if (!place.geometry) {
         window.alert(`No details available for input: '${place.name}'`)
+
         return
       }
 
@@ -157,6 +178,7 @@ export class PlaceSearch extends Component {
         />
       </div>
     )
+
     return (
       <div className={`flex-100 layout-row layout-wrap ${styles.map_box}`}>
         <div id="map" className={`flex-100 layout-row ${styles.place_map}`} style={mapStyle} />
@@ -172,14 +194,16 @@ PlaceSearch.propTypes = {
   gMaps: PropTypes.gMaps.isRequired,
   hideMap: PropTypes.bool,
   inputStyles: PropTypes.objectOf(PropTypes.string),
-  options: PropTypes.objectOf(PropTypes.any)
+  options: PropTypes.objectOf(PropTypes.any),
+  location: PropTypes.objectOf(PropTypes.any)
 }
 
 PlaceSearch.defaultProps = {
   theme: null,
   hideMap: false,
   inputStyles: {},
-  options: {}
+  options: {},
+  location: {}
 }
 
 export default PlaceSearch

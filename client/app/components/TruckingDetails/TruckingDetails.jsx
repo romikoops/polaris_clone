@@ -2,12 +2,11 @@ import React from 'react'
 import PropTypes from '../../prop-types'
 import styles from './TruckingDetails.scss'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { humanizeSnakeCase, capitalize } from '../../helpers/stringTools'
+import { humanizeSnakeCase } from '../../helpers/stringTools'
 
 export default function TruckingDetails (props) {
   const {
-    theme, trucking, truckTypes, handleTruckingDetailsChange
+    theme, trucking, truckTypes, handleTruckingDetailsChange, target
   } = props
 
   function tooltip (truckType) {
@@ -23,7 +22,7 @@ export default function TruckingDetails (props) {
 
   function formGroup (carriage, truckType) {
     return (
-      <div className={`${styles.form_group} layout-row layout-align-start-end`}>
+      <div className={`${styles.form_group} flex-50 layout-row layout-align-start-end`}>
         <input
           type="radio"
           id={`${carriage}-${truckType}`}
@@ -41,32 +40,20 @@ export default function TruckingDetails (props) {
   function carriageSection (carriage) {
     const disabled = !trucking[carriage].truck_type
     const disabledClass = disabled ? styles.disabled : ''
-    const prefix = capitalize(carriage.split('_')[0])
     return (
-      <div className={`${styles.carriage_sec} ${disabledClass} flex-50 layout-row layout-wrap`}>
+      <div className={`${styles.carriage_sec} ${disabledClass} flex-100 layout-row layout-wrap`}>
         <div className={disabled ? styles.overlay : ''} />
-        <div className="flex-100">
-          <h5>{`${prefix}-Carriage`}</h5>
-        </div>
-        <div className="flex-100 layout-column layout-align-space-around">
+        <div className="flex-100 layout-row layout-align-space-around">
           { truckTypes.map(_truckType => formGroup(carriage, _truckType)) }
         </div>
       </div>
     )
   }
   return (
-    <div className="content_width_booking">
-      <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
-        <div className="flex-100">
-          <TextHeading
-            theme={theme}
-            text="Trucking Details"
-            size={3}
-          />
-        </div>
+    <div className="flex-100 layout-row">
+      <div className={`${styles.trucking_details} flex-100 layout-row layout-wrap layout-align-center`}>
         <div className="flex-100 layout-row layout-wrap layout-align-center">
-          { carriageSection('pre_carriage') }
-          { carriageSection('on_carriage') }
+          { carriageSection(target) }
         </div>
       </div>
     </div>
@@ -84,7 +71,8 @@ TruckingDetails.propTypes = {
     }
   }).isRequired,
   truckTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleTruckingDetailsChange: PropTypes.func.isRequired
+  handleTruckingDetailsChange: PropTypes.func.isRequired,
+  target: PropTypes.string.isRequired
 }
 
 TruckingDetails.defaultProps = {
