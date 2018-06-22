@@ -5,7 +5,7 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -49,7 +49,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -96,6 +96,9 @@ exports[`shallow render 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -140,6 +143,9 @@ exports[`shallow render 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -212,7 +218,7 @@ exports[`state.showDetails is true 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -281,6 +287,9 @@ exports[`state.showDetails is true 1`] = `
           "guest": false,
           "last_name": "Doe",
           "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
           "role_id": 2,
         }
       }
@@ -294,7 +303,7 @@ exports[`theme is falsy 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -338,7 +347,7 @@ exports[`theme is falsy 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -378,6 +387,9 @@ exports[`theme is falsy 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -415,6 +427,9 @@ exports[`theme is falsy 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -487,7 +502,7 @@ exports[`with admin user 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -531,7 +546,7 @@ exports[`with admin user 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -539,15 +554,6 @@ exports[`with admin user 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
-            client={
-              Object {
-                "company_name": "Mehristweniger",
-                "email": "muller55@yahoo.de",
-                "first_name": "Sebastian",
-                "last_name": "Muller",
-                "password": "pwd",
-              }
-            }
             key="RANDOM_KEY_8"
             message="FOO_MESSAGE"
             tenant={
@@ -587,20 +593,14 @@ exports[`with admin user 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 1,
               }
             }
           />
           <Message
-            client={
-              Object {
-                "company_name": "Mehristweniger",
-                "email": "muller55@yahoo.de",
-                "first_name": "Sebastian",
-                "last_name": "Muller",
-                "password": "pwd",
-              }
-            }
             key="RANDOM_KEY_9"
             message="BAR_MESSAGE"
             tenant={
@@ -640,6 +640,9 @@ exports[`with admin user 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 1,
               }
             }

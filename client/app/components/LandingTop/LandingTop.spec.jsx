@@ -5,15 +5,10 @@ import { theme, user, identity, tenant } from '../../mocks'
 jest.mock('../Header/Header', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <header>{children}</header>)
-
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ children }) => <button>{children}</button>
-}))
 // eslint-disable-next-line
 import { LandingTop } from './LandingTop'
 
-const edittedTenant = {
+const editedTenant = {
   data: {
     ...tenant,
     name: 'FOO_NAME'
@@ -24,7 +19,7 @@ const propsBase = {
   bookNow: identity,
   goTo: identity,
   toggleShowLogin: identity,
-  tenant: edittedTenant,
+  tenant: editedTenant,
   theme,
   toAdmin: identity,
   user: {
@@ -33,13 +28,11 @@ const propsBase = {
   }
 }
 
-const createWrapper = propsInput => mount(<LandingTop {...propsInput} />)
-
-test.skip('user.role_id is 2', () => {
+test('user.role_id is 2', () => {
   expect(shallow(<LandingTop {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('theme has truthy properties', () => {
+test('theme has truthy properties', () => {
   const editedTheme = {
     ...theme,
     background: 'green',
@@ -54,7 +47,7 @@ test.skip('theme has truthy properties', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test.skip('user.role_id is 1', () => {
+test('user.role_id is 1', () => {
   const props = {
     ...propsBase,
     user: {
@@ -65,18 +58,18 @@ test.skip('user.role_id is 1', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.toggleShowLogin is called', () => {
+test('props.toggleShowLogin is called', () => {
   const props = {
     ...propsBase,
     user: {
+      ...user,
       guest: true
     },
     toggleShowLogin: jest.fn()
   }
-  const wrapper = createWrapper(props)
-
+  const wrapper = mount(<LandingTop {...props} />)
   const link = wrapper.find('a').first()
-
   link.simulate('click')
+
   expect(props.toggleShowLogin).toHaveBeenCalled()
 })

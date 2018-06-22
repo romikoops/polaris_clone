@@ -46,11 +46,11 @@ const propsBase = {
   clients: [client]
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<Conversation {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('theme is falsy', () => {
+test('theme is falsy', () => {
   const props = {
     ...propsBase,
     theme: null
@@ -58,14 +58,14 @@ test.skip('theme is falsy', () => {
   expect(shallow(<Conversation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('state.showDetails is true', () => {
+test('state.showDetails is true', () => {
   const wrapper = shallow(<Conversation {...propsBase} />)
   wrapper.setState({ showDetails: true })
 
   expect(wrapper).toMatchSnapshot()
 })
 
-test.skip('with admin user', () => {
+test('with admin user', () => {
   const props = {
     ...propsBase,
     user: {
