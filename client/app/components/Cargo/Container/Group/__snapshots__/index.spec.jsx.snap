@@ -234,7 +234,7 @@ exports[`props.viewHSCodes is true 1`] = `
       className="fa fa-eye clip flex-none"
       style={
         Object {
-          "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
         }
       }
     />

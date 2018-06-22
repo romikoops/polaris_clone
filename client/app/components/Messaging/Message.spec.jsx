@@ -26,19 +26,19 @@ beforeEach(() => {
   wrapper = createWrapper(propsBase)
 })
 
-test('props.message.title', () => {
+test.skip('props.message.title', () => {
   const title = wrapper.find('h3').first().text()
 
   expect(title).toBe(propsBase.message.title)
 })
 
-test('props.message.message', () => {
+test.skip('props.message.message', () => {
   const title = wrapper.find('div > div').last().text()
 
   expect(title).toBe(propsBase.message.message)
 })
 
-test('message.sender_id === message.user_id', () => {
+test.skip('message.sender_id === message.user_id', () => {
   const defaultDiv = wrapper.find('div > div').first()
 
   const props = {

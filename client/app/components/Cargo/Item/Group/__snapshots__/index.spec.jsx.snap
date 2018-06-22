@@ -2,612 +2,111 @@
 
 exports[`props.viewHSCodes is true 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Cargo Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X FOO_CATEGORY
+        x 1
       </p>
-    </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
-      >
-        <p
-          className="flex-none"
-        >
-          Cargo Type
-        </p>
-        <div
-          className="flex-5"
-        />
-        <p
-          className="flex-none"
-        />
-      </div>
-      <div
-        className="flex-30 layout-row layout-align-end-center"
-      >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Component
-          checked={false}
-          className="flex-none"
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
-        />
-      </div>
-    </div>
-    <hr
-      className="flex-100"
-    />
-  </div>
-  <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
-  >
-    <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_1"
-      >
-        <div
-          className="flex-100 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Item 0
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Length
-          </p>
-          <p
-            className="flex-none"
-          >
-            100
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Width
-          </p>
-          <p
-            className="flex-none"
-          >
-            90
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Height
-          </p>
-          <p
-            className="flex-none"
-          >
-            120
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Volume
-          </p>
-          <p
-            className="flex-none"
-          >
-            0.90
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Chargeable Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            80.00
-             kg
-          </p>
-        </div>
-        <hr
-          className="flex-100"
-        />
-      </div>
-    </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-    >
-      <Component
-        group={
+        className="icon_cargo_item"
+        style={
           Object {
-            "cargoType": Object {
-              "category": "FOO_CATEGORY",
-            },
-            "items": Array [
-              Object {
-                "chargeable_weight": 80,
-                "dimension_x": 90,
-                "dimension_y": 100,
-                "dimension_z": 120,
-                "gross_weight": 76,
-                "payload_in_kg": 56,
-                "tare_weight": 20,
-              },
-            ],
-            "quantity": "FOO_QUANTITY",
-            "size_class": "dry_goods",
-            "volume": 5,
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
           }
         }
       />
     </div>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-wrap"
-    onClick={[Function]}
-  >
-    <i
-      className="fa fa-eye clip flex-none"
-      style="#333"
-    />
-    <p
-      className="offset-5 flex-none"
-    >
-      View Hs Codes
-    </p>
-  </div>
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
-</div>
-`;
-
-exports[`shallow render 1`] = `
-<div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
->
-  <div
-    className="flex-100 layout-row layout-align-space-between-center"
-  >
     <div
-      className="flex-40 layout-row layout-align-start-center"
-    >
-      <h5
-        className="flex-none"
-      >
-        Cargo Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
-      <p
-        className="flex-none"
-      />
-    </div>
-    <div
-      className="flex-40 layout-row layout-align-end-center"
-    >
-      <p
-        className="flex-none"
-      >
-        FOO_QUANTITY X FOO_CATEGORY
-      </p>
-    </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Cargo Type
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
-        />
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
         <Component
-          checked={false}
-          className="flex-none"
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
-        />
-      </div>
-    </div>
-    <hr
-      className="flex-100"
-    />
-  </div>
-  <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
-  >
-    <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_0"
-      >
-        <div
-          className="flex-100 layout-row layout-align-start-center"
-        >
-          <p
-            className="flex-none"
-            style={
-              Object {
-                "fontSize": "10px",
-              }
-            }
-          >
-            Item 0
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Length
-          </p>
-          <p
-            className="flex-none"
-          >
-            100
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Width
-          </p>
-          <p
-            className="flex-none"
-          >
-            90
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Height
-          </p>
-          <p
-            className="flex-none"
-          >
-            120
-             cm
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Volume
-          </p>
-          <p
-            className="flex-none"
-          >
-            0.90
-             m
-            <sup>
-              3
-            </sup>
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Chargeable Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            80.00
-             kg
-          </p>
-        </div>
-        <hr
-          className="flex-100"
-        />
-      </div>
-    </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-    >
-      <Component
-        group={
-          Object {
-            "cargoType": Object {
-              "category": "FOO_CATEGORY",
-            },
-            "items": Array [
-              Object {
-                "chargeable_weight": 80,
-                "dimension_x": 90,
-                "dimension_y": 100,
-                "dimension_z": 120,
-                "gross_weight": 76,
-                "payload_in_kg": 56,
-                "tare_weight": 20,
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
               },
-            ],
-            "quantity": "FOO_QUANTITY",
-            "size_class": "dry_goods",
-            "volume": 5,
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
           }
-        }
-      />
-    </div>
-  </div>
-  <hr
-    className="flex-100"
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
-</div>
-`;
-
-exports[`state.unitView is true 1`] = `
-<div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
->
-  <div
-    className="flex-100 layout-row layout-align-space-between-center"
-  >
-    <div
-      className="flex-40 layout-row layout-align-start-center"
-    >
-      <h5
-        className="flex-none"
-      >
-        Cargo Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
-      <p
-        className="flex-none"
-      />
-    </div>
-    <div
-      className="flex-40 layout-row layout-align-end-center"
-    >
-      <p
-        className="flex-none"
-      >
-        FOO_QUANTITY X FOO_CATEGORY
-      </p>
-    </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
-    <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
-      >
-        <p
-          className="flex-none"
-        >
-          Cargo Type
-        </p>
-        <div
-          className="flex-5"
-        />
-        <p
-          className="flex-none"
-        />
-      </div>
-      <div
-        className="flex-30 layout-row layout-align-end-center"
-      >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Component
-          checked={true}
-          className="flex-none"
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style="#333"
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
         key="RANDOM_KEY_3"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -617,249 +116,813 @@ exports[`state.unitView is true 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Length
-          </p>
-          <p
-            className="flex-none"
-          >
-            100
+            <span>
+              90
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Width
-          </p>
-          <p
-            className="flex-none"
-          >
-            90
+            <span>
+              120
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Height
-          </p>
-          <p
-            className="flex-none"
-          >
-            120
+            <span>
+              100
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Volume
-          </p>
-          <p
-            className="flex-none"
-          >
-            0.90
-             m
-            <sup>
-              3
-            </sup>
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.90
+              </span>
+                m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Chargeable Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            80.00
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                80.00
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Chargeable Weight
+            </p>
+          </div>
         </div>
-        <hr
-          className="flex-100"
-        />
       </div>
     </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
     <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <Component
-        group={
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
           Object {
-            "cargoType": Object {
-              "category": "FOO_CATEGORY",
-            },
-            "items": Array [
-              Object {
-                "chargeable_weight": 80,
-                "dimension_x": 90,
-                "dimension_y": 100,
-                "dimension_z": 120,
-                "gross_weight": 76,
-                "payload_in_kg": 56,
-                "tare_weight": 20,
-              },
-            ],
-            "quantity": "FOO_QUANTITY",
-            "size_class": "dry_goods",
-            "volume": 5,
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
           }
         }
       />
     </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <Component
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style="#333"
+      />
+    </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
+  <div
+    className="unit_viewer closed_panel"
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_1"
+      >
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.90
+              </span>
+                m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                80.00
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Chargeable Weight
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.unitView is true 1`] = `
+<div
+  className="info"
+>
+  <div
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
+  >
+    <div
+      className="flex-5 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center cargo_unit"
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <p
+        className="flex-none layout-row layout-align-center-center"
+      >
+        x 1
+      </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-20 layout-row layout-align-center-center side_border"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
+      <div
+        className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      >
+        <Component
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style="#333"
+      />
+    </div>
+  </div>
+  <div
+    className="unit_viewer closed_panel"
+  >
+    <div
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY_7"
+      >
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Single Item
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              90
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.90
+              </span>
+                m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                80.00
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Chargeable Weight
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
 exports[`state.viewer is true 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Cargo Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X FOO_CATEGORY
+        x 1
       </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
     </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
     <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Cargo Type
+          <span
+            className="cargo_type"
+          >
+            FOO_CATEGORY
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
-        />
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo type
+        </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
         <Component
-          checked={false}
-          className="flex-none"
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
+          group={
+            Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
+              "items": Array [
+                Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
+              "volume": 5,
+            }
+          }
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style="#333"
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_5"
+        key="RANDOM_KEY_11"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -869,193 +932,158 @@ exports[`state.viewer is true 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Length
-          </p>
-          <p
-            className="flex-none"
-          >
-            100
+            <span>
+              90
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Width
-          </p>
-          <p
-            className="flex-none"
-          >
-            90
+            <span>
+              120
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
         >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
           <p
             className="flex-none"
           >
-            Height
-          </p>
-          <p
-            className="flex-none"
-          >
-            120
+            <span>
+              100
+            </span>
              cm
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Volume
-          </p>
-          <p
-            className="flex-none"
-          >
-            0.90
-             m
-            <sup>
-              3
-            </sup>
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                0.90
+              </span>
+                m
+              <sup>
+                3
+              </sup>
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Volume
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Chargeable Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            80.00
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                80.00
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Chargeable Weight
+            </p>
+          </div>
         </div>
-        <hr
-          className="flex-100"
-        />
       </div>
     </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
-    >
-      <Component
-        group={
-          Object {
-            "cargoType": Object {
-              "category": "FOO_CATEGORY",
-            },
-            "items": Array [
-              Object {
-                "chargeable_weight": 80,
-                "dimension_x": 90,
-                "dimension_y": 100,
-                "dimension_z": 120,
-                "gross_weight": 76,
-                "payload_in_kg": 56,
-                "tare_weight": 20,
-              },
-            ],
-            "quantity": "FOO_QUANTITY",
-            "size_class": "dry_goods",
-            "volume": 5,
-          }
-        }
-      />
-    </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <HsCodeViewer
-    close={[Function]}
-    hsCodes={
-      Array [
-        "FOO_HSCODE",
-        "BAR_HSCODE",
-      ]
-    }
-    item={
-      Object {
-        "cargoType": Object {
-          "category": "FOO_CATEGORY",
-        },
-        "items": Array [
-          Object {
-            "chargeable_weight": 80,
-            "dimension_x": 90,
-            "dimension_y": 100,
-            "dimension_z": 120,
-            "gross_weight": 76,
-            "payload_in_kg": 56,
-            "tare_weight": 20,
-          },
-        ],
-        "quantity": "FOO_QUANTITY",
-        "size_class": "dry_goods",
-        "volume": 5,
-      }
-    }
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
 </div>
 `;

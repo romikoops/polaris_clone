@@ -50,7 +50,7 @@ exports[`shallow render 1`] = `
             className="fa fa-angle-double-left clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
               }
             }
           />
