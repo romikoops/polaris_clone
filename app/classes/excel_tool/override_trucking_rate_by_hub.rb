@@ -5,7 +5,7 @@ module ExcelTool
     attr_reader :defaults, :trucking_pricing_by_zone, :sheets, :zone_sheet,
       :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
       :all_ident_values_and_countries, :charges
-      
+
     def post_initialize(args)
       @defaults = {}
       @trucking_pricing_by_zone = {}
@@ -20,7 +20,7 @@ module ExcelTool
       @all_ident_values_and_countries = {}
       @charges = {}
     end
-    
+
     def perform
       start_time = DateTime.now
       load_zones
@@ -42,7 +42,29 @@ module ExcelTool
         meta = generate_meta_from_sheet(rates_sheet)
         row_truck_type = !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type] 
         direction = meta[:direction] == "import" ? "on" : "pre"
+
+        load_type = meta[:load_type] == "container" ? "container" : "cargo_item"
+        cargo_class = meta[:cargo_class]
+        direction = meta[:direction] == "import" ? "on" : "pre"
         awesome_print meta
+        courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
+        scoping_attributes_hash = {
+          load_type:   load_type,
+          cargo_class: cargo_class,
+          courier_id:  courier.id,
+          truck_type:  row_truck_type,
+          carriage:    direction
+        }
+        old_tp_ids = hub.trucking_pricings.where(scoping_attributes_hash).ids
+        hub.hub_truckings.where(trucking_pricing_id: old_tp_ids).delete_all
+        TruckingPricing.where(id: old_tp_ids).delete_all
+
+        hub.truck_type_availabilities << TruckTypeAvailability.find_or_create_by(
+          truck_type: row_truck_type,
+          carriage:   direction,
+          load_type:  load_type
+        )
+
         modifier_position_objs = populate_modifier(rates_sheet)
         header_row = rates_sheet.row(4)
         header_row.shift
@@ -59,7 +81,8 @@ module ExcelTool
           row_min_value = row_data.shift
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
-          next if single_ident_values_and_country.first.nil?
+          next if single_ident_values_and_country.nil? || single_ident_values_and_country.first.nil?
+
           single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
           trucking_pricing = create_trucking_pricing(meta)
           stats[:trucking_pricings][:number_created] += 1
