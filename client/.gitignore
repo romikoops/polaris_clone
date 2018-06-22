@@ -35,6 +35,3 @@ npm-debug.log
 
 #ngrok
 ngrok
-
-# No images
-*.png
