@@ -12,6 +12,8 @@ class Hub < ApplicationRecord
   has_many :local_charges
   has_many :customs_fees
   has_many :notes, dependent: :destroy
+  has_many :hub_truck_type_availabilities
+  has_many :truck_type_availabilities, through: :hub_truck_type_availabilities
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {
@@ -58,6 +60,18 @@ class Hub < ApplicationRecord
 
   def self.rail
     where(hub_type: "rail")
+  end
+
+  def truck_type_availability
+    Shipment::LOAD_TYPES.each_with_object({}) do |load_type, load_type_obj|
+      load_type_obj[load_type] =
+        %w(pre on).each_with_object({}) do |carriage, carriage_obj|
+          carriage_obj[carriage] = truck_type_availabilities.where(
+            load_type: load_type,
+            carriage:  carriage
+          ).pluck(:truck_type)
+        end
+    end
   end
 
   def generate_hub_code!(tenant_id)
