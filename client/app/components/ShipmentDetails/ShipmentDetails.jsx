@@ -12,7 +12,6 @@ import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
-import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -688,6 +687,7 @@ export class ShipmentDetails extends Component {
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
         scope={scope}
+        handleTruckingDetailsChange={this.handleTruckingDetailsChange}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -813,12 +813,12 @@ export class ShipmentDetails extends Component {
             'layout-wrap layout-align-center'
           }
         >
-          <TruckingDetails
+          {/* <TruckingDetails
             theme={theme}
             trucking={this.state.shipment.trucking}
             truckTypes={truckTypes}
             handleTruckingDetailsChange={this.handleTruckingDetailsChange}
-          />
+          /> */}
         </div>
         <div className="flex-100 layout-row layout-align-center-center">
           <div className="flex-none content_width_booking layout-row layout-align-center-center">

@@ -14,14 +14,15 @@ function findNexus (lat, lng, callback) {
   })
 }
 
-function findAvailability (lat, lng, tenantId, loadType, availableNexusesIds, carriage, callback) {
+function findAvailability (lat, lng, tenantId, loadType, availableNexusesIds, carriage, availableHubIds, callback) {
   fetch(
     `${BASE_URL}/trucking_availability?` +
       `lat=${lat}&lng=${lng}&` +
       `tenant_id=${tenantId}&` +
       `load_type=${loadType}&` +
       `nexus_ids=${availableNexusesIds}&` +
-      `carriage=${carriage}`,
+      `carriage=${carriage}&` +
+      `hub_ids=${availableHubIds}`,
     {
       method: 'GET',
       headers: authHeader()
@@ -34,12 +35,30 @@ function findAvailability (lat, lng, tenantId, loadType, availableNexusesIds, ca
   })
 }
 
-function nexuses (nexusIds, target, itineraryIds, callback) {
+function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
+  fetch(
+    `${BASE_URL}/truck_type_availability?` +
+      `origin_nexus_ids=${originNexusIds}&` +
+      `destination_nexus_ids=${destinationNexusIds}`,
+    {
+      method: 'GET',
+      headers: authHeader()
+    }
+  ).then((promise) => {
+    promise.json().then((response) => {
+      const { truckingAvailable, nexusIds } = response.data
+      callback(truckingAvailable, nexusIds)
+    })
+  })
+}
+
+function nexuses (nexusIds, hubIds, target, itineraryIds, callback) {
   fetch(
     `${BASE_URL}/nexuses?` +
       `itinerary_ids=${itineraryIds}&` +
       `target=${target}&` +
-      `nexus_ids=${nexusIds}`,
+      `nexus_ids=${nexusIds}&` +
+      `hub_ids=${hubIds}`,
     {
       method: 'GET',
       headers: authHeader()
@@ -72,7 +91,8 @@ const getRequests = {
   findNexus,
   findAvailability,
   nexuses,
-  incoterms
+  incoterms,
+  findTruckTypes
 }
 
 export default getRequests
