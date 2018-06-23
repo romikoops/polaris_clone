@@ -4,7 +4,7 @@ exports[`props.fade is true 1`] = `
 <styled.div
   className="flex-100 layout-row slider_container one_slide"
 >
-  <Component
+  <Slider
     arrows={false}
     autoplay={true}
     dots={true}
@@ -82,17 +82,15 @@ exports[`props.fade is true 1`] = `
         </div>
       </div>
     </div>
-  </Component>
+  </Slider>
 </styled.div>
 `;
-
-exports[`props.slides is falsy 1`] = `""`;
 
 exports[`shallow render 1`] = `
 <styled.div
   className="flex-100 layout-row slider_container one_slide"
 >
-  <Component
+  <Slider
     arrows={false}
     autoplay={true}
     dots={true}
@@ -164,6 +162,8 @@ exports[`shallow render 1`] = `
         </div>
       </div>
     </div>
-  </Component>
+  </Slider>
 </styled.div>
 `;
+
+exports[`slides is falsy 1`] = `""`;

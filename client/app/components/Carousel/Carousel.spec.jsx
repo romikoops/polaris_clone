@@ -1,9 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 
-jest.mock('react-slick', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <span>{children}</span>)
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
@@ -49,10 +46,10 @@ test('props.fade is true', () => {
   expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
 })
 
-test('props.slides is falsy', () => {
+test('slides is falsy', () => {
   const props = {
     ...propsBase,
-    slides: false
+    slides: null
   }
   expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
 })
