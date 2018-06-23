@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { shallow as shallowMethod, mount } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 
 // eslint-disable-next-line
 import { NavDropdown } from './NavDropdown'
@@ -21,15 +21,6 @@ const propsBase = {
   invert: false
 }
 
-let shallow
-
-const createWrapper = propsInput => mount(<NavDropdown {...propsInput} />)
-const createShallow = propsInput => shallowMethod(<NavDropdown {...propsInput} />)
-
-beforeEach(() => {
-  shallow = createShallow(propsBase)
-})
-
 test('click calls listOption.select', () => {
   const props = {
     ...propsBase,
@@ -39,7 +30,7 @@ test('click calls listOption.select', () => {
     }]
   }
 
-  const dom = createWrapper(props)
+  const dom = mount(<NavDropdown {...props} />)
   const clickableDiv = dom.find('.dropdowncontent > div').first()
 
   expect(props.linkOptions[0].select).not.toHaveBeenCalled()
@@ -48,7 +39,7 @@ test('click calls listOption.select', () => {
 })
 
 test('shallow rendering', () => {
-  expect(shallow).toMatchSnapshot()
+  expect(shallow(<NavDropdown {...propsBase} />)).toMatchSnapshot()
 })
 
 test('when linkOptions doesn\'t provide url', () => {
@@ -56,7 +47,6 @@ test('when linkOptions doesn\'t provide url', () => {
     ...propsBase,
     linkOptions: [linkOptionBase]
   }
-  const dom = createShallow(props)
 
-  expect(dom).toMatchSnapshot()
+  expect(shallow(<NavDropdown {...props} />)).toMatchSnapshot()
 })
