@@ -15,16 +15,6 @@ jest.mock('uuid', () => {
 
   return { v4 }
 })
-jest.mock('./Aggregated', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../../../HsCodes/HsCodeViewer', () => ({
-  // eslint-disable-next-line react/prop-types
-  HsCodeViewer: ({ children }) => <div>{children}</div>
-}))
-jest.mock('react-toggle', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
 // eslint-disable-next-line
 import { CargoItemGroup } from './'
 

@@ -59,7 +59,7 @@ exports[`props.viewHSCodes is true 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <Component
+        <CargoItemGroupAggregated
           group={
             Object {
               "cargoType": Object {
@@ -331,7 +331,7 @@ exports[`shallow render 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <Component
+        <CargoItemGroupAggregated
           group={
             Object {
               "cargoType": Object {
@@ -603,7 +603,7 @@ exports[`state.unitView is true 1`] = `
       <div
         className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <Component
+        <CargoItemGroupAggregated
           group={
             Object {
               "cargoType": Object {
@@ -875,7 +875,7 @@ exports[`state.viewer is true 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <Component
+        <CargoItemGroupAggregated
           group={
             Object {
               "cargoType": Object {

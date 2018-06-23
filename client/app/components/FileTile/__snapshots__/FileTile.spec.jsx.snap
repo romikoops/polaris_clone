@@ -25,11 +25,13 @@ exports[`doc.approved === null 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>
@@ -177,11 +179,13 @@ exports[`doc.approved === rejected 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>
@@ -329,11 +333,13 @@ exports[`isAdmin is true 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>
@@ -471,11 +477,13 @@ exports[`shallow render 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>
@@ -647,7 +655,12 @@ exports[`state.showDenialDetails is true 1`] = `
           }
         >
           <RoundButton
+            active={false}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
             handleNext={[Function]}
+            icon=""
             iconClass="fa-times"
             size="small"
             text="Deny"
@@ -685,11 +698,13 @@ exports[`state.showDenialDetails is true 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>
@@ -837,11 +852,13 @@ exports[`theme is falsy 1`] = `
         <p
           className="flex-100"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </div>
     </div>

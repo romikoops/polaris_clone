@@ -2,9 +2,6 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import { theme, user, identity } from '../../mocks'
 
-jest.mock('react-truncate', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <span>{children}</span>)
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {

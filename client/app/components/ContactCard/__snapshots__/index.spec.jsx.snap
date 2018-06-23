@@ -87,12 +87,14 @@ exports[`shallow render 1`] = `
           <p
             className="flex-80 contact_header"
           >
-            <Component
+            <Truncate
+              ellipsis="…"
+              lines={1}
               trimWhitespace={true}
             >
                
                
-            </Component>
+            </Truncate>
           </p>
         </div>
       </div>
