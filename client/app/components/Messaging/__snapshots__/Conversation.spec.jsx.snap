@@ -57,6 +57,7 @@ exports[`shallow render 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
+            client={null}
             key="RANDOM_KEY_0"
             message="FOO_MESSAGE"
             tenant={
@@ -104,6 +105,7 @@ exports[`shallow render 1`] = `
             }
           />
           <Message
+            client={null}
             key="RANDOM_KEY_1"
             message="BAR_MESSAGE"
             tenant={
@@ -260,6 +262,8 @@ exports[`state.showDetails is true 1`] = `
   >
     <MessageShipmentData
       closeInfo={[Function]}
+      name=""
+      onChange={null}
       shipmentData={
         Object {
           "clientName": "FOO_CLIENT_NAME",
@@ -355,6 +359,7 @@ exports[`theme is falsy 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
+            client={null}
             key="RANDOM_KEY_2"
             message="FOO_MESSAGE"
             tenant={
@@ -395,6 +400,7 @@ exports[`theme is falsy 1`] = `
             }
           />
           <Message
+            client={null}
             key="RANDOM_KEY_3"
             message="BAR_MESSAGE"
             tenant={
@@ -554,6 +560,7 @@ exports[`with admin user 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
+            client={null}
             key="RANDOM_KEY_8"
             message="FOO_MESSAGE"
             tenant={
@@ -601,6 +608,7 @@ exports[`with admin user 1`] = `
             }
           />
           <Message
+            client={null}
             key="RANDOM_KEY_9"
             message="BAR_MESSAGE"
             tenant={

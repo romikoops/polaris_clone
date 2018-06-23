@@ -16,7 +16,7 @@ jest.mock('../../constants', () => {
 })
 jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
-  Tooltip: () => <div />
+  Tooltip: ({ props }) => <div {...props} />
 }))
 
 // eslint-disable-next-line

@@ -2,23 +2,12 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { req, identity, tenant, theme, user } from '../../mocks'
 
-jest.mock('../NavDropdown/NavDropdown', () => ({
-  // eslint-disable-next-line react/prop-types
-  NavDropdown: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../LoginRegistrationWrapper/LoginRegistrationWrapper', () => ({
-  // eslint-disable-next-line react/prop-types
-  LoginRegistrationWrapper: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Modal/Modal', () => ({
-  // eslint-disable-next-line react/prop-types
-  Modal: ({ children }) => <div>{children}</div>
-}))
 jest.mock('react-redux', () => ({
   connect: (x, y) => Component => Component
 }))
 // eslint-disable-next-line
 import Header from './Header'
+
 const propsBase = {
   tenant,
   theme,
