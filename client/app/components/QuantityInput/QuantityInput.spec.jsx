@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { shallow as shallowMethod } from 'enzyme'
+import { shallow } from 'enzyme'
 import { identity } from '../../mocks'
 
 import QuantityInput from './QuantityInput'
@@ -11,10 +11,8 @@ const propsBase = {
   nextStageAttempt: false
 }
 
-const createShallow = propsInput => shallowMethod(<QuantityInput {...propsInput} />)
-
 test('shallow rendering', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+  expect(shallow(<QuantityInput {...propsBase} />)).toMatchSnapshot()
 })
 
 test('with cargoItem.quantity', () => {
@@ -23,5 +21,5 @@ test('with cargoItem.quantity', () => {
     cargoItem: { quantity: 3 }
   }
 
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<QuantityInput {...propsBase} />)).toMatchSnapshot()
 })
