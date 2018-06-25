@@ -30,7 +30,7 @@ module ExcelTool
       end_time = DateTime.now
       diff = (end_time - start_time) / 86_400
 
-      awesome_print diff
+      
       { results: results, stats: stats }
     end
 
@@ -42,7 +42,7 @@ module ExcelTool
         meta = generate_meta_from_sheet(rates_sheet)
         row_truck_type = !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type] 
         direction = meta[:direction] == "import" ? "on" : "pre"
-        awesome_print meta
+        
         modifier_position_objs = populate_modifier(rates_sheet)
         header_row = rates_sheet.row(4)
         header_row.shift
@@ -55,7 +55,7 @@ module ExcelTool
         (6..rates_sheet.last_row).each do |line|
           row_data = rates_sheet.row(line)
           row_zone_name = row_data.shift
-          awesome_print row_zone_name
+          
           row_min_value = row_data.shift
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
@@ -134,7 +134,7 @@ module ExcelTool
               { ident: ident_value, country: idents_and_country[:country] }
             end
           elsif identifier_type == "geometry_id"
-            awesome_print idents_and_country
+            
             geometry = find_geometry(idents_and_country)
             puts geometry.names.log_format
             stats[:trucking_destinations][:number_created] += 1
@@ -250,7 +250,7 @@ module ExcelTool
       if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         val = val * 2
       end
-      awesome_print "#{row_zone_name} "
+      
       w_min = weight_min_row[m_index] || 0
       r_min = row_min_value || 0
       if defaults[mod_key]

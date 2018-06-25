@@ -1434,7 +1434,6 @@ module ExcelTools
         name:       charge[:name]
       }
     end
-    awesome_print all_charges
     all_charges
   end
 
