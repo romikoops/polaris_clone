@@ -13,7 +13,11 @@ class MainSeeder
       require './roles'
       require './incoterms'
       require './cargo_item_types'
+<<<<<<< HEAD
       require './truck_type_availabilities'
+=======
+      require './mandatory_charges'
+>>>>>>> 5195db24ee3792f13f917f1daa951b7f772fe14d
     end
     TenantSeeder.perform(tenant_filter_options)
     AdminSeeder.perform(tenant_filter_options)
