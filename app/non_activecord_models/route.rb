@@ -110,6 +110,10 @@ class Route
         MAX(destination_nexuses.id)        AS destination_nexus_id,
         MAX(origin_nexuses.name)           AS origin_nexus_name,
         MAX(destination_nexuses.name)      AS destination_nexus_name,
+        MAX(origin_nexuses.latitude)       AS origin_latitude,
+        MAX(origin_nexuses.longitude)      AS origin_longitude,
+        MAX(destination_nexuses.latitude)  AS destination_latitude,
+        MAX(destination_nexuses.longitude) AS destination_longitude,
         STRING_AGG(DISTINCT origin_truck_type_availabilities.truck_type, ',')
           AS origin_truck_types,
         STRING_AGG(DISTINCT destination_truck_type_availabilities.truck_type, ',')
@@ -172,7 +176,11 @@ class Route
         origin_nexuses.id             AS origin_nexus_id,
         destination_nexuses.id        AS destination_nexus_id,
         origin_nexuses.name           AS origin_nexus_name,
-        destination_nexuses.name      AS destination_nexus_name
+        destination_nexuses.name      AS destination_nexus_name,
+        origin_nexuses.latitude       AS origin_latitude,
+        origin_nexuses.longitude      AS origin_longitude,
+        destination_nexuses.latitude  AS destination_latitude,
+        destination_nexuses.longitude AS destination_longitude
       FROM itineraries
       JOIN stops AS origin_stops
         ON itineraries.id = origin_stops.itinerary_id
@@ -192,7 +200,7 @@ class Route
   end
 
   def self.hash_from_attributes(attributes, target)
-    %i(stop_id hub_id hub_name nexus_id nexus_name truck_types)
+    %i(stop_id hub_id hub_name nexus_id nexus_name latitude longitude truck_types)
       .each_with_object({}) do |attribute, obj|
         obj[attribute] = attributes["#{target}_#{attribute}"] || ""
         obj[attribute] = obj[attribute].split(",") if attribute == :truck_types
