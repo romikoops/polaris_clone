@@ -5,7 +5,7 @@ exports[`shallow rendering when props.size is full 1`] = `
   className="flex-none full hide_border full_wrapper"
   style={
     Object {
-      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
     }
   }
 >
@@ -41,7 +41,7 @@ exports[`shallow rendering when props.size is large 1`] = `
   className="flex-none large hide_border large_wrapper"
   style={
     Object {
-      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
     }
   }
 >
@@ -77,7 +77,7 @@ exports[`shallow rendering when props.size is small 1`] = `
   className="flex-none small hide_border small_wrapper"
   style={
     Object {
-      "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+      "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
     }
   }
 >

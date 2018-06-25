@@ -36,6 +36,7 @@ exports[`shallow render 1`] = `
               className="flex-85"
             >
                
+              FOO_ORIGIN_HUB
                
             </h4>
           </div>
@@ -45,11 +46,7 @@ exports[`shallow render 1`] = `
         >
           <div
             className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="fa fa-ship"
-            />
-          </div>
+          />
           <div
             style={
               Object {
@@ -84,6 +81,7 @@ exports[`shallow render 1`] = `
               className="flex-85"
             >
                
+              FOO_DESTINATION_HUB
                
             </h4>
           </div>

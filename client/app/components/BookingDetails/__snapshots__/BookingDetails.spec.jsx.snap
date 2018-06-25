@@ -187,9 +187,11 @@ exports[`shallow render 1`] = `
           "schedules": Array [
             Object {
               "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              "mode_of_transport": "FOO_MODE_TRANSPORT",
             },
             Object {
               "hub_route_key": "BAR_HUB_ROUTE_KEY",
+              "mode_of_transport": "BAR_MODE_TRANSPORT",
             },
           ],
           "shipment": Object {
@@ -227,6 +229,12 @@ exports[`shallow render 1`] = `
         Object {
           "data": Object {
             "id": 123,
+            "scope": Object {
+              "modes_of_transport": Object {
+                "BAR_MODE_TRANSPORT": Object {},
+                "FOO_MODE_TRANSPORT": Object {},
+              },
+            },
             "subdomain": "foosubdomain",
             "theme": Object {
               "colors": Object {
@@ -255,6 +263,9 @@ exports[`shallow render 1`] = `
           "guest": false,
           "last_name": "Doe",
           "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
         }
       }
     />
@@ -458,9 +469,11 @@ exports[`theme is falsy 1`] = `
           "schedules": Array [
             Object {
               "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              "mode_of_transport": "FOO_MODE_TRANSPORT",
             },
             Object {
               "hub_route_key": "BAR_HUB_ROUTE_KEY",
+              "mode_of_transport": "BAR_MODE_TRANSPORT",
             },
           ],
           "shipment": Object {
@@ -498,6 +511,12 @@ exports[`theme is falsy 1`] = `
         Object {
           "data": Object {
             "id": 123,
+            "scope": Object {
+              "modes_of_transport": Object {
+                "BAR_MODE_TRANSPORT": Object {},
+                "FOO_MODE_TRANSPORT": Object {},
+              },
+            },
             "subdomain": "foosubdomain",
             "theme": Object {
               "colors": Object {
@@ -519,6 +538,9 @@ exports[`theme is falsy 1`] = `
           "guest": false,
           "last_name": "Doe",
           "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
         }
       }
     />

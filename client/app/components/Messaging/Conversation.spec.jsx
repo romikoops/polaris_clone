@@ -2,22 +2,6 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { identity, shipment, user, tenant, client, theme } from '../../mocks'
 
-jest.mock('./index.js', () => ({
-  // eslint-disable-next-line react/prop-types
-  Message: ({ children }) => <div id="message">{children}</div>,
-  // eslint-disable-next-line react/prop-types
-  MessageShipmentData: ({ children }) => <div id="message.shipment.data">{children}</div>
-}))
-jest.mock('../../containers/RegistrationPage/RegistrationPage', () => ({
-  // eslint-disable-next-line react/prop-types
-  RegistrationPage: ({ children }) => <div>{children}</div>
-}))
-jest.mock('react-scroll', () => ({
-  // eslint-disable-next-line react/prop-types
-  Element: ({ children }) => <div id="scroll">{children}</div>,
-  scroller: { scrollTo: x => x }
-}))
-
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {

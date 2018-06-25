@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { shallow as shallowMethod } from 'enzyme'
+import { shallow } from 'enzyme'
 import { theme, identity } from '../../mocks'
 
 jest.mock('../../components/Admin/AdminNavItem', () => {
@@ -35,10 +35,6 @@ const propsBase = {
   navLinkInfo: [navLink]
 }
 
-const createShallow = propsInput => shallowMethod(<NavSidebar {...propsInput} />)
-
 test('shallow rendering', () => {
-  const shallow = createShallow(propsBase)
-
-  expect(shallow).toMatchSnapshot()
+  expect(shallow(<NavSidebar {...propsBase} />)).toMatchSnapshot()
 })

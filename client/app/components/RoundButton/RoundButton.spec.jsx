@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { mount, shallow as shallowMethod } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { identity, theme } from '../../mocks'
-
 import { RoundButton } from './RoundButton'
 
 const propsBase = {
@@ -17,19 +16,15 @@ const propsBase = {
   disabled: false
 }
 
-const createWrapper = propsInput => mount(<RoundButton {...propsInput} />)
-const createShallow = propsInput => shallowMethod(<RoundButton {...propsInput} />)
-
 test('button click calls props.handleNext', () => {
   const props = {
     ...propsBase,
     handleNext: jest.fn()
   }
-  const dom = createWrapper(props)
+  const dom = mount(<RoundButton {...props} />)
   const button = dom.find('button').first()
-
-  expect(props.handleNext).not.toHaveBeenCalled()
   button.simulate('click')
+
   expect(props.handleNext).toHaveBeenCalled()
 })
 
@@ -39,32 +34,31 @@ test('button click calls props.handleDisabled', () => {
     disabled: true,
     handleDisabled: jest.fn()
   }
-  const dom = createWrapper(props)
+  const dom = mount(<RoundButton {...props} />)
   const button = dom.find('button').first()
-
-  expect(props.handleDisabled).not.toHaveBeenCalled()
   button.simulate('click')
+
   expect(props.handleDisabled).toHaveBeenCalled()
 })
 
-test('shallow rendering when props.size is large', () => {
+test('size is large', () => {
   const props = {
     ...propsBase,
     size: 'large'
   }
 
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<RoundButton {...props} />)).toMatchSnapshot()
 })
 
-test('shallow rendering when props.size is full', () => {
+test('size is full', () => {
   const props = {
     ...propsBase,
     size: 'full'
   }
 
-  expect(createShallow(props)).toMatchSnapshot()
+  expect(shallow(<RoundButton {...props} />)).toMatchSnapshot()
 })
 
-test('shallow rendering when props.size is small', () => {
-  expect(createShallow(propsBase)).toMatchSnapshot()
+test('size is small', () => {
+  expect(shallow(<RoundButton {...propsBase} />)).toMatchSnapshot()
 })
