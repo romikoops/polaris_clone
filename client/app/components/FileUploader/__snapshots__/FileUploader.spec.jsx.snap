@@ -86,3 +86,46 @@ exports[`square is true 1`] = `
   </form>
 </div>
 `;
+
+exports[`state.error is true 1`] = `
+<div
+  className="flex-none layout-row upload_btn_wrapper "
+  data-for="RANDOM_KEY_3"
+  data-tip="FOO_TOOLTIP"
+>
+  <form>
+    <RoundButton
+      active={true}
+      back={false}
+      disabled={false}
+      handleDisabled={null}
+      handleNext={[Function]}
+      icon=""
+      iconClass=""
+      size="small"
+      text="Upload"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <ReactTooltip
+      className="tooltip"
+      effect="solid"
+      id="RANDOM_KEY_3"
+      insecure={true}
+      resizeHide={true}
+      wrapper="div"
+    />
+    <input
+      name="FOO_TYPE"
+      onChange={[Function]}
+      type="file"
+    />
+  </form>
+</div>
+`;
