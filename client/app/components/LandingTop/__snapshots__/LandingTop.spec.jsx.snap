@@ -36,6 +36,9 @@ exports[`theme has truthy properties 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
             "role_id": 2,
           }
         }
@@ -213,6 +216,9 @@ exports[`user.role_id is 1 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
             "role_id": 1,
           }
         }
@@ -287,7 +293,31 @@ exports[`user.role_id is 1 1`] = `
               icon=""
               iconClass=""
               size="small"
-              text="Admin Dashboard"
+              text="Find Rates"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="My Account"
               theme={
                 Object {
                   "colors": Object {
@@ -358,6 +388,9 @@ exports[`user.role_id is 2 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
             "role_id": 2,
           }
         }

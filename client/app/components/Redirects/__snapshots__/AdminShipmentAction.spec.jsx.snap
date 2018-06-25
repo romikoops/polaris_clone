@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loading is true 1`] = `
+<div
+  className="layout-fill"
+/>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-fill"
+>
+  <Modal
+    component={
+      <LoginPage
+        loggingIn={false}
+        loginAttempt={false}
+        noRedirect={true}
+        req={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    }
+    horizontalPadding="20px"
+    minHeight=""
+    parentToggle={[Function]}
+    verticalPadding="20px"
+  />
+</div>
+`;

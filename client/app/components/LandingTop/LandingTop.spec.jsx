@@ -5,15 +5,10 @@ import { theme, user, identity, tenant } from '../../mocks'
 jest.mock('../Header/Header', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <header>{children}</header>)
-
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ children }) => <button>{children}</button>
-}))
 // eslint-disable-next-line
 import { LandingTop } from './LandingTop'
 
-const edittedTenant = {
+const editedTenant = {
   data: {
     ...tenant,
     name: 'FOO_NAME'
@@ -24,7 +19,7 @@ const propsBase = {
   bookNow: identity,
   goTo: identity,
   toggleShowLogin: identity,
-  tenant: edittedTenant,
+  tenant: editedTenant,
   theme,
   toAdmin: identity,
   user: {
@@ -32,8 +27,6 @@ const propsBase = {
     role_id: 2
   }
 }
-
-const createWrapper = propsInput => mount(<LandingTop {...propsInput} />)
 
 test('user.role_id is 2', () => {
   expect(shallow(<LandingTop {...propsBase} />)).toMatchSnapshot()
@@ -69,14 +62,14 @@ test('props.toggleShowLogin is called', () => {
   const props = {
     ...propsBase,
     user: {
+      ...user,
       guest: true
     },
     toggleShowLogin: jest.fn()
   }
-  const wrapper = createWrapper(props)
-
+  const wrapper = mount(<LandingTop {...props} />)
   const link = wrapper.find('a').first()
-
   link.simulate('click')
+
   expect(props.toggleShowLogin).toHaveBeenCalled()
 })
