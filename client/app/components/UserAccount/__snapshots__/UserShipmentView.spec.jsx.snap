@@ -208,6 +208,7 @@ exports[`props.loading is true 1`] = `
           >
             <IncotermRow
               destinationFees={false}
+              feeHash={Object {}}
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -490,7 +491,7 @@ exports[`props.loading is true 1`] = `
           <div
             className="flex-50 layout-align-start-center layout-row"
           >
-            <Styled(Component)
+            <Styled(Select)
               className="select"
               name="file-type"
               onChange={[Function]}
@@ -537,7 +538,9 @@ exports[`props.loading is true 1`] = `
           <div
             className="flex-50 layout-align-end-center layout-row"
           >
-            <Unknown
+            <FileUploader
+              dispatchFn={null}
+              square={false}
               text="Packing Sheet"
               theme={
                 Object {
@@ -547,7 +550,9 @@ exports[`props.loading is true 1`] = `
                   },
                 }
               }
+              tooltip=""
               type="packing_sheet"
+              uploadFn={null}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -831,6 +836,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
+              feeHash={Object {}}
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -993,6 +999,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
               "volume": NaN,
             }
           }
+          shipment={Object {}}
           theme={
             Object {
               "colors": Object {
@@ -1020,6 +1027,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
               "volume": NaN,
             }
           }
+          shipment={Object {}}
           theme={
             Object {
               "colors": Object {
@@ -1168,7 +1176,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
           <div
             className="flex-50 layout-align-start-center layout-row"
           >
-            <Styled(Component)
+            <Styled(Select)
               className="select"
               name="file-type"
               onChange={[Function]}
@@ -1215,7 +1223,9 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
           <div
             className="flex-50 layout-align-end-center layout-row"
           >
-            <Unknown
+            <FileUploader
+              dispatchFn={null}
+              square={false}
               text="Packing Sheet"
               theme={
                 Object {
@@ -1225,7 +1235,9 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
                   },
                 }
               }
+              tooltip=""
               type="packing_sheet"
+              uploadFn={null}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -1509,6 +1521,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
+              feeHash={Object {}}
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -1644,6 +1657,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 className="flex-100"
               >
                 <TextHeading
+                  color=""
                   size={3}
                   text="Shipper"
                   theme={
@@ -1696,6 +1710,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 className="flex-100"
               >
                 <TextHeading
+                  color=""
                   size={3}
                   text="Receiver"
                   theme={
@@ -1753,6 +1768,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
                 className="flex-100"
               >
                 <TextHeading
+                  color=""
                   size={3}
                   text="Notifyee"
                   theme={
@@ -1934,7 +1950,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
           <div
             className="flex-50 layout-align-start-center layout-row"
           >
-            <Styled(Component)
+            <Styled(Select)
               className="select"
               name="file-type"
               onChange={[Function]}
@@ -1981,7 +1997,9 @@ exports[`props.shipmentData.contacts is present 1`] = `
           <div
             className="flex-50 layout-align-end-center layout-row"
           >
-            <Unknown
+            <FileUploader
+              dispatchFn={null}
+              square={false}
               text="Packing Sheet"
               theme={
                 Object {
@@ -1991,7 +2009,9 @@ exports[`props.shipmentData.contacts is present 1`] = `
                   },
                 }
               }
+              tooltip=""
               type="packing_sheet"
+              uploadFn={null}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -2275,6 +2295,7 @@ exports[`props.shipmentData.documents is present 1`] = `
           >
             <IncotermRow
               destinationFees={false}
+              feeHash={Object {}}
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -2557,7 +2578,7 @@ exports[`props.shipmentData.documents is present 1`] = `
           <div
             className="flex-50 layout-align-start-center layout-row"
           >
-            <Styled(Component)
+            <Styled(Select)
               className="select"
               name="file-type"
               onChange={[Function]}
@@ -2604,7 +2625,9 @@ exports[`props.shipmentData.documents is present 1`] = `
           <div
             className="flex-50 layout-align-end-center layout-row"
           >
-            <Unknown
+            <FileUploader
+              dispatchFn={null}
+              square={false}
               text="Packing Sheet"
               theme={
                 Object {
@@ -2614,7 +2637,9 @@ exports[`props.shipmentData.documents is present 1`] = `
                   },
                 }
               }
+              tooltip=""
               type="packing_sheet"
+              uploadFn={null}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>
@@ -2969,6 +2994,7 @@ exports[`shallow render 1`] = `
           >
             <IncotermRow
               destinationFees={false}
+              feeHash={Object {}}
               onCarriage={false}
               originFees={false}
               preCarriage={false}
@@ -3251,7 +3277,7 @@ exports[`shallow render 1`] = `
           <div
             className="flex-50 layout-align-start-center layout-row"
           >
-            <Styled(Component)
+            <Styled(Select)
               className="select"
               name="file-type"
               onChange={[Function]}
@@ -3298,7 +3324,9 @@ exports[`shallow render 1`] = `
           <div
             className="flex-50 layout-align-end-center layout-row"
           >
-            <Unknown
+            <FileUploader
+              dispatchFn={null}
+              square={false}
               text="Packing Sheet"
               theme={
                 Object {
@@ -3308,7 +3336,9 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
+              tooltip=""
               type="packing_sheet"
+              uploadFn={null}
               url="/shipments/undefined/upload/packing_sheet"
             />
           </div>

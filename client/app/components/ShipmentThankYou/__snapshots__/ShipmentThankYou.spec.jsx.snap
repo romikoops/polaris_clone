@@ -53,9 +53,14 @@ exports[`shallow rendering 1`] = `
           className="content_width flex-none content-width layout-row layout-align-start-center"
         >
           <RoundButton
+            active={false}
             back={true}
+            disabled={false}
+            handleDisabled={null}
             handleNext={[Function]}
+            icon=""
             iconClass="fa-angle0-left"
+            size=""
             text="Back to dashboard"
             theme={
               Object {

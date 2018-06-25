@@ -78,7 +78,11 @@ exports[`shallow render 1`] = `
         >
           <RoundButton
             active={true}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
             handleNext={[Function]}
+            icon=""
             iconClass="fa-archive"
             size="large"
             text="Find Rates"
@@ -178,6 +182,7 @@ exports[`shallow render 1`] = `
       >
         <TextHeading
           className="flex-non clip"
+          color=""
           size={1}
           text="Shipments"
           theme={
@@ -285,6 +290,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row layout-wrap layout-align-start-center"
     >
       <TextHeading
+        color=""
         size={1}
         text="My Shipment Addresses"
         theme={

@@ -20,7 +20,7 @@ exports[`shallow rendering 1`] = `
   <div
     className="layout-row flex-100 layout-wrap map_cont"
   >
-    <[object Object]
+    <GmapsLoader
       component={[Function]}
       handleAddressChange={[Function]}
       handleCarriageChange={[Function]}
@@ -106,6 +106,7 @@ exports[`shallow rendering 1`] = `
           "goTo": [Function],
         }
       }
+      theme={null}
     />
   </div>
   <div
@@ -136,13 +137,18 @@ exports[`shallow rendering 1`] = `
             className="flex-none letter_2 layout-align-space-between-end"
           >
             <TextHeading
+              color=""
               size={3}
               text="Available at appointed terminal"
             />
           </div>
           <Tooltip
+            color=""
             icon="fa-info-circle"
             text="planned_dropoff_date"
+            theme={Object {}}
+            toolText=""
+            wrapperClassName=""
           />
         </div>
         <div
@@ -156,7 +162,16 @@ exports[`shallow rendering 1`] = `
               className="flex-none fa fa-calendar"
             />
           </div>
-          <[object Object]
+          <DayPickerInput
+            classNames={
+              Object {
+                "container": "DayPickerInput",
+                "overlay": "DayPickerInput-Overlay",
+                "overlayWrapper": "DayPickerInput-OverlayWrapper",
+              }
+            }
+            clickUnselectsDay={false}
+            component="input"
             dayPickerProps={
               Object {
                 "disabledDays": Object {
@@ -167,9 +182,16 @@ exports[`shallow rendering 1`] = `
               }
             }
             format="DD/MM/YYYY"
+            formatDate={[Function]}
+            hideOnDayClick={true}
+            inputProps={Object {}}
+            keepFocus={true}
             name="dayPicker"
             onDayChange={[Function]}
+            overlayComponent={[Function]}
+            parseDate={[Function]}
             placeholder="DD/MM/YYYY"
+            showOverlay={false}
             value=""
           />
           <span
@@ -202,6 +224,8 @@ exports[`shallow rendering 1`] = `
               },
             }
           }
+          theme={null}
+          value={false}
         />
       </div>
     </div>
@@ -209,8 +233,9 @@ exports[`shallow rendering 1`] = `
   <div
     className="border_divider trucking_sec layout-row flex-100  layout-wrap layout-align-center"
   >
-    <[object Object]
+    <TruckingDetails
       handleTruckingDetailsChange={[Function]}
+      theme={null}
       truckTypes={
         Array [
           "default",
@@ -234,6 +259,7 @@ exports[`shallow rendering 1`] = `
     >
       <IncotermRow
         destinationFees={true}
+        feeHash={Object {}}
         onCarriage={true}
         originFees={false}
         preCarriage={false}
@@ -253,6 +279,7 @@ exports[`shallow rendering 1`] = `
             },
           }
         }
+        theme={null}
       />
     </div>
   </div>
@@ -322,6 +349,7 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
+      theme={null}
       toggleModal={[Function]}
     />
   </div>
@@ -342,9 +370,13 @@ exports[`shallow rendering 1`] = `
           >
             <Checkbox
               checked={false}
+              className=""
+              disabled={false}
               name="no_dangerous_goods_confirmation"
               onChange={[Function]}
+              onClick={null}
               size="30px"
+              theme={null}
             />
           </div>
           <div
@@ -379,10 +411,15 @@ exports[`shallow rendering 1`] = `
         >
           <RoundButton
             active={false}
+            back={false}
             disabled={true}
             handleDisabled={[Function]}
             handleNext={[Function]}
+            icon=""
+            iconClass=""
+            size=""
             text="Get Offers"
+            theme={null}
           />
         </div>
         <div
@@ -410,10 +447,16 @@ exports[`shallow rendering 1`] = `
         className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
       >
         <RoundButton
+          active={false}
           back={true}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
           iconClass="fa-angle-left"
+          size=""
           text="Back to Dashboard"
+          theme={null}
         />
       </div>
     </div>

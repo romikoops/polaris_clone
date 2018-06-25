@@ -20,7 +20,11 @@ exports[`props.contactData.location is falsy 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
         size="small"
         text="Back"
@@ -117,7 +121,11 @@ exports[`props.loading is true 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
         size="small"
         text="Back"
@@ -239,7 +247,11 @@ exports[`shallow render 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
         size="small"
         text="Back"
@@ -361,7 +373,11 @@ exports[`state.editBool is true 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
         size="small"
         text="Back"

@@ -88,7 +88,7 @@ exports[`props.aliases is truthy 1`] = `
         <div
           className="flex-75 layout-row layout-align-end-center layout-wrap"
         >
-          <Styled(Component)
+          <Styled(Select)
             className="select"
             clearable={false}
             name="currency"
@@ -237,7 +237,11 @@ exports[`props.aliases is truthy 1`] = `
           >
             <RoundButton
               active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
               handleNext={[Function]}
+              icon=""
               iconClass="fa-floppy-o"
               size="small"
               text="Save"
@@ -439,7 +443,12 @@ exports[`props.aliases is truthy 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -470,7 +479,12 @@ exports[`props.aliases is truthy 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -501,7 +515,12 @@ exports[`props.aliases is truthy 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -609,7 +628,7 @@ exports[`shallow render 1`] = `
         <div
           className="flex-75 layout-row layout-align-end-center layout-wrap"
         >
-          <Styled(Component)
+          <Styled(Select)
             className="select"
             clearable={false}
             name="currency"
@@ -758,7 +777,11 @@ exports[`shallow render 1`] = `
           >
             <RoundButton
               active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
               handleNext={[Function]}
+              icon=""
               iconClass="fa-floppy-o"
               size="small"
               text="Save"
@@ -926,7 +949,12 @@ exports[`shallow render 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -957,7 +985,12 @@ exports[`shallow render 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -988,7 +1021,12 @@ exports[`shallow render 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -1083,7 +1121,7 @@ exports[`state.editBool is true 1`] = `
         <div
           className="flex-75 layout-row layout-align-end-center layout-wrap"
         >
-          <Styled(Component)
+          <Styled(Select)
             className="select"
             clearable={false}
             name="currency"
@@ -1232,7 +1270,11 @@ exports[`state.editBool is true 1`] = `
           >
             <RoundButton
               active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
               handleNext={[Function]}
+              icon=""
               iconClass="fa-floppy-o"
               size="small"
               text="Save"
@@ -1400,7 +1442,12 @@ exports[`state.editBool is true 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -1431,7 +1478,12 @@ exports[`state.editBool is true 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
@@ -1462,7 +1514,12 @@ exports[`state.editBool is true 1`] = `
       >
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
           handleNext={[Function]}
+          icon=""
+          iconClass=""
           size="small"
           text="Opt Out"
           theme={
