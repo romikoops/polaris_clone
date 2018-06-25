@@ -18,7 +18,6 @@ import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
-import { debug } from 'util';
 
 const mapStyle = {
   width: '100%',
@@ -88,8 +87,7 @@ export class ShipmentLocationBox extends Component {
       truckTypes: {
         origin: ['side_lifter', 'chassis'],
         destination: ['side_lifter', 'chassis']
-      },
-      truckingHubs: {}
+      }
     }
 
     this.isOnFocus = {
@@ -153,8 +151,8 @@ export class ShipmentLocationBox extends Component {
   }
 
   setDestNexus (event) {
-    // this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
-    
+    this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
+
     if (event) {
       const destination = {
         nexus_id: event.value.id,
@@ -168,7 +166,7 @@ export class ShipmentLocationBox extends Component {
       this.props.setNotesIds([event.value.id], 'destination')
       this.props.setTargetAddress('destination', destination)
       this.setMarker({ lat, lng }, destination.nexus_name, 'destination')
-      this.setState({ dSelect }, () => this.prepForSelect('destination'))
+      this.setState({ dSelect })
     } else {
       this.setState({
         truckingOptions: {
@@ -176,7 +174,7 @@ export class ShipmentLocationBox extends Component {
           preCarriage: true
         },
         dSelect: ''
-      }, () => this.prepForSelect('destination'))
+      })
       this.props.setNotesIds(null, 'destination')
       this.state.markers.destination.setMap(null)
       this.props.setTargetAddress('destination', {})
@@ -455,7 +453,7 @@ export class ShipmentLocationBox extends Component {
     })
   }
 
-  handlePlaceChange (place, target) {
+  handlePlaceChange (aMap, place, target) {
     this.changeAddressFormVisibility(target, true)
 
     this.infowindow.close()
@@ -736,66 +734,13 @@ export class ShipmentLocationBox extends Component {
 
     /* eslint-enable camelcase */
   }
-  prepForSelect (target) {
-    const { truckingHubs, oSelect, dSelect } = this.state
-    const { routes } = this.props.shipmentData
-    const targetLocation = target === 'origin' ? oSelect : dSelect
-    // const targetLocation = this.props[target]
-    const targetTrucking = truckingHubs[target]
-    const counterpart = target === 'origin' ? 'destination' : 'origin'
-    let results = []
-    const selectOptions = []
-    const nexusNames = []
-    // debugger // eslint-disable-line
-    if (targetLocation.label) {
-      results = this.selectFromLookupTable([targetLocation.value.id], `${target}Nexus`)
-    } else if (targetTrucking) {
-      results = this.selectFromLookupTable(targetTrucking, `${target}Hubs`)
-    } else {
-      results = routes
-    }
-    results.forEach((res) => {
-      const counter = res[counterpart]
-      const option = {
-        label: counter.nexusName,
-        value: {
-          id: counter.nexusId,
-          latitude: counter.latitude || 24.0347,
-          longitude: counter.longitude || 24.0347,
-          name: counter.nexusName
-        }
-      }
-      if (!nexusNames.includes(counter.nexusName)) {
-        selectOptions.push(option)
-        nexusNames.push(counter.nexusName)
-      }
-    })
-    return selectOptions
-  }
-
-  selectFromLookupTable (nexusIds, target) {
-    const { shipmentData } = this.props
-    const { lookupTablesForRoutes, routes } = shipmentData
-    const results = []
-    nexusIds.forEach((nexusId) => {
-      const lookup = lookupTablesForRoutes[target][nexusId]
-      lookup.forEach((ri) => {
-        if (!results.includes(routes[ri])) {
-          results.push(routes[ri])
-        }
-      })
-    })
-
-    return results
-  }
-
   render () {
     const {
       allNexuses, scope, shipmentData, nextStageAttempts, origin, destination
     } = this.props
 
-    let originOptions = this.prepForSelect('destination')
-    let destinationOptions = this.prepForSelect('origin')
+    let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
+    let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : []
 
     const {
       originFieldsHaveErrors,
