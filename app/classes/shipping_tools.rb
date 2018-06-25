@@ -26,18 +26,14 @@ module ShippingTools
       shipment.save!
     end
 
-    case load_type
-    when "container"
-      shipment.containers.create if shipment.containers.none?
-    when "cargo_item"
-      shipment.cargo_items.create if shipment.cargo_items.none?
-    end
-
     itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
       Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
     end
 
-    routes_data = Route.detailed_hashes_from_itinerary_ids(itinerary_ids)
+    routes_data = Route.detailed_hashes_from_itinerary_ids(
+      itinerary_ids,
+      with_truck_types: { load_type: load_type }
+    )
 
     {
       shipment:                 shipment,
