@@ -1,0 +1,137 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-column flex-100 layout-align-start-stretch
+          container relative"
+>
+  <div
+    className="layout-row layout-align-space-around-center topRightBox topRightColor"
+  >
+    <b>
+      REQUESTED
+    </b>
+  </div>
+  <div
+    className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center"
+  >
+    <span
+      className="flex-100 title"
+    >
+      Ref: 
+      <b>
+        FOO_IMC_REFERENCE
+      </b>
+    </span>
+  </div>
+  <div
+    className="layout-row flex-90 layout-align-space-between-stretch section"
+  >
+    <div
+      className="layout-row flex-50 layout-align-space-between-stretch
+              relative"
+    >
+      <div
+        className="layout-column flex-45 city"
+      >
+        <div
+          className="layout-column layout-padding flex-50 layout-align-center-start"
+        >
+          <span>
+            <br />
+          </span>
+        </div>
+        <div
+          className="layout-column flex-50"
+        >
+          <img
+            className="flex-100"
+            src="/app/assets/images/dashboard/stockholm.png"
+          />
+        </div>
+      </div>
+      <div
+        className="layout-row layout-align-center-center routeIcon"
+      >
+        <i
+          className="fa fa-ship"
+        />
+      </div>
+      <div
+        className="layout-column flex-45 city"
+      >
+        <div
+          className="layout-column layout-padding flex-50 layout-align-center-start"
+        >
+          <span>
+            <br />
+          </span>
+        </div>
+        <div
+          className="layout-column flex-50"
+        >
+          <img
+            className="flex-100"
+            src="/app/assets/images/dashboard/shanghai.png"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-column flex-40"
+    >
+      <div
+        className="layout-column flex-50 layout-align-center-stretch"
+      >
+        <div
+          className="layout-row flex-50 layout-align-start-stretch"
+        >
+          <div
+            className="flex-20"
+          >
+            <i
+              className="fa fa-user profileIcon"
+            />
+          </div>
+          <div
+            className="flex-80"
+          >
+            FOO_CLIENT_NAME
+          </div>
+        </div>
+        <div
+          className="layout-row flex-50 layout-align-start-stretch"
+        >
+          <span
+            className="flex-20"
+          >
+            <i
+              className="fa fa-building profileIcon"
+            />
+          </span>
+          <span
+            className="flex-80 grey"
+          />
+        </div>
+      </div>
+      <div
+        className="layout-row flex-50 layout-align-end-end smallText"
+      >
+        <span
+          className="flex-80"
+        >
+          <b>
+            Booking placed at
+          </b>
+          <br />
+          <span
+            className="grey"
+          >
+            19
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

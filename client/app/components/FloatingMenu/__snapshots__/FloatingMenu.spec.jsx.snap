@@ -31,6 +31,9 @@ exports[`shallow render 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
           }
         }
       />
@@ -50,7 +53,7 @@ exports[`shallow render 1`] = `
             className="fa fa-angle-double-left clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
               }
             }
           />
@@ -90,6 +93,9 @@ exports[`theme is falsy 1`] = `
             "guest": false,
             "last_name": "Doe",
             "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
           }
         }
       />

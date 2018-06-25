@@ -329,6 +329,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -412,6 +418,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -1466,6 +1478,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -1549,6 +1567,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -2660,6 +2684,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -2743,6 +2773,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -3925,6 +3961,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -4008,6 +4050,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -5063,6 +5111,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -5146,6 +5200,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -6186,6 +6246,12 @@ exports[`shallow render 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -6269,6 +6335,12 @@ exports[`shallow render 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -7309,6 +7381,12 @@ exports[`with cargo items 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -7392,6 +7470,12 @@ exports[`with cargo items 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -7651,6 +7735,7 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_28"
+              shipment={Object {}}
               theme={
                 Object {
                   "colors": Object {
@@ -7659,7 +7744,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
             <CargoItemGroup
               group={
@@ -7772,6 +7856,7 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_29"
+              shipment={Object {}}
               theme={
                 Object {
                   "colors": Object {
@@ -7780,7 +7865,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
           </div>
         </div>
@@ -8649,6 +8733,12 @@ exports[`with containers 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {
@@ -8732,6 +8822,12 @@ exports[`with containers 1`] = `
                     "data": Object {
                       "data": Object {
                         "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "BAR_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {},
+                          },
+                        },
                         "subdomain": "foosubdomain",
                         "theme": Object {
                           "colors": Object {

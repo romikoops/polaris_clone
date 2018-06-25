@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.shipmentData.dangerousGoods is true 1`] = `
+exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"
@@ -21,6 +21,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Cargo Details"
               theme={
@@ -41,6 +42,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Shipment Documents "
               theme={
@@ -80,6 +82,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={3}
               text="Total value of goods"
               theme={
@@ -105,7 +108,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
               <div
                 className="flex-66 layout-row"
               >
-                <Component
+                <Formsy(FormsyInput)
                   className="flex-100 cargo_input "
                   errorMessageStyles={
                     Object {
@@ -113,11 +116,13 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
                       "fontSize": "13px",
                     }
                   }
+                  innerRef={[Function]}
                   name="totalGoodsValue"
                   onChange={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
+                  validationError=""
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
@@ -293,6 +298,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
               >
                  
                 <TextHeading
+                  color=""
                   size={3}
                   text="Description of goods"
                   theme={
@@ -382,10 +388,13 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Packing Sheet"
                 theme={
                   Object {
@@ -395,7 +404,10 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -406,10 +418,13 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Commercial Invoice"
                 theme={
                   Object {
@@ -419,29 +434,10 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="commercial_invoice"
-              />
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-wrap"
-            >
-              <Component
-                deleteFn={[Function]}
-                dispatchFn={[Function]}
-                text="Dangerous Goods"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                type="dangerous_goods"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -459,6 +455,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
                 >
                    
                   <TextHeading
+                    color=""
                     size={3}
                     text="Notes (Optional)"
                     theme={
@@ -492,9 +489,10 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
               <div
                 className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
               >
-                <Component
+                <DocumentsMultiForm
                   deleteFn={[Function]}
                   dispatchFn={[Function]}
+                  documents={Array []}
                   text="Miscellaneous"
                   theme={
                     Object {
@@ -504,7 +502,9 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                   type="miscellaneous"
+                  uploadFn={null}
                 />
               </div>
             </div>
@@ -516,7 +516,7 @@ exports[`props.shipmentData.dangerousGoods is true 1`] = `
 </div>
 `;
 
-exports[`props.tenant.data.scope.has_insurance is true 1`] = `
+exports[`shipmentData.dangerousGoods is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"
@@ -537,6 +537,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Cargo Details"
               theme={
@@ -557,6 +558,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Shipment Documents "
               theme={
@@ -596,6 +598,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={3}
               text="Total value of goods"
               theme={
@@ -621,7 +624,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className="flex-66 layout-row"
               >
-                <Component
+                <Formsy(FormsyInput)
                   className="flex-100 cargo_input "
                   errorMessageStyles={
                     Object {
@@ -629,11 +632,13 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
                       "fontSize": "13px",
                     }
                   }
+                  innerRef={[Function]}
                   name="totalGoodsValue"
                   onChange={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
+                  validationError=""
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
@@ -809,6 +814,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
               >
                  
                 <TextHeading
+                  color=""
                   size={3}
                   text="Description of goods"
                   theme={
@@ -898,10 +904,13 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Packing Sheet"
                 theme={
                   Object {
@@ -911,7 +920,10 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -922,10 +934,13 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Commercial Invoice"
                 theme={
                   Object {
@@ -935,7 +950,39 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={false}
+                multiple={false}
+                text="Dangerous Goods"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="dangerous_goods"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -953,6 +1000,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
                 >
                    
                   <TextHeading
+                    color=""
                     size={3}
                     text="Notes (Optional)"
                     theme={
@@ -986,9 +1034,10 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
               >
-                <Component
+                <DocumentsMultiForm
                   deleteFn={[Function]}
                   dispatchFn={[Function]}
+                  documents={Array []}
                   text="Miscellaneous"
                   theme={
                     Object {
@@ -998,7 +1047,525 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                   type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`tenant.data.scope.has_insurance is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onChange={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onChange={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <textarea
+                className="textarea_incoterm"
+                cols="30"
+                id=""
+                name="incotermText"
+                onChange={[Function]}
+                rows="6"
+                value=""
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <textarea
+                  className="textarea_margin"
+                  cols="30"
+                  id=""
+                  name="notes"
+                  onChange={[Function]}
+                  rows="6"
+                  value="FOO_NOTES"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
                 />
               </div>
             </div>
@@ -1023,6 +1590,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
             className="flex-none layout-row layout-align-space-around-center"
           >
             <TextHeading
+              color=""
               size={2}
               text="Insurance"
               theme={
@@ -1055,7 +1623,11 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
               >
                 <Checkbox
                   checked={true}
+                  className=""
+                  disabled={false}
                   onChange={[Function]}
+                  onClick={null}
+                  size={null}
                   theme={
                     Object {
                       "colors": Object {
@@ -1089,7 +1661,11 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
               >
                 <Checkbox
                   checked={false}
+                  className=""
+                  disabled={false}
                   onChange={[Function]}
+                  onClick={null}
+                  size={null}
                   theme={
                     Object {
                       "colors": Object {
@@ -1169,7 +1745,7 @@ exports[`props.tenant.data.scope.has_insurance is true 1`] = `
 </div>
 `;
 
-exports[`props.totalGoodsValue.value > 20000 1`] = `
+exports[`totalGoodsValue.value > 20000 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"
@@ -1190,6 +1766,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Cargo Details"
               theme={
@@ -1210,6 +1787,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={2}
               text="Shipment Documents "
               theme={
@@ -1249,6 +1827,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
             className="flex-none"
           >
             <TextHeading
+              color=""
               size={3}
               text="Total value of goods"
               theme={
@@ -1274,7 +1853,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
               <div
                 className="flex-66 layout-row"
               >
-                <Component
+                <Formsy(FormsyInput)
                   className="flex-100 cargo_input "
                   errorMessageStyles={
                     Object {
@@ -1282,11 +1861,13 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
                       "fontSize": "13px",
                     }
                   }
+                  innerRef={[Function]}
                   name="totalGoodsValue"
                   onChange={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
+                  validationError=""
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
@@ -1462,6 +2043,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
               >
                  
                 <TextHeading
+                  color=""
                   size={3}
                   text="Description of goods"
                   theme={
@@ -1551,10 +2133,13 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Packing Sheet"
                 theme={
                   Object {
@@ -1564,7 +2149,10 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -1575,10 +2163,13 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row"
             >
-              <Component
+              <DocumentsForm
                 deleteFn={[Function]}
                 dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
                 isRequired={true}
+                multiple={false}
                 text="Commercial Invoice"
                 theme={
                   Object {
@@ -1588,7 +2179,10 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
                     },
                   }
                 }
+                tooltip=""
                 type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
               />
             </div>
           </div>
@@ -1606,6 +2200,7 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
                 >
                    
                   <TextHeading
+                    color=""
                     size={3}
                     text="Notes (Optional)"
                     theme={
@@ -1639,9 +2234,10 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
               <div
                 className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
               >
-                <Component
+                <DocumentsMultiForm
                   deleteFn={[Function]}
                   dispatchFn={[Function]}
+                  documents={Array []}
                   text="Miscellaneous"
                   theme={
                     Object {
@@ -1651,501 +2247,9 @@ exports[`props.totalGoodsValue.value > 20000 1`] = `
                       },
                     }
                   }
+                  tooltip=""
                   type="miscellaneous"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`shallow render 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap padd_top"
-  name="cargoDetailsBox"
->
-  <div
-    className="flex-100 layout-row layout-align-center"
-  >
-    <div
-      className="flex-none content_width layout-row layout-wrap"
-    >
-      <div
-        className="flex-100 layout-row layout-align-space-between-center"
-      >
-        <div
-          className="flex-45 layout-align-start-center layout-row"
-        >
-          <div
-            className="flex-none"
-          >
-            <TextHeading
-              size={2}
-              text="Cargo Details"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-45 layout-align-start-center layout-row"
-        >
-          <div
-            className="flex-none"
-          >
-            <TextHeading
-              size={2}
-              text="Shipment Documents "
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-none"
-            style={
-              Object {
-                "marginLeft": "10px",
-              }
-            }
-          >
-            <p
-              className="flex-none"
-            >
-              ( if available )
-            </p>
-          </div>
-        </div>
-      </div>
-      <div
-        className="flex-100 layout-row layout-wrap"
-      >
-        <div
-          className="flex-100"
-        >
-           
-          <div
-            className="flex-none"
-          >
-            <TextHeading
-              size={3}
-              text="Total value of goods"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row"
-            >
-              <div
-                className="flex-66 layout-row"
-              >
-                <Component
-                  className="flex-100 cargo_input "
-                  errorMessageStyles={
-                    Object {
-                      "bottom": "-17px",
-                      "fontSize": "13px",
-                    }
-                  }
-                  name="totalGoodsValue"
-                  onChange={[Function]}
-                  required={true}
-                  submitAttempted={false}
-                  type="number"
-                  validationErrors={
-                    Object {
-                      "isDefaultRequiredValue": "Must be greater than 0",
-                      "nonNegative": "Must be greater than 0",
-                    }
-                  }
-                  validations={
-                    Object {
-                      "nonNegative": [Function],
-                    }
-                  }
-                  wrapperClassName="flex-100 wrapper_cargo_input"
-                />
-              </div>
-              <div
-                className="flex-33 layout-row"
-              >
-                <NamedSelect
-                  className="flex-100"
-                  clearable={false}
-                  onChange={[Function]}
-                  options={
-                    Array [
-                      Object {
-                        "label": "EUR",
-                        "value": "EUR",
-                      },
-                      Object {
-                        "label": "AUD",
-                        "value": "AUD",
-                      },
-                      Object {
-                        "label": "BGN",
-                        "value": "BGN",
-                      },
-                      Object {
-                        "label": "BRL",
-                        "value": "BRL",
-                      },
-                      Object {
-                        "label": "CAD",
-                        "value": "CAD",
-                      },
-                      Object {
-                        "label": "CHF",
-                        "value": "CHF",
-                      },
-                      Object {
-                        "label": "CNY",
-                        "value": "CNY",
-                      },
-                      Object {
-                        "label": "CZK",
-                        "value": "CZK",
-                      },
-                      Object {
-                        "label": "DKK",
-                        "value": "DKK",
-                      },
-                      Object {
-                        "label": "GBP",
-                        "value": "GBP",
-                      },
-                      Object {
-                        "label": "HKD",
-                        "value": "HKD",
-                      },
-                      Object {
-                        "label": "HRK",
-                        "value": "HRK",
-                      },
-                      Object {
-                        "label": "HUF",
-                        "value": "HUF",
-                      },
-                      Object {
-                        "label": "IDR",
-                        "value": "IDR",
-                      },
-                      Object {
-                        "label": "ILS",
-                        "value": "ILS",
-                      },
-                      Object {
-                        "label": "INR",
-                        "value": "INR",
-                      },
-                      Object {
-                        "label": "JPY",
-                        "value": "JPY",
-                      },
-                      Object {
-                        "label": "KRW",
-                        "value": "KRW",
-                      },
-                      Object {
-                        "label": "MXN",
-                        "value": "MXN",
-                      },
-                      Object {
-                        "label": "MYR",
-                        "value": "MYR",
-                      },
-                      Object {
-                        "label": "NOK",
-                        "value": "NOK",
-                      },
-                      Object {
-                        "label": "NZD",
-                        "value": "NZD",
-                      },
-                      Object {
-                        "label": "PHP",
-                        "value": "PHP",
-                      },
-                      Object {
-                        "label": "PLN",
-                        "value": "PLN",
-                      },
-                      Object {
-                        "label": "RON",
-                        "value": "RON",
-                      },
-                      Object {
-                        "label": "RUB",
-                        "value": "RUB",
-                      },
-                      Object {
-                        "label": "SEK",
-                        "value": "SEK",
-                      },
-                      Object {
-                        "label": "SGD",
-                        "value": "SGD",
-                      },
-                      Object {
-                        "label": "THB",
-                        "value": "THB",
-                      },
-                      Object {
-                        "label": "TRY",
-                        "value": "TRY",
-                      },
-                      Object {
-                        "label": "USD",
-                        "value": "USD",
-                      },
-                      Object {
-                        "label": "ZAR",
-                        "value": "ZAR",
-                      },
-                    ]
-                  }
-                  value={
-                    Object {
-                      "label": "EUR",
-                      "value": "EUR",
-                    }
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap"
-            id="cargo_notes"
-          >
-            <div
-              className="flex-100"
-            >
-              <div
-                className="flex-none f_header"
-              >
-                 
-                <TextHeading
-                  size={3}
-                  text="Description of goods"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-            </div>
-            <div
-              className="flex-100"
-            >
-              <Formsy(FormsyTextarea)
-                className="flex-100 cargo_text_area "
-                errorMessageStyles={
-                  Object {
-                    "bottom": "-17px",
-                    "fontSize": "13px",
-                  }
-                }
-                innerRef={[Function]}
-                name="cargoNotes"
-                onChange={[Function]}
-                required={true}
-                submitAttempted={false}
-                type="textarea"
-                validationError=""
-                validationErrors={
-                  Object {
-                    "isDefaultRequiredValue": "Must not be empty",
-                  }
-                }
-                validations={null}
-                value="FOO_CARGO_NOTES"
-                wrapperClassName="flex-100 wrapper_cargo_input"
-              />
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100"
-            >
-              <div
-                className="flex-none layout-row layout-wrap f_header"
-              >
-                 
-                <h4
-                  className="no_m flex-100"
-                >
-                  Incoterms
-                </h4>
-                <p
-                  className="flex-90"
-                >
-                  2010 by the International Chamber of Commerce (ICC) (Optional)
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-start-start input_box_full"
-            >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
-                name="incotermText"
-                onChange={[Function]}
-                rows="6"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap"
-            name="packing_sheet"
-          >
-            <div
-              className="flex-100 layout-row"
-            >
-              <Component
-                deleteFn={[Function]}
-                dispatchFn={[Function]}
-                isRequired={true}
-                text="Packing Sheet"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                type="packing_sheet"
-              />
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap"
-            name="commercial_invoice"
-          >
-            <div
-              className="flex-100 layout-row"
-            >
-              <Component
-                deleteFn={[Function]}
-                dispatchFn={[Function]}
-                isRequired={true}
-                text="Commercial Invoice"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-                type="commercial_invoice"
-              />
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-start layout-wrap"
-            >
-              <div
-                className="flex-100"
-              >
-                <div
-                  className="flex-none f_header"
-                >
-                   
-                  <TextHeading
-                    size={3}
-                    text="Notes (Optional)"
-                    theme={
-                      Object {
-                        "colors": Object {
-                          "primary": "#333",
-                          "secondary": "#fafafa",
-                        },
-                      }
-                    }
-                  />
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-start-start input_box_full"
-              >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
-                  name="notes"
-                  onChange={[Function]}
-                  rows="6"
-                  value="FOO_NOTES"
-                />
-              </div>
-            </div>
-            <div
-              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
-            >
-              <div
-                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
-              >
-                <Component
-                  deleteFn={[Function]}
-                  dispatchFn={[Function]}
-                  text="Miscellaneous"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                  type="miscellaneous"
+                  uploadFn={null}
                 />
               </div>
             </div>

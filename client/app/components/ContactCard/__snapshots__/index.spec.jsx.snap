@@ -24,7 +24,7 @@ exports[`shallow render 1`] = `
             className="fa fa-user-circle-o flex-none clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
                 "padding": "3px 0",
                 "width": "28px",
               }
@@ -49,7 +49,7 @@ exports[`shallow render 1`] = `
             className="fa fa-envelope flex-none clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
                 "padding": "3px 0",
                 "width": "28px",
               }
@@ -78,7 +78,7 @@ exports[`shallow render 1`] = `
             className="fa fa-building-o flex-none clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
                 "padding": "3px 0",
                 "width": "28px",
               }
@@ -87,12 +87,14 @@ exports[`shallow render 1`] = `
           <p
             className="flex-80 contact_header"
           >
-            <Component
+            <Truncate
+              ellipsis="…"
+              lines={1}
               trimWhitespace={true}
             >
                
                
-            </Component>
+            </Truncate>
           </p>
         </div>
       </div>
@@ -106,7 +108,7 @@ exports[`shallow render 1`] = `
             className="fa fa-phone flex-none clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
                 "padding": "3px 0",
                 "width": "28px",
               }
@@ -129,7 +131,7 @@ exports[`shallow render 1`] = `
         className="fa fa-globe flex-none clip"
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             "padding": "3px 0",
             "width": "28px",
           }

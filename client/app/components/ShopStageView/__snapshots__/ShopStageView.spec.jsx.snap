@@ -48,7 +48,7 @@ exports[`shallow rendering 1`] = `
             className="flex-none fa fa-chevron-left clip"
             style={
               Object {
-                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
               }
             }
           />
@@ -57,7 +57,7 @@ exports[`shallow rendering 1`] = `
           className="shop_stage_current_border"
           style={
             Object {
-              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             }
           }
         />
@@ -91,7 +91,7 @@ exports[`shallow rendering 1`] = `
                 className="flex-none"
                 style={
                   Object {
-                    "background": "-webkit-linear-gradient(left, undefined,undefined)",
+                    "background": "-webkit-linear-gradient(-90deg, undefined,undefined)",
                   }
                 }
               >
@@ -104,7 +104,7 @@ exports[`shallow rendering 1`] = `
               className="shop_stage_current_border"
               style={
                 Object {
-                  "background": "-webkit-linear-gradient(left, undefined,undefined)",
+                  "background": "-webkit-linear-gradient(-90deg, undefined,undefined)",
                 }
               }
             />
