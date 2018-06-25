@@ -33,31 +33,16 @@ module ShippingTools
       shipment.cargo_items.create if shipment.cargo_items.none?
     end
 
-    itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
-    origins = []
-    destinations = []
-    itineraries = current_user.tenant.itineraries.map do |itinerary|
-      next if itinerary.pricings.for_load_type(load_type).empty?
-      begin
-        origins << {
-          value: Location.find(itinerary.first_nexus.id).to_custom_hash,
-          label: itinerary.first_nexus.name
-        }
-        destinations << {
-          value: Location.find(itinerary.last_nexus.id).to_custom_hash,
-          label: itinerary.last_nexus.name
-        }
+    itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+      Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+    end
 
-        itinerary = itinerary.as_options_json
-      rescue StandardError
-      end
-      itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
-      itinerary
-    end.compact
+    routes_data = Route.detailed_hashes_from_itinerary_ids(itinerary_ids)
+
     {
       shipment:                 shipment,
-      all_nexuses:              { origins: origins.uniq, destinations: destinations.uniq },
-      itineraries:              itineraries,
+      routes:                   routes_data[:route_hashes],
+      lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types:         tenant.cargo_item_types,
       max_dimensions:           tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions
