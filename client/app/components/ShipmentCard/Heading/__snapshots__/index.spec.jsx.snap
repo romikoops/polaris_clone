@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`collapsed is true 1`] = `
+<div
+  className="heading flex-100 layout-row layout-align-space-between-center"
+  style={
+    Object {
+      "background": "#333",
+      "color": "white",
+    }
+  }
+>
+  <TextHeading
+    color="white"
+    size={3}
+    text="FOO"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="flex-10 layout-row layout-align-center-center"
+    onClick={[Function]}
+  >
+    <i
+      className="collapsed fa fa-chevron-down pointy"
+    />
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="heading flex-100 layout-row layout-align-space-between-center"
+  style={
+    Object {
+      "background": "#333",
+      "color": "white",
+    }
+  }
+>
+  <TextHeading
+    color="white"
+    size={3}
+    text="FOO"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="flex-10 layout-row layout-align-center-center"
+    onClick={[Function]}
+  >
+    <i
+      className=" fa fa-chevron-down pointy"
+    />
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="heading flex-100 layout-row layout-align-space-between-center"
+  style={
+    Object {
+      "background": "rgba(0,0,0,0.25)",
+      "color": "white",
+    }
+  }
+>
+  <TextHeading
+    color="white"
+    size={3}
+    text="FOO"
+    theme={null}
+  />
+  <div
+    className="flex-10 layout-row layout-align-center-center"
+    onClick={[Function]}
+  >
+    <i
+      className=" fa fa-chevron-down pointy"
+    />
+  </div>
+</div>
+`;

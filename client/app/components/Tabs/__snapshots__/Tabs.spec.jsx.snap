@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-column flex-100"
+>
+  <div
+    className="layout-row flex-100"
+  >
+    <div
+      className="layout-row flex-25"
+    >
+      <div
+        isActive={true}
+        key=".0"
+        onClick={[Function]}
+        tabIndex={0}
+      >
+        foo
+      </div>
+      <div
+        isActive={false}
+        key=".1"
+        onClick={[Function]}
+        tabIndex={1}
+      >
+        bar
+      </div>
+    </div>
+  </div>
+  <div
+    className="tabs-active-content"
+  >
+    foo
+  </div>
+</div>
+`;
