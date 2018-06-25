@@ -475,9 +475,9 @@ export class ShipmentLocationBox extends Component {
 
     this.selectLocation(place, target)
   }
-  filterTruckTypesByHub (truckingObject) {
-    this.setState({ truckingObject })
-    console.log(truckingObject)
+  filterTruckTypesByHub (truckTypeObject) {
+    this.setState({ truckTypeObject })
+    console.log(truckTypeObject)
   }
 
   updateAddressFieldsErrors (target) {
@@ -572,7 +572,7 @@ export class ShipmentLocationBox extends Component {
       availableNexusesIds,
       prefix,
       availableHubIds,
-      (truckingAvailable, nexusIds, hubIds, truckingObject) => {
+      (truckingAvailable, nexusIds, hubIds, truckTypeObject) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
             const { direction } = this.props.shipmentData.shipment
@@ -603,7 +603,7 @@ export class ShipmentLocationBox extends Component {
             this.props.handleSelectLocation(addressFormsHaveErrors)
           })
         } else {
-          this.filterTruckTypesByHub(truckingObject)
+          this.filterTruckTypesByHub(truckTypeObject)
           this.setState({ [`${target}FieldsHaveErrors`]: false })
           this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
           this.props.setNotesIds(nexusIds, target)

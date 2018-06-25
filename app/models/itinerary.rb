@@ -291,11 +291,12 @@ class Itinerary < ApplicationRecord
     raise ArgumentError unless %w(origin destination).include?(target)
 
     target_hub_ids.map do |target_hub_id|
-      next unless ordered_nexus_ids.include?(target_hub_id)
+      next unless ordered_hub_ids.include?(target_hub_id)
 
-      target_idx = ordered_nexus_ids.index(target_hub_id)
+      target_idx = ordered_hub_ids.index(target_hub_id)
 
       target_range = target == "origin" ? 0...target_idx : (target_idx + 1)..-1
+
       ordered_hub_ids[target_range]
     end.compact.flatten.uniq
   end

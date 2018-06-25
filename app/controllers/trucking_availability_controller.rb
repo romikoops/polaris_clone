@@ -8,26 +8,27 @@ class TruckingAvailabilityController < ApplicationController
     trucking_pricings = find_trucking_pricings
 
     truck_type_object = Hash.new { |h, k| h[k] = [] }
+    hub_ids = []
 
     trucking_pricings.each do |trucking_pricing|
       hub_id = trucking_pricing.preloaded_hub_id
       hub_ids << hub_id
 
       truck_type = trucking_pricing.truck_type
-      if truck_type_object[hub_id].include?(truck_type)
+      unless truck_type_object[hub_id].include?(truck_type)
         truck_type_object[hub_id] << trucking_pricing.truck_type
       end
     end
-    hub_ids   = trucking_pricings.map(&:preloaded_hub_id).uniq
     nexus_ids = Hub.where(id: hub_ids).pluck(:nexus_id).uniq
 
-    response = build_response_hash(trucking_pricings, nexus_ids, hub_ids)
+    response = build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
+
     response_handler(response)
   end
 
   private
 
-  def build_response_hash(trucking_pricings, nexus_ids, hub_ids)
+  def build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
     {
       trucking_available: !trucking_pricings.empty?,
       nexus_ids:          nexus_ids,

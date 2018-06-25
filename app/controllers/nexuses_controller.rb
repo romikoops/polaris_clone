@@ -7,7 +7,7 @@ class NexusesController < ApplicationController
 
   def index
     formatted_available_nexuses = format_for_select_box(find_available_nexuses)
-    response_handler("available#{params[:target].capitalize}s" => formatted_available_nexuses)
+    response_handler("available#{params[:target].capitalize}Nexuses" => formatted_available_nexuses)
   end
 
   def find_nexus
@@ -37,15 +37,14 @@ class NexusesController < ApplicationController
       end
     end.flatten.uniq
 
-    Hub.where(id: available_hub_ids).group_by_nexus
+    Hub.group_ids_by_nexus(available_hub_ids)
   end
 
   def format_for_select_box(available_hub_ids_grouped_by_nexus)
-    Location.where(id: available_hub_ids_grouped_by_nexus.keys).map
-    nexuses.map do |nexus|
+    Location.where(id: available_hub_ids_grouped_by_nexus.keys).map do |nexus|
       {
         label: nexus[:name],
-        value: nexus.merge(hub_ids: available_hub_ids_grouped_by_nexus[nexus.id])
+        value: nexus.as_json.merge(hub_ids: available_hub_ids_grouped_by_nexus[nexus.id])
       }
     end
   end
