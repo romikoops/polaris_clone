@@ -14,13 +14,12 @@ function findNexus (lat, lng, callback) {
   })
 }
 
-function findAvailability (lat, lng, tenantId, loadType, availableNexusesIds, carriage, availableHubIds, callback) {
+function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubIds, callback) {
   fetch(
     `${BASE_URL}/trucking_availability?` +
       `lat=${lat}&lng=${lng}&` +
       `tenant_id=${tenantId}&` +
       `load_type=${loadType}&` +
-      `nexus_ids=${availableNexusesIds}&` +
       `carriage=${carriage}&` +
       `hub_ids=${availableHubIds}`,
     {

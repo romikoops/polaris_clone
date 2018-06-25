@@ -15,14 +15,18 @@ export default function TruckingDetails (props) {
         text={truckType}
         icon="fa-info-circle"
         theme={theme}
+        color="white"
         wrapperClassName={styles.tooltip}
       />
     )
   }
 
   function formGroup (carriage, truckType) {
+    const disabled = !truckTypes.includes(truckType)
+    const disabledClass = disabled ? styles.disabled : ''
     return (
-      <div className={`${styles.form_group} flex-50 layout-row layout-align-start-end`}>
+      <div className={`${styles.form_group} ${disabledClass} flex-50 layout-row layout-align-start-end`}>
+        <div className={disabled ? styles.overlay : ''} />
         <input
           type="radio"
           id={`${carriage}-${truckType}`}
@@ -38,17 +42,17 @@ export default function TruckingDetails (props) {
   }
 
   function carriageSection (carriage) {
-    const disabled = !trucking[carriage].truck_type
-    const disabledClass = disabled ? styles.disabled : ''
+    const baseTruckTypes = ['side_lifter', 'chassis']
+
     return (
-      <div className={`${styles.carriage_sec} ${disabledClass} flex-100 layout-row layout-wrap`}>
-        <div className={disabled ? styles.overlay : ''} />
+      <div className={`${styles.carriage_sec}  flex-100 layout-row layout-wrap`}>
         <div className="flex-100 layout-row layout-align-space-around">
-          { truckTypes.map(_truckType => formGroup(carriage, _truckType)) }
+          { baseTruckTypes.map(_truckType => formGroup(carriage, _truckType)) }
         </div>
       </div>
     )
   }
+
   return (
     <div className="flex-100 layout-row">
       <div className={`${styles.trucking_details} flex-100 layout-row layout-wrap layout-align-center`}>

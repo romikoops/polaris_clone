@@ -31,9 +31,6 @@
         margin-left: 4px;
         display: inline-block;
       }
-    }
-    .carriage_sec {
-      position: relative;
       .overlay {
         position: absolute;
         top: 0;
@@ -46,6 +43,10 @@
       &.disabled {
         opacity: 0.4;
       }
+    }
+    .carriage_sec {
+      position: relative;
+      
     }
   }
 }
