@@ -235,7 +235,8 @@ module ExcelTool
         load_type:     meta[:load_type] == "container" ? "container" : "cargo_item",
         load_meterage: {
           ratio:        meta[:load_meterage_ratio],
-          height_limit: 130
+          height_limit: meta[:load_meterage_height],
+          area_limit: meta[:load_meterage_area]
         },
         cbm_ratio:     meta[:cbm_ratio],
         courier:       find_or_create_courier(meta[:courier]),

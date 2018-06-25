@@ -21,6 +21,7 @@ class NexusesController < ApplicationController
 
 	def find_available_nexuses
 		nexus_ids = params[:nexus_ids].split(",").map(&:to_i)
+		hub_ids = params[:hub_ids].split(",").map(&:to_i)
     target 	  = params[:target]
     
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
