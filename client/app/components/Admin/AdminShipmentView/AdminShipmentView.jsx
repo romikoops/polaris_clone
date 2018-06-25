@@ -92,7 +92,8 @@ export class AdminShipmentView extends Component {
         insurance: this.props.shipmentData.shipment.selected_offer.insurance.edited_total
           ? this.props.shipmentData.shipment.selected_offer.insurance.edited_total.value
           : this.props.shipmentData.shipment.selected_offer.trucking_pre.total.value
-      }
+      },
+      totalPrice: this.props.shipmentData.shipment.total_price.value
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
@@ -283,16 +284,25 @@ export class AdminShipmentView extends Component {
     const { newPrices, currency } = this.state
     const { adminDispatch, shipmentData } = this.props
 
+    let difference = 0
+
     Object.keys(newPrices).forEach((k) => {
       const service = shipmentData.shipment.selected_offer[k]
 
-      if (newPrices[k] !== 0 && service.total && newPrices[k] !== service.total.value) {
+      if (newPrices[k] !== 0 && service.total && service.total.value &&
+        newPrices[k] !== service.total.value) {
+        difference += (newPrices[k] - service.total.value)
+
         adminDispatch.editShipmentServicePrice(shipmentData.shipment.id, {
           value: newPrices[k],
           currency,
           charge_category: k
         })
       }
+    })
+
+    this.setState({
+      totalPrice: parseFloat(shipmentData.shipment.total_price.value) + difference
     })
 
     this.toggleEditServicePrice()
@@ -320,7 +330,7 @@ export class AdminShipmentView extends Component {
       locations
     } = shipmentData
     const {
-      showEditTime, showEditServicePrice, newTimes, newPrices, currency
+      showEditTime, showEditServicePrice, newTimes, newPrices, currency, totalPrice
     } = this.state
     const hubsObj = {
       startHub: {
@@ -852,7 +862,9 @@ export class AdminShipmentView extends Component {
                   <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
                 </div>
               </div>
-              <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
+              <h2 className="layout-align-end-center layout-row flex">
+                {(+totalPrice).toFixed(2)} {shipment.total_goods_value.currency}
+              </h2>
             </div>
           </div>
         </div>
