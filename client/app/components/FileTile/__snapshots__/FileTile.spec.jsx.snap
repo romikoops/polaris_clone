@@ -308,6 +308,176 @@ exports[`doc.approved === rejected 1`] = `
 </div>
 `;
 
+exports[`doc.signed_url is truthy 1`] = `
+<div
+  className="flex-none layout-row layout-wrap layout-align-center-start tile "
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_header"
+      >
+        <p
+          className="flex-100"
+        >
+          Title
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_text"
+      >
+        <p
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+             
+          </Truncate>
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_header"
+      >
+        <p
+          className="flex-100"
+        >
+          Type
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_text"
+      >
+        <p
+          className="flex-100"
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_header"
+      >
+        <p
+          className="flex-100"
+        >
+          Uploaded
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_text"
+      >
+        <p
+          className="flex-100"
+        >
+          19
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-start"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_header"
+      >
+        <p
+          className="flex-100"
+        >
+          Status
+        </p>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start file_text approved"
+      >
+        <p
+          className="flex-100"
+        >
+          approved
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-end"
+  >
+    <div
+      className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
+    >
+      <form
+        className="flex-none layout-row layout-align-center-center"
+        onSubmit={[Function]}
+      >
+        <div
+          className="flex-none"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-pencil clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+        </div>
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <i
+          className="clip fa fa-trash"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="upload_btn_wrapper flex-33 layout-row layout-align-center-center"
+    >
+      <Link
+        className="flex-none layout-row layout-align-center-center"
+        replace={false}
+        target="_blank"
+        to="FOO_SIGNED_URL"
+      >
+        <i
+          className="clip fa fa-eye"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </Link>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`isAdmin is true 1`] = `
 <div
   className="flex-none layout-row layout-wrap layout-align-center-start tile "

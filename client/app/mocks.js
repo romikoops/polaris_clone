@@ -27,7 +27,9 @@ export const tenant = {
     id: 123,
     scope: {
       modes_of_transport: {
-        FOO_MODE_TRANSPORT: {},
+        FOO_MODE_TRANSPORT: {
+          FOO_LOAD_TYPE: true
+        },
         BAR_MODE_TRANSPORT: {}
       }
     },

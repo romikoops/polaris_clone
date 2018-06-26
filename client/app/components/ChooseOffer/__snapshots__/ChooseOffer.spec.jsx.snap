@@ -25,7 +25,11 @@ exports[`shallow render 1`] = `
       className="flex-20 layout-row layout-wrap"
     >
       <RouteFilterBox
-        availableMotKeys={Object {}}
+        availableMotKeys={
+          Object {
+            "FOO_MODE_TRANSPORT": true,
+          }
+        }
         departureDate={0}
         durationFilter={40}
         moT={
@@ -47,6 +51,7 @@ exports[`shallow render 1`] = `
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "FOO_LOAD_TYPE",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
               "BAR_HUB_ROUTE_KEY": Object {
@@ -341,3 +346,7 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`shipmentData is falsy 1`] = `""`;
+
+exports[`shipmentData.schedules is falsy 1`] = `""`;

@@ -232,7 +232,9 @@ exports[`shallow render 1`] = `
             "scope": Object {
               "modes_of_transport": Object {
                 "BAR_MODE_TRANSPORT": Object {},
-                "FOO_MODE_TRANSPORT": Object {},
+                "FOO_MODE_TRANSPORT": Object {
+                  "FOO_LOAD_TYPE": true,
+                },
               },
             },
             "subdomain": "foosubdomain",
@@ -514,7 +516,9 @@ exports[`theme is falsy 1`] = `
             "scope": Object {
               "modes_of_transport": Object {
                 "BAR_MODE_TRANSPORT": Object {},
-                "FOO_MODE_TRANSPORT": Object {},
+                "FOO_MODE_TRANSPORT": Object {
+                  "FOO_LOAD_TYPE": true,
+                },
               },
             },
             "subdomain": "foosubdomain",

@@ -332,7 +332,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -421,7 +423,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -1481,7 +1485,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -1570,7 +1576,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -2687,7 +2695,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -2776,7 +2786,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -3964,7 +3976,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -4053,7 +4067,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -5114,7 +5130,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -5203,7 +5221,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -6249,7 +6269,9 @@ exports[`shallow render 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -6338,7 +6360,9 @@ exports[`shallow render 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -7384,7 +7408,9 @@ exports[`with cargo items 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -7473,7 +7499,9 @@ exports[`with cargo items 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -8736,7 +8764,9 @@ exports[`with containers 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -8825,7 +8855,9 @@ exports[`with containers 1`] = `
                         "scope": Object {
                           "modes_of_transport": Object {
                             "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {},
+                            "FOO_MODE_TRANSPORT": Object {
+                              "FOO_LOAD_TYPE": true,
+                            },
                           },
                         },
                         "subdomain": "foosubdomain",
