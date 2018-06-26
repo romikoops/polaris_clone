@@ -62,7 +62,7 @@ export class ShipmentOverviewCard extends Component {
     return (
       <div className="layout-wrap flex-100 layout-row layout-align-start-start">
         { !noTitle ? titleBox : ''}
-        <div className={` ${adminStyles.margin_box_right} flex-100 layout-row layout-align-start-start padding_bottom`}>
+        <div className={` ${adminStyles.margin_box_right} flex-100 layout-row layout-wrap layout-align-start-start padding_bottom`}>
           {this.listShipments(shipments)}
         </div>
 
