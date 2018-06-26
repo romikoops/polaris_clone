@@ -35,6 +35,19 @@ test('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
 })
 
+test('state.selectedMoT.ocean is false', () => {
+  const wrapper = shallow(<ChooseOffer {...propsBase} />)
+  wrapper.setState({
+    selectedMoT: {
+      ocean: false,
+      air: true,
+      truck: true,
+      rail: true
+    }
+  })
+  expect(wrapper).toMatchSnapshot()
+})
+
 test('shipmentData is falsy', () => {
   const props = {
     ...propsBase,
