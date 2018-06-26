@@ -138,9 +138,11 @@ export class AdminDashboardNew extends Component {
             <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
           </div>
         </div>
+        <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+          <span><b>Requested Shipments</b></span>
+        </div>
         <ShipmentOverviewCard
           admin
-          showTitle
           handleSelect={this.handleClick}
           dispatches={adminDispatch}
           shipments={preparedRequestedShipments}
