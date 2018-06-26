@@ -8,7 +8,12 @@ exports[`props.loading is false, state.requested is true 1`] = `
 >
   <RoundButton
     active={true}
+    back={false}
+    disabled={false}
+    handleDisabled={null}
     handleNext={[Function]}
+    icon=""
+    iconClass=""
     size="small"
     text="Download"
     theme={
@@ -54,7 +59,12 @@ exports[`shallow render 1`] = `
 >
   <RoundButton
     active={true}
+    back={false}
+    disabled={false}
+    handleDisabled={null}
     handleNext={[Function]}
+    icon=""
+    iconClass=""
     size="small"
     text="Request"
     theme={

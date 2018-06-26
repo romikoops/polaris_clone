@@ -22,11 +22,13 @@ exports[`displayOnly is true 1`] = `
       <p
         className="flex-none"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
     </div>
   </div>
@@ -82,11 +84,13 @@ exports[`multiple is true 1`] = `
       <p
         className="flex-none"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
     </div>
   </div>
@@ -108,10 +112,13 @@ exports[`multiple is true 1`] = `
             style="#333"
           />
         </button>
-        <Component
+        <ReactTooltip
           className="tooltip"
           effect="solid"
           id="RANDOM_KEY_2"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
         />
         <input
           name="FOO_TYPE"
@@ -161,11 +168,13 @@ exports[`shallow render 1`] = `
       <p
         className="flex-none"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
     </div>
   </div>
@@ -187,10 +196,13 @@ exports[`shallow render 1`] = `
             style="#333"
           />
         </button>
-        <Component
+        <ReactTooltip
           className="tooltip"
           effect="solid"
           id="RANDOM_KEY_0"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
         />
         <input
           name="FOO_TYPE"
@@ -245,11 +257,13 @@ exports[`theme is falsy 1`] = `
       <p
         className="flex-none"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
     </div>
   </div>
@@ -275,10 +289,13 @@ exports[`theme is falsy 1`] = `
             }
           />
         </button>
-        <Component
+        <ReactTooltip
           className="tooltip"
           effect="solid"
           id="RANDOM_KEY_4"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
         />
         <input
           name="FOO_TYPE"
@@ -333,11 +350,13 @@ exports[`viewer is true 1`] = `
       <p
         className="flex-none"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
     </div>
   </div>
@@ -359,10 +378,13 @@ exports[`viewer is true 1`] = `
             style="#333"
           />
         </button>
-        <Component
+        <ReactTooltip
           className="tooltip"
           effect="solid"
           id="RANDOM_KEY_3"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
         />
         <input
           name="FOO_TYPE"

@@ -31,7 +31,10 @@ import { UserShipmentRow } from './UserShipmentRow'
 
 const editedShipment = {
   ...shipment,
-  load_type: 'FOO_LOAD_TYPE',
+  origin_hub_id: 'FOO',
+  destination_hub_id: 'BAR',
+  load_type: 'cargo_item',
+  selected_offer: { cargo: {} },
   schedules_charges: {
     'FOO-BAR': {
       cargo: []
@@ -72,14 +75,6 @@ test('props.shipment.schedule_set.length < 1', () => {
   const props = {
     ...propsBase,
     shipment: shipmentValue
-  }
-  expect(shallow(<UserShipmentRow {...props} />)).toMatchSnapshot()
-})
-
-test('props.shipment.hubs is {}', () => {
-  const props = {
-    ...propsBase,
-    hubs: {}
   }
   expect(shallow(<UserShipmentRow {...props} />)).toMatchSnapshot()
 })

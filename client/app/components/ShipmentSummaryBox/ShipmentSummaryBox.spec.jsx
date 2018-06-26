@@ -1,6 +1,13 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { route, user, locations, shipment, identity, theme } from '../../mocks'
+import {
+  route,
+  user,
+  locations,
+  shipment,
+  identity,
+  theme
+} from '../../mocks'
 
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -71,9 +78,7 @@ const propsBase = {
 let originalDate
 const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
-  // eslint-disable-next-line no-global-assign
   originalDate = Date
-  // eslint-disable-next-line no-global-assign
   Date = class extends Date {
     constructor () {
       return constantDate
@@ -82,7 +87,6 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  // eslint-disable-next-line no-global-assign
   Date = originalDate
 })
 

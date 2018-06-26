@@ -4,7 +4,6 @@ class Admin::SchedulesController < ApplicationController
   before_action :require_login_and_role_is_admin
   include ItineraryTools
   include ExcelTools
-  include DocumentTools
 
   def index
     tenant = Tenant.find(current_user.tenant_id)

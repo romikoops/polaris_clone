@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w[german-shipping]
@@ -38,13 +37,15 @@ subdomains.each do |sub|
   hub = tenant.hubs.find_by_name('GS Warehouse Depot')
   trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ltl.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   awesome_print 'City rates done'
   puts 'GS Warehouse LTL'
   hub = tenant.hubs.find_by_name('GS Warehouse Depot')
   trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ftl.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   awesome_print 'City rates done'
 
 end
