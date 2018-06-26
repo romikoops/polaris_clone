@@ -3,7 +3,7 @@ import React from 'react'
 export function switchIcon (mot, style) {
   switch (mot) {
     case 'ocean':
-      return <i className="fa fa-anchor" />
+      return <i className={`fa fa-anchor ${style ? 'clip' : ''}`} style={style} />
     case 'air':
       return <i className={`fa fa-plane ${style ? 'clip' : ''}`} style={style} />
     case 'rail':

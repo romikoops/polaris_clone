@@ -106,6 +106,7 @@ export class AdminTruckingIndex extends Component {
     } else {
       filter4 = filter3
     }
+
     return filter4
   }
   render () {
@@ -122,11 +123,13 @@ export class AdminTruckingIndex extends Component {
         : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
       const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
+
       return (
         <div
-          className={`${
-            styles.action_section
-          } flex-100 layout-row layout-align-center-center layout-wrap`}
+          className={`
+            ${styles.action_section}
+            flex-100 layout-row layout-align-center-center layout-wrap
+          `}
         >
           <p className="flex-70">{typeNames[htk]}</p>
           <Checkbox
@@ -166,9 +169,10 @@ export class AdminTruckingIndex extends Component {
       </div>
     ))
     const results = this.applyFilters(searchResults)
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+      <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+        <div className={`${styles.component_view} flex-65 layout-row layout-align-start-start`}>
           <AdminSearchableHubs
             theme={theme}
             hubs={results}
@@ -176,7 +180,7 @@ export class AdminTruckingIndex extends Component {
             sideScroll={false}
             handleClick={viewTrucking}
             hideFilters
-            title="Trucking Hubs"
+            title=" "
             seeAll={false}
             icon="fa-info-circle"
           />

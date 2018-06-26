@@ -26,7 +26,7 @@
     }
   }
   .searchable_header{
-    padding: 15px 0;
+    padding: 26px 0;
   }
   .searchable_header.overlay {
     position: absolute;
@@ -460,9 +460,9 @@
     opacity: 0;
     z-index: -1;
   }
-  .component_view {
-    padding: 10px;
-  }
+  // .component_view {
+  //   padding: 10px;
+  // }
   .hub_form {
     width: 800px;
     height: 750px;
@@ -926,10 +926,14 @@
      cursor: pointer;
    }
 
-    .services_box .border_right {
-      border-color: transparent !important;
-    }
+   .services_box .border_right {
+    border-color: transparent !important;
+   }
 
+  .separator {
+    height: 40px;
+    width: 100%;
+  }
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;

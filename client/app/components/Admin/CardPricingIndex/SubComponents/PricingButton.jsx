@@ -4,11 +4,12 @@ import styles from '../Card.scss'
 
 function PricingButton ({ onClick, onDisabledClick, disabled }) {
   const disabledClass = disabled ? styles.disabled : ''
+
   return (
     <div
       className={`${
         styles.pricing_button
-      } ${disabledClass} flex-90 layout-row layout-align-center-center`}
+      } ${disabledClass} flex-100 layout-row layout-align-center-center`}
       onClick={disabled ? onDisabledClick : onClick}
     >
       <p className="flex-none">+ New Route Pricing</p>

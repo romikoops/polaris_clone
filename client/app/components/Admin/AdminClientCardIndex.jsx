@@ -10,6 +10,7 @@ function listClients (clients, theme) {
     theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: '#E0E0E0' }
+
   return clients.length > 0 ? clients.map((client) => {
     const clientCard = (
 

@@ -102,6 +102,7 @@ class Admin extends Component {
     }
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
+
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
         {loadingScreen}
@@ -288,6 +289,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const documentLoading = document.loading
+
   return {
     user,
     users,
