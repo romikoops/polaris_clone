@@ -128,7 +128,6 @@ module TruckingTools
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
-    byebug
     return {} if cargo_values["weight"] == 0
     
     case trucking_pricing.modifier
