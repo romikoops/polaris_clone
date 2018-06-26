@@ -119,9 +119,12 @@ export const location = {
   primary: true,
   id: 246,
   street_number: 579,
+  streetNumber: 579,
+  geocodedAddress: 'FOO_GEOCODED_ADDRESS',
   street: 'FOO_STREET',
   city: 'FOO_CITY',
   zip_code: '22456',
+  zipCode: '22456',
   country: 'Germany'
 }
 
