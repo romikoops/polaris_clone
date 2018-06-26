@@ -2,6 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme, identity, user, shipmentData, tenant, shipment } from '../../mocks'
 import { ChooseOffer } from './ChooseOffer'
+
 shipmentData.shipment = {
   ...shipmentData.shipment,
   load_type: 'FOO_LOAD_TYPE'
