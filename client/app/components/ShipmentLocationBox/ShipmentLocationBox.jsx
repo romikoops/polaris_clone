@@ -139,16 +139,16 @@ export class ShipmentLocationBox extends Component {
     this.initMap()
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.has_pre_carriage) {
+    if (!this.props.has_on_carriage && nextProps.has_pre_carriage) {
       this.postToggleAutocomplete('origin')
     }
-    if (nextProps.has_on_carriage) {
+    if (!this.props.has_pre_carriage && nextProps.has_on_carriage) {
       this.postToggleAutocomplete('destination')
     }
-    if (!nextProps.has_on_carriage) {
+    if (this.props.has_on_carriage && !nextProps.has_on_carriage) {
       this.prepForSelect('destination')
     }
-    if (!nextProps.has_pre_carriage) {
+    if (this.props.has_pre_carriage && !nextProps.has_pre_carriage) {
       this.prepForSelect('origin')
     }
     if (this.props.nextStageAttempts < nextProps.nextStageAttempts) {
@@ -508,7 +508,6 @@ export class ShipmentLocationBox extends Component {
 
   handleTrucking (event) {
     const { name, checked } = event.target
-
     if (name === 'has_pre_carriage') {
       if (checked) {
         this.postToggleAutocomplete('origin')
@@ -752,6 +751,7 @@ export class ShipmentLocationBox extends Component {
     /* eslint-enable camelcase */
   }
   prepForSelect (target) {
+    console.log(target)
     const { truckingHubs, oSelect, dSelect } = this.state
     const { lookupTablesForRoutes, routes } = this.props.shipmentData
     const targetLocation = target === 'origin' ? oSelect : dSelect

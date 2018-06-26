@@ -33,10 +33,12 @@ module PricingTools
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
     
     cargo_hash =  cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.try(:quantity) || 1)
-               else
-                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+      weight = if cargo_unit.is_a?(CargoItem) || 
+                  cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+                elsif cargo_unit.is_a?(AggregatedCargo)
+                  cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+                else
+                  cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
                end
       
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
