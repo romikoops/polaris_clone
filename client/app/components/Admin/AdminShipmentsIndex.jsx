@@ -15,10 +15,6 @@ export class AdminShipmentsIndex extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
-    const hubOrigin = shipment.schedule_set[0].origin_hub_id
-    const hubDestination = shipment.schedule_set[0].destination_hub_id
-    shipment.originHub = hubsObj[hubOrigin] ? hubsObj[hubOrigin].name : ''
-    shipment.destinationHub = hubsObj[hubDestination] ? hubsObj[hubDestination].name : ''
 
     return shipment
   }
@@ -70,7 +66,7 @@ export class AdminShipmentsIndex extends Component {
             <AdminSearchableShipments
               handleClick={this.viewShipment}
               hubs={hubHash}
-              adminDispatch={adminDispatch}
+              dispatches={adminDispatch}
               shipments={mergedReqShipments}
               title="Requested Shipments"
               theme={theme}
@@ -86,7 +82,7 @@ export class AdminShipmentsIndex extends Component {
             <AdminSearchableShipments
               handleClick={this.viewShipment}
               hubs={hubHash}
-              adminDispatch={adminDispatch}
+              dispatches={adminDispatch}
               shipments={mergedOpenShipments}
               title="Open Shipments"
               theme={theme}
@@ -102,7 +98,7 @@ export class AdminShipmentsIndex extends Component {
             <AdminSearchableShipments
               handleClick={this.viewShipment}
               hubs={hubHash}
-              adminDispatch={adminDispatch}
+              dispatches={adminDispatch}
               shipments={mergedFinishedShipments}
               title="Finished Shipments"
               theme={theme}

@@ -59,6 +59,7 @@ class AdminShipments extends Component {
     if (!shipments || !hubs || !clients) {
       return <h1>NO SHIPMENTS DATA</h1>
     }
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -76,6 +77,7 @@ class AdminShipments extends Component {
                 handleShipmentAction={this.handleShipmentAction}
                 clients={clients}
                 hubs={hubs}
+                adminDispatch={adminDispatch}
                 hubHash={hubHash}
                 shipments={shipments}
                 viewShipment={this.viewShipment}

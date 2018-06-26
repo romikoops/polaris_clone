@@ -34,6 +34,7 @@ export class ShipmentOverviewCard extends Component {
         <UserShipmentCard
           shipment={shipment}
           dispatches={dispatches}
+          theme={theme}
         />
       )
 
@@ -46,23 +47,25 @@ export class ShipmentOverviewCard extends Component {
           />
         </div>
       )
-    }) : (<span className={`${styles.wideelement}`}>No shipments available</span>)
+    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>No shipments available</span>)
   }
 
   render () {
     const {
-      shipments
+      shipments,
+      noTitle
     } = this.props
+    const titleBox = (<div className={`layout-padding flex-100 layout-align-start-center  ${styles.greyBg}`}>
+      <span><b>Requested Shipments</b></span>
+    </div>)
 
     return (
       <div className="layout-wrap flex-100 layout-row layout-align-start-start">
-        <div className={`layout-padding flex-100 layout-align-start-center  ${styles.greyBg}`}>
-          <span><b>Requested Shipments</b></span>
-        </div>
-        <div className={` ${adminStyles.margin_box_right} flex-100 layout-row layout-align-start-start`}>
+        { !noTitle ? titleBox : ''}
+        <div className={` ${adminStyles.margin_box_right} flex-100 layout-row layout-align-start-start padding_bottom`}>
           {this.listShipments(shipments)}
         </div>
-        
+
       </div>
     )
   }
@@ -73,7 +76,8 @@ ShipmentOverviewCard.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func),
   theme: PropTypes.theme,
-  hubs: PropTypes.objectOf(PropTypes.hub)
+  hubs: PropTypes.objectOf(PropTypes.hub),
+  noTitle: PropTypes.bool
 
 }
 
@@ -82,7 +86,8 @@ ShipmentOverviewCard.defaultProps = {
   shipments: [],
   dispatches: {},
   theme: null,
-  hubs: {}
+  hubs: {},
+  noTitle: false
 }
 
 export default ShipmentOverviewCard

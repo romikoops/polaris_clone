@@ -52,7 +52,7 @@ function login (data) {
           (response.data.role.name === 'super_admin' && !data.noRedirect) ||
           (response.data.role.name === 'sub_admin' && !data.noRedirect)
         ) {
-          dispatch(push('/admin/dashboard'))
+          dispatch(adminActions.getDashboard(true))
         } else if (response.data.role.name === 'shipper' && !data.noRedirect) {
           dispatch(push('/account'))
         }
