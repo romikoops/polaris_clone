@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserShipmentRow.scss'
 import { moment } from '../../constants'
@@ -68,18 +68,9 @@ export class UserShipmentRow extends Component {
     const {
       theme, shipment, hubs, user
     } = this.props
-    if (shipment.schedule_set.length < 1) {
-      return ''
-    }
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-      // ;
-      return ''
-    }
-    // ;
     const schedule = {}
-    const originHub = hubs[hubKeys[0]].data
-    const destHub = hubs[hubKeys[1]].data
+    const originHub = hubs[shipment.origin_hub_id].data
+    const destHub = hubs[shipment.destination_hub_id].data
     const gradientFontStyle = {
       background:
         theme && theme.colors
@@ -131,7 +122,7 @@ export class UserShipmentRow extends Component {
     //     </div>
     //   </div>
     // )
-    const feeHash = shipment.schedules_charges[shipment.schedule_set[0].hub_route_key]
+    const feeHash = shipment.selected_offer
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
         <div

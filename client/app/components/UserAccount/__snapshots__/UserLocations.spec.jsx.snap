@@ -1,0 +1,188 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap"
+>
+  <div
+    className="pointy flex-33"
+    key="addLocationButton"
+    onClick={[Function]}
+  >
+    <div
+      className="location-box new-address layout-row layout-align-center-center layout-wrap"
+    >
+      <div
+        className="layout-row layout-align-center flex-100"
+      >
+        <div
+          className="plus-icon"
+        />
+      </div>
+      <div
+        className="layout-row layout-align-center flex-100"
+      >
+        <h3>
+          Add location
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-33"
+    key="RANDOM_KEY_0"
+  >
+    <div
+      className="location-box"
+    >
+      <div
+        className="header"
+      >
+        <div
+          className="layout-row layout-wrap"
+        >
+          <div
+            className="layout-row flex-80"
+          >
+            <h3
+              className="other"
+            >
+              Other
+            </h3>
+          </div>
+          <div
+            className="layout-row flex-20 layout-align-end"
+          >
+            <div
+              className="makePrimary pointy"
+              onClick={[Function]}
+            >
+              Set as primary
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="content layout-row layout-wrap layout-align-start-start"
+      >
+        <p
+          className="flex-100"
+        >
+          579
+           
+          FOO_STREET
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          FOO_CITY
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          22456
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          Germany
+           
+        </p>
+      </div>
+      <div
+        className="footer"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="emulate_link"
+            onClick={[Function]}
+          >
+            Edit
+          </span>
+            |  
+          <span
+            className="emulate_link"
+            onClick={[Function]}
+          >
+            Delete
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-33"
+    key="RANDOM_KEY_1"
+  >
+    <div
+      className="location-box"
+    >
+      <div
+        className="header"
+      >
+        <h3
+          className="standard"
+        >
+          Primary
+        </h3>
+      </div>
+      <div
+        className="content layout-row layout-wrap layout-align-start-start"
+      >
+        <p
+          className="flex-100"
+        >
+          579
+           
+          FOO_STREET
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          FOO_CITY
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          22456
+           
+        </p>
+        <p
+          className="flex-100"
+        >
+          Germany
+           
+        </p>
+      </div>
+      <div
+        className="footer"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="emulate_link"
+            onClick={[Function]}
+          >
+            Edit
+          </span>
+            |  
+          <span
+            className="emulate_link"
+            onClick={[Function]}
+          >
+            Delete
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

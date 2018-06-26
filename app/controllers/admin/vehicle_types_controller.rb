@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::VehicleTypesController < ApplicationController
   before_action :require_login_and_role_is_admin
 
@@ -6,7 +8,7 @@ class Admin::VehicleTypesController < ApplicationController
     response_handler(@vehicle_types)
   end
 
-private
+  private
 
   def require_login_and_role_is_admin
     unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
@@ -14,5 +16,4 @@ private
       redirect_to root_path
     end
   end
-  
 end

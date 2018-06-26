@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Fuse from 'fuse.js'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { RouteOption } from '../RouteOption/RouteOption'
 import styles from './RouteSelector.scss'

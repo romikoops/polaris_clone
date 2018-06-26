@@ -1,29 +1,25 @@
+# frozen_string_literal: true
+
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
     air:      "0.167",
     rail:     "0.550",
     ocean:    "1.000",
-    trucking: "0.333"
-  }.map_values { |v| BigDecimal.new(v) }
+    trucking: "0.333",
+    truck:    "0.333"
+  }.map_values { |v| BigDecimal(v) }
 
-  MAX_DIMENSIONS = {
-    dimension_x:   "590.0",
-    dimension_y:   "234.2",
-    dimension_z:   "228.0",
-    payload_in_kg: "21_770.0"
-  }.map_values { |v| BigDecimal.new(v) }
+  DIMENSIONS = %i[dimension_x dimension_y dimension_z payload_in_kg chargeable_weight].freeze
 
   belongs_to :shipment
+  delegate :tenant, to: :shipment
+
   belongs_to :cargo_item_type
 
-  MAX_DIMENSIONS.each do |attribute, max_dimension|
-    validates attribute,
-      presence: true,
-      numericality: {
-        greater_than_or_equal_to: 0,
-        less_than_or_equal_to: max_dimension
-      }
-  end
+  before_validation :set_chargeable_weight!
+  before_validation :set_default_cargo_class!, on: :create
+
+  CustomValidations.cargo_item_max_dimensions(self)
 
   # Class Methods
   def self.extract(cargo_items_attributes)
@@ -34,18 +30,42 @@ class CargoItem < ApplicationRecord
 
   # Instance Methods
   def volume
-    dimension_x * dimension_y * dimension_z / 1000000    
+    dimension_x * dimension_y * dimension_z / 1_000_000
   end
 
   def payload_in_tons
-    payload_in_kg / 1000    
+    payload_in_kg / 1000
   end
 
-  def set_chargeable_weight!(mot = "ocean")
-    self.chargeable_weight =
-      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
-    
-    save!
+  def set_chargeable_weight!
+    return nil if shipment.itinerary.nil?
+
+    self.chargeable_weight = calc_chargeable_weight(shipment.itinerary.mode_of_transport)
   end
 
+  def calc_chargeable_weight(mot)
+    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym] * 1000, payload_in_kg].max
+  end
+
+  def valid_for_mode_of_transport?(mode_of_transport)
+    # This method determines whether the cargo_item would be valid, should the shipment's itinerary
+    # have the mode of transport supplied as argument.
+
+    # Creates and auxiliary class, cloned from CargoItem, with one aditional
+    # validation, which depends on the mode of transport.
+    klass = CustomValidations.cargo_item_max_dimensions(CargoItem.clone, mode_of_transport)
+    Module.const_set("AuxCargoItem", klass)
+
+    # Instantiates the auxiliary class, sets the chargeable weight,
+    # and checks if the item is still valid, thereby applying the new validation.
+    aux_cargo_item = Module::AuxCargoItem.new(given_attributes)
+    aux_cargo_item.chargeable_weight = calc_chargeable_weight(mode_of_transport)
+    aux_cargo_item.valid?
+  end
+
+  private
+
+  def set_default_cargo_class!
+    self.cargo_class ||= "lcl"
+  end
 end

@@ -36,10 +36,11 @@ export class RouteHubBox extends Component {
   }
   render () {
     const {
-      theme, hubs, route, locations
+      theme, shipment
     } = this.props
-    const { startHub, endHub } = hubs
-    const { origin, destination } = locations
+    const startHub = shipment.origin_hub
+    const endHub = shipment.destination_hub
+
     const gradientStyle = {
       background:
         theme && theme.colors
@@ -57,53 +58,53 @@ export class RouteHubBox extends Component {
       backgroundSize: '16px 2px, 100% 2px'
     }
     const bg1 =
-      startHub && startHub.location && startHub.location.photo
-        ? { backgroundImage: `url(${startHub.location.photo})` }
+      startHub && startHub.photo
+        ? { backgroundImage: `url(${startHub.photo})` }
         : {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
         }
     const bg2 =
-      endHub && endHub.location && endHub.location.photo
-        ? { backgroundImage: `url(${endHub.location.photo})` }
+      endHub && endHub.photo
+        ? { backgroundImage: `url(${endHub.photo})` }
         : {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
     const originAddress =
-      origin && origin.location_type !== 'nexus' ? (
+      shipment.pickup_address ? (
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Pickup From:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
-            {`${origin.street_number || ''} ${origin.street || ''}`}, <br />
-            {`${origin.city || ''}, ${' '} `}
-            {`${origin.zip_code || ''}, `}
-            {`${origin.country || ''}`} <br />
+            {`${shipment.pickup_address.street_number || ''} ${shipment.pickup_address.street || ''}`}, <br />
+            {`${shipment.pickup_address.city || ''}, ${' '} `}
+            {`${shipment.pickup_address.zip_code || ''}, `}
+            {`${shipment.pickup_address.country.name || ''}`} <br />
           </address>
         </div>
       ) : (
         ''
       )
     const destinationAddress =
-      destination && destination.location_type !== 'nexus' ? (
+      shipment.delivery_address ? (
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Delivery To:</p>
           </div>
           <address className={` ${styles.itinerary_address} flex-none`}>
-            {`${destination.street_number || ''} ${destination.street || ''}`}, <br />
-            {`${destination.city || ''}, ${' '} `}
-            {`${destination.zip_code || ''}, `}
-            {`${destination.country || ''}`} <br />
+            {`${shipment.delivery_address.street_number || ''} ${shipment.delivery_address.street || ''}`}, <br />
+            {`${shipment.delivery_address.city || ''}, ${' '} `}
+            {`${shipment.delivery_address.zip_code || ''}, `}
+            {`${shipment.delivery_address.country.name || ''}`} <br />
           </address>
         </div>
       ) : (
         ''
       )
     const timeDiff =
-      route && route[0] && route[0].eta ? (
+      shipment.planned_eta ? (
         <div
           className="flex-65 layout-row layout-wrap layout-align-center-stretch"
           style={{ marginTop: '25px' }}
@@ -114,7 +115,7 @@ export class RouteHubBox extends Component {
           </h4>
           <p className="flex-100 no_m center">
             {' '}
-            {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days{' '}
+            {moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}
           </p>
         </div>
       ) : (
@@ -132,8 +133,8 @@ export class RouteHubBox extends Component {
                   <i className="fa fa-map-marker" style={gradientStyle} />
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                  <h6 className="flex-100"> {startHub.data.name} </h6>
-                  <p className="flex-100">{startHub.location.geocoded_address}</p>
+                  <h6 className="flex-100"> {startHub.name} </h6>
+                  {/* <p className="flex-100">{startHub.location.geocoded_address}</p> */}
                 </div>
               </div>
             </div>
@@ -148,7 +149,7 @@ export class RouteHubBox extends Component {
                 style={{ marginTop: '100px' }}
               >
                 <div className="flex-none width_100 layout-row layout-align-center-center">
-                  {RouteHubBox.faIcon(route)}
+                  {RouteHubBox.faIcon(shipment.mode_of_transport)}
                 </div>
                 <div className="flex" style={dashedLineStyles} />
                 <br />
@@ -166,8 +167,8 @@ export class RouteHubBox extends Component {
                   <i className="fa fa-flag" style={gradientStyle} />
                 </div>
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                  <h6 className="flex-100"> {endHub.data.name} </h6>
-                  <p className="flex-100">{endHub.location.geocoded_address}</p>
+                  <h6 className="flex-100"> {endHub.name} </h6>
+                  {/* <p className="flex-100">{endHub.location.geocoded_address}</p> */}
                 </div>
               </div>
             </div>
@@ -180,17 +181,10 @@ export class RouteHubBox extends Component {
 }
 RouteHubBox.propTypes = {
   theme: PropTypes.theme,
-  route: PropTypes.arrayOf(PropTypes.shape({
-    eta: PropTypes.number
-  })),
-  hubs: PropTypes.arrayOf(PropTypes.hub),
-  locations: PropTypes.objectOf(PropTypes.any)
+  shipment: PropTypes.shipment.isRequired
 }
 RouteHubBox.defaultProps = {
-  theme: null,
-  hubs: [],
-  route: [],
-  locations: {}
+  theme: null
 }
 
 export default RouteHubBox

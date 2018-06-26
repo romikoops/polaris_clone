@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { ConvoTile, Conversation } from '../../components/Messaging'
 import { messagingActions } from '../../actions'
@@ -113,10 +113,10 @@ class MessageCenter extends Component {
     tmpShipment.length > 0
       ? (shipment = {
         convoKey,
-        transportType: tmpShipment[0].schedule_set[0].mode_of_transport,
-        icon: MessageCenter.transportationIcon(tmpShipment[0].schedule_set[0].mode_of_transport),
-        origin: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[0])[0],
-        destination: this.filterHubs(tmpShipment[0].schedule_set[0].hub_route_key.split('-')[1])[0],
+        transportType: tmpShipment[0].mode_of_transport,
+        icon: MessageCenter.transportationIcon(tmpShipment[0].mode_of_transport),
+        origin: this.filterHubs(tmpShipment[0].origin_hub_id)[0],
+        destination: this.filterHubs(tmpShipment[0].destination_hub_id)[0],
         eta: moment(tmpShipment.planned_eta).format('YYYY-MM-DD'),
         etd: moment(tmpShipment.planned_etd).format('YYYY-MM-DD'),
         totalPrice: Number.parseFloat(tmpShipment[0].total_price, 10).toFixed(2),

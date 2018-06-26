@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::UserManagersController < ApplicationController
-before_action :require_login_and_role_is_admin
+  before_action :require_login_and_role_is_admin
 
   def assign
     assign_data = params[:obj].as_json
@@ -9,7 +11,7 @@ before_action :require_login_and_role_is_admin
     response_handler(new_manager)
   end
 
-private
+  private
 
   def require_login_and_role_is_admin
     unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id

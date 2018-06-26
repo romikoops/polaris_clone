@@ -1,0 +1,426 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`displayOnly is true 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+    </div>
+  </div>
+  <div
+    className="icon_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`multiple is true 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+    </div>
+  </div>
+  <div
+    className="icon_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY_2"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style="#333"
+          />
+        </button>
+        <ReactTooltip
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY_2"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+    </div>
+  </div>
+  <div
+    className="icon_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY_0"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style="#333"
+          />
+        </button>
+        <ReactTooltip
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY_0"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+    </div>
+  </div>
+  <div
+    className="icon_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY_4"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style={
+              Object {
+                "color": "black",
+              }
+            }
+          />
+        </button>
+        <ReactTooltip
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY_4"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+    />
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`viewer is true 1`] = `
+<div
+  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+>
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="form_label flex-40 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+      </p>
+    </div>
+    <div
+      className="flex-60 layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        <Truncate
+          ellipsis="…"
+          lines={1}
+          trimWhitespace={false}
+        >
+           
+        </Truncate>
+      </p>
+    </div>
+  </div>
+  <div
+    className="viewer_row flex-none layout-row layout-align-none-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-end-center upload_btn_wrapper "
+      data-for="RANDOM_KEY_3"
+      data-tip="FOO_TOOLTIP"
+    >
+      <form>
+        <button
+          className="icon_btn flex-none layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-upload clip"
+            style="#333"
+          />
+        </button>
+        <ReactTooltip
+          className="tooltip"
+          effect="solid"
+          id="RANDOM_KEY_3"
+          insecure={true}
+          resizeHide={true}
+          wrapper="div"
+        />
+        <input
+          name="FOO_TYPE"
+          onChange={[Function]}
+          type="file"
+        />
+      </form>
+    </div>
+    <div
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      onClick={[Function]}
+    >
+      <i
+        className="fa fa-trash"
+      />
+    </div>
+    <Link
+      className="icon_btn flex-none layout-row layout-align-center-center"
+      replace={false}
+      target="_blank"
+      to="FOO_SIGNED_URL"
+    >
+      <i
+        className="clip fa fa-eye"
+        style="#333"
+      />
+    </Link>
+  </div>
+  <div
+    className="file_error  flex-100 layout-row layout-align-center"
+  >
+    <p
+      className="flex-100"
+    >
+      Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+    </p>
+  </div>
+</div>
+`;

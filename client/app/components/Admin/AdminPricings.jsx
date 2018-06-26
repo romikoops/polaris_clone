@@ -13,7 +13,6 @@ import {
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { AdminUploadsSuccess } from './Uploads/Success'
 
 class AdminPricings extends Component {
@@ -85,14 +84,15 @@ class AdminPricings extends Component {
     ) : (
       ''
     )
-    const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
+    // const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
-          <TextHeading theme={theme} size={1} text={title} />
+          {/* <TextHeading theme={theme} size={1} text={title} /> */}
           {selectedPricing ? backButton : ''}
         </div>
 

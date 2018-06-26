@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ServerChecksController < ApplicationController
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!

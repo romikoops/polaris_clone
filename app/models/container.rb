@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Container < ApplicationRecord
   # The following Constants are currently being stored directly
   # in the Front End, but may be needed in future refactoring.
@@ -8,7 +10,7 @@ class Container < ApplicationRecord
 
   belongs_to :shipment
 
-  before_validation :set_gross_weight, :set_weight_class
+  before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class
 
   validates :size_class,    presence: true
   validates :weight_class,  presence: true
@@ -25,7 +27,7 @@ class Container < ApplicationRecord
 
   # Instance Methods
   def size
-    self.size_class.split("_")[0]
+    size_class.split("_")[0]
   end
 
   private
@@ -41,14 +43,16 @@ class Container < ApplicationRecord
     size = size_class.split("_").first
     which_weight_step = nil
     PRICING_WEIGHT_STEPS[1..-1].each_with_index do |weight_step, i|
-      if payload_in_kg / 1000 > weight_step
-        which_weight_step = PRICING_WEIGHT_STEPS[i]
-      end
+      which_weight_step = PRICING_WEIGHT_STEPS[i] if payload_in_kg / 1000 > weight_step
     end
     which_weight_step = PRICING_WEIGHT_STEPS[-1] if which_weight_step.nil?
     which_weight_step = which_weight_step.to_d
 
     self.weight_class = "<= #{which_weight_step}t"
   end
-  
+
+  def sync_cargo_class
+    self.cargo_class ||= size_class
+    self.size_class  ||= cargo_class
+  end
 end

@@ -28,12 +28,11 @@ export default function GmapsLoader (props) {
             destination={props.destination}
             shipmentData={props.shipmentData}
             shipmentDispatch={props.shipmentDispatch}
-            nextStageAttempt={props.nextStageAttempt}
+            nextStageAttempts={props.nextStageAttempts}
             handleAddressChange={props.handleAddressChange}
             routeIds={props.routeIds}
             setNotesIds={(e, t) => props.setNotesIds(e, t)}
             handleSelectLocation={props.handleSelectLocation}
-            handleCarriageNexuses={props.handleCarriageNexuses}
             scope={props.scope}
           />
         )
@@ -64,11 +63,10 @@ GmapsLoader.propTypes = {
   setTargetAddress: PropTypes.func.isRequired,
   handleCarriageChange: PropTypes.func.isRequired,
   shipmentData: PropTypes.shipmentData,
-  nextStageAttempt: PropTypes.func.isRequired,
+  nextStageAttempts: PropTypes.integer,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired,
-  handleCarriageNexuses: PropTypes.func.isRequired,
   scope: PropTypes.scope.isRequired
 }
 
@@ -79,5 +77,6 @@ GmapsLoader.defaultProps = {
   shipmentData: null,
   setNotesIds: null,
   has_on_carriage: true,
-  has_pre_carriage: true
+  has_pre_carriage: true,
+  nextStageAttempts: 0
 }

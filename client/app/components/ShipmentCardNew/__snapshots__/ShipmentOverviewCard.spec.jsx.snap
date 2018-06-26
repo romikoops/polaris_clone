@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`admin is true 1`] = `
+<div
+  className="layout-wrap flex-100 layout-row layout-align-space-between-start"
+>
+  <div
+    className="layout-padding flex-100 layout-align-start-center  greyBg"
+  >
+    <span>
+      <b>
+        Requested Shipments
+      </b>
+    </span>
+  </div>
+  <div
+    className="margin_box_right margin_bottom flex-100 layout-row"
+  >
+    <AlternativeGreyBox
+      content={
+        <AdminShipmentCardNew
+          dispatches={
+            Object {
+              "foo": [Function],
+            }
+          }
+          hubs={
+            Object {
+              "foo": Object {
+                "location": Object {
+                  "city": "FOO_CITY",
+                  "country": "Germany",
+                  "id": 246,
+                  "primary": true,
+                  "street": "FOO_STREET",
+                  "street_number": 579,
+                  "zip_code": "22456",
+                },
+                "name": "FOO_HUB_NAME",
+              },
+            }
+          }
+          shipment={
+            Object {
+              "clientName": "FOO_CLIENT_NAME",
+              "id": 654,
+              "imc_reference": "FOO_IMC_REFERENCE",
+              "planned_etd": 789,
+              "schedule_set": Array [],
+              "status": "FOO_STATUS",
+            }
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      }
+      contentClassName="layout-row flex-100"
+      wrapperClassName="layout-row flex-50 flex-md-100 flex-sm-100 flex-xs-100 layout-align-center-center"
+    />
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-wrap flex-100 layout-row layout-align-space-between-start"
+>
+  <div
+    className="layout-padding flex-100 layout-align-start-center  greyBg"
+  >
+    <span>
+      <b>
+        Requested Shipments
+      </b>
+    </span>
+  </div>
+  <div
+    className="margin_box_right margin_bottom flex-100 layout-row"
+  >
+    <AlternativeGreyBox
+      content={
+        <UserShipmentCard
+          dispatches={
+            Object {
+              "foo": [Function],
+            }
+          }
+          shipment={
+            Object {
+              "clientName": "FOO_CLIENT_NAME",
+              "id": 654,
+              "imc_reference": "FOO_IMC_REFERENCE",
+              "planned_etd": 789,
+              "schedule_set": Array [],
+              "status": "FOO_STATUS",
+            }
+          }
+        />
+      }
+      contentClassName="layout-row flex-100"
+      wrapperClassName="layout-row flex-50 flex-md-100 flex-sm-100 flex-xs-100 layout-align-center-center"
+    />
+  </div>
+</div>
+`;

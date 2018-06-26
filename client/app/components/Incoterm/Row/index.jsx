@@ -1,32 +1,18 @@
 import React from 'react'
 import styles from './index.scss'
 import PropTypes from '../../../prop-types'
-import { gradientTextGenerator } from '../../../helpers'
+import { gradientTextGenerator, determineSpecialism, switchIcon } from '../../../helpers'
 
 export function IncotermRow ({
   theme,
-  shipment,
   onCarriage,
   preCarriage,
   originFees,
   destinationFees,
   feeHash,
-  tenant,
-  firstStep
+  tenant
 }) {
-  const sumCargoFees = (cargos) => {
-    let total = 0.0
-    let curr = ''
-    if (!cargos) {
-      return ''
-    }
-    Object.keys(cargos).forEach((k) => {
-      total += parseFloat(cargos[k].total.value)
-      curr = cargos[k].total.currency
-    })
-
-    return { currency: curr, total: total.toFixed(2) }
-  }
+  const speciality = determineSpecialism(tenant.data.scope.modes_of_transport)
 
   const selectedStyle =
     theme && theme.colors
@@ -50,8 +36,8 @@ export function IncotermRow ({
           styles.fee_value
         } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
       >
-        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).currency}</p>
-        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).total}</p>
+        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.currency}</p>
+        <p className="flex-none no_m letter_3 center">{feeHash.cargo.total.total}</p>
       </div>
     ) : (
       ''
@@ -195,7 +181,8 @@ export function IncotermRow ({
   const freightFeesTile = (
     <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-ship clip flex-none" style={freightStyle} />
+        {switchIcon(speciality, freightStyle)}
+        {/* <i className="fa fa-ship  flex-none" style={freightStyle} /> */}
       </div>
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
@@ -221,9 +208,7 @@ IncotermRow.propTypes = {
   originFees: PropTypes.bool,
   destinationFees: PropTypes.bool,
   feeHash: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.tenant,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired,
-  firstStep: PropTypes.bool
+  tenant: PropTypes.tenant
 }
 
 IncotermRow.defaultProps = {
@@ -233,8 +218,7 @@ IncotermRow.defaultProps = {
   originFees: false,
   destinationFees: false,
   feeHash: {},
-  tenant: {},
-  firstStep: false
+  tenant: {}
 }
 
 export default IncotermRow

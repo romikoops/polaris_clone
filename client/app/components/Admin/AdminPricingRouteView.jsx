@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from './'
 import styles from './Admin.scss'
@@ -59,7 +59,6 @@ export class AdminPricingRouteView extends Component {
     })
   }
   selectClient (client) {
-    console.log(client)
     this.setState({ selectedClient: client })
   }
   closeClientView () {
@@ -97,9 +96,7 @@ export class AdminPricingRouteView extends Component {
     if (!pricingData || !itineraryPricings) {
       return ''
     }
-    const routeBoxHubs = {
-      startHub: { data: {}, location: {} },
-      endHub: { data: {}, location: {} }
+    const fauxShipment = {
     }
     console.log(itineraryPricings)
     const { transportCategories } = pricingData
@@ -113,8 +110,8 @@ export class AdminPricingRouteView extends Component {
     if (!itinerary || !itineraryPricingData) {
       return ''
     }
-    routeBoxHubs.startHub.data = stops[0].hub
-    routeBoxHubs.endHub.data = stops[stops.length - 1].hub
+    fauxShipment.origin_hub = stops[0].hub
+    fauxShipment.destination_hub = stops[stops.length - 1].hub
 
     const textStyle = {
       background:
@@ -339,7 +336,7 @@ export class AdminPricingRouteView extends Component {
             {itinerary.name}
           </p>
         </div>
-        <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
+        <RouteHubBox shipment={fauxShipment} itinerary={detailedItineraries} theme={theme} />
         <div className="flex-100 layout-row layout-wrap layout-align-center-center">
           <div
             className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}

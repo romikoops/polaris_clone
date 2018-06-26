@@ -1,0 +1,1 @@
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5 * 60 * 1000

@@ -1,0 +1,415 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-90 layout-row layout-wrap layout-align-center-start 
+        data_overlay "
+>
+  <div
+    className="flex-100 layout-row layout-wrap data_box"
+  >
+    <div
+      className="flex-100 layout-row layout-align-center-center top_row"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center hubs_row"
+      >
+        <div
+          className=" flex-40 header_hub"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <i
+                className="fa fa-map-marker clip map_marker"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+                  }
+                }
+              />
+            </div>
+            <h4
+              className="flex-85"
+            >
+               
+              FOO_ORIGIN_HUB
+               
+            </h4>
+          </div>
+        </div>
+        <div
+          className=" flex connection_graphics"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          />
+          <div
+            style={
+              Object {
+                "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+                "backgroundSize": "16px 2px, 100% 2px",
+                "height": "2px",
+                "marginTop": "6px",
+                "width": "100%",
+              }
+            }
+          />
+        </div>
+        <div
+          className=" flex-40 header_hub"
+        >
+          <div
+            className="flex-100 layout-row"
+          >
+            <div
+              className="flex-15 layout-row layout-align-center-center"
+            >
+              <i
+                className="fa fa-flag-o clip flag"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+                  }
+                }
+              />
+            </div>
+            <h4
+              className="flex-85"
+            >
+               
+              FOO_DESTINATION_HUB
+               
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center layout-wrap"
+    >
+      <div
+        className="flex-50 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            Pickup Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-50 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+             
+            Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-50 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+             
+            ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            19
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            Shipment Type:
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none"
+          >
+             
+            FCL
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+    >
+      <div
+        className=" flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            IncoTerm:
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none"
+          >
+             
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className=" flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            MoT:
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none"
+          >
+             
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className=" flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            Pre-carrage:
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none"
+          >
+             
+            No
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className=" flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <h4
+            className="date_title"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+              }
+            }
+          >
+            On-carriage:
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center"
+        >
+          <p
+            className="flex-none"
+          >
+             
+            No
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center load_type"
+    >
+      <div
+        className="tot_price flex-none layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333, #fafafa)",
+          }
+        }
+      >
+        <p>
+          Total Price:
+        </p>
+         
+        <Tooltip
+          color="white"
+          icon="fa-info-circle"
+          text="total_price"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <Price
+          currency="EUR"
+          scale=""
+          value={12}
+        />
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <div
+        className="flex-33 layout-row layout-align-space-around-center"
+        onClick={[Function]}
+      >
+        <i
+          className="flex-none fa fa-angle-double-up"
+        />
+        <div
+          className="flex-5"
+        />
+        <p
+          className="flex-none"
+        >
+          Hide
+        </p>
+        <div
+          className="flex-5"
+        />
+        <i
+          className="flex-none fa fa-angle-double-up"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

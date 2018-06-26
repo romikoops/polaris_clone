@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContactsController < ApplicationController
   include Response
   before_action :require_login
@@ -10,17 +12,16 @@ class ContactsController < ApplicationController
       shipments.push(s.shipment)
     end
     location = contact.location
-    response_handler({contact: contact, shipments: shipments, location: location})
+    response_handler(contact: contact, shipments: shipments, location: location)
   end
 
   def update_contact
     update_data = JSON.parse(params[:update])
     contact = Contact.find(params[:id])
-    update_data.delete('id')
+    update_data.delete("id")
     contact.update_attributes(update_data)
     contact.save!
     response_handler(contact)
-
   end
 
   def update_contact_address
@@ -59,7 +60,6 @@ class ContactsController < ApplicationController
     ncd[:location_id] = new_loc.id
     contact = current_user.contacts.create!(ncd)
     response_handler(contact)
-
   end
 
   def delete_alias
@@ -67,9 +67,9 @@ class ContactsController < ApplicationController
     if contact.user_id == current_user.id
       contact.destroy
       response_handler(params[:id])
-      else
-      response_handler(false)  
-    end 
+    else
+      response_handler(false)
+    end
   end
 
   def create
@@ -92,11 +92,10 @@ class ContactsController < ApplicationController
     ncd[:location_id] = new_loc.id
     contact = current_user.contacts.create!(ncd)
     response_handler(contact)
-
   end
 
   private
-  
+
   def require_login
     unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
       flash[:error] = "You are not authorized to access this section."

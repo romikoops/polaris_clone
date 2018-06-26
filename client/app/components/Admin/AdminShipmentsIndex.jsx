@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './Admin.scss'
+import adminStyles from './Admin.scss'
 import { AdminSearchableShipments } from './AdminSearchables'
 import { adminDashboard as adminTip } from '../../constants'
+import Tabs from '../Tabs/Tabs'
+import Tab from '../Tabs/Tab'
 
 export class AdminShipmentsIndex extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -13,9 +15,11 @@ export class AdminShipmentsIndex extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
-    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
+    const hubOrigin = shipment.schedule_set[0].origin_hub_id
+    const hubDestination = shipment.schedule_set[0].destination_hub_id
+    shipment.originHub = hubsObj[hubOrigin] ? hubsObj[hubOrigin].name : ''
+    shipment.destinationHub = hubsObj[hubDestination] ? hubsObj[hubDestination].name : ''
+
     return shipment
   }
   constructor (props) {
@@ -30,7 +34,6 @@ export class AdminShipmentsIndex extends Component {
   }
 
   render () {
-    console.log(this.props)
     // const {selectedShipment} = this.state;
     const {
       theme,
@@ -59,49 +62,82 @@ export class AdminShipmentsIndex extends Component {
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedReqShipments}
-          title="Requested Shipments"
-          theme={theme}
-          handleShipmentAction={handleShipmentAction}
-          tooltip={adminTip.requested}
-          seeAll={false}
-        />
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedOpenShipments}
-          title="Open Shipments"
-          theme={theme}
-          handleShipmentAction={handleShipmentAction}
-          tooltip={adminTip.open}
-          seeAll={false}
-        />
-        <AdminSearchableShipments
-          handleClick={this.viewShipment}
-          hubs={hubHash}
-          adminDispatch={adminDispatch}
-          shipments={mergedFinishedShipments}
-          title="Finished Shipments"
-          theme={theme}
-          handleAction={handleShipmentAction}
-          tooltip={adminTip.finished}
-          seeAll={false}
-        />
+        <Tabs>
+          <Tab
+            tabTitle="Requested"
+            theme={theme}
+          >
+            {shipments.requested.length > 0 ? (
+              <AdminSearchableShipments
+                handleClick={this.viewShipment}
+                hubs={hubHash}
+                adminDispatch={adminDispatch}
+                shipments={mergedReqShipments}
+                title="Requested Shipments"
+                theme={theme}
+                handleShipmentAction={handleShipmentAction}
+                tooltip={adminTip.requested}
+                seeAll={false}
+              />
+            ) : (
+              <p>No requested shipments yet</p>
+            )}
+          </Tab>
+          <Tab
+            tabTitle="Open"
+            theme={theme}
+          >
+            {shipments.open.length > 0 ? (
+              <AdminSearchableShipments
+                handleClick={this.viewShipment}
+                hubs={hubHash}
+                adminDispatch={adminDispatch}
+                shipments={mergedOpenShipments}
+                title="Open Shipments"
+                theme={theme}
+                handleShipmentAction={handleShipmentAction}
+                tooltip={adminTip.open}
+                seeAll={false}
+              />
+            ) : (
+              <p>No open shipments yet</p>
+            )}
+
+          </Tab>
+          <Tab
+            tabTitle="Finished"
+            theme={theme}
+          >
+            {shipments.finished.length > 0 ? (
+              <AdminSearchableShipments
+                handleClick={this.viewShipment}
+                hubs={hubHash}
+                adminDispatch={adminDispatch}
+                shipments={mergedFinishedShipments}
+                title="Finished Shipments"
+                theme={theme}
+                handleAction={handleShipmentAction}
+                tooltip={adminTip.finished}
+                seeAll={false}
+              />
+            ) : (
+              <p>No open shipments yet</p>
+
+            )}
+
+          </Tab>
+        </Tabs>
+
         {mergedOpenShipments.length === 0 &&
-        mergedReqShipments.length === 0 &&
-        mergedFinishedShipments.length === 0 ? (
+          mergedReqShipments.length === 0 &&
+          mergedFinishedShipments.length === 0 ? (
             <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
               <div
                 className={`flex-100 layout-row layout-align-space-between-center ${
-                  styles.sec_subheader
+                  adminStyles.sec_subheader
                 }`}
               >
-                <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+                <p className={` ${adminStyles.sec_subheader_text} flex-none`}> No Shipments yet</p>
               </div>
               <p className="flex-none"> As shipments are requested, they will appear here</p>
             </div>

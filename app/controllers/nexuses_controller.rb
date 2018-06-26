@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class NexusesController < ApplicationController
-	include ItineraryTools
-	skip_before_action :require_authentication!
+  include ItineraryTools
+  skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
 
 	def index
@@ -18,26 +20,20 @@ class NexusesController < ApplicationController
 	private
 
 	def find_available_nexuses
-		# Expects a params[:target] #=> "origin" or "destination"
-		# Then the following variables are assigned:
-		#
-		#      target #=> "origin",      stop_target #=> "last_stops" 
-		#  or  target #=> "destination", stop_target #=> "first_stop" 
-
-		nexus_ids 			 = params[:nexus_ids].split(",").map(&:to_i)
-		target 					 = params[:target]
-		stop_target 		 = target == "destination" ? "first_stop" : "last_stop"
-		stop_counterpart = target == "destination" ? "last_stop"  : "first_stop"
-
+		nexus_ids = params[:nexus_ids].split(",").map(&:to_i)
+    target 	  = params[:target]
+    
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
-		itineraries   = Itinerary.where(tenant_id: current_user.tenant_id, id: itinerary_ids).map(&:as_options_json)
-		
-		if nexus_ids.blank? || nexus_ids.empty?
-			return itineraries.map { |itinerary| Location.find(itinerary[stop_target]["hub"]["nexus"]["id"]) }.uniq
-		end
-		
-		itineraries.select { |itinerary| nexus_ids.include? itinerary[stop_target]["hub"]["nexus"]["id"] }
-			.map { |itinerary| Location.find(itinerary[stop_counterpart]["hub"]["nexus"]["id"]) }.uniq
+    itineraries   = current_user.tenant.itineraries.where(id: itinerary_ids)
+    available_nexus_ids = itineraries.map do |itinerary|
+      if nexus_ids.blank? || nexus_ids.empty?
+        itinerary.nexus_ids_for_target(target)
+      else
+        itinerary.available_counterpart_nexus_ids_for_target_nexus_ids(target, nexus_ids)
+      end
+    end.flatten.uniq
+    
+    Location.where(id: available_nexus_ids)		
 	end
 
 	def format_for_select_box(nexuses)

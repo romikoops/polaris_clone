@@ -3,12 +3,12 @@
 :local {
   .content_width {
     width: 1000px;
-    max-width: 95%;
+    max-width: 90%;
     // box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
     @media screen and (min-width: 1920px) {
       width: 1200px;
     }
-    
+
   }
 
   .button_padding {
@@ -56,7 +56,7 @@
 
   .emulate_link {
     cursor: pointer;
-    
+
     &.blue_link {
       color: #0645AD;
     }
@@ -70,7 +70,7 @@
 :global {
   .emulate_link {
     cursor: pointer;
-    
+
     &.blue_link {
       color: #0645AD;
     }
@@ -82,8 +82,8 @@
     position: relative;
   }
   .content_width {
-    width: 95%;
-    max-width: 95%;
+    width: 90%;
+    max-width: 90%;
     // box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
   }
   .content_width_booking {
@@ -262,5 +262,14 @@
   }
   .header_buffer {
     margin-top: 60px;
+  }
+  .buffer_10 {
+    margin: 10px 0;
+  }
+  .flip_icon_horizontal {
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
   }
 }

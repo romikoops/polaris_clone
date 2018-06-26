@@ -1,26 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from '../Card.scss'
+import { gradientTextGenerator, switchIcon } from '../../../../helpers'
 
 class CardRoutesPricing extends Component {
-  static switchIcon (itinerary) {
-    let icon
-    switch (itinerary.mode_of_transport) {
-      case 'ocean':
-        icon = <i className="fa fa-anchor" />
-        break
-      case 'air':
-        icon = <i className="fa fa-paper-plane" />
-        break
-      case 'rail':
-        icon = <i className="fa fa-train" />
-        break
-      default:
-        icon = <i className="fa fa-anchor" />
-        break
-    }
-    return icon
-  }
   constructor (props) {
     super(props)
     this.state = {}
@@ -34,10 +17,15 @@ class CardRoutesPricing extends Component {
 
   render () {
     const {
-      handleClick, onDisabledClick, disabled, itinerary
+      handleClick, onDisabledClick, disabled, itinerary, theme
     } = this.props
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
     const disabledClass = disabled ? styles.disabled : ''
     const [originNexus, destinationNexus] = itinerary.name.split(' - ')
+
     return (
       <div
         className={`${styles.card_route_pricing} ${disabledClass} flex-100`}
@@ -58,7 +46,7 @@ class CardRoutesPricing extends Component {
               </strong>
             </p>
           </div>
-          {CardRoutesPricing.switchIcon(itinerary)}
+          {switchIcon(itinerary.mode_of_transport, gradientFontStyle)}
         </div>
         <div className={styles.bottom_routes}>
           <p>
@@ -77,10 +65,12 @@ CardRoutesPricing.propTypes = {
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
   handleClick: PropTypes.func.isRequired,
   onDisabledClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  theme: PropTypes.theme
 }
 CardRoutesPricing.defaultProps = {
-  disabled: false
+  disabled: false,
+  theme: {}
 }
 
 export default CardRoutesPricing

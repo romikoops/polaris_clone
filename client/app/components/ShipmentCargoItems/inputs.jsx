@@ -4,7 +4,7 @@ import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { switchIcon } from '../../helpers'
+import { switchIcon, chargeableWeight, volume } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -40,7 +40,8 @@ export default function getInputs (
   toggleModal,
   nextStageAttempt,
   scope,
-  maxDimensions
+  maxDimensions,
+  availableMotsForRoute
 ) {
   const { handleDelta } = this.props
   const placeholderInput = (
@@ -53,6 +54,10 @@ export default function getInputs (
   const showColliTypeErrors =
     !firstRenderInputs && nextStageAttempt &&
     (!cargoItemTypes[i] || !cargoItemTypes[i].label)
+
+  const maxDimensionsKey = availableMotsForRoute.some(mot => mot !== 'air') || availableMotsForRoute.length === 0
+    ? 'general' : 'air'
+  const maxDimensionsToApply = maxDimensions[maxDimensionsKey]
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
@@ -69,6 +74,7 @@ export default function getInputs (
       </div>
     </div>
   )
+
   inputs.grossWeight = (
     <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
@@ -92,12 +98,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.payloadInKg
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.payloadInKg}`
+                maxDimension: `Maximum weight is ${maxDimensionsToApply.payloadInKg}`
               }}
               required
             />
@@ -111,12 +117,6 @@ export default function getInputs (
     </div>
   )
 
-  const unitVolume =
-    cargoItem &&
-    cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
-
-  const volume = cargoItem && (unitVolume * cargoItem.quantity).toFixed(3)
-
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">
       <div className="layout-row flex-40 layout-align-center" >
@@ -125,7 +125,7 @@ export default function getInputs (
 
       <div className="flex">
         <p className={styles.input_label}>
-          { volume }
+          { volume(cargoItem) }
           <span>m</span>
           <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
         </p>
@@ -141,21 +141,12 @@ export default function getInputs (
     </div>
   )
 
-  function chargeableWeight (mot) {
-    const effectiveKgPerCubicMeter = {
-      air: 167,
-      rail: 550,
-      ocean: 1000
-    }
-
-    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
-  }
   function chargeableWeightElemJSX (mot) {
     return (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value}`}>
-          { cargoItem && chargeableWeight(mot) } kg
+          { chargeableWeight(cargoItem, mot) } kg
         </p>
       </div>
     )
@@ -182,9 +173,29 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let heightDataTip = ''
+  if (
+    cargoItem &&
+    maxDimensions.air &&
+    +cargoItem.dimension_z < +maxDimensionsToApply.dimensionZ &&
+    +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
+  ) {
+    heightDataTip = `
+      Please note that the maximum height for items in
+      Air Freight shipments is ${maxDimensions.air.dimensionZ} cm
+    `
+  }
+
+  let heightRef
   inputs.height = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <div className={`flex-90 layout-row ${styles.input_box}`}>
+      <div
+        className={`flex-90 layout-row ${styles.input_box}`}
+        data-tip={heightDataTip}
+        ref={(div) => { heightRef = div }}
+        onBlur={() => ReactTooltip.hide(heightRef)}
+      >
         <div className="flex-20 layout-row layout-align-center-center">
           H
         </div>
@@ -197,7 +208,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, heightRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -207,12 +218,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionZ
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionZ}`
+                maxDimension: `Maximum height is ${maxDimensionsToApply.dimensionZ}`
               }}
               required
             />
@@ -224,16 +235,31 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let lengthDataTip = ''
+  if (cargoItem) {
+    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
+      lengthDataTip = 'Length is automatically set by \'Collie Type\''
+    } else if (
+      maxDimensions.air &&
+      +cargoItem.dimension_x < +maxDimensionsToApply.dimensionX &&
+      +cargoItem.dimension_x > +maxDimensions.air.dimensionX
+    ) {
+      lengthDataTip = `
+        Please note that the maximum length for items in
+        Air Freight shipments is ${maxDimensions.air.dimensionX} cm
+      `
+    }
+  }
+  let lengthRef
   inputs.length = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <ReactTooltip effect="solid" />
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
-        data-tip={
-          cargoItem && cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x ? (
-            'Length is automatically set by \'Collie Type\''
-          ) : ''
-        }
+        data-tip={lengthDataTip}
+        ref={(div) => { lengthRef = div }}
+        onBlur={() => ReactTooltip.hide(lengthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
           L
@@ -248,7 +274,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, lengthRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -258,12 +284,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionX
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionX}`
+                maxDimension: `Maximum length is ${maxDimensionsToApply.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -276,16 +302,32 @@ export default function getInputs (
       </div>
     </div>
   )
+
+  let widthDataTip = ''
+  if (cargoItem) {
+    if (cargoItemTypes[i] && cargoItemTypes[i].dimension_y) {
+      widthDataTip = 'Width is automatically set by \'Collie Type\''
+    } else if (
+      maxDimensions.air &&
+      +cargoItem.dimension_y < +maxDimensionsToApply.dimensionY &&
+      +cargoItem.dimension_y > +maxDimensions.air.dimensionY
+    ) {
+      widthDataTip = `
+        Please note that the maximum width for items in
+        Air Freight shipments is ${maxDimensions.air.dimensionY} cm
+      `
+    }
+  }
+
+  let widthRef
   inputs.width = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <ReactTooltip effect="solid" />
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
-        data-tip={
-          cargoItem && cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y ? (
-            'Width is automatically set by \'Colli Type\''
-          ) : ''
-        }
+        data-tip={widthDataTip}
+        ref={(div) => { widthRef = div }}
+        onBlur={() => ReactTooltip.hide(widthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
           W
@@ -299,7 +341,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={(event, hasError) => handleDelta(event, hasError, widthRef)}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -309,12 +351,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimension: (values, value) => value < +maxDimensions.dimensionY
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensions.dimensionY}`
+                maxDimension: `Maximum width is ${maxDimensionsToApply.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

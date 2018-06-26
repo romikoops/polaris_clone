@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminChargeSection } from './'
-// import { v4 } from 'node-uuid';
+// import { v4 } from 'uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 
 export class AdminChargePanel extends Component {

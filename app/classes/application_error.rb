@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: http://abhisheksarka.github.io/custom-errors-in-rails/
 
 class ApplicationError < StandardError
@@ -5,7 +7,7 @@ class ApplicationError < StandardError
   attr_accessor :config, :code, :message, :http_code
 
   # We pass config hash of the sort
-  # {code: 100, message: 'Some Error Message', http_code: 501}              
+  # {code: 100, message: 'Some Error Message', http_code: 501}
   def initialize(config)
     @config    = config
     @code      = config[:code]

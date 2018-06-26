@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import styles from './AdminHubTile.scss'
 import { gradientGenerator, switchIcon } from '../../../helpers'
 

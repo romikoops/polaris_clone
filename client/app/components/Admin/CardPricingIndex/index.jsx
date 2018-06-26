@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
 import adminStyles from '../Admin.scss'
-import { CardTitle, CardRoutesPricing, PricingButton } from './SubComponents'
+import SideOptionsBox from '../SideOptions/SideOptionsBox'
+import { CardRoutesPricing, PricingButton } from './SubComponents'
 // import { RoundButton } from '../../RoundButton/RoundButton'
 import FileUploader from '../../FileUploader/FileUploader'
 import DocumentsDownloader from '../../Documents/Downloader'
 import { adminPricing as priceTip, moment } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
-import { filters } from '../../../helpers'
-import SideOptionsBox from '../SideOptions/SideOptionsBox'
+import {
+  filters,
+  gradientBorderGenerator,
+  gradientTextGenerator,
+  switchIcon
+} from '../../../helpers'
+import GradientBorder from '../../GradientBorder'
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
@@ -35,7 +41,7 @@ export default class CardPricingIndex extends Component {
   generateViewType (mot, limit) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-none layout-align-start-center layout-wrap">
+        <div className="layout-row flex-100 layout-align-start-center layout-wrap">
           {this.generateCardPricings(mot, limit)}
         </div>
       </div>
@@ -52,7 +58,6 @@ export default class CardPricingIndex extends Component {
   generateCardPricings (mot, limit) {
     const { itineraries } = this.state
     const { hubs, theme } = this.props
-    console.log(mot, limit)
     let itinerariesArr = []
     const viewLimit = limit || 3
     if (itineraries && itineraries.length > 0) {
@@ -70,6 +75,7 @@ export default class CardPricingIndex extends Component {
               />
             )
           }
+
           return ''
         })
     } else if (this.props.itineraries && this.props.itineraries.length > 0) {
@@ -87,9 +93,11 @@ export default class CardPricingIndex extends Component {
               />
             )
           }
+
           return ''
         })
     }
+
     return itinerariesArr
   }
   lclUpload (file) {
@@ -98,6 +106,7 @@ export default class CardPricingIndex extends Component {
   }
   updateSearch (array, mot) {
     const { searchTexts } = this.state
+
     return filters.handleSearchChange(searchTexts[mot], ['name'], array)
   }
   handlePricingSearch (event, target) {
@@ -118,20 +127,29 @@ export default class CardPricingIndex extends Component {
       theme, limit, scope, toggleCreator, lastUpdate
     } = this.props
     if (!scope) return ''
-    // const sectionStyle =
-    //   theme && theme.colors
-    //     ? { background: theme.colors.secondary, color: 'white' }
-    //     : { background: 'darkslategrey', color: 'white' }
+    const sectionStyle =
+      theme && theme.colors
+        ? { background: theme.colors.secondary, color: 'white' }
+        : { background: 'darkslategrey', color: 'white' }
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
     const modesOfTransport = scope.modes_of_transport
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
     const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
+
     return (
       <div className="flex-100 layout-row layout-align-space-around-start">
+
         <div
-          className={`${
-            styles.flex_titles
-          } flex-80 layout-row layout-wrap layout-align-center-start`}
+          className={`${styles.flex_titles} ${adminStyles.margin_box_right} ${adminStyles.margin_bottom}
+          flex-80 layout-row layout-wrap layout-align-start-start`}
         >
           {modeOfTransportNames.map(modeOfTransportName => (
             <div
@@ -139,17 +157,33 @@ export default class CardPricingIndex extends Component {
                 styles.titles_btn
               }`}
             >
-              <CardTitle
-                titles={`${modeOfTransportName} freight`}
-                faIcon={this.iconClasses[modeOfTransportName]}
-                theme={theme}
+              <GradientBorder
+                wrapperClassName={`layout-column flex-100 ${styles.city}`}
+                gradient={gradientBorderStyle}
+                className="layout-column flex-100"
+                content={(
+                  <div
+                    className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
+                  >
+                    <div className={`${styles.card_over} flex-none`}>
+                      <div className={styles.center_items}>
+                        {switchIcon(modeOfTransportName, gradientFontStyle)}
+                        <div>
+                          <h5>{`${modeOfTransportName} freight`}</h5>
+                          <p>Routes</p>
+                          {console.log(modeOfTransportName)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               />
               <PricingSearchBar
                 onChange={(e, t) => this.handlePricingSearch(e, t)}
                 value={searchTexts[modeOfTransportName]}
                 target={modeOfTransportName}
               />
-              <div className="flex-90 layout-row layout-align-center-start">
+              <div className="flex-100 layout-row layout-align-center-start">
                 {this.generateViewType(modeOfTransportName, limit)}
               </div>
               <PricingButton
@@ -164,92 +198,34 @@ export default class CardPricingIndex extends Component {
             <SideOptionsBox
               header="Data manager"
               content={
-                <div>
-                  <p className={styles.newsfeed}>Last updated at: </p>
-                  {lastUpdate !== ''
-                    ? <p className={styles.newsfeed}>{moment(lastUpdate).format('lll')}</p>
-                    : ''}
-                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <div
-                      className={`${
-                        adminStyles.action_header
-                      } flex-100 layout-row layout-align-start-center`}
-                      onClick={() => this.toggleExpander('upload')}
-                    >
-                      <div className="flex-90 layout-align-start-center layout-row">
-                        <i className="flex-none fa fa-cloud-upload" />
-                        <p className="flex-none">Upload Data</p>
-                      </div>
-                      <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                        {expander.upload ? (
-                          <i className="flex-none fa fa-chevron-up" />
-                        ) : (
-                          <i className="flex-none fa fa-chevron-down" />
-                        )}
-                      </div>
-                    </div>
-                    <div
-                      className={`${
-                        expander.upload ? adminStyles.open_filter : adminStyles.closed_filter
-                      } flex-100 layout-row layout-wrap layout-align-center-start`}
-                    >
-                      <div
-                        className={`${
-                          adminStyles.action_section
-                        } flex-100 layout-row layout-align-center-center layout-wrap`}
-                      >
-                        <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
-                        <FileUploader
-                          theme={theme}
-                          dispatchFn={e => this.lclUpload(e)}
-                          tooltip={priceTip.upload_lcl}
-                          type="xlsx"
-                          text="Dedicated Pricings .xlsx"
-                        />
-                      </div>
-                    </div>
+                <div
+                  className={`${
+                    expander.download ? adminStyles.open_filter : adminStyles.closed_filter
+                  } flex-100 layout-row layout-wrap layout-align-center-start`}
+                >
+                  <div
+                    className={`${
+                      adminStyles.action_section
+                    } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  >
+                    <p className="flex-100">Download Ocean Pricings Sheet</p>
+                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
                   </div>
-                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <div
-                      className={`${
-                        adminStyles.action_header
-                      } flex-100 layout-row layout-align-start-center`}
-                      onClick={() => this.toggleExpander('download')}
-                    >
-                      <div className="flex-90 layout-align-start-center layout-row">
-                        <i className="flex-none fa fa-cloud-download" />
-                        <p className="flex-none">Download Data</p>
-                      </div>
-                      <div className={`${adminStyles.expander_icon} flex-10 layout-align-center-center`}>
-                        {expander.download ? (
-                          <i className="flex-none fa fa-chevron-up" />
-                        ) : (
-                          <i className="flex-none fa fa-chevron-down" />
-                        )}
-                      </div>
-                    </div>
-                    <div
-                      className={`${
-                        expander.download ? adminStyles.open_filter : adminStyles.closed_filter
-                      } flex-100 layout-row layout-wrap layout-align-center-start`}
-                    >
-                      <div
-                        className={`${
-                          adminStyles.action_section
-                        } flex-100 layout-row layout-wrap layout-align-center-center`}
-                      >
-                        <p className="flex-100">Download Ocean Pricings Sheet</p>
-                        <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
-                      </div>
-                      <div
-                        className={`${
-                          adminStyles.action_section
-                        } flex-100 layout-row layout-wrap layout-align-center-center`}
-                      >
-                        <p className="flex-100">Download Air Pricings Sheet</p>
-                        <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
-                      </div>
-                    </div>
+                  <div
+                    className={`${
+                      adminStyles.action_section
+                    } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  >
+                    <p className="flex-100">Download Air Pricings Sheet</p>
+                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
+                  </div>
+                  <div
+                    className={`${
+                      adminStyles.action_section
+                    } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  >
+                    <p className="flex-100">Download Rail Pricings Sheet</p>
+                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'rail' }} />
                   </div>
                 </div>
               }

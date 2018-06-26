@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -13,13 +13,10 @@ import { UserMergedShipment } from './UserMergedShipment'
 import { UserMergedShipHeaders } from './UserMergedShipHeaders'
 
 export class UserDashboard extends Component {
-  static prepShipment (baseShipment, user, hubsObj) {
+  static prepShipment (baseShipment, user) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
     shipment.companyName = user ? `${user.company_name}` : ''
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].data.name : ''
-    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].data.name : ''
     return shipment
   }
 

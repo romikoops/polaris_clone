@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { AdminNavItem } from './AdminNavItem'
 import { adminMenutooltip as tooltip } from '../../constants'
@@ -90,7 +90,7 @@ export class AdminNav extends Component {
         tooltip={li.tooltip}
       />
     ))
-    if (user.role_id === 3) {
+    if (user.role.name === 'super_admin') {
       linkItems.push(<AdminNavItem
         key={v4()}
         url="/super_admin/upload"

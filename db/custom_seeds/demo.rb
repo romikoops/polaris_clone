@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include ExcelTools
 include MongoTools
 
@@ -13,6 +15,8 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   require './countries'
   puts 'mot_scopes'
   require './mot_scopes'
+  puts 'optin_statuses'
+  require './optin_statuses'
   puts 'roles'
   require './roles'
   puts 'incoterms'
@@ -34,7 +38,7 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   puts 'distributions'
   require './distributions'
 end
-
-puts "tenants"
+MandatoryCharge.create_all!
+puts 'tenants'
 require "#{Rails.root}/db/seed_classes/tenant_seeder.rb"
-TenantSeeder.exec
+TenantSeeder.perform

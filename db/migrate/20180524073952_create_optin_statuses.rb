@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOptinStatuses < ActiveRecord::Migration[5.1]
   def change
     create_table :optin_statuses do |t|

@@ -1,0 +1,719 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+>
+  <div
+    className="summary_wrapper
+          flex-15 layout-row layout-wrap layout-align-start-center "
+    onClick={[Function]}
+  >
+    <div
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-5"
+      />
+      Shipment Reference:
+      <div
+        className="flex-5"
+      />
+      <b />
+    </div>
+    <div
+      className="flex-30 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none no_m"
+      >
+        Show Details
+      </h4>
+      <div
+        className="flex-5"
+      />
+      <i
+        className="fa fa-info clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-90 layout-column layout-align-start-start messageView"
+  >
+    <div
+      className="flex-100 layout-column layout-align-start-start"
+    >
+      <div
+        className="message_scroll
+          flex-70 layout-row layout-align-start-start layout-wrap "
+        id="messageList"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-start layout-wrap"
+        >
+          <Message
+            client={null}
+            key="RANDOM_KEY_0"
+            message="FOO_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 2,
+              }
+            }
+          />
+          <Message
+            client={null}
+            key="RANDOM_KEY_1"
+            message="BAR_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 2,
+              }
+            }
+          />
+        </div>
+        <Element
+          name="messagesEnd"
+        />
+      </div>
+      <form
+        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        onSubmit={[Function]}
+      >
+        <div
+          className="flex-90 layout-row layout-align-center-space-around height_100 layout-wrap"
+        >
+          <div
+            className="flex-95 layout-row layout-align-center-center input_box"
+          >
+            <input
+              className="flex-90 text_input"
+              name="title"
+              onChange={[Function]}
+              placeholder="Type your message title here...."
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            className="flex-95 layout-row layout-align-center-center"
+          >
+            <textarea
+              className="flex-90 text_area"
+              cols="30"
+              id=""
+              name="message"
+              onChange={[Function]}
+              placeholder="Type your message text here...."
+              rows="5"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="flex-10 height_100 layout-row layout-align-center-center"
+        >
+          <button
+            className="flex-none layout-row layout-align-center-center send_button"
+            onSubmit={[Function]}
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          >
+            <i
+              className="flex-none fa fa-paper-plane-o"
+            />
+          </button>
+        </div>
+      </form>
+      <div />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`state.showDetails is true 1`] = `
+<div
+  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+>
+  <div
+    className="summary_wrapper
+          flex-15 layout-row layout-wrap layout-align-start-center "
+    onClick={[Function]}
+  >
+    <div
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-5"
+      />
+      Shipment Reference:
+      <div
+        className="flex-5"
+      />
+      <b />
+    </div>
+    <div
+      className="flex-30 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none no_m"
+      >
+        Show Details
+      </h4>
+      <div
+        className="flex-5"
+      />
+      <i
+        className="fa fa-times clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-90 layout-column layout-align-start-start messageView"
+  >
+    <MessageShipmentData
+      closeInfo={[Function]}
+      name=""
+      onChange={null}
+      shipmentData={
+        Object {
+          "clientName": "FOO_CLIENT_NAME",
+          "id": 654,
+          "imc_reference": "FOO_IMC_REFERENCE",
+          "planned_etd": 789,
+          "schedule_set": Array [],
+          "status": "FOO_STATUS",
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+          "role_id": 2,
+        }
+      }
+    />
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+>
+  <div
+    className="summary_wrapper
+          flex-15 layout-row layout-wrap layout-align-start-center "
+    onClick={[Function]}
+  >
+    <div
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-5"
+      />
+      Shipment Reference:
+      <div
+        className="flex-5"
+      />
+      <b />
+    </div>
+    <div
+      className="flex-30 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none no_m"
+      >
+        Show Details
+      </h4>
+      <div
+        className="flex-5"
+      />
+      <i
+        className="fa fa-info clip"
+        style={
+          Object {
+            "background": "black",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-90 layout-column layout-align-start-start messageView"
+  >
+    <div
+      className="flex-100 layout-column layout-align-start-start"
+    >
+      <div
+        className="message_scroll
+          flex-70 layout-row layout-align-start-start layout-wrap "
+        id="messageList"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-start layout-wrap"
+        >
+          <Message
+            client={null}
+            key="RANDOM_KEY_2"
+            message="FOO_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={null}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 2,
+              }
+            }
+          />
+          <Message
+            client={null}
+            key="RANDOM_KEY_3"
+            message="BAR_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={null}
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 2,
+              }
+            }
+          />
+        </div>
+        <Element
+          name="messagesEnd"
+        />
+      </div>
+      <form
+        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        onSubmit={[Function]}
+      >
+        <div
+          className="flex-90 layout-row layout-align-center-space-around height_100 layout-wrap"
+        >
+          <div
+            className="flex-95 layout-row layout-align-center-center input_box"
+          >
+            <input
+              className="flex-90 text_input"
+              name="title"
+              onChange={[Function]}
+              placeholder="Type your message title here...."
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            className="flex-95 layout-row layout-align-center-center"
+          >
+            <textarea
+              className="flex-90 text_area"
+              cols="30"
+              id=""
+              name="message"
+              onChange={[Function]}
+              placeholder="Type your message text here...."
+              rows="5"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="flex-10 height_100 layout-row layout-align-center-center"
+        >
+          <button
+            className="flex-none layout-row layout-align-center-center send_button"
+            onSubmit={[Function]}
+            style={
+              Object {
+                "background": "black",
+              }
+            }
+          >
+            <i
+              className="flex-none fa fa-paper-plane-o"
+            />
+          </button>
+        </div>
+      </form>
+      <div />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`with admin user 1`] = `
+<div
+  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+>
+  <div
+    className="summary_wrapper
+          flex-15 layout-row layout-wrap layout-align-start-center "
+    onClick={[Function]}
+  >
+    <div
+      className="flex-70 layout-wrap layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-5"
+      />
+      Shipment Reference:
+      <div
+        className="flex-5"
+      />
+      <b />
+    </div>
+    <div
+      className="flex-30 layout-align-center-center layout-row"
+    >
+      <h4
+        className="flex-none no_m"
+      >
+        Show Details
+      </h4>
+      <div
+        className="flex-5"
+      />
+      <i
+        className="fa fa-info clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-90 layout-column layout-align-start-start messageView"
+  >
+    <div
+      className="flex-100 layout-column layout-align-start-start"
+    >
+      <div
+        className="message_scroll
+          flex-70 layout-row layout-align-start-start layout-wrap "
+        id="messageList"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-start layout-wrap"
+        >
+          <Message
+            client={null}
+            key="RANDOM_KEY_8"
+            message="FOO_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
+          />
+          <Message
+            client={null}
+            key="RANDOM_KEY_9"
+            message="BAR_MESSAGE"
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "company_name": "FOO_COMPANY",
+                "currency": "EUR",
+                "email": "foo@bar.baz",
+                "first_name": "John",
+                "guest": false,
+                "last_name": "Doe",
+                "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
+                "role_id": 1,
+              }
+            }
+          />
+        </div>
+        <Element
+          name="messagesEnd"
+        />
+      </div>
+      <form
+        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        onSubmit={[Function]}
+      >
+        <div
+          className="flex-90 layout-row layout-align-center-space-around height_100 layout-wrap"
+        >
+          <div
+            className="flex-95 layout-row layout-align-center-center input_box"
+          >
+            <input
+              className="flex-90 text_input"
+              name="title"
+              onChange={[Function]}
+              placeholder="Type your message title here...."
+              type="text"
+              value=""
+            />
+          </div>
+          <div
+            className="flex-95 layout-row layout-align-center-center"
+          >
+            <textarea
+              className="flex-90 text_area"
+              cols="30"
+              id=""
+              name="message"
+              onChange={[Function]}
+              placeholder="Type your message text here...."
+              rows="5"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="flex-10 height_100 layout-row layout-align-center-center"
+        >
+          <button
+            className="flex-none layout-row layout-align-center-center send_button"
+            onSubmit={[Function]}
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          >
+            <i
+              className="flex-none fa fa-paper-plane-o"
+            />
+          </button>
+        </div>
+      </form>
+      <div />
+    </div>
+  </div>
+</div>
+`;

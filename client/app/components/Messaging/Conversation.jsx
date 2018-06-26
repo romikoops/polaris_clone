@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
@@ -65,7 +65,7 @@ export class Conversation extends Component {
     } = this.props
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
-    const isAdmin = user.role_id === 1
+    const isAdmin = user.role.name === 'admin'
     const messages = isAdmin
       ? conversation.messages.map((msg) => {
         const client = clients.filter(c => c.id === msg.user_id)[0]
@@ -108,7 +108,7 @@ export class Conversation extends Component {
       <div className="flex-100 layout-column layout-align-start-start" ref>
         <div
           id="messageList"
-          className={`${styles.message_scroll} 
+          className={`${styles.message_scroll}
           flex-70 layout-row layout-align-start-start layout-wrap `}
         >
           <div className="flex-70 layout-row layout-align-start-start layout-wrap" >
@@ -166,7 +166,7 @@ export class Conversation extends Component {
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`${styles.summary_wrapper} 
+          className={`${styles.summary_wrapper}
           flex-15 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >

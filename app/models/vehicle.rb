@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 class Vehicle < ApplicationRecord
   has_many :transport_categories
   has_many :itineraries
 
   validates :name,
-            presence: true,
-            uniqueness: {
-              scope: :mode_of_transport,
-              message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
-            }
+    presence:   true,
+    uniqueness: {
+      scope:   :mode_of_transport,
+      message: ->(obj, _) { "'#{obj.name}' taken for mode of transport '#{obj.mode_of_transport}'" }
+    }
 
-  VEHICLE_NAMES = %w(ocean_default rail_default air_default truck_default)
-  TRANSPORT_CATEGORY_NAMES = %w(dry_goods liquid_bulk gas_bulk any)
-  CARGO_CLASSES = %w(fcl_20 fcl_40 fcl_40_hq lcl)
+  VEHICLE_NAMES = %w[ocean_default rail_default air_default truck_default].freeze
+  TRANSPORT_CATEGORY_NAMES = %w[dry_goods liquid_bulk gas_bulk any].freeze
+  CARGO_CLASSES = %w[fcl_20 fcl_40 fcl_40_hq lcl].freeze
 
   def self.create_from_name(name, mot, tenant_id)
     vehicle = Vehicle.find_or_create_by!(name: name, mode_of_transport: mot)
@@ -21,10 +23,10 @@ class Vehicle < ApplicationRecord
         this_class = cargo_class.clone
         TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
           transport_category = TransportCategory.create(
-            name: transport_category_name,
+            name:              transport_category_name,
             mode_of_transport: mot,
-            cargo_class: this_class,
-            vehicle: vehicle
+            cargo_class:       this_class,
+            vehicle:           vehicle
           )
           puts transport_category.errors.full_messages if transport_category.errors.any?
         end
@@ -37,10 +39,10 @@ class Vehicle < ApplicationRecord
     CARGO_CLASSES.each do |cargo_class|
       TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
         transport_category = TransportCategory.new(
-          name: transport_category_name,
-          mode_of_transport: self.mode_of_transport,
-          cargo_class: cargo_class,
-          vehicle: self
+          name:              transport_category_name,
+          mode_of_transport: mode_of_transport,
+          cargo_class:       cargo_class,
+          vehicle:           self
         )
         puts transport_category.errors.full_messages unless transport_category.save
       end

@@ -3,8 +3,11 @@
 FactoryBot.define do
   factory :shipment do
     association :user
-    association :origin, factory: :location
-    association :destination, factory: :location
+    association :origin_nexus, factory: :location
+    association :destination_nexus, factory: :location
+    association :itinerary
+    association :trip
+    association :tenant
     load_type 'container'
   end
 

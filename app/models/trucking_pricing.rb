@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TruckingPricing < ApplicationRecord
   has_many :shipments
   belongs_to :courier
@@ -6,6 +8,9 @@ class TruckingPricing < ApplicationRecord
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
+
+  SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
+
   # Validations
 
   # Class methods
@@ -20,7 +25,7 @@ class TruckingPricing < ApplicationRecord
       temp_tp["tenant_id"] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
-      nhts = hts.map do |ht| 
+      nhts = hts.map do |ht|
         temp_ht = ht.as_json
         temp_ht.delete("id")
         temp_ht["hub_id"] = hub_id
@@ -29,22 +34,26 @@ class TruckingPricing < ApplicationRecord
       end
     end
   end
-  
+
   def self.fix_hub_truckings(subd)
     t = Tenant.find_by_subdomain(subd)
     t.trucking_pricings.map do |tp|
       hub = Hub.find(tp.hub_id)
-      if hub.tenant_id != t.id
-        new_hub = Hub.find_by(name: hub.name, tenant_id: t.id)
-        tp.hub_truckings.each do |ht|
-          ht.hub_id = new_hub.id
-          ht.save!
-        end
+      next unless hub.tenant_id != t.id
+      new_hub = Hub.find_by(name: hub.name, tenant_id: t.id)
+      tp.hub_truckings.each do |ht|
+        ht.hub_id = new_hub.id
+        ht.save!
       end
     end
   end
 
-  def self.find_by_filter(args = {})
+  def self.delete_existing_truckings(hub)
+    hub.trucking_pricings.delete_all
+    hub.hub_truckings.delete_all  
+  end
+
+  def self.find_by_filter(args={})
     find_by_filter_argument_errors(args)
 
     latitude     = args[:latitude]     || args[:location].try(:latitude)  || 0
@@ -53,7 +62,7 @@ class TruckingPricing < ApplicationRecord
     city_name    = args[:city_name]    || args[:location].try(:city)
     country_code = args[:country_code] || args[:location].try(:country).try(:code)
 
-    joins(hub_truckings: [:trucking_destination, hub: :nexus])
+    joins(hub_truckings: %i[trucking_destination hub])
       .where('hubs.tenant_id': args[:tenant_id])
       .where('trucking_pricings.load_type': args[:load_type])
       .where('trucking_pricings.carriage': args[:carriage])
@@ -61,6 +70,7 @@ class TruckingPricing < ApplicationRecord
       .where(cargo_class_condition(args))
       .where(truck_type_condition(args))
       .where(nexuses_condition(args))
+      .where(hubs_condition(args))
       .where("
         (
           (trucking_destinations.zipcode IS NOT NULL)
@@ -72,29 +82,23 @@ class TruckingPricing < ApplicationRecord
               (SELECT data::geometry FROM geometries WHERE id = trucking_destinations.geometry_id),
               (SELECT ST_Point(:longitude, :latitude)::geometry)
             ) AS contains
-          )          
+          )
         ) OR (
           (trucking_destinations.distance IS NOT NULL)
           AND (
-            trucking_destinations.distance = (
-              SELECT ROUND(ST_Distance(
-                ST_Point(hubs.longitude, hubs.latitude)::geography,
-                ST_Point(:longitude, :latitude)::geography
-              ) / 500)
-            )
+            trucking_destinations.distance = #{distance_to_match(args)}
           )
-        )        
+        )
       ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
-
+      .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
   end
 
   def self.find_by_hub_id(hub_id)
     find_by_hub_ids([hub_id])
   end
 
-  def self.find_by_hub_ids(hub_ids = [])
+  def self.find_by_hub_ids(hub_ids=[])
     raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
-
     sanitized_query = sanitize_sql(["
       SELECT
         trucking_pricing_id,
@@ -134,7 +138,7 @@ class TruckingPricing < ApplicationRecord
               END AS ident_value
             FROM trucking_pricings
             JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-            JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id             
+            JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
             WHERE hub_truckings.hub_id IN (:hub_ids)
           ) AS sub_query_lvl_3
         ) AS sub_query_lvl_2
@@ -149,7 +153,7 @@ class TruckingPricing < ApplicationRecord
     connection.exec_query(sanitized_query).map do |row|
       {
         "truckingPricing" => find(row["trucking_pricing_id"]),
-        row["ident_type"] => row["ident_values"].split(',').map { |range| range.split('*') },
+        row["ident_type"] => row["ident_values"].split(",").map { |range| range.split("*") },
         "countryCode"     => row["country_code"]
       }
     end
@@ -162,7 +166,7 @@ class TruckingPricing < ApplicationRecord
       JOIN hubs ON hubs.nexus_id = locations.id
       JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
-      WHERE trucking_pricings.id = #{self.id}
+      WHERE trucking_pricings.id = #{id}
       LIMIT 1
     ").values.first.try(:first)
   end
@@ -172,21 +176,27 @@ class TruckingPricing < ApplicationRecord
       SELECT hubs.id FROM hubs
       JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
-      WHERE trucking_pricings.id = #{self.id}
+      WHERE trucking_pricings.id = #{id}
       LIMIT 1
     ").values.first.try(:first)
   end
 
-  def values_without_rates_and_fees
-    %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type).sort.map do |key|
-      self[key.to_sym]
-    end.join(", ")
+  def scoping_attributes
+    SCOPING_ATTRIBUTE_NAMES.each_with_object({}) do |attribute_name, obj|
+      obj[attribute_name] = self[attribute_name]
+    end
+  end
+
+  def scoping_attributes_sql_where
+    "WHERE " + scoping_attributes.map do |scoping_attribute_name, scoping_attribute_value|
+      "#{scoping_attribute_name} = #{scoping_attribute_value}"
+    end.join(" AND ")
   end
 
   private
 
   def self.find_by_filter_argument_errors(args)
-    mandatory_args = [:load_type, :tenant_id, :carriage]
+    mandatory_args = %i[load_type tenant_id carriage]
 
     mandatory_args.each do |mandatory_arg|
       raise ArgumentError, "Must provide #{mandatory_arg}" if args[mandatory_arg].nil?
@@ -211,6 +221,22 @@ class TruckingPricing < ApplicationRecord
 
   def self.nexuses_condition(args)
     args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
+  end
+
+  def self.hubs_condition(args)
+    args[:hub_ids] ? { 'hubs.id': args[:hub_ids] } : {}
+  end
+
+  def self.distance_to_match(args)
+    sanitize_sql(
+      args[:distance] ||
+      "(
+        SELECT ROUND(ST_Distance(
+          ST_Point(hubs.longitude, hubs.latitude)::geography,
+          ST_Point(:longitude, :latitude)::geography
+        ) / 500)
+      )"
+    )
   end
 
   def self.parse_sql_record(str)

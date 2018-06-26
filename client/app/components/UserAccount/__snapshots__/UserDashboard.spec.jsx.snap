@@ -1,0 +1,347 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start dashboard_main"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-start dashboard_top"
+    >
+      <div
+        className="flex-100 layout-row left layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center welcome"
+        >
+          <h2
+            className="flex-none"
+          >
+            Welcome back, 
+            John
+          </h2>
+        </div>
+        <div
+          className="flex-none layout-row layout-align-center-center carousel"
+        >
+          <Carousel
+            fade={true}
+            noSlides={1}
+            slides={
+              Array [
+                Object {
+                  "header": "New York",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/NY_sm.jpg",
+                  "subheader": "USA",
+                },
+                Object {
+                  "header": "Shanghai",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/shanghai_sm.jpg",
+                  "subheader": "China",
+                },
+                Object {
+                  "header": "Singapore",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/Singapore_sm.jpg",
+                  "subheader": "Singapore",
+                },
+                Object {
+                  "header": "Seoul",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/seoul_sm.jpg",
+                  "subheader": "South Korea",
+                },
+                Object {
+                  "header": "Hanoi",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/Hanoi_sm.jpg",
+                  "subheader": "Vietnam",
+                },
+                Object {
+                  "header": "Shenzhen",
+                  "image": "https://assets.itsmycargo.com/assets/cityimages/Shenzhen_sm.jpg",
+                  "subheader": "China",
+                },
+              ]
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-none layout-row layout-align-center-center dash_btn"
+        >
+          <RoundButton
+            active={true}
+            handleNext={[Function]}
+            iconClass="fa-archive"
+            size="large"
+            text="Find Rates"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-50 layout-row right layout-wrap layout-align-space-between-space-between"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center stat_box"
+          >
+            <h1
+              className="flex-none"
+            >
+              0
+            </h1>
+            <div
+              className="flex-none layout-row layout-align-center-center stat_box_title"
+            >
+              <h3
+                className="flex-none"
+              >
+                Total Shipments
+              </h3>
+            </div>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-center-center stat_box"
+          >
+            <h1
+              className="flex-none"
+            >
+              0
+            </h1>
+            <div
+              className="flex-none layout-row layout-align-center-center stat_box_title"
+            >
+              <h3
+                className="flex-none"
+              >
+                Requested Shipments
+              </h3>
+            </div>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-center-center stat_box"
+          >
+            <h1
+              className="flex-none"
+            >
+              0
+            </h1>
+            <div
+              className="flex-none layout-row layout-align-center-center stat_box_title"
+            >
+              <h3
+                className="flex-none"
+              >
+                Shipments in Progress
+              </h3>
+            </div>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-center-center stat_box"
+          >
+            <h1
+              className="flex-none"
+            >
+              0
+            </h1>
+            <div
+              className="flex-none layout-row layout-align-center-center stat_box_title"
+            >
+              <h3
+                className="flex-none"
+              >
+                Completed Shipments
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-100 layout-wrap layout-align-center-center border_divider"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <TextHeading
+          className="flex-non clip"
+          size={1}
+          text="Shipments"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <UserMergedShipHeaders
+          title="Requested Shipments"
+          total={0}
+        />
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+               No Shipments requested.
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center pointy"
+              onClick={[Function]}
+              value="1"
+            >
+              <p
+                className="flex-none"
+              >
+                See all
+              </p>
+            </div>
+          </div>
+        </div>
+        <UserMergedShipHeaders
+          title="In Process"
+          total={0}
+        />
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap"
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+          >
+            <p
+              className="flex-none"
+            >
+               No Shipments in process.
+            </p>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center pointy"
+              onClick={[Function]}
+              value="2"
+            >
+              <p
+                className="flex-none"
+              >
+                See all
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-center-center border_divider"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-center-stretch"
+    >
+      <AdminSearchableClients
+        clients={Array []}
+        handleClick={[Function]}
+        seeAll={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        title="Most used Contacts"
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap layout-align-center-center border_divider"
+  >
+    <div
+      className="flex-100 layout-row layout-wrap layout-align-start-center"
+    >
+      <TextHeading
+        size={1}
+        text="My Shipment Addresses"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <UserLocations
+        locations={
+          Array [
+            Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "id": 246,
+              "primary": true,
+              "street": "FOO_STREET",
+              "street_number": 579,
+              "zip_code": "22456",
+            },
+          ]
+        }
+        makePrimary={[Function]}
+        setNav={[Function]}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "role": Object {
+              "name": "shipper",
+            },
+          }
+        }
+        userDispatch={
+          Object {
+            "getShipment": [Function],
+            "goTo": [Function],
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

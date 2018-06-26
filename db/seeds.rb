@@ -1,21 +1,22 @@
 
+# frozen_string_literal: true
+
 include ExcelTools
 include MongoTools
-
 
 puts 'You called rake \'db:seed\'. This task will load all seed files.'
 puts 'Load individual seeds with (e.g.) \'rake db:seed:all_pricings \''
 puts 'Start seeding...'
 
 Dir.chdir("#{Rails.root}/db/custom_seeds/") do
-
-
   puts 'drop_tables'
   require './drop_tables'
   puts 'countries'
   require './countries'
   puts 'mot_scopes'
   require './mot_scopes'
+  puts 'optin_statuses'
+  require './optin_statuses'
   puts 'roles'
   require './roles'
   puts 'cargo_item_types'
@@ -42,8 +43,6 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   # require './hs_code'
 end
 
-
-puts "tenants"
+puts 'tenants'
 require "#{Rails.root}/db/seed_classes/tenant_seeder.rb"
-TenantSeeder.exec
-
+TenantSeeder.perform

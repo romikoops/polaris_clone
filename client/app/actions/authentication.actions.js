@@ -45,15 +45,15 @@ function login (data) {
         const shipmentReq = data.req
         dispatch(success(response.data))
         if (shipmentReq) {
-          shipmentReq.shipment.user_id = response.data.id
+          shipmentReq.user_id = response.data.id
           dispatch(shipmentActions.chooseOffer(shipmentReq))
         } else if (
-          (response.data.role_id === 1 && !data.noRedirect) ||
-          (response.data.role_id === 3 && !data.noRedirect) ||
-          (response.data.role_id === 4 && !data.noRedirect)
+          (response.data.role.name === 'admin' && !data.noRedirect) ||
+          (response.data.role.name === 'super_admin' && !data.noRedirect) ||
+          (response.data.role.name === 'sub_admin' && !data.noRedirect)
         ) {
           dispatch(push('/admin/dashboard'))
-        } else if (response.data.role_id === 2 && !data.noRedirect) {
+        } else if (response.data.role.name === 'shipper' && !data.noRedirect) {
           dispatch(push('/account'))
         }
       },
@@ -89,9 +89,9 @@ function register (user, target) {
         dispatch(alertActions.success('Registration successful'))
         if (user.guest) {
           target && dispatch(push(target))
-        } else if (response.data.role_id === 1) {
+        } else if (response.data.role.name === 'admin') {
           dispatch(push('/admin'))
-        } else if (response.data.role_id === 2) {
+        } else if (response.data.role.name === 'shipper') {
           dispatch(push('/account'))
         }
       },

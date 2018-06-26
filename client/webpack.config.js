@@ -1,79 +1,35 @@
 const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const StatsPlugin = require('stats-webpack-plugin')
+const HtmlWebPackPlugin = require("html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const NodeEnvPlugin = require('node-env-webpack-plugin')
-const BabiliPlugin = require('babili-webpack-plugin')
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
-
-// we need to use fs.readFileSync, as require parses the file as js instead of json
 const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
   cacheDirectory: true,
   babelrc: false
 })
 
+
 babelrc.plugins.push('react-hot-loader/babel')
-
 module.exports = {
-  devtool: NodeEnvPlugin.isProduction ? 'none' : 'cheap-module-eval-source-map',
-  entry: NodeEnvPlugin.isProduction
-    ? ['@babel/polyfill', path.join(__dirname, 'app/index.jsx')]
-    : [
-      'react-hot-loader/patch',
-      '@babel/polyfill',
-      'webpack-dev-server/client?http://localhost:8080',
-      'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/index.jsx')
-    ],
-
-  output: {
-    path: path.join(__dirname, '/dist/'),
-    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js',
-    publicPath: '/'
-  },
+  entry: './app/index.jsx',
   devServer: {
-    historyApiFallback: true
+    historyApiFallback: true,
   },
-  plugins: [
-    // new webpack.optimize.OccurenceOrderPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'app/index.tpl.html',
-      inject: 'body',
-      filename: 'index.html'
-    }),
-    new ExtractTextPlugin({
-      filename: '[name]-[hash].min.css',
-      allChunks: true,
-      disable: !NodeEnvPlugin.isProduction
-    }),
-    new NodeEnvPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
-    NodeEnvPlugin.isProduction ? null : new webpack.HotModuleReplacementPlugin(),
-    NodeEnvPlugin.isProduction ? null : new webpack.NoEmitOnErrorsPlugin(),
-    NodeEnvPlugin.isProduction
-      ? new StatsPlugin('webpack.stats.json', {
-        source: false,
-        modules: false
-      })
-      : null,
-    NodeEnvPlugin.isProduction
-      ? new BabiliPlugin({
-        mangle: false
-      })
-      : new BrowserSyncPlugin({
-        host: 'localhost',
-        port: 3001,
-        proxy: 'http://localhost:8080/'
-      })
-  ].filter(Boolean),
-  resolve: {
-    extensions: ['.jsx', '.js', '.json']
+  output : {
+    publicPath: '/',
+    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js'
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader"
+        }
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -91,23 +47,31 @@ module.exports = {
         ]
       },
       {
+        test: /\.html$/,
+        use: [
+          {
+            loader: "html-loader",
+            options: { minimize: true }
+          }
+        ]
+      },
+      {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader'],
-          publicPath: '/dist'
-        })
+        use: [MiniCssExtractPlugin.loader, "css-loader"]
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            'css-loader',
-            'sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
-          ],
-          publicPath: '/dist'
-        })
+        use: [
+          {
+            loader: "style-loader" // creates style nodes from JS strings
+          },
+          {
+            loader: "css-loader" // translates CSS into CommonJS
+          },
+          {
+            loader: "sass-loader" // compiles Sass to CSS
+          }
+        ]
       },
       {
         test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
@@ -119,5 +83,26 @@ module.exports = {
         use: 'url-loader?limit=25000'
       }
     ]
-  }
-}
+  },
+  resolve: {
+    extensions: ['.jsx', '.js', '.json']
+  },
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: 'app/index.tpl.html',
+      inject: 'body',
+      filename: 'index.html'
+    }),
+    new MiniCssExtractPlugin({
+      filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.css' : '[name].css',
+      chunkFilename: "[id].css"
+    }),
+    NodeEnvPlugin.isProduction
+      ? false
+      : new BrowserSyncPlugin({
+        host: 'localhost',
+        port: 3001,
+        proxy: 'http://localhost:8080/'
+      })
+  ].filter(Boolean)
+};

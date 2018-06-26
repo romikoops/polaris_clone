@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row message_wrapper"
+>
+  <div
+    className="flex-5"
+  />
+  <styled.div
+    className="flex-none layout-row layout-align-start-center layout-wrap tenant_style message_inner"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <h3
+        className="flex-none message_title"
+      />
+      <p
+        className="flex-none timestamp"
+      >
+         Admin @ 
+        19
+      </p>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none message_text"
+      />
+    </div>
+  </styled.div>
+</div>
+`;

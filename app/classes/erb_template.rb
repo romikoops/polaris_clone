@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErbTemplate
   include WickedPdfHelper
   include ApplicationHelper
@@ -7,10 +9,10 @@ class ErbTemplate
   def initialize(args)
     @template = find_file args[:template]
     @layout   = find_file args[:layout], layout: true
-    
+
     set_locals args[:locals] if args[:locals].is_a? Hash
 
-    raise ArgumentError, 'Invalid template' if @template.nil?
+    raise ArgumentError, "Invalid template" if @template.nil?
   end
 
   def render
@@ -28,19 +30,19 @@ class ErbTemplate
 
   def set_locals(locals)
     locals.each do |k, v|
-      self.define_singleton_method(k) { v }
+      define_singleton_method(k) { v }
     end
   end
 
-  def find_file(arg_path, options = {})
+  def find_file(arg_path, options={})
     return nil if arg_path.nil?
 
-    full_path = "#{BASE_PATH}#{'/layouts' if options[:layout]}/#{arg_path}" 
+    full_path = "#{BASE_PATH}#{'/layouts' if options[:layout]}/#{arg_path}"
 
     [arg_path, full_path].each do |path|
-      return File.read(path) if File.exists? path 
+      return File.read(path) if File.exist? path
     end
 
-    return nil
+    nil
   end
 end

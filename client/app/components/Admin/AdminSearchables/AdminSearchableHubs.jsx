@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
+import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
-// import styles from '../Admin.scss'
+import adminStyles from '../Admin.scss'
 import { AdminHubTile } from '../'
+// import { Tooltip } from '../../Tooltip/Tooltip'
 import { adminClicked as clickTip } from '../../../constants'
-// import { NamedSelect } from '../../NamedSelect/NamedSelect'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class AdminSearchableHubs extends Component {
   static limitArray (hubs, limit) {
@@ -44,6 +45,7 @@ export class AdminSearchableHubs extends Component {
       this.setState({
         hubs: this.filterHubsByType(this.props.hubs)
       })
+
       return
     }
     const search = (key) => {
@@ -58,6 +60,7 @@ export class AdminSearchableHubs extends Component {
         keys: [key]
       }
       const fuse = new Fuse(this.props.hubs, options)
+
       return fuse.search(event.target.value)
     }
 
@@ -84,74 +87,105 @@ export class AdminSearchableHubs extends Component {
     } else {
       toLimitArray = array
     }
+
     return limit === 0 ? toLimitArray : AdminSearchableHubs.limitArray(toLimitArray, limit)
   }
   render () {
     const {
-      theme, seeAll
+      theme, seeAll, sideScroll, hideFilters
     } = this.props
     const { hubs } = this.state
     let hubsArr
 
     if (hubs) {
       hubsArr = this.filterHubsByType(hubs).map(hub => (
-        <AdminHubTile
-          key={v4()}
-          hub={hub}
-          theme={theme}
-          handleClick={this.handleClick}
-          tooltip={clickTip.related}
-          showTooltip
-          showIcon
-        />
+        <div className={`${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
+          <AdminHubTile
+            key={v4()}
+            hub={hub}
+            theme={theme}
+            handleClick={this.handleClick}
+            tooltip={clickTip.related}
+            showTooltip
+          />
+        </div>
       ))
     }
+    const viewType = sideScroll ? (
+      <div className={`layout-row flex-100 layout-align-start-center ${adminStyles.slider_container}`}>
+        <div
+          className={`layout-row flex-none layout-align-space-around-center ${adminStyles.slider_inner}`}
+        >
+          {hubsArr}
+        </div>
+      </div>
+    ) : (
+      <div className="layout-row flex-100 layout-align-start-center">
+        <div className="layout-row flex-100 layout-align-space-between-start layout-wrap">
+          {hubsArr}
+        </div>
+      </div>
+    )
+    const motOptions = [
+      { label: 'Ocean', value: 'ocean' },
+      { label: 'Rail', value: 'rail' },
+      { label: 'Air', value: 'air' }
+    ]
+    const filters = !hideFilters ? (
+      <div className="flex-90 layout-row layout-align-start-center">
+        <div className="flex-20 layout-row layout-align-start-cente">
+          <p className="flex-none">Filter by:</p>
+        </div>
+        <div className="flex-40 layout-row layout-align-center-center">
+          <NamedSelect
+            className={adminStyles.select}
+            options={motOptions}
+            onChange={e => this.setHubFilter(e)}
+            value={selectedMot}
+            placeholder="Hub Type"
+            name="motFilter"
+          />
+        </div>
+        <div className="flex-40 layout-row layout-align-center-center input_box_full">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search hubs"
+            onChange={this.handleSearchChange}
+          />
+        </div>
+      </div>
+    ) : (
+      ''
+    )
 
-    // const motOptions = [
-    //   { label: 'Ocean', value: 'ocean' },
-    //   { label: 'Rail', value: 'rail' },
-    //   { label: 'Air', value: 'air' }
-    // ]
-    // const filters = !hideFilters ? (
-    //   <div className="flex-90 layout-row layout-align-start-center">
-    //     <div className="flex-20 layout-row layout-align-start-cente">
-    //       <p className="flex-none">Filter by:</p>
-    //     </div>
-    //     <div className="flex-40 layout-row layout-align-center-center">
-    //       <NamedSelect
-    //         className={styles.select}
-    //         options={motOptions}
-    //         onChange={e => this.setHubFilter(e)}
-    //         value={selectedMot}
-    //         placeholder="Hub Type"
-    //         name="motFilter"
-    //       />
-    //     </div>
-    //     <div className="flex-40 layout-row layout-align-center-center input_box_full">
-    //       <input
-    //         type="text"
-    //         name="search"
-    //         placeholder="Search hubs"
-    //         onChange={this.handleSearchChange}
-    //       />
-    //     </div>
-    //   </div>
-    // ) : (
-    //   ''
-    // )
     return (
       <div
-        className="flex-80 layout-row layout-wrap layout-align-center-start"
+        className={`layout-row flex-100 layout-wrap layout-align-start-center ${adminStyles.searchable}`}
       >
-
-        {/* <div
-                  className={`flex-100 layout-row layout-wrap layout-align-center-center ${
-                    styles.searchable_header
-                  }`}
-                >
-                  {filters}
-                </div> */}
-        {hubsArr}
+        <div
+          className={`flex-100 layout-row layout-wrap layout-align-center-center ${
+            adminStyles.searchable_header
+          }`}
+        >
+          <div className="flex-100 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div className="flex-none layout-row layout-align-start-center">
+                <div className="flex-none">
+                  {/* <TextHeading theme={theme} size={1} text={title || 'Hubs'} /> */}
+                </div>
+                {/* {showTooltip ? (
+                  <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} />
+                ) : (
+                  ''
+                )}
+                {icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : ''} */}
+              </div>
+            </div>
+          </div>
+          {filters}
+        </div>
+        {viewType}
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
             <div
@@ -178,6 +212,8 @@ AdminSearchableHubs.propTypes = {
   }).isRequired,
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
+  sideScroll: PropTypes.bool,
+  hideFilters: PropTypes.bool,
   limit: PropTypes.number
 }
 
@@ -185,6 +221,8 @@ AdminSearchableHubs.defaultProps = {
   handleClick: null,
   seeAll: null,
   theme: null,
+  sideScroll: false,
+  hideFilters: false,
   limit: 0
 }
 

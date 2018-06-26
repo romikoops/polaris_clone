@@ -41,13 +41,13 @@ class AdminSchedules extends Component {
       searchFilters: {
         mot: {}
       },
-      searchResults: []
+      searchResults: this.props.scheduleData ? this.props.scheduleData.itineraries : []
     }
     this.toggleView = this.toggleView.bind(this)
   }
   componentWillMount () {
     if (this.props.scheduleData && this.props.scheduleData.itineraries) {
-      this.prepFilters()
+      this.prepFilters(this.props)
     }
   }
   componentDidMount () {
@@ -58,7 +58,7 @@ class AdminSchedules extends Component {
       nextProps.scheduleData &&
       nextProps.scheduleData.itineraries
     ) {
-      this.prepFilters()
+      this.prepFilters(nextProps)
     }
   }
 
@@ -104,8 +104,8 @@ class AdminSchedules extends Component {
       }
     })
   }
-  prepFilters () {
-    const { scheduleData } = this.props
+  prepFilters (props) {
+    const { scheduleData } = props
     if (!scheduleData) {
       return
     }
@@ -146,7 +146,7 @@ class AdminSchedules extends Component {
     const motKeys = Object.keys(searchFilters.mot).filter(key => searchFilters.mot[key])
     const filter1 = array.filter(a => motKeys.includes(a.mode_of_transport))
     let filter2
-    if (searchFilters.query && searchFilters.query !== '') {
+    if (searchFilters.query) {
       filter2 = filters.handleSearchChange(
         searchFilters.query,
         ['name', 'mode_of_transport'],
@@ -237,6 +237,7 @@ class AdminSchedules extends Component {
 
     const listView = (
       <AdminSearchableRoutes
+        className="flex-100"
         itineraries={results}
         theme={theme}
         hubs={hubs}

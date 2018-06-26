@@ -38,12 +38,13 @@ class AdminTrucking extends Component {
       return ''
     }
     const { truckingNexuses, nexuses } = trucking
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Switch className="flex">
           <Route
             exact
-            path="/admin/trucking"
+            path="/admin/pricings"
             render={props => (
               <AdminTruckingIndex
                 theme={theme}
@@ -101,7 +102,6 @@ AdminTrucking.propTypes = {
     truckingPrices: PropTypes.array
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
   truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object })
 }

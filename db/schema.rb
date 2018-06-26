@@ -54,6 +54,32 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.jsonb "unit_price"
   end
 
+  create_table "charge_breakdowns", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "trip_id"
+  end
+
+  create_table "charge_categories", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.integer "cargo_unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "price_id"
+    t.integer "charge_category_id"
+    t.integer "children_charge_category_id"
+    t.integer "charge_breakdown_id"
+    t.integer "detail_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "contacts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "location_id"
@@ -119,14 +145,16 @@ ActiveRecord::Schema.define(version: 20180524165119) do
   end
 
   create_table "customs_fees", force: :cascade do |t|
-    t.jsonb "import"
-    t.jsonb "export"
     t.string "mode_of_transport"
     t.string "load_type"
     t.integer "hub_id"
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_vehicle_id"
+    t.integer "counterpart_hub_id"
+    t.string "direction"
+    t.jsonb "fees"
   end
 
   create_table "documents", force: :cascade do |t|
@@ -248,7 +276,6 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.string "name"
     t.string "mode_of_transport"
     t.integer "tenant_id"
-    t.integer "mot_scope_id"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -264,14 +291,16 @@ ActiveRecord::Schema.define(version: 20180524165119) do
   end
 
   create_table "local_charges", force: :cascade do |t|
-    t.jsonb "import"
-    t.jsonb "export"
     t.string "mode_of_transport"
     t.string "load_type"
     t.integer "hub_id"
     t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_vehicle_id"
+    t.integer "counterpart_hub_id"
+    t.string "direction"
+    t.jsonb "fees"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -298,6 +327,19 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.boolean "on_carriage"
     t.boolean "import_charges"
     t.boolean "export_charges"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "max_dimensions_bundles", force: :cascade do |t|
+    t.string "mode_of_transport"
+    t.integer "tenant_id"
+    t.boolean "aggregate"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
+    t.decimal "dimension_z"
+    t.decimal "payload_in_kg"
+    t.decimal "chargeable_weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -339,6 +381,13 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.boolean "cookies"
     t.boolean "tenant"
     t.boolean "itsmycargo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "prices", force: :cascade do |t|
+    t.decimal "value"
+    t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -406,8 +455,6 @@ ActiveRecord::Schema.define(version: 20180524165119) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "origin_id"
-    t.integer "destination_id"
     t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
@@ -444,8 +491,11 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -548,6 +598,7 @@ ActiveRecord::Schema.define(version: 20180524165119) do
     t.jsonb "rates"
     t.jsonb "fees"
     t.string "cargo_class"
+    t.string "identifier_modifier"
   end
 
   create_table "user_locations", force: :cascade do |t|

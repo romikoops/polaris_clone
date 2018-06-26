@@ -8,6 +8,7 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     country: '',
     fullAddress: ''
   }
+  console.log(place)
 
   place.address_components.forEach((ac) => {
     if (ac.types.includes('street_number')) {
