@@ -1,0 +1,1 @@
+MandatoryCharge.create_all!

@@ -13,7 +13,6 @@ module TruckingTools
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != "PERCENTAGE"
         results = fare_calculator(k, fee, cargo, km)
-        
         fees[k] = results
       else
         total_fees[k] = fee
@@ -129,6 +128,7 @@ module TruckingTools
   end
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
+    byebug
     return {} if cargo_values["weight"] == 0
     
     case trucking_pricing.modifier
@@ -139,6 +139,11 @@ module TruckingTools
           rate["rate"]["min_value"] = rate["min_value"]
           return { rate: rate["rate"], fees: trucking_pricing["fees"] }
         end
+      end
+      if cargo_values["weight"] > trucking_pricing["rates"]["kg"].last["max_kg"].to_d
+        rate = trucking_pricing["rates"]["kg"].last
+        rate["rate"]["min_value"] = rate["min_value"]
+        return { rate: rate["rate"], fees: trucking_pricing["fees"] }
       end
     when "cbm"
       trucking_pricing["rates"]["cbm"].each do |rate|
@@ -273,7 +278,6 @@ module TruckingTools
     cargo_object
   end
 
-
   def calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
     load_meterage = (cargo.volume / 1.3) / 2.4
     load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
@@ -307,5 +311,4 @@ module TruckingTools
     cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
     cargo_object["stackable"]["number_of_items"] += cargo.quantity
   end
-
 end
