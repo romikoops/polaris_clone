@@ -126,6 +126,10 @@ class Admin::ShipmentsController < ApplicationController
     charge.edited_price = new_price
 
     if charge.save
+      unless charge.parent.nil?
+        charge.parent.update_edited_price!
+        charge.parent.save!
+      end
       response_handler(shipment.as_json(options))
 	  else
 		  # TBD - handle invalid record error

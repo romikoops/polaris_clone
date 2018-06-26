@@ -63,6 +63,16 @@ class Charge < ApplicationRecord
     price.save!
   end
 
+  def update_edited_price!
+    self.edited_price = Price.new(currency: price.currency) if edited_price.nil?
+    rates = get_rates(edited_price.currency).today.merge(edited_price.currency => 1.0)
+    edited_price.value = children.reduce(0) do |sum, charge|
+      price = charge.edited_price || charge.price
+      sum + price.value / rates[price.currency].to_d
+    end
+    edited_price.save!
+  end
+
   private
 
   def set_detail_level

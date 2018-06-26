@@ -63,6 +63,16 @@ export class AdminShipmentView extends Component {
 
     return `${noun}`
   }
+  static checkSelectedOffer (service) {
+    let obj = {}
+
+    if (service && service.total) {
+      const total = service.edited_total || service.total
+      obj = total
+    }
+
+    return obj
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -80,20 +90,12 @@ export class AdminShipmentView extends Component {
         }
       },
       newPrices: {
-        trucking_pre: this.props.shipmentData.shipment.selected_offer.trucking_pre.edited_total
-          ? this.props.shipmentData.shipment.selected_offer.trucking_pre.edited_total.value
-          : this.props.shipmentData.shipment.selected_offer.trucking_pre.total.value,
-        trucking_on: this.props.shipmentData.shipment.selected_offer.trucking_on.edited_total
-          ? this.props.shipmentData.shipment.selected_offer.trucking_on.edited_total.value
-          : this.props.shipmentData.shipment.selected_offer.trucking_pre.total.value,
-        cargo: this.props.shipmentData.shipment.selected_offer.cargo.edited_total
-          ? this.props.shipmentData.shipment.selected_offer.cargo.edited_total.value
-          : this.props.shipmentData.shipment.selected_offer.trucking_pre.total.value,
-        insurance: this.props.shipmentData.shipment.selected_offer.insurance.edited_total
-          ? this.props.shipmentData.shipment.selected_offer.insurance.edited_total.value
-          : this.props.shipmentData.shipment.selected_offer.trucking_pre.total.value
-      },
-      totalPrice: this.props.shipmentData.shipment.total_price.value
+        trucking_pre: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_pre),
+        trucking_on: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_on),
+        cargo: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.cargo),
+        insurance: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.insurance),
+        customs: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.customs)
+      }
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
@@ -164,7 +166,10 @@ export class AdminShipmentView extends Component {
     this.setState({
       newPrices: {
         ...newPrices,
-        [key]: value
+        [key]: {
+          ...newPrices[key],
+          value
+        }
       }
     })
   }
@@ -284,26 +289,26 @@ export class AdminShipmentView extends Component {
     const { newPrices, currency } = this.state
     const { adminDispatch, shipmentData } = this.props
 
-    let difference = 0
+    // let difference = 0
 
     Object.keys(newPrices).forEach((k) => {
       const service = shipmentData.shipment.selected_offer[k]
 
-      if (newPrices[k] !== 0 && service.total && service.total.value &&
-        newPrices[k] !== service.total.value) {
-        difference += (newPrices[k] - service.total.value)
+      if (newPrices[k].value !== 0 && service && service.total && service.total.value &&
+        newPrices[k].value !== service.total.value) {
+        // difference += (newPrices[k] - service.total.value)
 
         adminDispatch.editShipmentServicePrice(shipmentData.shipment.id, {
-          value: newPrices[k],
+          value: newPrices[k].value,
           currency,
           charge_category: k
         })
       }
     })
 
-    this.setState({
-      totalPrice: parseFloat(shipmentData.shipment.total_price.value) + difference
-    })
+    // this.setState({
+    //   totalPrice: parseFloat(shipmentData.shipment.total_price.value) + difference
+    // })
 
     this.toggleEditServicePrice()
   }
@@ -330,7 +335,7 @@ export class AdminShipmentView extends Component {
       locations
     } = shipmentData
     const {
-      showEditTime, showEditServicePrice, newTimes, newPrices, currency, totalPrice
+      showEditTime, showEditServicePrice, newTimes, newPrices
     } = this.state
     const hubsObj = {
       startHub: {
@@ -721,12 +726,12 @@ export class AdminShipmentView extends Component {
                           layout-align-center-center ${styles.greybg}`
                         }
                       >
-                        {currency}
+                        {newPrices.trucking_pre.currency}
                       </span>
                       <input
                         type="number"
                         onChange={e => this.handlePriceChange('trucking_pre', e.target.value)}
-                        value={Number(newPrices.trucking_pre).toFixed(2)}
+                        value={Number(newPrices.trucking_pre.value).toFixed(2)}
                         className="layout-padding flex-initial"
                       />
                     </div>
@@ -750,12 +755,12 @@ export class AdminShipmentView extends Component {
                           layout-align-center-center ${styles.greybg}`
                         }
                       >
-                        {currency}
+                        {newPrices.trucking_on.currency}
                       </span>
                       <input
                         type="number"
                         onChange={e => this.handlePriceChange('trucking_on', e.target.value)}
-                        value={Number(newPrices.trucking_on).toFixed(2)}
+                        value={Number(newPrices.trucking_on.value).toFixed(2)}
                         className="layout-padding flex-initial"
                       />
                     </div>
@@ -805,12 +810,12 @@ export class AdminShipmentView extends Component {
                           layout-align-center-center ${styles.greybg}`
                         }
                       >
-                        {currency}
+                        {newPrices.cargo.currency}
                       </span>
                       <input
                         type="number"
                         onChange={e => this.handlePriceChange('cargo', e.target.value)}
-                        value={Number(newPrices.cargo).toFixed(2)}
+                        value={Number(newPrices.cargo.value).toFixed(2)}
                         className="layout-padding flex-initial"
                       />
                     </div>
@@ -830,12 +835,52 @@ export class AdminShipmentView extends Component {
                     <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Customs</p>
                   </div>
+                  {showEditServicePrice && shipment.selected_offer.customs ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.customs.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        value={Number(newPrices.customs.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
                 <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
                   <div className="layout-row">
                     <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Insurance</p>
                   </div>
+                  {showEditServicePrice && shipment.selected_offer.insurance ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.insurance.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        value={Number(newPrices.insurance.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
@@ -863,7 +908,9 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <h2 className="layout-align-end-center layout-row flex">
-                {(+totalPrice).toFixed(2)} {shipment.total_goods_value.currency}
+                {shipment.selected_offer.edited_total.value
+                  ? (+shipment.selected_offer.edited_total.value).toFixed(2)
+                  : (+shipment.total_price.value).toFixed(2)} {shipment.total_goods_value.currency}
               </h2>
             </div>
           </div>
