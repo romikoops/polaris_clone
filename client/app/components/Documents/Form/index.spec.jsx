@@ -28,12 +28,6 @@ jest.mock('react-router', () => ({
   // eslint-disable-next-line react/prop-types
   Link: () => ({ props }) => <a {...props}>link</a>
 }))
-jest.mock('react-tooltip', () =>
-  // eslint-disable-next-line react/prop-types
-  () => ({ props }) => ({ children }) => <div>{children}</div>)
-jest.mock('react-truncate', () =>
-  // eslint-disable-next-line react/prop-types
-  () => ({ props }) => ({ children }) => <div>{children}</div>)
 // eslint-disable-next-line
 import DocumentsForm from './'
 

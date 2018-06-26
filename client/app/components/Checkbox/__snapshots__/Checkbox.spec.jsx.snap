@@ -30,7 +30,7 @@ exports[`checked is true 1`] = `
         className="fa fa-check show"
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             "fontSize": "15px",
           }
         }
@@ -70,7 +70,7 @@ exports[`disabled is true 1`] = `
         className="fa fa-check "
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             "fontSize": "15px",
           }
         }
@@ -110,7 +110,7 @@ exports[`shallow render 1`] = `
         className="fa fa-check "
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             "fontSize": "15px",
           }
         }
@@ -145,7 +145,7 @@ exports[`size is undefined 1`] = `
         className="fa fa-check "
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             "fontSize": "15px",
           }
         }

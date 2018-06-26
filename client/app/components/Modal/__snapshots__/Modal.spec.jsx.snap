@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="full_size flex-none layout-row layout-align-center-center"
+>
+  <div
+    className="modal_background full_size"
+    onClick={[Function]}
+  />
+  <div
+    className="modal flex-none"
+    style={
+      Object {
+        "maxHeight": "calc(0px - (22px * 2))",
+        "maxWidth": "90%",
+        "minHeight": 55,
+        "overflowY": "auto",
+        "padding": "22px 33px",
+      }
+    }
+  />
+</div>
+`;

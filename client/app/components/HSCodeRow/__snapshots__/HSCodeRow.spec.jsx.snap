@@ -17,6 +17,7 @@ exports[`cargoItems is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -30,6 +31,7 @@ exports[`cargoItems is falsy 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -40,6 +42,8 @@ exports[`cargoItems is falsy 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -180,6 +184,7 @@ exports[`cont.dangerousGoods is true 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -193,6 +198,7 @@ exports[`cont.dangerousGoods is true 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -203,6 +209,8 @@ exports[`cont.dangerousGoods is true 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -497,6 +505,7 @@ exports[`containers is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -510,6 +519,7 @@ exports[`containers is falsy 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -520,6 +530,8 @@ exports[`containers is falsy 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -702,6 +714,7 @@ exports[`shallow render 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -715,6 +728,7 @@ exports[`shallow render 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -725,6 +739,8 @@ exports[`shallow render 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -1019,6 +1035,7 @@ exports[`state.showPaste is true 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -1032,6 +1049,7 @@ exports[`state.showPaste is true 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -1042,6 +1060,8 @@ exports[`state.showPaste is true 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -1349,15 +1369,19 @@ exports[`theme is falsy 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={null}
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={null}
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div
@@ -1652,6 +1676,7 @@ exports[`variable textInputBool is true 1`] = `
           className="flex-none"
         >
           <TextHeading
+            color=""
             size={2}
             text="HS Codes"
             theme={
@@ -1665,6 +1690,7 @@ exports[`variable textInputBool is true 1`] = `
           />
         </div>
         <Tooltip
+          color=""
           icon="fa-info-circle"
           text="hs_code"
           theme={
@@ -1675,6 +1701,8 @@ exports[`variable textInputBool is true 1`] = `
               },
             }
           }
+          toolText=""
+          wrapperClassName=""
         />
       </div>
       <div

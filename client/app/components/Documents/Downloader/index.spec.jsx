@@ -28,10 +28,6 @@ jest.mock('react-router', () => ({
   // eslint-disable-next-line react/prop-types
   Link: ({ props }) => <a {...props}>link</a>
 }))
-jest.mock('../../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ props }) => <button {...props}>click</button>
-}))
 
 // eslint-disable-next-line
 import DocumentsDownloader from './'
