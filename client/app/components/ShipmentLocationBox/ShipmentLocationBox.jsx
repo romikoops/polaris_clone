@@ -17,6 +17,7 @@ import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
 import routeFilters from './routeFilters'
+import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
 
@@ -751,50 +752,63 @@ export class ShipmentLocationBox extends Component {
     /* eslint-enable camelcase */
   }
   prepForSelect (target) {
-    console.log(target)
-    const { truckingHubs, oSelect, dSelect } = this.state
-    const { lookupTablesForRoutes, routes } = this.props.shipmentData
-    const targetLocation = target === 'origin' ? oSelect : dSelect
-    // const targetLocation = this.props[target]
-    const targetTrucking = truckingHubs[target]
-    const counterpart = target === 'origin' ? 'destination' : 'origin'
-    let results = []
-    const selectOptions = []
-    const nexusNames = []
-    let indexes = []
-    if (targetLocation.label) {
-      indexes = routeFilters.selectFromLookupTable(lookupTablesForRoutes, [targetLocation.value.id], `${target}Nexus`)
-      results = indexes.map(index => routes[index])
-    } else if (targetTrucking) {
-      indexes = routeFilters.selectFromLookupTable(lookupTablesForRoutes, targetTrucking, `${target}Hub`)
-      results = indexes.map(index => routes[index])
-      this.prepTruckTypes(results, target)
-    } else {
-      results = routes
-    }
-
-    results.forEach((res) => {
-      const counter = res[counterpart]
-      const option = {
-        label: counter.nexusName,
-        value: {
-          id: counter.nexusId,
-          latitude: counter.latitude,
-          longitude: counter.longitude,
-          name: counter.nexusName
-        }
+    this.setState((prevState) => {
+      const {
+        truckingHubs, oSelect, dSelect, filteredRouteIndexes
+      } = prevState
+      const { lookupTablesForRoutes, routes } = this.props.shipmentData
+      if (filteredRouteIndexes.length === 0) {
+        return { filteredRouteIndexes: routes.map((_, i) => i) }
       }
-      if (!nexusNames.includes(counter.nexusName) && counter.nexusName !== targetLocation.label) {
-        selectOptions.push(option)
-        nexusNames.push(counter.nexusName)
+
+      const targetLocation = target === 'origin' ? oSelect : dSelect
+      const targetTrucking = truckingHubs[target]
+      const counterpart = target === 'origin' ? 'destination' : 'origin'
+
+      let indexes = filteredRouteIndexes
+      if (targetLocation.label) {
+        indexes = routeFilters.selectFromLookupTable(
+          lookupTablesForRoutes,
+          [targetLocation.value.id], `${target}Nexus`
+        )
+      } else if (targetTrucking) {
+        indexes = routeFilters.selectFromLookupTable(
+          lookupTablesForRoutes,
+          targetTrucking, `${target}Hub`
+        )
+      }
+
+      let newFilteredRouteIndexes = routeFilters.scopeIndexes(
+        filteredRouteIndexes,
+        indexes
+      )
+
+      let fieldsHaveErrors = false
+
+      if (targetTrucking && newFilteredRouteIndexes.length === 0) {
+        newFilteredRouteIndexes = filteredRouteIndexes
+        fieldsHaveErrors = true
+        const addressFormsHaveErrors =
+          fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
+        this.props.handleSelectLocation(addressFormsHaveErrors)
+      }
+
+      const newFilteredRoutes = []
+      const selectOptions = []
+      newFilteredRouteIndexes.forEach((idx) => {
+        const route = routes[idx]
+        newFilteredRoutes.push(route)
+        selectOptions.push(routeHelpers.routeOption(route))
+      })
+
+      if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
+
+      return {
+        filteredRouteIndexes: newFilteredRouteIndexes,
+        [`available${capitalize(counterpart)}Nexuses`]: selectOptions,
+        [`${target}FieldsHaveErrors`]: fieldsHaveErrors
       }
     })
-
-    this.setState(prevState =>
-      ({
-        filteredRouteIndexes: routeFilters.scopeIndexes(prevState.filteredRouteIndexes, indexes),
-        [`available${capitalize(counterpart)}Nexuses`]: selectOptions
-      }))
   }
   prepTruckTypes (routes, target) {
     const { selectedTrucking } = this.props
