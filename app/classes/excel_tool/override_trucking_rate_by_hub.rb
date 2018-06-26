@@ -30,7 +30,6 @@ module ExcelTool
       end_time = DateTime.now
       diff = (end_time - start_time) / 86_400
 
-      awesome_print diff
       { results: results, stats: stats }
     end
 
@@ -46,7 +45,6 @@ module ExcelTool
         load_type = meta[:load_type] == "container" ? "container" : "cargo_item"
         cargo_class = meta[:cargo_class]
         direction = meta[:direction] == "import" ? "on" : "pre"
-        awesome_print meta
         courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
         scoping_attributes_hash = {
           load_type:   load_type,
@@ -55,15 +53,13 @@ module ExcelTool
           truck_type:  row_truck_type,
           carriage:    direction
         }
-        old_tp_ids = hub.trucking_pricings.where(scoping_attributes_hash).ids
-        hub.hub_truckings.where(trucking_pricing_id: old_tp_ids).delete_all
-        TruckingPricing.where(id: old_tp_ids).delete_all
 
         hub.truck_type_availabilities << TruckTypeAvailability.find_or_create_by(
           truck_type: row_truck_type,
           carriage:   direction,
           load_type:  load_type
         )
+  
 
         modifier_position_objs = populate_modifier(rates_sheet)
         header_row = rates_sheet.row(4)
@@ -77,7 +73,6 @@ module ExcelTool
         (6..rates_sheet.last_row).each do |line|
           row_data = rates_sheet.row(line)
           row_zone_name = row_data.shift
-          awesome_print row_zone_name
           row_min_value = row_data.shift
           row_key = "#{row_zone_name}_#{row_truck_type}"
           single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
@@ -99,11 +94,26 @@ module ExcelTool
           tp = trucking_pricing
           td_query = build_td_query(single_ident_values, single_ident_values_and_country)
           td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
-          with_statement = build_query_statement(tp, td_ids)
+          delete_previous_trucking_pricings(hub, scoping_attributes_hash, td_ids)
+          with_statement  = build_with_statement(tp, td_ids)
           insertion_query = build_insert_query(with_statement, tp, td_ids)
           ActiveRecord::Base.connection.execute(insertion_query)
         end
       end
+    end
+
+    def delete_previous_trucking_pricings(hub, scoping_attributes_hash, td_ids)
+      old_tp_ids =
+        TruckingPricing.joins(hub_truckings: :trucking_destination)
+          .where('hub_truckings.hub_id': hub.id)
+          .where('trucking_destinations.id': td_ids)
+          .where(scoping_attributes_hash)
+          .distinct.ids
+
+      return if old_tp_ids.empty?
+
+      hub.hub_truckings.where(trucking_pricing_id: old_tp_ids).delete_all
+      TruckingPricing.where(id: old_tp_ids).delete_all
     end
 
     def load_zones
@@ -157,7 +167,6 @@ module ExcelTool
               { ident: ident_value, country: idents_and_country[:country] }
             end
           elsif identifier_type == "geometry_id"
-            awesome_print idents_and_country
             geometry = find_geometry(idents_and_country)
             puts geometry.names.log_format
             stats[:trucking_destinations][:number_created] += 1
@@ -274,7 +283,6 @@ module ExcelTool
       if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
         val = val * 2
       end
-      awesome_print "#{row_zone_name} "
       w_min = weight_min_row[m_index] || 0
       r_min = row_min_value || 0
       if defaults[mod_key]
@@ -355,7 +363,7 @@ module ExcelTool
       eos
     end
 
-    def build_query_statement(tp, td_ids)
+    def build_with_statement(tp, td_ids)
       <<-eos
         WITH
           td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
