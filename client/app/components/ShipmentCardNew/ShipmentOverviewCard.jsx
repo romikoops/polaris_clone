@@ -42,10 +42,12 @@ export class ShipmentOverviewCard extends Component {
       )
 
       return (
-        <div className={`${adminStyles.margin_box_right} ${adminStyles.margin_bottom} flex-100 layout-row`}>
+        <div className={`
+          ${adminStyles.margin_box_right} ${adminStyles.margin_bottom}
+          flex-sm-100 flex-xs-100 flex-50 flex-md-100 layout-row`}
+        >
           <AlternativeGreyBox
-            wrapperClassName="layout-row flex-50 flex-md-100
-              flex-sm-100 flex-xs-100 layout-align-center-center"
+            wrapperClassName="layout-row flex-100 layout-align-center-center"
             contentClassName="layout-row flex-100"
             content={ShipCard}
           />
@@ -61,7 +63,7 @@ export class ShipmentOverviewCard extends Component {
     } = this.props
 
     return (
-      <div className="layout-wrap flex-100 layout-row layout-align-space-between-start">
+      <div className={`flex-100 layout-row layout-align-space-between-start ${adminStyles.margin_box_right}`}>
         {showTitle ? (
           <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
             <span><b>Requested Shipments</b></span>

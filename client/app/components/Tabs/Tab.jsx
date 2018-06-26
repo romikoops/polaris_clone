@@ -17,7 +17,7 @@ export default function Tab (props) {
   }
 
   return (
-    <div className={`layout-row flex-gt-lg-33 flex-md-45 layout-align-center-center ${styles.tab}`}>
+    <div className={`layout-row flex-100 layout-align-center-center ${styles.tab}`}>
       <div className={styles.gradient} style={isActive ? borderGradient : deselectedStyle} />
       <div className={`${styles.content}`}>
         <a
