@@ -68,10 +68,11 @@ class Route
 
   def self.detailed_hash_from_attributes(attributes, options)
     {
-      itinerary_id:   attributes["itinerary_id"],
-      itinerary_name: attributes["itinerary_name"],
-      origin:         hash_from_attributes(attributes, "origin"),
-      destination:    hash_from_attributes(attributes, "destination")
+      itinerary_id:      attributes["itinerary_id"],
+      itinerary_name:    attributes["itinerary_name"],
+      mode_of_transport: attributes["mode_of_transport"],
+      origin:            hash_from_attributes(attributes, "origin"),
+      destination:       hash_from_attributes(attributes, "destination")
     }
   end
 
