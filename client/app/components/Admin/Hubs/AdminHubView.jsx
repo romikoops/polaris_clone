@@ -182,9 +182,7 @@ export class AdminHubView extends Component {
     if (!hubData || !theme) {
       return ''
     }
-    // debugger // eslint-disable-line
-    console.log('#### currentFee @@@@@@')
-    console.log(currentFee)
+
     const {
       hub, relatedHubs, routes, schedules, location, charges, customs
     } = hubData

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w[greencarrier greencarrier-sandbox]
@@ -9,7 +8,7 @@ subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
 
-  shipper = tenant.users.where(role_id: 2).first
+  shipper = tenant.users.shipper.first
   # tenant.itineraries.destroy_all
   # tenant.local_charges.destroy_all
   # tenant.customs_fees.destroy_all

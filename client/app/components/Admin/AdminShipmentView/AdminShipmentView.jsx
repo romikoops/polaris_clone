@@ -6,12 +6,6 @@ import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import PropTypes from '../../../prop-types'
 import { moment, documentTypes } from '../../../constants'
-import {
-  gradientTextGenerator,
-  gradientGenerator,
-  gradientBorderGenerator,
-  switchIcon
-} from '../../../helpers'
 import adminStyles from '../Admin.scss'
 import styles from '../AdminShipments.scss'
 import DocumentsForm from '../../Documents/Form'
@@ -19,6 +13,12 @@ import GradientBorder from '../../GradientBorder'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
+import {
+  gradientTextGenerator,
+  gradientGenerator,
+  gradientBorderGenerator,
+  switchIcon
+} from '../../../helpers'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -650,7 +650,7 @@ export class AdminShipmentView extends Component {
         <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : { color: '#E0E0E0' }} />
+              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
               <h4 className="flex-95 layout-row">Pick-up</h4>
             </div>
             {shipment.pickup_address ? (
@@ -694,7 +694,7 @@ export class AdminShipmentView extends Component {
             <div className="flex-100 layout-row">
               <div className="flex-5 layout-row" />
               {shipment.delivery_address ? (
-                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
+                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
                   <p>{shipment.delivery_address.street}
                     {shipment.delivery_address.street_number},&nbsp;
@@ -939,7 +939,7 @@ export class AdminShipmentView extends Component {
                   {shipment.total_goods_value ? (
                     <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                       <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                         {shipment.total_goods_value.value}
                         {shipment.total_goods_value.currency}
                       </p>
@@ -947,7 +947,7 @@ export class AdminShipmentView extends Component {
                   ) : (
                     <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                       <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                           -
                       </p>
                     </div>
@@ -957,23 +957,23 @@ export class AdminShipmentView extends Component {
                   {shipment.eori ? (
                     <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                       <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                         {shipment.eori}
                       </p>
                     </div>
                   ) : (
                     <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                       <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                           -
                       </p>
                     </div>
                   )}
                 </div>
-                <div className="flex-33 layout-row offset-5 layout-align-start-start layout-wrap">
+                <div className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap">
                   {shipment.incoterm_text ? (
-                    <div className="flex-100 layout-column layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-start-center layout-row">Incoterm:</span>
+                    <div className="flex-100 layout-column layout-align-center-start">
+                      <span className="flex-40 flex-xs-100 layout-align-center-center layout-row">Incoterm:</span>
                       <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
                         {shipment.incoterm_text}
                       </p>

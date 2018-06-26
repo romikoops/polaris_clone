@@ -5,8 +5,10 @@ import { existsSync, unlinkSync } from 'fs'
 import looksSame from '../_vendor/looks-same'
 import { delay } from './delay'
 import { initPuppeteer } from '../_vendor/init-puppeteer'
+import { isDocker } from '../_modules/isDocker'
 
 const SCREEN_DIR = path.resolve(__dirname, '../node_modules')
+const STEPS_SCREEN_DIR = path.resolve(__dirname, '../_screens')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
@@ -398,8 +400,12 @@ export default async function init (options) {
     return page.evaluate(selectFirstAvailableDayFn)
   }
 
-  const takeScreenshot = async (label) => {
-    const screenshotPath = `${SCREEN_DIR}/${label}.png`
+  const takeScreenshot = async (label, screenDirectoryFlag) => {
+    const screenDirectory = screenDirectoryFlag
+      ? STEPS_SCREEN_DIR
+      : SCREEN_DIR
+
+    const screenshotPath = `${screenDirectory}/${label}.png`
 
     if (existsSync(screenshotPath)) {
       unlinkSync(screenshotPath)
@@ -410,6 +416,12 @@ export default async function init (options) {
     })
 
     return screenshotPath
+  }
+  const saveStep = async (label) => {
+    if (!isDocker()) {
+      return
+    }
+    await takeScreenshot(label, true)
   }
 
   const shouldMatchScreenshot = async (label, tolerance, resetFlag) => {
@@ -464,6 +476,7 @@ export default async function init (options) {
     inputWithTab,
     onError,
     page,
+    saveStep,
     selectFirstAvailableDay,
     selectWithTab,
     setInput,

@@ -39,7 +39,12 @@ export default function CargoItemGroupAggregated ({ group }) {
         </div>
         <div className="flex-33 layout-row layout-align-space-around">
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{(group.chargeable_weight).toFixed(3)}</span> &nbsp;kg</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              <span className={styles.cargo_type}>
+                {+(group.chargeable_weight).toFixed(3)}
+              </span>
+              &nbsp;kg
+            </p>
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
         </div>

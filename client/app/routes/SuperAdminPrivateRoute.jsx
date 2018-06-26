@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
 
-const isSuperAdmin = user => (user && user.role_id === 3)
+const isSuperAdmin = user => (user && user.role.name === 'super_admin')
 
 export default function SuperAdminPrivateRoute ({
   component: Component, user, loggedIn, ...rest

@@ -7,34 +7,6 @@ import { theme, shipmentData, identity } from '../../mocks'
  * `totalGoodsValue: PropTypes.number.isRequired,` is wrong
  */
 
-jest.mock('react-tooltip', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <h2>{children}</h2>)
-jest.mock('../FormsyInput/FormsyInput', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ props }) => <input {...props} />)
-jest.mock('../Documents/Form', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../Documents/MultiForm', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../Checkbox/Checkbox', () => ({
-  // eslint-disable-next-line react/prop-types
-  Checkbox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../TextHeading/TextHeading', () => ({
-  // eslint-disable-next-line react/prop-types
-  TextHeading: ({ children }) => <h2>{children}</h2>
-}))
-jest.mock('../NamedSelect/NamedSelect', () => ({
-  // eslint-disable-next-line react/prop-types
-  NamedSelect: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Tooltip/Tooltip', () => ({
-  // eslint-disable-next-line react/prop-types
-  Tooltip: ({ children }) => <div>{children}</div>
-}))
 jest.mock('../../helpers', () => ({
   // eslint-disable-next-line react/prop-types
   converter: x => x
@@ -114,7 +86,7 @@ test('shallow render', () => {
   expect(shallow(<CargoDetails {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.totalGoodsValue.value > 20000', () => {
+test('totalGoodsValue.value > 20000', () => {
   const props = {
     ...propsBase,
     totalGoodsValue: { value: 20001 }
@@ -123,7 +95,7 @@ test('props.totalGoodsValue.value > 20000', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.dangerousGoods is true', () => {
+test('shipmentData.dangerousGoods is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {
@@ -134,7 +106,7 @@ test('props.shipmentData.dangerousGoods is true', () => {
   expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
 })
 
-test('props.tenant.data.scope.has_insurance is true', () => {
+test('tenant.data.scope.has_insurance is true', () => {
   const tenant = {
     data: {
       scope: {

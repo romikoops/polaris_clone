@@ -43,7 +43,7 @@ exports[`code && selectedType === code 1`] = `
         className="flex-none fa fa-check"
         style={
           Object {
-            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
           }
         }
       />

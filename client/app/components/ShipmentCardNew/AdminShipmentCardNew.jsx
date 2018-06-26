@@ -72,9 +72,12 @@ export class AdminShipmentCardNew extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+    const deselectedStyle = {
+      ...gradientTextGenerator('#DCDBDC', '#DCDBDC')
+    }
     const gradientBorderStyle =
       theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary, 150)
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
         : { background: 'black' }
 
     const bg1 =
@@ -148,7 +151,7 @@ export class AdminShipmentCardNew extends Component {
             />
 
             <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
-              {switchIcon(shipment.mode_of_transport, gradientFontStyle)}
+              {switchIcon(shipment.mode_of_transport)}
             </div>
 
             <GradientBorder
@@ -240,20 +243,18 @@ export class AdminShipmentCardNew extends Component {
               </div>
             </div>
             <span className="flex-30">Cargo item</span>
-            <span className={`flex-30 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
-              {shipment.pickup_address ? (
-                <i className="fa fa-check-square clip" style={gradientFontStyle} />
-              ) : (
-                <i className={`fa fa-check-square ${adminStyles.deselected_icon}`} />
-              )}
+            <span className="flex-30">
+              <i
+                className="fa fa-check-square clip"
+                style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
+              />
               <span> pickup</span>
             </span>
             <span className="flex-30">
-              {shipment.delivery_address ? (
-                <i className="fa fa-check-square clip" style={gradientFontStyle} />
-              ) : (
-                <i className={`fa fa-check-square ${adminStyles.deselected_icon}`} />
-              )}
+              <i
+                className="fa fa-check-square clip"
+                style={shipment.delivery_address ? gradientFontStyle : deselectedStyle}
+              />
               <span> delivery</span>
             </span>
           </div>

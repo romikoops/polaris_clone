@@ -3,20 +3,20 @@
 class Admin::DashboardController < ApplicationController
   include ItineraryTools
   before_action :require_login_and_role_is_admin
+
   def index
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     requested_shipments = Shipment.where(
-      status:    %w[requested requested_by_unconfirmed_account],
+      status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     open_shipments = Shipment.where(
-      status:    %w[in_progress confirmed],
+      status:    %w(in_progress confirmed),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
-    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
+    @requested_shipments = requested_shipments.map { |shipment| shipment.with_address_options_json }
+    @open_shipments = open_shipments.map { |shipment| shipment.with_address_options_json }
+    @finished_shipments = finished_shipments.map { |shipment| shipment.with_address_options_json }
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     @detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
        itinerary.as_options_json(methods: :routes)

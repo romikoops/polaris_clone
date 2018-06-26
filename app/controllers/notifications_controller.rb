@@ -47,16 +47,14 @@ class NotificationsController < ApplicationController
       @contacts.push(contact: sc.contact, type: sc.contact_type, location: sc.contact.location)
     end
     hubs = { startHub: {}, endHub: {} }
-    @schedules = @shipment.schedule_set
-    hubs[:startHub] = Hub.find(@schedules.first["hub_route_key"].split("-")[0].to_i)
-    hubs[:endHub] = Hub.find(@schedules.last["hub_route_key"].split("-")[1].to_i)
+    
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
       tmp["signed_url"] = doc.get_signed_url
       @documents << tmp
     end
-    resp = { shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
+    resp = { shipment: @shipment.with_address_options_json(), cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs }
     response_handler(resp)
   end
 

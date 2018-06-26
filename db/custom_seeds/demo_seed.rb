@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(greencarrier)
@@ -10,7 +9,7 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
-  shipper = tenant.users.where(role_id: 2).first
+  shipper = tenant.users.shipper.first
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all
@@ -48,7 +47,7 @@ subdomains.each do |sub|
 
 # #   # # # # # # Overwrite trucking data from excel sheet
 
- 
+
       # hub = tenant.hubs.find_by_name("Shanghai Airport")
       # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
       # req = {"xlsx" => trucking}
@@ -64,13 +63,13 @@ subdomains.each do |sub|
 			# req = {"xlsx" => trucking}
 			# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 			# awesome_print "City rates done"
-			
+
 			# hub = tenant.hubs.find_by_name("Gothenburg Port")
 			# trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port.xlsx")
 			# req = {"xlsx" => trucking}
 			# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 			# awesome_print "Zip rates done"
-			
+
 			# hub = tenant.hubs.find_by_name("Gothenburg Port")
 			# trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port_ftl.xlsx")
 			# req = {"xlsx" => trucking}
@@ -81,14 +80,14 @@ subdomains.each do |sub|
 			# trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_stockholm_airport.xlsx")
 			# req = {"xlsx" => trucking}
       # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-      
+
       # hub = tenant.hubs.find_by_name("Malmo Airport")
 			# trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_malmo_airport.xlsx")
 			# req = {"xlsx" => trucking}
 			# overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
 
-			
+
 #   # awesome_print "City rates done"
   # hub = tenant.hubs.find_by_name("Gothenburg Port")
   # trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_ftl.xlsx")
@@ -181,7 +180,8 @@ subdomains.each do |sub|
   # }
   # # gothenburg_ltl_url = write_trucking_to_sheet(gothenburg_options_ltl)
   # #  awesome_print gothenburg_ltl_url
-  gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
+  # gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
+  gothenburg_ftl_url = DocumentService::TruckingWriter.new(gothenburg_options_ftl).perform
    awesome_print gothenburg_ftl_url
   # shanghai_ltl_url = write_trucking_to_sheet(shanghai_options)
   #  awesome_print shanghai_ltl_url

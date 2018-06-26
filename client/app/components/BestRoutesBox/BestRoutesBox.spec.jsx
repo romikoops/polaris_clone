@@ -36,5 +36,4 @@ test('chooseResult is called', () => {
   clickableDiv.simulate('click')
 
   expect(props.chooseResult).toHaveBeenCalled()
-  expect(props.chooseResult).toHaveBeenCalledWith({ schedule: { hub_route_key: 'FOO_HUB_ROUTE_KEY' }, total: 7 })
 })

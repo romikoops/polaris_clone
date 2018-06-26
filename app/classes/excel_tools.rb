@@ -419,408 +419,6 @@ module ExcelTools
     { stats: stats, results: results }
   end
 
-  def overwrite_zonal_trucking_rates_by_hub(params, _user=current_user, hub_id)
-    start_time = DateTime.now
-    stats = {
-      type:                  "trucking",
-      trucking_pricings:     {
-        number_updated: 0,
-        number_created: 0
-      },
-      trucking_destinations: {
-        number_updated: 0,
-        number_created: 0
-      }
-    }
-
-    results = {
-      trucking_pricings:     [],
-      trucking_destinations: []
-    }
-
-    defaults = {}
-    trucking_pricing_by_zone = {}
-    hub = Hub.find(hub_id)
-    tenant = hub.tenant
-    xlsx = Roo::Spreadsheet.open(params["xlsx"])
-    sheets = xlsx.sheets.clone
-    zone_sheet = xlsx.sheet(sheets[0]).clone
-    fees_sheet = xlsx.sheet(sheets[1]).clone
-
-    num_rows = zone_sheet.last_row
-    zip_char_length = nil
-    identifier_type, identifier_modifier = determine_identifier_type_and_modifier(zone_sheet.row(1)[1])
-
-    # START Load Zones ------------------------
-
-    zones = {}
-    (2..num_rows).each do |line|
-      row_data = zone_sheet.row(line)
-      zone_name = row_data[0]
-      zones[zone_name] = [] if zones[zone_name].nil?
-
-      if row_data[1] && !row_data[2]
-        row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
-        zip_char_length ||= row_zip.to_s.length
-        if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { ident: (row_zip/2.0).ceil, country: row_data[3] }
-        else
-          zones[zone_name] << { ident: row_zip, country: row_data[3] }
-        end
-
-      elsif !row_data[1] && row_data[2]
-        range = row_data[2].delete(" ").split("-")
-        zip_char_length ||= range[0].length
-        if identifier_type == 'distance' && identifier_modifier == 'return'
-          zones[zone_name] << { min: (range[0].to_i/2.0).ceil, max: (range[1].to_i/2.0).ceil, country: row_data[3] }
-        else
-          zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
-        end
-
-
-      elsif row_data[1] && row_data[2]
-        zones[zone_name] << {
-          ident:     row_data[1],
-          sub_ident: row_data[2],
-          country:   row_data[3]
-        }
-      end
-    end
-    
-
-    all_ident_values_and_countries = {}
-    zones.each do |zone_name, idents_and_countries|
-      all_ident_values_and_countries[zone_name] = idents_and_countries.flat_map do |idents_and_country|
-        if idents_and_country[:min] && idents_and_country[:max]
-          (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
-            stats[:trucking_destinations][:number_created] += 1
-            ident_value = nil
-            if identifier_type == "zipcode"
-              ident_length = ident.to_s.length
-              ident_value = "0" * (zip_char_length - ident_length) + ident.to_s
-            else
-              ident_value = ident
-            end
-            { ident: ident_value, country: idents_and_country[:country] }
-          end
-        elsif identifier_type == "geometry_id"
-          awesome_print idents_and_country
-          geometry = find_geometry(idents_and_country)
-          puts geometry.names.log_format
-          stats[:trucking_destinations][:number_created] += 1
-          # stats[:hub_truckings][:number_created] += 1
-
-          { ident: geometry.id, country: idents_and_country[:country] }
-        else
-          idents_and_country
-        end
-      end
-    end
-
-    # END Load Zones ------------------------
-
-    # START Load Fees & Charges ------------------------
-
-    rows = fees_sheet.parse(
-      fee:        "FEE",
-      mot:        "MOT",
-      fee_code:   "FEE_CODE",
-      truck_type: "TRUCK_TYPE",
-      direction:  "DIRECTION",
-      currency:   "CURRENCY",
-      rate_basis: "RATE_BASIS",
-      ton:        "TON",
-      cbm:        "CBM",
-      kg:         "KG",
-      item:       "ITEM",
-      shipment:   "SHIPMENT",
-      bill:       "BILL",
-      container:  "CONTAINER",
-      minimum:    "MINIMUM",
-      wm:         "WM",
-      percentage: "PERCENTAGE"
-    )
-    charges = {}
-
-    rows.each do |row|
-      fee_row_key = "#{row[:fee_code]}_#{row[:truck_type]}_#{row[:direction]}"
-      case row[:rate_basis]
-      when "PER_SHIPMENT"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_CONTAINER"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_BILL"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PERCENTAGE"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:percentage], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_CBM"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_KG"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_WM"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:wm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_ITEM"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_CBM_TON"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_SHIPMENT_CONTAINER"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], shipment: row[:shipment], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_BILL_CONTAINER"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      when "PER_CBM_KG"
-        charges[fee_row_key] = { direction: row[:direction], truck_type: row[:truck_type], currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee] }
-      end
-    end
-
-    # END Load Fees & Charges ------------------------
-
-    # START Determine how many columns the modifiers span ------------------------
-
-    sheets.slice(2, sheets.length - 1).each do |sheet|
-      rates_sheet = xlsx.sheet(sheet)
-      meta = generate_meta_from_sheet(rates_sheet)
-      currency = meta[:currency]
-      load_meterage_ratio = meta[:load_meterage_ratio]
-      load_meterage_limit = meta[:load_meterage_limit]
-      cbm_ratio = meta[:cbm_ratio]
-      modifier = meta[:scale]
-      rate_basis = meta[:rate_basis]
-      base = meta[:base]
-      row_truck_type = meta[:truck_type]
-      row_truck_type = "default" if !row_truck_type || row_truck_type == ""
-      load_type = meta[:load_type] == "container" ? "container" : "cargo_item"
-      cargo_class = meta[:cargo_class]
-      direction = meta[:direction] == "import" ? "on" : "pre"
-      awesome_print meta
-      courier = Courier.find_or_create_by(name: meta[:courier], tenant: tenant)
-      rate_num_rows = rates_sheet.last_row
-      modifier_position_objs = {}
-      modifier_row = rates_sheet.row(3)
-
-      modifier_row.shift
-      modifier_row.shift
-      modifier_row.uniq.each do |mod|
-        if mod != nil
-          modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
-        end
-      end
-      header_row = rates_sheet.row(4)
-      header_row.shift
-      header_row.shift
-
-      weight_min_row = rates_sheet.row(5)
-      weight_min_row.shift
-      weight_min_row.shift
-
-      modifier_position_objs.each do |mod_key, mod_indexes|
-        header_row.each_with_index do |cell, i|
-          next if !cell || !mod_indexes.include?(i)
-          defaults[mod_key] = {} unless defaults[mod_key]
-          min_max_arr = cell.split(" - ")
-          unless min_max_arr[1]
-
-          end
-          defaults[mod_key][i] = { "min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil }.symbolize_keys
-        end
-      end
-
-      # END Determine how many columns the modifiers span ------------------------
-
-      # START Rates ------------------------
-
-      (6..rate_num_rows).each do |line|
-        row_data = rates_sheet.row(line)
-        row_zone_name = row_data.shift
-        awesome_print row_zone_name
-
-        row_min_value = row_data.shift
-        row_key = "#{row_zone_name}_#{row_truck_type}"
-
-        single_ident_values_and_country = all_ident_values_and_countries[row_zone_name]
-
-        next if single_ident_values_and_country.first.nil?
-
-        single_ident_values = single_ident_values_and_country.map { |h| h[:ident] }
-        single_country_values = single_ident_values_and_country.map { |h| h[:country] }
-
-          trucking_pricing = TruckingPricing.new(
-            rates:         {},
-            fees:          {},
-            carriage:      direction,
-            cargo_class:   cargo_class,
-            load_type:     load_type,
-            load_meterage: {
-              ratio:        load_meterage_ratio,
-              height_limit: 130
-            },
-            cbm_ratio:     cbm_ratio,
-            courier:       courier,
-            modifier:      modifier,
-            truck_type:    row_truck_type,
-            tenant_id:     tenant.id,
-            identifier_modifier: identifier_modifier
-          )
-          stats[:trucking_pricings][:number_created] += 1
-          modifier_position_objs.each do |mod_key, mod_indexes|
-            trucking_pricing.rates[mod_key] = mod_indexes.map do |m_index|
-              val = row_data[m_index]
-              next unless val
-              if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
-                val = val * 2
-              end
-              awesome_print "#{row_zone_name} "
-              w_min = weight_min_row[m_index] || 0
-              r_min = row_min_value || 0
-              if defaults[mod_key]
-                defaults[mod_key][m_index].clone.merge(
-                  min_value: [w_min, r_min].max,
-                  rate:      {
-                    value:      val,
-                    rate_basis: rate_basis,
-                    currency:   currency,
-                    base:       base
-                  }
-                )
-              else
-                {
-                  min_value: 0,
-                  rate:      {
-                    value:      val,
-                    rate_basis: rate_basis,
-                    currency:   currency,
-                    base:       base
-                  }
-                }
-              end
-            end
-          end
-          charges.each do |_k, fee|
-            tmp_fee = fee.clone
-            next unless tmp_fee[:direction] == direction && tmp_fee[:truck_type] == row_truck_type
-
-            tmp_fee.delete(:direction)
-            tmp_fee.delete(:truck_type)
-            trucking_pricing[:fees][tmp_fee[:key]] = tmp_fee
-          end
-
-          single_ident_values_and_country_with_timestamps =
-            case identifier_type
-            when "distance", "geometry_id"
-              single_ident_values_and_country.map do |h|
-                "(#{h[:ident]}, '#{h[:country]}', current_timestamp, current_timestamp)"
-              end
-            else
-              single_ident_values_and_country.map do |h|
-                "('#{h[:ident]}', '#{h[:country]}', current_timestamp, current_timestamp)"
-              end
-            end.join(", ")
-
-          tp = trucking_pricing
-          
-          # Find or update trucking_destinations
-          td_query = <<-eos
-            WITH
-              existing_identifiers AS (
-                SELECT id, #{identifier_type}, country_code FROM trucking_destinations
-                WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
-                  AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
-              ),
-              inserted_td_ids AS (
-                INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
-                  -- insert non-existent trucking_destinations
-                  SELECT ident_value, country_code::text, cr_at, up_at
-                  FROM (VALUES #{single_ident_values_and_country_with_timestamps})
-                    AS t(ident_value, country_code, cr_at, up_at)
-                  WHERE ident_value::text NOT IN (
-                    SELECT #{identifier_type}::text
-                    FROM existing_identifiers
-                    WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
-                  )
-                RETURNING id
-              )
-            SELECT id FROM inserted_td_ids
-            UNION
-            SELECT id FROM existing_identifiers
-          eos
-
-          td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
-
-          with_statement = <<-eos
-            WITH
-              td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
-              matching_tp_id_table AS (
-                SELECT DISTINCT trucking_pricings.id
-                FROM td_ids
-                JOIN hub_truckings
-                  ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
-                JOIN trucking_pricings
-                  ON trucking_pricings.id = hub_truckings.trucking_pricing_id
-                #{tp.scoping_attributes.to_sql_where}
-                AND hub_truckings.hub_id = #{hub_id}
-              ),
-              hub_ids AS (
-                VALUES(#{hub_id})
-              ),
-              t_stamps AS (
-                VALUES(current_timestamp)
-              )
-          eos
-
-          insertion_query = <<-eos
-            DO
-            $do$
-            BEGIN
-            IF (
-              #{with_statement}
-              SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
-            ) THEN
-              #{with_statement}
-              UPDATE trucking_pricings
-              SET (#{TruckingPricing.given_attribute_names.sort.join(', ')}) = #{tp.to_postgres_insertable}
-              WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
-
-              #{with_statement}
-              INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-                (
-                  SELECT * FROM hub_ids
-                  CROSS JOIN matching_tp_id_table
-                  CROSS JOIN td_ids
-                  CROSS JOIN t_stamps AS created_ats
-                  CROSS JOIN t_stamps AS updated_ats
-                )
-                ON CONFLICT DO NOTHING;
-
-            ELSE
-              #{with_statement},
-              tp_ids AS (
-                INSERT INTO trucking_pricings(#{TruckingPricing.given_attribute_names.sort.join(', ')})
-                  VALUES #{tp.to_postgres_insertable}
-                RETURNING id
-              )
-              INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-                (
-                  SELECT * FROM hub_ids
-                  CROSS JOIN tp_ids
-                  CROSS JOIN td_ids
-                  CROSS JOIN t_stamps AS created_ats
-                  CROSS JOIN t_stamps AS updated_ats
-                );
-            END IF;
-            END
-            $do$
-          eos
-
-          ActiveRecord::Base.connection.execute(insertion_query)
-        end
-    end
-    # END Rates ------------------------
-    end_time = DateTime.now
-    diff = (end_time - start_time) / 86_400
-
-    awesome_print diff
-    { results: results, stats: stats }
-  end
-
   def overwrite_city_trucking_rates_by_hub(params, _user=current_user, hub_id, courier_name, direction)
     courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
     p direction
@@ -931,7 +529,7 @@ module ExcelTools
 
     { stats: stats, results: results }
   end
-
+  
   def overwrite_local_charges(params, user=current_user)
     stats = {
       type:    "local_charges",
@@ -1000,15 +598,15 @@ module ExcelTools
         counterparts = {}
         tenant_vehicles = {}
         rows.each do |row|
-          # 
+          #
           if row[:destination]
             counterpart_hub = Hub.find_by(name: "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}", tenant_id: user.tenant_id)
             if !counterpart_hub
-              
+
             end
             counterpart_hub_id = counterpart_hub.id
-            hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id] 
-            customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id] 
+            hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id]
+            customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id]
             counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
           end
           if row[:service_level]
@@ -1017,7 +615,7 @@ module ExcelTools
               mode_of_transport: row[:mot].downcase,
               name:              row[:service_level]
             ).try(:id)
-            
+
             tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] ||= Vehicle.create_from_name(row[:service_level], row[:mot].downcase, user.tenant_id).id
             tenant_vehicle_id = tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"]
           else
@@ -1039,8 +637,8 @@ module ExcelTools
             customs["general"][tenant_vehicle_id] = {}
           end
         end
-        
-        
+
+
         hub_fees.each do |hub_key, tv_ids|
           tv_ids.keys.each do |tv_id|
             %w(export import).each do |direction|
@@ -1056,7 +654,7 @@ module ExcelTools
                   "load_type"         => lt,
                   "tenant_vehicle_id" => tv_id != "general" ? tv_id : nil,
                   "counterpart_hub_id" => hub_key != "general" ? hub_key : nil
-                  
+
                 }
                 customs[hub_key][tv_id][direction][lt] = {
                   "fees"            => {},
@@ -1067,7 +665,7 @@ module ExcelTools
                   "load_type"         => lt,
                   "tenant_vehicle_id" => tv_id != "general" ? tv_id : nil,
                   "counterpart_hub_id" => hub_key != "general" ? hub_key : nil
-                  
+
                 }
               end
             end
@@ -1103,17 +701,17 @@ module ExcelTools
           when "PER_KG_RANGE"
             charge = { currency: row[:currency], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], range_min: row[:range_min], range_max: row[:range_max] }
           end
-          
+
           charge[:expiration_date] = row[:expiration_date]
           charge[:effective_date] = row[:effective_date]
-        
+
           if row[:fee_code] != "CUST"
             hub_fees = local_charge_load_setter(
               hub_fees,
               charge,
               row[:load_type].downcase,
               row[:direction].downcase,
-              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general", 
+              tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
               row[:mot],
               counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
             )
@@ -1135,7 +733,7 @@ module ExcelTools
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |k, v|
               v["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{v["mode_of_transport"]}"]
-              # byebug
+              
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k, direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"], counterpart_hub_id: v["counterpart_hub_id"])
               if lc
                 lc.update_attributes(v)
@@ -1336,13 +934,13 @@ module ExcelTools
       "rail"  => "Railyard",
       "truck" => "Depot"
     }
-    
+
     default_mandatory_charge = MandatoryCharge.find_by(pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false)
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
       country = Country.geo_find_by_name(hub_row[:country])
-      
+
       mandatory_charge_values = {
         pre_carriage: hub_row[:pre_carriage] || false,
         on_carriage: hub_row[:on_carriage] || false,
@@ -1573,7 +1171,8 @@ module ExcelTools
         results[:stops] << stop
         stop
       end
-      itinerary.stops << results[:stops]
+      itinerary.stops << aux_data[pricing_key][:stops_in_order]
+
       itinerary.save!
 
       steps_in_order = []
@@ -1679,7 +1278,7 @@ module ExcelTools
         new_pricing_data = pricing_data.clone
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
         if !transport_category
-          
+
         end
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
@@ -1740,14 +1339,14 @@ module ExcelTools
   def local_charge_load_setter(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     debug_message(charge)
     debug_message(all_charges)
-    
+
     if counterpart_hub_id == "general" && tenant_vehicle_id != 'general'
       all_charges.keys.each do |ac_key|
         if all_charges[ac_key][tenant_vehicle_id]
           set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, ac_key)
         end
       end
-      
+
     elsif counterpart_hub_id == "general" && tenant_vehicle_id == 'general'
       all_charges.keys.each do |ac_key|
         all_charges[ac_key].keys.each do |tv_key|
@@ -1756,7 +1355,7 @@ module ExcelTools
           end
         end
       end
-      
+
     else
       if all_charges[counterpart_hub_id][tenant_vehicle_id]
        set_general_local_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
@@ -1771,11 +1370,11 @@ module ExcelTools
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][lt]["fees"][charge[:key]] = charge
       end
     else
-      if !all_charges[counterpart_hub_id] || 
+      if !all_charges[counterpart_hub_id] ||
         !all_charges[counterpart_hub_id][tenant_vehicle_id] ||
         !all_charges[counterpart_hub_id][tenant_vehicle_id][direction] ||
         !all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]
-        
+
       end
       all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = charge
     end
@@ -1796,7 +1395,7 @@ module ExcelTools
     end
 
   end
-  
+
   def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
     case charge[:rate_basis]
     when "PER_KG_RANGE"

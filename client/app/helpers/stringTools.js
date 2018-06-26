@@ -22,6 +22,8 @@ export function renderHubType (mot) {
       return 'Port'
     case 'rail':
       return 'Railyard'
+    case 'truck':
+      return 'Depot'
     default:
       return ''
   }

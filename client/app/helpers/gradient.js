@@ -46,18 +46,18 @@ export const gradientTextGenerator = (colour1, colour2) => {
   return { background: `-webkit-linear-gradient(-90deg, ${colour1},${colour2})` }
 }
 
-export const gradientBorderGenerator = (colour1, colour2) => {
+export const gradientBorderGenerator = (colour1, colour2, direction = '-90deg') => {
   if ((navigator.userAgent.indexOf('Opera') || navigator.userAgent.indexOf('OPR')) !== -1) {
-    return { backgroundImage: `-o-linear-gradient(-90deg, ${colour1}, ${colour2})` }
+    return { backgroundImage: `-o-linear-gradient(${direction}, ${colour1}, ${colour2})` }
   } else if (navigator.userAgent.indexOf('Chrome') !== -1) {
-    return { backgroundImage: `-webkit-linear-gradient(-90deg, ${colour1}, ${colour2})` }
+    return { backgroundImage: `-webkit-linear-gradient(${direction}, ${colour1}, ${colour2})` }
   } else if (navigator.userAgent.indexOf('Safari') !== -1) {
-    return { backgroundImage: `-webkit-linear-gradient(-90deg, ${colour1}, ${colour2})` }
+    return { backgroundImage: `-webkit-linear-gradient(${direction}, ${colour1}, ${colour2})` }
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
-    return { backgroundImage: `-moz-linear-gradient(right top, farthest-corner, ${colour1} 0%, ${colour2} 50%)` }
+    return { backgroundImage: `-moz-linear-gradient(${direction}, farthest-corner, ${colour1} 0%, ${colour2} 50%)` }
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
     return { color: 'black' }
   }
 
-  return { backgroundImage: `-webkit-linear-gradient(-90deg, ${colour1}, ${colour2})` }
+  return { backgroundImage: `-webkit-linear-gradient(${direction}, ${colour1}, ${colour2})` }
 }

@@ -44,10 +44,13 @@ exports[`documents is falsy 1`] = `
               style="#333"
             />
           </button>
-          <Component
+          <ReactTooltip
             className="tooltip"
             effect="solid"
             id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
           />
           <input
             name="FOO_TYPE"
@@ -103,11 +106,13 @@ exports[`shallow render 1`] = `
         <p
           className="flex"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </Link>
       <div
@@ -131,11 +136,13 @@ exports[`shallow render 1`] = `
         <p
           className="flex"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </Link>
       <div
@@ -153,11 +160,13 @@ exports[`shallow render 1`] = `
       <p
         className="flex"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
@@ -191,10 +200,13 @@ exports[`shallow render 1`] = `
               style="#333"
             />
           </button>
-          <Component
+          <ReactTooltip
             className="tooltip"
             effect="solid"
             id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
           />
           <input
             name="FOO_TYPE"
@@ -250,11 +262,13 @@ exports[`theme is falsy 1`] = `
         <p
           className="flex"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </Link>
       <div
@@ -278,11 +292,13 @@ exports[`theme is falsy 1`] = `
         <p
           className="flex"
         >
-          <Component
+          <Truncate
+            ellipsis="…"
             lines={1}
+            trimWhitespace={false}
           >
              
-          </Component>
+          </Truncate>
         </p>
       </Link>
       <div
@@ -300,11 +316,13 @@ exports[`theme is falsy 1`] = `
       <p
         className="flex"
       >
-        <Component
+        <Truncate
+          ellipsis="…"
           lines={1}
+          trimWhitespace={false}
         >
            
-        </Component>
+        </Truncate>
       </p>
       <div
         className="icon_btn flex-none layout-row layout-align-center-center"
@@ -342,10 +360,13 @@ exports[`theme is falsy 1`] = `
               }
             />
           </button>
-          <Component
+          <ReactTooltip
             className="tooltip"
             effect="solid"
             id="RANDOM_KEY_1"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
           />
           <input
             name="FOO_TYPE"

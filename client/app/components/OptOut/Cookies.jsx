@@ -15,6 +15,7 @@ class OptOutCookies extends Component {
   }
   render () {
     const { theme } = this.props
+
     return (
       <div className={`${styles.container} flex-none layout-row layout-align-center-center layout-wrap`}>
         <div className="flex-100 layout-row layout-align-start-center">

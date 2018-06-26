@@ -8,6 +8,7 @@ export const theme = {
 }
 
 export const user = {
+  role: { name: 'shipper' },
   company_name: 'FOO_COMPANY',
   currency: 'EUR',
   email: 'foo@bar.baz',
@@ -24,6 +25,12 @@ export const history = {
 export const tenant = {
   data: {
     id: 123,
+    scope: {
+      modes_of_transport: {
+        FOO_MODE_TRANSPORT: {},
+        BAR_MODE_TRANSPORT: {}
+      }
+    },
     theme,
     subdomain: 'foosubdomain'
   }
@@ -36,8 +43,8 @@ export const req = {
 }
 
 const schedulesInShipmentData = [
-  { hub_route_key: 'FOO_HUB_ROUTE_KEY' },
-  { hub_route_key: 'BAR_HUB_ROUTE_KEY' }
+  { hub_route_key: 'FOO_HUB_ROUTE_KEY', mode_of_transport: 'FOO_MODE_TRANSPORT' },
+  { hub_route_key: 'BAR_HUB_ROUTE_KEY', mode_of_transport: 'BAR_MODE_TRANSPORT' }
 ]
 
 export const shipmentInShipmentData = {

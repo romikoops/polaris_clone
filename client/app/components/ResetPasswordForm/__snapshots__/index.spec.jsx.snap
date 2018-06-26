@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap"
+>
+  <Connect(Header)
+    noMessages={true}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+    user={
+      Object {
+        "company_name": "FOO_COMPANY",
+        "currency": "EUR",
+        "email": "foo@bar.baz",
+        "first_name": "John",
+        "guest": false,
+        "last_name": "Doe",
+        "phone": "6345789",
+        "role": Object {
+          "name": "shipper",
+        },
+      }
+    }
+  />
+  <div
+    className="flex-100 layout-row layout-align-center hundred"
+  >
+    <div
+      className="content_width layout-row layout-align-center-center"
+    >
+      <Formsy
+        className="reset_password_form"
+        disabled={false}
+        getErrorMessage={[Function]}
+        getErrorMessages={[Function]}
+        getValue={[Function]}
+        hasValue={[Function]}
+        isFormDisabled={[Function]}
+        isFormSubmitted={[Function]}
+        isPristine={[Function]}
+        isRequired={[Function]}
+        isValid={[Function]}
+        isValidValue={[Function]}
+        mapping={null}
+        name="form"
+        onChange={[Function]}
+        onError={[Function]}
+        onInvalid={[Function]}
+        onInvalidSubmit={[Function]}
+        onReset={[Function]}
+        onSubmit={[Function]}
+        onValid={[Function]}
+        onValidSubmit={[Function]}
+        preventExternalInvalidation={false}
+        resetValue={[Function]}
+        setValidations={[Function]}
+        setValue={[Function]}
+        showError={[Function]}
+        showRequired={[Function]}
+        validationErrors={null}
+      >
+        <div
+          className="form-group"
+        >
+          <label
+            htmlFor="password"
+          >
+            Password
+          </label>
+          <Formsy(FormsyInput)
+            className="form_control"
+            errorMessageStyles={
+              Object {
+                "bottom": "-19px",
+                "fontSize": "12px",
+              }
+            }
+            id="password"
+            innerRef={[Function]}
+            name="password"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            required={true}
+            type="password"
+            validationError=""
+            validationErrors={
+              Object {
+                "isDefaultRequiredValue": "Must not be blank",
+                "minLength": "Min. 8 characters",
+              }
+            }
+            validations={
+              Object {
+                "minLength": 8,
+              }
+            }
+          />
+          <hr
+            style={Object {}}
+          />
+        </div>
+        <div
+          className="form-group"
+        >
+          <label
+            htmlFor="password_confirmation"
+          >
+            Confirm Password
+          </label>
+          <Formsy(FormsyInput)
+            className="form_control"
+            errorMessageStyles={
+              Object {
+                "bottom": "-19px",
+                "fontSize": "12px",
+              }
+            }
+            id="password_confirmation"
+            innerRef={[Function]}
+            name="password_confirmation"
+            onBlur={[Function]}
+            onFocus={[Function]}
+            required={false}
+            type="password"
+            validationError=""
+            validationErrors={
+              Object {
+                "equalsField": "Must match password",
+              }
+            }
+            validations={
+              Object {
+                "equalsField": "password",
+              }
+            }
+          />
+          <hr
+            style={Object {}}
+          />
+        </div>
+        <p
+          style={
+            Object {
+              "fontSize": "13px",
+              "textAlign": "justify",
+              "width": "271px",
+            }
+          }
+        >
+          By clicking 
+          'Set Password'
+          , you will reset the password of your ItsMyCargo account.
+        </p>
+        <div
+          className="form_group_submit_btn layout-row layout-align-center-center"
+        >
+          <RoundButton
+            active={true}
+            back={false}
+            disabled={false}
+            handleDisabled={null}
+            handleNext={null}
+            icon=""
+            iconClass=""
+            size="small"
+            text="Set Password"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+          <div
+            className="spinner"
+          />
+        </div>
+      </Formsy>
+    </div>
+  </div>
+</div>
+`;

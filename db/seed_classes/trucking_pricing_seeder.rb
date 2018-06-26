@@ -4,7 +4,7 @@ class TruckingPricingSeeder
   extend ExcelTools
   DIRECTIONS = %w[import export].freeze
 
-  def self.perform(filter = {})    
+  def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       puts "Deleting trucking pricings for #{tenant.name}..."
       tenant.trucking_pricings.delete_all
@@ -12,34 +12,44 @@ class TruckingPricingSeeder
 
       puts "Seeding trucking pricings for #{tenant.name}..."
 
-      shipper = tenant.users.where(role_id: 2).first
+      shipper = tenant.users.shipper.first
       hub = tenant.hubs.find_by_name('Shanghai Port')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
       req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
       hub = tenant.hubs.find_by_name('Shanghai Port')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port_ftl.xlsx")
       req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+      hub = tenant.hubs.find_by_name('Shanghai Airport')
+      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
+      req = { 'xlsx' => trucking }
+
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
       puts 'City rates done'
 
       hub = tenant.hubs.find_by_name('Gothenburg Port')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port.xlsx")
       req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
       puts 'Zip rates done'
 
       hub = tenant.hubs.find_by_name('Gothenburg Port')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port_ftl.xlsx")
       req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
       puts 'All rates done'
 
       hub = tenant.hubs.find_by_name('Stockholm Airport')
       trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_stockholm_airport.xlsx")
       req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
     end
   end
 end

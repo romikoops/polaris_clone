@@ -8,13 +8,6 @@ jest.mock('react-router', () => ({
   // eslint-disable-next-line react/prop-types
   Link: ({ props }) => <a {...props}>link</a>
 }))
-jest.mock('react-truncate', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <span>{children}</span>)
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ props }) => <button {...props}>click</button>
-}))
 jest.mock('../../helpers', () => ({
   authHeader: x => x
 }))

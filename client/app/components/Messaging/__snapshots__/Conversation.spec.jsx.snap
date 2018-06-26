@@ -5,7 +5,7 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -49,7 +49,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -57,12 +57,19 @@ exports[`shallow render 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
+            client={null}
             key="RANDOM_KEY_0"
             message="FOO_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -90,17 +97,27 @@ exports[`shallow render 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
           />
           <Message
+            client={null}
             key="RANDOM_KEY_1"
             message="BAR_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -128,6 +145,9 @@ exports[`shallow render 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -200,7 +220,7 @@ exports[`state.showDetails is true 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -242,6 +262,8 @@ exports[`state.showDetails is true 1`] = `
   >
     <MessageShipmentData
       closeInfo={[Function]}
+      name=""
+      onChange={null}
       shipmentData={
         Object {
           "clientName": "FOO_CLIENT_NAME",
@@ -269,6 +291,9 @@ exports[`state.showDetails is true 1`] = `
           "guest": false,
           "last_name": "Doe",
           "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
           "role_id": 2,
         }
       }
@@ -282,7 +307,7 @@ exports[`theme is falsy 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -326,7 +351,7 @@ exports[`theme is falsy 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -334,12 +359,19 @@ exports[`theme is falsy 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
+            client={null}
             key="RANDOM_KEY_2"
             message="FOO_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -360,17 +392,27 @@ exports[`theme is falsy 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
           />
           <Message
+            client={null}
             key="RANDOM_KEY_3"
             message="BAR_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -391,6 +433,9 @@ exports[`theme is falsy 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 2,
               }
             }
@@ -463,7 +508,7 @@ exports[`with admin user 1`] = `
   className="flex-100 layout-column layout-align-start-start convo_wrapper"
 >
   <div
-    className="summary_wrapper 
+    className="summary_wrapper
           flex-15 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
@@ -507,7 +552,7 @@ exports[`with admin user 1`] = `
       className="flex-100 layout-column layout-align-start-start"
     >
       <div
-        className="message_scroll 
+        className="message_scroll
           flex-70 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
@@ -515,21 +560,19 @@ exports[`with admin user 1`] = `
           className="flex-70 layout-row layout-align-start-start layout-wrap"
         >
           <Message
-            client={
-              Object {
-                "company_name": "Mehristweniger",
-                "email": "muller55@yahoo.de",
-                "first_name": "Sebastian",
-                "last_name": "Muller",
-                "password": "pwd",
-              }
-            }
+            client={null}
             key="RANDOM_KEY_8"
             message="FOO_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -557,26 +600,27 @@ exports[`with admin user 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 1,
               }
             }
           />
           <Message
-            client={
-              Object {
-                "company_name": "Mehristweniger",
-                "email": "muller55@yahoo.de",
-                "first_name": "Sebastian",
-                "last_name": "Muller",
-                "password": "pwd",
-              }
-            }
+            client={null}
             key="RANDOM_KEY_9"
             message="BAR_MESSAGE"
             tenant={
               Object {
                 "data": Object {
                   "id": 123,
+                  "scope": Object {
+                    "modes_of_transport": Object {
+                      "BAR_MODE_TRANSPORT": Object {},
+                      "FOO_MODE_TRANSPORT": Object {},
+                    },
+                  },
                   "subdomain": "foosubdomain",
                   "theme": Object {
                     "colors": Object {
@@ -604,6 +648,9 @@ exports[`with admin user 1`] = `
                 "guest": false,
                 "last_name": "Doe",
                 "phone": "6345789",
+                "role": Object {
+                  "name": "shipper",
+                },
                 "role_id": 1,
               }
             }

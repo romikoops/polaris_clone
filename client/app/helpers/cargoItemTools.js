@@ -10,7 +10,7 @@ export function chargeableWeight (cargoItem, mot) {
 
   return Math.max(
     +volume(cargoItem) * effectiveKgPerCubicMeter[mot],
-    +cargoItem.payload_in_kg
+    +cargoItem.payload_in_kg * cargoItem.quantity
   ).toFixed(1)
 }
 

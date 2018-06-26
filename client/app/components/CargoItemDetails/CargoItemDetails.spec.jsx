@@ -2,10 +2,6 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../mocks'
 
-jest.mock('../HsCodes/HsCodeViewer', () => ({
-  // eslint-disable-next-line react/prop-types
-  HsCodeViewer: ({ children }) => <div>{children}</div>
-}))
 // eslint-disable-next-line import/first
 import { CargoItemDetails } from './CargoItemDetails'
 
