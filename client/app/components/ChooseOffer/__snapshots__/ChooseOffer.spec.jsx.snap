@@ -27,7 +27,7 @@ exports[`shallow render 1`] = `
       <RouteFilterBox
         availableMotKeys={
           Object {
-            "FOO_MODE_TRANSPORT": true,
+            "ocean": true,
           }
         }
         departureDate={0}
@@ -51,14 +51,20 @@ exports[`shallow render 1`] = `
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "incoterm_text": "FOO_INCOTERM_TEXT",
-            "load_type": "FOO_LOAD_TYPE",
+            "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
-              "BAR_HUB_ROUTE_KEY": Object {
-                "total": 25,
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
               },
-              "FOO_HUB_ROUTE_KEY": Object {
-                "total": 7,
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
               },
             },
             "total_goods_value": Object {
@@ -289,6 +295,56 @@ exports[`shallow render 1`] = `
             />
           </div>
         </div>
+        <RouteResult
+          fees={
+            Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            }
+          }
+          key="RANDOM_KEY_0"
+          loadType="OCEAN_LOAD_TYPE"
+          pickup={false}
+          schedule={
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            }
+          }
+          selectResult={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+            }
+          }
+        />
       </div>
       <div
         className="flex-100 layout-row layout-wrap"

@@ -66,10 +66,12 @@ exports[`shallow render 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -116,10 +118,12 @@ exports[`shallow render 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -372,10 +376,12 @@ exports[`theme is falsy 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -415,10 +421,12 @@ exports[`theme is falsy 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -577,10 +585,12 @@ exports[`with admin user 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -627,10 +637,12 @@ exports[`with admin user 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {
-                        "FOO_LOAD_TYPE": true,
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
                       },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",

@@ -143,13 +143,20 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -331,10 +338,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -422,10 +431,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -1296,13 +1307,20 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -1484,10 +1502,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -1575,10 +1595,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -2506,13 +2528,20 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -2694,10 +2723,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -2785,10 +2816,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -3771,13 +3804,20 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 "has_on_carriage": true,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -3975,10 +4015,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -4066,10 +4108,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -4926,13 +4970,20 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": true,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -5129,10 +5180,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -5220,10 +5273,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -6080,13 +6135,20 @@ exports[`shallow render 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -6268,10 +6330,12 @@ exports[`shallow render 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -6359,10 +6423,12 @@ exports[`shallow render 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -7219,13 +7285,20 @@ exports[`with cargo items 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -7407,10 +7480,12 @@ exports[`with cargo items 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -7498,10 +7573,12 @@ exports[`with cargo items 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -8575,13 +8652,20 @@ exports[`with containers 1`] = `
                 "has_on_carriage": false,
                 "has_pre_carriage": false,
                 "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
                 "notes": "FOO_NOTES",
                 "schedules_charges": Object {
-                  "BAR_HUB_ROUTE_KEY": Object {
-                    "total": 25,
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
                   },
-                  "FOO_HUB_ROUTE_KEY": Object {
-                    "total": 7,
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
                   },
                 },
                 "selected_offer": Object {
@@ -8763,10 +8847,12 @@ exports[`with containers 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",
@@ -8854,10 +8940,12 @@ exports[`with containers 1`] = `
                         "id": 123,
                         "scope": Object {
                           "modes_of_transport": Object {
-                            "BAR_MODE_TRANSPORT": Object {},
-                            "FOO_MODE_TRANSPORT": Object {
-                              "FOO_LOAD_TYPE": true,
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
                             },
+                            "rail": Object {},
+                            "truck": Object {},
                           },
                         },
                         "subdomain": "foosubdomain",

@@ -27,10 +27,12 @@ export const tenant = {
     id: 123,
     scope: {
       modes_of_transport: {
-        FOO_MODE_TRANSPORT: {
-          FOO_LOAD_TYPE: true
+        ocean: {
+          OCEAN_LOAD_TYPE: true
         },
-        BAR_MODE_TRANSPORT: {}
+        air: {},
+        truck: {},
+        rail: {}
       }
     },
     theme,
@@ -45,14 +47,19 @@ export const req = {
 }
 
 const schedulesInShipmentData = [
-  { hub_route_key: 'FOO_HUB_ROUTE_KEY', mode_of_transport: 'FOO_MODE_TRANSPORT' },
-  { hub_route_key: 'BAR_HUB_ROUTE_KEY', mode_of_transport: 'BAR_MODE_TRANSPORT' }
+  { hub_route_key: 'OCEAN_HUB_ROUTE_KEY', mode_of_transport: 'ocean' },
+  { hub_route_key: 'AIR_HUB_ROUTE_KEY', mode_of_transport: 'air' },
+  { hub_route_key: 'TRUCK_HUB_ROUTE_KEY', mode_of_transport: 'truck' },
+  { hub_route_key: 'RAIL_HUB_ROUTE_KEY', mode_of_transport: 'rail' }
 ]
 
 export const shipmentInShipmentData = {
+  load_type: 'OCEAN_LOAD_TYPE',
   schedules_charges: {
-    FOO_HUB_ROUTE_KEY: { total: 7 },
-    BAR_HUB_ROUTE_KEY: { total: 25 }
+    OCEAN_HUB_ROUTE_KEY: { total: 40 },
+    AIR_HUB_ROUTE_KEY: { total: 200 },
+    TRUCK_HUB_ROUTE_KEY: { total: 75 },
+    RAIL_HUB_ROUTE_KEY: { total: 125 }
   },
   total_goods_value: {
     value: 15,

@@ -3,10 +3,17 @@ import { shallow } from 'enzyme'
 import { theme, identity, user, shipmentData, tenant, shipment } from '../../mocks'
 import { ChooseOffer } from './ChooseOffer'
 
-shipmentData.shipment = {
-  ...shipmentData.shipment,
-  load_type: 'FOO_LOAD_TYPE'
-}
+jest.mock('uuid', () => {
+  let counter = -1
+  const v4 = () => {
+    counter++
+
+    return `RANDOM_KEY_${counter}`
+  }
+
+  return { v4 }
+})
+
 const propsBase = {
   theme,
   user,
@@ -24,7 +31,7 @@ const propsBase = {
   tenant
 }
 
-test.only('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
 })
 

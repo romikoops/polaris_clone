@@ -37,13 +37,20 @@ exports[`shallow render 1`] = `
         "has_on_carriage": false,
         "has_pre_carriage": false,
         "incoterm_text": "FOO_INCOTERM_TEXT",
+        "load_type": "OCEAN_LOAD_TYPE",
         "notes": "FOO_NOTES",
         "schedules_charges": Object {
-          "BAR_HUB_ROUTE_KEY": Object {
-            "total": 25,
+          "AIR_HUB_ROUTE_KEY": Object {
+            "total": 200,
           },
-          "FOO_HUB_ROUTE_KEY": Object {
-            "total": 7,
+          "OCEAN_HUB_ROUTE_KEY": Object {
+            "total": 40,
+          },
+          "RAIL_HUB_ROUTE_KEY": Object {
+            "total": 125,
+          },
+          "TRUCK_HUB_ROUTE_KEY": Object {
+            "total": 75,
           },
         },
         "total_goods_value": Object {
@@ -186,12 +193,20 @@ exports[`shallow render 1`] = `
           },
           "schedules": Array [
             Object {
-              "hub_route_key": "FOO_HUB_ROUTE_KEY",
-              "mode_of_transport": "FOO_MODE_TRANSPORT",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
             },
             Object {
-              "hub_route_key": "BAR_HUB_ROUTE_KEY",
-              "mode_of_transport": "BAR_MODE_TRANSPORT",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
             },
           ],
           "shipment": Object {
@@ -200,13 +215,20 @@ exports[`shallow render 1`] = `
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
-              "BAR_HUB_ROUTE_KEY": Object {
-                "total": 25,
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
               },
-              "FOO_HUB_ROUTE_KEY": Object {
-                "total": 7,
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
               },
             },
             "total_goods_value": Object {
@@ -231,10 +253,12 @@ exports[`shallow render 1`] = `
             "id": 123,
             "scope": Object {
               "modes_of_transport": Object {
-                "BAR_MODE_TRANSPORT": Object {},
-                "FOO_MODE_TRANSPORT": Object {
-                  "FOO_LOAD_TYPE": true,
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
                 },
+                "rail": Object {},
+                "truck": Object {},
               },
             },
             "subdomain": "foosubdomain",
@@ -470,12 +494,20 @@ exports[`theme is falsy 1`] = `
           },
           "schedules": Array [
             Object {
-              "hub_route_key": "FOO_HUB_ROUTE_KEY",
-              "mode_of_transport": "FOO_MODE_TRANSPORT",
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
             },
             Object {
-              "hub_route_key": "BAR_HUB_ROUTE_KEY",
-              "mode_of_transport": "BAR_MODE_TRANSPORT",
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
             },
           ],
           "shipment": Object {
@@ -484,13 +516,20 @@ exports[`theme is falsy 1`] = `
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
             "notes": "FOO_NOTES",
             "schedules_charges": Object {
-              "BAR_HUB_ROUTE_KEY": Object {
-                "total": 25,
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
               },
-              "FOO_HUB_ROUTE_KEY": Object {
-                "total": 7,
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
               },
             },
             "total_goods_value": Object {
@@ -515,10 +554,12 @@ exports[`theme is falsy 1`] = `
             "id": 123,
             "scope": Object {
               "modes_of_transport": Object {
-                "BAR_MODE_TRANSPORT": Object {},
-                "FOO_MODE_TRANSPORT": Object {
-                  "FOO_LOAD_TYPE": true,
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
                 },
+                "rail": Object {},
+                "truck": Object {},
               },
             },
             "subdomain": "foosubdomain",
