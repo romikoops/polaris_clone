@@ -13,6 +13,7 @@ import DocumentsDownloader from '../Documents/Downloader'
 import { adminSchedules as schedTip } from '../../constants'
 import { filters, capitalize } from '../../helpers'
 import '../../styles/select-css-custom.css'
+import SideOptionsBox from './SideOptions/SideOptionsBox'
 import { AdminSearchableRoutes } from './AdminSearchables'
 import { Checkbox } from '../Checkbox/Checkbox'
 
@@ -26,9 +27,11 @@ class AdminSchedules extends Component {
     } else {
       prop = property
     }
+
     return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
       const result2 = result1 ? 1 : 0
+
       return result2 * sortOrder
     }
   }
@@ -70,8 +73,10 @@ class AdminSchedules extends Component {
       if (!itinerary) {
         return false
       }
+
       return itinerary.origin_hub_id === hub.id || itinerary.destination_hub_id === hub.id
     })
+
     return filteredItineraries.map(x => x.id)
   }
   toggleView () {
@@ -155,6 +160,7 @@ class AdminSchedules extends Component {
     } else {
       filter2 = filter1
     }
+
     return filter2
   }
   render () {
@@ -214,10 +220,6 @@ class AdminSchedules extends Component {
         <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
       </div>
     )
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.mot).map(htk => (
       <div
         className={`${
@@ -252,214 +254,205 @@ class AdminSchedules extends Component {
       />
     )
     const currView = showList ? listView : genView
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {uploadStatus}
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+        <div className={`${styles.component_view} flex-80 flex-md-70 flex-sm-100 layout-row layout-align-start-start`}>
           {currView}
         </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                className="flex-100"
-                value={searchFilters.query}
-                placeholder="Search..."
-                onChange={e => this.handleSearchQuery(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('mot')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Mode of Transport</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.mot ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.mot ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {typeFilters}
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.upload ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
+        <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
+          <SideOptionsBox
+            header="Filters"
+            flexOptions="layout-column flex-20 flex-md-30"
+            content={
+              <div className="">
                 <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
                 >
-                  <p className="flex-80">Upload Train Schedules Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
-                    type="xlsx"
-                    text="Train Schedules .xlsx"
+                  <input
+                    type="text"
+                    className="flex-100"
+                    value={searchFilters.query}
+                    placeholder="Search..."
+                    onChange={e => this.handleSearchQuery(e)}
                   />
                 </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-80">Upload Air Schedules Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
-                    type="xlsx"
-                    text="Air Schedules .xlsx"
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-80">Upload Vessel Schedules Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
-                    type="xlsx"
-                    text="Vessel Schedules .xlsx"
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-80">Upload Trucking Schedules Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
-                    type="xlsx"
-                    text="Truck Schedules .xlsx"
-                  />
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('mot')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-ship" />
+                      <p className="flex-none">Mode of Transport</p>
+                    </div>
+                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.mot ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.mot ? styles.open_filter : styles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    {typeFilters}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
+            }
+          />
+          <SideOptionsBox
+            header="Data manager"
+            flexOptions="layout-column flex-20 flex-md-30"
+            content={
+              <div className="">
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('upload')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-cloud-upload" />
+                      <p className="flex-none">Upload Data</p>
+                    </div>
+                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.upload ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.upload ? styles.open_filter : styles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">Upload Train Schedules Sheet</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
+                        type="xlsx"
+                        text="Train Schedules .xlsx"
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">Upload Air Schedules Sheet</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
+                        type="xlsx"
+                        text="Air Schedules .xlsx"
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">Upload Vessel Schedules Sheet</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
+                        type="xlsx"
+                        text="Vessel Schedules .xlsx"
+                      />
+                    </div>
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
+                    >
+                      <p className="flex-80">Upload Trucking Schedules Sheet</p>
+                      <FileUploader
+                        theme={theme}
+                        dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
+                        type="xlsx"
+                        text="Truck Schedules .xlsx"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('download')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-cloud-download" />
+                      <p className="flex-none">Download Data</p>
+                    </div>
+                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.download ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.download ? styles.open_filter : styles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                    >
+                      <p className="flex-100">Download Schedules Sheet</p>
+                      <DocumentsDownloader theme={theme} target="schedules" />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+                    onClick={() => this.toggleExpander('new')}
+                  >
+                    <div className="flex-90 layout-align-start-center layout-row">
+                      <i className="flex-none fa fa-plus-circle" />
+                      <p className="flex-none">Autogenerate Schedules</p>
+                    </div>
+                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
+                      {expander.new ? (
+                        <i className="flex-none fa fa-chevron-up" />
+                      ) : (
+                        <i className="flex-none fa fa-chevron-down" />
+                      )}
+                    </div>
+                  </div>
+                  <div
+                    className={`${
+                      expander.new ? styles.open_filter : styles.closed_filter
+                    } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  >
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                    >
+                      {showList ? newButton : backButton}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div
-                className={`${
-                  expander.download ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100">Download Schedules Sheet</p>
-                  <DocumentsDownloader theme={theme} target="schedules" />
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">Autogenerate Schedules</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.new ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  {showList ? newButton : backButton}
-                </div>
-              </div>
-            </div>
-          </div>
+            }
+          />
         </div>
       </div>
     )
