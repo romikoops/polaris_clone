@@ -61,7 +61,7 @@ class Route
       WHERE itineraries.id IN (?)
     ", origin_hub_ids, destination_hub_ids, itinerary_ids])
 
-    connection.exec_query(sanitized_query).to_a
+    ApplicationRecord.connection.exec_query(sanitized_query).to_a
   end
 
   private
