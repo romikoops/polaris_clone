@@ -3,7 +3,7 @@ import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { Tooltip } from '../../Tooltip/Tooltip'
-import { WorldMap as WMap } from '../DashboardMap/WorldMap'
+import { WorldMap } from '../DashboardMap/WorldMap'
 import { AdminRouteList } from '../AdminRouteList'
 
 export class AdminSearchableRoutes extends Component {
@@ -127,10 +127,11 @@ export class AdminSearchableRoutes extends Component {
           <div className="layout-row flex-95 layout-align-space-between-stretch layout-wrap">
 
             <div className="layout-padding flex-100">
-              <WMap
+              <WorldMap
                 itineraries={itineraries}
                 hoverId={hoverId}
                 height={250}
+                theme={theme}
               />
             </div><div className="layout-padding flex-100">
               <AdminRouteList
