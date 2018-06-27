@@ -48,12 +48,33 @@ function setCurrency (currency) {
   // FIXME: console.log(url)
   return fetch(url, requestOptions).then(handleResponse)
 }
+function toggleTenantCurrencyMode () {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  const url = `${BASE_URL}/admin/currencies/toggle_mode`
+  // FIXME: console.log(url)
+  return fetch(url, requestOptions).then(handleResponse)
+}
+function setTenantCurrencyRates (base, rates) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ base, rates })
+  }
+  const url = `${BASE_URL}/admin/currencies/set_rates`
+  // FIXME: console.log(url)
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 const appService = {
   fetchCurrencies,
   setCurrency,
   fetchCurrenciesForBase,
-  refreshRates
+  refreshRates,
+  toggleTenantCurrencyMode,
+  setTenantCurrencyRates
 }
 
 export default appService

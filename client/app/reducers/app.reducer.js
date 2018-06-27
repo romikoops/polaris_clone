@@ -63,6 +63,26 @@ export default function app (state = {}, action) {
       })
       return currErr
     }
+    case appConstants.TOGGLE_CURRENCIES_REQUEST: {
+      const currReq = merge({}, state, {
+        loading: true
+      })
+      return currReq
+    }
+    case appConstants.TOGGLE_CURRENCIES_SUCCESS: {
+      const currSucc = merge({}, state, {
+        currencyList: action.payload.rates,
+        loading: false
+      })
+      return currSucc
+    }
+    case appConstants.TOGGLE_CURRENCIES_ERROR: {
+      const currErr = merge({}, state, {
+        error: action.payload,
+        loading: false
+      })
+      return currErr
+    }
     case appConstants.RECEIVE_TENANTS: {
       return {
         ...state,
