@@ -2,8 +2,6 @@
 
 module OfferCalculatorService
   class TruckingDataBuilder < Base
-    include TruckingTools
-
     def exec(hubs)
       { origin: "pre", destination: "on" }
         .select { |_, carriage| @shipment.has_carriage?(carriage) }
@@ -58,7 +56,7 @@ module OfferCalculatorService
       cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array
       return nil if cargo_units.empty?
 
-      calc_trucking_price(
+      TruckingTools.calc_trucking_price(
         trucking_pricing,
         cargo_units,
         distance,
