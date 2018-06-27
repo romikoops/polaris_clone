@@ -31,24 +31,25 @@ module PricingTools
   end
 
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
-    cargo_hash =  cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
-      weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
-                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
-               else
-                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
-               end
-               
+    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      weight =
+        if cargo_unit.is_a?(CargoItem)
+          cargo_unit.payload_in_kg * (cargo_unit.try(:quantity) || 1)
+        elsif cargo_unit.is_a?(AggregatedCargo)
+          cargo_unit.weight * (cargo_unit.try(:quantity) || 1)
+        else
+          cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+        end
+
       return_h[:quantity] += cargo_unit.quantity unless cargo_unit.try(:quantity).nil?
-      return_h[:volume]   += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
+      return_h[:volume]   += (cargo_unit.try(:volume) || 1) * (cargo_unit.try(:quantity)|| 1) || 0
 
       return_h[:weight]   += (cargo_unit.try(:weight) || weight)
     end
 
     lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
-    
     charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
     charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
-    # 
     return {} if charge.nil?
     totals = { "total" => {} }
 
@@ -134,7 +135,7 @@ module PricingTools
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
     return if cargo_rate_value.nil? || cargo_rate_value == 0
     container.unit_price = { value: cargo_rate_value, currency: user.currency }
-    totals["total"] = { value: cargo_rate_value * container.quantity, currency: user.currency }
+    totals["total"] = { value: cargo_rate_value, currency: user.currency }
     totals
   end
 
@@ -266,7 +267,6 @@ module PricingTools
     when "PER_TON"
       ton = (cargo_hash[:weight] / 1000) * fee["ton"]
       min = fee["min"] || 0
-
       [ton, min].max
     when "PER_WM"
       cbm = cargo_hash[:volume] * (fee["value"] || fee["rate"])

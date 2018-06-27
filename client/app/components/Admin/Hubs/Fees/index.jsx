@@ -1,37 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import Toggle from 'react-toggle'
-// import DayPickerInput from 'react-day-picker/DayPickerInput'
 import '../../../../styles/day-picker-custom.css'
 import styles from '../../Admin.scss'
 import styles2 from './index.scss'
-// import { NamedSelect } from '../../../NamedSelect/NamedSelect'
-// import { RoundButton } from '../../../RoundButton/RoundButton'
-// import AdminPromptConfirm from '../../Prompt/Confirm'
 import {
   currencyOptions,
   cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  chargeGlossary,
   rateBasises,
   lclPricingSchema,
   fclPricingSchema,
-  // cargoGlossary,
   rateBasisSchema,
   moment
 } from '../../../../constants'
-// import { TextHeading } from '../../../TextHeading/TextHeading'
 import { gradientGenerator } from '../../../../helpers'
 import FeeRow from './FeeRow'
 
-const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
-// const cargoClassOpts = cargoClassOptions
-// const lclSchema = lclPricingSchema
-// const fclSchema = fclPricingSchema
-// const cargoGloss = cargoGlossary
 
 export class AdminHubFees extends Component {
   static selectFromOptions (options, value) {
@@ -44,6 +31,7 @@ export class AdminHubFees extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   static prepForSelect (arr, labelKey, valueKey, glossary) {
@@ -55,14 +43,27 @@ export class AdminHubFees extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectOptions: {},
+      selectOptions: {
+        customs: {},
+        charges: {}
+      },
+      editor: {
+        charges: {
+          import: {},
+          export: {}
+        },
+        customs: {
+          import: {},
+          export: {}
+        }
+      },
       edit: false,
       direction: 'import',
       selectedCargoClass: 'lcl'
     }
-    // this.editPricing = lclSchema
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
+    this.handleDayChange = this.handleDayChange.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
     this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
@@ -74,9 +75,12 @@ export class AdminHubFees extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
+    const { direction, selectedCargoClass } = this.state
     if (nextProps.charges[0].hub_id) {
-      this.setAllFromOptions(nextProps.charges[0])
-      this.setAllFromOptions(nextProps.customs[0])
+      this.setAllFromOptions(nextProps.charges
+        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
+      this.setAllFromOptions(nextProps.customs
+        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'customs')
     }
     if (this.state.charges !== nextProps.charges || this.state.customs !== nextProps.customs) {
       this.setState({
@@ -85,47 +89,72 @@ export class AdminHubFees extends Component {
       })
     }
   }
+
   setCargoClass (type) {
-    this.setState({ selectedCargoClass: type })
+    this.setState({ selectedCargoClass: type }, () => { this.prepAllOptions() })
   }
 
-  setAllFromOptions (charges) {
+  setAllFromOptions (charges, target) {
     const newObj = { import: {}, export: {} }
     const tmpObj = {}
-    const directions = ['import', 'export']
-    directions.forEach((dir) => {
-      Object.keys(charges[dir]).forEach((key) => {
-        if (!newObj[dir][key]) {
-          newObj[dir][key] = {}
+    if (!charges.fees) {
+      return
+    }
+    Object.keys(charges.fees).forEach((key) => {
+      if (!newObj[charges.direction][key]) {
+        newObj[charges.direction][key] = {}
+      }
+      if (!tmpObj[key]) {
+        tmpObj[key] = {}
+      }
+      let opts
+      Object.keys(charges.fees[key]).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOpts.slice()
+          newObj[charges.direction][key][chargeKey] = AdminHubFees.selectFromOptions(
+            opts,
+            charges.fees[key][chargeKey]
+          )
+        } else if (chargeKey === 'rate_basis') {
+          opts = rateOpts.slice()
+          newObj[charges.direction][key][chargeKey] = AdminHubFees.selectFromOptions(
+            opts,
+            charges.fees[key][chargeKey]
+          )
         }
-        if (!tmpObj[key]) {
-          tmpObj[key] = {}
-        }
-        let opts
-        Object.keys(charges[dir][key]).forEach((chargeKey) => {
-          if (chargeKey === 'currency') {
-            opts = currencyOpts.slice()
-            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
-              opts,
-              charges[dir][key][chargeKey]
-            )
-          } else if (chargeKey === 'rate_basis') {
-            opts = rateOpts.slice()
-            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
-              opts,
-              charges[dir][key][chargeKey]
-            )
-          }
-        })
       })
     })
 
-    this.setState({
-      selectOptions: {
-        ...this.state.selectOptions,
-        [charges.load_type]: newObj
+    this.setState(prevState => (
+      {
+        editor: {
+          ...prevState.editor,
+          [target]: {
+            ...prevState.editor[target],
+            [charges.direction]: charges
+          }
+        },
+        selectOptions: {
+          ...prevState.selectOptions,
+          [target]: {
+            ...prevState.selectOptions[target],
+            [charges.load_type]: {
+              ...prevState.selectOptions[charges.load_type],
+              ...newObj
+            }
+          }
+        }
       }
-    })
+    ))
+  }
+  prepAllOptions () {
+    const {
+      direction, selectedCargoClass, charges, customs
+    } = this.state
+    this.setAllFromOptions(charges
+      .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
+    this.setAllFromOptions(customs
+      .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'customs')
   }
 
   handleTopLevelSelect (selection) {
@@ -137,23 +166,29 @@ export class AdminHubFees extends Component {
       }
     })
   }
-  handleDayChange (e, direction, key, chargeKey) {
+  handleDayChange (e, direction, key, chargeKey, target) {
     console.log(e, direction, key, chargeKey)
     this.setState({
-      charge: {
-        ...this.state.charge,
-        [direction]: {
-          ...this.state.charge[direction],
-          [key]: {
-            ...this.state.charge[direction][key],
-            [chargeKey]: moment(e).format('YYYY/MM/DD')
+      editor: {
+        ...this.state.editor,
+        [target]: {
+          ...this.state.editor[target],
+          [direction]: {
+            ...this.state.editor[target][direction],
+            fees: {
+              ...this.state.editor[target][direction].fees,
+              [key]: {
+                ...this.state.editor[target][direction].fees[key],
+                [chargeKey]: moment(e).format('YYYY/MM/DD')
+              }
+            }
           }
         }
       }
     })
   }
 
-  handleSelect (selection) {
+  handleSelect (selection, target) {
     const { direction } = this.state
     const nameKeys = selection.name.split('-')
     if (nameKeys[2] === 'rate_basis') {
@@ -165,43 +200,61 @@ export class AdminHubFees extends Component {
         }
       })
       this.setState({
-        charge: {
-          ...this.state.charge,
-          [nameKeys[0]]: {
-            ...this.state.charge[nameKeys[0]],
-            [nameKeys[1]]: newSchema
+        editor: {
+          ...this.state.editor,
+          [target]: {
+            ...this.state.editor[target],
+            [direction]: {
+              ...this.state.editor[target][direction],
+              fees: {
+                ...this.state.editor[target][direction].fees,
+                [nameKeys[1]]: newSchema
+              }
+            }
           }
         },
         selectOptions: {
           ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[direction],
-            [nameKeys[1]]: {
-              ...this.state.selectOptions[nameKeys[0]][nameKeys[1]],
-              [nameKeys[2]]: selection
+          [target]: {
+            ...this.state.selectOptions[target],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[target][nameKeys[0]],
+              [nameKeys[1]]: {
+                ...this.state.selectOptions[target][nameKeys[0]][nameKeys[1]],
+                [nameKeys[2]]: selection
+              }
             }
           }
         }
       })
     } else {
       this.setState({
-        charge: {
-          ...this.state.charge,
-          [nameKeys[0]]: {
-            ...this.state.charge[nameKeys[0]],
-            [nameKeys[1]]: {
-              ...this.state.charge[nameKeys[0]][nameKeys[2]],
-              [nameKeys[2]]: parseInt(selection.value, 10)
+        editor: {
+          ...this.state.editor,
+          [target]: {
+            ...this.state.editor[target],
+            [nameKeys[0]]: {
+              ...this.state.editor[target][nameKeys[0]],
+              fees: {
+                ...this.state.editor[target][nameKeys[0]].fees,
+                [nameKeys[1]]: {
+                  ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
+                  [nameKeys[2]]: parseInt(selection.value, 10)
+                }
+              }
             }
           }
         },
         selectOptions: {
           ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[nameKeys[0]],
-            [nameKeys[1]]: {
-              ...this.state.selectOptions[nameKeys[0]][nameKeys[1]],
-              [nameKeys[2]]: selection
+          [target]: {
+            ...this.state.selectOptions[target],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[target][nameKeys[0]],
+              [nameKeys[1]]: {
+                ...this.state.selectOptions[target][nameKeys[0]][nameKeys[1]],
+                [nameKeys[2]]: selection
+              }
             }
           }
         }
@@ -216,17 +269,23 @@ export class AdminHubFees extends Component {
     delete charges[key]
     this.setState({ charges })
   }
-  handleChange (event) {
+  handleChange (event, target) {
     const { name, value } = event.target
     const nameKeys = name.split('-')
     this.setState({
-      charges: {
-        ...this.state.charges,
-        [nameKeys[0]]: {
-          ...this.state.charges[nameKeys[0]],
-          [nameKeys[1]]: {
-            ...this.state.charges[nameKeys[0]][nameKeys[1]],
-            [nameKeys[2]]: parseInt(value, 10)
+      editor: {
+        ...this.state.editor,
+        [target]: {
+          ...this.state.editor[target],
+          [nameKeys[0]]: {
+            ...this.state.editor[target][nameKeys[0]],
+            fees: {
+              ...this.state.editor[target][nameKeys[0]].fees,
+              [nameKeys[1]]: {
+                ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
+                [nameKeys[2]]: parseInt(value, 10)
+              }
+            }
           }
         }
       }
@@ -271,20 +330,15 @@ export class AdminHubFees extends Component {
     this.setState({ selectOptions: newObj, charges })
   }
 
-  confirmDelete () {
-    this.setState({
-      confirm: true
-    })
-  }
-  closeConfirm () {
-    this.setState({ confirm: false })
-  }
-
-  saveEdit () {
-    const { charges } = this.state
-    this.props.adminDispatch.editLocalCharges(charges.nexus_id, charges)
-    this.closeConfirm()
-    this.toggleEdit()
+  saveEdit (target) {
+    const { editor, direction } = this.state
+    // debugger // eslint-disable-line
+    const charges = editor[target][direction]
+    if (target === 'charges') {
+      this.props.adminDispatch.editLocalCharges(charges)
+    } else {
+      this.props.adminDispatch.editCustomsFees(charges)
+    }
   }
   handleDirectionChange (e) {
     const { directionBool } = this.state
@@ -312,6 +366,7 @@ export class AdminHubFees extends Component {
       const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#E0E0E0' }
       const innerStyle = selectedCargoClass === cargoClass.value ? styles2.cargo_class_button_selected : ''
       const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
+
       return (<div
         className={`flex-25 layout-row layout-align-start-center ${inactiveStyle} ${styles2.cargo_class_button}`}
         style={buttonStyle}
@@ -328,86 +383,62 @@ export class AdminHubFees extends Component {
   render () {
     const { theme } = this.props
 
-    // const textStyle = {
-    //   background:
-    //     theme && theme.colors
-    //       ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-    //       : 'black'
-    // }
     const {
       selectOptions,
-      // edit,
-      // showPanel,
+
       direction,
       directionBool,
       charges,
-      // confirm,
       selectedCargoClass,
       customs
     } = this.state
-    // let gloss
     const { primary, secondary } = theme.colors
     const bgStyle = gradientGenerator(primary, secondary)
 
     if (!charges || (charges && !charges[0])) {
       return ''
     }
-    // const confimPrompt = confirm ? (
-    //   <AdminPromptConfirm
-    //     theme={theme}
-    //     heading="Are you sure?"
-    //     text="These changes will be instantly available in your store"
-    //     confirm={() => this.saveEdit()}
-    //     deny={() => this.closeConfirm()}
-    //   />
-    // ) : (
-    //   ''
-    // )
-
-    // const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
-    // const feesToAdd = Object.keys(feeSchema.data).map((key) => {
-    //   if (!charges[key]) {
-    //     return (
-    //       <div
-    //         key={key}
-    //         className="flex-33 layout-row layout-align-start-center"
-    //         onClick={() => this.addFeeToPricing(key)}
-    //       >
-    //         <i className="fa fa-plus clip flex-none" style={textStyle} />
-    //         <div className="flex-5" />
-    //         <p className="flex-none">
-    //           {key} - {gloss[key]}{' '}
-    //         </p>
-    //       </div>
-    //     )
-    //   }
-    //   return ''
-    // })
-    // const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
     const impStyle = directionBool ? styles2.toggle_off : styles2.toggle_on
     const expStyle = directionBool ? styles2.toggle_on : styles2.toggle_off
-    const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass)[0]
-    const currentCustoms = customs.filter(custom => custom.load_type === selectedCargoClass)[0]
-    const feeRows = Object.keys(currentCharge[direction]).map((ck) => {
-      const fee = currentCharge[direction][ck]
+    const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass && charge.direction === direction)[0]
+    const currentCustoms = customs.filter(custom => custom.load_type === selectedCargoClass && custom.direction === direction)[0]
+    const editCharge = this.state.editor.charges[direction]
+    const editCustoms = this.state.editor.customs[direction]
+    const feeRows = Object.keys(currentCharge.fees).map((ck) => {
+      const fee = currentCharge.fees[ck]
+
       return (<FeeRow
         className="flex-100"
         theme={theme}
         fee={fee}
-        selectOptions={selectOptions[currentCharge.load_type]}
+        selectOptions={selectOptions.charges[currentCharge.load_type]}
         direction={direction}
+        editCharge={editCharge}
+        handleDateEdit={this.handleDayChange}
+        handleSelect={this.handleSelect}
+        handleChange={this.handleChange}
+        saveEdit={e => this.saveEdit(e)}
+        target="charges"
       />)
     })
-    const customsRows = Object.keys(currentCustoms[direction]).map((ck) => {
-      const fee = currentCustoms[direction][ck]
+    const customsRows = Object.keys(currentCustoms.fees).map((ck) => {
+      const fee = currentCustoms.fees[ck]
+
       return (<FeeRow
         className="flex-100"
         theme={theme}
         fee={fee}
-        selectOptions={selectOptions[currentCustoms.load_type]}
+        editCharge={editCustoms}
+        selectOptions={selectOptions.customs[currentCustoms.load_type]}
         direction={direction}
+        handleDateEdit={this.handleDayChange}
+        handleSelect={this.handleSelect}
+        handleChange={this.handleChange}
+        saveEdit={e => this.saveEdit(e)}
+        target="customs"
       />)
     })
+
     return (
       <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>

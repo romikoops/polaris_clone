@@ -7,10 +7,6 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
-    options = {
-      methods: %i(selected_offer mode_of_transport),
-      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
-    }
     requested_shipments = Shipment.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
@@ -23,9 +19,9 @@ class Admin::ShipmentsController < ApplicationController
     @documents["open_shipments"] = Document.get_documents_for_array(open_shipments)
     finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
     @documents["finished_shipments"] = Document.get_documents_for_array(finished_shipments)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
-    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
+    @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
+    @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
     resp = {
       requested: @requested_shipments,
       open:      @open_shipments,

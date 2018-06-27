@@ -55,7 +55,7 @@ module OfferCalculatorService
     def calc_trucking_charges(distance, trucking_pricing)
       cargo_class = trucking_pricing.cargo_class
       cargo_unit_array = @shipment.cargo_units.where(cargo_class: cargo_class)
-      cargo_units = cargo_unit_array.empty? ? [@shipment.aggregated_cargo] : cargo_unit_array
+      cargo_units = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : cargo_unit_array
       return nil if cargo_units.empty?
 
       calc_trucking_price(

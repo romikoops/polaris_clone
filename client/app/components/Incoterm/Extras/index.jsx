@@ -16,9 +16,9 @@ export function IncotermExtras ({
   }
   const { scope } = tenant.data
   const customsStyle =
-    feeHash && feeHash.customs && feeHash.customs.val ? selectedStyle : deselectedStyle
+    feeHash && feeHash.customs ? selectedStyle : deselectedStyle
   const insuranceStyle =
-    feeHash && feeHash.insurance && feeHash.insurance.val ? selectedStyle : deselectedStyle
+    feeHash && feeHash.insurance ? selectedStyle : deselectedStyle
   const insuranceFeesValue = feeHash ? (
     <div
       className={`${

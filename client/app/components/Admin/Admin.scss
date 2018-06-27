@@ -895,7 +895,7 @@
    }
    .margin_box_right {
      > * {
-       margin-right: 25px;
+      //  margin-right: 25px;
        &:last-child {
         margin: 0 !important;
       }
@@ -938,4 +938,7 @@
       }
     }
   }
-}
+  .card_padding{
+    padding: 8px;
+  }
+ }

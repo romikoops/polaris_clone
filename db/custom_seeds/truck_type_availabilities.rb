@@ -1,0 +1,1 @@
+TruckTypeAvailability.create_all!
