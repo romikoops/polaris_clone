@@ -31,6 +31,21 @@ const propsBase = {
   tenant
 }
 
+let originalDate
+const constantDate = new Date('2017-06-13T04:41:20')
+beforeEach(() => {
+  originalDate = Date
+  Date = class extends Date {
+    constructor () {
+      return constantDate
+    }
+  }
+})
+
+afterEach(() => {
+  Date = originalDate
+})
+
 test('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
 })
