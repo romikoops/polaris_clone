@@ -252,7 +252,7 @@ module TruckingTools
     
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage["ratio"]
       if cargo.is_a? AggregatedCargo
-        calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       else
         if (trucking_pricing.load_meterage["height_limit"] && 
           (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"])) || 
@@ -306,9 +306,10 @@ module TruckingTools
   def calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
     cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
     cbm_weight = cargo.volume * cbm_ratio
-    trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-    cargo_object["stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-    cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
-    cargo_object["stackable"]["number_of_items"] += cargo.quantity
+    quantity = cargo.try(:quantity) || 1
+    trucking_chargeable_weight = [cbm_weight, cargo.try(:payload_in_kg) || cargo.weight].max
+    cargo_object["stackable"]["weight"] += trucking_chargeable_weight * quantity
+    cargo_object["stackable"]["volume"] += cargo.volume * quantity
+    cargo_object["stackable"]["number_of_items"] += quantity
   end
 end

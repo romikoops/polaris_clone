@@ -71,7 +71,7 @@ class Admin::PricingsController < ApplicationController
   end
 
   def destroy
-    delete_pricing(params[:id])
+    pricing_delete(params[:id])
     response_handler({})
   end
 

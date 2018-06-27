@@ -338,7 +338,7 @@ module ShippingTools
         contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-
+    # byebug
     hub_route = @schedule["hub_route_id"]
     cargo_items = shipment.cargo_items
     containers = shipment.containers
