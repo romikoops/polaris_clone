@@ -379,11 +379,11 @@ function editShipmentPrice (id, priceObj) {
   }
   return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
 }
-function editShipmentServicePrice (id, priceObj) {
+function editShipmentServicePrice (id, data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ priceObj })
+    body: JSON.stringify(data)
   }
   return fetch(`${BASE_URL}/admin/shipments/${id}/edit_service_price`, requestOptions).then(handleResponse)
 }

@@ -232,11 +232,11 @@ class Shipment < ApplicationRecord
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
     end
   end
-  
+
   def as_options_json(options={})
     new_options = options.reverse_merge(
-      methods: [:selected_offer, :mode_of_transport],
-      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+      methods: %i(selected_offer mode_of_transport),
+      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
     )
     as_json(new_options)
   end

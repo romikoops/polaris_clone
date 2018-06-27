@@ -109,17 +109,10 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def edit_service_price
-    options = {
-      methods: %i(selected_offer mode_of_transport),
-      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
-    }
-
-    priceObj = params[:priceObj]
-
-    shipment = Shipment.find(params[:shipment_id])
+    shipment = Shipment.find(params[:id])
     charge_breakdown = shipment.charge_breakdowns.selected
-	  charge = charge_breakdown.charge(priceObj["charge_category"])
-    new_price = Price.new(value: priceObj["value"], currency: priceObj["currency"])
+	  charge = charge_breakdown.charge(params["charge_category"])
+    new_price = Price.new(price_params)
     charge.edited_price = new_price
 
     if charge.save
@@ -127,9 +120,8 @@ class Admin::ShipmentsController < ApplicationController
         charge.parent.update_edited_price!
         charge.parent.save!
       end
-      response_handler(shipment.as_json(options))
+      response_handler(shipment.as_options_json())
 	  else
-		  # TBD - handle invalid record error
       error = ApplicationError.new(
         http_code: 400,
         code:      SecureRandom.uuid,
@@ -252,5 +244,9 @@ class Admin::ShipmentsController < ApplicationController
 
   def shipment_params
     params.require(:shipment).permit(:total_price, :planned_pickup_date, :origin_id, :destination_id)
+  end
+
+  def price_params
+    params.require(:price).permit(:value, :currency)
   end
 end

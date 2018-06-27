@@ -289,26 +289,20 @@ export class AdminShipmentView extends Component {
     const { newPrices, currency } = this.state
     const { adminDispatch, shipmentData } = this.props
 
-    // let difference = 0
-
     Object.keys(newPrices).forEach((k) => {
       const service = shipmentData.shipment.selected_offer[k]
 
       if (newPrices[k].value !== 0 && service && service.total && service.total.value &&
         newPrices[k].value !== service.total.value) {
-        // difference += (newPrices[k] - service.total.value)
-
         adminDispatch.editShipmentServicePrice(shipmentData.shipment.id, {
-          value: newPrices[k].value,
-          currency,
+          price: {
+            value: newPrices[k].value,
+            currency
+          },
           charge_category: k
         })
       }
     })
-
-    // this.setState({
-    //   totalPrice: parseFloat(shipmentData.shipment.total_price.value) + difference
-    // })
 
     this.toggleEditServicePrice()
   }
@@ -345,8 +339,6 @@ export class AdminShipmentView extends Component {
         data: locations.destination
       }
     }
-
-    console.log('shipmentData', shipmentData)
 
     hubs.forEach((c) => {
       if (String(c.data.id) === schedules[0].origin_hub_id) {
@@ -908,7 +900,7 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <h2 className="layout-align-end-center layout-row flex">
-                {shipment.selected_offer.edited_total.value
+                {shipment.selected_offer.edited_total && shipment.selected_offer.edited_total.value
                   ? (+shipment.selected_offer.edited_total.value).toFixed(2)
                   : (+shipment.total_price.value).toFixed(2)} {shipment.total_goods_value.currency}
               </h2>

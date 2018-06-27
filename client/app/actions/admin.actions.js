@@ -1209,10 +1209,7 @@ function editShipmentPrice (id, priceObj) {
     )
   }
 }
-function editShipmentServicePrice (id, priceObj) {
-  function request (shipmentData) {
-    return { type: adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_REQUEST, payload: shipmentData }
-  }
+function editShipmentServicePrice (id, data) {
   function success (shipmentData) {
     return { type: adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_SUCCESS, payload: shipmentData.data }
   }
@@ -1220,12 +1217,10 @@ function editShipmentServicePrice (id, priceObj) {
     return { type: adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_FAILURE, error }
   }
   return (dispatch) => {
-    dispatch(request())
-
-    adminService.editShipmentServicePrice(id, priceObj).then(
-      (data) => {
+    adminService.editShipmentServicePrice(id, data).then(
+      (res) => {
         dispatch(alertActions.success('Edit Time successful'))
-        dispatch(success(data))
+        dispatch(success(res))
       },
       (error) => {
         dispatch(failure(error))
