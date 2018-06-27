@@ -72,7 +72,7 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || "EUR"
-    results = get_currency_array(currency)
+    results = get_currency_array(currency, current_user.tenant_id)
     response_handler(results)
   end
 
@@ -84,7 +84,7 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency])
+    rates = get_rates(params[:currency, current_user.tenant_id])
     response_handler(user: current_user, rates: rates)
   end
 

@@ -58,7 +58,7 @@ module PricingTools
       totals[k]["currency"] ||= fee["currency"]
       totals[k]["value"] += fee_value(fee, cargo_hash)
     end
-    converted = sum_and_convert_cargo(totals, user.currency)
+    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals["total"] = { value: converted, currency: user.currency }
 
     totals
@@ -85,7 +85,7 @@ module PricingTools
       totals[k]["value"] += fee_value(fee, cargo_hash)
     end
 
-    converted = sum_and_convert_cargo(totals, user.currency)
+    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals["total"] = { value: converted, currency: user.currency }
     totals
   end
@@ -112,7 +112,7 @@ module PricingTools
     end
     
 
-    converted = sum_and_convert_cargo(totals, user.currency)
+    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     cargo.try(:unit_price=, value: converted, currency: user.currency)
     totals["total"] = { value: converted, currency: user.currency }
 
@@ -132,7 +132,7 @@ module PricingTools
       totals[k]["value"] += fee_value(fee, get_cargo_hash(container, mot))
     end
 
-    cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
+    cargo_rate_value = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     return if cargo_rate_value.nil? || cargo_rate_value == 0
     container.unit_price = { value: cargo_rate_value, currency: user.currency }
     totals["total"] = { value: cargo_rate_value, currency: user.currency }
