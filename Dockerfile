@@ -1,4 +1,5 @@
 # Official PostgreSQL image
+# https://github.com/docker-library/postgres/tree/master/10/alpine
 ##########
 
 FROM alpine:3.7
@@ -25,6 +26,8 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 ENV PG_MAJOR 10
 ENV PG_VERSION 10.4
+ENV PGDATA /var/lib/postgresql/data
+VOLUME /var/lib/postgresql/data
 ENV PG_SHA256 1b60812310bd5756c62d93a9f93de8c28ea63b0df254f428cd1cf1a4d9020048
 
 RUN set -ex \
@@ -149,6 +152,7 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 RUN chmod 755 docker-entrypoint.sh
 
 # Attempt to install postgis
+# https://stackoverflow.com/questions/27547933/how-to-create-postgis-extension-for-postgresql-in-docker
 USER postgres 
 RUN pg_ctl start -w -D ${PGDATA}
 RUN createdb postgis_template -E UTF8
