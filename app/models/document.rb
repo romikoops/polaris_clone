@@ -48,11 +48,6 @@ class Document < ApplicationRecord
     self.delete_documents(@doc) unless @doc.nil?
   end
 
-  def self.delete_all
-    @docs = Document.all
-    self.delete_documents(@docs) unless @docs.nil?
-  end
-
   def self.get_documents_for_array(arr)
     results = {}
     arr.each do |a|
