@@ -252,7 +252,7 @@ module TruckingTools
     
     if trucking_pricing.load_meterage && trucking_pricing.load_meterage["ratio"]
       if cargo.is_a? AggregatedCargo
-        calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
       else
         if (trucking_pricing.load_meterage["height_limit"] && 
           (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"])) || 
