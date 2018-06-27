@@ -137,6 +137,7 @@ export class AdminSearchableRoutes extends Component {
                 itineraries={itineraries}
                 limit={limit}
                 tile={tile}
+                theme={theme}
                 handleClick={itinerary => this.handleClick(itinerary)}
                 hoverFn={e => this.handleRouteHover(e)}
               />
