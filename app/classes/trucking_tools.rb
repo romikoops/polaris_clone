@@ -19,7 +19,7 @@ module TruckingTools
       end
     end
     fees[:rate] = fare_calculator("rate", pricing[:rate], cargo, km)
-    byebug
+    
     fees.each do |_k, fee|
       next unless fee
       if !result["value"]

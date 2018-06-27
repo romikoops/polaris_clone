@@ -128,12 +128,9 @@ export class ShipmentLocationBox extends Component {
       const speciality = determineSpecialism(this.props.scope.modes_of_transport)
       this.setState({ speciality })
     }
-    if (!this.props.has_on_carriage) {
-      this.prepForSelect('destination')
-    }
-    if (!this.props.has_pre_carriage) {
-      this.prepForSelect('origin')
-    }
+    this.getInitalFilteredRouteIndexes()
+    this.prepForSelect('origin')
+    this.prepForSelect('destination')
   }
 
   componentDidMount () {
@@ -357,6 +354,21 @@ export class ShipmentLocationBox extends Component {
   getPlace (placeId, callback) {
     const service = new this.props.gMaps.places.PlacesService(this.state.map)
     service.getDetails({ placeId }, place => callback(place))
+  }
+
+  getInitalFilteredRouteIndexes () {
+    this.setState((prevState) => {
+      const {
+        filteredRouteIndexes
+      } = prevState
+      const { routes } = this.props.shipmentData
+
+      if (filteredRouteIndexes.length === 0) {
+        return { filteredRouteIndexes: routes.map((_, i) => i) }
+      }
+
+      return { filteredRouteIndexes }
+    })
   }
 
   selectedRoute (route) {
@@ -751,16 +763,13 @@ export class ShipmentLocationBox extends Component {
 
     /* eslint-enable camelcase */
   }
+
   prepForSelect (target) {
     this.setState((prevState) => {
       const {
         truckingHubs, oSelect, dSelect, filteredRouteIndexes
       } = prevState
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
-      if (filteredRouteIndexes.length === 0) {
-        return { filteredRouteIndexes: routes.map((_, i) => i) }
-      }
-
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
