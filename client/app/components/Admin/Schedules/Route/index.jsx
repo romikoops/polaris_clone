@@ -288,7 +288,7 @@ class AdminSchedulesRoute extends Component {
                 type="text"
                 className="flex-100"
                 value={searchFilters.query}
-                placeholder="Type something..."
+                placeholder="Search..."
                 onChange={e => this.handleSearchQuery(e)}
               />
             </div>

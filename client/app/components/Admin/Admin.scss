@@ -1,4 +1,7 @@
 :local {
+  .extra_padding_left {
+    padding-left: 10px;
+  }
   .searchable {
     width: 100%;
     margin: 15px 0;
@@ -774,7 +777,6 @@
   }
   .error {
     height: 40px !important;
-
   }
   .file_error {
     overflow: hidden;
@@ -808,10 +810,11 @@
     border-radius: 5px;
   }
   .action_header {
-    background: lightslategray;
+    background: #E0E0E0;
+    border-bottom: 1px solid #4F4F4F;
     p, i{
       font-size: 20px;
-      color: white;
+      color: #4F4F4F;
       margin: 5px;
     }
   }
@@ -822,6 +825,7 @@
       font-size: 14px;
       // color: white;
       margin: 5px;
+      text-align: center;
     }
   }
   .dpb {

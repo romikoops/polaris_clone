@@ -94,14 +94,14 @@ class SideNav extends Component {
         target: 'schedules',
         tooltip: menuTip.schedules
       },
-      {
-        key: v4(),
-        icon: 'fa-truck',
-        text: 'Trucking',
-        url: '/admin/trucking',
-        target: 'trucking',
-        tooltip: menuTip.trucking
-      },
+      // {
+      //   key: v4(),
+      //   icon: 'fa-truck',
+      //   text: 'Trucking',
+      //   url: '/admin/trucking',
+      //   target: 'trucking',
+      //   tooltip: menuTip.trucking
+      // },
       {
         key: v4(),
         icon: 'fa-users',

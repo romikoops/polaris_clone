@@ -209,7 +209,7 @@ export class AdminTruckingView extends Component {
     )
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
-        background: 
+        background:
           ${theme.colors.brightPrimary} !important;
         border: 0.5px solid rgba(0, 0, 0, 0);
       }
@@ -365,7 +365,7 @@ export class AdminTruckingView extends Component {
           </div>
           {styleTagJSX}
         </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
           <div
             className={`${
               styles.action_box

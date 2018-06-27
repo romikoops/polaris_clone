@@ -99,7 +99,7 @@ export class AdminSearchableHubs extends Component {
 
     if (hubs) {
       hubsArr = this.filterHubsByType(hubs).map(hub => (
-        <div className={`${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
+        <div className={`${adminStyles.margin_box_right}`}>
           <AdminHubTile
             key={v4()}
             hub={hub}
@@ -120,7 +120,7 @@ export class AdminSearchableHubs extends Component {
         </div>
       </div>
     ) : (
-      <div className="layout-row flex-100 layout-align-start-center">
+      <div className="layout-row flex-80 flex-md-90 flex-sm-90 flex-xs-90 layout-align-start-center">
         <div className="layout-row flex-100 layout-align-space-between-start layout-wrap">
           {hubsArr}
         </div>

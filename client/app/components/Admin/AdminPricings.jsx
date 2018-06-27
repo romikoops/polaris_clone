@@ -87,7 +87,7 @@ class AdminPricings extends Component {
     // const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}

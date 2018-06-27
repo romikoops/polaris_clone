@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from '../../../../prop-types'
 import styles from '../Card.scss'
+import adminStyles from '../../Admin.scss'
 
 function PricingButton ({ onClick, onDisabledClick, disabled }) {
   const disabledClass = disabled ? styles.disabled : ''
@@ -9,7 +10,7 @@ function PricingButton ({ onClick, onDisabledClick, disabled }) {
     <div
       className={`${
         styles.pricing_button
-      } ${disabledClass} flex-100 layout-row layout-align-center-center`}
+      } ${adminStyles.margin_bottom} ${disabledClass} flex-100 layout-row layout-align-center-center`}
       onClick={disabled ? onDisabledClick : onClick}
     >
       <p className="flex-none">+ New Route Pricing</p>

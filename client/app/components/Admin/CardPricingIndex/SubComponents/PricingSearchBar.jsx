@@ -9,7 +9,7 @@ function PricingSearchBar ({ onChange, value, target }) {
         type="text"
         value={value}
         onChange={e => onChange(e, target)}
-        placeholder="Type something..."
+        placeholder="Search..."
       />
     </div>
   )

@@ -6,9 +6,9 @@ import adminStyles from '../Admin.scss'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import { CardRoutesPricing, PricingButton } from './SubComponents'
 // import { RoundButton } from '../../RoundButton/RoundButton'
-import FileUploader from '../../FileUploader/FileUploader'
+// import FileUploader from '../../FileUploader/FileUploader'
 import DocumentsDownloader from '../../Documents/Downloader'
-import { adminPricing as priceTip, moment } from '../../../constants'
+// import { adminPricing as priceTip, moment } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import {
   filters,
@@ -127,10 +127,6 @@ export default class CardPricingIndex extends Component {
       theme, limit, scope, toggleCreator, lastUpdate
     } = this.props
     if (!scope) return ''
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const gradientBorderStyle =
       theme && theme.colors
         ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
@@ -145,15 +141,15 @@ export default class CardPricingIndex extends Component {
     const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
 
     return (
-      <div className="flex-100 layout-row layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
         <div
           className={`${styles.flex_titles} ${adminStyles.margin_box_right} ${adminStyles.margin_bottom}
-          flex-80 layout-row layout-wrap layout-align-start-start`}
+          flex-80 flex-md-60 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
         >
           {modeOfTransportNames.map(modeOfTransportName => (
             <div
-              className={`${columnFlex} flex-sm-45 flex-md-45 layout-row layout-wrap layout-align-center-start ${
+              className={`${columnFlex} flex-sm-45 flex-md-45 flex-xs-100 layout-row layout-wrap layout-align-center-start ${
                 styles.titles_btn
               }`}
             >
@@ -171,7 +167,6 @@ export default class CardPricingIndex extends Component {
                         <div>
                           <h5>{`${modeOfTransportName} freight`}</h5>
                           <p>Routes</p>
-                          {console.log(modeOfTransportName)}
                         </div>
                       </div>
                     </div>
@@ -193,15 +188,13 @@ export default class CardPricingIndex extends Component {
             </div>
           ))}
         </div>
-        <div className="flex-20 layout-row">
-          <div className={adminStyles.position_fixed_right}>
+        <div className="flex-20 layout-row layout-align-end-end">
+          <div className="hide-sm hide-xs">
             <SideOptionsBox
               header="Data manager"
               content={
                 <div
-                  className={`${
-                    expander.download ? adminStyles.open_filter : adminStyles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
+                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
                 >
                   <div
                     className={`${

@@ -188,20 +188,22 @@ export class AdminHubsIndex extends Component {
     const results = this.applyFilters(searchResults)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-space-around-start">
-          <AdminSearchableHubs
-            theme={theme}
-            hubs={results}
-            adminDispatch={adminDispatch}
-            sideScroll={false}
-            handleClick={viewHub}
-            hideFilters
-            seeAll={false}
-            icon="fa-info-circle"
-            tooltip={hubsTip.manage}
-          />
-          <div className="flex-20 layout-row layout-wrap layout-align-center-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-align-space-between-start">
+          <div className="layout-row flex-80 flex-sm-100">
+            <AdminSearchableHubs
+              theme={theme}
+              hubs={results}
+              adminDispatch={adminDispatch}
+              sideScroll={false}
+              handleClick={viewHub}
+              hideFilters
+              seeAll={false}
+              icon="fa-info-circle"
+              tooltip={hubsTip.manage}
+            />
+          </div>
+          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-center-start">
             <div className={`${styles.position_fixed_right}`}>
 
               <div className={`${styles.filter_panel} flex layout-row`}>

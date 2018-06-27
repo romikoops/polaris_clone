@@ -3,10 +3,10 @@ import styles from './SideOptionsBox.scss'
 import PropTypes from '../../../prop-types'
 
 function SideOptionsBox (props) {
-  const { content, header } = props
+  const { content, header, flexOptions } = props
 
   return (
-    <div className={styles.panel_wrap}>
+    <div className={`hide-sm hide-xs ${flexOptions} ${styles.panel_wrap}`}>
       <h1><span>{header}</span></h1>
       {content}
     </div>
@@ -15,12 +15,14 @@ function SideOptionsBox (props) {
 
 SideOptionsBox.propTypes = {
   content: PropTypes.node,
-  header: PropTypes.string
+  header: PropTypes.string,
+  flexOptions: PropTypes.string
 }
 
 SideOptionsBox.defaultProps = {
   content: null,
-  header: ''
+  header: '',
+  flexOptions: ''
 }
 
 export default SideOptionsBox
