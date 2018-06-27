@@ -49,7 +49,9 @@ module CurrencyTools
   def sum_and_convert_cargo(hash_obj, base, tenant_id)
     rates = get_rates(base, tenant_id)
     base_value = 0
-
+    # if rates[:tenant_id]
+    #   byebug
+    # end
     hash_obj.each do |_key, charge|
       if rates[:today][charge["currency"]]
         base_value += charge["value"] * (1 / rates[:today][charge["currency"]])
