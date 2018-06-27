@@ -2,39 +2,46 @@
 
 class PricingSeeder
   extend ExcelTools
+  DUMMY_DATA_PATH = "#{Rails.root}/db/dummydata"
 
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
-      shipper = tenant.users.second
-      tenant.itineraries.destroy_all
-      tenant.stops.destroy_all
-      tenant.trips.destroy_all
-      tenant.layovers.destroy_all
-      tenant.hubs.destroy_all
-      # Location.where(location_type: 'nexus')
+      shipper = tenant.users.shipper.first
 
-      MandatoryCharge.create_all!
+      destroy_data_for_tenant(tenant)
 
-      # # Overwrite hubs from excel sheet
-      puts '# Overwrite hubs from excel sheet'
-      hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
-      req = { 'xlsx' => hubs }
-      overwrite_hubs(req, shipper)
+      puts "Seeding hubs, itineraries, layovers and pricings for #{tenant.name}..."
 
-      ### Overwrite dedicated pricings from excel sheet.
-      ### If dedicated == true, shipper.id is automatically inserted.
+      Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"].each do |file_path|
+        file_name = File.basename(file_path, ".xlsx")
+        subdomain, sheet_type, other_info = *file_name.split("__")
+        
+        req = { 'xlsx' => File.open(file_path) }
 
-      puts '# Overwrite freight rates (fcl and lcl) from excel sheet'
-      public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-      req = { 'xlsx' => public_pricings }
-      overwrite_freight_rates(req, shipper, true)
-
-      # puts "# Overwrite Local Charges From Sheet"
-      local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-      req = { 'xlsx' => local_charges }
-      overwrite_local_charges(req, shipper)
-      # Overwrite trucking data from excel sheet
-
+        case sheet_type
+        when "hubs"
+          puts "  - Seeding hubs..."
+          overwrite_hubs(req, shipper)              
+        when "freight_rates"
+          puts "  - Seeding freight rates (fcl and lcl)..."
+          overwrite_freight_rates(req, shipper, true)
+        when "local_charges"
+          puts "  - Seeding local charges..."
+          overwrite_local_charges(req, shipper)
+        end
+      end
     end
+  end
+
+  private
+
+  def self.destroy_data_for_tenant(tenant)
+    puts "Destroying hubs, itineraries, layovers and pricings for #{tenant.name}..."
+
+    tenant.itineraries.destroy_all
+    tenant.stops.destroy_all
+    tenant.trips.destroy_all
+    tenant.layovers.destroy_all
+    tenant.hubs.destroy_all
   end
 end

@@ -6,7 +6,6 @@ class OfferCalculator
   attr_reader :shipment, :detailed_schedules, :hubs
   include CurrencyTools
   include PricingTools
-  # include TruckingTools
 
   def initialize(shipment, params, user)
     @user             = user

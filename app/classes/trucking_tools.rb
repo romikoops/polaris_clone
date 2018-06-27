@@ -2,6 +2,7 @@
 
 module TruckingTools
   include MongoTools
+  extend self
 
   def calculate_trucking_price(pricing, cargo, _direction, km)
     fees = {}
