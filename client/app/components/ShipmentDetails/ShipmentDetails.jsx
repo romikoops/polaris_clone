@@ -115,7 +115,8 @@ export class ShipmentDetails extends Component {
         stackableGoodsConfirmed: ''
       },
       prevRequestLoaded: false,
-      availableMotsForRoute: []
+      availableMotsForRoute: [],
+      filteredRouteIndexes: []
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -150,6 +151,7 @@ export class ShipmentDetails extends Component {
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
+    this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
@@ -177,9 +179,19 @@ export class ShipmentDetails extends Component {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
 
-    if (shouldUpdateAvailableMotsForRoute(this.state, nextState)) {
+    if (
+      shouldUpdateAvailableMotsForRoute(
+        this.state.filteredRouteIndexes,
+        nextState.filteredRouteIndexes
+      )
+    ) {
       this.updateAvailableMotsForRoute()
+
       return false
+    }
+
+    if (!this.props.shipmentData.routes && nextProps.shipmentData.routes) {
+      this.getInitalFilteredRouteIndexes()
     }
 
     return !!(
@@ -189,7 +201,8 @@ export class ShipmentDetails extends Component {
       nextState.modals &&
       nextProps.tenant &&
       nextProps.user &&
-      nextProps.shipmentData.maxDimensions
+      nextProps.shipmentData.maxDimensions &&
+      nextProps.shipmentData.routes
     )
   }
   componentWillUpdate () {
@@ -248,6 +261,21 @@ export class ShipmentDetails extends Component {
     this.setState({ aggregated: bool })
   }
 
+  getInitalFilteredRouteIndexes () {
+    this.setState((prevState) => {
+      const {
+        filteredRouteIndexes
+      } = prevState
+      const { routes } = this.props.shipmentData
+
+      if (filteredRouteIndexes.length === 0) {
+        return { filteredRouteIndexes: routes.map((_, i) => i) }
+      }
+
+      return { filteredRouteIndexes }
+    })
+  }
+
   presetMandatoryCarriage () {
     const { scope } = this.props.tenant.data
     Object.keys(scope.carriage_options).forEach((carriage) => {
@@ -291,10 +319,11 @@ export class ShipmentDetails extends Component {
 
   updateAvailableMotsForRoute () {
     this.setState((prevState) => {
-      const { origin, destination } = prevState
-      const { itineraries } = this.props.shipmentData
+      const { routes, lookupTablesForRoutes } = this.props.shipmentData
+      const { filteredRouteIndexes } = prevState
+      const availableMotsForRoute =
+        calcAvailableMotsForRoute(routes, lookupTablesForRoutes, filteredRouteIndexes)
 
-      const availableMotsForRoute = calcAvailableMotsForRoute(itineraries, origin, destination)
       return { availableMotsForRoute }
     })
   }
@@ -612,12 +641,16 @@ export class ShipmentDetails extends Component {
     this.setState({ modals })
   }
 
+  updateFilteredRouteIndexes (filteredRouteIndexes) {
+    this.setState({ filteredRouteIndexes })
+  }
+
   render () {
     const {
       tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
 
-    const { modals } = this.state
+    const { modals, filteredRouteIndexes } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
 
@@ -689,6 +722,8 @@ export class ShipmentDetails extends Component {
         scope={scope}
         selectedTrucking={this.state.shipment.trucking}
         handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+        filteredRouteIndexes={filteredRouteIndexes}
+        updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
