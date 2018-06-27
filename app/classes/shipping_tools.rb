@@ -26,38 +26,19 @@ module ShippingTools
       shipment.save!
     end
 
-    case load_type
-    when "container"
-      shipment.containers.create if shipment.containers.none?
-    when "cargo_item"
-      shipment.cargo_items.create if shipment.cargo_items.none?
+    itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+      Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
     end
 
-    itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
-    origins = []
-    destinations = []
-    itineraries = current_user.tenant.itineraries.map do |itinerary|
-      next if itinerary.pricings.for_load_type(load_type).empty?
-      begin
-        origins << {
-          value: Location.find(itinerary.first_nexus.id).to_custom_hash,
-          label: itinerary.first_nexus.name
-        }
-        destinations << {
-          value: Location.find(itinerary.last_nexus.id).to_custom_hash,
-          label: itinerary.last_nexus.name
-        }
+    routes_data = Route.detailed_hashes_from_itinerary_ids(
+      itinerary_ids,
+      with_truck_types: { load_type: load_type }
+    )
 
-        itinerary = itinerary.as_options_json
-      rescue StandardError
-      end
-      itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
-      itinerary
-    end.compact
     {
       shipment:                 shipment,
-      all_nexuses:              { origins: origins.uniq, destinations: destinations.uniq },
-      itineraries:              itineraries,
+      routes:                   routes_data[:route_hashes],
+      lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types:         tenant.cargo_item_types,
       max_dimensions:           tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions
@@ -125,6 +106,14 @@ module ShippingTools
       contact
     end || []
     charge_breakdown = shipment.charge_breakdowns.selected
+    existing_insurance_charge = charge_breakdown.charge('insurance')
+    if existing_insurance_charge
+      existing_insurance_charge.destroy
+    end
+    existing_customs_charge = charge_breakdown.charge('customs')
+    if existing_customs_charge
+      existing_customs_charge.destroy
+    end
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
@@ -135,7 +124,7 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-
+    
     if shipment_data[:customs][:total][:val].to_d > 0
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),

@@ -1,22 +1,20 @@
 import React, { Component } from 'react'
-import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { Carousel } from '../Carousel/Carousel'
-import { activeRoutesData } from '../../constants'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { UserMergedShipment } from './UserMergedShipment'
-import { UserMergedShipHeaders } from './UserMergedShipHeaders'
+import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
+import { gradientTextGenerator } from '../../helpers'
+import SquareButton from '../SquareButton'
 
 export class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
     shipment.companyName = user ? `${user.company_name}` : ''
+
     return shipment
   }
 
@@ -67,50 +65,28 @@ export class UserDashboard extends Component {
   }
   render () {
     const {
-      theme, hubs, dashboard, user, userDispatch, seeAll
+      theme, hubs, dashboard, user, userDispatch
     } = this.props
     if (!user || !dashboard) {
       return <h1>NO DATA</h1>
     }
     const { shipments, contacts, locations } = dashboard
-    const mergedOpenShipments =
-      shipments && shipments.open
-        ? shipments.open
-          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
-        : false
+    // const mergedOpenShipments =
+    //   shipments && shipments.open
+    //     ? shipments.open
+    //       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+    //       .map(sh => UserDashboard.prepShipment(sh, user, hubs))
+    //     : false
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
           .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
           .map(sh => UserDashboard.prepShipment(sh, user, hubs))
         : false
-    const mergedFinishedShipments =
-      shipments && shipments.finished
-        ? shipments.finished
-          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
-        : false
-    const newReqShips =
-      mergedRequestedShipments.length > 0 ? (
-        UserDashboard.limitArray(mergedRequestedShipments, 3).map(ship => (
-          <UserMergedShipment key={v4()} ship={ship} viewShipment={this.viewShipment} />
-        ))
-      ) : (
-        <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none"> No Shipments requested.</p>
-        </div>
-      )
-    const newOpenShips =
-      mergedOpenShipments.length > 0 ? (
-        UserDashboard.limitArray(mergedOpenShipments, 3).map(ship => (
-          <UserMergedShipment key={v4()} ship={ship} viewShipment={this.viewShipment} />
-        ))
-      ) : (
-        <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none"> No Shipments in process.</p>
-        </div>
-      )
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
@@ -120,138 +96,44 @@ export class UserDashboard extends Component {
           }`}
         >
           <div
-            className={`flex-100 layout-row layout-wrap layout-align-start-start ${
-              ustyles.dashboard_top
-            }`}
+            className={
+              `layout-row flex-100 layout-align-space-between-start ${ustyles.header}`
+            }
           >
-            <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
-              <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
-                <h2 className="flex-none">Welcome back, {user.first_name}</h2>
-              </div>
-              <div
-                className={`flex-none layout-row layout-align-center-center ${ustyles.carousel}`}
-              >
-                <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade />
-              </div>
-              <div
-                className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}
-              >
-                <RoundButton
-                  theme={theme}
-                  handleNext={this.startBooking}
-                  active
-                  size="large"
-                  text="Find Rates"
-                  iconClass="fa-archive"
+            <div
+              className={`layout-row flex-100 layout-align-start-center 
+              ${ustyles.headerElement}`}
+            >
+              <span className="layout-row flex-10 layout-align-center-center">
+                <i
+                  className={`fa fa-user clip ${ustyles.bigProfile}`}
+                  style={gradientFontStyle}
                 />
-              </div>
-              <div
-                className={`flex-50 layout-row ${
-                  ustyles.right
-                } layout-wrap layout-align-space-between-space-between`}
-              >
-                <div
-                  className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}
-                >
-                  <h1 className="flex-none">
-                    {mergedOpenShipments.length +
-                      mergedFinishedShipments.length +
-                      mergedRequestedShipments.length}
-                  </h1>
-                  <div
-                    className={`flex-none layout-row layout-align-center-center ${
-                      ustyles.stat_box_title
-                    }`}
-                  >
-                    <h3 className="flex-none">Total Shipments</h3>
-                  </div>
-                </div>
-                <div
-                  className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}
-                >
-                  <h1 className="flex-none">{mergedRequestedShipments.length}</h1>
-                  <div
-                    className={`flex-none layout-row layout-align-center-center ${
-                      ustyles.stat_box_title
-                    }`}
-                  >
-                    <h3 className="flex-none">Requested Shipments</h3>
-                  </div>
-                </div>
-                <div
-                  className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}
-                >
-                  <h1 className="flex-none">{mergedOpenShipments.length}</h1>
-                  <div
-                    className={`flex-none layout-row layout-align-center-center ${
-                      ustyles.stat_box_title
-                    }`}
-                  >
-                    <h3 className="flex-none">Shipments in Progress</h3>
-                  </div>
-                </div>
-                <div
-                  className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}
-                >
-                  <h1 className="flex-none">{mergedFinishedShipments.length}</h1>
-                  <div
-                    className={`flex-none layout-row layout-align-center-center ${
-                      ustyles.stat_box_title
-                    }`}
-                  >
-                    <h3 className="flex-none">Completed Shipments</h3>
-                  </div>
-                </div>
-              </div>
+              </span>
+              <span className={`${ustyles.welcome} flex-90 layout-row`}>
+                Welcome back,&nbsp; <b>{user.first_name}</b>
+              </span>
+              <SquareButton
+                theme={theme}
+                handleNext={this.startBooking}
+                active
+                border
+                size="large"
+                text="Find Rates"
+                iconClass="fa-archive"
+              />
             </div>
           </div>
-
-          <div
-            className={`layout-row flex-100 layout-wrap layout-align-center-center ${
-              defaults.border_divider
-            }`}
-          >
-            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-              <TextHeading className="flex-non clip" size={1} theme={theme} text="Shipments" />
-              <UserMergedShipHeaders
-                title="Requested Shipments"
-                total={mergedRequestedShipments.length}
-              />
-
-              <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                {newReqShips}
-                {seeAll !== false ? (
-                  <div className="flex-100 layout-row layout-align-end-center">
-                    <div
-                      className="flex-none layout-row layout-align-center-center pointy"
-                      value="1"
-                      onClick={() => userDispatch.goTo('/account/shipments/requested')}
-                    >
-                      <p className="flex-none">See all</p>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              <UserMergedShipHeaders title="In Process" total={mergedOpenShipments.length} />
-              <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                {newOpenShips}
-                {seeAll !== false ? (
-                  <div className="flex-100 layout-row layout-align-end-center">
-                    <div
-                      className="flex-none layout-row layout-align-center-center pointy"
-                      value="2"
-                      onClick={() => userDispatch.goTo('/account/shipments/open')}
-                    >
-                      <p className="flex-none">See all</p>
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-            </div>
+          <ShipmentOverviewCard
+            dispatches={userDispatch}
+            shipments={mergedRequestedShipments}
+            theme={theme}
+          />
+          <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
+            <span className="flex-15" onClick={() => this.handleViewShipments()}>
+              <u><b>See more shipments</b></u>
+            </span>
+            <div className={`flex-85 ${ustyles.separator}`} />
           </div>
         </div>
         <div

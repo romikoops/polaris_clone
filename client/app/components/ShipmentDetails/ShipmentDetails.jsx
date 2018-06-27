@@ -12,7 +12,6 @@ import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
-import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -688,6 +687,8 @@ export class ShipmentDetails extends Component {
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
         scope={scope}
+        selectedTrucking={this.state.shipment.trucking}
+        handleTruckingDetailsChange={this.handleTruckingDetailsChange}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -771,9 +772,6 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
-    const truckTypes = this.truckTypes[this.state.shipment.load_type]
-    const showTruckingDetails =
-      truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
     const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
 
@@ -805,20 +803,6 @@ export class ShipmentDetails extends Component {
           } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
-        </div>
-        <div
-          className={
-            `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${showTruckingDetails ? styles.visible : ''} ` +
-            'layout-wrap layout-align-center'
-          }
-        >
-          <TruckingDetails
-            theme={theme}
-            trucking={this.state.shipment.trucking}
-            truckTypes={truckTypes}
-            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
-          />
         </div>
         <div className="flex-100 layout-row layout-align-center-center">
           <div className="flex-none content_width_booking layout-row layout-align-center-center">
@@ -865,8 +849,9 @@ export class ShipmentDetails extends Component {
               </div>
             </div>
           )}
-
-          {cargoDetails}
+          <div className="flex-100 layout-row layout-align-center-center">
+            {cargoDetails}
+          </div>
         </div>
         <div
           className={

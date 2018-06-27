@@ -1209,7 +1209,7 @@ function editShipmentPrice (id, priceObj) {
     )
   }
 }
-function editLocalCharges (chargeId, data) {
+function editLocalCharges (data) {
   function request (chargeData) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
   }
@@ -1222,7 +1222,7 @@ function editLocalCharges (chargeId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editLocalCharges(chargeId, data).then(
+    adminService.editLocalCharges(data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))
@@ -1234,7 +1234,7 @@ function editLocalCharges (chargeId, data) {
     )
   }
 }
-function editCustomsFees (feeId, data) {
+function editCustomsFees (data) {
   function request (chargeData) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
   }
@@ -1247,7 +1247,7 @@ function editCustomsFees (feeId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editLocalCharges(feeId, data).then(
+    adminService.editLocalCharges(data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))

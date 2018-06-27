@@ -38,7 +38,7 @@ module AwsConfig
       self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
     end
 
-    def delete_document(docs)
+    def delete_documents(docs)
        docs.each do |doc|
         self.aws_client.delete_object(bucket: "imcdev", key: doc.url)
         doc.delete
@@ -82,8 +82,8 @@ module AwsConfig
       aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
     end
 
-    def delete_document(docs)
-      self.class.delete_document(docs)
+    def delete_documents(docs)
+      self.class.delete_documents(docs)
     end
   end
 

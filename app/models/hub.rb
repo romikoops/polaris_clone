@@ -12,6 +12,8 @@ class Hub < ApplicationRecord
   has_many :local_charges
   has_many :customs_fees
   has_many :notes, dependent: :destroy
+  has_many :hub_truck_type_availabilities
+  has_many :truck_type_availabilities, through: :hub_truck_type_availabilities
   belongs_to :mandatory_charge, optional: true
 
   MOT_HUB_NAME = {
@@ -27,6 +29,22 @@ class Hub < ApplicationRecord
     hubs.each do |h|
       h.nexus_id = h.location_id
       h.save!
+    end
+  end
+
+  def self.group_ids_by_nexus(hub_ids)
+    sanitized_query = sanitize_sql(["
+      SELECT
+        hubs.nexus_id,
+        STRING_AGG(hubs.id::text, ',') AS serialized_hub_ids
+      FROM hubs
+      WHERE hubs.id IN (?)
+      GROUP BY hubs.nexus_id
+    ", hub_ids])
+
+    groups = connection.execute(sanitized_query).to_a
+    groups.each_with_object({}) do |group, obj|
+      obj[group["nexus_id"]] = group["serialized_hub_ids"].split(",").map(&:to_i)
     end
   end
 
@@ -58,6 +76,18 @@ class Hub < ApplicationRecord
 
   def self.rail
     where(hub_type: "rail")
+  end
+
+  def truck_type_availability
+    Shipment::LOAD_TYPES.each_with_object({}) do |load_type, load_type_obj|
+      load_type_obj[load_type] =
+        %w(pre on).each_with_object({}) do |carriage, carriage_obj|
+          carriage_obj[carriage] = truck_type_availabilities.where(
+            load_type: load_type,
+            carriage:  carriage
+          ).pluck(:truck_type)
+        end
+    end
   end
 
   def generate_hub_code!(tenant_id)
@@ -130,5 +160,19 @@ class Hub < ApplicationRecord
       )
       return customs
     end
+  end
+
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      include: {
+        nexus:    { only: %i[id name] },
+        location: {
+          include: {
+            country: { only: %i[name]}
+          }
+        }
+      }
+    )
+    as_json(new_options)
   end
 end

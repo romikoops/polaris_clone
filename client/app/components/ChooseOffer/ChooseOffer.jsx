@@ -126,9 +126,9 @@ export class ChooseOffer extends Component {
     const {
       shipment, originHubs, destinationHubs, schedules
     } = shipmentData
-    if (!schedules) return ''
+    if (!shipment || !schedules) return ''
 
-    const depDay = shipment ? shipment.planned_pickup_date : new Date()
+    const depDay = shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
     schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const availableMoTKeys = {}
     schedules.forEach((s) => {

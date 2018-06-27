@@ -50,6 +50,7 @@ export class AdminShipmentCardNew extends Component {
   }
 
   handleEdit () {
+    debugger // eslint-disable-line
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
@@ -81,15 +82,15 @@ export class AdminShipmentCardNew extends Component {
         : { background: 'black' }
 
     const bg1 =
-      hubs.startHub && hubs.startHub.location && hubs.startHub.location.photo
-        ? { backgroundImage: `url(${hubs.startHub.location.photo})` }
+      hubs.startHub && hubs.startHub.photo
+        ? { backgroundImage: `url(${hubs.startHub.photo})` }
         : {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
         }
     const bg2 =
-      hubs.endHub && hubs.endHub.location && hubs.endHub.location.photo
-        ? { backgroundImage: `url(${hubs.endHub.location.photo})` }
+      hubs.endHub && hubs.endHub.photo
+        ? { backgroundImage: `url(${hubs.endHub.photo})` }
         : {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'

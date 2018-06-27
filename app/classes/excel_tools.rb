@@ -971,8 +971,13 @@ module ExcelTools
         longitude:        hub_row[:longitude],
         country:          country,
         city:             hub_row[:hub_name],
-        geocoded_address: hub_row[:geocoded_address]
+        geocoded_address: hub_row[:geocoded_address],
+        location_type: nil
       )
+      if !location.street_number
+        location.reverse_geocode
+        location.save!
+      end
       hub_code = hub_row[:hub_code] unless hub_row[:hub_code].blank?
 
       hub = Hub.find_by(
@@ -1429,7 +1434,6 @@ module ExcelTools
         name:       charge[:name]
       }
     end
-    awesome_print all_charges
     all_charges
   end
 
