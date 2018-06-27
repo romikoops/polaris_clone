@@ -39,7 +39,6 @@ exports[`props.shipment is truthy 1`] = `
           },
         ]
       }
-      sideScroll={false}
       theme={
         Object {
           "colors": Object {
@@ -50,7 +49,6 @@ exports[`props.shipment is truthy 1`] = `
       }
       title="FOO_TITLE Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      user={Object {}}
       userView={true}
     />
   </div>
@@ -76,7 +74,6 @@ exports[`shallow render 1`] = `
       limit={0}
       seeAll={false}
       shipments={Array []}
-      sideScroll={false}
       theme={
         Object {
           "colors": Object {
@@ -87,7 +84,6 @@ exports[`shallow render 1`] = `
       }
       title="FOO_TITLE Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      user={Object {}}
       userView={true}
     />
     <div

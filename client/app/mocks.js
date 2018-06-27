@@ -55,6 +55,7 @@ const schedulesInShipmentData = [
 
 export const shipmentInShipmentData = {
   load_type: 'OCEAN_LOAD_TYPE',
+  selected_offer: { cargo: {}, total: { value: 77 } },
   schedules_charges: {
     OCEAN_HUB_ROUTE_KEY: { total: 40 },
     AIR_HUB_ROUTE_KEY: { total: 200 },

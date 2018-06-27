@@ -25,6 +25,7 @@ exports[`shallow rendering 1`] = `
       handleAddressChange={[Function]}
       handleCarriageChange={[Function]}
       handleSelectLocation={[Function]}
+      handleTruckingDetailsChange={[Function]}
       has_on_carriage={true}
       has_pre_carriage={false}
       nextStageAttempts={0}
@@ -67,6 +68,14 @@ exports[`shallow rendering 1`] = `
               "FOO_DIRECTION": "optional",
             },
           },
+        }
+      }
+      selectedTrucking={
+        Object {
+          "on_carriage": Object {
+            "truck_type": "default",
+          },
+          "pre_carriage": Object {},
         }
       }
       setNotesIds={[Function]}
@@ -231,27 +240,6 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <div
-    className="border_divider trucking_sec layout-row flex-100  layout-wrap layout-align-center"
-  >
-    <TruckingDetails
-      handleTruckingDetailsChange={[Function]}
-      theme={null}
-      truckTypes={
-        Array [
-          "default",
-        ]
-      }
-      trucking={
-        Object {
-          "on_carriage": Object {
-            "truck_type": "default",
-          },
-          "pre_carriage": Object {},
-        }
-      }
-    />
-  </div>
-  <div
     className="flex-100 layout-row layout-align-center-center"
   >
     <div
@@ -329,29 +317,33 @@ exports[`shallow rendering 1`] = `
         </h3>
       </div>
     </div>
-    <ShipmentCargoItems
-      addCargoItem={[Function]}
-      availableCargoItemTypes={Array []}
-      availableMotsForRoute={Array []}
-      cargoItems={Array []}
-      deleteItem={[Function]}
-      handleDelta={[Function]}
-      nextStageAttempt={false}
-      scope={
-        Object {
-          "carriage_options": Object {
-            "on_carriage": Object {
-              "FOO_DIRECTION": "mandatory",
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <ShipmentCargoItems
+        addCargoItem={[Function]}
+        availableCargoItemTypes={Array []}
+        availableMotsForRoute={Array []}
+        cargoItems={Array []}
+        deleteItem={[Function]}
+        handleDelta={[Function]}
+        nextStageAttempt={false}
+        scope={
+          Object {
+            "carriage_options": Object {
+              "on_carriage": Object {
+                "FOO_DIRECTION": "mandatory",
+              },
+              "pre_carriage": Object {
+                "FOO_DIRECTION": "optional",
+              },
             },
-            "pre_carriage": Object {
-              "FOO_DIRECTION": "optional",
-            },
-          },
+          }
         }
-      }
-      theme={null}
-      toggleModal={[Function]}
-    />
+        theme={null}
+        toggleModal={[Function]}
+      />
+    </div>
   </div>
   <div
     className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"

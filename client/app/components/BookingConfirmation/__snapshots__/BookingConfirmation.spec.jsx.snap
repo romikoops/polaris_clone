@@ -306,7 +306,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -403,7 +403,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -1470,7 +1470,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -1567,7 +1567,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -2691,7 +2691,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -2788,7 +2788,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -3983,7 +3983,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -4080,7 +4080,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -5148,7 +5148,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -5245,7 +5245,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -6298,7 +6298,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -6395,7 +6395,7 @@ exports[`shallow render 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -7448,7 +7448,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -7545,7 +7545,7 @@ exports[`with cargo items 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
@@ -8815,7 +8815,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 70.00
+                  USD 87.00
                 </h5>
               </div>
             </div>
@@ -8912,7 +8912,7 @@ exports[`with containers 1`] = `
                 <h5
                   className="flex-none letter_3"
                 >
-                  USD 17.00 
+                  USD 0.00 
                 </h5>
               </div>
             </div>
