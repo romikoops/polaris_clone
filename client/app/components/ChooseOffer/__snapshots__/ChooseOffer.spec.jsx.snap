@@ -67,6 +67,12 @@ exports[`shallow render 1`] = `
                 "total": 75,
               },
             },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
             "total_goods_value": Object {
               "currency": "USD",
               "value": 15,
@@ -472,6 +478,12 @@ exports[`state.selectedMoT.ocean is false 1`] = `
               },
               "TRUCK_HUB_ROUTE_KEY": Object {
                 "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
               },
             },
             "total_goods_value": Object {

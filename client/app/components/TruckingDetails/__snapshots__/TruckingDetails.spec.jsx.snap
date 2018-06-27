@@ -2,149 +2,43 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="content_width_booking"
+  className="flex-100 layout-row"
 >
   <div
-    className="trucking_details layout-row layout-wrap layout-align-center"
+    className="trucking_details flex-100 layout-row layout-wrap layout-align-center"
   >
-    <div
-      className="flex-100"
-    >
-      <TextHeading
-        color=""
-        size={3}
-        text="Trucking Details"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
     <div
       className="flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="carriage_sec disabled flex-50 layout-row layout-wrap"
+        className="carriage_sec  flex-100 layout-row layout-wrap"
       >
         <div
-          className="overlay"
-        />
-        <div
-          className="flex-100"
-        >
-          <h5>
-            Pre-Carriage
-          </h5>
-        </div>
-        <div
-          className="flex-100 layout-column layout-align-space-around"
+          className="flex-100 layout-row layout-align-space-around"
         >
           <div
-            className="form_group layout-row layout-align-start-end"
+            className="form_group disabled flex-50 layout-row layout-align-start-end"
           >
+            <div
+              className="overlay"
+            />
             <input
               checked={false}
-              id="pre_carriage-FOO"
-              name="pre_carriage_truck"
-              onChange={[Function]}
-              type="radio"
-              value="pre_carriage_truck"
-            />
-            <label
-              htmlFor="pre_carriage-FOO"
-            >
-              FOO
-            </label>
-            <Tooltip
-              color=""
-              icon="fa-info-circle"
-              text="FOO"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-          <div
-            className="form_group layout-row layout-align-start-end"
-          >
-            <input
-              checked={false}
-              id="pre_carriage-BAR"
-              name="pre_carriage_truck"
-              onChange={[Function]}
-              type="radio"
-              value="pre_carriage_truck"
-            />
-            <label
-              htmlFor="pre_carriage-BAR"
-            >
-              BAR
-            </label>
-            <Tooltip
-              color=""
-              icon="fa-info-circle"
-              text="BAR"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              toolText=""
-              wrapperClassName="tooltip"
-            />
-          </div>
-        </div>
-      </div>
-      <div
-        className="carriage_sec disabled flex-50 layout-row layout-wrap"
-      >
-        <div
-          className="overlay"
-        />
-        <div
-          className="flex-100"
-        >
-          <h5>
-            On-Carriage
-          </h5>
-        </div>
-        <div
-          className="flex-100 layout-column layout-align-space-around"
-        >
-          <div
-            className="form_group layout-row layout-align-start-end"
-          >
-            <input
-              checked={false}
-              id="on_carriage-FOO"
+              id="on_carriage-side_lifter"
               name="on_carriage_truck"
               onChange={[Function]}
               type="radio"
               value="on_carriage_truck"
             />
             <label
-              htmlFor="on_carriage-FOO"
+              htmlFor="on_carriage-side_lifter"
             >
-              FOO
+              Side Lifter
             </label>
             <Tooltip
-              color=""
+              color="white"
               icon="fa-info-circle"
-              text="FOO"
+              text="side_lifter"
               theme={
                 Object {
                   "colors": Object {
@@ -158,25 +52,28 @@ exports[`shallow render 1`] = `
             />
           </div>
           <div
-            className="form_group layout-row layout-align-start-end"
+            className="form_group disabled flex-50 layout-row layout-align-start-end"
           >
+            <div
+              className="overlay"
+            />
             <input
               checked={false}
-              id="on_carriage-BAR"
+              id="on_carriage-chassis"
               name="on_carriage_truck"
               onChange={[Function]}
               type="radio"
               value="on_carriage_truck"
             />
             <label
-              htmlFor="on_carriage-BAR"
+              htmlFor="on_carriage-chassis"
             >
-              BAR
+              Chassis
             </label>
             <Tooltip
-              color=""
+              color="white"
               icon="fa-info-circle"
-              text="BAR"
+              text="chassis"
               theme={
                 Object {
                   "colors": Object {
