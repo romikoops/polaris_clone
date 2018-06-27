@@ -39,7 +39,10 @@ export class ShipmentOverviewCard extends Component {
       )
 
       return (
-        <div className={` ${adminStyles.margin_bottom} flex-100 flex-lg-50 flex-gt-lg-33 layout-row ${adminStyles.card_padding}`}>
+        <div
+          className={` ${adminStyles.margin_bottom} flex-100 flex-lg-50
+          flex-gt-lg-33 layout-row ${adminStyles.card_padding}`}
+        >
           <AlternativeGreyBox
             wrapperClassName="layout-row flex layout-align-center-center"
             contentClassName="layout-row flex-100"
@@ -47,7 +50,9 @@ export class ShipmentOverviewCard extends Component {
           />
         </div>
       )
-    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>No shipments available</span>)
+    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>
+      No shipments available
+    </span>)
   }
 
   render () {
@@ -55,14 +60,19 @@ export class ShipmentOverviewCard extends Component {
       shipments,
       noTitle
     } = this.props
-    const titleBox = (<div className={`${adminStyles.card_padding} flex-100 layout-align-start-center  ${styles.greyBg}`}>
+    const titleBox = (<div
+      className={`${adminStyles.card_padding} flex-100
+      layout-align-start-center  ${styles.greyBg}`}
+    >
       <span><b>Requested Shipments</b></span>
     </div>)
 
     return (
       <div className="layout-wrap flex-100 layout-row layout-align-start-start">
         { !noTitle ? titleBox : ''}
-        <div className={` ${adminStyles.margin_box_right} flex-100 layout-row layout-wrap layout-align-start-start padding_bottom`}>
+        <div className={` ${adminStyles.margin_box_right} flex-100
+        layout-row layout-wrap layout-align-start-start padding_bottom`}
+        >
           {this.listShipments(shipments)}
         </div>
 
