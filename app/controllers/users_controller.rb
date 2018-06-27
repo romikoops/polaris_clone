@@ -72,7 +72,8 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || "EUR"
-    results = get_currency_array(currency, current_user.tenant_id)
+    tenant_id = current_user ? current_user.tenant_id : nil
+    results = get_currency_array(currency, tenant_id)
     response_handler(results)
   end
 

@@ -677,23 +677,26 @@ export class ShipmentLocationBox extends Component {
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
+
   loadPrevReq () {
-    const { prevRequest, allNexuses } = this.props
+    const { prevRequest, shipmentData } = this.props
+    const { routes } = shipmentData
     if (!prevRequest.shipment) {
       return
     }
     const { shipment } = prevRequest
     const newState = {}
-
     if (!this.props.has_pre_carriage) {
-      newState.oSelect = allNexuses.origins.find(o => (
-        o.value.id === shipment.origin.nexus_id
+      const newStateOrigin = routes.find(o => (
+        o.origin.nexusId === shipment.origin.nexus_id
       ))
+      newState.oSelect = routeHelpers.routeOption(newStateOrigin.origin)
     }
     if (!this.props.has_on_carriage) {
-      newState.dSelect = allNexuses.destinations.find(o => (
-        o.value.id === shipment.destination.nexus_id
+      const newStateDestination = routes.find(d => (
+        d.destination.nexusId === shipment.destination.nexus_id
       ))
+      newState.dSelect = routeHelpers.routeOption(newStateDestination.destination)
     }
     newState.autoText = {
       origin: shipment.origin.fullAddress || '',
