@@ -22,7 +22,6 @@ class TruckingAvailabilityController < ApplicationController
     nexus_ids = Hub.where(id: hub_ids).pluck(:nexus_id).uniq
 
     response = build_response_hash(trucking_pricings, nexus_ids, hub_ids, truck_type_object)
-
     response_handler(response)
   end
 

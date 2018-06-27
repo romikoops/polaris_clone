@@ -40,6 +40,10 @@ export class AdminShipmentCardNew extends Component {
     this.handleShipmentAction(shipment.id, 'ignore')
     this.closeConfirm()
   }
+  handleFinished () {
+    const { shipment } = this.props
+    this.handleShipmentAction(shipment.id, 'finished')
+  }
   confirmDelete () {
     this.setState({
       confirm: true
@@ -108,6 +112,19 @@ export class AdminShipmentCardNew extends Component {
     ) : (
       ''
     )
+    const plannedDate = shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
+    const requestedButtons = shipment.status === 'requested' ? (
+      <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
+        <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
+        <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />
+        <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
+      </div>
+    ) : ''
+    const openButtons = shipment.status === 'requested' ? (
+      <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
+        <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleFinished()} />
+      </div>
+    ) : ''
 
     return (
       <div
@@ -119,11 +136,8 @@ export class AdminShipmentCardNew extends Component {
       >
         {confimPrompt}
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
-        <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
-          <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
-          <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />
-          <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
-        </div>
+        {requestedButtons}
+        {openButtons}
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
           <span className={`flex-100 ${styles.ref_row_card}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
@@ -206,7 +220,7 @@ export class AdminShipmentCardNew extends Component {
           <div className="layout-column flex-20">
             <span className="flex-100"><b>Pickup Date</b><br />
               <span className={`${styles.grey}`}>
-                {moment(shipment.planned_pickup_date).format('DD/MM/YYYY')}
+                {moment(plannedDate).format('DD/MM/YYYY')}
               </span>
             </span>
           </div>

@@ -105,28 +105,34 @@ export default function ContactDetailsRow ({
   }
 
   return (
-    <div className={`layout-row flex-100 layout-xs-column layout-sm-column ${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
-      <AlternativeGreyBox
-        title="Shipper"
-        wrapperClassName="layout-row flex-lg-40 flex-gt-sm-100"
-        contentClassName="layout-row layout-wrap flex-100"
-        content={shipperContact}
-        showTitle
-      />
-      <AlternativeGreyBox
-        title="Consignee"
-        wrapperClassName="layout-row flex-lg-40 flex-gt-sm-100"
-        contentClassName="layout-row layout-wrap flex-100"
-        content={consigneeContact}
-        showTitle
-      />
-      <AlternativeGreyBox
-        title="Notifyees"
-        wrapperClassName="layout-row flex-lg-20 flex-gt-sm-100"
-        contentClassName="layout-row layout-wrap flex-100"
-        content={nArray}
-        showTitle
-      />
+    <div className={`layout-row flex-100 layout-wrap ${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
+      <div className="flex-100 flex-gt-sm-40 layout-row layout-align-center-center card_padding_right">
+        <AlternativeGreyBox
+          title="Shipper"
+          wrapperClassName="layout-row flex-100"
+          contentClassName="layout-row layout-wrap flex-100"
+          content={shipperContact}
+          showTitle
+        />
+      </div>
+      <div className="flex-100 flex-gt-sm-40 layout-row layout-align-center-center card_padding_right">
+        <AlternativeGreyBox
+          title="Consignee"
+          wrapperClassName="layout-row flex-100"
+          contentClassName="layout-row layout-wrap flex-100"
+          content={consigneeContact}
+          showTitle
+        />
+      </div>
+      <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center-center ">
+        <AlternativeGreyBox
+          title="Notifyees"
+          wrapperClassName="layout-row flex-100 height_100"
+          contentClassName="layout-row layout-wrap flex-100"
+          content={nArray}
+          showTitle
+        />
+      </div>
     </div>
   )
 }

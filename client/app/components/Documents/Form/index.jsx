@@ -3,7 +3,6 @@ import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
-import { Link } from 'react-router-dom'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import { BASE_URL } from '../../../constants'
@@ -61,6 +60,7 @@ class DocumentsForm extends React.Component {
         if (type) {
           file.doc_type = type
         }
+
         return dispatchFn(file)
       }
       if (uploadFn) {
@@ -75,11 +75,13 @@ class DocumentsForm extends React.Component {
         body: formData
       }
       const uploadUrl = BASE_URL + url
+
       return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
     }
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
+
     return this.showFileTypeError()
   }
   showFileTypeError () {
@@ -124,13 +126,13 @@ class DocumentsForm extends React.Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const link = doc.signed_url ? (
-      <Link
-        to={doc.signed_url}
+      <a
+        href={doc.signed_url}
         className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
         target="_blank"
       >
         <i className="clip fa fa-eye" style={textStyle} />
-      </Link>
+      </a>
     ) : (
       ''
     )
@@ -146,10 +148,16 @@ class DocumentsForm extends React.Component {
       </p>
     )
     const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
+
     return (
-      <div className={`${styles.form} flex-100 layout-row layout-align-none-center layout-wrap`}>
+      <div
+        className={`${styles.form} flex-100 layout-row
+        layout-align-none-center layout-wrap`}
+      >
         <div className="flex layout-row layout-wrap">
-          <div className={`${styles.form_label} flex-40 layout-row layout-align-start-center`}>
+          <div className={`${styles.form_label} flex-40 layout-row
+          layout-align-start-center`}
+          >
             <p className="flex-none">{text}</p>
           </div>
           <div className="flex-60 layout-row layout-align-center-center">
@@ -158,7 +166,9 @@ class DocumentsForm extends React.Component {
         </div>
         <div className={`${iconRowStyle} flex-none layout-row layout-align-none-center`}>
           {displayOnly ? (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
+            <div className={`${styles.icon_btn} flex-none layout-row
+            layout-align-center-center`}
+            />
           ) : (
             <div
               className={`flex-none layout-row layout-align-end-center ${
@@ -169,7 +179,8 @@ class DocumentsForm extends React.Component {
             >
               <form>
                 <button
-                  className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
+                  className={`${styles.icon_btn} flex-none layout-row
+                    layout-align-center-center`}
                   onClick={e => this.clickUploaderInput(e)}
                 >
                   <i className="fa fa-upload clip" style={textStyle} />
@@ -187,10 +198,13 @@ class DocumentsForm extends React.Component {
             </div>
           )}
           {multiple ? (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
+            <div className={`${styles.icon_btn} flex-none layout-row
+            layout-align-center-center`}
+            />
           ) : (
             <div
-              className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
+              className={`${styles.icon_btn} flex-none layout-row
+              layout-align-center-center`}
               onClick={() => this.deleteFile(doc)}
             >
               <i className="fa fa-trash" />
@@ -199,13 +213,18 @@ class DocumentsForm extends React.Component {
           {viewer && !multiple ? (
             link
           ) : (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
+            <div className={`${styles.icon_btn} flex-none
+            layout-row layout-align-center-center`}
+            />
           )}
         </div>
         <div
-          className={`${styles.file_error} ${errorStyle} flex-100 layout-row layout-align-center`}
+          className={`${styles.file_error} ${errorStyle} flex-100
+          layout-row layout-align-center`}
         >
-          <p className="flex-100">Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed</p>
+          <p className="flex-100">
+            Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed
+          </p>
         </div>
       </div>
     )

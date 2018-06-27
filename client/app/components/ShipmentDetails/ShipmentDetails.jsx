@@ -244,8 +244,8 @@ export class ShipmentDetails extends Component {
     const { noteIds } = this.state
     const { shipmentDispatch, shipmentData } = this.props
     if (!noteIds.itineraries) {
-      const { itineraries } = shipmentData
-      noteIds.itineraries = itineraries
+      const { routes } = shipmentData
+      noteIds.itineraries = routes
     }
     noteIds[`${target}s`] = ids
     if (noteIds.origins && noteIds.destinations) {

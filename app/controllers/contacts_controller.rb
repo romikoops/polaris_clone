@@ -9,7 +9,7 @@ class ContactsController < ApplicationController
     scs = contact.shipment_contacts
     shipments = []
     scs.each do |s|
-      shipments.push(s.shipment)
+      shipments.push(s.shipment.with_address_options_json)
     end
     location = contact.location
     response_handler(contact: contact, shipments: shipments, location: location)
