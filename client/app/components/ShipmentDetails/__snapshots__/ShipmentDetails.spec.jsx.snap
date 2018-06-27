@@ -35,6 +35,9 @@ exports[`shallow rendering 1`] = `
             "cargo_items_attributes": Array [],
             "clientName": "FOO_CLIENT_NAME",
             "containers_attributes": Array [],
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
             "destination_id": 12,
             "destination_user_input": "destination_user_input",
             "direction": "FOO_DIRECTION",
@@ -44,6 +47,9 @@ exports[`shallow rendering 1`] = `
             "imc_reference": "FOO_IMC_REFERENCE",
             "incoterm": "incoterm",
             "load_type": "cargo_item",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
             "origin_id": 1,
             "origin_user_input": "origin_user_input",
             "planned_etd": 789,
@@ -87,6 +93,9 @@ exports[`shallow rendering 1`] = `
             "cargo_items_attributes": Array [],
             "clientName": "FOO_CLIENT_NAME",
             "containers_attributes": Array [],
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
             "destination_id": 12,
             "destination_user_input": "destination_user_input",
             "direction": "FOO_DIRECTION",
@@ -96,6 +105,9 @@ exports[`shallow rendering 1`] = `
             "imc_reference": "FOO_IMC_REFERENCE",
             "incoterm": "incoterm",
             "load_type": "cargo_item",
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
             "origin_id": 1,
             "origin_user_input": "origin_user_input",
             "planned_etd": 789,
