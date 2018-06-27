@@ -313,6 +313,28 @@ class Shipment < ApplicationRecord
     return_bool
   end
 
+
+  def self.requested_shipments(tenant_id)
+    where(
+      status:    %w(requested requested_by_unconfirmed_account),
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
+  end
+
+  def self.open_shipments(tenant_id)
+    where(
+      status:    %w(in_progress confirmed),
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
+  end
+
+  def self.finished_shipments(tenant_id)
+    where(
+      status:    "finished",
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
+  end
+
   private
 
   def update_carriage_properties!

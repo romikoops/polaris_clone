@@ -346,6 +346,10 @@ class Itinerary < ApplicationRecord
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end
 
+  def self.tenant_itinerary(tenant_id)
+    where(tenant_id: tenant_id)
+  end
+
   def self.update_hubs
     its = Itinerary.all
     its.each do |it|
