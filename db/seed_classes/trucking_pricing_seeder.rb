@@ -33,7 +33,7 @@ class TruckingPricingSeeder
           next
         end
 
-        req = { 'xlsx' => File.open("#{file_path}") }
+        req = { 'xlsx' => File.open(file_path) }
         ExcelTool::OverrideTruckingRateByHub.new(
           params: req, _user: shipper, hub_id: hub.id
         ).perform
