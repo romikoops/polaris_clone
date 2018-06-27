@@ -117,8 +117,8 @@ export const shipments = {
 }
 
 export const shipment = {
-  origin_hub: {name: 'FOO_ORIGIN_HUB'},
-  destination_hub: {name: 'FOO_DESTINATION_HUB'},
+  origin_hub: { name: 'FOO_ORIGIN_HUB' },
+  destination_hub: { name: 'FOO_DESTINATION_HUB' },
   id: 654,
   status: 'FOO_STATUS',
   clientName: 'FOO_CLIENT_NAME',

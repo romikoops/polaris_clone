@@ -5,10 +5,10 @@ import { shipment } from '../../mocks'
 import { UserShipmentCard } from './UserShipmentCard'
 
 jest.mock('../../helpers', () => ({
-  gradientTextGenerator: x=>x,
-  gradientGenerator:x=>x,
-  gradientBorderGenerator:x=>x,
-  switchIcon:x=>x
+  gradientTextGenerator: x => x,
+  gradientGenerator: x => x,
+  gradientBorderGenerator: x => x,
+  switchIcon: x => x
 }))
 jest.mock('uuid', () => {
   let counter = -1
@@ -37,4 +37,3 @@ const propsBase = {
 test('shallow rendering', () => {
   expect(shallow(<UserShipmentCard {...propsBase} />)).toMatchSnapshot()
 })
-
