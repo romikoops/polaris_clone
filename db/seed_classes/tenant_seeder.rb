@@ -1805,7 +1805,7 @@ class TenantSeeder
   def self.perform(filter = {})
     puts "Seeding Tenants..."
     TENANT_DATA.each do |tenant_attr|
-      next unless filter.all? { |k, v| tenant_attr[k] == v }
+      next unless should_perform?(tenant_attr, filter)
 
       puts "  - #{tenant_attr[:subdomain]}..."
       other_data = tenant_attr.delete(:other_data) || {}
@@ -1822,6 +1822,15 @@ class TenantSeeder
   end
 
   private
+
+  def self.should_perform?(tenant_attr, filter)
+    filter.all? do |filter_key, filter_value|
+      tenant_attr_value = tenant_attr[filter_key]
+
+      tenant_attr_value == filter_value ||
+      (filter_value.is_a?(Array) && filter_value.include?(tenant_attr_value))
+    end
+  end
 
   # Cargo Item Types
 

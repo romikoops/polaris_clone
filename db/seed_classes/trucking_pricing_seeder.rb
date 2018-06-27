@@ -12,7 +12,7 @@ class TruckingPricingSeeder
       puts "Seeding trucking pricings for #{tenant.name}..."
 
       shipper = tenant.users.shipper.first
-      
+
       Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"].each do |file_path|
         file_name = File.basename(file_path, ".xlsx")
         subdomain, sheet_type, hub_name = *file_name.split("__")
