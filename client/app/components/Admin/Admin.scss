@@ -924,6 +924,9 @@
    .action_icons i {
      cursor: pointer;
    }
+   .action_icons {
+     width: 75px;
+   }
 
     .services_box .border_right {
       border-color: transparent !important;
@@ -938,7 +941,7 @@
       }
     }
   }
-  .card_padding{
-    padding: 8px;
+  .header_margin_buffer{
+    margin: 0 15px;
   }
  }

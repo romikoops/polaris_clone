@@ -637,6 +637,7 @@ export class ShipmentLocationBox extends Component {
           this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
           this.props.setNotesIds(nexusIds, target)
           // this.scopeNexusOptions(nexusIds, hubIds, counterpart)
+
           addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
             this.props.setTargetAddress(target, { ...address, nexusIds })
           })
