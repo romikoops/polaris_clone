@@ -4,6 +4,7 @@ import { AdminSearchableHubs } from './AdminSearchables'
 import styles from './Admin.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import { capitalize, filters } from '../../helpers'
 
 export class AdminTruckingIndex extends Component {
@@ -199,94 +200,35 @@ export class AdminTruckingIndex extends Component {
                 />
               </div>
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div
-                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                  onClick={() => this.toggleExpander('hubType')}
-                >
-                  <div className={`flex-90 layout-align-start-center layout-row ${styles.extra_padding_left}`}>
-                    <i className="flex-none fa fa-ship" />
-                    <p className="flex-none">Hub Type</p>
-                  </div>
-                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                    {expander.hubType ? (
-                      <i className="flex-none fa fa-chevron-up" />
-                    ) : (
-                      <i className="flex-none fa fa-chevron-down" />
-                    )}
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    expander.hubType ? styles.open_filter : styles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  {typeFilters}
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div
-                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                  onClick={() => this.toggleExpander('status')}
-                >
-                  <div className={`flex-90 layout-align-start-center layout-row ${styles.extra_padding_left}`}>
-                    <i className="flex-none fa fa-star-half-o" />
-                    <p className="flex-none">Status</p>
-                  </div>
-                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                    {expander.status ? (
-                      <i className="flex-none fa fa-chevron-up" />
-                    ) : (
-                      <i className="flex-none fa fa-chevron-down" />
-                    )}
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    expander.status ? styles.open_filter : styles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  {statusFilters}
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div
-                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                  onClick={() => this.toggleExpander('countries')}
-                >
-                  <div className={`flex-90 layout-align-start-center layout-row ${styles.extra_padding_left}`}>
-                    <i className="flex-none fa fa-flag" />
-                    <p className="flex-none">Country</p>
-                  </div>
-                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                    {expander.countries ? (
-                      <i className="flex-none fa fa-chevron-up" />
-                    ) : (
-                      <i className="flex-none fa fa-chevron-down" />
-                    )}
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    expander.countries ? styles.open_filter : styles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  {countryFilters}
-                </div>
+                <CollapsingBar
+                  collapsed={!expander.hubType}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('hubType')}
+                  headingText="Hub Type"
+                  faClass="fa fa-ship"
+                  content={typeFilters}
+                />
+                <CollapsingBar
+                  collapsed={!expander.status}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('status')}
+                  headingText="Status"
+                  faClass="fa fa-star-half-o"
+                  content={statusFilters}
+                />
+                <CollapsingBar
+                  collapsed={!expander.countries}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('countries')}
+                  headingText="Country"
+                  faClass="fa fa-flag"
+                  content={countryFilters}
+                />
               </div>
             </div>
           }
         />
       </div>
-      // //////////////
-      // <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      //   <AdminSearchableHubs
-      //     theme={theme}
-      //     hubs={hubs}
-      //     adminDispatch={adminDispatch}
-      //     sideScroll={false}
-      //     handleClick={viewTrucking}
-      //   />
-      // </div>
     )
   }
 }

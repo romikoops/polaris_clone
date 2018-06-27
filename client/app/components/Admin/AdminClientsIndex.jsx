@@ -9,6 +9,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { filters, capitalize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 class AdminClientsIndex extends Component {
   constructor (props) {
@@ -137,6 +138,7 @@ class AdminClientsIndex extends Component {
             flexOptions="layout-column flex-20 flex-md-30"
             content={
               <div>
+
                 <div
                   className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
                 >
@@ -149,29 +151,14 @@ class AdminClientsIndex extends Component {
                   />
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('companies')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-ship" />
-                      <p className="flex-none">Company</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.companies ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.companies ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
-                    {typeFilters}
-                  </div>
+                  <CollapsingBar
+                    collapsed={!expander.companies}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('companies')}
+                    headingText="Company"
+                    faClass="fa fa-building"
+                    content={typeFilters}
+                  />
                 </div>
               </div>
             }
@@ -180,29 +167,14 @@ class AdminClientsIndex extends Component {
             header="Data manager"
             flexOptions="layout-column flex-20 flex-md-30"
             content={
-              <div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('upload')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-cloud-upload" />
-                      <p className="flex-none">Upload Data</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.upload ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.upload ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <CollapsingBar
+                  collapsed={!expander.upload}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('upload')}
+                  headingText="Upload Data"
+                  faClass="fa fa-cloud-upload"
+                  content={(
                     <div
                       className={`${
                         styles.action_section
@@ -217,30 +189,15 @@ class AdminClientsIndex extends Component {
                         tooltip={clientTip.upload}
                       />
                     </div>
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('download')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-cloud-download" />
-                      <p className="flex-none">Download Data</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.download ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.download ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
+                  )}
+                />
+                <CollapsingBar
+                  collapsed={!expander.download}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('download')}
+                  headingText="Download Data"
+                  faClass="fa fa-cloud-download"
+                  content={(
                     <div
                       className={`${
                         styles.action_section
@@ -249,30 +206,15 @@ class AdminClientsIndex extends Component {
                       <p className="flex-100 center">Download Clients Sheet</p>
                       <DocumentsDownloader theme={theme} target="clients" />
                     </div>
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('new')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-plus-circle" />
-                      <p className="flex-none">New Client</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.new ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.new ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
+                  )}
+                />
+                <CollapsingBar
+                  collapsed={!expander.new}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('new')}
+                  headingText="Create New Client"
+                  faClass="fa fa-plus-circle"
+                  content={(
                     <div
                       className={`${
                         styles.action_section
@@ -280,8 +222,8 @@ class AdminClientsIndex extends Component {
                     >
                       {newButton}
                     </div>
-                  </div>
-                </div>
+                  )}
+                />
               </div>
             }
           />

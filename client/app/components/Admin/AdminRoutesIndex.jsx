@@ -10,6 +10,7 @@ import { AdminSearchableRoutes } from './AdminSearchables'
 import { filters, capitalize } from '../../helpers'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import { Checkbox } from '../Checkbox/Checkbox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 export class AdminRoutesIndex extends Component {
   constructor (props) {
@@ -152,29 +153,14 @@ export class AdminRoutesIndex extends Component {
                   />
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('mot')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-ship" />
-                      <p className="flex-none">Mode of Transport</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.mot ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.mot ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
-                    {typeFilters}
-                  </div>
+                  <CollapsingBar
+                    collapsed={!expander.mot}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('mot')}
+                    headingText="Mode of Transport"
+                    faClass="fa fa-ship"
+                    content={typeFilters}
+                  />
                 </div>
               </div>
             }
@@ -185,43 +171,30 @@ export class AdminRoutesIndex extends Component {
             content={
               <div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <div
-                    className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                    onClick={() => this.toggleExpander('new')}
-                  >
-                    <div className="flex-90 layout-align-start-center layout-row">
-                      <i className="flex-none fa fa-plus-circle" />
-                      <p className="flex-none">New Route</p>
-                    </div>
-                    <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                      {expander.new ? (
-                        <i className="flex-none fa fa-chevron-up" />
-                      ) : (
-                        <i className="flex-none fa fa-chevron-down" />
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      expander.new ? styles.open_filter : styles.closed_filter
-                    } flex-100 layout-row layout-wrap layout-align-center-start`}
-                  >
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-wrap layout-align-center-center`}
-                    >
-                      <RoundButton
-                        theme={theme}
-                        size="small"
-                        text="New Route"
-                        active
-                        handleNext={this.props.toggleNewRoute}
-                        iconClass="fa-plus"
-                      />
-                      <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
-                    </div>
-                  </div>
+                  <CollapsingBar
+                    collapsed={!expander.new}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('new')}
+                    headingText="Create New Route"
+                    faClass="fa fa-plus-circle"
+                    content={(
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-wrap layout-align-center-center`}
+                      >
+                        <RoundButton
+                          theme={theme}
+                          size="small"
+                          text="New Route"
+                          active
+                          handleNext={this.props.toggleNewRoute}
+                          iconClass="fa-plus"
+                        />
+                        <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
+                      </div>
+                    )}
+                  />
                 </div>
               </div>
             }

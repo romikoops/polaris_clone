@@ -17,7 +17,7 @@ import FileUploader from '../FileUploader/FileUploader'
 import DocumentsForm from '../Documents/Form'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { IncotermRow } from '../Incoterm/Row'
-import ShipmentCard from '../ShipmentCard/ShipmentCard'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import { IncotermExtras } from '../Incoterm/Extras'
 
 const StyledSelect = styled(Select)`
@@ -346,7 +346,7 @@ export class UserShipmentView extends Component {
     const feeHash = shipment.selected_charge
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <ShipmentCard
+        <CollapsingBar
           headingText="Overview"
           theme={theme}
           collapsed={collapser.overview}
@@ -372,7 +372,7 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-        <ShipmentCard
+        <CollapsingBar
           headingText="Itinerary"
           theme={theme}
           collapsed={collapser.itinerary}
@@ -436,7 +436,7 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-        <ShipmentCard
+        <CollapsingBar
           headingText="Fares & Fees"
           theme={theme}
           collapsed={collapser.charges}
@@ -475,7 +475,7 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-        <ShipmentCard
+        <CollapsingBar
           headingText="Additional Services"
           theme={theme}
           collapsed={collapser.extras}
@@ -492,7 +492,7 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-        <ShipmentCard
+        <CollapsingBar
           headingText="Contact Details"
           theme={theme}
           collapsed={collapser.contacts}
@@ -520,7 +520,7 @@ export class UserShipmentView extends Component {
           }
         />
 
-        <ShipmentCard
+        <CollapsingBar
           headingText="Cargo Details"
           theme={theme}
           collapsed={collapser.cargo}
@@ -531,7 +531,7 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-        <ShipmentCard
+        <CollapsingBar
           headingText="Additional Info"
           theme={theme}
           collapsed={collapser.extra_info}
@@ -601,7 +601,7 @@ export class UserShipmentView extends Component {
           }
         />
 
-        <ShipmentCard
+        <CollapsingBar
           headingText="Documents"
           theme={theme}
           collapsed={collapser.documents}
