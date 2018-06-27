@@ -54,7 +54,6 @@ export class AdminShipmentCardNew extends Component {
   }
 
   handleEdit () {
-    debugger // eslint-disable-line
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
@@ -105,14 +104,16 @@ export class AdminShipmentCardNew extends Component {
       <AdminPromptConfirm
         theme={theme}
         heading="Are you sure?"
-        text={`This will reject the requested shipment ${shipment.imc_reference}. This shipment can be still be recovered after being ignored`}
+        text={`This will reject the requested shipment ${shipment.imc_reference}. 
+        This shipment can be still be recovered after being ignored`}
         confirm={() => this.handleIgnore()}
         deny={() => this.closeConfirm()}
       />
     ) : (
       ''
     )
-    const plannedDate = shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
+    const plannedDate =
+    shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
     const requestedButtons = shipment.status === 'requested' ? (
       <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
         <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
@@ -120,7 +121,7 @@ export class AdminShipmentCardNew extends Component {
         <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
       </div>
     ) : ''
-    const openButtons = shipment.status === 'requested' ? (
+    const openButtons = shipment.status === 'confirmed' || shipment.status === 'in_progress' ? (
       <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
         <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleFinished()} />
       </div>
