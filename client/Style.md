@@ -575,3 +575,77 @@ handleInvalidSubmit () {
   const { shipper, consignee } = this.state
 }
 `
+
+## SUGGESTION: Order of complex `this.state`
+
+> Sort first by complexety, then alphabetically
+
+Before:
+
+```
+this.state = {
+  acceptTerms: false,
+  consignee: {},
+  shipper: {},
+  notifyees: [],
+  insurance: {
+    bool: null,
+    val: 0
+  },
+  incotermText: '',
+  customs: {
+    import: {
+      bool: false,
+      val: 0
+    },
+    export: {
+      bool: false,
+      val: 0
+    },
+    total: {
+      val: 0
+    }
+  },
+  hsCodes: {},
+  hsTexts: {},
+  totalGoodsValue: { value: 0, currency: 'EUR' },
+  cargoNotes: '',
+  finishBookingAttempted: false,
+  customsCredit: false
+}
+```
+
+After:
+
+```
+this.state = {
+  acceptTerms: false,
+  cargoNotes: '',
+  consignee: {},
+  customsCredit: false,
+  finishBookingAttempted: false,
+  hsCodes: {},
+  hsTexts: {},
+  incotermText: '',
+  notifyees: [],
+  shipper: {},
+  totalGoodsValue: { value: 0, currency: 'EUR' },
+  insurance: {
+    bool: null,
+    val: 0
+  },
+  customs: {
+    import: {
+      bool: false,
+      val: 0
+    },
+    export: {
+      bool: false,
+      val: 0
+    },
+    total: {
+      val: 0
+    }
+  },
+}
+```

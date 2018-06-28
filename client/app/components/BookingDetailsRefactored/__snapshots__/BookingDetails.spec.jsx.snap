@@ -1,0 +1,666 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  style={
+    Object {
+      "paddingTop": "60px",
+    }
+  }
+>
+  <RouteHubBox
+    locations={
+      Object {
+        "destination": Object {
+          "city": "BAR_CITY",
+          "country": "China",
+          "street": "BAR_STREET",
+          "street_number": 9,
+          "zip_code": 845321,
+        },
+        "endHub": "FOO_END_HUB",
+        "origin": Object {
+          "city": "FOO_CITY",
+          "country": "Germany",
+          "street": "FOO_STREET",
+          "street_number": 7,
+          "zip_code": 21177,
+        },
+        "startHub": "FOO_START_HUB",
+      }
+    }
+    shipment={
+      Object {
+        "cargo_notes": "FOO_CARGO_NOTES",
+        "eori": 1234,
+        "has_on_carriage": false,
+        "has_pre_carriage": false,
+        "incoterm_text": "FOO_INCOTERM_TEXT",
+        "load_type": "OCEAN_LOAD_TYPE",
+        "notes": "FOO_NOTES",
+        "schedules_charges": Object {
+          "AIR_HUB_ROUTE_KEY": Object {
+            "total": 200,
+          },
+          "OCEAN_HUB_ROUTE_KEY": Object {
+            "total": 40,
+          },
+          "RAIL_HUB_ROUTE_KEY": Object {
+            "total": 125,
+          },
+          "TRUCK_HUB_ROUTE_KEY": Object {
+            "total": 75,
+          },
+        },
+        "selected_offer": Object {
+          "cargo": Object {},
+          "total": Object {
+            "value": 77,
+          },
+        },
+        "total_goods_value": Object {
+          "currency": "USD",
+          "value": 15,
+        },
+        "total_price": Object {
+          "currency": "USD",
+          "value": 12,
+        },
+      }
+    }
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="wrapper_contact_setter flex-100 layout-row"
+  >
+    <ContactSetter
+      consignee={Object {}}
+      contacts={Array []}
+      finishBookingAttempted={false}
+      notifyees={Array []}
+      removeNotifyee={[Function]}
+      setContact={[Function]}
+      shipper={Object {}}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      userLocations={Array []}
+    />
+  </div>
+  <Formsy
+    className="flex-100"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
+  >
+    <CargoDetails
+      currencies={
+        Array [
+          Object {
+            "key": "USD",
+            "rate": 1.05,
+          },
+        ]
+      }
+      customsData={
+        Object {
+          "export": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "import": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "total": Object {
+            "val": 0,
+          },
+        }
+      }
+      deleteCode={[Function]}
+      eori=""
+      finishBookingAttempted={false}
+      handleChange={[Function]}
+      handleHsTextChange={[Function]}
+      handleInsurance={[Function]}
+      handleTotalGoodsCurrency={[Function]}
+      hsTexts={Object {}}
+      incotermText=""
+      insurance={
+        Object {
+          "bool": null,
+          "val": 0,
+        }
+      }
+      notes=""
+      setCustomsFee={[Function]}
+      setHsCode={[Function]}
+      shipmentData={
+        Object {
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "hubs": Object {},
+          "locations": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "schedules": Array [
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            },
+            Object {
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+          ],
+          "shipment": Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+          },
+        }
+      }
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
+      tenant={
+        Object {
+          "data": Object {
+            "id": 123,
+            "scope": Object {
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      toggleCustomsCredit={[Function]}
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+        }
+      }
+    />
+    <div
+      className="btn_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none  layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-50 layout-row layout-align-start-center"
+        />
+        <div
+          className="flex-50 layout-row layout-align-end-center"
+        >
+          <div
+            className="flex-none layout-row"
+          >
+            <RoundButton
+              active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={null}
+              icon=""
+              iconClass=""
+              size=""
+              text="Review Booking"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      className="sec_break flex-100"
+    />
+    <div
+      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none content-width layout-row layout-align-start-center"
+      >
+        <RoundButton
+          active={false}
+          back={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-angle-left"
+          size=""
+          text="Back to dashboard"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </Formsy>
+</div>
+`;
+
+exports[`shipmentData is falsy 1`] = `""`;
+
+exports[`shipmentData.shipment is falsy 1`] = `""`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  style={
+    Object {
+      "paddingTop": "60px",
+    }
+  }
+>
+  <div
+    className="wrapper_contact_setter flex-100 layout-row"
+  >
+    <ContactSetter
+      consignee={Object {}}
+      contacts={Array []}
+      finishBookingAttempted={false}
+      notifyees={Array []}
+      removeNotifyee={[Function]}
+      setContact={[Function]}
+      shipper={Object {}}
+      theme={null}
+      userLocations={Array []}
+    />
+  </div>
+  <Formsy
+    className="flex-100"
+    disabled={false}
+    getErrorMessage={[Function]}
+    getErrorMessages={[Function]}
+    getValue={[Function]}
+    hasValue={[Function]}
+    isFormDisabled={[Function]}
+    isFormSubmitted={[Function]}
+    isPristine={[Function]}
+    isRequired={[Function]}
+    isValid={[Function]}
+    isValidValue={[Function]}
+    mapping={null}
+    onChange={[Function]}
+    onError={[Function]}
+    onInvalid={[Function]}
+    onInvalidSubmit={[Function]}
+    onReset={[Function]}
+    onSubmit={[Function]}
+    onValid={[Function]}
+    onValidSubmit={[Function]}
+    preventExternalInvalidation={false}
+    resetValue={[Function]}
+    setValidations={[Function]}
+    setValue={[Function]}
+    showError={[Function]}
+    showRequired={[Function]}
+    validationErrors={null}
+  >
+    <CargoDetails
+      currencies={
+        Array [
+          Object {
+            "key": "USD",
+            "rate": 1.05,
+          },
+        ]
+      }
+      customsData={
+        Object {
+          "export": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "import": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "total": Object {
+            "val": 0,
+          },
+        }
+      }
+      deleteCode={[Function]}
+      eori=""
+      finishBookingAttempted={false}
+      handleChange={[Function]}
+      handleHsTextChange={[Function]}
+      handleInsurance={[Function]}
+      handleTotalGoodsCurrency={[Function]}
+      hsTexts={Object {}}
+      incotermText=""
+      insurance={
+        Object {
+          "bool": null,
+          "val": 0,
+        }
+      }
+      notes=""
+      setCustomsFee={[Function]}
+      setHsCode={[Function]}
+      shipmentData={
+        Object {
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "hubs": Object {},
+          "locations": Object {
+            "destination": Object {
+              "city": "BAR_CITY",
+              "country": "China",
+              "street": "BAR_STREET",
+              "street_number": 9,
+              "zip_code": 845321,
+            },
+            "endHub": "FOO_END_HUB",
+            "origin": Object {
+              "city": "FOO_CITY",
+              "country": "Germany",
+              "street": "FOO_STREET",
+              "street_number": 7,
+              "zip_code": 21177,
+            },
+            "startHub": "FOO_START_HUB",
+          },
+          "schedules": Array [
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            },
+            Object {
+              "hub_route_key": "AIR_HUB_ROUTE_KEY",
+              "mode_of_transport": "air",
+            },
+            Object {
+              "hub_route_key": "TRUCK_HUB_ROUTE_KEY",
+              "mode_of_transport": "truck",
+            },
+            Object {
+              "hub_route_key": "RAIL_HUB_ROUTE_KEY",
+              "mode_of_transport": "rail",
+            },
+          ],
+          "shipment": Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+          },
+        }
+      }
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
+      tenant={
+        Object {
+          "data": Object {
+            "id": 123,
+            "scope": Object {
+              "modes_of_transport": Object {
+                "air": Object {},
+                "ocean": Object {
+                  "OCEAN_LOAD_TYPE": true,
+                },
+                "rail": Object {},
+                "truck": Object {},
+              },
+            },
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            },
+          },
+        }
+      }
+      theme={null}
+      toggleCustomsCredit={[Function]}
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "currency": "EUR",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+          "role": Object {
+            "name": "shipper",
+          },
+        }
+      }
+    />
+    <div
+      className="btn_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none  layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-50 layout-row layout-align-start-center"
+        />
+        <div
+          className="flex-50 layout-row layout-align-end-center"
+        >
+          <div
+            className="flex-none layout-row"
+          >
+            <RoundButton
+              active={true}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={null}
+              icon=""
+              iconClass=""
+              size=""
+              text="Review Booking"
+              theme={null}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      className="sec_break flex-100"
+    />
+    <div
+      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none content-width layout-row layout-align-start-center"
+      >
+        <RoundButton
+          active={false}
+          back={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-angle-left"
+          size=""
+          text="Back to dashboard"
+          theme={null}
+        />
+      </div>
+    </div>
+  </Formsy>
+</div>
+`;
