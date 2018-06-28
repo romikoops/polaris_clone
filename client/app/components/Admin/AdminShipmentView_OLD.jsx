@@ -235,6 +235,8 @@ export class AdminShipmentView extends Component {
       theme, hubs, shipmentData, clients, tenant
     } = this.props
 
+    console.log('shipmentData', shipmentData)
+
     if (!shipmentData || !hubs || !clients) {
       return <h1>NO DATA</h1>
     }

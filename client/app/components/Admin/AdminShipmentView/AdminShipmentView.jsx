@@ -62,12 +62,24 @@ export class AdminShipmentView extends Component {
 
     return `${noun}`
   }
+  static checkSelectedOffer (service) {
+    let obj = {}
+
+    if (service && service.total) {
+      const total = service.edited_total || service.total
+      obj = total
+    }
+
+    return obj
+  }
   constructor (props) {
     super(props)
     this.state = {
       showEditPrice: false,
+      showEditServicePrice: false,
       newTotal: 0,
       showEditTime: false,
+      currency: this.props.shipmentData.shipment.selected_offer.total.currency,
       newTimes: {
         eta: {
           day: new Date(moment(this.props.shipmentData.shipment.planned_eta).format())
@@ -75,13 +87,22 @@ export class AdminShipmentView extends Component {
         etd: {
           day: new Date(moment(this.props.shipmentData.shipment.planned_etd).format())
         }
+      },
+      newPrices: {
+        trucking_pre: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_pre),
+        trucking_on: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_on),
+        cargo: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.cargo),
+        insurance: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.insurance),
+        customs: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.customs)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
+    this.toggleEditServicePrice = this.toggleEditServicePrice.bind(this)
     this.toggleEditTime = this.toggleEditTime.bind(this)
     this.saveNewPrice = this.saveNewPrice.bind(this)
+    this.saveNewEditedPrice = this.saveNewEditedPrice.bind(this)
     this.saveNewTime = this.saveNewTime.bind(this)
     this.handleNewTotalChange = this.handleNewTotalChange.bind(this)
     this.handleCurrencySelect = this.handleCurrencySelect.bind(this)
@@ -138,8 +159,24 @@ export class AdminShipmentView extends Component {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'finished')
   }
+  handlePriceChange (key, value) {
+    const { newPrices } = this.state
+
+    this.setState({
+      newPrices: {
+        ...newPrices,
+        [key]: {
+          ...newPrices[key],
+          value
+        }
+      }
+    })
+  }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
+  }
+  toggleEditServicePrice () {
+    this.setState({ showEditServicePrice: !this.state.showEditServicePrice })
   }
   toggleEditTime () {
     this.setState({ showEditTime: !this.state.showEditTime })
@@ -252,6 +289,27 @@ export class AdminShipmentView extends Component {
     })
     this.toggleEditPrice()
   }
+  saveNewEditedPrice () {
+    const { newPrices, currency } = this.state
+    const { adminDispatch, shipmentData } = this.props
+
+    Object.keys(newPrices).forEach((k) => {
+      const service = shipmentData.shipment.selected_offer[k]
+
+      if (newPrices[k].value !== 0 && service && service.total && service.total.value &&
+        newPrices[k].value !== service.total.value) {
+        adminDispatch.editShipmentServicePrice(shipmentData.shipment.id, {
+          price: {
+            value: newPrices[k].value,
+            currency
+          },
+          charge_category: k
+        })
+      }
+    })
+
+    this.toggleEditServicePrice()
+  }
   handleNewTotalChange (event) {
     const { value } = event.target
     this.setState({ newTotal: +value })
@@ -274,7 +332,7 @@ export class AdminShipmentView extends Component {
       schedules
     } = shipmentData
     const {
-      showEditTime, newTimes
+      showEditTime, showEditServicePrice, newTimes, newPrices
     } = this.state
 
     const createdDate = shipment
@@ -609,68 +667,190 @@ export class AdminShipmentView extends Component {
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-truck clip flex-none layout-align-center-center"
-                    style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
-                  />
-                  <p>Pre-Carriage</p>
+                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                    <p>Pre-Carriage</p>
+                  </div>
+                  {showEditServicePrice && shipment.selected_offer.trucking_pre ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.trucking_pre.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('trucking_pre', e.target.value)}
+                        value={Number(newPrices.trucking_pre.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-truck clip flex-none layout-align-center-center"
-                    style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                  />
-                  <p>On-Carriage</p>
+                <div className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i
+                      className="fa fa-truck clip flex-none layout-align-center-center"
+                      style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                    />
+                    <p>On-Carriage</p>
+                  </div>
+                  {showEditServicePrice && shipment.selected_offer.trucking_on ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.trucking_on.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('trucking_on', e.target.value)}
+                        value={Number(newPrices.trucking_on.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-file-text clip flex-none layout-align-center-center"
-                    style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
-                  />
-                  <p>Origin Documentation</p>
+                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i
+                      className="fa fa-file-text clip flex-none layout-align-center-center"
+                      style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                    />
+                    <p>
+                      Origin<br />
+                      Documentation
+                    </p>
+                  </div>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                    style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                  />
-                  <p>Destination Documentation</p>
+                <div
+                  className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}
+                >
+                  <div className="layout-row">
+                    <i
+                      className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                      style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                    />
+                    <p>
+                      Destination<br />
+                      Documentation
+                    </p>
+                  </div>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-ship clip flex-none layout-align-center-center"
-                    style={selectedStyle}
-                  />
-                  <p>Freight</p>
+                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i
+                      className="fa fa-ship clip flex-none layout-align-center-center"
+                      style={selectedStyle}
+                    />
+                    <p>Freight</p>
+                  </div>
+                  {showEditServicePrice && shipment.selected_offer.cargo ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.cargo.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        value={Number(newPrices.cargo.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
           </div>
-          <div
-            className={`flex-30 layout-row flex-sm-100 flex-xs-100 
-            ${styles.additional_services} 
-            ${styles.services_box} 
-            ${styles.border_right}`}
-          >
-            <div className="layout-column flex-100">
+          <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
+            <div className="layout-column flex-80">
               <h3>Additional Services</h3>
               <div className="">
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-id-card clip flex-none"
-                    style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle}
-                  />
-                  <p>Customs</p>
+                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                    <p>Customs</p>
+                  </div>
+                  {showEditServicePrice && shipment.selected_offer.customs ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.customs.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        value={Number(newPrices.customs.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i
-                    className="fa fa-umbrella clip flex-none"
-                    style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle}
-                  />
-                  <p>Insurance</p>
+                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                  <div className="layout-row">
+                    <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                    <p>Insurance</p>
+                  </div>
+                  {showEditServicePrice && shipment.selected_offer.insurance ? (
+                    <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
+                      <span
+                        className={
+                          `layout-row flex layout-padding
+                          layout-align-center-center ${styles.greybg}`
+                        }
+                      >
+                        {newPrices.insurance.currency}
+                      </span>
+                      <input
+                        type="number"
+                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        value={Number(newPrices.insurance.value).toFixed(2)}
+                        className="layout-padding flex-initial"
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
+            </div>
+            <div className="layout-row layout-padding flex-20 layout-align-center-start">
+              {showEditServicePrice ? (
+                <div className="layout-column layout-align-center-center">
+                  <div className={`layout-row layout-align-center-center ${styles.save}`}>
+                    <i onClick={this.saveNewEditedPrice} className="fa fa-check" />
+                  </div>
+                  <div className={`layout-row layout-align-center-center ${styles.cancel}`}>
+                    <i onClick={this.toggleEditServicePrice} className="fa fa-trash" />
+                  </div>
+                </div>
+              ) : (
+                <i onClick={this.toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
+              )}
             </div>
           </div>
           <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
@@ -681,7 +861,11 @@ export class AdminShipmentView extends Component {
                   <p className="layout-align-sm-end-center layout-align-xs-end-center">{AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
                 </div>
               </div>
-              <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
+              <h2 className="layout-align-end-center layout-row flex">
+                {shipment.selected_offer.edited_total && shipment.selected_offer.edited_total.value
+                  ? (+shipment.selected_offer.edited_total.value).toFixed(2)
+                  : (+shipment.total_price.value).toFixed(2)} {shipment.total_goods_value.currency}
+              </h2>
             </div>
           </div>
         </div>

@@ -1014,6 +1014,24 @@ export default function admin (state = {}, action) {
         loading: false
       }
 
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_REQUEST:
+      return state
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_SUCCESS:
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          shipment: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
     case adminConstants.SAVE_ITINERARY_NOTES_REQUEST:
       return state
     case adminConstants.SAVE_ITINERARY_NOTES_SUCCESS:
