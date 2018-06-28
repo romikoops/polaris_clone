@@ -1,15 +1,23 @@
 # frozen_string_literal: true
 
+Dir["#{Rails.root}/app/queries/trucking_pricing/*.rb"].each { |file| require file }
+
 class TruckingPricing < ApplicationRecord
   has_many :shipments
-  belongs_to :courier
+  belongs_to :trucking_pricing_scope
+  delegate :courier, to: :trucking_pricing_scope
   belongs_to :tenant
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
+  include Queries::TruckingPricing
 
   SCOPING_ATTRIBUTE_NAMES = %i(load_type cargo_class carriage courier_id truck_type).freeze
+
+  SCOPING_ATTRIBUTE_NAMES.each do |scoping_attribute_name|
+    delegate scoping_attribute_name, to: :trucking_pricing_scope
+  end
 
   # Validations
 
@@ -50,113 +58,21 @@ class TruckingPricing < ApplicationRecord
 
   def self.delete_existing_truckings(hub)
     hub.trucking_pricings.delete_all
-    hub.hub_truckings.delete_all  
+    hub.hub_truckings.delete_all
   end
 
   def self.find_by_filter(args={})
-    find_by_filter_argument_errors(args)
-
-    latitude     = args[:latitude]     || args[:location].try(:latitude)  || 0
-    longitude    = args[:longitude]    || args[:location].try(:longitude) || 0
-    zipcode      = args[:zipcode]      || args[:location].try(:get_zip_code)
-    city_name    = args[:city_name]    || args[:location].try(:city)
-    country_code = args[:country_code] || args[:location].try(:country).try(:code)
-
-    joins(hub_truckings: %i[trucking_destination hub])
-      .where('hubs.tenant_id': args[:tenant_id])
-      .where('trucking_pricings.load_type': args[:load_type])
-      .where('trucking_pricings.carriage': args[:carriage])
-      .where('trucking_destinations.country_code': country_code)
-      .where(cargo_class_condition(args))
-      .where(truck_type_condition(args))
-      .where(nexuses_condition(args))
-      .where(hubs_condition(args))
-      .where("
-        (
-          (trucking_destinations.zipcode IS NOT NULL)
-          AND (trucking_destinations.zipcode = :zipcode)
-        ) OR (
-          (trucking_destinations.geometry_id IS NOT NULL)
-          AND (
-            SELECT ST_Contains(
-              (SELECT data::geometry FROM geometries WHERE id = trucking_destinations.geometry_id),
-              (SELECT ST_Point(:longitude, :latitude)::geometry)
-            ) AS contains
-          )
-        ) OR (
-          (trucking_destinations.distance IS NOT NULL)
-          AND (
-            trucking_destinations.distance = #{distance_to_match(args)}
-          )
-        )
-      ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
-      .select("hubs.id AS preloaded_hub_id, trucking_pricings.*")
+    FindByFilter.new(args.merge(klass: self)).perform
   end
 
   def self.find_by_hub_id(hub_id)
     find_by_hub_ids([hub_id])
   end
 
-  def self.find_by_hub_ids(hub_ids=[])
-    raise ArgumentError, "Must provide hub_ids or hub_id" if hub_ids.empty?
-    sanitized_query = sanitize_sql(["
-      SELECT
-        trucking_pricing_id,
-        MIN(country_code) AS country_code,
-        MIN(ident_type) AS ident_type,
-        STRING_AGG(ident_values, ',') AS ident_values
-      FROM (
-        SELECT
-          tp_id AS trucking_pricing_id,
-          MIN(country_code) AS country_code,
-          ident_type,
-          CASE
-            WHEN ident_type = 'city'
-              THEN MIN(geometries.name_4) || '*' || MIN(geometries.name_2)
-            ELSE
-              MIN(ident_value)::text      || '*' || MAX(ident_value)::text
-          END AS ident_values
-        FROM (
-          SELECT tp_id, ident_type, ident_value, country_code,
-            CASE
-            WHEN ident_type <> 'city'
-              THEN DENSE_RANK() OVER(PARTITION BY tp_id, ident_type ORDER BY ident_value) - ident_value::integer
-            END AS range
-          FROM (
-            SELECT
-              trucking_pricings.id AS tp_id,
-              trucking_destinations.country_code,
-              CASE
-                WHEN trucking_destinations.zipcode  IS NOT NULL THEN 'zipcode'
-                WHEN trucking_destinations.distance IS NOT NULL THEN 'distance'
-                ELSE 'city'
-              END AS ident_type,
-              CASE
-                WHEN trucking_destinations.zipcode  IS NOT NULL THEN trucking_destinations.zipcode::integer
-                WHEN trucking_destinations.distance IS NOT NULL THEN trucking_destinations.distance::integer
-                ELSE trucking_destinations.geometry_id
-              END AS ident_value
-            FROM trucking_pricings
-            JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-            JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-            WHERE hub_truckings.hub_id IN (:hub_ids)
-          ) AS sub_query_lvl_3
-        ) AS sub_query_lvl_2
-        LEFT OUTER JOIN geometries ON sub_query_lvl_2.ident_value = geometries.id
-        GROUP BY tp_id, ident_type, range
-        ORDER BY MAX(ident_value)
-      ) AS sub_query_lvl_1
-      GROUP BY trucking_pricing_id
-      ORDER BY ident_values
-    ", hub_ids: hub_ids])
-
-    connection.exec_query(sanitized_query).map do |row|
-      {
-        "truckingPricing" => find(row["trucking_pricing_id"]),
-        row["ident_type"] => row["ident_values"].split(",").map { |range| range.split("*") },
-        "countryCode"     => row["country_code"]
-      }
-    end
+  def self.find_by_hub_ids(hub_ids)
+    query = FindByHubIds.new(hub_ids: hub_ids, klass: self)
+    query.perform
+    query.deserialized_result
   end
 
   # Instance Methods
@@ -181,65 +97,7 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
-  def scoping_attributes
-    SCOPING_ATTRIBUTE_NAMES.each_with_object({}) do |attribute_name, obj|
-      obj[attribute_name] = self[attribute_name]
-    end
-  end
-
-  def scoping_attributes_sql_where
-    "WHERE " + scoping_attributes.map do |scoping_attribute_name, scoping_attribute_value|
-      "#{scoping_attribute_name} = #{scoping_attribute_value}"
-    end.join(" AND ")
-  end
-
-  private
-
-  def self.find_by_filter_argument_errors(args)
-    mandatory_args = %i[load_type tenant_id carriage]
-
-    mandatory_args.each do |mandatory_arg|
-      raise ArgumentError, "Must provide #{mandatory_arg}" if args[mandatory_arg].nil?
-    end
-
-    if args[:location].try(:country).try(:code).nil? && args[:country_code].nil?
-      raise ArgumentError, "Must provide country_code"
-    end
-
-    if args.keys.size <= mandatory_args.length
-      raise ArgumentError, "Must provide a valid filter besides #{mandatory_args.to_sentence}"
-    end
-  end
-
-  def self.truck_type_condition(args)
-    args[:truck_type] ? { 'trucking_pricings.truck_type': args[:truck_type] } : {}
-  end
-
-  def self.cargo_class_condition(args)
-    args[:cargo_class] ? { 'trucking_pricings.cargo_class': args[:cargo_class] } : {}
-  end
-
-  def self.nexuses_condition(args)
-    args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
-  end
-
-  def self.hubs_condition(args)
-    args[:hub_ids] ? { 'hubs.id': args[:hub_ids] } : {}
-  end
-
-  def self.distance_to_match(args)
-    sanitize_sql(
-      args[:distance] ||
-      "(
-        SELECT ROUND(ST_Distance(
-          ST_Point(hubs.longitude, hubs.latitude)::geography,
-          ST_Point(:longitude, :latitude)::geography
-        ) / 500)
-      )"
-    )
-  end
-
-  def self.parse_sql_record(str)
-    str.gsub(/\(|\)|\"/, "").split(",")
+  def as_options_json(options={})
+    as_json(options.reverse_merge(methods: SCOPING_ATTRIBUTE_NAMES))
   end
 end
