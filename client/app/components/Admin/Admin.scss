@@ -1,4 +1,7 @@
 :local {
+  .extra_padding_left {
+    padding-left: 10px;
+  }
   .searchable {
     width: 100%;
     margin: 15px 0;
@@ -26,7 +29,7 @@
     }
   }
   .searchable_header{
-    padding: 15px 0;
+    padding: 26px 0;
   }
   .searchable_header.overlay {
     position: absolute;
@@ -164,25 +167,26 @@
   }
   .input_box {
     height: 38px;
-    width: 170px;
-    border: 1px solid #F2F2F2;
+    width: 100px;
+    border: 0;
     border-radius: 3px;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    background-color: transparent;
+    margin-top: -70px;
+    margin-bottom: 50px;
   }
   .inpu_box_right_margin {
     margin-right: 10px;
   }
   .input_box input {
     height: 38px;
-    border: 1px solid #F2F2F2;
-    background-color: #F9F9F9;
+    border: 1px solid #BDBDBD;
+    background-color: transparent;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
     min-width: 80%;
-    max-width: 80%;
+    max-width: 100%;
     &:focus {
-      outline: none;
+      outline: 1px solid #E0E0E0;
     }
   }
   .dpb_picker div input{
@@ -459,9 +463,9 @@
     opacity: 0;
     z-index: -1;
   }
-  .component_view {
-    padding: 10px;
-  }
+  // .component_view {
+  //   padding: 10px;
+  // }
   .hub_form {
     width: 800px;
     height: 750px;
@@ -773,7 +777,6 @@
   }
   .error {
     height: 40px !important;
-
   }
   .file_error {
     overflow: hidden;
@@ -807,10 +810,11 @@
     border-radius: 5px;
   }
   .action_header {
-    background: lightslategray;
+    background: #E0E0E0;
+    border-bottom: 1px solid #4F4F4F;
     p, i{
       font-size: 20px;
-      color: white;
+      color: #4F4F4F;
       margin: 5px;
     }
   }
@@ -821,6 +825,7 @@
       font-size: 14px;
       // color: white;
       margin: 5px;
+      text-align: center;
     }
   }
   .dpb {
@@ -897,7 +902,7 @@
      > * {
       //  margin-right: 25px;
        &:last-child {
-        margin: 0 !important;
+        margin-right: 0 !important;
       }
      }
    }
@@ -928,10 +933,14 @@
      width: 75px;
    }
 
-    .services_box .border_right {
-      border-color: transparent !important;
-    }
+   .services_box .border_right {
+    border-color: transparent !important;
+   }
 
+  .separator {
+    height: 40px;
+    width: 100%;
+  }
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;

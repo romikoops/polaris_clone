@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { AdminSearchableClients } from './AdminSearchables'
+// import { AdminSearchableClients } from './AdminSearchables'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator, history } from '../../helpers'
 
@@ -52,6 +52,7 @@ export class AdminPricingsClientIndex extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -62,12 +63,12 @@ export class AdminPricingsClientIndex extends Component {
           </p>
           {backButton}
         </div>
-        <AdminSearchableClients
+        {/* <AdminSearchableClients
           theme={theme}
           clients={clients}
           handleClick={this.viewClient}
           seeAll={false}
-        />
+        /> */}
       </div>
     )
   }

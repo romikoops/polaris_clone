@@ -6,6 +6,7 @@ import PropTypes from '../../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
 import { AdminUploadsSuccess } from '../Uploads/Success'
 import { adminActions, documentActions } from '../../../actions'
+import styles from '../Admin.scss'
 
 class AdminHubs extends Component {
   constructor (props) {
@@ -52,7 +53,13 @@ class AdminHubs extends Component {
 
   render () {
     const {
-      theme, hubs, hub, hubHash, adminDispatch, document, documentDispatch
+      theme,
+      hubs,
+      hub,
+      hubHash,
+      adminDispatch,
+      document,
+      documentDispatch
     } = this.props
 
     const uploadStatus = document.viewer ? (
@@ -64,12 +71,19 @@ class AdminHubs extends Component {
     ) : (
       ''
     )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         {uploadStatus}
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          {/* {title} */}
-        </div>
+        <div className={`flex-100 layout-row layout-wrap layout-align-space-between-center ${styles.sec_title}`} />
+        {/* <div className="flex-none layout-row layout-align-start-center">
+                  {showTooltip ? (
+                    <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} />
+                  ) : (
+                    ''
+                  )}
+                  {icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : ''}
+                </div> */}
         {this.state.newHub ? (
           <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />
         ) : (

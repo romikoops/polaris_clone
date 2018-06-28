@@ -275,7 +275,7 @@ function getPricings (redirect) {
 
   return (dispatch) => {
     dispatch(request())
-
+    dispatch(getTrucking())
     adminService.getPricings().then(
       (data) => {
         dispatch(alertActions.success('Fetching Prices successful'))
@@ -1001,7 +1001,7 @@ function activateHub (hubId) {
     return { type: adminConstants.ACTIVATE_HUB_REQUEST, payload: newHubData }
   }
   function success (newHubData) {
-    return { type: adminConstants.ACTIVATE_HUB_SUCCESS, payload: newHubData }
+    return { type: adminConstants.ACTIVATE_HUB_SUCCESS, payload: newHubData.data }
   }
   function failure (error) {
     return { type: adminConstants.ACTIVATE_HUB_FAILURE, error }
@@ -1187,9 +1187,9 @@ function saveNewHub (hub, location) {
 
     adminService.saveNewHub(hub, location).then(
       (data) => {
-        dispatch(alertActions.success('Hew Hub successful'))
-        dispatch(getHubs(false))
+        // dispatch(getHubs(true))
         dispatch(success(data))
+        dispatch(alertActions.success('Hew Hub successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1396,7 +1396,7 @@ function viewTrucking (truckingHub) {
       (data) => {
         dispatch(alertActions.success('Fetch Trucking successful'))
         dispatch(success(data))
-        dispatch(push(`/admin/trucking/${truckingHub}`))
+        dispatch(push(`/admin/pricings/trucking/${truckingHub}`))
       },
       (error) => {
         dispatch(failure(error))

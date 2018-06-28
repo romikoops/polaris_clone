@@ -11,6 +11,7 @@ import {
   documentActions,
   tenantActions
 } from './'
+import { getSubdomain } from '../helpers'
 // import { Promise } from 'es6-promise-promise';
 
 const { fetch } = window
@@ -219,10 +220,19 @@ function fetchTenant (subdomain) {
 
   return (dispatch) => {
     dispatch(requestTenant(subdomain))
+    let subdomainToFetch
+    if (!subdomain) {
+      subdomainToFetch = getSubdomain()
+    } else {
+      subdomainToFetch = subdomain
+    }
 
-    return fetch(`${BASE_URL}/tenants/${subdomain}`)
+    return fetch(`${BASE_URL}/tenants/${subdomainToFetch}`)
       .then(response => response.json())
-      .then(json => dispatch(receiveTenant(subdomain, json)), err => dispatch(failure(err)))
+      .then(
+        json => dispatch(receiveTenant(subdomainToFetch, json)),
+        err => dispatch(failure(err))
+      )
   }
 }
 function fetchTenants () {

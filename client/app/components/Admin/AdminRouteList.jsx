@@ -9,6 +9,7 @@ function listItineraries (itineraries, handleClick, hoverFn, theme) {
     theme && theme.colors
       ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
       : { background: '#E0E0E0' }
+
   return itineraries.length > 0 ? itineraries.map((itinerary) => {
     const firstStopArray = itinerary.stops[0].hub.name.split(' ')
     const firstStopType = firstStopArray.splice(-1)
@@ -18,6 +19,7 @@ function listItineraries (itineraries, handleClick, hoverFn, theme) {
     const lastStopName = lastStopArray.join(' ')
     const stopCount = itinerary.stops.length - 2
     const modeOfTransport = itinerary.mode_of_transport
+
     return (
       <div
         className={`layout-row layout-padding layout-align-space-around-stretch
@@ -68,6 +70,7 @@ export class AdminRouteList extends Component {
       hoverFn,
       theme
     } = this.props
+
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.container}`}>
         <div className={`layout-padding layout-align-start-center ${styles.greyBg}`}>

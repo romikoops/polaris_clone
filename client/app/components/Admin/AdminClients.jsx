@@ -9,9 +9,9 @@ import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { adminClientsTooltips as clientTip } from '../../constants'
-import { Tooltip } from '../Tooltip/Tooltip'
+// import { TextHeading } from '../TextHeading/TextHeading'
+// import { adminClientsTooltips as clientTip } from '../../constants'
+// import { Tooltip } from '../Tooltip/Tooltip'
 
 class AdminClients extends Component {
   static errorsExist (errorsObjects) {
@@ -19,6 +19,7 @@ class AdminClients extends Component {
     errorsObjects.forEach((errorsObj) => {
       if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true
     })
+
     return returnBool
   }
 
@@ -365,17 +366,18 @@ class AdminClients extends Component {
         </div>
       </div>
     )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <div className="flex-100 layout-row layout-align-space-between-center">
             <div className="flex-none layout-row layout-align-start-center">
-              <div className="flex-none">
+              {/* <div className="flex-none">
                 <TextHeading theme={theme} size={1} text="Clients" />
-              </div>
-              <Tooltip icon="fa-info-circle" theme={theme} toolText={clientTip.change} />
+              </div> */}
+              {/* <Tooltip icon="fa-info-circle" theme={theme} toolText={clientTip.change} /> */}
             </div>
           </div>
         </div>

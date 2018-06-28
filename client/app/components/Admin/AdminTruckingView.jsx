@@ -17,27 +17,32 @@ import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
 
+function getTruckingPricingKey (truckingPricing) {
+  if (truckingPricing.zipcode) {
+    const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
+    const endResult = joinedArrays.join(', ')
+
+    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+  }
+  if (truckingPricing.city) {
+    const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
+    const endResult = joinedArrays.join(', ')
+
+    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+  }
+  if (truckingPricing.distance) {
+    const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
+    const endResult = joinedArrays.join(', ')
+
+    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+  }
+
+  return ''
+}
+
 export class AdminTruckingView extends Component {
   static backToIndex () {
     history.goBack()
-  }
-  static getTruckingPricingKey (truckingPricing) {
-    if (truckingPricing.zipcode) {
-      const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
-      const endResult = joinedArrays.join(', ')
-      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
-    }
-    if (truckingPricing.city) {
-      const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
-      const endResult = joinedArrays.join(', ')
-      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
-    }
-    if (truckingPricing.distance) {
-      const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
-      const endResult = joinedArrays.join(', ')
-      return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
-    }
-    return ''
   }
 
   constructor (props) {
@@ -75,6 +80,7 @@ export class AdminTruckingView extends Component {
         .filter(pr => pr.truckingPricing.truck_type === truckKey)
         .filter(pr => pr.truckingPricing.cargo_class === cargoClass.value)
     }
+
     return pricings
       .filter(pr => pr.truckingPricing.load_type === loadTypeKey)
       .filter(pr => pr.truckingPricing.carriage === directionKey)
@@ -138,6 +144,7 @@ export class AdminTruckingView extends Component {
         filteredTruckingPricings:
         this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
       })
+
       return
     }
     const search = (key) => {
@@ -152,6 +159,7 @@ export class AdminTruckingView extends Component {
         keys: key
       }
       const fuse = new Fuse(this.props.truckingDetail.truckingPricings, options)
+
       return fuse.search(event.target.value)
     }
 
@@ -209,7 +217,7 @@ export class AdminTruckingView extends Component {
     )
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
-        background: 
+        background:
           ${theme.colors.brightPrimary} !important;
         border: 0.5px solid rgba(0, 0, 0, 0);
       }
@@ -231,6 +239,7 @@ export class AdminTruckingView extends Component {
       filteredTruckingPricings.length > 0 ? (
         filteredTruckingPricings.map((tp) => {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
+
           return (
             <div
               className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
@@ -249,7 +258,7 @@ export class AdminTruckingView extends Component {
               <div className="flex-100 layout-row layout-wrap layout-align-center-center">
                 <p className="flex-90">{capitalize(idenitfierKey)}</p>
               </div>
-              <p className="flex-90"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
+              <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
             </div>
           )
         })
@@ -287,6 +296,7 @@ export class AdminTruckingView extends Component {
           <p className="flex-none">Chassis</p>
         </div>
       </div>) : ''
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         {uploadStatus}
@@ -365,7 +375,7 @@ export class AdminTruckingView extends Component {
           </div>
           {styleTagJSX}
         </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
           <div
             className={`${
               styles.action_box

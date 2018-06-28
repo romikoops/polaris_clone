@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 import { AdminPriceCreator } from './'
-import { AdminSearchableClients } from './AdminSearchables'
+// import { AdminSearchableClients } from './AdminSearchables'
 // import FileUploader from '../../components/FileUploader/FileUploader'
 // import DocumentsDownloader from '../../components/Documents/Downloader'
-import { adminPricing as priceTip } from '../../constants'
+// import { adminPricing as priceTip } from '../../constants'
 import CardPricingIndex from './CardPricingIndex'
-
-// import styles from './Admin.scss'
+import Tabs from '../Tabs/Tabs'
+import Tab from '../Tabs/Tab'
+import AdminTrucking from './AdminTrucking'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
@@ -53,7 +54,7 @@ export class AdminPricingsIndex extends Component {
   }
   render () {
     const {
-      theme, pricingData, clients, adminDispatch, scope
+      theme, pricingData, clients, adminDispatch, scope, hubHash
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -73,37 +74,56 @@ export class AdminPricingsIndex extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <CardPricingIndex
-          itineraries={detailedItineraries}
-          theme={theme}
-          scope={scope}
-          adminDispatch={adminDispatch}
-          toggleCreator={this.toggleCreator}
-          documentDispatch={this.props.documentDispatch}
-          lastUpdate={lastUpdate}
-        />
 
-        <AdminSearchableClients
-          theme={theme}
-          clients={clients}
-          handleClick={this.viewClient}
-          seeAll={() => adminDispatch.goTo('/admin/pricings/clients')}
-          tooltip={priceTip.clients}
-          showTooltip
-        />
-        {newPricing ? (
-          <AdminPriceCreator
+        <Tabs
+          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            tabTitle="Routes"
             theme={theme}
-            itineraries={itineraries}
-            clients={clients}
-            adminDispatch={adminDispatch}
-            detailedItineraries={detailedItineraries}
-            transportCategories={transportCategories}
-            closeForm={this.toggleCreator}
-          />
-        ) : (
-          ''
-        )}
+          >
+            <CardPricingIndex
+              itineraries={detailedItineraries}
+              theme={theme}
+              scope={scope}
+              adminDispatch={adminDispatch}
+              toggleCreator={this.toggleCreator}
+              documentDispatch={this.props.documentDispatch}
+              lastUpdate={lastUpdate}
+            />
+            {/* <AdminSearchableClients
+              theme={theme}
+              clients={clients}
+              handleClick={this.viewClient}
+              seeAll={() => adminDispatch.goTo('/admin/pricings/clients')}
+              tooltip={priceTip.clients}
+              showTooltip
+            /> */}
+            {newPricing ? (
+              <AdminPriceCreator
+                theme={theme}
+                itineraries={itineraries}
+                clients={clients}
+                adminDispatch={adminDispatch}
+                detailedItineraries={detailedItineraries}
+                transportCategories={transportCategories}
+                closeForm={this.toggleCreator}
+              />
+            ) : (
+              ''
+            )}
+          </Tab>
+          <Tab
+            tabTitle="Trucking"
+            theme={theme}
+          >
+            <AdminTrucking
+              theme={theme}
+              hubHash={hubHash}
+            />
+          </Tab>
+        </Tabs>
+
       </div>
     )
   }
@@ -123,13 +143,14 @@ AdminPricingsIndex.propTypes = {
     routes: PropTypes.array,
     lastUpdate: PropTypes.string
   }),
-  scope: PropTypes.scope
-
+  scope: PropTypes.scope,
+  hubHash: PropTypes.objectOf(PropTypes.hub)
 }
 
 AdminPricingsIndex.defaultProps = {
   theme: null,
   clients: [],
+  hubHash: {},
   pricingData: null,
   scope: null
 }
