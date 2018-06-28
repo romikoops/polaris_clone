@@ -22,6 +22,7 @@ exports[`shallow rendering 1`] = `
   >
     <GmapsLoader
       component={[Function]}
+      filteredRouteIndexes={Array []}
       handleAddressChange={[Function]}
       handleCarriageChange={[Function]}
       handleSelectLocation={[Function]}
@@ -128,6 +129,7 @@ exports[`shallow rendering 1`] = `
         }
       }
       theme={null}
+      updateFilteredRouteIndexes={[Function]}
     />
   </div>
   <div

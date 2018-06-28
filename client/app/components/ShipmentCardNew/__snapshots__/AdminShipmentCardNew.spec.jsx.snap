@@ -11,22 +11,6 @@ exports[`shallow rendering 1`] = `
     onClick={[Function]}
   />
   <div
-    className="layout-row layout-align-space-around-center topRight"
-  >
-    <i
-      className="fa fa-check pointy check"
-      onClick={[Function]}
-    />
-    <i
-      className="fa fa-edit pointy edit"
-      onClick={[Function]}
-    />
-    <i
-      className="fa fa-trash pointy trash"
-      onClick={[Function]}
-    />
-  </div>
-  <div
     className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center"
   >
     <span

@@ -7840,7 +7840,50 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_28"
-              shipment={Object {}}
+              shipment={
+                Object {
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                }
+              }
               theme={
                 Object {
                   "colors": Object {
@@ -7961,7 +8004,50 @@ exports[`with cargo items 1`] = `
                 }
               }
               key="RANDOM_KEY_29"
-              shipment={Object {}}
+              shipment={
+                Object {
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                }
+              }
               theme={
                 Object {
                   "colors": Object {
@@ -9122,7 +9208,7 @@ exports[`with containers 1`] = `
           <div
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
-            <CargoContainerGroup
+            <CargoItemGroup
               group={
                 Object {
                   "cargo_group_id": 1,
@@ -9138,6 +9224,50 @@ exports[`with containers 1`] = `
                 }
               }
               key="RANDOM_KEY_13"
+              shipment={
+                Object {
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                }
+              }
               theme={
                 Object {
                   "colors": Object {
@@ -9146,9 +9276,8 @@ exports[`with containers 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
-            <CargoContainerGroup
+            <CargoItemGroup
               group={
                 Object {
                   "cargo_group_id": 2,
@@ -9164,6 +9293,50 @@ exports[`with containers 1`] = `
                 }
               }
               key="RANDOM_KEY_14"
+              shipment={
+                Object {
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                }
+              }
               theme={
                 Object {
                   "colors": Object {
@@ -9172,7 +9345,6 @@ exports[`with containers 1`] = `
                   },
                 }
               }
-              viewHSCodes={false}
             />
           </div>
         </div>
