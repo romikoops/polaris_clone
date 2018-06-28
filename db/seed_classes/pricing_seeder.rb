@@ -29,7 +29,9 @@ class PricingSeeder
       overwrite_freight_rates(request_hash["freight_rates"], shipper, true)
 
       puts "  - Seeding local charges..."
-      overwrite_local_charges(request_hash["local_charges"], shipper)
+      ExcelTool::OverwriteLocalCharges.new(
+        params: request_hash["local_charges"], user: shipper
+      ).perform
     end
   end
 
