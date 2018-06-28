@@ -2,7 +2,8 @@
 
 class TruckingPricing < ApplicationRecord
   has_many :shipments
-  belongs_to :courier
+  belongs_to :trucking_pricing_scope
+  delegate :courier, to: :trucking_pricing_scope
   belongs_to :tenant
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings

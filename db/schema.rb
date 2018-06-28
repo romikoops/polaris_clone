@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180627081746) do
+ActiveRecord::Schema.define(version: 20180628130604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -601,21 +601,28 @@ ActiveRecord::Schema.define(version: 20180627081746) do
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
-  create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "courier_id"
+  create_table "trucking_pricing_scopes", force: :cascade do |t|
     t.string "load_type"
+    t.string "cargo_class"
+    t.string "carriage"
+    t.integer "courier_id"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_pricings", force: :cascade do |t|
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
-    t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
-    t.string "cargo_class"
     t.string "identifier_modifier"
+    t.integer "trucking_pricing_scope_id"
   end
 
   create_table "user_locations", force: :cascade do |t|
