@@ -11,15 +11,13 @@ module CurrencyTools
     else
       cached_rates = Currency.find_by(base: base, tenant_id: nil)
     end
-    rates = if cached_rates.nil? || cached_rates.today.nil?
-              refresh_rates(base)
-            elsif cached_rates.updated_at < Date.new - 1.day
-              refresh_rates(base)
-            else
-              cached_rates
-            end
-
-    rates
+    if cached_rates.nil? || cached_rates.today.nil?
+      refresh_rates(base)
+    elsif cached_rates.updated_at < Date.new - 1.day
+      refresh_rates(base)
+    else
+      cached_rates
+    end
   end
 
   def get_currency_array(base, tenant_id)

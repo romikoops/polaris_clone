@@ -3,8 +3,10 @@ import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './AdminClientTile.scss'
+import adminStyles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, gradientBorderGenerator } from '../../helpers'
+import GradientBorder from '../GradientBorder'
 import defaults from '../../styles/default_classes.scss'
 
 export class AdminClientTile extends Component {
@@ -127,30 +129,52 @@ export class AdminClientTile extends Component {
         </div>
       </div>
     )
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
     const switchView = showDelete ? deleter : content
     const contentView = deleteable ? switchView : content
     const tooltipId = v4()
+
     return (
-      <div className={`flex-none ${styles.client_card} layout-row pointy`}>
-        {deleteable && !showDelete ? (
-          <div
-            className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
-            onClick={this.toggleShowDelete}
-          >
-            <i className="fa fa-trash" />
+      <GradientBorder
+        wrapperClassName={`flex-none ${styles.client_card} ${adminStyles.margin_bottom} layout-row flex-30 pointy`}
+        gradient={gradientBorderStyle}
+        className="layout-column flex-100"
+        content={(
+          <div className="layout-column flex-100">
+            {deleteable && !showDelete ? (
+              <div
+                className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
+                onClick={this.toggleShowDelete}
+              >
+                <i className="fa fa-trash" />
+              </div>
+            ) : (
+              ''
+            )}
+            <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
+              {contentView}
+              {
+                showTooltip
+                  ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+                  : ''
+              }
+            </div>
+            {/* <div className={`${userStyles.footer}`}>
+              <div className="layout-row layout-align-center-center">
+                <span
+                  className="emulate_link"
+                  onClick={this.toggleShowDelete}
+                >
+                  <i className="fa fa-trash" />
+                </span>
+              </div>
+            </div> */}
           </div>
-        ) : (
-          ''
         )}
-        <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
-          {contentView}
-          {
-            showTooltip
-              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
-              : ''
-          }
-        </div>
-      </div>
+      />
     )
   }
 }

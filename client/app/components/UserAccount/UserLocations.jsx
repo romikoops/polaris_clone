@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
+import adminStyles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { EditLocation } from './EditLocation'
+import { gradientTextGenerator } from '../../helpers'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient) => [
   <div
     key="addLocationButton"
-    className={`${defaults.pointy} flex-33`}
+    className={`${defaults.pointy} flex-30 ${adminStyles.margin_bottom}`}
     onClick={() => toggleActiveView('editLocation')}
   >
     <div
@@ -27,8 +29,8 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
     </div>
   </div>,
   locInfo.map(op => (
-    <div key={v4()} className="flex-33">
-      <div className={`${styles['location-box']}`}>
+    <div key={v4()} className={`flex-30 ${adminStyles.margin_bottom}`}>
+      <div className={`${styles['location-box']} flex-100 layout-column`}>
         <div className={`${styles.header}`}>
           {op.user.primary ? (
             <h3 className={`${styles.standard}`}>Primary</h3>
@@ -50,16 +52,19 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
             </div>
           )}
         </div>
-        <div className={`${styles.content} layout-row layout-wrap layout-align-start-start`}>
-          <p className="flex-100">{op.location.street_number} {op.location.street} </p>
-          <p className="flex-100">{op.location.city} </p>
-          <p className="flex-100">{op.location.zip_code} </p>
-          <p className="flex-100">{op.location.country} </p>
+        <div className={`layout-row flex-100 ${styles.location_address}`}>
+          <i className="fa fa-map-marker clip" style={{ background: '#BDBDBD' }} />
+          <div className={`${styles.content} layout-row layout-wrap layout-align-start-start`}>
+            <p className="flex-100">{op.location.street_number} {op.location.street} </p>
+            <p className="flex-100"><strong>{op.location.city}</strong></p>
+            <p className="flex-100">{op.location.zip_code} </p>
+            <p className="flex-100">{op.location.country} </p>
+          </div>
         </div>
         <div className={`${styles.footer}`}>
           <div className="layout-row layout-align-center-center">
             <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
-                                Edit
+              <i className="fa fa-pencil" />
             </span>
                             &nbsp; | &nbsp;
             <span
@@ -68,7 +73,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
                 destroyLocation(op.location.id)
               }
             >
-                                Delete
+              <i className="fa fa-trash" />
             </span>
           </div>
         </div>
@@ -132,8 +137,12 @@ export class UserLocations extends Component {
   }
 
   render () {
+    const { theme } = this.props
     const locInfo = this.props.locations
-
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
     let activeView
     switch (this.state.activeView) {
       case 'allLocations':
@@ -143,7 +152,8 @@ export class UserLocations extends Component {
             this.makePrimary,
             this.toggleActiveView,
             this.destroyLocation,
-            this.editLocation
+            this.editLocation,
+            gradientFontStyle
           )
           : undefined
         break
@@ -174,11 +184,11 @@ export class UserLocations extends Component {
         )
         break
       default:
-        activeView = LocationView(locInfo)
+        activeView = LocationView(locInfo, gradientFontStyle)
     }
 
     return (
-      <div className="layout-row flex-100 layout-wrap">{activeView}</div>
+      <div className="layout-row flex-100 layout-wrap layout-align-space-between-center">{activeView}</div>
     )
   }
 }
