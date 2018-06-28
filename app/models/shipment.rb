@@ -69,6 +69,11 @@ class Shipment < ApplicationRecord
   # Scopes
   scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
   scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
+  scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
+  scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
+  scope :open, -> { where(status: %w(in_progress confirmed)) }
+  scope :finished, -> { where(status: "finished") }
+
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
   end
@@ -311,27 +316,6 @@ class Shipment < ApplicationRecord
     self.itinerary = current_itinerary
 
     return_bool
-  end
-
-  def self.requested_shipments(tenant_id)
-    where(
-      status:    %w(requested requested_by_unconfirmed_account),
-      tenant_id: tenant_id
-    ).order(booking_placed_at: :desc)
-  end
-
-  def self.open_shipments(tenant_id)
-    where(
-      status:    %w(in_progress confirmed),
-      tenant_id: tenant_id
-    ).order(booking_placed_at: :desc)
-  end
-
-  def self.finished_shipments(tenant_id)
-    where(
-      status:    "finished",
-      tenant_id: tenant_id
-    ).order(booking_placed_at: :desc)
   end
 
   private
