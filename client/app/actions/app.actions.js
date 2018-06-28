@@ -25,6 +25,7 @@ function fetchCurrencies (type) {
   function failure (error) {
     return { type: appConstants.FETCH_CURRENCIES_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request(type))
     appService.fetchCurrencies(type).then(
@@ -52,6 +53,7 @@ function refreshRates (type) {
   function failure (error) {
     return { type: appConstants.REFRESH_CURRENCIES_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request(type))
     appService.refreshRates(type).then(
@@ -79,6 +81,7 @@ function fetchCurrenciesForBase (base) {
   function failure (error) {
     return { type: appConstants.FETCH_CURRENCIES_FOR_BASE_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request(base))
     appService.fetchCurrenciesForBase(base).then(
@@ -106,6 +109,7 @@ function setCurrency (type, req) {
   function failure (error) {
     return { type: appConstants.SET_CURRENCY_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request(type))
     appService.setCurrency(type).then(
@@ -135,6 +139,7 @@ function toggleTenantCurrencyMode () {
   function failure (error) {
     return { type: appConstants.SET_CURRENCY_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request())
     appService.toggleTenantCurrencyMode().then(
@@ -161,6 +166,7 @@ function setTenantCurrencyRates (base, rates) {
   function failure (error) {
     return { type: appConstants.SET_CURRENCY_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(request())
     appService.setTenantCurrencyRates(base, rates).then(
@@ -210,8 +216,10 @@ function fetchTenant (subdomain) {
   function failure (error) {
     return { type: appConstants.RECEIVE_TENANT_ERROR, error }
   }
+
   return (dispatch) => {
     dispatch(requestTenant(subdomain))
+
     return fetch(`${BASE_URL}/tenants/${subdomain}`)
       .then(response => response.json())
       .then(json => dispatch(receiveTenant(subdomain, json)), err => dispatch(failure(err)))
@@ -221,18 +229,21 @@ function fetchTenants () {
   function failure (error) {
     return { type: appConstants.RECEIVE_TENANT_ERROR, error }
   }
+
   return dispatch => fetch(`${BASE_URL}/tenants`)
     .then(response => response.json())
     .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
 }
 function shouldFetchTenant (state, subdomain) {
   const { tenant } = state
-  if (!tenant.data || (Object.keys(tenant.data).length < 1)) {
+  if (!tenant.data || (Object.keys(tenant.data).length < 1) ||
+  (tenant && tenant.data && tenant.data.subdomain !== subdomain)) {
     return true
   }
   if (tenant.isFetching) {
     return false
   }
+
   return tenant.didInvalidate
 }
 

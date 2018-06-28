@@ -38,8 +38,9 @@ class App extends Component {
   }
   componentDidUpdate (prevProps) {
     // this.isUserExpired()
-    if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
-      // const subdomain = getSubdomain();
+    if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
+      (!this.props.tenant && !this.props.isFetching) ||
+    (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
       const { appDispatch, selectedSubdomain } = this.props
       appDispatch.fetchTenantIfNeeded(selectedSubdomain)
     }
