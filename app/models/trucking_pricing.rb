@@ -97,9 +97,7 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
-  private
-
-  def self.parse_sql_record(str)
-    str.gsub(/\(|\)|\"/, "").split(",")
+  def as_options_json(options={})
+    as_json(options.reverse_merge(methods: SCOPING_ATTRIBUTE_NAMES))
   end
 end

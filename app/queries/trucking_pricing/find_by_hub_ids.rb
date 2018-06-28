@@ -76,7 +76,7 @@ module Queries
       def deserialized_result
         @result.map do |row|
           {
-            "truckingPricing" => @klass.find(row["trucking_pricing_id"]),
+            "truckingPricing" => @klass.find(row["trucking_pricing_id"]).as_options_json,
             row["ident_type"] => row["ident_values"].split(",").map { |range| range.split("*") },
             "countryCode"     => row["country_code"]
           }
