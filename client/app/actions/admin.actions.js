@@ -14,6 +14,7 @@ function getHubs (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_HUBS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -44,6 +45,7 @@ function getHub (id, redirect) {
   function failure (error) {
     return { type: adminConstants.GET_HUB_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -73,6 +75,7 @@ function editHub (id, object) {
   function failure (error) {
     return { type: adminConstants.EDIT_HUB_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -100,6 +103,7 @@ function wizardHubs (file) {
   function failure (error) {
     return { type: adminConstants.WIZARD_HUBS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -127,6 +131,7 @@ function wizardSCharge (file) {
   function failure (error) {
     return { type: adminConstants.WIZARD_SERVICE_CHARGE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -154,6 +159,7 @@ function wizardPricings (file) {
   function failure (error) {
     return { type: adminConstants.WIZARD_PRICING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -181,6 +187,7 @@ function wizardTrucking (type, file) {
   function failure (error) {
     return { type: adminConstants.WIZARD_TRUCKING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -208,6 +215,7 @@ function wizardOpenPricings (file) {
   function failure (error) {
     return { type: adminConstants.WIZARD_OPEN_PRICING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -235,6 +243,7 @@ function getServiceCharges (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_SERVICE_CHARGES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -263,6 +272,7 @@ function getPricings (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_PRICINGS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -291,6 +301,7 @@ function deletePricing (pricing) {
   function failure (error) {
     return { type: adminConstants.DELETE_PRICING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(pricing))
     adminService.deletePricing(pricing).then(
@@ -317,6 +328,7 @@ function getClientPricings (id, redirect) {
   function failure (error) {
     return { type: adminConstants.GET_CLIENT_PRICINGS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -348,6 +360,7 @@ function getItineraryPricings (id, redirect) {
   function failure (error) {
     return { type: adminConstants.GET_ROUTE_PRICINGS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -379,6 +392,7 @@ function updatePricing (id, req) {
   function failure (error) {
     return { type: adminConstants.UPDATE_PRICING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -405,6 +419,7 @@ function getSchedules (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_SCHEDULES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -434,6 +449,7 @@ function getTrucking (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_TRUCKING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -464,6 +480,7 @@ function getShipments (redirect) {
   function failure (error) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -493,6 +510,7 @@ function getDashShipments () {
   function failure (error) {
     return { type: adminConstants.GET_DASH_SHIPMENTS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -520,6 +538,7 @@ function getShipment (id, redirect) {
   function failure (error) {
     return { type: adminConstants.ADMIN_GET_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -550,6 +569,7 @@ function getClients (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_CLIENTS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -581,6 +601,7 @@ function getClient (id, redirect) {
   function failure (error) {
     return { type: adminConstants.GET_CLIENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -612,6 +633,7 @@ function getVehicleTypes () {
   function failure (error) {
     return { type: adminConstants.GET_VEHICLE_TYPES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -639,6 +661,7 @@ function getDashboard (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_DASHBOARD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -669,6 +692,7 @@ function editTruckingPrice (price) {
   function failure (error) {
     return { type: adminConstants.EDIT_TRUCKING_PRICE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -696,6 +720,7 @@ function autoGenSchedules (data) {
   function failure (error) {
     return { type: adminConstants.GENERATE_SCHEDULES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -741,6 +766,7 @@ function confirmShipment (id, action, redirect) {
   function failure (error) {
     return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(id, action))
     adminService.confirmShipment(id, action).then(
@@ -779,6 +805,7 @@ function getItineraries (redirect) {
   function failure (error) {
     return { type: adminConstants.GET_ROUTES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -809,6 +836,7 @@ function getLayovers (itineraryId, target) {
   function failure (error) {
     return { type: adminConstants.GET_LAYOVERS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -835,6 +863,7 @@ function saveItineraryNotes (itineraryId, notes) {
   function failure (error) {
     return { type: adminConstants.SAVE_ITINERARY_NOTES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
     adminService.saveItineraryNotes(itineraryId, notes).then(
@@ -861,6 +890,7 @@ function getItinerary (id, redirect) {
   function failure (error) {
     return { type: adminConstants.GET_ROUTE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -891,6 +921,7 @@ function newRoute (data) {
   function failure (error) {
     return { type: adminConstants.NEW_ROUTE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -919,6 +950,7 @@ function updateServiceCharge (id, req) {
   function failure (error) {
     return { type: adminConstants.UPDATE_SERVICE_CHARGES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -947,6 +979,7 @@ function newClient (data) {
   function failure (error) {
     return { type: adminConstants.NEW_CLIENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -973,6 +1006,7 @@ function activateHub (hubId) {
   function failure (error) {
     return { type: adminConstants.ACTIVATE_HUB_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1000,6 +1034,7 @@ function deleteHub (hubId, redirect) {
   function failure (error) {
     return { type: adminConstants.DELETE_HUB_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1029,6 +1064,7 @@ function deleteItinerary (id, redirect) {
   function failure (error) {
     return { type: adminConstants.DELETE_ITINERARY_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1058,6 +1094,7 @@ function deleteTrip (id, redirect) {
   function failure (error) {
     return { type: adminConstants.DELETE_TRIP_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1087,6 +1124,7 @@ function deleteClient (id, redirect) {
   function failure (error) {
     return { type: adminConstants.DELETE_CLIENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1116,6 +1154,7 @@ function documentAction (docId, action) {
   function failure (error) {
     return { type: adminConstants.DOCUMENT_ACTION_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1142,14 +1181,15 @@ function saveNewHub (hub, location) {
   function failure (error) {
     return { type: adminConstants.NEW_HUB_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
     adminService.saveNewHub(hub, location).then(
       (data) => {
-        dispatch(alertActions.success('Hew Hub successful'))
-        dispatch(getHubs(false))
+        // dispatch(getHubs(true))
         dispatch(success(data))
+        dispatch(alertActions.success('Hew Hub successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -1169,6 +1209,7 @@ function saveNewTrucking (obj) {
   function failure (error) {
     return { type: adminConstants.NEW_TRUCKING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1194,6 +1235,7 @@ function editShipmentPrice (id, priceObj) {
   function failure (error) {
     return { type: adminConstants.EDIT_SHIPMENT_PRICE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1219,6 +1261,7 @@ function editLocalCharges (data) {
   function failure (error) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1244,6 +1287,7 @@ function editCustomsFees (data) {
   function failure (error) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1269,6 +1313,7 @@ function editShipmentTime (id, timeObj) {
   function failure (error) {
     return { type: adminConstants.EDIT_SHIPMENT_TIME_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1295,6 +1340,7 @@ function assignManager (obj) {
   function failure (error) {
     return { type: adminConstants.ASSIGN_MANAGER_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1321,6 +1367,7 @@ function viewTrucking (truckingHub) {
   function failure (error) {
     return { type: adminConstants.VIEW_TRUCKING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1348,6 +1395,7 @@ function loadItinerarySchedules (id, redirect) {
   function failure (error) {
     return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
     adminService.loadItinerarySchedules(id).then(
@@ -1376,6 +1424,7 @@ function uploadTrucking (url, file, direction) {
   function failure (error) {
     return { type: adminConstants.UPLOAD_TRUCKING_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1403,6 +1452,7 @@ function newHubImage (id, file) {
   function failure (error) {
     return { type: adminConstants.UPLOAD_HUB_IMAGE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -1428,6 +1478,7 @@ function updateHubMandatoryCharges (id, charges) {
   function failure (error) {
     return { type: adminConstants.UPDATE_MANDATORY_CHARGE_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 

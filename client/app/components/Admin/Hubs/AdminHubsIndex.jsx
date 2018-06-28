@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
+import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import hubStyles from './index.scss'
-import { AdminSearchableHubs } from '../AdminSearchables'
 import FileUploader from '../../../components/FileUploader/FileUploader'
-import { adminHubs as hubsTip } from '../../../constants'
+import { adminClicked as clickTip } from '../../../constants'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import DocumentsDownloader from '../../../components/Documents/Downloader'
 import { Checkbox } from '../../Checkbox/Checkbox'
 import { capitalize, filters } from '../../../helpers'
+import { AdminHubTile } from './AdminHubTile'
 
 export class AdminHubsIndex extends Component {
   // export function AdminHubsIndex ({
@@ -36,6 +37,12 @@ export class AdminHubsIndex extends Component {
       this.prepFilters()
     }
   }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.hubs.length) {
+      this.prepFilters(nextProps.hubs)
+    }
+  }
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -55,8 +62,9 @@ export class AdminHubsIndex extends Component {
       }
     })
   }
-  prepFilters () {
+  prepFilters (nextHubs) {
     const { hubs } = this.props
+    const filterablehubs = nextHubs || hubs
     const tmpFilters = {
       hubType: {},
       countries: {},
@@ -66,13 +74,14 @@ export class AdminHubsIndex extends Component {
       },
       expander: {}
     }
-    hubs.forEach((hub) => {
+    filterablehubs.forEach((hub) => {
       tmpFilters.hubType[hub.data.hub_type] = true
       tmpFilters.countries[hub.location.country] = true
     })
+
     this.setState({
       searchFilters: tmpFilters,
-      searchResults: hubs
+      searchResults: filterablehubs.slice()
     })
   }
   handleSearchQuery (e) {
@@ -90,6 +99,7 @@ export class AdminHubsIndex extends Component {
     const hubFilterKeys =
       Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
     const filter1 = array.filter(a => hubFilterKeys.includes(a.data.hub_type))
+
     let filter2 = []
     const countryKeys =
       Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
@@ -98,9 +108,11 @@ export class AdminHubsIndex extends Component {
     } else {
       filter2 = filter1
     }
+
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
     const filter3 = filter2.filter(a => statusFilterKeys.includes(a.data.hub_status))
+
     let filter4
     if (searchFilters.query && searchFilters.query !== '') {
       filter4 = filters.handleSearchChange(
@@ -111,12 +123,13 @@ export class AdminHubsIndex extends Component {
     } else {
       filter4 = filter3
     }
+
     return filter4
   }
   render () {
     const { searchResults, searchFilters, expander } = this.state
     const {
-      theme, viewHub, adminDispatch, toggleNewHub, documentDispatch
+      theme, viewHub, toggleNewHub, documentDispatch
     } = this.props
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
@@ -141,6 +154,7 @@ export class AdminHubsIndex extends Component {
         : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
       const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
+
       return (
         <div
           className={`${
@@ -184,22 +198,28 @@ export class AdminHubsIndex extends Component {
         />
       </div>
     ))
+
     const results = this.applyFilters(searchResults)
+
+    const hubsArr = results.map(hub => (
+      <AdminHubTile
+        key={v4()}
+        hub={hub}
+        theme={theme}
+        handleClick={viewHub}
+        tooltip={clickTip.related}
+        showTooltip
+      />
+    ))
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
-          <AdminSearchableHubs
-            theme={theme}
-            hubs={results}
-            adminDispatch={adminDispatch}
-            sideScroll={false}
-            handleClick={viewHub}
-            hideFilters
-            seeAll={false}
-            icon="fa-info-circle"
-            tooltip={hubsTip.manage}
-          />
+          <div className="layout-row flex-100 layout-align-start-center header_buffer">
+            <div className="layout-row flex-100 layout-align-space-around-start layout-wrap">
+              {hubsArr}
+            </div>
+          </div>
         </div>
         <div className="flex-20 layout-row layout-wrap layout-align-center-start">
           <div
@@ -464,9 +484,6 @@ AdminHubsIndex.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   viewHub: PropTypes.func.isRequired,
   toggleNewHub: PropTypes.func.isRequired,
-  adminDispatch: PropTypes.shape({
-    getHub: PropTypes.func
-  }).isRequired,
   documentDispatch: PropTypes.shape({
     closeViewer: PropTypes.func,
     uploadHubs: PropTypes.func

@@ -23,11 +23,19 @@ export class AdminSearchableHubs extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.seeAll = this.seeAll.bind(this)
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.hubs && nextProps.hideFilters) {
+      this.setState({
+        hubs: this.filterHubsByType(nextProps.hubs)
+      }, () => this.handleSearchChange({ target: { value: '' } }))
+    }
+  }
   componentDidUpdate (prevProps) {
     if (prevProps.hubs !== this.props.hubs) {
       this.handleSearchChange({ target: { value: '' } })
     }
   }
+
   setHubFilter (e) {
     this.setState({ selectedMot: e })
     // this.handleSearchChange({ target: { value: '' } })
@@ -46,6 +54,7 @@ export class AdminSearchableHubs extends Component {
       this.setState({
         hubs: this.filterHubsByType(this.props.hubs)
       })
+
       return
     }
     const search = (key) => {
@@ -60,6 +69,7 @@ export class AdminSearchableHubs extends Component {
         keys: [key]
       }
       const fuse = new Fuse(this.props.hubs, options)
+
       return fuse.search(event.target.value)
     }
 
@@ -86,6 +96,7 @@ export class AdminSearchableHubs extends Component {
     } else {
       toLimitArray = array
     }
+
     return limit === 0 ? toLimitArray : AdminSearchableHubs.limitArray(toLimitArray, limit)
   }
   render () {
@@ -154,6 +165,7 @@ export class AdminSearchableHubs extends Component {
     ) : (
       ''
     )
+
     return (
       <div
         className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}

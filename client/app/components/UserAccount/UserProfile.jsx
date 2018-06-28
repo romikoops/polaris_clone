@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import Select from 'react-select'
+// import styled from 'styled-components'
+// import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -8,7 +8,7 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { currencyOptions } from '../../constants'
+// import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -293,6 +293,7 @@ export class UserProfile extends Component {
           theme={theme}
           tenant={tenant}
         />)
+
         return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
       }
       case 'tenant': {
@@ -302,6 +303,7 @@ export class UserProfile extends Component {
           theme={theme}
           tenant={tenant}
         />)
+
         return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
       }
       case 'itsmycargo': {
@@ -311,6 +313,7 @@ export class UserProfile extends Component {
           theme={theme}
           tenant={tenant}
         />)
+
         return <Modal component={comp} theme={theme} parentToggle={() => this.closeOptOutModal()} />
       }
       default:
@@ -360,25 +363,25 @@ export class UserProfile extends Component {
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
-    const StyledSelect = styled(Select)`
-      width: 50%;
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
+    // const StyledSelect = styled(Select)`
+    //   width: 50%;
+    //   .Select-control {
+    //     background-color: #f9f9f9;
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2 !important;
+    //   }
+    //   .Select-menu-outer {
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-value {
+    //     background-color: #f9f9f9;
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-option {
+    //     background-color: #f9f9f9;
+    //   }
+    // `
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
@@ -499,6 +502,7 @@ export class UserProfile extends Component {
         </div>
       </div>
     )
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         {newAliasBool ? newAliasBox : ''}
@@ -528,7 +532,7 @@ export class UserProfile extends Component {
                 <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
               )}
             </div>
-            <div className="flex-50 layout-row layout-align-end-center layout-wrap">
+            {/* <div className="flex-50 layout-row layout-align-end-center layout-wrap">
               <div className="flex-75 layout-row layout-align-end-center layout-wrap">
                 <div className="flex-100 layout-row layout-align-end-center layout-wrap">
                   <h3 className="flex-none"> Currency Settings:</h3>
@@ -537,7 +541,7 @@ export class UserProfile extends Component {
                   <p className="flex-none">Current Selection: {user.currency}</p>
                 </div>
               </div>
-              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+               <div className="flex-75 layout-row layout-align-end-center layout-wrap">
                 <StyledSelect
                   name="currency"
                   className={`${styles.select}`}
@@ -557,7 +561,7 @@ export class UserProfile extends Component {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div
