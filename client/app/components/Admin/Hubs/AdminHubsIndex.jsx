@@ -194,7 +194,7 @@ export class AdminHubsIndex extends Component {
               tooltip={hubsTip.manage}
             />
           </div>
-          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-center-start">
+          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
             <div className={`${styles.position_fixed_right}`}>
 
               <div className={`${styles.filter_panel} flex layout-row`}>

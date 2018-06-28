@@ -122,9 +122,9 @@ export default class CardPricingIndex extends Component {
   }
 
   render () {
-    const { expander, searchTexts } = this.state
+    const { searchTexts } = this.state
     const {
-      theme, limit, scope, toggleCreator, lastUpdate
+      theme, limit, scope, toggleCreator
     } = this.props
     if (!scope) return ''
     const gradientBorderStyle =
@@ -145,13 +145,14 @@ export default class CardPricingIndex extends Component {
 
         <div
           className={`${styles.flex_titles} ${adminStyles.margin_box_right} ${adminStyles.margin_bottom}
-          flex-80 flex-md-60 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
+          flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
         >
           {modeOfTransportNames.map(modeOfTransportName => (
             <div
-              className={`${columnFlex} flex-sm-45 flex-md-45 flex-xs-100 layout-row layout-wrap layout-align-center-start ${
-                styles.titles_btn
-              }`}
+              className={`${columnFlex}
+                flex-sm-45 flex-md-45 flex-xs-100 layout-row layout-wrap layout-align-center-start card_padding_right ${
+            styles.titles_btn
+            }`}
             >
               <GradientBorder
                 wrapperClassName={`layout-column flex-100 ${styles.city}`}
@@ -243,8 +244,7 @@ CardPricingIndex.propTypes = {
     closeViewer: PropTypes.func,
     uploadPricings: PropTypes.func
   }).isRequired,
-  scope: PropTypes.scope,
-  lastUpdate: PropTypes.string
+  scope: PropTypes.scope
 }
 
 CardPricingIndex.defaultProps = {
@@ -253,6 +253,5 @@ CardPricingIndex.defaultProps = {
   itineraries: [],
   scope: null,
   limit: 4,
-  toggleCreator: null,
-  lastUpdate: ''
+  toggleCreator: null
 }

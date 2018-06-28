@@ -183,51 +183,54 @@ export class AdminTruckingIndex extends Component {
             icon="fa-info-circle"
           />
         </div>
-        <SideOptionsBox
-          header="Filters"
-          flexOptions="layout-column flex-20 flex-md-30"
-          content={
-            <div>
-              <div
-                className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-              >
-                <input
-                  type="text"
-                  className="flex-100"
-                  value={searchFilters.query}
-                  placeholder="Search"
-                  onChange={e => this.handleSearchQuery(e)}
-                />
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <CollapsingBar
-                  collapsed={!expander.hubType}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('hubType')}
-                  headingText="Hub Type"
-                  faClass="fa fa-ship"
-                  content={typeFilters}
-                />
-                <CollapsingBar
-                  collapsed={!expander.status}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('status')}
-                  headingText="Status"
-                  faClass="fa fa-star-half-o"
-                  content={statusFilters}
-                />
-                <CollapsingBar
-                  collapsed={!expander.countries}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('countries')}
-                  headingText="Country"
-                  faClass="fa fa-flag"
-                  content={countryFilters}
-                />
-              </div>
-            </div>
-          }
-        />
+        <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+          <div className={`${styles.filter_panel} flex layout-row layout-align-end-end`}>
+            <SideOptionsBox
+              header="Filters"
+              content={
+                <div>
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                  >
+                    <input
+                      type="text"
+                      className="flex-100"
+                      value={searchFilters.query}
+                      placeholder="Search"
+                      onChange={e => this.handleSearchQuery(e)}
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                    <CollapsingBar
+                      collapsed={!expander.hubType}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('hubType')}
+                      headingText="Hub Type"
+                      faClass="fa fa-ship"
+                      content={typeFilters}
+                    />
+                    <CollapsingBar
+                      collapsed={!expander.status}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('status')}
+                      headingText="Status"
+                      faClass="fa fa-star-half-o"
+                      content={statusFilters}
+                    />
+                    <CollapsingBar
+                      collapsed={!expander.countries}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('countries')}
+                      headingText="Country"
+                      faClass="fa fa-flag"
+                      content={countryFilters}
+                    />
+                  </div>
+                </div>
+              }
+            />
+          </div>
+        </div>
       </div>
     )
   }
