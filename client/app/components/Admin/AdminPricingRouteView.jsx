@@ -59,7 +59,6 @@ export class AdminPricingRouteView extends Component {
     })
   }
   selectClient (client) {
-    console.log(client)
     this.setState({ selectedClient: client })
   }
   closeClientView () {

@@ -1,0 +1,21 @@
+:local {
+  .panel_wrap {
+    width: 227px;
+    border-bottom: 7px solid #E0E0E0;
+    border-top: 7px solid #E0E0E0;
+    border-left: 7px solid #E0E0E0;
+    padding-bottom: 15px;
+    margin-top: 64px;
+  }
+  h1 {
+    color: #4F4F4F;
+    font-size: 22px;
+    text-align: center;
+    margin-top: -20px;
+    span {
+      background-color: white;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+}

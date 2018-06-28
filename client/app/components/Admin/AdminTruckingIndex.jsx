@@ -3,6 +3,8 @@ import PropTypes from '../../prop-types'
 import { AdminSearchableHubs } from './AdminSearchables'
 import styles from './Admin.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
+import SideOptionsBox from './SideOptions/SideOptionsBox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import { capitalize, filters } from '../../helpers'
 
 export class AdminTruckingIndex extends Component {
@@ -106,6 +108,7 @@ export class AdminTruckingIndex extends Component {
     } else {
       filter4 = filter3
     }
+
     return filter4
   }
   render () {
@@ -116,17 +119,15 @@ export class AdminTruckingIndex extends Component {
     if (!truckingNexuses) {
       return ''
     }
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
       const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
+
       return (
         <div
-          className={`${
-            styles.action_section
-          } flex-100 layout-row layout-align-center-center layout-wrap`}
+          className={`
+            ${styles.action_section}
+            flex-100 layout-row layout-align-center-center layout-wrap
+          `}
         >
           <p className="flex-70">{typeNames[htk]}</p>
           <Checkbox
@@ -166,9 +167,10 @@ export class AdminTruckingIndex extends Component {
       </div>
     ))
     const results = this.applyFilters(searchResults)
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+      <div className="flex-100 layout-row layout-align-space-between-start">
+        <div className={`${styles.component_view} flex-80 flex-sm-100 flex-xs-100 flex-md-70 layout-row layout-align-start-start`}>
           <AdminSearchableHubs
             theme={theme}
             hubs={results}
@@ -176,123 +178,60 @@ export class AdminTruckingIndex extends Component {
             sideScroll={false}
             handleClick={viewTrucking}
             hideFilters
-            title="Trucking Hubs"
+            title=" "
             seeAll={false}
             icon="fa-info-circle"
           />
         </div>
-        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                className="flex-100"
-                value={searchFilters.query}
-                placeholder="Type something..."
-                onChange={e => this.handleSearchQuery(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('hubType')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Hub Type</p>
+        <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+          <div className={`${styles.filter_panel} flex layout-row layout-align-end-end`}>
+            <SideOptionsBox
+              header="Filters"
+              content={
+                <div>
+                  <div
+                    className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                  >
+                    <input
+                      type="text"
+                      className="flex-100"
+                      value={searchFilters.query}
+                      placeholder="Search"
+                      onChange={e => this.handleSearchQuery(e)}
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                    <CollapsingBar
+                      collapsed={!expander.hubType}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('hubType')}
+                      headingText="Hub Type"
+                      faClass="fa fa-ship"
+                      content={typeFilters}
+                    />
+                    <CollapsingBar
+                      collapsed={!expander.status}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('status')}
+                      headingText="Status"
+                      faClass="fa fa-star-half-o"
+                      content={statusFilters}
+                    />
+                    <CollapsingBar
+                      collapsed={!expander.countries}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('countries')}
+                      headingText="Country"
+                      faClass="fa fa-flag"
+                      content={countryFilters}
+                    />
+                  </div>
                 </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.hubType ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.hubType ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {typeFilters}
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('status')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-star-half-o" />
-                  <p className="flex-none">Status</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.status ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.status ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {statusFilters}
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('countries')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-flag" />
-                  <p className="flex-none">Country</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.countries ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.countries ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {countryFilters}
-              </div>
-            </div>
+              }
+            />
           </div>
         </div>
       </div>
-      // //////////////
-      // <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      //   <AdminSearchableHubs
-      //     theme={theme}
-      //     hubs={hubs}
-      //     adminDispatch={adminDispatch}
-      //     sideScroll={false}
-      //     handleClick={viewTrucking}
-      //   />
-      // </div>
     )
   }
 }

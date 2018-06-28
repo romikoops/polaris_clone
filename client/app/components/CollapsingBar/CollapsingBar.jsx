@@ -1,11 +1,11 @@
 import React from 'react'
-import ShipmentCardHeading from './Heading'
-import ShipmentCardMainPanel from './MainPanel'
+import CollapsingHeading from './Heading'
+import CollapsingContent from './Content'
 import Proptypes from '../../prop-types'
-import styles from './ShipmentCard.scss'
+import styles from './CollapsingBar.scss'
 
-export default function ShipmentCard ({
-  collapsed, theme, handleCollapser, content, headingText
+export default function CollapsingBar ({
+  collapsed, theme, handleCollapser, content, headingText, faClass
 }) {
   return (
     <div className={
@@ -13,29 +13,32 @@ export default function ShipmentCard ({
       'layout-row layout-align-start-center layout-wrap'
     }
     >
-      <ShipmentCardHeading
+      <CollapsingHeading
         text={headingText}
         collapsed={collapsed}
         theme={theme}
         handleCollapser={handleCollapser}
+        faClass={faClass}
       />
-      <ShipmentCardMainPanel collapsed={collapsed} content={content} />
+      <CollapsingContent collapsed={collapsed} content={content} />
     </div>
   )
 }
 
-ShipmentCard.propTypes = {
+CollapsingBar.propTypes = {
   collapsed: Proptypes.bool,
   theme: Proptypes.theme,
   handleCollapser: Proptypes.func,
   content: Proptypes.node,
-  headingText: Proptypes.string
+  headingText: Proptypes.string,
+  faClass: Proptypes.string
 }
 
-ShipmentCard.defaultProps = {
+CollapsingBar.defaultProps = {
   collapsed: false,
   theme: null,
   handleCollapser: null,
   content: '',
-  headingText: ''
+  headingText: '',
+  faClass: ''
 }

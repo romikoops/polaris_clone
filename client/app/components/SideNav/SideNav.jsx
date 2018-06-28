@@ -14,7 +14,8 @@ class SideNav extends Component {
     super(props)
     this.state = {
       linkTextClass: '',
-      linkVisibility: []
+      linkVisibility: [],
+      activeIndex: -1
     }
     this.userLinks = [
       {
@@ -94,14 +95,14 @@ class SideNav extends Component {
         target: 'schedules',
         tooltip: menuTip.schedules
       },
-      {
-        key: v4(),
-        icon: 'fa-truck',
-        text: 'Trucking',
-        url: '/admin/trucking',
-        target: 'trucking',
-        tooltip: menuTip.trucking
-      },
+      // {
+      //   key: v4(),
+      //   icon: 'fa-truck',
+      //   text: 'Trucking',
+      //   url: '/admin/trucking',
+      //   target: 'trucking',
+      //   tooltip: menuTip.trucking
+      // },
       {
         key: v4(),
         icon: 'fa-users',
@@ -158,6 +159,7 @@ class SideNav extends Component {
     this.linkTextClass = ''
     this.setLinkVisibility = this.setLinkVisibility.bind(this)
     this.handleClickAction = this.handleClickAction.bind(this)
+    this.toggleActiveIndex = this.toggleActiveIndex.bind(this)
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.expand) {
@@ -245,12 +247,20 @@ class SideNav extends Component {
     }
   }
   setLinkVisibility (bool, i) {
-    const { linkVisibility } = this.state
-    linkVisibility[i] = bool
-    this.setState({ linkVisibility })
+    this.setState((prevState) => {
+      const { linkVisibility } = prevState
+      linkVisibility[i] = bool
+
+      return { linkVisibility }
+    })
+  }
+  toggleActiveIndex (index) {
+    this.setState({ activeIndex: index })
   }
   handleClickAction (li, i, isAdmin) {
     if (!this.state.linkVisibility[i] && !this.props.expand) return
+
+    this.toggleActiveIndex(i)
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
   render () {
@@ -273,8 +283,9 @@ class SideNav extends Component {
       return (
         <div
           className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
-          key={li.key}
           onClick={() => this.handleClickAction(li, i, isAdmin)}
+          key={li.key}
+          style={this.state.activeIndex === i ? { background: '#E0E0E0' } : {}}
         >
           <div
             className="flex-100 layout-row layout-align-start-center"
@@ -314,6 +325,7 @@ class SideNav extends Component {
         }`}
       >
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
+        {console.log(() => this.toggleActiveIndex())}
         <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
       </div>
     )

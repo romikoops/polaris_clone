@@ -4,7 +4,6 @@ import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { AdminClientTile } from '../'
-import { TextHeading } from '../../TextHeading/TextHeading'
 import { Tooltip } from '../../Tooltip/Tooltip'
 
 export class AdminSearchableClients extends Component {
@@ -43,6 +42,7 @@ export class AdminSearchableClients extends Component {
       this.setState({
         clients: this.props.clients
       })
+
       return
     }
     const search = (keys) => {
@@ -57,6 +57,7 @@ export class AdminSearchableClients extends Component {
         keys
       }
       const fuse = new Fuse(this.props.clients, options)
+
       return fuse.search(event.target.value)
     }
     const filteredClients = search(['first_name', 'last_name', 'company_name', 'phone', 'email'])
@@ -68,8 +69,7 @@ export class AdminSearchableClients extends Component {
   render () {
     const {
       theme,
-      title,
-      seeAll,
+      // seeAll,
       placeholder,
       tooltip,
       showTooltip,
@@ -103,15 +103,16 @@ export class AdminSearchableClients extends Component {
         </div>
       </div>
     )
+
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
         <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
-                <div className="flex-none" >
+                {/* <div className="flex-none" >
                   <TextHeading theme={theme} size={1} text={title || 'Clients'} />
-                </div>
+                </div> */}
                 { icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : '' }
               </div>
             </div>
@@ -129,7 +130,7 @@ export class AdminSearchableClients extends Component {
         <div className="flex-100 layout-row layout-align-center layout-align-space-between">
           {viewType}
         </div>
-        {seeAll !== false ? (
+        {/* {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
             <div
               className="flex-none layout-row layout-align-center-center pointy"
@@ -140,7 +141,7 @@ export class AdminSearchableClients extends Component {
           </div>
         ) : (
           ''
-        )}
+        )} */}
       </div>
     )
   }
@@ -153,7 +154,6 @@ AdminSearchableClients.propTypes = {
     goTo: PropTypes.func
   }),
   seeAll: PropTypes.func,
-  title: PropTypes.string,
   placeholder: PropTypes.string,
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
@@ -170,7 +170,6 @@ AdminSearchableClients.defaultProps = {
   showTooltip: false,
   icon: '',
   tooltip: '',
-  title: '',
   placeholder: '',
   adminDispatch: null,
   hideFilters: false

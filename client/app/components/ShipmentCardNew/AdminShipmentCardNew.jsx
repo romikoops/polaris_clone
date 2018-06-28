@@ -20,25 +20,27 @@ export class AdminShipmentCardNew extends Component {
     this.state = {
       confirm: false
     }
-  }
-  handleShipmentAction (id, action) {
-    const { dispatches, shipment } = this.props
-    dispatches.confirmShipment(shipment.id, action)
+    this.selectShipment = this.selectShipment.bind(this)
   }
   handleDeny () {
-    const { shipment } = this.props
-    this.handleShipmentAction(shipment.id, 'decline')
+    const { shipment, handleAction } = this.props
+    handleAction(shipment.id, 'decline')
   }
 
   handleAccept () {
-    const { shipment } = this.props
-    this.handleShipmentAction(shipment.id, 'accept')
+    const { shipment, handleAction } = this.props
+    handleAction(shipment.id, 'accept')
   }
 
   handleIgnore () {
-    const { shipment } = this.props
-    this.handleShipmentAction(shipment.id, 'ignore')
+    const { shipment, handleAction } = this.props
+    handleAction(shipment.id, 'ignore')
     this.closeConfirm()
+  }
+
+  handleEdit () {
+    const { shipment, handleSelect } = this.props
+    handleSelect(shipment)
   }
   handleFinished () {
     const { shipment } = this.props
@@ -52,14 +54,9 @@ export class AdminShipmentCardNew extends Component {
   closeConfirm () {
     this.setState({ confirm: false })
   }
-
-  handleEdit () {
-    const { shipment, dispatches } = this.props
-    dispatches.getShipment(shipment.id, true)
-  }
-  handleView () {
-    const { shipment, dispatches } = this.props
-    dispatches.getShipment(shipment.id, true)
+  selectShipment () {
+    const { shipment, handleSelect } = this.props
+    handleSelect(shipment)
   }
   render () {
     const {
@@ -104,7 +101,7 @@ export class AdminShipmentCardNew extends Component {
       <AdminPromptConfirm
         theme={theme}
         heading="Are you sure?"
-        text={`This will reject the requested shipment ${shipment.imc_reference}. 
+        text={`This will reject the requested shipment ${shipment.imc_reference}.
         This shipment can be still be recovered after being ignored`}
         confirm={() => this.handleIgnore()}
         deny={() => this.closeConfirm()}
@@ -215,38 +212,53 @@ export class AdminShipmentCardNew extends Component {
             </div>
           </div>
         </div>
-        <div className={`layout-row flex-40 layout-align-start-stretch
+
+        {shipment.status !== 'finished' ? (
+          <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
-        >
-          <div className="layout-column flex-20">
-            <span className="flex-100"><b>Pickup Date</b><br />
-              <span className={`${styles.grey}`}>
-                {moment(plannedDate).format('DD/MM/YYYY')}
+          >
+            <div className="layout-column flex-20">
+              <span className="flex-100"><b>Pickup Date</b><br />
+                <span className={`${styles.grey}`}>
+                  {moment(plannedDate).format('DD/MM/YYYY')}
+                </span>
               </span>
-            </span>
-          </div>
-          <div className="layout-column flex-20">
-            <span className="flex-100"><b>ETD</b><br />
-              <span className={`${styles.grey}`}>
-                {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+            </div>
+            <div className="layout-column flex-20">
+              <span className="flex-100"><b>ETD</b><br />
+                <span className={`${styles.grey}`}>
+                  {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+                </span>
               </span>
-            </span>
+            </div>
+            <div className="layout-column flex-20">
+              <span className="flex-100"><b>ETA</b><br />
+                <span className={`${styles.grey}`}>
+                  {moment(shipment.planned_eta).format('DD/MM/YYYY')}
+                </span>
+              </span>
+            </div>
+            <div className="layout-column flex-40">
+              <span className="flex-100"><b>Estimated Transit Time</b><br />
+                <span className={`${styles.grey}`}>
+                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days
+                </span>
+              </span>
+            </div>
           </div>
-          <div className="layout-column flex-20">
-            <span className="flex-100"><b>ETA</b><br />
+        ) : (
+          <div className={`layout-row flex-100 layout-align-start-stretch
+            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
+          >
+            <div className="flex-40 layout-row"><b>Arrived on:</b>
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
-            </span>
+            </div>
+            <hr className="flex-60 layout-row" />
           </div>
-          <div className="layout-column flex-40">
-            <span className="flex-100"><b>Estimated Transit Time</b><br />
-              <span className={`${styles.grey}`}>
-                {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days
-              </span>
-            </span>
-          </div>
-        </div>
+        )}
+
         <div className={`layout-row flex-25 layout-align-space-between-center
             ${styles.sectionBottom} ${styles.separatorTop}`}
         >
@@ -291,14 +303,14 @@ export class AdminShipmentCardNew extends Component {
 
 AdminShipmentCardNew.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
-  dispatches: PropTypes.objectOf(PropTypes.func),
+  handleAction: PropTypes.func.isRequired,
+  handleSelect: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
 AdminShipmentCardNew.defaultProps = {
   shipment: {},
-  dispatches: {},
   theme: {},
   hubs: {}
 }

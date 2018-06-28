@@ -19,9 +19,15 @@ class AdminTrucking extends Component {
     this.viewTrucking = this.viewTrucking.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
+  componentWillMount () {
+    if (!this.props.trucking) {
+      this.props.adminDispatch.getTrucking()
+    }
+  }
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   viewTrucking (hub) {
     const { adminDispatch } = this.props
     adminDispatch.viewTrucking(hub.id)
@@ -38,12 +44,13 @@ class AdminTrucking extends Component {
       return ''
     }
     const { truckingNexuses, nexuses } = trucking
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Switch className="flex">
           <Route
             exact
-            path="/admin/trucking"
+            path="/admin/pricings"
             render={props => (
               <AdminTruckingIndex
                 theme={theme}
@@ -58,7 +65,7 @@ class AdminTrucking extends Component {
           />
           <Route
             exact
-            path="/admin/trucking/:id"
+            path="/admin/pricings/trucking/:id"
             render={props => (
               <AdminTruckingView
                 theme={theme}
@@ -94,14 +101,14 @@ AdminTrucking.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   hubHash: PropTypes.objectOf(PropTypes.hub),
   adminDispatch: PropTypes.shape({
-    viewTrucking: PropTypes.func
+    viewTrucking: PropTypes.func,
+    getTrucking: PropTypes.func
   }).isRequired,
   trucking: PropTypes.shape({
     truckingHubs: PropTypes.array,
     truckingPrices: PropTypes.array
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
-  history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
   truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object })
 }

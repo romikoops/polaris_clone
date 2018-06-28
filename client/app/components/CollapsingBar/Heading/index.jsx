@@ -1,21 +1,17 @@
 import React from 'react'
 import Proptypes from '../../../prop-types'
-import styles from './ShipmentCardHeading.scss'
+import styles from './CollapsingHeading.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
 
-export default function ShipmentCardHeading ({
-  text, theme, collapsed, handleCollapser
+export default function CollapsingHeading ({
+  text, theme, collapsed, handleCollapser, faClass
 }) {
-  const themeTitled =
-    theme && theme.colors
-      ? { background: theme.colors.primary, color: 'white' }
-      : { background: 'rgba(0,0,0,0.25)', color: 'white' }
-
   return (
     <div
-      style={themeTitled}
+      style={{ background: '#E0E0E0', color: '#4F4F4F' }}
       className={`${styles.heading} flex-100 layout-row layout-align-space-between-center`}
     >
+      <i className={faClass} />
       <TextHeading theme={theme} color="white" size={3} text={text} />
       <div
         className="flex-10 layout-row layout-align-center-center"
@@ -27,16 +23,18 @@ export default function ShipmentCardHeading ({
   )
 }
 
-ShipmentCardHeading.propTypes = {
+CollapsingHeading.propTypes = {
   text: Proptypes.string,
   collapsed: Proptypes.bool,
   theme: Proptypes.theme,
-  handleCollapser: Proptypes.func
+  handleCollapser: Proptypes.func,
+  faClass: Proptypes.string
 }
 
-ShipmentCardHeading.defaultProps = {
+CollapsingHeading.defaultProps = {
   text: '',
   collapsed: false,
   theme: null,
-  handleCollapser: null
+  handleCollapser: null,
+  faClass: ''
 }

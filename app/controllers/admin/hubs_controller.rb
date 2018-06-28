@@ -70,7 +70,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-    response_handler(hub.as_options_json)
+    response_handler(data: hub.as_options_json, location: hub.location.to_custom_hash)
   end
 
   def delete

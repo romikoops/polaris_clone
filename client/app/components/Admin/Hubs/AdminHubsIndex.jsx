@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
-import hubStyles from './index.scss'
 import FileUploader from '../../../components/FileUploader/FileUploader'
 import { adminClicked as clickTip } from '../../../constants'
 import { RoundButton } from '../../RoundButton/RoundButton'
@@ -10,16 +9,10 @@ import DocumentsDownloader from '../../../components/Documents/Downloader'
 import { Checkbox } from '../../Checkbox/Checkbox'
 import { capitalize, filters } from '../../../helpers'
 import { AdminHubTile } from './AdminHubTile'
+import SideOptionsBox from '../SideOptions/SideOptionsBox'
+import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 
 export class AdminHubsIndex extends Component {
-  // export function AdminHubsIndex ({
-  //   theme,
-  //   hubs,
-  //   viewHub,
-  //   adminDispatch,
-  //   toggleNewHub,
-  //   documentDispatch
-  // }) {
   constructor (props) {
     super(props)
     this.state = {
@@ -148,10 +141,6 @@ export class AdminHubsIndex extends Component {
     if (!this.props.hubs) {
       return ''
     }
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
       const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
 
@@ -213,268 +202,163 @@ export class AdminHubsIndex extends Component {
     ))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
-          <div className="layout-row flex-100 layout-align-start-center header_buffer">
-            <div className="layout-row flex-100 layout-align-space-around-start layout-wrap">
-              {hubsArr}
-            </div>
-          </div>
-        </div>
-        <div className="flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                className="flex-100"
-                value={searchFilters.query}
-                placeholder="Type something..."
-                onChange={e => this.handleSearchQuery(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('hubType')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Hub Type</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.hubType ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.hubType ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {typeFilters}
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('status')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-star-half-o" />
-                  <p className="flex-none">Status</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.status ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.status ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {statusFilters}
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('countries')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-flag" />
-                  <p className="flex-none">Country</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.countries ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.countries ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {countryFilters}
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-align-space-between-start">
+          <div className="layout-row flex-80 flex-sm-100">
+            <div className="layout-row flex-100 layout-align-start-center header_buffer">
+              <div className="layout-row flex-100 layout-align-space-around-start layout-wrap">
+                {hubsArr}
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
+          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+            <div className={`${styles.position_fixed_right}`}>
+
+              <div className={`${styles.filter_panel} flex layout-row`}>
+                <SideOptionsBox
+                  header="Filter"
+                  content={(
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                      <CollapsingBar
+                        collapsed={!expander.hubType}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('hubType')}
+                        headingText="Hub Type"
+                        faClass="fa fa-ship"
+                        content={typeFilters}
+                      />
+                      <CollapsingBar
+                        collapsed={!expander.status}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('status')}
+                        headingText="Status"
+                        faClass="fa fa-ship"
+                        content={statusFilters}
+                      />
+                      <CollapsingBar
+                        collapsed={!expander.countries}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('countries')}
+                        headingText="Country"
+                        faClass="fa fa-flag"
+                        content={countryFilters}
+                      />
+                    </div>
                   )}
-                </div>
+                />
               </div>
-              <div
-                className={`${
-                  expander.upload ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100 center">Upload Hubs Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    url={hubUrl}
-                    type="xlsx"
-                    text="Hub .xlsx"
-                    dispatchFn={documentDispatch.uploadHubs}
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-100 center">Upload Local Charges Sheet</p>
-                  <FileUploader
-                    theme={theme}
-                    url={scUrl}
-                    type="xlsx"
-                    text="Hub .xlsx"
-                    dispatchFn={documentDispatch.uploadLocalCharges}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
+              <div className="flex layout-row">
+                <SideOptionsBox
+                  header="Data manager"
+                  content={(
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                      <CollapsingBar
+                        collapsed={!expander.upload}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('upload')}
+                        headingText="Upload Data"
+                        faClass="fa fa-cloud-upload"
+                        content={(
+                          <div>
+                            <div
+                              className={`${
+                                styles.action_section
+                              } flex-100 layout-row layout-align-center-center layout-wrap`}
+                            >
+                              <p className="flex-100 center">Upload Hubs Sheet</p>
+                              <FileUploader
+                                theme={theme}
+                                url={hubUrl}
+                                type="xlsx"
+                                text="Hub .xlsx"
+                                dispatchFn={documentDispatch.uploadHubs}
+                              />
+                            </div>
+                            <div
+                              className={`${
+                                styles.action_section
+                              } flex-100 layout-row layout-align-center-center layout-wrap`}
+                            >
+                              <p className="flex-100 center">Upload Local Charges Sheet</p>
+                              <FileUploader
+                                theme={theme}
+                                url={scUrl}
+                                type="xlsx"
+                                text="Hub .xlsx"
+                                dispatchFn={documentDispatch.uploadLocalCharges}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      />
+                      <CollapsingBar
+                        collapsed={!expander.download}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('download')}
+                        headingText="Download Data"
+                        faClass="fa fa-cloud-download"
+                        content={(
+                          <div>
+                            <div
+                              className={`${
+                                styles.action_section
+                              } flex-100 layout-row layout-wrap layout-align-center-center`}
+                            >
+                              <p className="flex-100 center">Download Hubs Sheet</p>
+                              <DocumentsDownloader theme={theme} target="hubs" />
+                            </div>
+                            <div
+                              className={`${
+                                styles.action_section
+                              } flex-100 layout-row layout-wrap layout-align-center-center`}
+                            >
+                              <p className="flex-100 center">Download Ocean Local Charges Sheet</p>
+                              <DocumentsDownloader
+                                theme={theme}
+                                target="local_charges"
+                                options={{ mot: 'ocean' }}
+                              />
+                            </div>
+                            <div
+                              className={`${
+                                styles.action_section
+                              } flex-100 layout-row layout-wrap layout-align-center-center`}
+                            >
+                              <p className="flex-100 center">Download Air Local Charges Sheet</p>
+                              <DocumentsDownloader
+                                theme={theme}
+                                target="local_charges"
+                                options={{ mot: 'air' }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      />
+                      <CollapsingBar
+                        collapsed={!expander.new}
+                        theme={theme}
+                        handleCollapser={() => this.toggleExpander('new')}
+                        headingText="Create New Hub"
+                        faClass="fa fa-plus-circle"
+                        content={(
+                          <div
+                            className={`${
+                              styles.action_section
+                            } flex-100 layout-row layout-wrap layout-align-center-center`}
+                          >
+                            {newButton}
+                          </div>
+                        )}
+                      />
+                    </div>
                   )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.download ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">Download Hubs Sheet</p>
-                  <DocumentsDownloader theme={theme} target="hubs" />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">Download Ocean Local Charges Sheet</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="local_charges"
-                    options={{ mot: 'ocean' }}
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">Download Air Local Charges Sheet</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="local_charges"
-                    options={{ mot: 'air' }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">Create New Hub</p>
-                </div>
-                <div className={`${hubStyles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.new ? hubStyles.open_filter : hubStyles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  {newButton}
-                </div>
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
+
     )
   }
 }

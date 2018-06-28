@@ -8,7 +8,9 @@ import styles from './Admin.scss'
 import { AdminSearchableRoutes } from './AdminSearchables'
 // import FileUploader from '../FileUploader/FileUploader'
 import { filters, capitalize } from '../../helpers'
+import SideOptionsBox from './SideOptions/SideOptionsBox'
 import { Checkbox } from '../Checkbox/Checkbox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 export class AdminRoutesIndex extends Component {
   constructor (props) {
@@ -91,6 +93,7 @@ export class AdminRoutesIndex extends Component {
     } else {
       filter2 = filter1
     }
+
     return filter2
   }
   render () {
@@ -101,10 +104,6 @@ export class AdminRoutesIndex extends Component {
     if (!itineraries) {
       return ''
     }
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const typeFilters = Object.keys(searchFilters.mot).map(htk => (
       <div
         className={`${
@@ -121,10 +120,11 @@ export class AdminRoutesIndex extends Component {
     ))
 
     const results = this.applyFilters(searchResults)
+
     // const hubUrl = '/admin/itineraries/process_csv'
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
+        <div className={`${styles.component_view} flex-80 flex-md-70 flex-sm-100 layout-row layout-align-start-start`}>
           <AdminSearchableRoutes
             itineraries={results}
             theme={theme}
@@ -140,164 +140,70 @@ export class AdminRoutesIndex extends Component {
             seeAll={false}
           />
         </div>
-        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                className="flex-100"
-                value={searchFilters.query}
-                placeholder="Search..."
-                onChange={e => this.handleSearchQuery(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('mot')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Mode of Transport</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.mot ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.mot ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {typeFilters}
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              {/* <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.upload ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-              </div> */}
-            </div>
-            {/* <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.download ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
+        <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
+          <SideOptionsBox
+            header="Filters"
+            flexOptions="layout-column flex-20 flex-md-30"
+            content={
+              <div>
                 <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
                 >
-                  <p className="flex-100">Download Itinerary Sheet</p>
-                  <DocumentsDownloader theme={theme} target="itineraries" />
-                </div>
-              </div>
-            </div> */}
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">New Route</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.new ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="New Route"
-                    active
-                    handleNext={this.props.toggleNewRoute}
-                    iconClass="fa-plus"
+                  <input
+                    type="text"
+                    className="flex-100"
+                    value={searchFilters.query}
+                    placeholder="Search..."
+                    onChange={e => this.handleSearchQuery(e)}
                   />
-                  <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    collapsed={!expander.mot}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('mot')}
+                    headingText="Mode of Transport"
+                    faClass="fa fa-ship"
+                    content={typeFilters}
+                  />
                 </div>
               </div>
-            </div>
-          </div>
+            }
+          />
+          <SideOptionsBox
+            header="Filters"
+            flexOptions="layout-column flex-20 flex-md-30"
+            content={
+              <div>
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    collapsed={!expander.new}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('new')}
+                    headingText="Create New Route"
+                    faClass="fa fa-plus-circle"
+                    content={(
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-wrap layout-align-center-center`}
+                      >
+                        <RoundButton
+                          theme={theme}
+                          size="small"
+                          text="New Route"
+                          active
+                          handleNext={this.props.toggleNewRoute}
+                          iconClass="fa-plus"
+                        />
+                        <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
+                      </div>
+                    )}
+                  />
+                </div>
+              </div>
+            }
+          />
         </div>
       </div>
     )
