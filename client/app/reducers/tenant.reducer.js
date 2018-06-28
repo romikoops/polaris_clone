@@ -45,7 +45,7 @@ export const tenant = (
   }
 }
 
-export const selectedSubdomain = (state = 'greencarrier', action) => {
+export const selectedSubdomain = (state = '', action) => {
   switch (action.type) {
     case tenantActions.SELECT_SUBDOMAIN:
       return action.subdomain
