@@ -7,29 +7,31 @@ class PricingSeeder
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       shipper = tenant.users.shipper.first
-
+      
       destroy_data_for_tenant(tenant)
-
+      
       puts "Seeding hubs, itineraries, layovers and pricings for #{tenant.name}..."
-
-      Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"].each do |file_path|
-        file_name = File.basename(file_path, ".xlsx")
-        subdomain, sheet_type, other_info = *file_name.split("__")
-        
-        req = { 'xlsx' => File.open(file_path) }
-
-        case sheet_type
-        when "hubs"
-          puts "  - Seeding hubs..."
-          overwrite_hubs(req, shipper)              
-        when "freight_rates"
-          puts "  - Seeding freight rates (fcl and lcl)..."
-          overwrite_freight_rates(req, shipper, true)
-        when "local_charges"
-          puts "  - Seeding local charges..."
-          overwrite_local_charges(req, shipper)
+      
+      request_hash = Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"]
+        .each_with_object({}) do |file_path, obj|
+          file_name = File.basename(file_path, ".xlsx")
+          subdomain, sheet_type, other_info = *file_name.split("__")
+          
+          if %(hubs freight_rates local_charges).include?(sheet_type)
+            obj[sheet_type] = { 'xlsx' => File.open(file_path) }
+          end
         end
-      end
+        
+      puts "  - Seeding hubs..."           
+      overwrite_hubs(request_hash["hubs"], shipper)              
+
+      puts "  - Seeding freight rates (fcl and lcl)..."
+      overwrite_freight_rates(request_hash["freight_rates"], shipper, true)
+
+      puts "  - Seeding local charges..."
+      ExcelTool::OverwriteLocalCharges.new(
+        params: request_hash["local_charges"], user: shipper
+      ).perform
     end
   end
 

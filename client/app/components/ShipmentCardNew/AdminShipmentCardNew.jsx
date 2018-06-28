@@ -250,12 +250,12 @@ export class AdminShipmentCardNew extends Component {
           <div className={`layout-row flex-100 layout-align-start-stretch
             ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
           >
-            <div className="flex-40 layout-row"><b>Arrived on:</b>
+            <div className="flex-100 layout-row"><b>Arrived on:</b>
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
             </div>
-            <hr className="flex-60 layout-row" />
+            {/* <hr className="flex-60 layout-row" /> */}
           </div>
         )}
 

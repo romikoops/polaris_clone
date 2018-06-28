@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20180627081746) do
     t.integer "detail_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "edited_price_id"
   end
 
   create_table "contacts", force: :cascade do |t|

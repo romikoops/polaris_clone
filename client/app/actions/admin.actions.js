@@ -1251,6 +1251,27 @@ function editShipmentPrice (id, priceObj) {
     )
   }
 }
+function editShipmentServicePrice (id, data) {
+  function success (shipmentData) {
+    return { type: adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_SUCCESS, payload: shipmentData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    adminService.editShipmentServicePrice(id, data).then(
+      (res) => {
+        dispatch(alertActions.success('Edit Time successful'))
+        dispatch(success(res))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function editLocalCharges (data) {
   function request (chargeData) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
@@ -1552,6 +1573,7 @@ export const adminActions = {
   saveNewTrucking,
   assignManager,
   editShipmentPrice,
+  editShipmentServicePrice,
   editShipmentTime,
   editLocalCharges,
   deletePricing,

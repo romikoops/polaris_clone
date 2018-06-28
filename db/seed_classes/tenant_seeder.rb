@@ -1508,7 +1508,7 @@ class TenantSeeder
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
         logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
-        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+        background: "https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg"
       },
       addresses: {
         main:"Brooktorkai 7, 20457 Hamburg, Germany"
