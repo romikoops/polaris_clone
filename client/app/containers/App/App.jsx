@@ -45,10 +45,13 @@ class App extends Component {
     }
   }
   isUserExpired () {
-    const { appDispatch } = this.props
+    const { appDispatch, user } = this.props
     const { localStorage } = window
     const auth = JSON.parse(localStorage.getItem('authHeader'))
     if (auth && moment.unix(auth.expiry).isBefore(moment())) {
+      appDispatch.goTo('/signout')
+    }
+    if ((user && !user.role) || (user && user.role && !user.role.name)) {
       appDispatch.goTo('/signout')
     }
   }
@@ -60,6 +63,7 @@ class App extends Component {
       return <Loading theme={defaultTheme} text="loading..." />
     }
     const { theme } = tenant.data
+
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
         <CookieConsentBar
@@ -77,6 +81,7 @@ class App extends Component {
           tenant &&
           tenant.data &&
           user.tenant_id !== tenant.data.id &&
+            user.role &&
             user.role.name !== 'super_admin' ? (
               <Redirect to="/signout" />
             ) : (
@@ -168,6 +173,7 @@ function mapStateToProps (state) {
   const { isFetching } = tenant || {
     isFetching: true
   }
+
   return {
     selectedSubdomain,
     tenant,
