@@ -35,6 +35,26 @@ module ExcelTool
 
     private
 
+    def local_stats
+      {
+        trucking_pricings: {
+          number_updated: 0,
+          number_created: 0
+        },
+        trucking_destinations: {
+          number_updated: 0,
+          number_created: 0
+        }
+      }
+    end
+
+    def _results
+      {
+        trucking_pricings: [],
+        trucking_destinations: []
+      }
+    end
+
     def overwrite_zonal_trucking_rates_by_hub
       sheets.slice(2, sheets.length - 1).each do |sheet|
         rates_sheet = xlsx.sheet(sheet)
