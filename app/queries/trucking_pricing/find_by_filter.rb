@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Queries
   module TruckingPricing
     class FindByFilter
