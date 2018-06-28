@@ -137,7 +137,9 @@ class SideNav extends Component {
     ]
 
     const { user } = props
-    const isAdmin = user.role.name === 'admin' || user.role.name === 'super_admin' || user.role.name === 'sub_admin'
+    const isAdmin = (user.role && user.role.name === 'admin') ||
+      (user.role && user.role.name === 'super_admin') ||
+      (user.role && user.role.name === 'sub_admin')
     const links = isAdmin ? this.adminLinks : this.userLinks
     const superAdminLink = {
       key: 'super-admin',
@@ -146,7 +148,7 @@ class SideNav extends Component {
       url: '/admin/superadmin',
       target: 'superadmin'
     }
-    if (user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
+    if (user.role && user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }
     links.forEach((link, i) => {
@@ -254,7 +256,9 @@ class SideNav extends Component {
   render () {
     const { theme, user, expand } = this.props
 
-    const isAdmin = user.role.name === 'admin' || user.role.name === 'super_admin' || user.role.name === 'sub_admin'
+    const isAdmin = (user.role && user.role.name === 'admin') ||
+    (user.role && user.role.name === 'super_admin') ||
+    (user.role && user.role.name === 'sub_admin')
     const links = isAdmin ? this.adminLinks : this.userLinks
 
     const textStyle = {
@@ -265,6 +269,7 @@ class SideNav extends Component {
     }
     const navLinks = links.map((li, i) => {
       const toolId = v4()
+
       return (
         <div
           className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
@@ -301,6 +306,7 @@ class SideNav extends Component {
         </div>
       )
     })
+
     return (
       <div
         className={`flex-100 layout-column layout-align-start-stretch layout-wrap ${
@@ -349,6 +355,7 @@ function mapStateToProps (state) {
     users, authentication, tenant, admin
   } = state
   const { user, loggedIn } = authentication
+
   return {
     user,
     users,

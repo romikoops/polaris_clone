@@ -2,43 +2,95 @@
 
 include ExcelTools
 include MongoTools
+# subdomains = %w(demo greencarrier easyshipping hartrodt)
+subdomains = %w[demo]
+subdomains.each do |sub|
+  # # Tenant.all.each do |tenant|
+  tenant = Tenant.find_by_subdomain(sub)
 
-puts 'You called rake \'db:seed:demo\'.'
-puts 'This task will load all seed files, but only the pricings for \'demo\'.'
-puts 'Load individual seeds with (e.g.) \'rake db:seed:all_pricings \''
-puts 'Start seeding...'
+  shipper = tenant.users.shipper.first
+  tenant.itineraries.destroy_all
+  tenant.local_charges.destroy_all
+  tenant.customs_fees.destroy_all
+  tenant.trucking_pricings.delete_all
+  HubTrucking.where(hub: tenant.hubs).delete_all
+  tenant.hubs.destroy_all
+  # # # #   # # # # #Overwrite hubs from excel sheet
+  # # # puts '# Overwrite hubs from excel sheet'
+  hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
+  req = { 'xlsx' => hubs }
+  overwrite_hubs(req, shipper)
 
-Dir.chdir("#{Rails.root}/db/custom_seeds/") do
-  puts 'drop_tables'
-  require './drop_tables'
-  puts 'countries'
-  require './countries'
-  puts 'mot_scopes'
-  require './mot_scopes'
-  puts 'optin_statuses'
-  require './optin_statuses'
-  puts 'roles'
-  require './roles'
-  puts 'incoterms'
-  require './incoterms'
-  puts 'cargo_item_types'
-  require './cargo_item_types'
-  puts 'tenants'
-  require './tenants'
-  puts 'admin'
-  require './admin'
-  puts 'super_admin'
-  require './super_admin'
-  puts 'shipper'
-  require './shipper'
-  puts 'vehicles'
-  require './vehicles'
-  puts 'all_pricings_demo'
-  require './all_pricings_demo'
-  puts 'distributions'
-  require './distributions'
+  public_pricings = File.open("#{Rails.root}/db/dummydata/demo/demo__freight_rates.xlsx")
+  req = { 'xlsx' => public_pricings }
+  overwrite_freight_rates(req, shipper, true)
+
+  # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
+
+  # # # # puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/demo/demo__local_charges.xlsx")
+  req = { 'xlsx' => local_charges }
+  overwrite_local_charges(req, shipper)
+
+  # #   # # # # # # Overwrite trucking data from excel sheet
+
+  puts 'Shanghai Airport'
+  hub = tenant.hubs.find_by_name('Shanghai Airport')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__shanghai_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+    params: req, _user: shipper, hub_id: hub.id
+  ).perform
+  puts 'Shanghai Port'
+  hub = tenant.hubs.find_by_name('Shanghai Port')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__shanghai_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  puts 'Shanghai Airport ftl'
+  hub = tenant.hubs.find_by_name('Shanghai Port')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  awesome_print 'City rates done'
+  puts 'Gothenburg Port'
+  hub = tenant.hubs.find_by_name('Gothenburg Port')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__gothenburg_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  puts 'Gothenburg Airport'
+  hub = tenant.hubs.find_by_name('Gothenburg Airport')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__gothenburg_airport.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  awesome_print 'Zip rates done'
+  puts 'Gothenburg Port ftl'
+  hub = tenant.hubs.find_by_name('Gothenburg Port')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  awesome_print 'All rates done'
+  puts 'Stockholm Airport'
+  hub = tenant.hubs.find_by_name('Stockholm Airport')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__stockholm_airport.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+  puts 'Malmo Airport'
+  hub = tenant.hubs.find_by_name('Malmo Airport')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__malmo_airport.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
 end
-MandatoryCharge.create_all!
-puts 'tenants'
-require "#{Rails.root}/db/seed_classes/tenant_seeder.rb"
-TenantSeeder.perform

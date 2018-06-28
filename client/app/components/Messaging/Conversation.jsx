@@ -65,7 +65,7 @@ export class Conversation extends Component {
     } = this.props
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
-    const isAdmin = user.role.name === 'admin'
+    const isAdmin = user.role && user.role.name === 'admin'
     const messages = isAdmin
       ? conversation.messages.map((msg) => {
         const client = clients.filter(c => c.id === msg.user_id)[0]
