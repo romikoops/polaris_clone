@@ -40,17 +40,12 @@ class Document < ApplicationRecord
   end
 
   def self.obj_key(shipment, type, file_name)
-    "documents/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
+     "documents/" + shipment.tenant.subdomain + "/shipments/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
   end
 
   def self.delete_document(id)
     @doc = Document.where(id: id)
-    self.delete_document(@doc) unless @doc.nil?
-  end
-
-  def self.delete_all
-    @docs = Document.all
-    self.delete_document(@docs) unless @docs.nil?
+    self.delete_documents(@doc) unless @doc.nil?
   end
 
   def self.get_documents_for_array(arr)

@@ -76,6 +76,7 @@ class AdminShipments extends Component {
                 handleShipmentAction={this.handleShipmentAction}
                 clients={clients}
                 hubs={hubs}
+                adminDispatch={adminDispatch}
                 hubHash={hubHash}
                 shipments={shipments}
                 viewShipment={this.viewShipment}

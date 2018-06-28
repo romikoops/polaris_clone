@@ -900,7 +900,7 @@
    }
    .margin_box_right {
      > * {
-       margin-right: 25px;
+      //  margin-right: 25px;
        &:last-child {
         margin-right: 0 !important;
       }
@@ -929,6 +929,9 @@
    .action_icons i {
      cursor: pointer;
    }
+   .action_icons {
+     width: 75px;
+   }
 
    .services_box .border_right {
     border-color: transparent !important;
@@ -947,4 +950,7 @@
       }
     }
   }
-}
+  .header_margin_buffer{
+    margin: 0 15px;
+  }
+ }

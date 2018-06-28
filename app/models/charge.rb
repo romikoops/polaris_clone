@@ -55,7 +55,7 @@ class Charge < ApplicationRecord
   end
 
   def update_price!
-    rates = get_rates(price.currency).today.merge(price.currency => 1.0)
+    rates = get_rates(price.currency, charge_breakdown.shipment.tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
       sum + charge.price.value / rates[charge.price.currency].to_d
     end

@@ -24,7 +24,7 @@ module AwsConfig
     end
 
     def path(shipment)
-      "documents/" + shipment["uuid"]
+      shipment.tenant.subdomain + "/documents/" + shipment["uuid"]
     end
 
     def create_on_aws(file, shipment)
@@ -38,8 +38,8 @@ module AwsConfig
       self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
     end
 
-    def delete_document(docs)
-       docs.each do |doc|
+    def delete_documents(docs)
+      docs.each do |doc|
         self.aws_client.delete_object(bucket: "imcdev", key: doc.url)
         doc.delete
       end
@@ -47,7 +47,7 @@ module AwsConfig
 
     def upload(args={})
       self.aws_client.put_object(
-        bucket:       args[:imcdev],
+        bucket:       args[:bucket],
         key:          args[:key],
         body:         args[:file],
         content_type: args[:content_type],
@@ -82,8 +82,8 @@ module AwsConfig
       aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
     end
 
-    def delete_document(docs)
-      self.class.delete_document(docs)
+    def delete_documents(docs)
+      self.class.delete_documents(docs)
     end
   end
 

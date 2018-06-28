@@ -3,7 +3,6 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
-import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import PropTypes from '../../../prop-types'
 import { moment, documentTypes } from '../../../constants'
 import adminStyles from '../Admin.scss'
@@ -192,7 +191,7 @@ export class AdminShipmentView extends Component {
   }
   prepContainerGroups (cargos) {
     const { theme, shipmentData } = this.props
-    const { hsCodes } = shipmentData
+    const { hsCodes, shipment } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
     const resultArray = []
@@ -215,7 +214,12 @@ export class AdminShipmentView extends Component {
     })
     Object.keys(cargoGroups).forEach((k) => {
       resultArray
-        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+        .push(<CargoItemGroup
+          group={cargoGroups[k]}
+          theme={theme}
+          hsCodes={hsCodes}
+          shipment={shipment}
+        />)
     })
 
     return resultArray
@@ -267,42 +271,25 @@ export class AdminShipmentView extends Component {
       cargoItems,
       containers,
       aggregatedCargo,
-      schedules,
-      locations
+      schedules
     } = shipmentData
     const {
       showEditTime, newTimes
     } = this.state
-    const hubsObj = {
-      startHub: {
-        data: locations.origin
-      },
-      endHub: {
-        data: locations.destination
-      }
-    }
 
-    hubs.forEach((c) => {
-      if (String(c.data.id) === schedules[0].origin_hub_id) {
-        hubsObj.startHub = c
-      }
-      if (String(c.data.id) === schedules[0].destination_hub_id) {
-        hubsObj.endHub = c
-      }
-    })
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
     const bg1 =
-      hubsObj.startHub && hubsObj.startHub.location && hubsObj.startHub.location.photo
-        ? { backgroundImage: `url(${hubsObj.startHub.location.photo})` }
+      shipment.origin_hub && shipment.origin_hub.photo
+        ? { backgroundImage: `url(${shipment.origin_hub.photo})` }
         : {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
         }
     const bg2 =
-      hubsObj.endHub && hubsObj.endHub.location && hubsObj.endHub.location.photo
-        ? { backgroundImage: `url(${hubsObj.endHub.location.photo})` }
+      shipment.destination_hub && shipment.destination_hub.photo
+        ? { backgroundImage: `url(${shipment.destination_hub.photo})` }
         : {
           backgroundImage:
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
@@ -337,7 +324,7 @@ export class AdminShipmentView extends Component {
 
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
-        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${styles.status_box_requested}`}
+        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
@@ -349,7 +336,7 @@ export class AdminShipmentView extends Component {
     )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_process}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
         <p className="layout-align-center-center layout-row"> In process </p>
       </div>
     ) : (
@@ -357,7 +344,7 @@ export class AdminShipmentView extends Component {
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
     ) : (
@@ -480,18 +467,18 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length
+    const cargoCount = Object.keys(feeHash.cargo).length - 1
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
-          <div className={`layout-row flex-85 flex-md-75 flex-sm-70 flex-xs-40 layout-align-start-center ${adminStyles.title_grey}`}>
+          <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
           {statusRequested}
           {statusInProcess}
           {statusFinished}
-          <div className={`layout-row flex-5 flex-md-10 flex-sm-10 flex-xs-15 layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+          <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
             {shipment.status === 'requested' ? (
               <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
             ) : (
@@ -516,11 +503,12 @@ export class AdminShipmentView extends Component {
               <div className="layout-row flex-100">
                 <ShipmentOverviewShowCard
                   et={etdJSX}
-                  hubs={hubsObj}
+                  hub={shipment.origin_hub}
                   bg={bg1}
                   editTime={this.state.showEditTime}
                   handleSaveTime={this.saveNewTime}
                   toggleEditTime={this.toggleEditTime}
+                  isAdmin
                 />
               </div>
             )}
@@ -541,41 +529,15 @@ export class AdminShipmentView extends Component {
             className="layout-row flex"
             content={(
               <div className="layout-row flex-100">
-                <div className={`${styles.info_hub_box} flex-60 layout-column`}>
-                  <h3>{hubsObj.endHub.data.name}</h3>
-                  <p className={styles.address}>{hubsObj.endHub.data.geocoded_address}</p>
-                  <div className="layout-row layout-align-start-center">
-                    <div className="layout-column flex-60 layout-align-center-start">
-                      <span>
-                        ETD
-                      </span>
-                      <div className="layout-row layout-align-start-center">
-                        {etaJSX}
-                      </div>
-                    </div>
-                    <div className="layout-row flex-40 layout-align-center-center">
-                      {this.state.showEditTime ? (
-                        <span className="layout-column flex-100 layout-align-center-stretch">
-                          <div
-                            onClick={this.saveNewTime}
-                            className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
-                          >
-                            <i className="fa fa-check" />
-                          </div>
-                          <div
-                            onClick={this.toggleEditTime}
-                            className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
-                          >
-                            <i className="fa fa-times" />
-                          </div>
-                        </span>
-                      ) : (
-                        <i onClick={this.toggleEditTime} className={`fa fa-edit ${styles.editIcon}`} />
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className={`layout-column flex-40 ${styles.image}`} style={bg2} />
+                <ShipmentOverviewShowCard
+                  et={etaJSX}
+                  hub={shipment.destination_hub}
+                  bg={bg2}
+                  editTime={this.state.showEditTime}
+                  handleSaveTime={this.saveNewTime}
+                  toggleEditTime={this.toggleEditTime}
+                  isAdmin
+                />
               </div>
             )}
           />
@@ -648,38 +610,64 @@ export class AdminShipmentView extends Component {
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-truck clip flex-none layout-align-center-center"
+                    style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                  />
                   <p>Pre-Carriage</p>
                 </div>
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-truck clip flex-none layout-align-center-center"
+                    style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                  />
                   <p>On-Carriage</p>
                 </div>
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-file-text clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-file-text clip flex-none layout-align-center-center"
+                    style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                  />
                   <p>Origin Documentation</p>
                 </div>
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-file-text-o clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                    style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                  />
                   <p>Destination Documentation</p>
                 </div>
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-ship clip flex-none layout-align-center-center" style={selectedStyle} />
+                  <i
+                    className="fa fa-ship clip flex-none layout-align-center-center"
+                    style={selectedStyle}
+                  />
                   <p>Freight</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
+          <div
+            className={`flex-30 layout-row flex-sm-100 flex-xs-100 
+            ${styles.additional_services} 
+            ${styles.services_box} 
+            ${styles.border_right}`}
+          >
             <div className="layout-column flex-100">
               <h3>Additional Services</h3>
               <div className="">
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-id-card clip flex-none"
+                    style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle}
+                  />
                   <p>Customs</p>
                 </div>
                 <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
-                  <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                  <i
+                    className="fa fa-umbrella clip flex-none"
+                    style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle}
+                  />
                   <p>Insurance</p>
                 </div>
               </div>
@@ -762,8 +750,14 @@ export class AdminShipmentView extends Component {
                     </div>
                   ) : (
                     <div className="flex-100 layout-column layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                      <span
+                        className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
+                      >
+                        Incoterm:
+                      </span>
+                      <p
+                        className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
+                      >
                           -
                       </p>
                     </div>
@@ -771,7 +765,11 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
+                <div
+                  className={`${styles.border_bottom}
+                  flex-100 flex-sm-100 flex-xs-100 layout-row offset-5
+                  layout-align-start-start layout-wrap`}
+                >
                   {shipment.cargo_notes ? (
                     <div className="flex-100 layout-row layout-align-start-center">
                       <span className="flex-20 layout-row">Description of Goods:</span>

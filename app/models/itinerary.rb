@@ -192,12 +192,24 @@ class Itinerary < ApplicationRecord
     try("#{target}_nexus_ids".to_sym)
   end
 
+  def hub_ids_for_target(target)
+    try("#{target}_hub_ids".to_sym)
+  end
+
   def origin_nexus_ids
     origin_stops.joins(:hub).pluck("hubs.nexus_id")
   end
 
   def destination_nexus_ids
     destination_stops.joins(:hub).pluck("hubs.nexus_id")
+  end
+
+  def origin_hub_ids
+    origin_stops.pluck(:hub_id)
+  end
+
+  def destination_hub_ids
+    destination_stops.pluck(:hub_id)
   end
 
   def origin_nexuses
@@ -261,6 +273,10 @@ class Itinerary < ApplicationRecord
     end
   end
 
+  def ordered_hub_ids
+    stops.order(index: :asc).pluck(:hub_id)
+  end
+
   def ordered_nexus_ids
     stops.order(index: :asc).joins(:hub).pluck("hubs.nexus_id")
   end
@@ -271,50 +287,18 @@ class Itinerary < ApplicationRecord
       ordered_nexus_ids.index(origin_nexus_id) < ordered_nexus_ids.index(destination_nexus_id)
   end
 
-  def available_counterpart_nexus_ids_for_target_nexus_ids(target, counterpart_nexus_ids)
-    raise ArgumentError unless %w[origin destination].include?(target)
+  def available_counterpart_hub_ids_for_target_hub_ids(target, target_hub_ids)
+    raise ArgumentError unless %w(origin destination).include?(target)
 
-    counterpart_nexus_ids.map do |counterpart_nexus_id|
-      next unless ordered_nexus_ids.include?(counterpart_nexus_id)
+    target_hub_ids.map do |target_hub_id|
+      next unless ordered_hub_ids.include?(target_hub_id)
 
-      counterpart_idx = ordered_nexus_ids.index(counterpart_nexus_id)
+      target_idx = ordered_hub_ids.index(target_hub_id)
 
-      target_range = target == "origin" ? 0...counterpart_idx : (counterpart_idx + 1)..-1
-      ordered_nexus_ids[target_range]
+      target_range = target == "origin" ? 0...target_idx : (target_idx + 1)..-1
+
+      ordered_hub_ids[target_range]
     end.compact.flatten.uniq
-  end
-
-  def self.ids_with_route_stops_for(origin_hub_ids, destination_hub_ids)
-    sanitized_query = sanitize_sql(["
-      WITH itineraries_with_stops AS (
-        SELECT
-          destination_stops.itinerary_id AS itinerary_id,
-          origin_stops.id                AS origin_stop_id,
-          destination_stops.id           AS destination_stop_id
-        FROM (
-          SELECT id, itinerary_id, index
-          FROM stops
-          WHERE hub_id IN (?)
-        ) as origin_stops
-        JOIN (
-          SELECT id, itinerary_id, index
-          FROM stops
-          WHERE hub_id IN (?)
-        ) as destination_stops
-        ON origin_stops.itinerary_id = destination_stops.itinerary_id
-        WHERE origin_stops.index < destination_stops.index
-      )
-      SELECT
-        itineraries.id                             AS itinerary_id,
-        itineraries.mode_of_transport              AS mode_of_transport,
-        itineraries_with_stops.origin_stop_id      AS origin_stop_id,
-        itineraries_with_stops.destination_stop_id AS destination_stop_id
-      FROM itineraries
-      JOIN itineraries_with_stops ON itineraries.id = itineraries_with_stops.itinerary_id
-      WHERE itineraries.id IN (?)
-    ", origin_hub_ids, destination_hub_ids, ids])
-
-    connection.exec_query(sanitized_query).to_a
   end
 
   def self.filter_by_hubs(origin_hub_ids, destination_hub_ids)
@@ -360,6 +344,10 @@ class Itinerary < ApplicationRecord
     itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
+  end
+
+  def self.tenant_itinerary(tenant_id)
+    where(tenant_id: tenant_id)
   end
 
   def self.update_hubs

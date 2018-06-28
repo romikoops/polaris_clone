@@ -18,9 +18,9 @@ class UsersController < ApplicationController
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
-    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
+    @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
+    @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
 
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false)
@@ -72,7 +72,8 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user.try(:currency) || "EUR"
-    results = get_currency_array(currency)
+    tenant_id = current_user ? current_user.tenant_id : nil
+    results = get_currency_array(currency, tenant_id)
     response_handler(results)
   end
 
@@ -84,7 +85,7 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency])
+    rates = get_rates(params[:currency, current_user.tenant_id])
     response_handler(user: current_user, rates: rates)
   end
 

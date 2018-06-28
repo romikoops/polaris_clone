@@ -7,18 +7,18 @@ class Admin::LocalChargesController < ApplicationController
     data = params[:data].as_json
     id = data["id"]
     data.delete("id")
-    LocalCharge.find(id).update_attributes(data)
-    data["id"] = id
-    response_handler(data)
+    local_charge = LocalCharge.find(id)
+    local_charge.update_attributes(fees: data["fees"])
+    response_handler(local_charge)
   end
 
   def edit_customs
     data = params[:data].as_json
     id = data["id"]
     data.delete("id")
-    CustomsFee.find(id).update_attributes(data)
-    data["id"] = id
-    response_handler(data)
+    customs_fee = CustomsFee.find(id)
+    customs_fee.update_attributes(fees: data["fees"])
+    response_handler(customs_fee)
   end
 
   def download_local_charges

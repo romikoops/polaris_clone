@@ -53,7 +53,8 @@ function getLayovers (id) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/itineraries/${id}/layovers`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/itineraries/${id}/layovers`, requestOptions)
+    .then(handleResponse)
 }
 
 function getHub (id) {
@@ -74,6 +75,7 @@ function wizardHubs (file) {
     body: formData
   }
   const uploadUrl = `${BASE_URL}/admin/hubs/process_csv`
+
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -86,6 +88,7 @@ function wizardSCharge (file) {
     body: formData
   }
   const uploadUrl = `${BASE_URL}/admin/local_charges/process_csv`
+
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -98,6 +101,7 @@ function wizardPricings (file) {
     body: formData
   }
   const uploadUrl = `${BASE_URL}/admin/pricings/train_and_ocean_pricings/process_csv`
+
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -115,6 +119,7 @@ function wizardTrucking (type, file) {
   } else if (type === 'city') {
     uploadUrl = `${BASE_URL}/admin/trucking/trucking_city_pricings`
   }
+
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -127,6 +132,7 @@ function wizardOpenPricings (file) {
     body: formData
   }
   const uploadUrl = `${BASE_URL}/admin/open_pricings/train_and_ocean_pricings/process_csv`
+
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -171,7 +177,8 @@ function getItineraryPricings (id) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/route_pricings/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/route_pricings/${id}`, requestOptions)
+    .then(handleResponse)
 }
 
 function confirmShipment (id, action) {
@@ -181,6 +188,7 @@ function confirmShipment (id, action) {
     body: JSON.stringify({ shipment_action: action })
   }
   const url = `${BASE_URL}/admin/shipments/${id}`
+
   // FIXME: console.log(url)
   return fetch(url, requestOptions).then(handleResponse)
 }
@@ -200,8 +208,8 @@ function deletePricing (pricing) {
     headers: authHeader()
   }
 
-  // eslint-disable-next-line no-underscore-dangle
-  return fetch(`${BASE_URL}/admin/pricings/${pricing._id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/pricings/${pricing.id}`, requestOptions)
+    .then(handleResponse)
 }
 
 function getClientPricings (id) {
@@ -210,7 +218,8 @@ function getClientPricings (id) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/client_pricings/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/client_pricings/${id}`, requestOptions)
+    .then(handleResponse)
 }
 
 function getClients () {
@@ -265,7 +274,8 @@ function autoGenSchedules (data) {
     body: JSON.stringify(data)
   }
 
-  return fetch(`${BASE_URL}/admin/schedules/auto_generate`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/schedules/auto_generate`, requestOptions)
+    .then(handleResponse)
 }
 
 function updatePricing (id, data) {
@@ -275,7 +285,8 @@ function updatePricing (id, data) {
     body: JSON.stringify(data)
   }
 
-  return fetch(`${BASE_URL}/admin/pricings/update/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/pricings/update/${id}`, requestOptions)
+    .then(handleResponse)
 }
 
 function updateServiceCharge (id, data) {
@@ -285,7 +296,8 @@ function updateServiceCharge (id, data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${BASE_URL}/admin/local_charges/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/${id}`, requestOptions)
+    .then(handleResponse)
 }
 
 function newClient (data) {
@@ -296,6 +308,7 @@ function newClient (data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/clients`, requestOptions).then(handleResponse)
 }
 
@@ -304,7 +317,9 @@ function activateHub (hubId) {
     method: 'PATCH',
     headers: authHeader()
   }
-  return fetch(`${BASE_URL}/admin/hubs/${hubId}/set_status`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/hubs/${hubId}/set_status`, requestOptions)
+    .then(handleResponse)
 }
 
 function documentAction (docId, action) {
@@ -313,7 +328,9 @@ function documentAction (docId, action) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(action)
   }
-  return fetch(`${BASE_URL}/admin/documents/action/${docId}`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/documents/action/${docId}`, requestOptions)
+    .then(handleResponse)
 }
 
 function saveNewHub (hub, location) {
@@ -322,6 +339,7 @@ function saveNewHub (hub, location) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ hub, location })
   }
+
   return fetch(`${BASE_URL}/admin/hubs`, requestOptions).then(handleResponse)
 }
 function deleteHub (hubId) {
@@ -329,7 +347,9 @@ function deleteHub (hubId) {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
-  return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions)
+    .then(handleResponse)
 }
 
 function deleteClient (id) {
@@ -337,7 +357,9 @@ function deleteClient (id) {
     method: 'DELETE',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
-  return fetch(`${BASE_URL}/admin/clients/${id}`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/clients/${id}`, requestOptions)
+    .then(handleResponse)
 }
 function editHub (hubId, object) {
   const requestOptions = {
@@ -345,7 +367,9 @@ function editHub (hubId, object) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(object)
   }
-  return fetch(`${BASE_URL}/admin/hubs/${hubId}`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/hubs/${hubId}`, requestOptions)
+    .then(handleResponse)
 }
 function newRoute (itinerary) {
   const requestOptions = {
@@ -353,6 +377,7 @@ function newRoute (itinerary) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ itinerary })
   }
+
   return fetch(`${BASE_URL}/admin/itineraries`, requestOptions).then(handleResponse)
 }
 function saveNewTrucking (obj) {
@@ -361,6 +386,7 @@ function saveNewTrucking (obj) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ obj })
   }
+
   return fetch(`${BASE_URL}/admin/trucking`, requestOptions).then(handleResponse)
 }
 function assignManager (obj) {
@@ -369,7 +395,9 @@ function assignManager (obj) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ obj })
   }
-  return fetch(`${BASE_URL}/admin/user_managers/assign`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/user_managers/assign`, requestOptions)
+    .then(handleResponse)
 }
 function editShipmentPrice (id, priceObj) {
   const requestOptions = {
@@ -377,23 +405,29 @@ function editShipmentPrice (id, priceObj) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ priceObj })
   }
-  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions)
+    .then(handleResponse)
 }
-function editLocalCharges (id, data) {
+function editLocalCharges (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ data })
   }
-  return fetch(`${BASE_URL}/admin/local_charges/${id}/edit`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/local_charges/${data.id}/edit`, requestOptions)
+    .then(handleResponse)
 }
-function editCustomsFees (id, data) {
+function editCustomsFees (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ data })
   }
-  return fetch(`${BASE_URL}/admin/customs_fees/${id}/edit`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/customs_fees/${data.id}/edit`, requestOptions)
+    .then(handleResponse)
 }
 function editShipmentTime (id, timeObj) {
   const requestOptions = {
@@ -401,13 +435,16 @@ function editShipmentTime (id, timeObj) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ timeObj })
   }
-  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_time`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_time`, requestOptions)
+    .then(handleResponse)
 }
 function deleteItinerary (id) {
   const requestOptions = {
     method: 'DELETE',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
+
   return fetch(`${BASE_URL}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
 function deleteTrip (id) {
@@ -415,6 +452,7 @@ function deleteTrip (id) {
     method: 'DELETE',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
+
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 function uploadTrucking (url, file, direction) {
@@ -426,6 +464,7 @@ function uploadTrucking (url, file, direction) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
 }
 function newHubImage (id, file) {
@@ -436,6 +475,7 @@ function newHubImage (id, file) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/hubs/${id}/image`, requestOptions).then(handleResponse)
 }
 
@@ -444,6 +484,7 @@ function loadItinerarySchedules (id) {
     method: 'GET',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
+
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 function saveItineraryNotes (id, notes) {
@@ -452,7 +493,9 @@ function saveItineraryNotes (id, notes) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ notes })
   }
-  return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions)
+    .then(handleResponse)
 }
 
 function editTruckingPrice (pricing) {
@@ -461,7 +504,9 @@ function editTruckingPrice (pricing) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ pricing })
   }
-  return fetch(`${BASE_URL}/admin/trucking/${pricing.id}/edit`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/trucking/${pricing.id}/edit`, requestOptions)
+    .then(handleResponse)
 }
 function updateHubMandatoryCharges (id, charges) {
   const requestOptions = {
@@ -469,7 +514,9 @@ function updateHubMandatoryCharges (id, charges) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ mandatoryCharge: charges })
   }
-  return fetch(`${BASE_URL}/admin/hubs/${id}/update_mandatory_charges`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/admin/hubs/${id}/update_mandatory_charges`, requestOptions)
+    .then(handleResponse)
 }
 
 export const adminService = {

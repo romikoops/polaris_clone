@@ -236,7 +236,16 @@ class Shipment < ApplicationRecord
   def as_options_json(options={})
     new_options = options.reverse_merge(
       methods: [:selected_offer, :mode_of_transport],
-      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
+      include:[ 
+        { destination_nexus: {}},
+        { origin_nexus: {}}, 
+        { destination_hub: {
+          include: [{location: { only: %i(geocoded_address latitude longitude)}}]
+        }},
+        { origin_hub: {
+          include: [{location: { only: %i(geocoded_address latitude longitude)}}]
+        }}
+      ]
     )
     as_json(new_options)
   end
@@ -302,6 +311,28 @@ class Shipment < ApplicationRecord
     self.itinerary = current_itinerary
 
     return_bool
+  end
+
+
+  def self.requested_shipments(tenant_id)
+    where(
+      status:    %w(requested requested_by_unconfirmed_account),
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
+  end
+
+  def self.open_shipments(tenant_id)
+    where(
+      status:    %w(in_progress confirmed),
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
+  end
+
+  def self.finished_shipments(tenant_id)
+    where(
+      status:    "finished",
+      tenant_id: tenant_id
+    ).order(booking_placed_at: :desc)
   end
 
   private

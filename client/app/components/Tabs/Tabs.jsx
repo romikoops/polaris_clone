@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes from '../../prop-types'
 
 export default class Tabs extends PureComponent {
   constructor (props, context) {
@@ -32,6 +32,7 @@ export default class Tabs extends PureComponent {
     if (children[activeTabIndex]) {
       return children[activeTabIndex].props.children
     }
+    return ''
   }
 
   render () {
@@ -53,9 +54,14 @@ export default class Tabs extends PureComponent {
 }
 
 Tabs.propTypes = {
+  defaultActiveTabIndex: PropTypes.number,
+  children: PropTypes.node,
   wrapperTabs: PropTypes.string
+
 }
 
 Tabs.defaultProps = {
-  wrapperTabs: 'layout-row flex-40'
+  wrapperTabs: 'layout-row flex-40',
+  defaultActiveTabIndex: 0,
+  children: null
 }
