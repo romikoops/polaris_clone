@@ -60,7 +60,7 @@ class Admin::SchedulesController < ApplicationController
     if params[:file]
       itinerary = Itinerary.find(params[:id])
       req = { "xlsx" => params[:file], "itinerary" => itinerary }
-      results = overwrite_schedules_by_itinerary(req, current_user)
+      results = ExcelTool::OverwriteSchedulesByItinerary.new(params: req, _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
