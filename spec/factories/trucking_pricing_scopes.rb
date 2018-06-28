@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :trucking_pricing_scope do
-    load_type "MyString"
-    cargo_class "MyString"
-    carriage "MyString"
-    courier_id 1
-    truck_type "MyString"
+    load_type "cargo_item"
+  	cargo_class "lcl"
+  	truck_type "default"
+  	carriage "pre"
+  	association :courier
   end
 end

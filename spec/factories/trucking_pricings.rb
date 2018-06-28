@@ -156,16 +156,12 @@ LOAD_METERAGE = { "ratio" => 1850.0, "height_limit" => 130 }
 
 FactoryBot.define do
   factory :trucking_pricing do
-  	load_type "cargo_item"
+    association :trucking_pricing_scope
   	cbm_ratio 460
-  	cargo_class 'fcl_20f'
   	modifier "kg"
-  	truck_type "default"
-  	carriage "pre"
   	load_meterage LOAD_METERAGE
   	rates RATES
   	fees FEES
-  	association :courier
   	association :tenant
   end
 end
