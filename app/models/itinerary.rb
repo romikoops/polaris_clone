@@ -14,6 +14,7 @@ class Itinerary < ApplicationRecord
   has_many :hubs,      through: :stops
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
+  scope :for_tenant, -> (tenant_id) { where(tenant_id: tenant_id) }
   # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
   validate :must_have_stops
@@ -344,10 +345,6 @@ class Itinerary < ApplicationRecord
     itineraries = shipment.tenant.itineraries.filter_by_hubs(start_hub_ids, end_hub_ids)
 
     { itineraries: itineraries.to_a, origin_hubs: start_hubs, destination_hubs: end_hubs }
-  end
-
-  def self.tenant_itinerary(tenant_id)
-    where(tenant_id: tenant_id)
   end
 
   def self.update_hubs

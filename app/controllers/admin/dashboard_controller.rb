@@ -21,6 +21,7 @@ class Admin::DashboardController < ApplicationController
   private
 
   def initialize_variables
+    @shipments = Shipment.where(tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments
     @open_shipments = open_shipments
     @finished_shipments = finished_shipments
@@ -33,26 +34,26 @@ class Admin::DashboardController < ApplicationController
   end
 
   def requested_shipments
-    Shipment.requested_shipments(current_user.tenant_id).map do |shipment|
+    @shipments.requested.order_booking_desc.map do |shipment|
       shipment.with_address_options_json
     end
   end
 
   def open_shipments
-    Shipment.open_shipments(current_user.tenant_id).map do |shipment|
+    @shipments.open.order_booking_desc.map do |shipment|
       shipment.with_address_options_json
     end
   end
 
   def finished_shipments
-    Shipment.finished_shipments(current_user.tenant_id).map do |shipment|
+    @shipments.finished.order_booking_desc.map do |shipment|
       shipment.with_address_options_json
     end
   end
 
 
   def detailed_itin_json
-    Itinerary.tenant_itinerary(current_user.tenant_id).map do |itinerary|
+    Itinerary.for_tenant(current_user.tenant_id).map do |itinerary|
        itinerary.as_options_json(methods: :routes)
     end
   end
