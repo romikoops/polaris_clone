@@ -31,6 +31,11 @@ export class AdminRoutesIndex extends Component {
     }
     window.scrollTo(0, 0)
   }
+  componentWillReceiveProps (nextProps) {
+    if (this.props.itineraries !== nextProps.itineraries) {
+      this.prepFilters()
+    }
+  }
   toggleExpander (key) {
     this.setState({
       expander: {
