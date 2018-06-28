@@ -40,7 +40,7 @@ class Document < ApplicationRecord
   end
 
   def self.obj_key(shipment, type, file_name)
-    "documents/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
+     "documents/" + shipment.tenant.subdomain + "/shipments/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
   end
 
   def self.delete_document(id)

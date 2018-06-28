@@ -90,8 +90,7 @@ export class ShipmentLocationBox extends Component {
         origin: [],
         destination: []
       },
-      truckingHubs: {},
-      filteredRouteIndexes: []
+      truckingHubs: {}
     }
 
     this.isOnFocus = {
@@ -128,7 +127,6 @@ export class ShipmentLocationBox extends Component {
       const speciality = determineSpecialism(this.props.scope.modes_of_transport)
       this.setState({ speciality })
     }
-    this.getInitalFilteredRouteIndexes()
     this.prepForSelect('origin')
     this.prepForSelect('destination')
   }
@@ -356,21 +354,6 @@ export class ShipmentLocationBox extends Component {
     service.getDetails({ placeId }, place => callback(place))
   }
 
-  getInitalFilteredRouteIndexes () {
-    this.setState((prevState) => {
-      const {
-        filteredRouteIndexes
-      } = prevState
-      const { routes } = this.props.shipmentData
-
-      if (filteredRouteIndexes.length === 0) {
-        return { filteredRouteIndexes: routes.map((_, i) => i) }
-      }
-
-      return { filteredRouteIndexes }
-    })
-  }
-
   selectedRoute (route) {
     const origin = {
       city: '',
@@ -577,9 +560,8 @@ export class ShipmentLocationBox extends Component {
       if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
     }, 6000)
 
-    const { shipmentData } = this.props
+    const { shipmentData, filteredRouteIndexes } = this.props
     const { lookupTablesForRoutes, routes, shipment } = shipmentData
-    const { filteredRouteIndexes } = this.state
     const lat = place.geometry.location.lat()
     const lng = place.geometry.location.lng()
 
@@ -637,6 +619,7 @@ export class ShipmentLocationBox extends Component {
           this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
           this.props.setNotesIds(nexusIds, target)
           // this.scopeNexusOptions(nexusIds, hubIds, counterpart)
+
           addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
             this.props.setTargetAddress(target, { ...address, nexusIds })
           })
@@ -770,14 +753,15 @@ export class ShipmentLocationBox extends Component {
   prepForSelect (target) {
     this.setState((prevState) => {
       const {
-        truckingHubs, oSelect, dSelect, filteredRouteIndexes
+        truckingHubs, oSelect, dSelect
       } = prevState
+      const { filteredRouteIndexes } = this.props
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
 
-      let indexes = filteredRouteIndexes
+      let indexes = filteredRouteIndexes.slice()
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -820,8 +804,9 @@ export class ShipmentLocationBox extends Component {
 
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
 
+      this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
+
       return {
-        filteredRouteIndexes: newFilteredRouteIndexes,
         [`available${capitalize(counterpart)}Nexuses`]: selectOptions,
         [`${target}FieldsHaveErrors`]: fieldsHaveErrors
       }
@@ -1338,7 +1323,9 @@ ShipmentLocationBox.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
-  scope: PropTypes.scope.isRequired
+  scope: PropTypes.scope.isRequired,
+  filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
+  updateFilteredRouteIndexes: PropTypes.func.isRequired
 }
 
 ShipmentLocationBox.defaultProps = {

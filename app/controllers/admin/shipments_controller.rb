@@ -101,7 +101,7 @@ class Admin::ShipmentsController < ApplicationController
       shipmentRef: shipment.imc_reference
     }
     add_message_to_convo(shipment.user, message, true)
-    response_handler(shipment)
+    response_handler(shipment.with_address_options_json)
   end
 
   def edit_time
@@ -124,7 +124,7 @@ class Admin::ShipmentsController < ApplicationController
       shipmentRef: shipment.imc_reference
     }
     add_message_to_convo(shipment.user, message, true)
-    response_handler(shipment.as_json(options))
+    response_handler(shipment.with_address_options_json)
   end
 
   def edit
@@ -147,7 +147,7 @@ class Admin::ShipmentsController < ApplicationController
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
-        response_handler(@shipment)
+        response_handler(@shipment.with_address_options_json)
       when "decline"
         @shipment.decline!
         message = {
@@ -156,13 +156,13 @@ class Admin::ShipmentsController < ApplicationController
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
-        response_handler(@shipment)
+        response_handler(@shipment.with_address_options_json)
       when "ignore"
         @shipment.ignore!
         response_handler({})
       when "finished"
         @shipment.finish!
-        response_handler(@shipment)
+        response_handler(@shipment.with_address_options_json)
       else
         raise "Unknown action!"
       end

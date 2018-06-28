@@ -3,7 +3,6 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../../Cargo/Item/Group/Aggregated'
-import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import PropTypes from '../../../prop-types'
 import { moment, documentTypes } from '../../../constants'
 import adminStyles from '../Admin.scss'
@@ -192,7 +191,7 @@ export class AdminShipmentView extends Component {
   }
   prepContainerGroups (cargos) {
     const { theme, shipmentData } = this.props
-    const { hsCodes } = shipmentData
+    const { hsCodes, shipment } = shipmentData
     const cargoGroups = {}
     let groupCount = 1
     const resultArray = []
@@ -215,7 +214,12 @@ export class AdminShipmentView extends Component {
     })
     Object.keys(cargoGroups).forEach((k) => {
       resultArray
-        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+        .push(<CargoItemGroup
+          group={cargoGroups[k]}
+          theme={theme}
+          hsCodes={hsCodes}
+          shipment={shipment}
+        />)
     })
 
     return resultArray
@@ -320,7 +324,7 @@ export class AdminShipmentView extends Component {
 
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
-        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${styles.status_box_requested}`}
+        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
@@ -332,7 +336,7 @@ export class AdminShipmentView extends Component {
     )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_process}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
         <p className="layout-align-center-center layout-row"> In process </p>
       </div>
     ) : (
@@ -340,7 +344,7 @@ export class AdminShipmentView extends Component {
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
     ) : (
@@ -463,18 +467,18 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length
+    const cargoCount = Object.keys(feeHash.cargo).length - 1
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
-          <div className={`layout-row flex-85 flex-md-75 flex-sm-70 flex-xs-40 layout-align-start-center ${adminStyles.title_grey}`}>
+          <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
           {statusRequested}
           {statusInProcess}
           {statusFinished}
-          <div className={`layout-row flex-5 flex-md-10 flex-sm-10 flex-xs-15 layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
+          <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
             {shipment.status === 'requested' ? (
               <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
             ) : (

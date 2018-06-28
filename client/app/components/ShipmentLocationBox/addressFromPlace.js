@@ -8,7 +8,6 @@ export default function addressFromPlace (place, gMaps, map, callback) {
     country: '',
     fullAddress: ''
   }
-  console.log(place)
 
   place.address_components.forEach((ac) => {
     if (ac.types.includes('street_number')) {
@@ -44,8 +43,13 @@ export default function addressFromPlace (place, gMaps, map, callback) {
       radius: 10000
     }
     service.nearbySearch(requestOptions, (results) => {
-      if (results) {
+      if (results && results.length > 0) {
         tmpAddress.city = results[0].name
+      }
+      if (!tmpAddress.city) {
+        tmpAddress.city = place.address_components.find(ac => (
+          ac.types.includes('administrative_area_level_1')
+        )).long_name
       }
       callback(tmpAddress)
     })
