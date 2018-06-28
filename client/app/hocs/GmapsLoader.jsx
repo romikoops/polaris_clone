@@ -34,6 +34,7 @@ export default function GmapsLoader (props) {
             setNotesIds={(e, t) => props.setNotesIds(e, t)}
             handleSelectLocation={props.handleSelectLocation}
             scope={props.scope}
+            {...props}
           />
         )
       }

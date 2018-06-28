@@ -18,7 +18,6 @@ module OfferCalculatorService
 
       { origin: "pre", destination: "on" }.each do |target, carriage|
         next unless @shipment.has_carriage?(carriage)
-
         location = Location.create_from_raw_params!(location_params(target))
         raise_trucking_address_error(target) if trucking_address_invalid?(location)
         @shipment.trucking["#{carriage}_carriage"]["location_id"] = location.id
@@ -29,6 +28,7 @@ module OfferCalculatorService
       if aggregated_cargo_shipment?
         @shipment.aggregated_cargo.try(:destroy)
         @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params)
+        @shipment.aggregated_cargo.set_chargeable_weight!
       else
         destroy_previous_cargo_units
         @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
@@ -97,6 +97,7 @@ module OfferCalculatorService
     def location_params(target)
       unsafe_location_hash = @params.require(:shipment).require(target).to_unsafe_hash
       snakefied_location_hash = unsafe_location_hash.deep_transform_keys { |k| k.to_s.underscore }
+      snakefied_location_hash.deep_symbolize_keys!
       snakefied_location_hash[:geocoded_address] = snakefied_location_hash.delete(:full_address)
       snakefied_location_hash[:street_number] = snakefied_location_hash.delete(:number)
       ActionController::Parameters.new(snakefied_location_hash)

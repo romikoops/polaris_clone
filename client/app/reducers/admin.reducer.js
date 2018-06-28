@@ -333,12 +333,12 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
       const req =
-        state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.shipments && state.shipments.open
+          ? state.shipments.open.filter(x => x.id !== action.payload.id)
           : []
       const dashReq =
-        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open
+          ? state.dashboard.shipments.open.filter(x => x.id !== action.payload.id)
           : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
       const dashFinished =
@@ -357,14 +357,14 @@ export default function admin (state = {}, action) {
           ...state.dashboard,
           shipments: {
             ...state.dashboard.shipments,
-            open: dashFinished,
-            requested: dashReq
+            finished: dashFinished,
+            open: dashReq
           }
         },
         shipments: {
           ...state.shipments,
           finished,
-          requested: req
+          open: req
         },
         shipment: {
           ...state.shipment,

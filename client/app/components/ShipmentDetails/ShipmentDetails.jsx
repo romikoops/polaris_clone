@@ -12,7 +12,6 @@ import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
-import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -116,7 +115,8 @@ export class ShipmentDetails extends Component {
         stackableGoodsConfirmed: ''
       },
       prevRequestLoaded: false,
-      availableMotsForRoute: []
+      availableMotsForRoute: [],
+      filteredRouteIndexes: []
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -151,6 +151,7 @@ export class ShipmentDetails extends Component {
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
+    this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
   }
   componentWillMount () {
     const { prevRequest, setStage } = this.props
@@ -178,9 +179,19 @@ export class ShipmentDetails extends Component {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
 
-    if (shouldUpdateAvailableMotsForRoute(this.state, nextState)) {
+    if (
+      shouldUpdateAvailableMotsForRoute(
+        this.state.filteredRouteIndexes,
+        nextState.filteredRouteIndexes
+      )
+    ) {
       this.updateAvailableMotsForRoute()
+
       return false
+    }
+
+    if (!this.props.shipmentData.routes && nextProps.shipmentData.routes) {
+      this.getInitalFilteredRouteIndexes()
     }
 
     return !!(
@@ -190,7 +201,8 @@ export class ShipmentDetails extends Component {
       nextState.modals &&
       nextProps.tenant &&
       nextProps.user &&
-      nextProps.shipmentData.maxDimensions
+      nextProps.shipmentData.maxDimensions &&
+      nextProps.shipmentData.routes
     )
   }
   componentWillUpdate () {
@@ -232,8 +244,8 @@ export class ShipmentDetails extends Component {
     const { noteIds } = this.state
     const { shipmentDispatch, shipmentData } = this.props
     if (!noteIds.itineraries) {
-      const { itineraries } = shipmentData
-      noteIds.itineraries = itineraries
+      const { routes } = shipmentData
+      noteIds.itineraries = routes
     }
     noteIds[`${target}s`] = ids
     if (noteIds.origins && noteIds.destinations) {
@@ -247,6 +259,21 @@ export class ShipmentDetails extends Component {
 
   setAggregatedCargo (bool) {
     this.setState({ aggregated: bool })
+  }
+
+  getInitalFilteredRouteIndexes () {
+    this.setState((prevState) => {
+      const {
+        filteredRouteIndexes
+      } = prevState
+      const { routes } = this.props.shipmentData
+
+      if (filteredRouteIndexes.length === 0) {
+        return { filteredRouteIndexes: routes.map((_, i) => i) }
+      }
+
+      return { filteredRouteIndexes }
+    })
   }
 
   presetMandatoryCarriage () {
@@ -292,10 +319,11 @@ export class ShipmentDetails extends Component {
 
   updateAvailableMotsForRoute () {
     this.setState((prevState) => {
-      const { origin, destination } = prevState
-      const { itineraries } = this.props.shipmentData
+      const { routes, lookupTablesForRoutes } = this.props.shipmentData
+      const { filteredRouteIndexes } = prevState
+      const availableMotsForRoute =
+        calcAvailableMotsForRoute(routes, lookupTablesForRoutes, filteredRouteIndexes)
 
-      const availableMotsForRoute = calcAvailableMotsForRoute(itineraries, origin, destination)
       return { availableMotsForRoute }
     })
   }
@@ -613,12 +641,16 @@ export class ShipmentDetails extends Component {
     this.setState({ modals })
   }
 
+  updateFilteredRouteIndexes (filteredRouteIndexes) {
+    this.setState({ filteredRouteIndexes })
+  }
+
   render () {
     const {
       tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
 
-    const { modals } = this.state
+    const { modals, filteredRouteIndexes } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
 
@@ -688,6 +720,10 @@ export class ShipmentDetails extends Component {
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
         scope={scope}
+        selectedTrucking={this.state.shipment.trucking}
+        handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+        filteredRouteIndexes={filteredRouteIndexes}
+        updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -771,9 +807,6 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
-    const truckTypes = this.truckTypes[this.state.shipment.load_type]
-    const showTruckingDetails =
-      truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
     const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
 
@@ -805,20 +838,6 @@ export class ShipmentDetails extends Component {
           } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
-        </div>
-        <div
-          className={
-            `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${showTruckingDetails ? styles.visible : ''} ` +
-            'layout-wrap layout-align-center'
-          }
-        >
-          <TruckingDetails
-            theme={theme}
-            trucking={this.state.shipment.trucking}
-            truckTypes={truckTypes}
-            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
-          />
         </div>
         <div className="flex-100 layout-row layout-align-center-center">
           <div className="flex-none content_width_booking layout-row layout-align-center-center">
@@ -865,8 +884,9 @@ export class ShipmentDetails extends Component {
               </div>
             </div>
           )}
-
-          {cargoDetails}
+          <div className="flex-100 layout-row layout-align-center-center">
+            {cargoDetails}
+          </div>
         </div>
         <div
           className={

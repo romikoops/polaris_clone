@@ -10,8 +10,8 @@ class NotesController < ApplicationController
     destinations = params[:destinations] || []
     itineraries = params[:itineraries]
     itineraries.each do |itin|
-      next unless origins.include?(itin["originNexusId"]) && destinations.include?(itin["destinationNexusId"])
-      itinerary = Itinerary.find(itin["id"])
+      next unless origins.include?(itin["origin"]["nexusId"]) && destinations.include?(itin["destination"]["nexusId"])
+      itinerary = Itinerary.find(itin["itineraryId"])
       itinerary.notes.each do |note|
         notes.push(transform_note(itinerary, note))
       end

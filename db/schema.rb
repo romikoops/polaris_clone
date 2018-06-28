@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180620151531) do
+ActiveRecord::Schema.define(version: 20180627081746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20180620151531) do
     t.string "base"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_id"
   end
 
   create_table "customs_fees", force: :cascade do |t|
@@ -180,6 +181,13 @@ ActiveRecord::Schema.define(version: 20180620151531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name_1", "name_2", "name_3", "name_4"], name: "index_geometries_on_name_1_and_name_2_and_name_3_and_name_4", unique: true
+  end
+
+  create_table "hub_truck_type_availabilities", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "truck_type_availability_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -571,6 +579,14 @@ ActiveRecord::Schema.define(version: 20180620151531) do
     t.datetime "closing_date"
   end
 
+  create_table "truck_type_availabilities", force: :cascade do |t|
+    t.string "load_type"
+    t.string "carriage"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
@@ -651,6 +667,7 @@ ActiveRecord::Schema.define(version: 20180620151531) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"

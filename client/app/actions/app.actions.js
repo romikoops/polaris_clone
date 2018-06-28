@@ -140,8 +140,32 @@ function toggleTenantCurrencyMode () {
     appService.toggleTenantCurrencyMode().then(
       (resp) => {
         dispatch(success(resp.data.rates))
-        dispatch(tenantActions.receiveTenant(resp.data.subdomain, resp.data))
-        dispatch(alertActions.success('Fetching Currency successful'))
+        dispatch(tenantActions.receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
+        dispatch(alertActions.success('Toggle Currency Mode successful'))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
+function setTenantCurrencyRates (base, rates) {
+  function request (currencyReq) {
+    return { type: appConstants.FETCH_CURRENCIES_REQUEST, payload: currencyReq }
+  }
+  function success (currencyData) {
+    return { type: appConstants.FETCH_CURRENCIES_SUCCESS, payload: currencyData }
+  }
+  function failure (error) {
+    return { type: appConstants.SET_CURRENCY_ERROR, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+    appService.setTenantCurrencyRates(base, rates).then(
+      (resp) => {
+        dispatch(success(resp.data))
       },
       (error) => {
         error.then((data) => {
@@ -259,7 +283,8 @@ export const appActions = {
   setTheme,
   fetchCurrenciesForBase,
   refreshRates,
-  toggleTenantCurrencyMode
+  toggleTenantCurrencyMode,
+  setTenantCurrencyRates
 }
 
 export default appActions

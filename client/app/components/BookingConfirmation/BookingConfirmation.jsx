@@ -12,7 +12,6 @@ import { gradientTextGenerator } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
-import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
 import { IncotermRow } from '../Incoterm/Row'
@@ -35,12 +34,15 @@ import {
 } from '../../classNames'
 
 const ACCEPT = `${ROW(33)} ${ALIGN_END} height_100`
-// eslint-disable-next-line
-const AFTER_CONTAINER = `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
-// eslint-disable-next-line
-const BACK_TO_DASHBOARD = `${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`
-// eslint-disable-next-line
-const BACK_TO_DASHBOARD_CELL = `${defaults.content_width} flex-none ${ROW('CONTENT')} ${ALIGN_START_CENTER}`
+
+const AFTER_CONTAINER =
+  `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`
+
+const BACK_TO_DASHBOARD =
+  `${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`
+
+const BACK_TO_DASHBOARD_CELL =
+  `${defaults.content_width} flex-none ${ROW('CONTENT')} ${ALIGN_START_CENTER}`
 const BOOKING = `${ROW('NONE')} content_width_booking ${ALIGN_CENTER}`
 const BUTTON = `${ROW('NONE')} ${ALIGN_END}`
 const CHECKBOX = `${ROW(65)} ${ALIGN_START_CENTER}`
@@ -55,14 +57,16 @@ const CONTAINER = `BOOKING_CONFIRMATION ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 const HEADING = `${styles.heading_style} ${ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const INNER_WRAPPER = `${styles.inner_wrapper} ${WRAP_ROW(100)} ${ALIGN_START}`
 const INNER_WRAPPER_CELL = `${WRAP_ROW(100)} ${ALIGN_BETWEEN_START}`
-// eslint-disable-next-line
-const ITINERARY = `${styles.shipment_card_itinerary} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
+
+const ITINERARY =
+  `${styles.shipment_card_itinerary} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const LAYOUT_WRAP = `${WRAP_ROW(100)} ${ALIGN_START_CENTER}`
 const MISSING_DOCS = `${ROW(25)} ${ALIGN_START_CENTER} ${styles.no_doc}`
-// eslint-disable-next-line
+
 const SHIPMENT_CARD = `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
-// eslint-disable-next-line
-const SHIPMENT_CARD_CONTAINER = `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
+
+const SHIPMENT_CARD_CONTAINER =
+  `${styles.shipment_card} ${WRAP_ROW(100)} ${ALIGN_BETWEEN_CENTER}`
 const SUBTITLE = `${styles.sec_subtitle_text} flex-none offset-5`
 const SUBTITLE_NORMAL = `${styles.sec_subtitle_text_normal} flex-none`
 const SUMM_TOP = `${styles.b_summ_top} ${ROW(100)} ${ALIGN_AROUND_STRETCH}`
@@ -76,16 +80,24 @@ export function calcFareTotals (feeHash) {
   const total = feeHash.total && +feeHash.total.value
 
   return Object.keys(feeHash).reduce((sum, k) => (
-    feeHash[k] && ['customs', 'insurance'].includes(k) ? sum - feeHash[k].val : sum
+    feeHash[k] && ['customs', 'insurance']
+      .includes(k) && feeHash[k].total ? sum - feeHash[k].total.value : sum
   ), total).toFixed(2)
 }
 export function calcExtraTotals (feeHash) {
   let res1 = 0
-  if (feeHash && feeHash.customs && feeHash.customs.val) {
-    res1 += parseFloat(feeHash.customs.val)
+  if (feeHash &&
+    feeHash.customs &&
+    feeHash.customs &&
+    feeHash.customs.total &&
+    feeHash.customs.total.value) {
+    res1 += parseFloat(feeHash.customs.total.value)
   }
-  if (feeHash && feeHash.insurance && feeHash.insurance.val) {
-    res1 += parseFloat(feeHash.insurance.val)
+  if (feeHash &&
+    feeHash.insurance &&
+    feeHash.insurance.total &&
+    feeHash.insurance.total.value) {
+    res1 += parseFloat(feeHash.insurance.total.value)
   }
 
   return res1.toFixed(2)
@@ -587,6 +599,7 @@ export class BookingConfirmation extends Component {
 }
 
 function prepContainerGroups (cargos, props) {
+  const { hsCodes, shipment } = props.shipmentData
   const uniqCargos = uniqWith(
     cargos,
     (x, y) => x.id === y.id
@@ -623,16 +636,17 @@ function prepContainerGroups (cargos, props) {
   })
 
   return Object.keys(cargoGroups).map(prop =>
-    (<CargoContainerGroup
+    (<CargoItemGroup
       key={v4()}
       group={cargoGroups[prop]}
       theme={props.theme}
-      hsCodes={props.shipmentData.hsCodes}
+      hsCodes={hsCodes}
+      shipment={shipment}
     />))
 }
 
 function prepCargoItemGroups (cargos, props) {
-  const { cargoItemTypes, hsCodes } = props.shipmentData
+  const { cargoItemTypes, hsCodes, shipment } = props.shipmentData
   const uniqCargos = uniqWith(
     cargos,
     (x, y) => x.id === y.id
@@ -680,6 +694,7 @@ function prepCargoItemGroups (cargos, props) {
       group={cargoGroups[prop]}
       theme={props.theme}
       hsCodes={hsCodes}
+      shipment={shipment}
     />))
 }
 
@@ -740,12 +755,11 @@ function getDocs ({
 function getDefaultTerms (tenant) {
   return [
     'You verify that all the information provided above is true',
-    // eslint-disable-next-line
     `You agree to our Terms and Conditions and the General Conditions of the
                         Nordic Association of Freight Forwarders (NSAB) and those of 
                         {tenant.name}`,
-    // eslint-disable-next-line
-    'You agree to pay the price of the shipment as stated above upon arrival of the invoice'
+    `You agree to pay the price of the
+    shipment as stated above upon arrival of the invoice`
   ]
 }
 
@@ -812,7 +826,12 @@ function getShipperAndConsignee ({
 }) {
   const els = [
     <Contact key={v4()} contact={shipper} contactType="Shipper" textStyle={textStyle} />,
-    <Contact key={v4()} contact={consignee} contactType="Consignee" textStyle={textStyle} />
+    <Contact
+      key={v4()}
+      contact={consignee}
+      contactType="Consignee"
+      textStyle={textStyle}
+    />
   ]
 
   if (shipment.direction === 'import') {
@@ -844,7 +863,6 @@ function getLocationsDestination ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
     <div className={`${ROW(100)} ${ALIGN_START}`}>
       <address className="flex-none">
-        {/* eslint-disable-next-line */}
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
         ,
         {`${locations.destination.city}`},

@@ -20,10 +20,6 @@ export class AdminDashboardNew extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
-    const hubOrigin = shipment.schedule_set[0].origin_hub_id
-    const hubDestination = shipment.schedule_set[0].destination_hub_id
-    shipment.originHub = hubsObj[hubOrigin] ? hubsObj[hubOrigin].name : ''
-    shipment.destinationHub = hubsObj[hubDestination] ? hubsObj[hubDestination].name : ''
     return shipment
   }
 
