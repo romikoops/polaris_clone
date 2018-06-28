@@ -185,7 +185,6 @@ module ExcelTool
             end
           elsif identifier_type == "geometry_id"
             geometry = find_geometry(idents_and_country)
-            puts geometry.names.log_format
             stats[:trucking_destinations][:number_created] += 1
             # stats[:hub_truckings][:number_created] += 1
 
