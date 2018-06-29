@@ -52,7 +52,6 @@ module ExcelTools
       trucking_pricing_should_update = nil
 
       zip_code_range.each do |zipcode|
-        p zipcode
         trucking_destination = TruckingDestination.find_by!(zipcode: zipcode, country_code: "SE")
 
         trucking_pricing_ids = TruckingPricing.where(
@@ -219,7 +218,6 @@ module ExcelTools
           zip_codes << td
           hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
           tmp_zip += 1
-          p tmp_zip
         end
 
         if hub_truckings[0].trucking_pricing_id
@@ -289,7 +287,6 @@ module ExcelTools
 
   def overwrite_distance_trucking_rates_by_hub(params, _user=current_user, hub_id, courier_name, direction, country_code)
     courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
-    p direction
 
     stats = {
       type:              "trucking",
@@ -340,7 +337,6 @@ module ExcelTools
       rows.each do |row|
         range_values = row[:range].split("-").map(&:to_i)
         range_key = "#{row[:range]}_#{row[:truck_type]}"
-        p range_key
         hub_truckings[range_key] = [] unless hub_truckings[range_key]
         trucking_destinations[range_key] = [] unless trucking_destinations[range_key]
         unless new_pricings_data[range_key]
@@ -353,7 +349,6 @@ module ExcelTools
           aux_data[range_key] = {} unless aux_data[range_key]
 
           if hub_truckings[range_key][0].trucking_pricing_id && hub_truckings[range_key][0].trucking_pricing.load_type == row[:truck_type]
-            p hub_truckings[range_key][0].trucking_pricing_id
             trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
             trucking_pricings[range_key][direction]["table"] = []
 
@@ -421,7 +416,6 @@ module ExcelTools
 
   def overwrite_city_trucking_rates_by_hub(params, _user=current_user, hub_id, courier_name, direction)
     courier = Courier.find_or_create_by(name: courier_name, tenant: _user.tenant)
-    p direction
     defaults = []
     stats = {
       type:              "trucking",
@@ -983,9 +977,6 @@ module ExcelTools
       cargo_pricings.each do |cargo_key, pricing_data|
         new_pricing_data = pricing_data.clone
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
-        if !transport_category
-
-        end
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 
@@ -993,14 +984,13 @@ module ExcelTools
 
         pricing_details = new_pricing_data.delete(:data)
         pricing_exceptions = new_pricing_data.delete(:exceptions)
-        # external_updated_at = pricing_data.delete(:updated_at)
         pricing.update(new_pricing_data)
         pricing_details.each do |shipping_type, pricing_detail_data|
           currency = pricing_detail_data.delete(:currency)
           pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
           range = pricing_detail_params.delete(:range)
           pricing_detail = pricing.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
-          pricing_detail.update!(range: range, currency_name: currency) # , external_updated_at: external_updated_at)
+          pricing_detail.update!(range: range, currency_name: currency)
         end
 
         pricing_exceptions.each do |pricing_exception_data|

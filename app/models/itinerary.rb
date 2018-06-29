@@ -116,7 +116,7 @@ class Itinerary < ApplicationRecord
           stats[:layovers][:number_created] += 1
         end
       end
-      p tmp_date
+
       tmp_date += 1.day
     end
     { results: results, stats: stats }

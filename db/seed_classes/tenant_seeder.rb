@@ -1824,7 +1824,7 @@ class TenantSeeder
   private
 
   def self.should_perform?(tenant_attr, filter)
-    filter.all? do |filter_key, filter_value|
+    filter.all? do |filter_key, filter_value|\
       tenant_attr_value = tenant_attr[filter_key]
 
       tenant_attr_value == filter_value ||
@@ -1838,38 +1838,36 @@ class TenantSeeder
   CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
 
   def self.update_cargo_item_types!(tenant, cargo_item_types_attr)
-    if cargo_item_types_attr.nil?
-      puts "No cargo item types set for tenant #{tenant.subdomain}"
-      return
-    end
+    return if cargo_item_types_attr.nil?
 
     if cargo_item_types_attr == :all
       CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     if cargo_item_types_attr == :no_dimensions
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     tenant.tenant_cargo_item_types.destroy_all
     cargo_item_types_attr.each do |cargo_item_type_attr|
-      cargo_item_type = if cargo_item_type_attr.is_a? Hash
-                          CargoItemType.find_by(cargo_item_type_attr)
-                        else
-                          CargoItemType.find_by(
-                            category: cargo_item_type_attr,
-                            dimension_x: nil,
-                            dimension_y: nil,
-                            area: nil
-                          )
-                        end
-      TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+      cargo_item_type =
+        if cargo_item_type_attr.is_a? Hash
+          CargoItemType.find_by(cargo_item_type_attr)
+        else
+          CargoItemType.find_by(
+            category: cargo_item_type_attr,
+            dimension_x: nil,
+            dimension_y: nil,
+            area: nil
+          )
+        end
+      TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
     end
   end
 
@@ -1878,8 +1876,6 @@ class TenantSeeder
     if incoterm_array
       incoterm_array.each do |code|
         incoterm = Incoterm.find_by_code(code)
-        awesome_print code
-        awesome_print incoterm
         tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
       end
     else

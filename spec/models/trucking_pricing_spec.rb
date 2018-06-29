@@ -246,7 +246,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "zipcode"         => [["15000", "15099"]],
               "countryCode"     => "SE"          
             }
@@ -266,7 +266,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "zipcode"         => [["15000", "15039"], ["15050", "15109"]],          
               "countryCode"     => "SE"
             }
@@ -286,7 +286,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "city"            => [["Testname4", "Gothenburg"]],
               "countryCode"     => "SE"
             }
