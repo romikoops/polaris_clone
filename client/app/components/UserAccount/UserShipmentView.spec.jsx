@@ -26,9 +26,6 @@ jest.mock('../../constants', () => {
 
   return { moment, documentTypes }
 })
-jest.mock('../ShipmentCard/ShipmentCard', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
   switchIcon: x => x,
@@ -37,7 +34,7 @@ jest.mock('../../helpers', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { UserShipmentView } from './UserShipmentView'
+import UserShipmentView from './UserShipmentView'
 
 const createWrapper = propsInput => mount(<UserShipmentView {...propsInput} />)
 

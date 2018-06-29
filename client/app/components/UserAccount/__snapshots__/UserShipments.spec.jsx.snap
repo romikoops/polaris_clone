@@ -9,6 +9,7 @@ exports[`shallow render 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      wrapperTabs="layout-row flex-40"
     >
       <Tab
         isActive={false}
