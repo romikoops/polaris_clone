@@ -1,4 +1,4 @@
-/* eslint react/prop-types: "off" */
+/* eslint react/prop-types: "off", consistent-return: "off" */
 import * as Scroll from 'react-scroll'
 import Formsy from 'formsy-react'
 import React, { Component } from 'react'
@@ -9,6 +9,24 @@ import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { isEmpty } from '../../helpers/objectTools'
+
+import {
+  ALIGN_AROUND_CENTER,
+  ALIGN_AROUND_STRETCH,
+  ALIGN_BETWEEN_CENTER,
+  ALIGN_BETWEEN_START,
+  ALIGN_END_CENTER,
+  ALIGN_CENTER,
+  ALIGN_CENTER_START,
+  ALIGN_END,
+  ALIGN_START,
+  ALIGN_START_CENTER,
+  COLUMN_15,
+  ROW,
+  WRAP_ROW
+} from '../../classNames'
+
+const CONTAINER = `BOOKING_DETAILS ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 
 export class BookingDetails extends Component {
   constructor (props) {
@@ -204,24 +222,25 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
+    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
 
-    return parseFloat(shipmentData.shipment.total_price.value, 10) + customs.val + insurance.val
+    return parsed + customs.val + insurance.val
   }
   toNextStage () {
     const {
-      consignee,
-      shipper,
-      notifyees,
-      hsCodes,
-      totalGoodsValue,
       cargoNotes,
-      insurance,
+      consignee,
       customs,
-      hsTexts,
+      customsCredit,
       eori,
-      notes,
+      hsCodes,
+      hsTexts,
       incotermText,
-      customsCredit
+      insurance,
+      notes,
+      notifyees,
+      shipper,
+      totalGoodsValue
     } = this.state
     if ([shipper, consignee].some(isEmpty)) {
       scrollTo('contact_setter')
@@ -279,13 +298,11 @@ export class BookingDetails extends Component {
     if (!shipmentData) return ''
 
     const {
-      shipment,
-      hubs,
       contacts,
-      userLocations,
-      // containers,
-      // cargoItems,
-      locations
+      hubs,
+      locations,
+      shipment,
+      userLocations
     } = shipmentData
     if (!shipment || !hubs) return ''
 
@@ -293,28 +310,28 @@ export class BookingDetails extends Component {
       consignee, shipper, notifyees, customs, customsCredit, eori
     } = this.state
 
+    const maybeRouteHubBox = shipment && theme && hubs
+      ? <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
+      : ''
+
     return (
       <div
-        className="flex-100 layout-row layout-wrap layout-align-center-start"
+        className={CONTAINER}
         style={{ paddingTop: '60px' }}
       >
-        {shipment && theme && hubs ? (
-          <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
-        ) : (
-          ''
-        )}
-        <div className={`${styles.wrapper_contact_setter} flex-100 layout-row`}>
+        {maybeRouteHubBox}
+        <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           <ContactSetter
-            contacts={contacts}
-            userLocations={userLocations}
-            shipper={shipper}
             consignee={consignee}
-            notifyees={notifyees}
+            contacts={contacts}
             direction={shipment.direction}
-            setContact={this.setContact}
-            theme={theme}
-            removeNotifyee={this.removeNotifyee}
             finishBookingAttempted={this.state.finishBookingAttempted}
+            notifyees={notifyees}
+            removeNotifyee={this.removeNotifyee}
+            setContact={this.setContact}
+            shipper={shipper}
+            theme={theme}
+            userLocations={userLocations}
           />
         </div>
         <Formsy

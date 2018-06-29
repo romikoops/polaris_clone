@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_DETAILS flex-100 layout-row layout-wrap layout-align-center-start"
   style={
     Object {
       "paddingTop": "60px",
@@ -385,7 +385,7 @@ exports[`shipmentData.shipment is falsy 1`] = `""`;
 
 exports[`theme is falsy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_DETAILS flex-100 layout-row layout-wrap layout-align-center-start"
   style={
     Object {
       "paddingTop": "60px",
