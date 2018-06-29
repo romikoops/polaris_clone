@@ -81,7 +81,7 @@ module TruckingTools
     when "PER_CONTAINER"
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
     when "PER_CONTAINER_KM"
-      value = (fee[:km] * km) + fee[:unit]
+      value =( (fee[:km] * km) + fee[:unit]) * cargo["number_of_items"]
       min = fee[:min_value] || 0
       final_value = [min, value].max
       
