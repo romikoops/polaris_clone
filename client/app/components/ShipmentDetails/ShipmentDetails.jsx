@@ -178,7 +178,6 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
-
     if (
       shouldUpdateAvailableMotsForRoute(
         this.state.filteredRouteIndexes,
@@ -190,7 +189,7 @@ export class ShipmentDetails extends Component {
       return false
     }
 
-    if (!this.props.shipmentData.routes && nextProps.shipmentData.routes) {
+    if (nextProps.shipmentData.routes && nextState.filteredRouteIndexes.length === 0) {
       this.getInitalFilteredRouteIndexes()
     }
 
