@@ -9,28 +9,28 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.shipper.first
-  tenant.itineraries.destroy_all
-  tenant.local_charges.destroy_all
-  tenant.customs_fees.destroy_all
-  # tenant.trucking_pricings.delete_all
-  # HubTrucking.where(hub: tenant.hubs).delete_all
-  # tenant.hubs.destroy_all
-  # # # # #   # # # # #Overwrite hubs from excel sheet
-  # # # # puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__hubs.xlsx")
-  req = { 'xlsx' => hubs }
-  overwrite_hubs(req, shipper)
+  # tenant.itineraries.destroy_all
+  # tenant.local_charges.destroy_all
+  # tenant.customs_fees.destroy_all
+  # # tenant.trucking_pricings.delete_all
+  # # HubTrucking.where(hub: tenant.hubs).delete_all
+  # # tenant.hubs.destroy_all
+  # # # # # #   # # # # #Overwrite hubs from excel sheet
+  # # # # # puts '# Overwrite hubs from excel sheet'
+  # hubs = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__hubs.xlsx")
+  # req = { 'xlsx' => hubs }
+  # overwrite_hubs(req, shipper)
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__freight_rates.xlsx")
-  req = { 'xlsx' => public_pricings }
-  overwrite_freight_rates(req, shipper, true)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__freight_rates.xlsx")
+  # req = { 'xlsx' => public_pricings }
+  # overwrite_freight_rates(req, shipper, true)
 
-  # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
+  # # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
-  # # # # puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__local_charges.xlsx")
-  req = { 'xlsx' => local_charges }
-  ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
+  # # # # # puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__local_charges.xlsx")
+  # req = { 'xlsx' => local_charges }
+  # ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
 
   # # #   # # # # # # Overwrite trucking data from excel sheet
 
@@ -49,20 +49,20 @@ subdomains.each do |sub|
   #         params: req, _user: shipper, hub_id: hub.id
   #       ).perform
   # puts 'Shanghai Airport ftl'
-  hub = tenant.hubs.find_by_name('Shanghai Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx")
-  req = { 'xlsx' => trucking }
-  ExcelTool::OverrideTruckingRateByHub.new(
-          params: req, _user: shipper, hub_id: hub.id
-        ).perform
-  awesome_print 'City rates done'
-  # puts 'Gothenburg Port'
-  # hub = tenant.hubs.find_by_name('Gothenburg Port')
-  # trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__gothenburg_port.xlsx")
+  # hub = tenant.hubs.find_by_name('Shanghai Port')
+  # trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__shanghai_port.xlsx")
   # req = { 'xlsx' => trucking }
   # ExcelTool::OverrideTruckingRateByHub.new(
   #         params: req, _user: shipper, hub_id: hub.id
   #       ).perform
+  # awesome_print 'City rates done'
+  puts 'Gothenburg Port'
+  hub = tenant.hubs.find_by_name('Gothenburg Port')
+  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__gothenburg_port.xlsx")
+  req = { 'xlsx' => trucking }
+  ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
   # puts 'Gothenburg Airport'
   # hub = tenant.hubs.find_by_name('Gothenburg Airport')
   # trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__gothenburg_airport.xlsx")
@@ -72,13 +72,13 @@ subdomains.each do |sub|
   #       ).perform
   # awesome_print 'Zip rates done'
   # puts 'Gothenburg Port ftl'
-  hub = tenant.hubs.find_by_name('Gothenburg Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx")
-  req = { 'xlsx' => trucking }
-  ExcelTool::OverrideTruckingRateByHub.new(
-          params: req, _user: shipper, hub_id: hub.id
-        ).perform
-  awesome_print 'All rates done'
+  # hub = tenant.hubs.find_by_name('Gothenburg Port')
+  # trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ftl__gothenburg_port.xlsx")
+  # req = { 'xlsx' => trucking }
+  # ExcelTool::OverrideTruckingRateByHub.new(
+  #         params: req, _user: shipper, hub_id: hub.id
+  #       ).perform
+  # awesome_print 'All rates done'
   # puts 'Stockholm Airport'
   # hub = tenant.hubs.find_by_name('Stockholm Airport')
   # trucking = File.open("#{Rails.root}/db/dummydata/greencarrier/greencarrier__trucking_ltl__stockholm_airport.xlsx")

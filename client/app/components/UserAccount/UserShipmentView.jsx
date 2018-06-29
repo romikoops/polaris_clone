@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
+import { v4 } from 'uuid'
+import { pick, uniqWith } from 'lodash'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
@@ -158,33 +160,50 @@ export class UserShipmentView extends Component {
   }
   prepContainerGroups (cargos) {
     const { theme, shipmentData } = this.props
-    const { hsCodes } = shipmentData
+    const { hsCodes, shipment } = shipmentData
+    const uniqCargos = uniqWith(
+      cargos,
+      (x, y) => x.id === y.id
+    )
     const cargoGroups = {}
-    let groupCount = 1
-    const resultArray = []
-    cargos.forEach((c) => {
-      if (!cargoGroups[c.id]) {
-        cargoGroups[c.id] = {
-          items: [],
-          size_class: c.size_class,
-          payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
-          tare_weight: parseFloat(c.tare_weight) * parseInt(c.quantity, 10),
-          gross_weight: parseFloat(c.gross_weight) * parseInt(c.quantity, 10),
-          quantity: 1,
-          groupAlias: groupCount,
-          cargo_group_id: c.id,
-          hsCodes: c.hs_codes,
-          hsText: c.customs_text
-        }
-        groupCount += 1
+
+    uniqCargos.forEach((singleCargo, i) => {
+      const parsedPayload = parseFloat(singleCargo.payload_in_kg)
+      const parsedQuantity = parseInt(singleCargo.quantity, 10)
+      const payload = parsedPayload * parsedQuantity
+
+      const parsedTare = parseFloat(singleCargo.tare_weight)
+      const tare = parsedTare * parsedQuantity
+
+      const parsedGross = parseFloat(singleCargo.gross_weight)
+      const gross = parsedGross * parsedQuantity
+      const items = Array(parsedQuantity).fill(singleCargo)
+      const base = pick(
+        singleCargo,
+        ['size_class', 'quantity']
+      )
+
+      cargoGroups[singleCargo.id] = {
+        ...base,
+        cargo_group_id: singleCargo.id,
+        gross_weight: gross,
+        groupAlias: i + 1,
+        hsCodes: singleCargo.hs_codes,
+        hsText: singleCargo.customs_text,
+        items,
+        payload_in_kg: payload,
+        tare_weight: tare
       }
     })
-    Object.keys(cargoGroups).forEach((k) => {
-      resultArray
-        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
-    })
 
-    return resultArray
+    return Object.keys(cargoGroups).map(prop =>
+      (<CargoContainerGroup
+        key={v4()}
+        group={cargoGroups[prop]}
+        theme={theme}
+        hsCodes={hsCodes}
+        shipment={shipment}
+      />))
   }
 
   render () {

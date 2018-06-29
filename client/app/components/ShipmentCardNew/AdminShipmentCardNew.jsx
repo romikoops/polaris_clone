@@ -23,28 +23,28 @@ export class AdminShipmentCardNew extends Component {
     this.selectShipment = this.selectShipment.bind(this)
   }
   handleDeny () {
-    const { shipment, handleAction } = this.props
-    handleAction(shipment.id, 'decline')
+    const { shipment, dispatches } = this.props
+    dispatches.confirmShipment(shipment.id, 'decline')
   }
 
   handleAccept () {
-    const { shipment, handleAction } = this.props
-    handleAction(shipment.id, 'accept')
+    const { shipment, dispatches } = this.props
+    dispatches.confirmShipment(shipment.id, 'accept')
   }
 
   handleIgnore () {
-    const { shipment, handleAction } = this.props
-    handleAction(shipment.id, 'ignore')
+    const { shipment, dispatches } = this.props
+    dispatches.confirmShipment(shipment.id, 'ignore')
     this.closeConfirm()
   }
 
   handleEdit () {
-    const { shipment, handleSelect } = this.props
-    handleSelect(shipment)
+    const { shipment, dispatches } = this.props
+    dispatches.getShipment(shipment.id, true)
   }
   handleView () {
-    const { shipment, handleSelect } = this.props
-    handleSelect(shipment)
+    const { shipment, dispatches } = this.props
+    dispatches.getShipment(shipment.id, true)
   }
   handleFinished () {
     const { shipment } = this.props
@@ -59,8 +59,8 @@ export class AdminShipmentCardNew extends Component {
     this.setState({ confirm: false })
   }
   selectShipment () {
-    const { shipment, handleSelect } = this.props
-    handleSelect(shipment)
+    const { shipment, dispatches } = this.props
+    dispatches.getShipment(shipment.id, true)
   }
   render () {
     const {
@@ -307,8 +307,7 @@ export class AdminShipmentCardNew extends Component {
 
 AdminShipmentCardNew.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
-  handleAction: PropTypes.func.isRequired,
-  handleSelect: PropTypes.func.isRequired,
+  dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub)
 }

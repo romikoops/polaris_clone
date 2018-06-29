@@ -19,9 +19,7 @@ export class ShipmentOverviewCard extends Component {
     const {
       dispatches,
       theme,
-      hubs,
-      handleSelect,
-      handleAction
+      hubs
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
@@ -31,8 +29,6 @@ export class ShipmentOverviewCard extends Component {
           dispatches={dispatches}
           theme={theme}
           hubs={hubs}
-          handleSelect={handleSelect}
-          handleAction={handleAction}
         />
       ) : (
         <UserShipmentCard
@@ -89,8 +85,6 @@ ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
-  handleSelect: PropTypes.func.isRequired,
-  handleAction: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub),
   noTitle: PropTypes.bool
