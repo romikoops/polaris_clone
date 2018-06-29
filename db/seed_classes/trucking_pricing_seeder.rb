@@ -9,7 +9,7 @@ class TruckingPricingSeeder
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
       delete_previous_trucking_pricings(tenant)
-      puts "Seeding trucking pricings for #{tenant.name}..."
+      puts "Seeding trucking pricings for #{tenant.name.light_blue}:"
 
       shipper = tenant.users.shipper.first
 
@@ -29,9 +29,11 @@ class TruckingPricingSeeder
         formatted_hub_name = hub_name.split("_").map(&:capitalize).join(" ")
         hub = Hub.find_by(tenant: tenant, name: formatted_hub_name)
         if hub.nil?
-          puts "(!) Hub '#{formatted_hub_name}' not found for tenant '#{tenant.subdomain} (!)".red
+          puts "(!) Hub '#{formatted_hub_name}' not found for tenant '#{tenant.subdomain}' (!)".red
           next
         end
+
+        puts "  - #{formatted_hub_name}..."
 
         req = { 'xlsx' => File.open(file_path) }
         ExcelTool::OverrideTruckingRateByHub.new(
@@ -44,7 +46,7 @@ class TruckingPricingSeeder
   private
 
   def self.delete_previous_trucking_pricings(tenant)
-    puts "Deleting trucking pricings for #{tenant.name}..."
+    puts "Deleting trucking pricings for #{tenant.name.light_blue}..."
     tenant.trucking_pricings.delete_all
     HubTrucking.where(id: tenant.hub_truckings.ids).delete_all    
   end

@@ -21,7 +21,7 @@ class Admin::HubsController < ApplicationController
     hub["location_id"] = new_loc.id
     hub["nexus_id"] = new_nexus.id
     new_hub = Hub.create!(hub)
-    response_handler(data: new_hub, location: new_loc)
+    response_handler(data: new_hub, location: new_loc.to_custom_hash)
   end
 
   def update_mandatory_charges
@@ -70,7 +70,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-    response_handler(hub.as_options_json)
+    response_handler(data: hub.as_options_json, location: hub.location.to_custom_hash)
   end
 
   def delete

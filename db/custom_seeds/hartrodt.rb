@@ -13,7 +13,7 @@ overwrite_freight_rates(req, shipper, true)
 puts '# Overwrite Local Charges From Sheet'
 local_charges = File.open("#{Rails.root}/db/dummydata/ht_local_charges.xlsx")
 req = { 'xlsx' => local_charges }
-overwrite_local_charges(req, shipper)
+ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
 
 hub = tenant.hubs.find_by_name('Hamburg Port')
 trucking = File.open("#{Rails.root}/db/dummydata/new_ht_trucking_hamburg_ftl.xlsx")

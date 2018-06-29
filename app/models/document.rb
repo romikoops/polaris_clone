@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Document < ApplicationRecord
+  extend AwsConfig
   belongs_to :shipment
   belongs_to :user
   belongs_to :tenant
@@ -8,7 +9,7 @@ class Document < ApplicationRecord
   def self.new_upload(file, shipment, type, user)
     file_name = file.original_filename.gsub(/[^0-9A-Za-z.\-]/, "_")
     obj_key = self.obj_key(shipment, type, file_name)
-    self.upload(bucket: "imcdev", key: obj_key, file: file.tempfile, content_type: file.content_type, acl: "private")
+    upload(bucket: "imcdev", key: obj_key, file: file.tempfile, content_type: file.content_type, acl: "private")
 
     shipment.documents.create!(
       url:         obj_key,
@@ -23,7 +24,7 @@ class Document < ApplicationRecord
   def self.new_upload_backend(file, shipment, type, user)
     file_name = File.basename(file.path)
     obj_key = self.obj_key(shipment, type, file_name)
-    self.upload(bucket: "imcdev", key: obj_key, file: file, content_type: "application/pdf", acl: "private")
+    upload(bucket: "imcdev", key: obj_key, file: file, content_type: "application/pdf", acl: "private")
 
     Document.create!(
       url:      obj_key,
@@ -44,8 +45,8 @@ class Document < ApplicationRecord
   end
 
   def self.delete_document(id)
-    @doc = Document.where(id: id)
-    self.delete_documents(@doc) unless @doc.nil?
+    doc = Document.where(id: id)
+    delete_documents(doc) unless doc.empty?
   end
 
   def self.get_documents_for_array(arr)

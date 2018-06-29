@@ -31,7 +31,7 @@ class Admin::LocalChargesController < ApplicationController
   def overwrite
     if params[:file]
       req = { "xlsx" => params[:file] }
-      resp = overwrite_local_charges(req, current_user)
+      resp = ExcelTool::OverwriteLocalCharges.new(params: req, user: current_user).perform
 
       response_handler(resp)
     else

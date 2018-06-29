@@ -4,6 +4,7 @@ class Charge < ApplicationRecord
   include CurrencyTools
 
   belongs_to :price
+  belongs_to :edited_price, class_name: "Price", optional: true
   belongs_to :charge_category
   belongs_to :children_charge_category,
     foreign_key: "children_charge_category_id", class_name: "ChargeCategory"
@@ -23,7 +24,7 @@ class Charge < ApplicationRecord
       [key, charge.deconstruct_tree_into_schedule_charge]
     end.to_h
 
-    { total: price.given_attributes }.merge(children_charges)
+    { total: price.given_attributes, edited_total: edited_price.try(:given_attributes) }.merge(children_charges)
   end
 
   def self.create_from_schedule_charges(
@@ -54,12 +55,26 @@ class Charge < ApplicationRecord
     charge_breakdown
   end
 
+  def tenant_id
+    charge_breakdown.shipment.tenant_id
+  end
+
   def update_price!
-    rates = get_rates(price.currency, charge_breakdown.shipment.tenant_id).today.merge(price.currency => 1.0)
+    rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
       sum + charge.price.value / rates[charge.price.currency].to_d
     end
     price.save!
+  end
+
+  def update_edited_price!
+    self.edited_price = Price.new(currency: price.currency) if edited_price.nil?
+    rates = get_rates(edited_price.currency, tenant_id).today.merge(edited_price.currency => 1.0)
+    edited_price.value = children.reduce(0) do |sum, charge|
+      price = charge.edited_price || charge.price
+      sum + price.value / rates[price.currency].to_d
+    end
+    edited_price.save!
   end
 
   private

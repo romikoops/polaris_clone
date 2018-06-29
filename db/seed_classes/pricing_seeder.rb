@@ -9,8 +9,8 @@ class PricingSeeder
       shipper = tenant.users.shipper.first
       
       destroy_data_for_tenant(tenant)
-      
-      puts "Seeding hubs, itineraries, layovers and pricings for #{tenant.name}..."
+
+      puts "Seeding hubs, itineraries, layovers and pricings for #{tenant.name.light_blue}:"
       
       request_hash = Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"]
         .each_with_object({}) do |file_path, obj|
@@ -22,21 +22,48 @@ class PricingSeeder
           end
         end
         
-      puts "  - Seeding hubs..."           
-      overwrite_hubs(request_hash["hubs"], shipper)              
 
-      puts "  - Seeding freight rates (fcl and lcl)..."
-      overwrite_freight_rates(request_hash["freight_rates"], shipper, true)
 
-      puts "  - Seeding local charges..."
-      overwrite_local_charges(request_hash["local_charges"], shipper)
+      seed_hubs(request_hash["hubs"], shipper)
+      seed_freight_rates(request_hash["freight_rates"], shipper)
+      seed_local_charges(request_hash["local_charges"], shipper)
     end
   end
 
   private
 
+  def self.seed_hubs(req, shipper)
+    if req.nil?
+      puts "  - No hubs sheet".red
+      return
+    end
+
+    puts "  - Seeding hubs..."           
+    overwrite_hubs(req, shipper)              
+  end
+
+  def self.seed_freight_rates(req, shipper)
+    if req.nil?
+      puts "  - No freight rates charges sheet".red
+      return
+    end
+
+    puts "  - Seeding freight rates (fcl and lcl)..."
+    overwrite_freight_rates(req, shipper, true)
+  end
+
+  def self.seed_local_charges(req, shipper)
+    if req.nil?
+      puts "  - No local_charges charges sheet".red
+      return
+    end
+
+    puts "  - Seeding local charges..."
+    ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
+  end
+
   def self.destroy_data_for_tenant(tenant)
-    puts "Destroying hubs, itineraries, layovers and pricings for #{tenant.name}..."
+    puts "Destroying hubs, itineraries, layovers and pricings for #{tenant.name.light_blue}..."
 
     tenant.itineraries.destroy_all
     tenant.stops.destroy_all

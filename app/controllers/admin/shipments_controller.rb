@@ -104,6 +104,29 @@ class Admin::ShipmentsController < ApplicationController
     response_handler(shipment.with_address_options_json)
   end
 
+  def edit_service_price
+    shipment = Shipment.find(params[:id])
+    charge_breakdown = shipment.charge_breakdowns.selected
+	  charge = charge_breakdown.charge(params["charge_category"])
+    new_price = Price.new(price_params)
+    charge.edited_price = new_price
+
+    if charge.save
+      unless charge.parent.nil?
+        charge.parent.update_edited_price!
+        charge.parent.save!
+      end
+      response_handler(shipment.as_options_json())
+	  else
+      error = ApplicationError.new(
+        http_code: 400,
+        code:      SecureRandom.uuid,
+        message:   shipments.errors.full_messages.join("\n")
+      )
+      response_handler(error)
+	  end
+  end
+
   def edit_time
     options = {
       methods: %i(selected_offer mode_of_transport),
@@ -217,5 +240,9 @@ class Admin::ShipmentsController < ApplicationController
 
   def shipment_params
     params.require(:shipment).permit(:total_price, :planned_pickup_date, :origin_id, :destination_id)
+  end
+
+  def price_params
+    params.require(:price).permit(:value, :currency)
   end
 end

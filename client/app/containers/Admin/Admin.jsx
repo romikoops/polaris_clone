@@ -25,6 +25,7 @@ import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
 // eslint-disable-next-line import/no-named-as-default
 import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
+import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
   constructor (props) {
@@ -102,6 +103,7 @@ class Admin extends Component {
     }
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
+
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
         {loadingScreen}
@@ -110,11 +112,11 @@ class Admin extends Component {
         <div className="flex layout-row layout-align-center-start layout-wrap">
           <NavBar className={`${styles.top_margin}`} />
           <div
-            className="content_width flex-none layout-row
+            className=" flex-100 layout-row
              layout-wrap layout-align-start-start hundred"
           >
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-              <Switch className="flex">
+              <Switch className="flex ">
                 <Route
                   exact
                   path="/admin/dashboard"
@@ -135,7 +137,14 @@ class Admin extends Component {
                 <Route
                   path="/admin/hubs"
                   render={props => (
-                    <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs} />
+                    <AdminHubs
+                      theme={theme}
+                      {...props}
+                      hubHash={hubHash}
+                      hubs={hubs}
+                      icon="fa-info-circle"
+                      tooltip={hubsTip.manage}
+                    />
                   )}
                 />
                 <Route
@@ -288,6 +297,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const documentLoading = document.loading
+
   return {
     user,
     users,

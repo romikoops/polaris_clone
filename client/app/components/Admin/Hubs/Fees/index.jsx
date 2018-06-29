@@ -76,7 +76,7 @@ export class AdminHubFees extends Component {
   }
   componentWillReceiveProps (nextProps) {
     const { direction, selectedCargoClass } = this.state
-    if (nextProps.charges[0].hub_id) {
+    if (nextProps.charges[0] && nextProps.charges[0].hub_id) {
       this.setAllFromOptions(nextProps.charges
         .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
       this.setAllFromOptions(nextProps.customs
@@ -332,7 +332,6 @@ export class AdminHubFees extends Component {
 
   saveEdit (target) {
     const { editor, direction } = this.state
-    // debugger // eslint-disable-line
     const charges = editor[target][direction]
     if (target === 'charges') {
       this.props.adminDispatch.editLocalCharges(charges)
@@ -346,12 +345,12 @@ export class AdminHubFees extends Component {
       this.setState({
         direction: 'export',
         directionBool: true
-      })
+      }, () => this.prepAllOptions())
     } else {
       this.setState({
         direction: 'import',
         directionBool: false
-      })
+      }, () => this.prepAllOptions())
     }
   }
   renderCargoClassButtons () {

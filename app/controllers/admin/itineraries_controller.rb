@@ -13,7 +13,7 @@ class Admin::ItinerariesController < ApplicationController
 
   def create
     itinerary = Itinerary.find_or_initialize_by(itinerary_params)
-    stops     = params["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
+    stops     = params["itinerary"]["stops"].map.with_index { |h, i| Stop.new(hub_id: h, index: i) }
 
     itinerary.stops = stops
     if itinerary.save
