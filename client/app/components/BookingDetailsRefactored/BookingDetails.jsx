@@ -11,17 +11,10 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { isEmpty } from '../../helpers/objectTools'
 
 import {
-  ALIGN_AROUND_CENTER,
-  ALIGN_AROUND_STRETCH,
-  ALIGN_BETWEEN_CENTER,
-  ALIGN_BETWEEN_START,
+  trim,
   ALIGN_END_CENTER,
-  ALIGN_CENTER,
   ALIGN_CENTER_START,
-  ALIGN_END,
-  ALIGN_START,
   ALIGN_START_CENTER,
-  COLUMN_15,
   ROW,
   WRAP_ROW
 } from '../../classNames'
@@ -184,12 +177,12 @@ export class BookingDetails extends Component {
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price.value, 10)) * 0.0017
+    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const iVal = (gVal * 1.1 + parsed) * 0.0017
     if (bool) {
-      this.setState({ insurance: { bool, val: iVal } })
-    } else {
-      this.setState({ insurance: { ...this.state.insurance, val: iVal } })
+      return this.setState({ insurance: { bool, val: iVal } })
     }
+    this.setState({ insurance: { ...this.state.insurance, val: iVal } })
   }
   removeNotifyee (i) {
     const { notifyees } = this.state
@@ -214,10 +207,10 @@ export class BookingDetails extends Component {
           value: gVal
         }
       })
-      this.calcInsurance(gVal, false)
-    } else {
-      this.setState({ [name]: value })
+
+      return this.calcInsurance(gVal, false)
     }
+    this.setState({ [name]: value })
   }
   orderTotal () {
     const { shipmentData } = this.props
@@ -314,6 +307,85 @@ export class BookingDetails extends Component {
       ? <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
       : ''
 
+    const ContactSetterComponent = (<ContactSetter
+      consignee={consignee}
+      contacts={contacts}
+      direction={shipment.direction}
+      finishBookingAttempted={this.state.finishBookingAttempted}
+      notifyees={notifyees}
+      removeNotifyee={this.removeNotifyee}
+      setContact={this.setContact}
+      shipper={shipper}
+      theme={theme}
+      userLocations={userLocations}
+    />)
+
+    const CargoDetailsComponent = (<CargoDetails
+      theme={theme}
+      handleChange={this.handleCargoInput}
+      shipmentData={shipmentData}
+      handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
+      hsCodes={this.state.hsCodes}
+      hsTexts={this.state.hsTexts}
+      setHsCode={this.setHsCode}
+      handleHsTextChange={this.handleHsTextChange}
+      deleteCode={this.deleteCode}
+      cargoNotes={this.state.cargoNotes}
+      totalGoodsValue={this.state.totalGoodsValue}
+      handleInsurance={this.handleInsurance}
+      insurance={this.state.insurance}
+      shipmentDispatch={shipmentDispatch}
+      currencies={currencies}
+      customsData={customs}
+      notes={this.state.notes}
+      setCustomsFee={this.setCustomsFee}
+      user={user}
+      eori={eori}
+      customsCredit={customsCredit}
+      tenant={tenant}
+      incotermText={this.state.incotermText}
+      toggleCustomsCredit={this.toggleCustomsCredit}
+      finishBookingAttempted={this.state.finishBookingAttempted}
+    />)
+
+    const ReviewButtonComponent = (
+      <div className={`${styles.btn_sec} ${WRAP_ROW(100)} layout-align-center`}>
+        <div
+          className={trim(`
+              ${defaults.content_width} 
+              ${WRAP_ROW('none')} 
+              ${ALIGN_START_CENTER}
+            `)}
+        >
+          <div className={`${ROW(50)} ${ALIGN_START_CENTER}`} />
+          <div className={`${ROW(50)} ${ALIGN_END_CENTER}`}>
+            <div className="flex-none layout-row">
+              <RoundButton theme={theme} text="Review Booking" active />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    const BackButtonComponent = (
+      <div className={`${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`}>
+        <div className={trim(`
+              ${defaults.content_width}
+              ${ROW('none')} 
+              ${ALIGN_START_CENTER}
+            `)}
+        >
+          <RoundButton
+            back
+            handleNext={e => this.backToDashboard(e)}
+            iconClass="fa-angle-left"
+            text="Back to dashboard"
+            theme={theme}
+          />
+        </div>
+      </div>
+    )
+
     return (
       <div
         className={CONTAINER}
@@ -321,85 +393,18 @@ export class BookingDetails extends Component {
       >
         {maybeRouteHubBox}
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
-          <ContactSetter
-            consignee={consignee}
-            contacts={contacts}
-            direction={shipment.direction}
-            finishBookingAttempted={this.state.finishBookingAttempted}
-            notifyees={notifyees}
-            removeNotifyee={this.removeNotifyee}
-            setContact={this.setContact}
-            shipper={shipper}
-            theme={theme}
-            userLocations={userLocations}
-          />
+          {ContactSetterComponent}
         </div>
+
         <Formsy
-          onValidSubmit={this.toNextStage}
-          onInvalidSubmit={this.handleInvalidSubmit}
           className="flex-100"
+          onInvalidSubmit={this.handleInvalidSubmit}
+          onValidSubmit={this.toNextStage}
         >
-          <CargoDetails
-            theme={theme}
-            handleChange={this.handleCargoInput}
-            shipmentData={shipmentData}
-            handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
-            hsCodes={this.state.hsCodes}
-            hsTexts={this.state.hsTexts}
-            setHsCode={this.setHsCode}
-            handleHsTextChange={this.handleHsTextChange}
-            deleteCode={this.deleteCode}
-            cargoNotes={this.state.cargoNotes}
-            totalGoodsValue={this.state.totalGoodsValue}
-            handleInsurance={this.handleInsurance}
-            insurance={this.state.insurance}
-            shipmentDispatch={shipmentDispatch}
-            currencies={currencies}
-            customsData={customs}
-            notes={this.state.notes}
-            setCustomsFee={this.setCustomsFee}
-            user={user}
-            eori={eori}
-            customsCredit={customsCredit}
-            tenant={tenant}
-            incotermText={this.state.incotermText}
-            toggleCustomsCredit={this.toggleCustomsCredit}
-            finishBookingAttempted={this.state.finishBookingAttempted}
-          />
-          <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-            <div
-              className={`${
-                defaults.content_width
-              } flex-none  layout-row layout-wrap layout-align-start-center`}
-            >
-              <div className="flex-50 layout-row layout-align-start-center" />
-              <div className="flex-50 layout-row layout-align-end-center">
-                <div className="flex-none layout-row">
-                  <RoundButton theme={theme} text="Review Booking" active />
-                </div>
-              </div>
-            </div>
-          </div>
+          {CargoDetailsComponent}
+          {ReviewButtonComponent}
           <hr className={`${styles.sec_break} flex-100`} />
-          <div
-            className={`${
-              styles.back_to_dash_sec
-            } flex-100 layout-row layout-wrap layout-align-center`}
-          >
-            <div
-              className={`${
-                defaults.content_width
-              } flex-none content-width layout-row layout-align-start-center`}
-            >
-              <RoundButton
-                theme={theme}
-                text="Back to dashboard"
-                back
-                iconClass="fa-angle-left"
-                handleNext={e => this.backToDashboard(e)}
-              />
-            </div>
-          </div>
+          {BackButtonComponent}
         </Formsy>
       </div>
     )
