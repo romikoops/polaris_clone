@@ -6,9 +6,9 @@ import adminStyles from '../Admin.scss'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import { CardRoutesPricing, PricingButton } from './SubComponents'
 // import { RoundButton } from '../../RoundButton/RoundButton'
-// import FileUploader from '../../FileUploader/FileUploader'
+import FileUploader from '../../FileUploader/FileUploader'
 import DocumentsDownloader from '../../Documents/Downloader'
-// import { adminPricing as priceTip, moment } from '../../../constants'
+import { adminPricing as priceTip } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import {
   filters,
@@ -192,7 +192,32 @@ export default class CardPricingIndex extends Component {
         <div className="flex-20 layout-row layout-align-end-end">
           <div className="hide-sm hide-xs">
             <SideOptionsBox
-              header="Data manager"
+              header="Uploads"
+              content={
+                <div
+                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+                >
+                  <div
+                    className={`${
+                      adminStyles.action_section
+                    } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  >
+                    <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
+                    <FileUploader
+                      theme={theme}
+                      dispatchFn={e => this.lclUpload(e)}
+                      tooltip={priceTip.upload_lcl}
+                      type="xlsx"
+                      text="Dedicated Pricings .xlsx"
+                    />
+
+                  </div>
+
+                </div>
+              }
+            />
+            <SideOptionsBox
+              header="Downloads"
               content={
                 <div
                   className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
