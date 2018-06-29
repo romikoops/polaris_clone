@@ -42,6 +42,10 @@ export class AdminShipmentCardNew extends Component {
     const { shipment, handleSelect } = this.props
     handleSelect(shipment)
   }
+  handleView () {
+    const { shipment, handleSelect } = this.props
+    handleSelect(shipment)
+  }
   handleFinished () {
     const { shipment } = this.props
     this.handleShipmentAction(shipment.id, 'finished')

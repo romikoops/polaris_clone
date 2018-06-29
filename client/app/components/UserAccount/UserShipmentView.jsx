@@ -251,7 +251,7 @@ export class UserShipmentView extends Component {
 
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
-        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${styles.status_box_requested}`}
+        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
@@ -263,7 +263,7 @@ export class UserShipmentView extends Component {
     )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box_process}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
         <p className="layout-align-center-center layout-row"> In process </p>
       </div>
     ) : (
@@ -271,7 +271,7 @@ export class UserShipmentView extends Component {
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
-      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${styles.status_box}`}>
+      <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
         <p className="layout-align-center-center layout-row"> {shipment.status} </p>
       </div>
     ) : (
