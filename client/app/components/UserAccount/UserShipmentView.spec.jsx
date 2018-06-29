@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import { theme, identity, shipmentData, tenant, user, match, location } from '../../mocks'
 
 /**
@@ -32,11 +32,10 @@ jest.mock('../../helpers', () => ({
   gradientGenerator: x => x,
   gradientBorderGenerator: x => x
 }))
+jest.mock('../GradientBorder', x => x)
 
 // eslint-disable-next-line import/first
-import UserShipmentView from './UserShipmentView'
-
-const createWrapper = propsInput => mount(<UserShipmentView {...propsInput} />)
+import { UserShipmentView } from './UserShipmentView'
 
 const propsBase = {
   theme,
@@ -56,7 +55,7 @@ test('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.loading is true', () => {
+test('loading is true', () => {
   const props = {
     ...propsBase,
     loading: true
@@ -64,17 +63,7 @@ test('props.loading is true', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.setNav is called', () => {
-  const props = {
-    ...propsBase,
-    setNav: jest.fn()
-  }
-
-  createWrapper(props)
-  expect(props.setNav).toHaveBeenCalled()
-})
-
-test.skip('props.hubs is false', () => {
+test('.hubs is false', () => {
   const props = {
     ...propsBase,
     hubs: false
@@ -83,7 +72,7 @@ test.skip('props.hubs is false', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.documents is present', () => {
+test('shipmentData.documents is present', () => {
   const documents = [
     { id: 0, doc_type: 'foo' },
     { id: 1, doc_type: 'bar' }
@@ -101,7 +90,7 @@ test('props.shipmentData.documents is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.cargoItems is present', () => {
+test('shipmentData.cargoItems is present', () => {
   const cargoItems = [
     { id: 0, cargo_item_type_id: 'foo' },
     { id: 1, cargo_item_type_id: 'bar' }
@@ -121,7 +110,7 @@ test('props.shipmentData.cargoItems is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.contacts is present', () => {
+test('shipmentData.contacts is present', () => {
   const contacts = [
     {
       type: 'notifyee',

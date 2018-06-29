@@ -1,6 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`props.loading is true 1`] = `
+exports[`.hubs is false 1`] = `""`;
+
+exports[`loading is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
 >
@@ -42,33 +44,6 @@ exports[`props.loading is true 1`] = `
   <div
     className="layout-row flex-100 margin_bottom"
   >
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
     <div
       className="layout-row flex-20 layout-align-center-center"
     >
@@ -91,33 +66,6 @@ exports[`props.loading is true 1`] = `
         </h5>
       </div>
     </div>
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
   </div>
   <div
     className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
@@ -646,7 +594,7 @@ exports[`props.loading is true 1`] = `
 </div>
 `;
 
-exports[`props.shipmentData.cargoItems is present 1`] = `
+exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
 >
@@ -688,33 +636,6 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
   <div
     className="layout-row flex-100 margin_bottom"
   >
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
     <div
       className="layout-row flex-20 layout-align-center-center"
     >
@@ -737,33 +658,598 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
         </h5>
       </div>
     </div>
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
+  >
+    <div
+      className="layout-column flex-60 layout-align-center-stretch"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <i
+          className="flex-none fa fa-check-square clip check_square"
+          style={
+            Object {
+              "0": "#",
+              "1": "D",
+              "2": "C",
+              "3": "D",
+              "4": "B",
+              "5": "D",
+              "6": "C",
+            }
+          }
+        />
+        <h4
+          className="flex-95 layout-row"
         >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
+          Pick-up
+        </h4>
+      </div>
+      <div
+        className="flex-100 layout-row"
+      >
+        <div
+          className="flex-5 layout-row"
+        />
+      </div>
+    </div>
+    <div
+      className="layout-column flex-40 layout-align-center-stretch"
+    >
+      <div
+        className="layout-row flex-100 layout-align-start-center"
+      >
+        <i
+          className="flex-none fa fa-check-square clip check_square"
+          style={
+            Object {
+              "0": "#",
+              "1": "D",
+              "2": "C",
+              "3": "D",
+              "4": "B",
+              "5": "D",
+              "6": "C",
+            }
+          }
+        />
+        <h4
+          className="flex-95 layout-row"
+        >
+          Delivery
+        </h4>
+      </div>
+      <div
+        className="flex-100 layout-row"
+      >
+        <div
+          className="flex-5 layout-row"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
+  >
+    <div
+      className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
+    >
+      <div
+        className="layout-column flex-100"
+      >
+        <h3>
+          Freight, Duties & Carriage:
+        </h3>
+        <div
+          className="layout-wrap layout-row flex"
+        >
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-truck clip flex-none layout-align-center-center"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
               }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
+            />
+            <p>
+              Pre-Carriage
+            </p>
+          </div>
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-truck clip flex-none layout-align-center-center"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
+              }
+            />
+            <p>
+              On-Carriage
+            </p>
+          </div>
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-file-text clip flex-none layout-align-center-center"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
+              }
+            />
+            <p>
+              Origin Documentation
+            </p>
+          </div>
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-file-text-o clip flex-none layout-align-center-center"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
+              }
+            />
+            <p>
+              Destination Documentation
+            </p>
+          </div>
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-ship clip flex-none layout-align-center-center"
+              style="#333"
+            />
+            <p>
+              Freight
+            </p>
+          </div>
         </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
+      </div>
+    </div>
+    <div
+      className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+    >
+      <div
+        className="layout-column flex-100"
+      >
+        <h3>
+          Additional Services
+        </h3>
+        <div
+          className=""
+        >
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-id-card clip flex-none"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
+              }
+            />
+            <p>
+              Customs
+            </p>
+          </div>
+          <div
+            className="layout-row flex-50 margin_bottom"
+          >
+            <i
+              className="fa fa-umbrella clip flex-none"
+              style={
+                Object {
+                  "0": "#",
+                  "1": "D",
+                  "2": "C",
+                  "3": "D",
+                  "4": "B",
+                  "5": "D",
+                  "6": "C",
+                }
+              }
+            />
+            <p>
+              Insurance
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+    >
+      <div
+        className="layout-column flex-100"
+      >
+        <div
+          className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
+        >
+          <div
+            className="layout-align-center-center layout-row flex"
+          >
+            <span
+              className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+              style="#333"
+            >
+              x 
+              0
+            </span>
+            <p
+              className="layout-align-sm-end-center layout-align-xs-end-center"
+            />
+          </div>
+        </div>
+        <h2
+          className="layout-align-end-center layout-row flex"
+        >
+          77.00
+           
+          USD
+        </h2>
+      </div>
+    </div>
+  </div>
+  <ContactDetailsRow
+    contacts={Array []}
+    style="#333"
+  />
+  <AlternativeGreyBox
+    content={Array []}
+    contentClassName="layout-column flex"
+    title="Cargo Details"
+    wrapperClassName="layout-row flex-100 no_margin_box_right"
+  />
+  <AlternativeGreyBox
+    content={
+      <div
+        className="layout-column flex-100"
+      >
+        <div
+          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
+        >
+          <div
+            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
+          >
+            <div
+              className="flex-100 layout-xs-column layout-row layout-align-start-start"
+            >
+              <span
+                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
+              >
+                Total Value of Goods:
+              </span>
+              <p
+                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
+              >
+                15
+                USD
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
+          >
+            <div
+              className="flex-100 layout-xs-column layout-row layout-align-start-start"
+            >
+              <span
+                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
+              >
+                EORI number:
+              </span>
+              <p
+                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
+              >
+                1234
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-column layout-align-center-start"
+            >
+              <span
+                className="flex-40 flex-xs-100 layout-align-center-center layout-row"
+              >
+                Incoterm:
+              </span>
+              <p
+                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
+              >
+                FOO_INCOTERM_TEXT
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="layout-column flex-100 flex-sm-100 flex-xs-100 column_info"
+        >
+          <div
+            className="border_bottom flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <span
+                className="flex-20 layout-row"
+              >
+                Description of Goods:
+              </span>
+              <p
+                className="flex-80 layout-padding layout-row"
+              >
+                FOO_CARGO_NOTES
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <span
+                className="flex-20 layout-row"
+              >
+                Notes:
+              </span>
+              <p
+                className="flex-80 layout-padding layout-row"
+              >
+                FOO_NOTES
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    contentClassName="layout-row flex-100"
+    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
+          no_border_top margin_bottom no_margin_box_right"
+  />
+  <AlternativeGreyBox
+    content={
+      <div
+        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        >
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+            <Styled(Select)
+              className="select flex-50"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <FileUploader
+              dispatchFn={null}
+              square={false}
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="packing_sheet"
+              uploadFn={null}
+              url="/shipments/undefined/upload/packing_sheet"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-25 layout-row layout-align-start-center no_doc"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <i
+              className="flex-none fa fa-ban"
+            />
+          </div>
+          <div
+            className="flex layout-align-start-center layout-row"
+          >
+            <p
+              className="flex-none"
+            >
+              undefined: Not Uploaded
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-25 layout-row layout-align-start-center no_doc"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <i
+              className="flex-none fa fa-ban"
+            />
+          </div>
+          <div
+            className="flex layout-align-start-center layout-row"
+          >
+            <p
+              className="flex-none"
+            >
+              undefined: Not Uploaded
+            </p>
+          </div>
+        </div>
+      </div>
+    }
+    contentClassName="layout-column flex"
+    title="Documents"
+    wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
+  />
+</div>
+`;
+
+exports[`shipmentData.cargoItems is present 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
+>
+  <div
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+  >
+    <div
+      className="layout-row flex layout-align-start-center title_grey"
+    >
+      <p
+        className="layout-align-start-center layout-row"
+      >
+        Shipment
+      </p>
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
+  >
+    <p
+      className="layout-row flex-md-30 flex-20"
+    >
+      Ref:  
+      <span />
+    </p>
+    <hr
+      className="layout-row flex-md-40 flex-55"
     />
+    <p
+      className="layout-row flex-md-30 flex-25 layout-align-end-center"
+    >
+      <strong>
+        Placed at: 
+      </strong>
+       
+      19
+    </p>
+  </div>
+  <div
+    className="layout-row flex-100 margin_bottom"
+  >
+    <div
+      className="layout-row flex-20 layout-align-center-center"
+    >
+      <div
+        className="layout-column flex layout-align-center-center font_adjustaments"
+      >
+        <div
+          className="layout-align-center-center layout-row"
+          style="#333"
+        />
+        <p
+          className=""
+        >
+          Estimated time delivery
+        </p>
+        <h5>
+          17
+           days
+           
+        </h5>
+      </div>
+    </div>
   </div>
   <div
     className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
@@ -1351,7 +1837,7 @@ exports[`props.shipmentData.cargoItems is present 1`] = `
 </div>
 `;
 
-exports[`props.shipmentData.contacts is present 1`] = `
+exports[`shipmentData.contacts is present 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
 >
@@ -1393,33 +1879,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
   <div
     className="layout-row flex-100 margin_bottom"
   >
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
     <div
       className="layout-row flex-20 layout-align-center-center"
     >
@@ -1442,33 +1901,6 @@ exports[`props.shipmentData.contacts is present 1`] = `
         </h5>
       </div>
     </div>
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
   </div>
   <div
     className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
@@ -2045,7 +2477,7 @@ exports[`props.shipmentData.contacts is present 1`] = `
 </div>
 `;
 
-exports[`props.shipmentData.documents is present 1`] = `
+exports[`shipmentData.documents is present 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
 >
@@ -2087,33 +2519,6 @@ exports[`props.shipmentData.documents is present 1`] = `
   <div
     className="layout-row flex-100 margin_bottom"
   >
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
     <div
       className="layout-row flex-20 layout-align-center-center"
     >
@@ -2136,679 +2541,6 @@ exports[`props.shipmentData.documents is present 1`] = `
         </h5>
       </div>
     </div>
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
-  </div>
-  <div
-    className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
-  >
-    <div
-      className="layout-column flex-60 layout-align-center-stretch"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <i
-          className="flex-none fa fa-check-square clip check_square"
-          style={
-            Object {
-              "0": "#",
-              "1": "D",
-              "2": "C",
-              "3": "D",
-              "4": "B",
-              "5": "D",
-              "6": "C",
-            }
-          }
-        />
-        <h4
-          className="flex-95 layout-row"
-        >
-          Pick-up
-        </h4>
-      </div>
-      <div
-        className="flex-100 layout-row"
-      >
-        <div
-          className="flex-5 layout-row"
-        />
-      </div>
-    </div>
-    <div
-      className="layout-column flex-40 layout-align-center-stretch"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <i
-          className="flex-none fa fa-check-square clip check_square"
-          style={
-            Object {
-              "0": "#",
-              "1": "D",
-              "2": "C",
-              "3": "D",
-              "4": "B",
-              "5": "D",
-              "6": "C",
-            }
-          }
-        />
-        <h4
-          className="flex-95 layout-row"
-        >
-          Delivery
-        </h4>
-      </div>
-      <div
-        className="flex-100 layout-row"
-      >
-        <div
-          className="flex-5 layout-row"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-    className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
-  >
-    <div
-      className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Freight, Duties & Carriage:
-        </h3>
-        <div
-          className="layout-wrap layout-row flex"
-        >
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Pre-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              On-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Origin Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text-o clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Destination Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-ship clip flex-none layout-align-center-center"
-              style="#333"
-            />
-            <p>
-              Freight
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Additional Services
-        </h3>
-        <div
-          className=""
-        >
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-id-card clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Customs
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-umbrella clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Insurance
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-        >
-          <div
-            className="layout-align-center-center layout-row flex"
-          >
-            <span
-              className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
-              style="#333"
-            >
-              x 
-              0
-            </span>
-            <p
-              className="layout-align-sm-end-center layout-align-xs-end-center"
-            />
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-          77.00
-           
-          USD
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={Array []}
-    style="#333"
-  />
-  <AlternativeGreyBox
-    content={Array []}
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <AlternativeGreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                Total Value of Goods:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                15
-                USD
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                EORI number:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                1234
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap"
-          >
-            <div
-              className="flex-100 layout-column layout-align-center-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-center-center layout-row"
-              >
-                Incoterm:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                FOO_INCOTERM_TEXT
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-column flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="border_bottom flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Description of Goods:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_CARGO_NOTES
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Notes:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_NOTES
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <AlternativeGreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
-      >
-        <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center "
-        >
-          <div
-            className="flex-50 layout-align-start-center layout-row"
-          >
-            <p
-              className="sec_subheader_text flex-none letter_3"
-            >
-              Upload New Document
-            </p>
-            <Styled(Select)
-              className="select flex-50"
-              name="file-type"
-              onChange={[Function]}
-              options={
-                Array [
-                  Object {
-                    "label": "Packing Sheet",
-                    "value": "packing_sheet",
-                  },
-                  Object {
-                    "label": "Commercial Invoice",
-                    "value": "commercial_invoice",
-                  },
-                  Object {
-                    "label": "Customs Declaration",
-                    "value": "customs_declaration",
-                  },
-                  Object {
-                    "label": "Customs Value Declaration",
-                    "value": "customs_value_declaration",
-                  },
-                  Object {
-                    "label": "EORI",
-                    "value": "eori",
-                  },
-                  Object {
-                    "label": "Certificate Of Origin",
-                    "value": "certificate_of_origin",
-                  },
-                  Object {
-                    "label": "Dangerous Goods",
-                    "value": "dangerous_goods",
-                  },
-                ]
-              }
-              value={
-                Object {
-                  "label": "Packing Sheet",
-                  "value": "packing_sheet",
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-50 layout-align-end-center layout-row"
-          >
-            <FileUploader
-              dispatchFn={null}
-              square={false}
-              text="Packing Sheet"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              tooltip=""
-              type="packing_sheet"
-              uploadFn={null}
-              url="/shipments/undefined/upload/packing_sheet"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-25 layout-row layout-align-start-center no_doc"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="flex-none fa fa-ban"
-            />
-          </div>
-          <div
-            className="flex layout-align-start-center layout-row"
-          >
-            <p
-              className="flex-none"
-            >
-              undefined: Not Uploaded
-            </p>
-          </div>
-        </div>
-        <div
-          className="flex-25 layout-row layout-align-start-center no_doc"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="flex-none fa fa-ban"
-            />
-          </div>
-          <div
-            className="flex layout-align-start-center layout-row"
-          >
-            <p
-              className="flex-none"
-            >
-              undefined: Not Uploaded
-            </p>
-          </div>
-        </div>
-      </div>
-    }
-    contentClassName="layout-column flex"
-    title="Documents"
-    wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
-  />
-</div>
-`;
-
-exports[`shallow render 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
->
-  <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
-  >
-    <div
-      className="layout-row flex layout-align-start-center title_grey"
-    >
-      <p
-        className="layout-align-start-center layout-row"
-      >
-        Shipment
-      </p>
-    </div>
-  </div>
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-  >
-    <p
-      className="layout-row flex-md-30 flex-20"
-    >
-      Ref:  
-      <span />
-    </p>
-    <hr
-      className="layout-row flex-md-40 flex-55"
-    />
-    <p
-      className="layout-row flex-md-30 flex-25 layout-align-end-center"
-    >
-      <strong>
-        Placed at: 
-      </strong>
-       
-      19
-    </p>
-  </div>
-  <div
-    className="layout-row flex-100 margin_bottom"
-  >
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
-    <div
-      className="layout-row flex-20 layout-align-center-center"
-    >
-      <div
-        className="layout-column flex layout-align-center-center font_adjustaments"
-      >
-        <div
-          className="layout-align-center-center layout-row"
-          style="#333"
-        />
-        <p
-          className=""
-        >
-          Estimated time delivery
-        </p>
-        <h5>
-          17
-           days
-           
-        </h5>
-      </div>
-    </div>
-    <GradientBorder
-      className="layout-row flex"
-      content={
-        <div
-          className="layout-row flex-100"
-        >
-          <ShipmentOverviewShowCard
-            bg={
-              Object {
-                "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
-              }
-            }
-            editTime={false}
-            et={
-              <p
-                className="flex-none letter_3 date"
-              >
-                19
-              </p>
-            }
-            isAdmin={false}
-          />
-        </div>
-      }
-      gradient="#333"
-      wrapperClassName="layout-row flex-40 hub_box_shipment"
-    />
   </div>
   <div
     className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
