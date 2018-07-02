@@ -26,25 +26,25 @@ module AwsConfig
   end
 
   def create_on_aws(file, shipment)
-    obj_key = self.path(shipment) + "/" + file.name
-    public_awsurl = self.awsurl + obj_key
-    self.aws_signer.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: file.content_type, acl: "private")
+    obj_key = path(shipment) + "/" + file.name
+    public_awsurl = awsurl + obj_key
+    aws_signer.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: file.content_type, acl: "private")
     shipment.documents.create(url: public_awsurl, shipment_id: shipment["uuid"], text: file.name)
   end
 
   def get_file_url(key)
-    self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
+    aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
   end
 
   def delete_documents(docs)
     docs.each do |doc|
-      self.aws_client.delete_object(bucket: "imcdev", key: doc.url)
+      aws_client.delete_object(bucket: "imcdev", key: doc.url)
       doc.delete
     end
   end
 
   def upload(args={})
-    self.aws_client.put_object(
+    aws_client.put_object(
       bucket:       args[:bucket],
       key:          args[:key],
       body:         args[:file],
