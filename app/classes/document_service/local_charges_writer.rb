@@ -2,6 +2,7 @@
 
 module DocumentService
   class LocalChargesWriter
+    include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hubs, :results_by_hub, :filename, :directory, :header_values, :workbook
 

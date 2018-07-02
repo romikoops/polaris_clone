@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-class Admin::TruckingController < ApplicationController
+class Admin::TruckingController < Admin::AdminBaseController
   include ExcelTools
   include TruckingTools
-
-  before_action :require_login_and_role_is_admin
 
   def index
     response_handler({})
@@ -98,17 +96,7 @@ class Admin::TruckingController < ApplicationController
     response_handler(truckingHubId: truckingHubId)
   end
 
-  def overwrite_zip_trucking
-    if params[:file]
-      req = { "xlsx" => params[:file] }
-      %w[import export].each do |dir|
-        overwrite_zipcode_weight_trucking_rates(req, current_user, dir)
-      end
-      response_handler(true)
-    else
-      response_handler(false)
-    end
-  end
+ 
 
   def overwrite_zonal_trucking_by_hub
     if params[:file]
@@ -120,17 +108,6 @@ class Admin::TruckingController < ApplicationController
     end
   end
 
-  def overwrite_city_trucking
-    if params[:file]
-      req = { "xlsx" => params[:file] }
-      %w[import export].each do |dir|
-        overwrite_city_trucking_rates(req, current_user, dir)
-      end
-      response_handler(true)
-    else
-      response_handler(false)
-    end
-  end
 
   def download
     options = params[:options].as_json.symbolize_keys
@@ -139,13 +116,4 @@ class Admin::TruckingController < ApplicationController
     response_handler(url: url, key: "trucking")
   end
 
-
-  private
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
-  end
 end

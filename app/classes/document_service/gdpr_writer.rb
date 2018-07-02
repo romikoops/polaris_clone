@@ -2,6 +2,7 @@
 
 module DocumentService
   class GdprWriter
+    include AwsConfig
     include WritingTool
     attr_reader :tenant, :user_contacts, :filename, :directory, :workbook, :worksheet, :user, :user_aliases,
       :user_shipments, :user_messages, :user_locations, :user_sheet, :alias_sheet, :contacts_sheet, :shipment_sheet

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Document < ApplicationRecord
-  extend AwsConfig
+  include AwsConfig
   belongs_to :shipment
   belongs_to :user
   belongs_to :tenant
