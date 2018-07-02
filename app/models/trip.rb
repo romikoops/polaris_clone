@@ -4,6 +4,8 @@ class Trip < ApplicationRecord
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
   belongs_to :itinerary
+
+  scope :lastday_today, -> { where("closing_date > ?", Date.today) }
   def self.update_times
     trips = Trip.all
     trips.each do |t|
