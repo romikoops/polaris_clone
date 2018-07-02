@@ -188,8 +188,8 @@ export class ShipmentDetails extends Component {
 
       return false
     }
-
-    if (nextProps.shipmentData.routes && nextState.filteredRouteIndexes.length === 0) {
+    if (nextProps.shipmentData.routes && nextProps.shipmentData.routes.length > 0 &&
+    nextState.filteredRouteIndexes.length === 0) {
       this.getInitalFilteredRouteIndexes()
     }
 
@@ -329,6 +329,7 @@ export class ShipmentDetails extends Component {
 
   newContainerGrossWeight () {
     const container = this.state.containers.new
+
     return container.type ? container.tare_weight + container.weight : 0
   }
 
@@ -409,6 +410,7 @@ export class ShipmentDetails extends Component {
     } else {
       excessChargeableWeightText = ''
     }
+
     return excessChargeableWeightText
   }
 
@@ -515,17 +517,20 @@ export class ShipmentDetails extends Component {
     ) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('map')
+
       return
     }
     if (!selectedDay) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('dayPicker')
+
       return
     }
 
     if (!incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('incoterms')
+
       return
     }
 

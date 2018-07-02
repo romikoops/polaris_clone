@@ -751,6 +751,7 @@ export class ShipmentLocationBox extends Component {
   }
 
   prepForSelect (target) {
+    console.log('target')
     this.setState((prevState) => {
       const {
         truckingHubs, oSelect, dSelect
