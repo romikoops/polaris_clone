@@ -132,34 +132,6 @@ class Admin::TruckingController < ApplicationController
     end
   end
 
-  def overwrite_zip_trucking_by_hub
-    data = params
-    if data["file"]
-
-      direction_array = if data["direction"] == "either"
-                          %w[import export]
-                        else
-                          [data["direction"]]
-                        end
-      req = { "xlsx" => data["file"] }
-      direction_array.each do |dir|
-        overwrite_zipcode_trucking_rates_by_hub(req, current_user, data["id"], "Greencarrier LTL", dir)
-      end
-      trucking_hub = get_item("truckingHubs", "hub_id", data["id"])
-      hub = Hub.find(data["id"])
-      trucking_queries = []
-      trucking_pricings = []
-      if trucking_hub
-        trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
-        trucking_pricings = trucking_queries.map { |tq| { query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id]) } }
-      end
-
-      response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
-    else
-      response_handler(false)
-    end
-  end
-
   def download
     options = params[:options].as_json.symbolize_keys
     options[:tenant_id] = current_user.tenant_id
@@ -167,25 +139,6 @@ class Admin::TruckingController < ApplicationController
     response_handler(url: url, key: "trucking")
   end
 
-  def overwrite_city_trucking_by_hub
-    if params[:file]
-      direction_array = if params["direction"] == "either"
-                          %w[import export]
-                        else
-                          [params["direction"]]
-                        end
-      req = { "xlsx" => params[:file] }
-
-      direction_array.each do |dir|
-        overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], "Globelink", dir)
-      end
-      hub = Hub.find(params["id"])
-      results = TruckingPricing.find_by_hub_id(params[:id])
-      response_handler(hub: hub, truckingPricings: results)
-    else
-      response_handler(false)
-    end
-  end
 
   private
 
