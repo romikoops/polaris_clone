@@ -32,6 +32,9 @@ class ShipmentsController < ApplicationController
   def test_email
     tenant_notification_email(current_user, Shipment.first)
   end
+  
+  def reuse_booking_data
+  end
 
   # Uploads document and returns Document item
   def upload_document

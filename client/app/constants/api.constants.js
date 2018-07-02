@@ -7,8 +7,8 @@ if (process.env.NODE_ENV === 'production') {
   url = 'https://api2.itsmycargo.com'
   // url = 'https://devapi.itsmycargo.com'
 } else {
-  // url = 'http://localhost:3000'
-  url = 'https://api2.itsmycargo.com'
+  url = 'http://localhost:3000'
+  // url = 'https://api2.itsmycargo.com'
   // url = 'https://devapi.itsmycargo.com'
   // url = 'http://192.168.178.91:3000'
   // url = 'http://imc-beta.eu-central-1.elasticbeanstalk.com/'

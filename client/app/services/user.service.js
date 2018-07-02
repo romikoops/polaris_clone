@@ -235,6 +235,13 @@ function saveAddressEdit (data) {
   }
   return fetch(`${BASE_URL}/contacts/update_contact_address/${data.id}`, requestOptions).then(handleResponse)
 }
+function reuseShipment (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  return fetch(`${BASE_URL}/shipments/${id}/reuse`, requestOptions).then(handleResponse)
+}
 
 export const userService = {
   getLocations,
@@ -259,6 +266,7 @@ export const userService = {
   deleteContactAddress,
   editUserLocation,
   delete: _delete,
-  optOut
+  optOut,
+  reuseShipment
 }
 export default userService

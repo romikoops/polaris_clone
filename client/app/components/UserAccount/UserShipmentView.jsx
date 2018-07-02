@@ -205,6 +205,11 @@ export class UserShipmentView extends Component {
         shipment={shipment}
       />))
   }
+  reuseShipment () {
+    const { shipmentData, userDispatch } = this.props
+    const { shipment } = shipmentData
+    userDispatch.reuseShipment(shipment.id)
+  }
 
   render () {
     const {
@@ -287,6 +292,11 @@ export class UserShipmentView extends Component {
       </div>
     ) : (
       ''
+    )
+    const reuseShipment = (
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.reuse_shipment_box}`}>
+        <p className="layout-align-center-center layout-row">Reuse Shipment </p>
+      </div>
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
@@ -444,6 +454,7 @@ export class UserShipmentView extends Component {
           <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
+          {reuseShipment}
           {statusRequested}
           {statusInProcess}
           {statusFinished}

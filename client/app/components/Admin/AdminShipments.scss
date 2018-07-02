@@ -11,6 +11,20 @@
       z-index: 10000000;
     }
   }
+  .reuse_shipment_box {
+    max-height: 32px !important;
+    margin-top: 3px;
+    p {
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      height: 28px;
+      letter-spacing: 0.06em;
+      margin: 0;
+      text-transform: uppercase;
+      z-index: 10000000;
+    }
+  }
   .status_box {
     p {
       font-size: 12px;
