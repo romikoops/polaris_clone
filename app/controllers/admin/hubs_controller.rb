@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-class Admin::HubsController < ApplicationController
+class Admin::HubsController < Admin::AdminBaseController
   include ExcelTools
   include ItineraryTools
   include Response
   include PricingTools
   include AwsConfig
-  before_action :require_login_and_role_is_admin
+
   before_action :for_create, only: :create
 
   def index
@@ -136,17 +136,6 @@ class Admin::HubsController < ApplicationController
   def hub_route_map(hub)
     hub.stops.map(&:itinerary).map do |itinerary|
       itinerary.as_options_json(methods: :routes)
-    end
-  end
-
-  def is_current_tenant?
-    current_user.tenant_id == Tenant.find_by_subdomain(params[:subdomain_id]).id
-  end
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
     end
   end
 end
