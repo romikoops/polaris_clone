@@ -6,7 +6,7 @@ module ExcelTool
       :fees_sheet, :num_rows, :zip_char_length, :identifier_type, :identifier_modifier, :zones,
       :all_ident_values_and_countries, :charges
 
-    def post_initialize(args)
+    def post_initialize(_args)
       @defaults = {}
       @trucking_pricing_by_zone = {}
       @tenant = @hub.tenant
@@ -35,11 +35,31 @@ module ExcelTool
 
     private
 
+    def local_stats
+      {
+        trucking_pricings:     {
+          number_updated: 0,
+          number_created: 0
+        },
+        trucking_destinations: {
+          number_updated: 0,
+          number_created: 0
+        }
+      }
+    end
+
+    def _results
+      {
+        trucking_pricings:     [],
+        trucking_destinations: []
+      }
+    end
+
     def overwrite_zonal_trucking_rates_by_hub
       sheets.slice(2, sheets.length - 1).each do |sheet|
         rates_sheet = xlsx.sheet(sheet)
         meta = generate_meta_from_sheet(rates_sheet)
-        row_truck_type = !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type] 
+        row_truck_type = !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type]
         direction = meta[:direction] == "import" ? "on" : "pre"
 
         load_type = meta[:load_type] == "container" ? "container" : "cargo_item"
@@ -59,7 +79,6 @@ module ExcelTool
           carriage:   direction,
           load_type:  load_type
         )
-  
 
         modifier_position_objs = populate_modifier(rates_sheet)
         header_row = rates_sheet.row(4)
@@ -94,20 +113,19 @@ module ExcelTool
           tp = trucking_pricing
           td_query = build_td_query(single_ident_values, single_ident_values_and_country)
           td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
-          delete_previous_trucking_pricings(hub, scoping_attributes_hash, td_ids)
-          with_statement  = build_with_statement(tp, td_ids)
-          insertion_query = build_insert_query(with_statement, tp, td_ids)
+          delete_previous_trucking_pricings(hub, td_ids)
+          insertion_query = build_insert_query(tp, td_ids)
           ActiveRecord::Base.connection.execute(insertion_query)
         end
       end
     end
 
-    def delete_previous_trucking_pricings(hub, scoping_attributes_hash, td_ids)
+    def delete_previous_trucking_pricings(hub, td_ids)
       old_tp_ids =
         TruckingPricing.joins(hub_truckings: :trucking_destination)
           .where('hub_truckings.hub_id': hub.id)
           .where('trucking_destinations.id': td_ids)
-          .where(scoping_attributes_hash)
+          .where(trucking_pricing_scope: @trucking_pricing_scope)
           .distinct.ids
 
       return if old_tp_ids.empty?
@@ -125,21 +143,20 @@ module ExcelTool
         if row_data[1] && !row_data[2]
           row_zip = row_data[1].is_a?(Numeric) ? row_data[1].to_i : row_data[1]
           @zip_char_length ||= row_zip.to_s.length
-          if identifier_type == 'distance' && identifier_modifier == 'return'
-            zones[zone_name] << { ident: (row_zip/2.0).ceil, country: row_data[3] }
-          else
-            zones[zone_name] << { ident: row_zip, country: row_data[3] }
-          end
+          zones[zone_name] << if identifier_type == "distance" && identifier_modifier == "return"
+                                { ident: (row_zip / 2.0).ceil, country: row_data[3] }
+                              else
+                                { ident: row_zip, country: row_data[3] }
+                              end
 
         elsif !row_data[1] && row_data[2]
           range = row_data[2].delete(" ").split("-")
           @zip_char_length ||= range[0].length
-          if identifier_type == 'distance' && identifier_modifier == 'return'
-            zones[zone_name] << { min: (range[0].to_i/2.0).ceil, max: (range[1].to_i/2.0).ceil, country: row_data[3] }
-          else
-            zones[zone_name] << { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
-          end
-
+          zones[zone_name] << if identifier_type == "distance" && identifier_modifier == "return"
+                                { min: (range[0].to_i / 2.0).ceil, max: (range[1].to_i / 2.0).ceil, country: row_data[3] }
+                              else
+                                { min: range[0].to_i, max: range[1].to_i, country: row_data[3] }
+                              end
 
         elsif row_data[1] && row_data[2]
           zones[zone_name] << {
@@ -168,7 +185,6 @@ module ExcelTool
             end
           elsif identifier_type == "geometry_id"
             geometry = find_geometry(idents_and_country)
-            puts geometry.names.log_format
             stats[:trucking_destinations][:number_created] += 1
             # stats[:hub_truckings][:number_created] += 1
 
@@ -251,38 +267,38 @@ module ExcelTool
       modifier_row.shift
       modifier_position_objs = {}
       modifier_row.uniq.each do |mod|
-        if mod != nil
-          modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
-        end
+        modifier_position_objs[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod } unless mod.nil?
       end
       modifier_position_objs
     end
 
     def create_trucking_pricing(meta)
+      @trucking_pricing_scope = TruckingPricingScope.find_or_create_by(
+        carriage:    meta[:direction] == "import" ? "on" : "pre",
+        cargo_class: meta[:cargo_class],
+        load_type:   meta[:load_type] == "container" ? "container" : "cargo_item",
+        courier_id:  find_or_create_courier(meta[:courier]).id,
+        truck_type:  !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type]
+      )
+
       TruckingPricing.new(
-        rates:         {},
-        fees:          {},
-        carriage:      meta[:direction] == "import" ? "on" : "pre",
-        cargo_class:   meta[:cargo_class],
-        load_type:     meta[:load_type] == "container" ? "container" : "cargo_item",
-        load_meterage: {
+        load_meterage:          {
           ratio:        meta[:load_meterage_ratio],
           height_limit: meta[:load_meterage_height],
-          area_limit: meta[:load_meterage_area]
+          area_limit:   meta[:load_meterage_area]
         },
-        cbm_ratio:     meta[:cbm_ratio],
-        courier:       find_or_create_courier(meta[:courier]),
-        modifier:      meta[:scale],
-        truck_type:    !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type] ,
-        tenant_id:     tenant.id,
-        identifier_modifier: identifier_modifier
+        rates:                  {},
+        fees:                   {},
+        cbm_ratio:              meta[:cbm_ratio],
+        modifier:               meta[:scale],
+        tenant_id:              tenant.id,
+        identifier_modifier:    identifier_modifier,
+        trucking_pricing_scope: @trucking_pricing_scope
       )
     end
 
-    def trucking_rates(weight_min_row, val, meta, row_min_value, row_zone_name, m_index, mod_key)
-      if identifier_type == 'distance' && identifier_modifier == 'return' && mod_key == 'km'
-        val = val * 2
-      end
+    def trucking_rates(weight_min_row, val, meta, row_min_value, _row_zone_name, m_index, mod_key)
+      val *= 2 if identifier_type == "distance" && identifier_modifier == "return" && mod_key == "km"
       w_min = weight_min_row[m_index] || 0
       r_min = row_min_value || 0
       if defaults[mod_key]
@@ -337,7 +353,7 @@ module ExcelTool
     end
 
     def build_td_query(single_ident_values, single_ident_values_and_country)
-      <<-eos
+      <<-SQL
         WITH
           existing_identifiers AS (
             SELECT id, #{identifier_type}, country_code FROM trucking_destinations
@@ -360,87 +376,40 @@ module ExcelTool
         SELECT id FROM inserted_td_ids
         UNION
         SELECT id FROM existing_identifiers
-      eos
+      SQL
     end
 
-    def build_with_statement(tp, td_ids)
-      <<-eos
+    def build_insert_query(tp, td_ids)
+      <<-SQL
         WITH
-          td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
-          matching_tp_id_table AS (
-            SELECT DISTINCT trucking_pricings.id
-            FROM td_ids
-            JOIN hub_truckings
-              ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
-            JOIN trucking_pricings
-              ON trucking_pricings.id = hub_truckings.trucking_pricing_id
-            #{tp.scoping_attributes.to_sql_where}
-            AND hub_truckings.hub_id = #{hub_id}
-          ),
-          hub_ids AS (
-            VALUES(#{hub_id})
-          ),
-          t_stamps AS (
-            VALUES(current_timestamp)
-          )
-      eos
-    end
-
-    def build_insert_query(with_statement, tp, td_ids)
-      <<-eos
-        DO
-        $do$
-        BEGIN
-        IF (
-          #{with_statement}
-          SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
-        ) THEN
-          #{with_statement}
-          UPDATE trucking_pricings
-          SET (#{TruckingPricing.given_attribute_names.sort.join(', ')}) = #{tp.to_postgres_insertable}
-          WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table);
-
-          #{with_statement}
-          INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-            (
-              SELECT * FROM hub_ids
-              CROSS JOIN matching_tp_id_table
-              CROSS JOIN td_ids
-              CROSS JOIN t_stamps AS created_ats
-              CROSS JOIN t_stamps AS updated_ats
-            )
-            ON CONFLICT DO NOTHING;
-
-        ELSE
-          #{with_statement},
+          td_ids   AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
+          hub_ids  AS (VALUES(#{hub_id})),
+          t_stamps AS (VALUES(current_timestamp)),
           tp_ids AS (
             INSERT INTO trucking_pricings(#{TruckingPricing.given_attribute_names.sort.join(', ')})
               VALUES #{tp.to_postgres_insertable}
             RETURNING id
           )
-          INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-            (
-              SELECT * FROM hub_ids
-              CROSS JOIN tp_ids
-              CROSS JOIN td_ids
-              CROSS JOIN t_stamps AS created_ats
-              CROSS JOIN t_stamps AS updated_ats
-            );
-        END IF;
-        END
-        $do$
-      eos
+        INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+          (
+            SELECT * FROM hub_ids
+            CROSS JOIN tp_ids
+            CROSS JOIN td_ids
+            CROSS JOIN t_stamps AS created_ats
+            CROSS JOIN t_stamps AS updated_ats
+          );
+      SQL
     end
 
     def determine_identifier_type_and_modifier(identifier_type)
       if identifier_type == "CITY"
-        return "geometry_id"
-      elsif identifier_type.include?('_')
-        return identifier_type.split('_').map{|str| str.downcase}
-      elsif identifier_type.include?(' ')
-        return identifier_type.split(' ').map{|str| str.downcase}
+        "geometry_id"
+      elsif identifier_type.include?("_")
+        identifier_type.split("_").map(&:downcase)
+      elsif identifier_type.include?(" ")
+        identifier_type.split(" ").map(&:downcase)
       else
-        return [identifier_type.downcase, false]
+        [identifier_type.downcase, false]
       end
     end
 

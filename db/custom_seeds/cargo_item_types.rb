@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-puts "Destroying Cargo Item Types..."
-TenantCargoItemType.destroy_all
-CargoItemType.destroy_all
-
 puts "Seeding Cargo Item Types..."
 cargo_item_types_data = [
   {
@@ -53,7 +49,14 @@ cargo_item_types_data = [
   { category: 'Barrel' }
 ]
 
-cargo_item_types_data.each do |cargo_item_types_attr|
-  cargo_item = CargoItemType.new(cargo_item_types_attr)
-  puts "#{cargo_item.description} already exists in db" unless cargo_item.save
+
+
+ATTR_NAMES = %i(dimension_x dimension_y area category).freeze
+
+cargo_item_types_data.each do |raw_cargo_item_types_attr|
+  cargo_item_types_attr = ATTR_NAMES.each_with_object({}) do |attr_name, obj|
+    obj[attr_name] = raw_cargo_item_types_attr[attr_name]
+  end
+
+  cargo_item = CargoItemType.find_or_create_by(cargo_item_types_attr)
 end

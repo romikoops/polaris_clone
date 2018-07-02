@@ -1,5 +1,5 @@
 module WritingTool
-  include AwsConfig
+
   def write_to_aws(dir, tenant, filename, doc_type)
     file = open(dir)
     obj_key = "documents/#{tenant.subdomain}/downloads/#{doc_type}/#{filename}"

@@ -13,8 +13,8 @@ import {
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { AdminUploadsSuccess } from './Uploads/Success'
+import { AdminTruckingView } from './AdminTruckingView'
 
 class AdminPricings extends Component {
   constructor (props) {
@@ -62,7 +62,10 @@ class AdminPricings extends Component {
       itineraryPricings,
       documentDispatch,
       document,
-      tenant
+      tenant,
+      loading,
+      trucking,
+      truckingDetail
     } = this.props
     const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
@@ -85,14 +88,15 @@ class AdminPricings extends Component {
     ) : (
       ''
     )
-    const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
+    // const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
+    const { nexuses } = trucking
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
-          <TextHeading theme={theme} size={1} text={title} />
+          {/* <TextHeading theme={theme} size={1} text={title} /> */}
           {selectedPricing ? backButton : ''}
         </div>
 
@@ -157,6 +161,20 @@ class AdminPricings extends Component {
           />
           <Route
             exact
+            path="/admin/pricings/trucking/:id"
+            render={props => (
+              <AdminTruckingView
+                theme={theme}
+                nexuses={nexuses}
+                truckingDetail={truckingDetail}
+                loading={loading}
+                adminDispatch={adminDispatch}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
             path="/admin/pricings/routes/:id"
             render={props => (
               <AdminPricingRouteView
@@ -205,7 +223,12 @@ AdminPricings.propTypes = {
   }).isRequired,
   document: PropTypes.objectOf(PropTypes.any).isRequired,
   itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
-  tenant: PropTypes.tenant
+  tenant: PropTypes.tenant,
+  trucking: PropTypes.shape({
+    truckingHubs: PropTypes.array,
+    truckingPrices: PropTypes.array
+  }).isRequired,
+  truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object })
 }
 
 AdminPricings.defaultProps = {
@@ -216,7 +239,8 @@ AdminPricings.defaultProps = {
   hubHash: {},
   clients: [],
   itineraries: [],
-  tenant: null
+  tenant: null,
+  truckingDetail: null
 }
 
 function mapStateToProps (state) {
@@ -232,7 +256,9 @@ function mapStateToProps (state) {
     transportCategories,
     clientPricings,
     itineraryPricings,
-    loading
+    loading,
+    trucking,
+    truckingDetail
   } = admin
 
   return {
@@ -247,7 +273,9 @@ function mapStateToProps (state) {
     clients,
     itineraryPricings,
     loading,
-    document
+    document,
+    trucking,
+    truckingDetail
   }
 }
 function mapDispatchToProps (dispatch) {

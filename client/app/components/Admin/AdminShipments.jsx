@@ -7,7 +7,6 @@ import styles from './Admin.scss'
 import { AdminShipmentsIndex } from './'
 import { AdminShipmentView } from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
-// import { TextHeading } from '../TextHeading/TextHeading'
 import { AdminShipmentsGroup } from './Shipments/Group'
 
 class AdminShipments extends Component {
@@ -57,11 +56,11 @@ class AdminShipments extends Component {
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
-      return <h1>NO SHIPMENTS DATA</h1>
+      return <h1>NO SHIPMENTS DATA (OR REFRESH PAGE)</h1>
     }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >

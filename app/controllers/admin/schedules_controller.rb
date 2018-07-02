@@ -2,40 +2,29 @@
 
 class Admin::SchedulesController < ApplicationController
   before_action :require_login_and_role_is_admin
+  before_action :initialize_variables, only: [:index, :auto_generate_schedules]
   include ItineraryTools
   include ExcelTools
 
   def index
-    tenant = Tenant.find(current_user.tenant_id)
-    train_schedules = tenant.itineraries.where(mode_of_transport: "train").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    ocean_schedules = tenant.itineraries.where(mode_of_transport: "ocean").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    air_schedules = tenant.itineraries.where(mode_of_transport: "air").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
-      itinerary.as_options_json(methods: :routes)
-    end
-    response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries)
+    response_handler(air: @air_schedules,
+      train: @train_schedules,
+      ocean: @ocean_schedules,
+      itineraries: itinerary_route_json)
   end
 
   def show
     itinerary = Itinerary.find(params[:id])
-    schedules = itinerary.trips.where("closing_date > ?", Date.today).limit(100).order(:start_date)
+    schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
     response_handler(schedules: schedules, itinerary: itinerary)
   end
 
-  def auto_generate_schedules
-    tenant = Tenant.find(current_user.tenant_id)
-    mot = params[:mot]
-    itinerary = Itinerary.find(params[:itinerary])
-    stops = itinerary.stops.order(:index)
-
-    closing_date_buffer = params[:closing_date].to_i
-    vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
-    resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
-    train_schedules = tenant.itineraries.where(mode_of_transport: "train").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    ocean_schedules = tenant.itineraries.where(mode_of_transport: "ocean").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    air_schedules = tenant.itineraries.where(mode_of_transport: "air").flat_map { |it| it.trips.limit(10).order(:start_date) }
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    response_handler(air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, stats: resp)
+  def auto_generate_schedules    
+    response_handler(air: @air_schedules,
+      train: @train_schedules,
+      ocean: @ocean_schedules,
+      itineraries: itineraries,
+      stats: itin_weekly_schedules)
   end
 
   def download_schedules
@@ -51,16 +40,14 @@ class Admin::SchedulesController < ApplicationController
   end
 
   def layovers
-    trip = Trip.find(params[:id])
-    layovers = trip.layovers.order(:stop_index).map { |l| { layover: l, stop: l.stop, hub: l.stop.hub } }
-    response_handler(layovers)
+    response_handler(trip_layovers)
   end
 
   def schedules_by_itinerary
     if params[:file]
       itinerary = Itinerary.find(params[:id])
       req = { "xlsx" => params[:file], "itinerary" => itinerary }
-      results = overwrite_schedules_by_itinerary(req, current_user)
+      results = ExcelTool::OverwriteSchedulesByItinerary.new(params: req, _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -99,8 +86,65 @@ class Admin::SchedulesController < ApplicationController
 
   private
 
+  def initialize_variables
+    @train_schedules = mot_schedule("train")
+    @ocean_schedules = mot_schedule("ocean")
+    @air_schedules = mot_schedule("air")
+  end
+
+  def mot_schedule(mot)
+    tenant.itineraries.where(mode_of_transport: mot).flat_map do |itin|
+      itin.trips.limit(10).order(:start_date)
+    end
+  end
+
+  def tenant
+    @tenant ||= Tenant.find(current_user.tenant_id)
+  end
+
+  def itinerary_route_json
+    Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
+      itinerary.as_options_json(methods: :routes)
+    end
+  end
+
+  def stops
+    @stops ||= itinerary.stops.order(:index)
+  end
+
+  def vehicle
+    @vehicle ||= TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
+  end
+  
+  def itin_weekly_schedules
+    itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate],
+      params[:endDate], params[:weekdays], vehicle, params[:closing_date].to_i)
+  end
+
+  def itinerary
+    @itinerary ||= Itinerary.find(params[:itinerary])
+  end
+
+  def itineraries
+    @itineraries ||= Itinerary.where(tenant_id: current_user.tenant_id)
+  end
+
+  def trip_layovers
+    trip.layovers.order(:stop_index).map do |layover|
+      { layover: layover, stop: layover.stop, hub: layover.stop.hub }
+    end
+  end
+
+  def trip
+    @trip ||= Trip.find(params[:id])
+  end
+
+  def is_current_tenant?
+    current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+  end
+
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
+    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
       flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end

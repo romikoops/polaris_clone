@@ -84,7 +84,7 @@ export class ShipmentOverviewCard extends Component {
 ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
-  dispatches: PropTypes.objectOf(PropTypes.func),
+  dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub),
   noTitle: PropTypes.bool
@@ -94,7 +94,6 @@ ShipmentOverviewCard.propTypes = {
 ShipmentOverviewCard.defaultProps = {
   admin: false,
   shipments: [],
-  dispatches: {},
   theme: null,
   hubs: {},
   noTitle: false

@@ -1,11 +1,20 @@
 :local {
+  .hello {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
   .hub_card {
     width: 225px;
     height: 180px;
     padding: 3px;
     // color: #FFFFFF;
     position: relative;
-    margin: 15px;
+    margin: 0 15px 30px 0;
+    &.inactive {
+      filter: grayscale(100%);
+      opacity: 0.7;
+    }
   }
   .image {
     height: 84px;
@@ -22,13 +31,14 @@
   .hub_name {
     h1 {
       margin: 0px;
+      font-size: 25px;
       color: #4F4F4F;
     }
   }
   .hub_type {
     p {
       margin: 0px;
-      font-size: 20px;
+      font-size: 18px;
       color: #4F4F4F;
     }
   }
@@ -43,15 +53,13 @@
     z-index: 10;
     background: rgba(0,10,4,0.26);
   }
-  
+
   .hub_card i {
-    height: 30px;
-    width: 30px;
-    font-size: 30px;
-    margin-top: 23px;
+    margin-top: 0;
+    padding: 10px;
     -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    font-size: 24px !important;
+    -webkit-text-fill-color: white !important;
+    font-size: 16px !important;
   }
   .tooltip {
     max-width: 150px !important;

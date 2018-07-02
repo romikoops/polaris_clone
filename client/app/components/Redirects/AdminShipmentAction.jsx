@@ -20,7 +20,7 @@ class AdminShipmentAction extends Component {
     const { user, loggedIn, adminDispatch } = this.props
     if (!user || !loggedIn || user.guest) {
       this.toggleShowLogin()
-    } else if (user && user.role.name === 'shipper') {
+    } else if (user && user.role && user.role.name === 'shipper') {
       adminDispatch.goTo('/')
     } else {
       this.handleAction()
@@ -28,7 +28,7 @@ class AdminShipmentAction extends Component {
   }
   componentDidUpdate () {
     const { user, loggedIn } = this.props
-    if (user && loggedIn && user.role.name === 'admin') {
+    if (user && loggedIn && user.role && user.role.name === 'admin') {
       this.handleAction()
     }
   }

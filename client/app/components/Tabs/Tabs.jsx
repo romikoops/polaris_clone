@@ -36,10 +36,12 @@ export default class Tabs extends PureComponent {
   }
 
   render () {
+    const { wrapperTabs } = this.props
+
     return (
       <div className="layout-column flex-100">
         <div className="layout-row flex-100">
-          <div className="layout-row flex-25">
+          <div className={wrapperTabs}>
             {this.renderChildrenWithTabsApiAsProps()}
           </div>
         </div>
@@ -53,10 +55,13 @@ export default class Tabs extends PureComponent {
 
 Tabs.propTypes = {
   defaultActiveTabIndex: PropTypes.number,
-  children: PropTypes.node
+  children: PropTypes.node,
+  wrapperTabs: PropTypes.string
+
 }
 
 Tabs.defaultProps = {
+  wrapperTabs: 'layout-row flex-40',
   defaultActiveTabIndex: 0,
   children: null
 }

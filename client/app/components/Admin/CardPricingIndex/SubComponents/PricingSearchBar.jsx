@@ -4,12 +4,12 @@ import styles from '../Card.scss'
 
 function PricingSearchBar ({ onChange, value, target }) {
   return (
-    <div className={`${styles.pricing_search} flex-90 layout-row layout-align-center-center`}>
+    <div className={`${styles.pricing_search} flex-100 layout-row layout-align-center-center`}>
       <input
         type="text"
         value={value}
         onChange={e => onChange(e, target)}
-        placeholder="Type something..."
+        placeholder="Search..."
       />
     </div>
   )

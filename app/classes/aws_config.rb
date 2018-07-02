@@ -54,10 +54,29 @@ module AwsConfig
         acl:          args[:acl]
       )
     end
+
+    def asset_url
+      "https://assets.itsmycargo.com/"
+    end
+
+    def save_asset(file, obj_key)
+    aws_client.put_object(
+      bucket: ENV["AWS_BUCKET"], key: obj_key, body: file,
+      content_type: file.content_type, acl: "public-read")
+    end
   end
 
   # Instance methods
   module InstanceMethods
+
+    def asset_url
+      self.class.asset_url
+    end
+
+    def save_asset(file, objKey)
+      self.class.save_asset(file, objKey)
+    end
+
     def aws_signer
       self.class.aws_signer
     end
@@ -67,11 +86,11 @@ module AwsConfig
     end
 
     def awsurl
-      self.class.awsurl
+      "https://s3-eu-west-1.amazonaws.com/imcdev/"
     end
 
     def path(shipment)
-      self.class.path(shipment)
+     self.class.path(shipment)
     end
 
     def create_on_aws(file, shipment)
@@ -79,11 +98,15 @@ module AwsConfig
     end
 
     def get_file_url(key)
-      aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
+      self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
     end
 
     def delete_documents(docs)
       self.class.delete_documents(docs)
+    end
+
+    def upload(args={})
+      self.class.upload(args)
     end
   end
 

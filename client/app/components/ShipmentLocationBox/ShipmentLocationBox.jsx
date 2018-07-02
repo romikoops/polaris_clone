@@ -458,7 +458,7 @@ export class ShipmentLocationBox extends Component {
     // triggers a place change with the first result from google
     const service = new this.props.gMaps.places.AutocompleteService()
     service.getPlacePredictions({ input }, (_input) => {
-      this.getPlace(_input[0].place_id, (place) => {
+      _input && _input[0] && this.getPlace(_input[0].place_id, (place) => {
         this.handlePlaceChange(place, target)
       })
     })

@@ -76,6 +76,8 @@ Rails.application.routes.draw do
       post 'discounts/users/:user_id', to: 'discounts#create_multiple', as: :discounts_create_multiple
       post 'shipments/:id/edit_price', to: 'shipments#edit_price'
       post 'shipments/:id/edit_time', to: 'shipments#edit_time'
+      post 'shipments/:id/edit_service_price', to: 'shipments#edit_service_price'
+
       resources :schedules, only: %i[index show destroy]
       post 'schedules/overwrite/:id', to: 'schedules#schedules_by_itinerary'
       post 'train_schedules/process_csv',

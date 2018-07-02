@@ -5,7 +5,7 @@ module CurrencyTools
 
   def get_rates(base, tenant_id)
     tenant = Tenant.find(tenant_id)
-    if tenant.scope["fixed_currency"]
+    if tenant && tenant.scope["fixed_currency"]
       tenant_rates = Currency.find_by(base: base, tenant_id: tenant_id)
       cached_rates = tenant_rates || Currency.find_by(base: base)
     else

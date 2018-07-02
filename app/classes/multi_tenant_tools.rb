@@ -559,7 +559,7 @@ module MultiTenantTools
     puts "# Overwrite Local Charges From Sheet"
     local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
     req = { "xlsx" => local_charges }
-    overwrite_local_charges(req, shipper)
+    ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   end
 
   def quick_fix(subdomain)

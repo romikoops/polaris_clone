@@ -12,9 +12,7 @@ describe TruckingPricing, type: :model do
     	let(:trucking_destination_geometry)  { create(:trucking_destination, :with_geometry) }
     	let(:trucking_destination_distance)  { create(:trucking_destination, :distance) }
 
-    	let(:courier)          { create(:courier) }
-      let(:trucking_pricing) { create(:trucking_pricing, courier: courier, tenant: tenant) }
-
+      let(:trucking_pricing) { create(:trucking_pricing, tenant: tenant) }
 
       let(:zipcode)      { '15211' }
       let(:latitude)     { '57.000000' }
@@ -94,7 +92,7 @@ describe TruckingPricing, type: :model do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            location: location,   cargo_class: 'fcl_20f'
+            location: location,   cargo_class: 'lcl'
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
@@ -143,7 +141,7 @@ describe TruckingPricing, type: :model do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            location: location,   cargo_class: 'fcl_20f'
+            location: location,   cargo_class: 'lcl'
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
@@ -192,7 +190,7 @@ describe TruckingPricing, type: :model do
           trucking_pricings = described_class.find_by_filter(
             tenant_id: tenant.id, load_type: load_type,
             carriage: carriage,   country_code: country_code,
-            location: location,   cargo_class: 'fcl_20f'
+            location: location,   cargo_class: 'lcl'
           )
 
           expect(trucking_pricings).to match([trucking_pricing])
@@ -215,7 +213,7 @@ describe TruckingPricing, type: :model do
       let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
       let(:courier)          { create(:courier) }
-      let(:trucking_pricing) { create(:trucking_pricing, courier: courier, tenant: tenant) }
+      let(:trucking_pricing) { create(:trucking_pricing, tenant: tenant) }
 
       context 'basic tests' do
         it 'raises an ArgumentError if no hub_id are provided' do         
@@ -248,7 +246,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "zipcode"         => [["15000", "15099"]],
               "countryCode"     => "SE"          
             }
@@ -268,7 +266,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "zipcode"         => [["15000", "15039"], ["15050", "15109"]],          
               "countryCode"     => "SE"
             }
@@ -288,7 +286,7 @@ describe TruckingPricing, type: :model do
 
           expect(trucking_pricings).to match([
             {
-              "truckingPricing" => trucking_pricing,
+              "truckingPricing" => trucking_pricing.as_options_json,
               "city"            => [["Testname4", "Gothenburg"]],
               "countryCode"     => "SE"
             }

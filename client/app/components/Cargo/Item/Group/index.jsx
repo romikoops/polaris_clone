@@ -6,7 +6,7 @@ import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
 // import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoItemGroupAggregated from './Aggregated'
-import { LOAD_TYPES, LOAD_SIZES } from '../../../../constants'
+import { LOAD_TYPES, LOAD_SIZES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator } from '../../../../helpers'
 
 export class CargoItemGroup extends Component {
@@ -62,7 +62,7 @@ export class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0].dimension_x}</span> cm</p>
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_x : ''}</span> cm</p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
@@ -72,7 +72,7 @@ export class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0].dimension_z}</span> cm</p>
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_z : ''}</span> cm</p>
         </div>
 
         <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
@@ -82,7 +82,7 @@ export class CargoItemGroup extends Component {
               ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
               : ''
           }
-          <p className="flex-none"><span>{group.items[0].dimension_y}</span> cm</p>
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_y : ''}</span> cm</p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
@@ -105,12 +105,12 @@ export class CargoItemGroup extends Component {
             <p className="flex-none layout-row layout-align-center-center">Volume</p>
           </div>
         </div>
-        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+        { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].chargeable_weight).toFixed(2)}</span> &nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
-        </div>
+        </div> : '' }
       </div>
     )
     // const unitStyle = unitView ? styles.open_panel : styles.closed_panel
@@ -126,6 +126,7 @@ export class CargoItemGroup extends Component {
         <CargoItemGroupAggregated group={group} />
       </div>
     )
+    const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
     return (
       <div className={`${styles.info}`}>
         <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
@@ -142,7 +143,7 @@ export class CargoItemGroup extends Component {
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
             <div className="layout-column">
-              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{group.cargoType.category}</span></p>
+              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
               <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
             </div>
           </div>

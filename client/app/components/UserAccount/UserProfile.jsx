@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import Select from 'react-select'
+// import styled from 'styled-components'
+// import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import adminStyles from '../Admin/Admin.scss'
@@ -9,7 +9,7 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { currencyOptions } from '../../constants'
+// import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -369,25 +369,25 @@ export class UserProfile extends Component {
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
-    const StyledSelect = styled(Select)`
-      width: 50%;
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
+    // const StyledSelect = styled(Select)`
+    //   width: 50%;
+    //   .Select-control {
+    //     background-color: #f9f9f9;
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2 !important;
+    //   }
+    //   .Select-menu-outer {
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-value {
+    //     background-color: #f9f9f9;
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-option {
+    //     background-color: #f9f9f9;
+    //   }
+    // `
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }

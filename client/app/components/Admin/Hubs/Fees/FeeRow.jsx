@@ -184,7 +184,6 @@ class FeeRow extends PureComponent {
     const {
       fee, theme, selectOptions, direction, editCharge
     } = this.props
-    // debugger // eslint-disable-line
     if (!selectOptions) {
       return ''
     }
