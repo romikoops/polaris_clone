@@ -35,7 +35,7 @@ class Shipment < ApplicationRecord
   before_validation :assign_uuid, :generate_imc_reference,
     :set_default_trucking, :set_tenant,
     on: :create
-  before_validation :update_carriage_properties!
+  before_validation :update_carriage_properties!, :sync_nexuses
 
   # ActiveRecord associations
   belongs_to :user
@@ -98,6 +98,27 @@ class Shipment < ApplicationRecord
     return nil if trip.nil?
 
     trip.layovers.hub_id(destination_hub_id)
+  end
+
+  def origin_layover=(layover)
+    set_trip_using_layover(layover)
+
+    self.planned_etd  = layover.etd
+    self.closing_date = layover.closing_date
+    self.origin_hub   = layover.hub
+  end
+
+  def destination_layover=(layover)
+    set_trip_using_layover(layover)
+
+    self.planned_eta     = layover.eta
+    self.destination_hub = layover.hub
+  end
+
+  def set_trip_using_layover(layover)
+    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id != trip_id
+
+    self.trip ||= layover.trip
   end
 
   def pickup_address
@@ -198,10 +219,6 @@ class Shipment < ApplicationRecord
     send("has_#{carriage}_carriage?")
   end
 
-  def mode_of_transport
-    itinerary.mode_of_transport
-  end
-
   def has_customs?
     !!customs
   end
@@ -232,14 +249,6 @@ class Shipment < ApplicationRecord
 
   def eta
     planned_eta
-  end
-
-  def has_on_carriage?
-    has_on_carriage
-  end
-
-  def has_pre_carriage?
-    has_pre_carriage
   end
 
   def selected_offer
@@ -363,6 +372,14 @@ class Shipment < ApplicationRecord
 
   def set_tenant
     self.tenant_id ||= user.tenant_id
+  end
+
+  def sync_nexuses
+    %w(origin destination).each do |target|
+      next if self["#{target}_hub"].nil?
+
+      self["#{target}_nexus"] ||= self["#{target}_hub"]
+    end
   end
 
   def user_tenant_match

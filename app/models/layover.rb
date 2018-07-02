@@ -4,6 +4,7 @@ class Layover < ApplicationRecord
   belongs_to :stop
   belongs_to :itinerary
   belongs_to :trip
+  delegate :hub_id, :hub, to: :stop
 
   scope :hub_id, ->(hub_id) { joins(:stop).where('stops.hub_id': hub_id) }
 

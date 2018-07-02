@@ -23,17 +23,30 @@ class ShipmentSeeder
         p [user.email, status, load_type, direction, trip]
         puts counter
         puts "------"
-        # shipemnt Shipment.new(
+        # @shipemnt = Shipment.new(
         #   user: user,
-        #   status:
+        #   status: status
         #   load_type: load_type,
         #   direction: direction,
         # )
-        # shipment.update_via_layovers(*trip.layovers.sample(2))
+        # origin_layover, destination_layover = *trip.layovers.sample(2)
+        # @shipment.origin_layover      = origin_layover
+        # @shipment.destination_layover = destination_layover
+        # 
+        # @shipment.planned_origin_drop_off_date = random_origin_drop_off_date
+        # @shipment.booking_placed_at = random_booking_placed_at
       end
     end
 
     counter
+  end
+
+  def random_origin_drop_off_date(origin_layover)
+    @shipment.origin_layover.closing_date - rand(2..30).hours
+  end
+
+  def random_booking_placed_at(planned_origin_drop_off_date)
+    @shipment.planned_origin_drop_off_date - rand(1..8).days - rand(2..30).hours
   end
 end
 
@@ -46,7 +59,8 @@ end
 #    - schedules_charges: jsonb 
 #    - schedule_set: jsonb
 #    - route_id: integer
-#    - hs_code: string 
+#    - hs_code: string
+#    - total_price: jsonb
 #  
 #  Current
 #    - id: integer
@@ -72,8 +86,7 @@ end
 #  )
 #       - trip_id: integer 
 #           - itinerary_id: integer 
-#    - customs_credit: boolean 
-#    - total_price: jsonb 
+#    - customs_credit: boolean
 #    - total_goods_value: jsonb 
 #    - eori: string
 #    - booking_placed_at: datetime 
