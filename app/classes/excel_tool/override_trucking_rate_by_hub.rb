@@ -422,8 +422,6 @@ module ExcelTool
       meta.deep_symbolize_keys!
     end
 
-    private
-
     def find_geometry(idents_and_country)
       geometry = Geometry.cascading_find_by_names(
         idents_and_country[:sub_ident],
