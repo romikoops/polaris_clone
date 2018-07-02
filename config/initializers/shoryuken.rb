@@ -35,7 +35,7 @@ Shoryuken.configure_server do |config|
   # end
   Shoryuken.sqs_client = Aws::SQS::Client.new(access_key_id: ENV['AWS_KEY'], secret_access_key: ENV['AWS_SECRET'], region: 'eu-central-1')
   Rails.logger = Shoryuken::Logging.logger
-  Rails.logger.level = :info
+  Rails.logger.level = Logger::INFO
   config.server_middleware do |chain|
     chain.add Shoryuken::Middleware::Server::RavenReporter
   end
