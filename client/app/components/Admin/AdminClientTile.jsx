@@ -43,7 +43,8 @@ export class AdminClientTile extends Component {
       client,
       deleteable,
       showTooltip,
-      tooltip
+      tooltip,
+      flexClasses
     } = this.props
     const { showDelete } = this.state
     if (!client) {
@@ -139,7 +140,7 @@ export class AdminClientTile extends Component {
 
     return (
       <GradientBorder
-        wrapperClassName={`flex-none ${styles.client_card} ${adminStyles.margin_bottom} layout-row flex-30 flex-md-45 pointy`}
+        wrapperClassName={`flex-none ${styles.client_card} ${adminStyles.margin_bottom} layout-row ${flexClasses} pointy`}
         gradient={gradientBorderStyle}
         className="layout-column flex-100"
         content={(
@@ -187,6 +188,7 @@ AdminClientTile.propTypes = {
   target: PropTypes.string,
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
+  flexClasses: PropTypes.string,
   showTooltip: PropTypes.bool
 }
 AdminClientTile.defaultProps = {
@@ -197,7 +199,8 @@ AdminClientTile.defaultProps = {
   showTooltip: false,
   navFn: null,
   deleteFn: null,
-  target: ''
+  target: '',
+  flexClasses: 'flex-30 flex-md-45'
 }
 
 export default AdminClientTile
