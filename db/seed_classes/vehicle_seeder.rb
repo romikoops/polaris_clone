@@ -31,13 +31,12 @@ class VehicleSeeder
 
         CARGO_CLASSES.each do |cargo_class|
           TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
-            transport_category = TransportCategory.new(
+            transport_category = TransportCategory.find_or_create_by(
               name: transport_category_name,
               mode_of_transport: mot,
               cargo_class: cargo_class,
               vehicle: vehicle
             )
-            puts transport_category.errors.full_messages unless transport_category.save
           end
         end
       end

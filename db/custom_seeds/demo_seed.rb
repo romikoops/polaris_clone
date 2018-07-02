@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(greencarrier)
@@ -168,12 +167,12 @@ subdomains.each do |sub|
   #   hub_id: 1,
   #   load_type: 'cargo_item'
   # }
-  hub = tenant.hubs.find_by_name("Gothenburg Port")
-  gothenburg_options_ftl = {
-    tenant_id: tenant.id,
-    hub_id: hub.id,
-    load_type: 'container'
-  }
+  # hub = tenant.hubs.find_by_name("Gothenburg Port")
+  # gothenburg_options_ftl = {
+  #   tenant_id: tenant.id,
+  #   hub_id: hub.id,
+  #   load_type: 'container'
+  # }
   # shanghai_options = {
   #   tenant_id: 2,
   #   hub_id: 3,
@@ -181,8 +180,9 @@ subdomains.each do |sub|
   # }
   # # gothenburg_ltl_url = write_trucking_to_sheet(gothenburg_options_ltl)
   # #  awesome_print gothenburg_ltl_url
-  gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
-   awesome_print gothenburg_ftl_url
+  # gothenburg_ftl_url = write_trucking_to_sheet(gothenburg_options_ftl)
+  # gothenburg_ftl_url = DocumentService::TruckingWriter.new(gothenburg_options_ftl).perform
+  #  awesome_print gothenburg_ftl_url
   # shanghai_ltl_url = write_trucking_to_sheet(shanghai_options)
   #  awesome_print shanghai_ltl_url
   # admin_sea = tenant.users.new(
@@ -217,6 +217,14 @@ subdomains.each do |sub|
   # )
   # # admin.skip_confirmation!
   # admin_air.save!
+  itinerary = tenant.itineraries.find_by(name:'Gothenburg - Shanghai')
+  schedules = File.open("#{Rails.root}/db/dummydata/#{PATH TO FILE}")
+  params = {
+    "xlsx" => schedules,
+    "itinerary" => itinerary
+  }
+  overwrite_schedules_by_itinerary(params, shipper)
+
 end
 # user = Tenant.greencarrier.users.find_by_email('demo@greencarrier.com')
 # gdpr_download(user.id)

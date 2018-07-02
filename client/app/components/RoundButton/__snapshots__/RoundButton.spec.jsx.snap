@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow rendering when props.size is full 1`] = `
+exports[`size is full 1`] = `
 <button
   className="round_btn neutral full clickable"
   onClick={[Function]}
@@ -27,7 +27,7 @@ exports[`shallow rendering when props.size is full 1`] = `
 </button>
 `;
 
-exports[`shallow rendering when props.size is large 1`] = `
+exports[`size is large 1`] = `
 <button
   className="round_btn neutral large clickable"
   onClick={[Function]}
@@ -54,7 +54,7 @@ exports[`shallow rendering when props.size is large 1`] = `
 </button>
 `;
 
-exports[`shallow rendering when props.size is small 1`] = `
+exports[`size is small 1`] = `
 <button
   className="round_btn neutral small clickable"
   onClick={[Function]}

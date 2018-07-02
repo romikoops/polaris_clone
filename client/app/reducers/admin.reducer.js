@@ -7,6 +7,7 @@ export default function admin (state = {}, action) {
       const reqWzHubs = merge({}, state, {
         loading: true
       })
+
       return reqWzHubs
     }
     case adminConstants.WIZARD_HUBS_SUCCESS: {
@@ -16,6 +17,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return succWzHubs
     }
     case adminConstants.WIZARD_HUBS_FAILURE: {
@@ -27,6 +29,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return errWzHubs
     }
 
@@ -34,6 +37,7 @@ export default function admin (state = {}, action) {
       const reqWzScs = merge({}, state, {
         loading: true
       })
+
       return reqWzScs
     }
     case adminConstants.WIZARD_SERVICE_CHARGE_SUCCESS: {
@@ -43,6 +47,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return succWzScs
     }
     case adminConstants.WIZARD_SERVICE_CHARGE_FAILURE: {
@@ -54,6 +59,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return errWzScs
     }
 
@@ -61,6 +67,7 @@ export default function admin (state = {}, action) {
       const reqWzTrucking = merge({}, state, {
         loading: true
       })
+
       return reqWzTrucking
     }
     case adminConstants.WIZARD_TRUCKING_SUCCESS: {
@@ -70,6 +77,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return succWzTrucking
     }
     case adminConstants.WIZARD_TRUCKING_FAILURE: {
@@ -81,6 +89,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return errWzTrucking
     }
 
@@ -88,6 +97,7 @@ export default function admin (state = {}, action) {
       const reqWzPric = merge({}, state, {
         loading: true
       })
+
       return reqWzPric
     }
     case adminConstants.WIZARD_PRICINGS_SUCCESS: {
@@ -97,6 +107,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return succWzPric
     }
     case adminConstants.WIZARD_PRICINGS_FAILURE: {
@@ -108,6 +119,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return errWzPric
     }
 
@@ -115,6 +127,7 @@ export default function admin (state = {}, action) {
       const reqWzOpenPric = merge({}, state, {
         loading: true
       })
+
       return reqWzOpenPric
     }
     case adminConstants.WIZARD_OPEN_PRICINGS_SUCCESS: {
@@ -124,6 +137,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return succWzOpenPric
     }
     case adminConstants.WIZARD_OPEN_PRICINGS_FAILURE: {
@@ -135,6 +149,7 @@ export default function admin (state = {}, action) {
         },
         loading: false
       })
+
       return errWzOpenPric
     }
 
@@ -142,6 +157,7 @@ export default function admin (state = {}, action) {
       const reqHubs = merge({}, state, {
         loading: true
       })
+
       return reqHubs
     }
     case adminConstants.GET_HUBS_SUCCESS:
@@ -155,12 +171,14 @@ export default function admin (state = {}, action) {
         error: { hubs: action.error },
         loading: false
       })
+
       return errHubs
     }
     case adminConstants.GET_HUB_REQUEST: {
       const reqHub = merge({}, state, {
         loading: true
       })
+
       return reqHub
     }
     case adminConstants.GET_HUB_SUCCESS:
@@ -174,18 +192,21 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       })
+
       return errHub
     }
     case adminConstants.DELETE_HUB_REQUEST: {
       const reqHub = merge({}, state, {
         loading: true
       })
+
       return reqHub
     }
     // eslint-disable-next-line no-case-declarations
     case adminConstants.DELETE_HUB_SUCCESS:
       const hubs = state.hubs.filter(x => x.id !== parseInt(action.payload.id, 10))
       const hub = state.hub.hub.id === parseInt(action.payload.id, 10) ? {} : state.hub
+
       return {
         ...state,
         hub,
@@ -197,12 +218,14 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       })
+
       return errHub
     }
     case adminConstants.GET_DASHBOARD_REQUEST: {
       const reqDash = merge({}, state, {
         loading: true
       })
+
       return reqDash
     }
     case adminConstants.GET_DASHBOARD_SUCCESS:
@@ -217,6 +240,7 @@ export default function admin (state = {}, action) {
         error: { hubs: action.error },
         loading: false
       })
+
       return errDash
     }
 
@@ -224,6 +248,7 @@ export default function admin (state = {}, action) {
       const reqShips = merge({}, state, {
         loading: true
       })
+
       return reqShips
     }
     case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
@@ -241,6 +266,7 @@ export default function admin (state = {}, action) {
         error: { shipments: action.error },
         loading: false
       })
+
       return errShips
     }
 
@@ -267,6 +293,7 @@ export default function admin (state = {}, action) {
       const reqShip = merge({}, state, {
         loading: true
       })
+
       return reqShip
     }
     case adminConstants.ADMIN_GET_SHIPMENT_SUCCESS:
@@ -280,6 +307,7 @@ export default function admin (state = {}, action) {
         error: { shipments: action.error },
         loading: false
       })
+
       return errShip
     }
 
@@ -287,6 +315,7 @@ export default function admin (state = {}, action) {
       const reqConfShip = merge({}, state, {
         loading: true
       })
+
       return reqConfShip
     }
     case adminConstants.CONFIRM_SHIPMENT_SUCCESS: {
@@ -309,6 +338,7 @@ export default function admin (state = {}, action) {
       if (shipment) {
         shipment.status = 'confirmed'
       }
+
       return {
         ...state,
         dashboard: {
@@ -333,12 +363,12 @@ export default function admin (state = {}, action) {
     }
     case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
       const req =
-        state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.shipments && state.shipments.open
+          ? state.shipments.open.filter(x => x.id !== action.payload.id)
           : []
       const dashReq =
-        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open
+          ? state.dashboard.shipments.open.filter(x => x.id !== action.payload.id)
           : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
       const dashFinished =
@@ -351,20 +381,21 @@ export default function admin (state = {}, action) {
       if (shipment) {
         shipment.status = 'finished'
       }
+
       return {
         ...state,
         dashboard: {
           ...state.dashboard,
           shipments: {
             ...state.dashboard.shipments,
-            open: dashFinished,
-            requested: dashReq
+            finished: dashFinished,
+            open: dashReq
           }
         },
         shipments: {
           ...state.shipments,
           finished,
-          requested: req
+          open: req
         },
         shipment: {
           ...state.shipment,
@@ -378,6 +409,7 @@ export default function admin (state = {}, action) {
         error: { shipments: action.error },
         loading: false
       })
+
       return errConfShip
     }
 
@@ -395,6 +427,7 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
           ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
           : []
+
       return {
         ...state,
         dashboard: {
@@ -434,6 +467,7 @@ export default function admin (state = {}, action) {
         error: { schedules: action.error },
         loading: false
       })
+
       return errSched
     }
 
@@ -470,6 +504,7 @@ export default function admin (state = {}, action) {
         .filter(tp => tp.truckingPricing.id !== action.payload.id)
       otps.truckingPricing = action.payload
       tps.push(otps)
+
       return {
         ...state,
         truckingDetail: {
@@ -491,6 +526,7 @@ export default function admin (state = {}, action) {
       const reqTruck = merge({}, state, {
         loading: true
       })
+
       return reqTruck
     }
     case adminConstants.GET_TRUCKING_SUCCESS: {
@@ -498,6 +534,7 @@ export default function admin (state = {}, action) {
         trucking: action.payload.data,
         loading: false
       })
+
       return succTruck
     }
     case adminConstants.GET_TRUCKING_FAILURE: {
@@ -505,6 +542,7 @@ export default function admin (state = {}, action) {
         error: { trucking: action.error },
         loading: false
       })
+
       return errTruck
     }
 
@@ -533,6 +571,7 @@ export default function admin (state = {}, action) {
       const reqVehicleTypes = merge({}, state, {
         loading: true
       })
+
       return reqVehicleTypes
     }
     case adminConstants.GET_VEHICLE_TYPES_SUCCESS: {
@@ -540,6 +579,7 @@ export default function admin (state = {}, action) {
         vehicleTypes: action.payload.data,
         loading: false
       })
+
       return succVehicleTypes
     }
     case adminConstants.GET_VEHICLE_TYPES_FAILURE: {
@@ -547,6 +587,7 @@ export default function admin (state = {}, action) {
         error: { vehicleTypes: action.error },
         loading: false
       })
+
       return errVehicleTypes
     }
 
@@ -554,6 +595,7 @@ export default function admin (state = {}, action) {
       const reqPric = merge({}, state, {
         loading: true
       })
+
       return reqPric
     }
     case adminConstants.GET_PRICINGS_SUCCESS: {
@@ -561,6 +603,7 @@ export default function admin (state = {}, action) {
         pricingData: action.payload.data,
         loading: false
       })
+
       return succPric
     }
     case adminConstants.GET_PRICING_FAILURE: {
@@ -568,6 +611,7 @@ export default function admin (state = {}, action) {
         error: { pricings: action.error },
         loading: false
       })
+
       return errPric
     }
 
@@ -581,6 +625,7 @@ export default function admin (state = {}, action) {
       const { pricings } = state.pricingData
       // eslint-disable-next-line no-underscore-dangle
       delete pricings[action.payload._id]
+
       return {
         ...state,
         pricingData: {
@@ -607,6 +652,7 @@ export default function admin (state = {}, action) {
       const exItineraryPricings = state.itineraryPricings.itineraryPricingData
         .filter(pricingObj => pricingObj.pricing.id !== action.payload.pricing.id)
       exItineraryPricings.push(action.payload)
+
       return {
         ...state,
         pricingData: {
@@ -636,6 +682,7 @@ export default function admin (state = {}, action) {
         serviceCharges: newScs,
         loading: false
       })
+
       return newState
     }
     case adminConstants.UPDATE_SERVICE_CHARGES_FAILURE:
@@ -645,6 +692,7 @@ export default function admin (state = {}, action) {
       const reqClientPric = merge({}, state, {
         loading: true
       })
+
       return reqClientPric
     }
     case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
@@ -658,6 +706,7 @@ export default function admin (state = {}, action) {
         error: { pricings: action.error },
         loading: false
       })
+
       return errClientPric
     }
 
@@ -665,6 +714,7 @@ export default function admin (state = {}, action) {
       const reqRoutePric = merge({}, state, {
         loading: true
       })
+
       return reqRoutePric
     }
     case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
@@ -678,6 +728,7 @@ export default function admin (state = {}, action) {
         error: { pricings: action.error },
         loading: false
       })
+
       return errRoutePric
     }
 
@@ -698,6 +749,7 @@ export default function admin (state = {}, action) {
         error: { clients: action.error },
         loading: false
       })
+
       return errClients
     }
 
@@ -709,6 +761,7 @@ export default function admin (state = {}, action) {
     case adminConstants.NEW_CLIENT_SUCCESS: {
       const { clients } = state
       clients.push(action.payload)
+
       return {
         ...state,
         clients,
@@ -730,6 +783,7 @@ export default function admin (state = {}, action) {
     case adminConstants.NEW_ROUTE_SUCCESS: {
       const itineraries = state.itineraries.filter(x => x.id !== action.payload.id)
       itineraries.push(action.payload)
+
       return {
         ...state,
         itineraries,
@@ -747,6 +801,7 @@ export default function admin (state = {}, action) {
       const reqClient = merge({}, state, {
         loading: true
       })
+
       return reqClient
     }
     case adminConstants.GET_CLIENT_SUCCESS: {
@@ -755,6 +810,7 @@ export default function admin (state = {}, action) {
         client: action.payload.data,
         loading: false
       })
+
       return succClient
     }
     case adminConstants.GET_CLIENT_FAILURE: {
@@ -762,6 +818,7 @@ export default function admin (state = {}, action) {
         error: { client: action.error },
         loading: false
       })
+
       return errClient
     }
 
@@ -769,6 +826,7 @@ export default function admin (state = {}, action) {
       const reqSC = merge({}, state, {
         loading: true
       })
+
       return reqSC
     }
     case adminConstants.GET_SERVICE_CHARGES_SUCCESS: {
@@ -776,6 +834,7 @@ export default function admin (state = {}, action) {
         serviceCharges: action.payload.data,
         loading: false
       })
+
       return succSC
     }
     case adminConstants.GET_SERVICE_CHARGES_FAILURE: {
@@ -783,6 +842,7 @@ export default function admin (state = {}, action) {
         error: { serviceCharges: action.error },
         loading: false
       })
+
       return errSC
     }
 
@@ -790,6 +850,7 @@ export default function admin (state = {}, action) {
       const reqRoutes = merge({}, state, {
         loading: true
       })
+
       return reqRoutes
     }
     case adminConstants.GET_ROUTES_SUCCESS: {
@@ -804,6 +865,7 @@ export default function admin (state = {}, action) {
         error: { routes: action.error },
         loading: false
       })
+
       return errRoutes
     }
 
@@ -811,6 +873,7 @@ export default function admin (state = {}, action) {
       const reqRoute = merge({}, state, {
         loading: true
       })
+
       return reqRoute
     }
     case adminConstants.GET_ROUTE_SUCCESS: {
@@ -825,6 +888,7 @@ export default function admin (state = {}, action) {
         error: { route: action.error },
         loading: false
       })
+
       return errRoute
     }
 
@@ -832,22 +896,29 @@ export default function admin (state = {}, action) {
       const reqHubActivate = merge({}, state, {
         loading: true
       })
+
       return reqHubActivate
     }
-    case adminConstants.ACTIVATE_HUB_SUCCESS:
+    case adminConstants.ACTIVATE_HUB_SUCCESS: {
+      const newHubs = state.hubs.filter(h => h.data.id !== action.payload.data.id)
+      newHubs.push(action.payload)
+
       return {
         ...state,
+        hubs: newHubs,
         hub: {
           ...state.hub,
           hub: action.payload.data
         },
         loading: false
       }
+    }
     case adminConstants.ACTIVATE_HUB_FAILURE: {
       const errHubActivate = merge({}, state, {
         error: { hub: action.error },
         loading: false
       })
+
       return errHubActivate
     }
 
@@ -855,11 +926,13 @@ export default function admin (state = {}, action) {
       const reqDocAction = merge({}, state, {
         loading: true
       })
+
       return reqDocAction
     }
     case adminConstants.DOCUMENT_ACTION_SUCCESS: {
       const docs = state.shipment.documents.filter(x => x.id !== action.payload.id)
       docs.push(action.payload)
+
       return {
         ...state,
         shipment: {
@@ -874,6 +947,7 @@ export default function admin (state = {}, action) {
         error: { documents: action.error },
         loading: false
       })
+
       return errDocAction
     }
 
@@ -884,6 +958,7 @@ export default function admin (state = {}, action) {
     case adminConstants.NEW_HUB_SUCCESS: {
       const newHubs = state.hubs
       newHubs.push(action.payload)
+
       return {
         ...state,
         loading: false,
@@ -903,6 +978,7 @@ export default function admin (state = {}, action) {
     case adminConstants.EDIT_HUB_SUCCESS: {
       const newHubs = state.hubs.filter(x => x.id !== action.payload.hub.id)
       newHubs.push({ data: action.payload.hub, location: action.payload.location })
+
       return {
         ...state,
         loading: false,
@@ -942,6 +1018,7 @@ export default function admin (state = {}, action) {
     case adminConstants.ASSIGN_MANAGER_SUCCESS: {
       const newManagerArr = state.client.managerAssignments
       newManagerArr.push(action.payload)
+
       return {
         ...state,
         client: {
@@ -961,6 +1038,7 @@ export default function admin (state = {}, action) {
       const newTrucking = merge({}, state, {
         truckingDetail: action.payload
       })
+
       return newTrucking
     }
 
@@ -979,6 +1057,7 @@ export default function admin (state = {}, action) {
           loading: false
         }
       }
+
       return {
         ...state,
         itinerary: {
@@ -1008,6 +1087,24 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.EDIT_SHIPMENT_PRICE_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_REQUEST:
+      return state
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_SUCCESS:
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          shipment: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_SHIPMENT_SERVICE_PRICE_FAILURE:
       return {
         ...state,
         error: { route: action.error },
@@ -1054,6 +1151,7 @@ export default function admin (state = {}, action) {
     case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS: {
       const newCharges = state.hub.charges.filter(c => c.id !== action.payload.id)
       newCharges.push(action.payload)
+
       return {
         ...state,
         hub: {
@@ -1075,6 +1173,7 @@ export default function admin (state = {}, action) {
     case adminConstants.EDIT_CUSTOMS_FEES_SUCCESS: {
       const newCustoms = state.hub.customs.filter(c => c.id !== action.payload.id)
       newCustoms.push(action.payload)
+
       return {
         ...state,
         hub: {
@@ -1111,6 +1210,7 @@ export default function admin (state = {}, action) {
     case adminConstants.UPLOAD_HUB_IMAGE_SUCCESS:
       const hubsArr = state.hubs.filter(h => h.id !== action.payload.id)
       hubsArr.push(action.payload)
+
       return {
         ...state,
         hub: {
@@ -1146,6 +1246,7 @@ export default function admin (state = {}, action) {
       return state
     case adminConstants.DELETE_CLIENT_SUCCESS: {
       const clients = state.clients.filter(client => client.id !== action.payload)
+
       return {
         ...state,
         clients,

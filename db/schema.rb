@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180614143412) do
+ActiveRecord::Schema.define(version: 20180702132909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.integer "detail_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "edited_price_id"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -142,6 +143,7 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.string "base"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "tenant_id"
   end
 
   create_table "customs_fees", force: :cascade do |t|
@@ -179,6 +181,13 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name_1", "name_2", "name_3", "name_4"], name: "index_geometries_on_name_1_and_name_2_and_name_3_and_name_4", unique: true
+  end
+
+  create_table "hub_truck_type_availabilities", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "truck_type_availability_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -491,10 +500,10 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
@@ -570,6 +579,14 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.datetime "closing_date"
   end
 
+  create_table "truck_type_availabilities", force: :cascade do |t|
+    t.string "load_type"
+    t.string "carriage"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
@@ -584,21 +601,27 @@ ActiveRecord::Schema.define(version: 20180614143412) do
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
-  create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "courier_id"
+  create_table "trucking_pricing_scopes", force: :cascade do |t|
     t.string "load_type"
+    t.string "cargo_class"
+    t.string "carriage"
+    t.integer "courier_id"
+    t.string "truck_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_pricings", force: :cascade do |t|
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
-    t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
-    t.string "cargo_class"
     t.string "identifier_modifier"
+    t.integer "trucking_pricing_scope_id"
   end
 
   create_table "user_locations", force: :cascade do |t|

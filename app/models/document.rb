@@ -1,26 +1,15 @@
 # frozen_string_literal: true
 
 class Document < ApplicationRecord
+  include AwsConfig
   belongs_to :shipment
   belongs_to :user
   belongs_to :tenant
 
   def self.new_upload(file, shipment, type, user)
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
     file_name = file.original_filename.gsub(/[^0-9A-Za-z.\-]/, "_")
-    obj_key = "documents/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
-
-    s3.put_object(
-      bucket:       "imcdev",
-      key:          obj_key,
-      body:         file.tempfile,
-      content_type: file.content_type,
-      acl:          "private"
-    )
+    obj_key = self.obj_key(shipment, type, file_name)
+    upload(bucket: "imcdev", key: obj_key, file: file.tempfile, content_type: file.content_type, acl: "private")
 
     shipment.documents.create!(
       url:         obj_key,
@@ -33,21 +22,10 @@ class Document < ApplicationRecord
   end
 
   def self.new_upload_backend(file, shipment, type, user)
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
     file_name = File.basename(file.path)
-    obj_key = "documents/" + shipment["uuid"] + "/" + type + "/" + file_name
+    obj_key = self.obj_key(shipment, type, file_name)
+    upload(bucket: "imcdev", key: obj_key, file: file, content_type: "application/pdf", acl: "private")
 
-    s3.put_object(
-      bucket:       "imcdev",
-      key:          obj_key,
-      body:         file,
-      content_type: "application/pdf",
-      acl:          "private"
-    )
     Document.create!(
       url:      obj_key,
       shipment: shipment,
@@ -59,39 +37,16 @@ class Document < ApplicationRecord
   end
 
   def get_signed_url
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
-    signer = Aws::S3::Presigner.new(client: s3)
+    @url = get_file_url(url)
+  end
 
-    @url = signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: url)
+  def self.obj_key(shipment, type, file_name)
+     "documents/" + shipment.tenant.subdomain + "/shipments/" + shipment["uuid"] + "/" + type + "/" + Time.now.to_i.to_s + "-" + file_name
   end
 
   def self.delete_document(id)
-    @doc = Document.find(id)
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
-    s3.delete_object(bucket: "imcdev", key: @doc.url)
-
-    @doc.delete
-  end
-
-  def self.delete_all
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            ENV["AWS_REGION"]
-    )
-    @docs = Document.all
-    @docs.each do |d|
-      s3.delete_object(bucket: "imcdev", key: d.url)
-      d.delete
-    end
+    doc = Document.where(id: id)
+    delete_documents(doc) unless doc.empty?
   end
 
   def self.get_documents_for_array(arr)

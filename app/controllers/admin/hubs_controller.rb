@@ -1,63 +1,41 @@
 # frozen_string_literal: true
 
-class Admin::HubsController < ApplicationController
+class Admin::HubsController < Admin::AdminBaseController
   include ExcelTools
   include ItineraryTools
   include Response
-  include DocumentTools
-  before_action :require_login_and_role_is_admin
+  include PricingTools
+  include AwsConfig
+
+  before_action :for_create, only: :create
 
   def index
     @hubs = Hub.prepped(current_user)
-
     response_handler(@hubs)
   end
 
   def create
-    new_loc = Location.create_and_geocode(params[:location].as_json)
-    new_nexus = Location.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", "nexus")
-    hub = params[:hub].as_json
-    hub["tenant_id"] = current_user.tenant_id
-    hub["location_id"] = new_loc.id
-    hub["nexus_id"] = new_nexus.id
-    new_hub = Hub.create!(hub)
-    response_handler(data: new_hub, location: new_loc)
+    response_handler(data: create_hub, location: @new_loc)
   end
 
   def update_mandatory_charges
-    hub = Hub.find(params[:id])
-    nmc = params[:mandatoryCharge].as_json
-    nmc.delete("id")
-    nmc.delete("created_at")
-    nmc.delete("updated_at")
-    new_mandatory_charge = MandatoryCharge.find_by(nmc)
-    hub.mandatory_charge = new_mandatory_charge
-    hub.save!
-    response_handler(hub: hub, mandatoryCharge: hub.mandatory_charge)
+    response_handler(
+      hub:             create_hub_mandatory_charge.as_options_json,
+      mandatoryCharge: hub.mandatory_charge
+    )
   end
 
   def show
     hub = Hub.find(params[:id])
-    related_hubs = hub.nexus.hubs
-    location = hub.location
-    layovers = hub.layovers.limit(20)
-    routes = hub.stops.map(&:itinerary).map do |itinerary|
-      itinerary.as_options_json(methods: :routes)
-    end
-    customs = hub.customs_fees
-    charges = hub.local_charges
-    mandatory_charges = hub.mandatory_charge
-    # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
-    # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     resp = {
-      hub:             hub,
-      routes:          routes,
-      relatedHubs:     related_hubs,
-      schedules:       layovers,
-      charges:         charges,
-      customs:         customs,
-      location:        hub.location,
-      mandatoryCharges: mandatory_charges
+      hub:              hub.as_options_json,
+      routes:           hub_route_map(hub),
+      relatedHubs:      hub.nexus.hubs,
+      schedules:        hub.layovers.limit(20),
+      charges:          hub.local_charges,
+      customs:          hub.customs_fees,
+      location:         hub.location,
+      mandatoryCharges: hub.mandatory_charge
     }
     response_handler(resp)
   end
@@ -70,7 +48,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-    response_handler(hub)
+    response_handler(data: hub.as_options_json, location: hub.location.to_custom_hash)
   end
 
   def delete
@@ -81,18 +59,9 @@ class Admin::HubsController < ApplicationController
 
   def update_image
     hub = Hub.find(params[:hub_id])
-    file = params[:file]
-    s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
-      region:            "eu-central-1"
-    )
-    objKey = "images/" + hub.tenant_id.to_s + "/" + file.original_filename
-    awsurl = "https://assets.itsmycargo.com/" + objKey
-    s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, content_type: file.content_type, acl: "public-read")
-    hub.photo = awsurl
+    hub.photo = save_on_aws(hub.tenant_id)
     hub.save!
-    response_handler(hub)
+    response_handler(hub.as_options_json)
   end
 
   def update
@@ -100,19 +69,18 @@ class Admin::HubsController < ApplicationController
     location = hub.location
     new_loc = params[:location].as_json
     new_hub = params[:data].as_json
+    country_name = new_loc.delete("country")
+    country = Country.find_by_name(country_name)
+    new_loc[:country_id] = country.id
     hub.update_attributes(new_hub)
     location.update_attributes(new_loc)
-    response_handler(hub: hub, location: location)
+    response_handler(hub: hub.as_options_json, location: location)
   end
 
   def overwrite
     if params[:file]
       req = { "xlsx" => params[:file] }
       resp = overwrite_hubs(req)
-      # resp = []
-      # hubs.each do |po|
-      #   resp << {data: po, location: po.location}
-      # end
       response_handler(resp)
     else
       response_handler(false)
@@ -121,10 +89,53 @@ class Admin::HubsController < ApplicationController
 
   private
 
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
+  def for_create
+    @new_loc = geo_location
+    @new_nexus = nexus
+  end
+
+  def hub_hash
+    hub = params[:hub].as_json
+    hub[:tenant_id] = current_user.tenant_id
+    hub[:location_id] = @new_loc.id
+    hub[:nexus_id] = @new_nexus.id
+    hub
+  end
+
+  def create_hub
+    Hub.create!(hub_hash)
+  end
+
+  def geo_location
+    Location.create_and_geocode(params[:location].as_json)
+  end
+
+  def nexus
+    Location.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", "nexus")
+  end
+
+  def new_mandatory_charge
+    nmc = params[:mandatoryCharge].as_json
+    MandatoryCharge.find_by(nmc.except("id", "created_at", "updated_at"))
+  end
+
+  def create_hub_mandatory_charge
+    hub = Hub.find(params[:id])
+    hub.mandatory_charge = new_mandatory_charge
+    hub.save!
+    hub
+  end
+
+  def save_on_aws(tenant_id)
+    file = params[:file]
+    obj_key = "images/" + tenant_id.to_s + "/" + file.original_filename
+    save_asset(file, obj_key)
+    asset_url + obj_key
+  end
+
+  def hub_route_map(hub)
+    hub.stops.map(&:itinerary).map do |itinerary|
+      itinerary.as_options_json(methods: :routes)
     end
   end
 end

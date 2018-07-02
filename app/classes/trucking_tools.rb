@@ -2,6 +2,7 @@
 
 module TruckingTools
   include MongoTools
+  extend self
 
   def calculate_trucking_price(pricing, cargo, _direction, km)
     fees = {}
@@ -13,14 +14,13 @@ module TruckingTools
     pricing[:fees].each do |k, fee|
       if fee[:rate_basis] != "PERCENTAGE"
         results = fare_calculator(k, fee, cargo, km)
-        
         fees[k] = results
       else
         total_fees[k] = fee
       end
     end
     fees[:rate] = fare_calculator("rate", pricing[:rate], cargo, km)
-
+    
     fees.each do |_k, fee|
       next unless fee
       if !result["value"]
@@ -30,7 +30,6 @@ module TruckingTools
       end
       result["currency"] = fee[:currency]
     end
-
     extra_fees_results = {}
 
     total_fees.each do |tk, tfee|
@@ -82,15 +81,20 @@ module TruckingTools
     when "PER_CONTAINER"
       return { currency: fee[:currency], value: fee[:value] * cargo["number_of_items"], key: key }
     when "PER_CONTAINER_KM"
-      value = (fee[:km] * km) + fee[:unit]
+      value =( (fee[:km] * km) + fee[:unit]) * cargo["number_of_items"]
       min = fee[:min_value] || 0
       final_value = [min, value].max
+      
       return { currency: fee[:currency], value: final_value, key: key }
     when "PER_CBM_TON"
       cbm_value = cargo["volume"] * fee[:cbm]
       ton_value = (cargo["weight"] / 1000) * fee[:ton]
       min = fee[:min_value] || 0
       return_value = [ton_value, cbm_value, min].max
+    when "PER_CBM"
+      cbm_value = cargo["volume"] * (fee[:value] || fee[:cbm])
+      min = fee[:min_value] || 0
+      return_value = [cbm_value, min].max
       return { currency: fee[:currency], value: return_value, key: key }
     when "PER_CBM_KG"
       cbm_value = cargo["volume"] * fee[:cbm]
@@ -136,6 +140,11 @@ module TruckingTools
           rate["rate"]["min_value"] = rate["min_value"]
           return { rate: rate["rate"], fees: trucking_pricing["fees"] }
         end
+      end
+      if cargo_values["weight"] > trucking_pricing["rates"]["kg"].last["max_kg"].to_d
+        rate = trucking_pricing["rates"]["kg"].last
+        rate["rate"]["min_value"] = rate["min_value"]
+        return { rate: rate["rate"], fees: trucking_pricing["fees"] }
       end
     when "cbm"
       trucking_pricing["rates"]["cbm"].each do |rate|
@@ -197,43 +206,7 @@ module TruckingTools
     }
     # cargo_total_items = cargos.map {|c| c.quantity}.sum
     cargos.each do |cargo|
-      if trucking_pricing.load_meterage && trucking_pricing.load_meterage["ratio"]
-        if cargo.is_a? AggregatedCargo
-          load_meterage = (cargo.volume / 1.3) / 2.4
-          load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
-          trucking_chargeable_weight = load_meter_weight > cargo.weight ? load_meter_weight : cargo.weight
-          cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight
-          cargo_object["non_stackable"]["volume"] += cargo.volume
-        else
-          if (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"]) || !cargo.stackable
-            load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24_000
-            load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
-            trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
-            cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-            cargo_object["non_stackable"]["volume"] += cargo.volume * cargo.quantity
-            cargo_object["non_stackable"]["number_of_items"] += cargo.quantity
-          else
-            cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
-            cbm_weight = cargo.volume * cbm_ratio
-            trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-            cargo_object["stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-            cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
-            cargo_object["stackable"]["number_of_items"] += cargo.quantity
-          end
-        end
-      else
-        if cargo.is_a? AggregatedCargo
-          cargo_object["non_stackable"]["weight"] += cargo.weight
-          cargo_object["non_stackable"]["volume"] += cargo.volume
-        else
-          cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
-          cbm_weight = cargo.volume * cbm_ratio
-          trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-          cargo_object["stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-          cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
-          cargo_object["stackable"]["number_of_items"] += cargo.quantity
-        end
-      end
+      determine_load_meterage(trucking_pricing, cargo_object, cargo)
     end
 
     cargo_object
@@ -253,7 +226,7 @@ module TruckingTools
     direction = carriage == "pre" ? "export" : "import"
     cargo_object = trucking_pricing.load_type == "container" ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
     trucking_pricings = {}
-
+    
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
@@ -262,15 +235,82 @@ module TruckingTools
       fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km) if tp
     end
     total = { value: 0, currency: "" }
-    
     fees.each do |_key, trucking_fee|
-      unless trucking_fee.empty?
-        total[:value] += trucking_fee[:value]
-        total[:currency] = trucking_fee[:currency]
-      end
+      next if trucking_fee.empty?
+
+      total[:value] += trucking_fee[:value]
+      total[:currency] = trucking_fee[:currency]
+    end
+    if total[:currency] == "" && total[:value] == 0
+      total[:currency] = trucking_pricing.tenant.currency
     end
 
     fees[:total] = total
     fees
+  end
+
+  def determine_load_meterage(trucking_pricing, cargo_object, cargo)
+    
+    if trucking_pricing.load_meterage && trucking_pricing.load_meterage["ratio"]
+      if cargo.is_a? AggregatedCargo
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+      else
+        if (trucking_pricing.load_meterage["height_limit"] && 
+          (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"])) || 
+          (!cargo.stackable && trucking_pricing.load_meterage["height_limit"])
+          calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
+        elsif (trucking_pricing.load_meterage["area_limit"] &&
+          ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) > trucking_pricing.load_meterage["area_limit"])) || 
+          (!cargo.stackable && trucking_pricing.load_meterage["area_limit"])
+          calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
+        else
+          calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+        end
+      end
+    else
+      if cargo.is_a? AggregatedCargo
+        cargo_object["non_stackable"]["weight"] += cargo.weight
+        cargo_object["non_stackable"]["volume"] += cargo.volume
+      else
+        calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+      end
+    end
+    
+    cargo_object
+  end
+
+  def calc_aggregated_cargo_load_meterage(trucking_pricing, cargo_object, cargo)
+    load_meterage = (cargo.volume / 1.3) / 2.4
+    load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
+    trucking_chargeable_weight = load_meter_weight > cargo.weight ? load_meter_weight : cargo.weight
+    cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight
+    cargo_object["non_stackable"]["volume"] += cargo.volume
+  end
+
+  def calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
+    load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24_000
+    load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
+    trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
+    cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
+    cargo_object["non_stackable"]["volume"] += cargo.volume * cargo.quantity
+    cargo_object["non_stackable"]["number_of_items"] += cargo.quantity
+  end
+
+  def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
+    load_meter_weight = cargo.volume * trucking_pricing.load_meterage["ratio"]
+    trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
+    cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
+    cargo_object["non_stackable"]["volume"] += cargo.volume * cargo.quantity
+    cargo_object["non_stackable"]["number_of_items"] += cargo.quantity
+  end
+
+  def calc_cargo_cbm_ratio(trucking_pricing, cargo_object, cargo)
+    cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
+    cbm_weight = cargo.volume * cbm_ratio
+    quantity = cargo.try(:quantity) || 1
+    trucking_chargeable_weight = [cbm_weight, cargo.try(:payload_in_kg) || cargo.weight].max
+    cargo_object["stackable"]["weight"] += trucking_chargeable_weight * quantity
+    cargo_object["stackable"]["volume"] += cargo.volume * quantity
+    cargo_object["stackable"]["number_of_items"] += quantity
   end
 end

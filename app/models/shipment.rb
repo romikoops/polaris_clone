@@ -71,6 +71,11 @@ class Shipment < ApplicationRecord
   # Scopes
   scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
   scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
+  scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
+  scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
+  scope :open, -> { where(status: %w(in_progress confirmed)) }
+  scope :finished, -> { where(status: "finished") }
+
   STATUSES.each do |status|
     scope status, -> { where(status: status) }
   end
@@ -244,7 +249,20 @@ class Shipment < ApplicationRecord
   def as_options_json(options={})
     new_options = options.reverse_merge(
       methods: %i(selected_offer mode_of_transport),
-      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
+      include: [
+        :destination_nexus,
+        :origin_nexus,
+        {
+          destination_hub: {
+            include: { location: { only: %i(geocoded_address latitude longitude) } }
+          }
+        },
+        {
+          origin_hub: {
+            include: { location: { only: %i(geocoded_address latitude longitude) } }
+          }
+        }
+      ]
     )
     as_json(new_options)
   end

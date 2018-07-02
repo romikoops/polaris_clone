@@ -1508,7 +1508,7 @@ class TenantSeeder
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
         logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
-        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+        background: "https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg"
       },
       addresses: {
         main:"Brooktorkai 7, 20457 Hamburg, Germany"
@@ -1695,7 +1695,7 @@ class TenantSeeder
       theme: {
         colors: {
           primary: "#2458AB",
-          secondary: "#FFFFFF",
+          secondary: "#5496f9",
           brightPrimary: "#3586BA",
           brightSecondary: "#1C98FC"
         },
@@ -1805,7 +1805,7 @@ class TenantSeeder
   def self.perform(filter = {})
     puts "Seeding Tenants..."
     TENANT_DATA.each do |tenant_attr|
-      next unless filter.all? { |k, v| tenant_attr[k] == v }
+      next unless should_perform?(tenant_attr, filter)
 
       puts "  - #{tenant_attr[:subdomain]}..."
       other_data = tenant_attr.delete(:other_data) || {}
@@ -1823,44 +1823,51 @@ class TenantSeeder
 
   private
 
+  def self.should_perform?(tenant_attr, filter)
+    filter.all? do |filter_key, filter_value|\
+      tenant_attr_value = tenant_attr[filter_key]
+
+      tenant_attr_value == filter_value ||
+      (filter_value.is_a?(Array) && filter_value.include?(tenant_attr_value))
+    end
+  end
+
   # Cargo Item Types
 
   CARGO_ITEM_TYPES = CargoItemType.all
   CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
 
   def self.update_cargo_item_types!(tenant, cargo_item_types_attr)
-    if cargo_item_types_attr.nil?
-      puts "No cargo item types set for tenant #{tenant.subdomain}"
-      return
-    end
+    return if cargo_item_types_attr.nil?
 
     if cargo_item_types_attr == :all
       CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     if cargo_item_types_attr == :no_dimensions
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+        TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     tenant.tenant_cargo_item_types.destroy_all
     cargo_item_types_attr.each do |cargo_item_type_attr|
-      cargo_item_type = if cargo_item_type_attr.is_a? Hash
-                          CargoItemType.find_by(cargo_item_type_attr)
-                        else
-                          CargoItemType.find_by(
-                            category: cargo_item_type_attr,
-                            dimension_x: nil,
-                            dimension_y: nil,
-                            area: nil
-                          )
-                        end
-      TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+      cargo_item_type =
+        if cargo_item_type_attr.is_a? Hash
+          CargoItemType.find_by(cargo_item_type_attr)
+        else
+          CargoItemType.find_by(
+            category: cargo_item_type_attr,
+            dimension_x: nil,
+            dimension_y: nil,
+            area: nil
+          )
+        end
+      TenantCargoItemType.find_or_create_by(tenant: tenant, cargo_item_type: cargo_item_type)
     end
   end
 
@@ -1869,8 +1876,6 @@ class TenantSeeder
     if incoterm_array
       incoterm_array.each do |code|
         incoterm = Incoterm.find_by_code(code)
-        awesome_print code
-        awesome_print incoterm
         tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
       end
     else

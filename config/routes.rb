@@ -27,7 +27,8 @@ Rails.application.routes.draw do
       post 'trucking/trucking_city_pricings/:id', to: 'trucking#overwrite_city_trucking_by_hub'
       post 'trucking/:id/edit', to: 'trucking#edit'
       post 'trucking/download', to: 'trucking#download'
-
+      post 'currencies/toggle_mode', to: 'currencies#toggle_mode'
+      post 'currencies/set_rates', to: 'currencies#set_rates'
       resources :hubs, only: %i[index show create update] do
         patch 'set_status'
       end
@@ -75,6 +76,8 @@ Rails.application.routes.draw do
       post 'discounts/users/:user_id', to: 'discounts#create_multiple', as: :discounts_create_multiple
       post 'shipments/:id/edit_price', to: 'shipments#edit_price'
       post 'shipments/:id/edit_time', to: 'shipments#edit_time'
+      post 'shipments/:id/edit_service_price', to: 'shipments#edit_service_price'
+
       resources :schedules, only: %i[index show destroy]
       post 'schedules/overwrite/:id', to: 'schedules#schedules_by_itinerary'
       post 'train_schedules/process_csv',
@@ -143,6 +146,7 @@ Rails.application.routes.draw do
 
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
+   
 
     get 'search/hscodes/:query' => 'search#search_hs_codes'
     post 'super_admins/new_demo' => 'super_admins#new_demo_site'

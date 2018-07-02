@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w[speedtrans speedtrans-sandbox]
@@ -10,35 +9,36 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.shipper.first
-  # tenant.itineraries.destroy_all
-  # tenant.local_charges.destroy_all
-  # tenant.customs_fees.destroy_all
-  # tenant.trucking_pricings.delete_all
-  # tenant.hubs.destroy_all
-  # # #   # # # # #Overwrite hubs from excel sheet
+  tenant.itineraries.destroy_all
+  tenant.local_charges.destroy_all
+  tenant.customs_fees.destroy_all
+  tenant.trucking_pricings.delete_all
+  HubTrucking.where(hub_id: tenant.hubs).delete_all
+  tenant.hubs.destroy_all
+  # #   # # # # #Overwrite hubs from excel sheet
   puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/st_hubs.xlsx")
+  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__hubs.xlsx")
   req = { 'xlsx' => hubs }
   overwrite_hubs(req, shipper)
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/st_freight_rates.xlsx")
+  public_pricings = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
   overwrite_freight_rates(req, shipper, true)
 
   # # # # #   # # # # # Overwrite public pricings from excel sheet
 
   # puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/st_local_charges.xlsx")
+  local_charges = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__local_charges.xlsx")
   req = { 'xlsx' => local_charges }
-  overwrite_local_charges(req, shipper)
-
+  ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
 
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/st_trucking_hamburg_port.xlsx")
+  trucking = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 
   # admin_sea = tenant.users.new(
   #   role: Role.find_by_name('admin'),

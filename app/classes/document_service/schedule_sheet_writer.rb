@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module DocumentService
   class ScheduleSheetWriter
+    include AwsConfig
     include WritingTool
     attr_reader :tenant, :options, :trips, :worksheet, :directory, :workbook, :worksheet, :itinerary, :filename
 

@@ -143,14 +143,14 @@ class UserAccount extends Component {
         {loadingScreen}
         {menu}
         <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
-        <div className="layout-row flex layout-wrap layout-align-center">
+        <div className="layout-row flex layout-wrap layout-align-center-start">
           <NavBar className={`${styles.top_margin}`} />
           <div
             className={`flex-95 ${defs.spacing_md_bottom} ${
               styles.top_margin
-            } layout-row flex-none`}
+            } layout-row flex-none `}
           >
-            <div className="layout-row flex-100 ">
+            <div className="layout-row flex-100 height_100">
               <Switch className="flex">
                 <Route
                   exact

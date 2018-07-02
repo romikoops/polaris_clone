@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module DocumentService
   class TruckingWriter
+    include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hub, :target_load_type, :filename, :directory, :header_values,
       :workbook, :unfiltered_results, :carriage_reducer, :results_by_truck_type, :dir_fees,

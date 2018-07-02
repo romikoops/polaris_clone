@@ -2,23 +2,23 @@
 
 class Admin::LocalChargesController < ApplicationController
   include ExcelTools
-  include DocumentTools
+
   def edit
     data = params[:data].as_json
     id = data["id"]
     data.delete("id")
-    LocalCharge.find(id).update_attributes(data)
-    data["id"] = id
-    response_handler(data)
+    local_charge = LocalCharge.find(id)
+    local_charge.update_attributes(fees: data["fees"])
+    response_handler(local_charge)
   end
 
   def edit_customs
     data = params[:data].as_json
     id = data["id"]
     data.delete("id")
-    CustomsFee.find(id).update_attributes(data)
-    data["id"] = id
-    response_handler(data)
+    customs_fee = CustomsFee.find(id)
+    customs_fee.update_attributes(fees: data["fees"])
+    response_handler(customs_fee)
   end
 
   def download_local_charges
@@ -31,7 +31,7 @@ class Admin::LocalChargesController < ApplicationController
   def overwrite
     if params[:file]
       req = { "xlsx" => params[:file] }
-      resp = overwrite_local_charges(req, current_user)
+      resp = ExcelTool::OverwriteLocalCharges.new(params: req, user: current_user).perform
 
       response_handler(resp)
     else

@@ -2,6 +2,9 @@ import * as React from 'react'
 import { mount, shallow } from 'enzyme'
 import { theme, shipmentData, user, identity } from '../../mocks'
 
+jest.mock('../../helpers', () => ({
+  switchIcon: x => x
+}))
 jest.mock('../../constants', () => {
   const format = () => 19
 
@@ -13,7 +16,7 @@ jest.mock('../../constants', () => {
 })
 jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
-  Tooltip: () => <div />
+  Tooltip: ({ props }) => <div {...props} />
 }))
 
 // eslint-disable-next-line
@@ -21,8 +24,14 @@ import { MessageShipmentData } from './MessageShipmentData'
 
 const createWrapper = propsInput => mount(<MessageShipmentData {...propsInput} />)
 
+const editedShipment = {
+  ...shipmentData.shipment,
+  origin_hub: { name: 'FOO_ORIGIN_HUB' },
+  destination_hub: { name: 'FOO_DESTINATION_HUB' }
+}
 const editedShipmentData = {
   ...shipmentData,
+  shipment: editedShipment,
   hubs: {
     startHub: 'FOO_START_HUB',
     endHub: 'FOO_END_HUB'

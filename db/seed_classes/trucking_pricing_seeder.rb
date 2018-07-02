@@ -4,48 +4,50 @@ class TruckingPricingSeeder
   extend ExcelTools
   DIRECTIONS = %w[import export].freeze
 
+  DUMMY_DATA_PATH = "#{Rails.root}/db/dummydata"
+
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
-      puts "Deleting trucking pricings for #{tenant.name}..."
-      tenant.trucking_pricings.delete_all
-      HubTrucking.where(id: tenant.hub_truckings.ids).delete_all
-
-      puts "Seeding trucking pricings for #{tenant.name}..."
+      delete_previous_trucking_pricings(tenant)
+      puts "Seeding trucking pricings for #{tenant.name.light_blue}:"
 
       shipper = tenant.users.shipper.first
-      hub = tenant.hubs.find_by_name('Shanghai Port')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
-      hub = tenant.hubs.find_by_name('Shanghai Port')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port_ftl.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+      Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"].each do |file_path|
+        file_name = File.basename(file_path, ".xlsx")
+        subdomain, sheet_type, hub_name = *file_name.split("__")
+          
+        trucking_load_type_match_data = sheet_type.match(/trucking_(.)/)
+        next if trucking_load_type_match_data.nil?
+        trucking_load_type = trucking_load_type_match_data[1]
 
-      hub = tenant.hubs.find_by_name('Shanghai Airport')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_shanghai_port.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+        if hub_name.nil?
+          puts "(!) No hub supplied for trucking sheet #{file_name} (!)".red
+          next
+        end
+                
+        formatted_hub_name = hub_name.split("_").map(&:capitalize).join(" ")
+        hub = Hub.find_by(tenant: tenant, name: formatted_hub_name)
+        if hub.nil?
+          puts "(!) Hub '#{formatted_hub_name}' not found for tenant '#{tenant.subdomain}' (!)".red
+          next
+        end
 
-      puts 'City rates done'
+        puts "  - #{formatted_hub_name}..."
 
-      hub = tenant.hubs.find_by_name('Gothenburg Port')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-      puts 'Zip rates done'
-
-      hub = tenant.hubs.find_by_name('Gothenburg Port')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_gothenburg_port_ftl.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-      puts 'All rates done'
-
-      hub = tenant.hubs.find_by_name('Stockholm Airport')
-      trucking = File.open("#{Rails.root}/db/dummydata/new_gc_trucking_stockholm_airport.xlsx")
-      req = { 'xlsx' => trucking }
-      overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+        req = { 'xlsx' => File.open(file_path) }
+        ExcelTool::OverrideTruckingRateByHub.new(
+          params: req, _user: shipper, hub_id: hub.id
+        ).perform
+      end
     end
+  end
+
+  private
+
+  def self.delete_previous_trucking_pricings(tenant)
+    puts "Deleting trucking pricings for #{tenant.name.light_blue}..."
+    tenant.trucking_pricings.delete_all
+    HubTrucking.where(id: tenant.hub_truckings.ids).delete_all    
   end
 end

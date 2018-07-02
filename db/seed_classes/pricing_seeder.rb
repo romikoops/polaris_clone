@@ -2,39 +2,73 @@
 
 class PricingSeeder
   extend ExcelTools
+  DUMMY_DATA_PATH = "#{Rails.root}/db/dummydata"
 
   def self.perform(filter = {})
     Tenant.where(filter).each do |tenant|
-      shipper = tenant.users.second
-      tenant.itineraries.destroy_all
-      tenant.stops.destroy_all
-      tenant.trips.destroy_all
-      tenant.layovers.destroy_all
-      tenant.hubs.destroy_all
-      # Location.where(location_type: 'nexus')
+      shipper = tenant.users.shipper.first
+      
+      destroy_data_for_tenant(tenant)
 
-      MandatoryCharge.create_all!
+      puts "Seeding hubs, itineraries, layovers and pricings for #{tenant.name.light_blue}:"
+      
+      request_hash = Dir["#{DUMMY_DATA_PATH}/#{tenant.subdomain}/*.xlsx"]
+        .each_with_object({}) do |file_path, obj|
+          file_name = File.basename(file_path, ".xlsx")
+          subdomain, sheet_type, other_info = *file_name.split("__")
+          
+          if %(hubs freight_rates local_charges).include?(sheet_type)
+            obj[sheet_type] = { 'xlsx' => File.open(file_path) }
+          end
+        end
+        
 
-      # # Overwrite hubs from excel sheet
-      puts '# Overwrite hubs from excel sheet'
-      hubs = File.open("#{Rails.root}/db/dummydata/gc_hubs.xlsx")
-      req = { 'xlsx' => hubs }
-      overwrite_hubs(req, shipper)
 
-      ### Overwrite dedicated pricings from excel sheet.
-      ### If dedicated == true, shipper.id is automatically inserted.
-
-      puts '# Overwrite freight rates (fcl and lcl) from excel sheet'
-      public_pricings = File.open("#{Rails.root}/db/dummydata/gc_freight_rates.xlsx")
-      req = { 'xlsx' => public_pricings }
-      overwrite_freight_rates(req, shipper, true)
-
-      # puts "# Overwrite Local Charges From Sheet"
-      local_charges = File.open("#{Rails.root}/db/dummydata/gc_local_charges.xlsx")
-      req = { 'xlsx' => local_charges }
-      overwrite_local_charges(req, shipper)
-      # Overwrite trucking data from excel sheet
-
+      seed_hubs(request_hash["hubs"], shipper)
+      seed_freight_rates(request_hash["freight_rates"], shipper)
+      seed_local_charges(request_hash["local_charges"], shipper)
     end
+  end
+
+  private
+
+  def self.seed_hubs(req, shipper)
+    if req.nil?
+      puts "  - No hubs sheet".red
+      return
+    end
+
+    puts "  - Seeding hubs..."           
+    overwrite_hubs(req, shipper)              
+  end
+
+  def self.seed_freight_rates(req, shipper)
+    if req.nil?
+      puts "  - No freight rates charges sheet".red
+      return
+    end
+
+    puts "  - Seeding freight rates (fcl and lcl)..."
+    overwrite_freight_rates(req, shipper, true)
+  end
+
+  def self.seed_local_charges(req, shipper)
+    if req.nil?
+      puts "  - No local_charges charges sheet".red
+      return
+    end
+
+    puts "  - Seeding local charges..."
+    ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
+  end
+
+  def self.destroy_data_for_tenant(tenant)
+    puts "Destroying hubs, itineraries, layovers and pricings for #{tenant.name.light_blue}..."
+
+    tenant.itineraries.destroy_all
+    tenant.stops.destroy_all
+    tenant.trips.destroy_all
+    tenant.layovers.destroy_all
+    tenant.hubs.destroy_all
   end
 end

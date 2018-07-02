@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
-import { TextHeading } from '../../TextHeading/TextHeading'
 import { Tooltip } from '../../Tooltip/Tooltip'
-import { WorldMap as WMap } from '../DashboardMap/WorldMap'
-import { AdminRouteList as ARouteList } from '../AdminRouteList'
+import { WorldMap } from '../DashboardMap/WorldMap'
+import { AdminRouteList } from '../AdminRouteList'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
@@ -88,7 +87,6 @@ export class AdminSearchableRoutes extends Component {
       showTooltip,
       tooltip,
       icon,
-      heading,
       hideFilters,
       tile
     } = this.props
@@ -104,9 +102,9 @@ export class AdminSearchableRoutes extends Component {
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
-                <div className="flex-none">
+                {/* <div className="flex-none">
                   <TextHeading theme={theme} size={2} text={heading} />
-                </div>
+                </div> */}
                 {icon && showTooltip ? (
                   <Tooltip theme={theme} icon={icon} toolText={tooltip} />
                 ) : (
@@ -126,19 +124,21 @@ export class AdminSearchableRoutes extends Component {
             </div> : '' }
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
-          <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
+          <div className="layout-row flex-95 layout-align-space-between-stretch layout-wrap">
 
             <div className="layout-padding flex-100">
-              <WMap
+              <WorldMap
                 itineraries={itineraries}
                 hoverId={hoverId}
                 height={250}
+                theme={theme}
               />
             </div><div className="layout-padding flex-100">
-              <ARouteList
+              <AdminRouteList
                 itineraries={itineraries}
                 limit={limit}
                 tile={tile}
+                theme={theme}
                 handleClick={itinerary => this.handleClick(itinerary)}
                 hoverFn={e => this.handleRouteHover(e)}
               />
@@ -175,7 +175,6 @@ AdminSearchableRoutes.propTypes = {
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
   tooltip: PropTypes.string,
-  heading: PropTypes.string,
   hideFilters: PropTypes.bool,
   tile: PropTypes.bool
 }
@@ -189,7 +188,6 @@ AdminSearchableRoutes.defaultProps = {
   icon: '',
   tooltip: '',
   showTooltip: false,
-  heading: 'Routes',
   hideFilters: false,
   tile: false
 }

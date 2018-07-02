@@ -90,7 +90,7 @@ export class AdminNav extends Component {
         tooltip={li.tooltip}
       />
     ))
-    if (user.role.name === 'super_admin') {
+    if (user.role && user.role.name === 'super_admin') {
       linkItems.push(<AdminNavItem
         key={v4()}
         url="/super_admin/upload"

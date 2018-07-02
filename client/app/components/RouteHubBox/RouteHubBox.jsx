@@ -13,12 +13,14 @@ export class RouteHubBox extends Component {
         train: 'train'
       }
       const faClass = `flex-none fa fa-${faKeywords[sched.mode_of_transport]}`
+
       return (
         <div className="flex-33 layout-row layout-align-center">
           <i className={faClass} />
         </div>
       )
     }
+
     return [
       <div className="flex-33 layout-row layout-align-center">
         <i className="fa fa-ship flex-none" />
@@ -121,6 +123,7 @@ export class RouteHubBox extends Component {
       ) : (
         ''
       )
+
     return (
       <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
         <div className={`flex-none ${defs.content_width} layout-row layout-align-start-start`}>

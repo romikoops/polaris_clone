@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w[german-shipping]
@@ -17,11 +16,11 @@ subdomains.each do |sub|
   # tenant.hubs.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # # # puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/gs_hubs.xlsx")
+  hubs = File.open("#{Rails.root}/db/dummydata/german-shipping/german-shipping__hubs.xlsx")
   req = { 'xlsx' => hubs }
   overwrite_hubs(req, shipper)
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/gs_freight_rates.xlsx")
+  public_pricings = File.open("#{Rails.root}/db/dummydata/german-shipping/german-shipping__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
   overwrite_freight_rates(req, shipper, true)
 
@@ -36,15 +35,15 @@ subdomains.each do |sub|
 
   puts 'GS Warehouse LTL'
   hub = tenant.hubs.find_by_name('GS Warehouse Depot')
-  trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ltl.xlsx")
+  trucking = File.open("#{Rails.root}/db/dummydata/german-shipping/german-shipping__trucking_ltl__hamburg_depot.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   awesome_print 'City rates done'
   puts 'GS Warehouse LTL'
   hub = tenant.hubs.find_by_name('GS Warehouse Depot')
-  trucking = File.open("#{Rails.root}/db/dummydata/gs_trucking_hamburg_ftl.xlsx")
+  trucking = File.open("#{Rails.root}/db/dummydata/german-shipping/german-shipping__trucking_ftl__hamburg_depot.xlsx")
   req = { 'xlsx' => trucking }
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   awesome_print 'City rates done'
 
 end

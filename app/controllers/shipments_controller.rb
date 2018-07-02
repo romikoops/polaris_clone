@@ -8,7 +8,6 @@ class ShipmentsController < ApplicationController
 
   def index
     @shipper = current_user
-    options = {methods: [:selected_offer], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     requested_shipments = Shipment.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
@@ -18,9 +17,9 @@ class ShipmentsController < ApplicationController
       tenant_id: current_user.tenant_id
     )
     finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.as_json(options)}
-    @open_shipments = open_shipments.map{|shipment| shipment.as_json(options)}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.as_json(options)}
+    @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
+    @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
+    @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
     response_handler(
       requested: @requested_shipments,
       open:      @open_shipments,
@@ -48,10 +47,6 @@ class ShipmentsController < ApplicationController
 
   def show
     shipment = Shipment.find(params[:id])
-    options = {
-      methods: [:selected_offer, :mode_of_transport],
-      include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]
-    }
 
     cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
       return_h[cargo_item_type.id] = cargo_item_type
@@ -67,10 +62,7 @@ class ShipmentsController < ApplicationController
       tmp_doc
     end
 
-    shipment_as_json = shipment.as_json(options).merge(
-      pickup_address:   shipment.pickup_address_with_country,
-      delivery_address: shipment.delivery_address_with_country
-    )
+    shipment_as_json = shipment.with_address_options_json
     response_handler(
       shipment:        shipment_as_json,
       cargoItems:      shipment.cargo_items,

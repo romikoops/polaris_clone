@@ -9,7 +9,12 @@ exports[`shallow render 1`] = `
   <form>
     <RoundButton
       active={true}
+      back={false}
+      disabled={false}
+      handleDisabled={null}
       handleNext={[Function]}
+      icon=""
+      iconClass=""
       size="small"
       text="Upload"
       theme={
@@ -21,10 +26,13 @@ exports[`shallow render 1`] = `
         }
       }
     />
-    <Component
+    <ReactTooltip
       className="tooltip"
       effect="solid"
       id="RANDOM_KEY_0"
+      insecure={true}
+      resizeHide={true}
+      wrapper="div"
     />
     <input
       name="FOO_TYPE"
@@ -62,10 +70,13 @@ exports[`square is true 1`] = `
         }
       }
     />
-    <Component
+    <ReactTooltip
       className="tooltip"
       effect="solid"
       id="RANDOM_KEY_1"
+      insecure={true}
+      resizeHide={true}
+      wrapper="div"
     />
     <input
       name="FOO_TYPE"

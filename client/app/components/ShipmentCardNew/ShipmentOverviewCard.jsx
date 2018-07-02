@@ -34,33 +34,48 @@ export class ShipmentOverviewCard extends Component {
         <UserShipmentCard
           shipment={shipment}
           dispatches={dispatches}
+          theme={theme}
         />
       )
 
       return (
-        <div className={`${adminStyles.margin_box_right} ${adminStyles.margin_bottom} flex-100 layout-row`}>
+        <div
+          className={` ${adminStyles.margin_bottom} flex-100 flex-lg-50
+          flex-gt-lg-33 layout-row card_padding`}
+        >
           <AlternativeGreyBox
-            wrapperClassName="layout-row flex-50 flex-md-100
-              flex-sm-100 flex-xs-100 layout-align-center-center"
+            wrapperClassName="layout-row flex layout-align-center-center"
             contentClassName="layout-row flex-100"
             content={ShipCard}
           />
         </div>
       )
-    }) : (<span className={`${styles.wideelement}`}>No shipments available</span>)
+    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>
+      No shipments available
+    </span>)
   }
 
   render () {
     const {
-      shipments
+      shipments,
+      noTitle
     } = this.props
+    const titleBox = (<div
+      className={`${adminStyles.card_padding} flex-100
+      layout-align-start-center  ${styles.greyBg}`}
+    >
+      <span><b>Requested Shipments</b></span>
+    </div>)
 
     return (
-      <div className="layout-wrap flex-100 layout-row layout-align-space-between-start">
-        <div className={`layout-padding flex-100 layout-align-start-center  ${styles.greyBg}`}>
-          <span><b>Requested Shipments</b></span>
+      <div className="layout-wrap flex-100 layout-row layout-align-start-start">
+        { !noTitle ? titleBox : ''}
+        <div className={` ${adminStyles.margin_box_right} flex-100
+        layout-row layout-wrap layout-align-start-start padding_bottom`}
+        >
+          {this.listShipments(shipments)}
         </div>
-        {this.listShipments(shipments)}
+
       </div>
     )
   }
@@ -69,18 +84,19 @@ export class ShipmentOverviewCard extends Component {
 ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
-  dispatches: PropTypes.objectOf(PropTypes.func),
+  dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
-  hubs: PropTypes.objectOf(PropTypes.hub)
+  hubs: PropTypes.objectOf(PropTypes.hub),
+  noTitle: PropTypes.bool
 
 }
 
 ShipmentOverviewCard.defaultProps = {
   admin: false,
   shipments: [],
-  dispatches: {},
   theme: null,
-  hubs: {}
+  hubs: {},
+  noTitle: false
 }
 
 export default ShipmentOverviewCard

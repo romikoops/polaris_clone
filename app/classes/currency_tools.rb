@@ -3,9 +3,14 @@
 module CurrencyTools
   require "http"
 
-  def get_rates(base)
-    cached_rates = Currency.find_by(base: base)
-
+  def get_rates(base, tenant_id)
+    tenant = Tenant.find(tenant_id)
+    if tenant && tenant.scope["fixed_currency"]
+      tenant_rates = Currency.find_by(base: base, tenant_id: tenant_id)
+      cached_rates = tenant_rates || Currency.find_by(base: base)
+    else
+      cached_rates = Currency.find_by(base: base, tenant_id: nil)
+    end
     rates = if cached_rates.nil? || cached_rates.today.nil?
               refresh_rates(base)
             elsif cached_rates.updated_at < Date.new - 1.day
@@ -17,8 +22,8 @@ module CurrencyTools
     rates
   end
 
-  def get_currency_array(base)
-    rates = get_rates(base)
+  def get_currency_array(base, tenant_id)
+    rates = get_rates(base, tenant_id)
     results = [{ key: base, rate: 1 }]
     rates["today"].each do |k, v|
       results << { key: k, rate: v }
@@ -27,8 +32,8 @@ module CurrencyTools
     results
   end
 
-  def sum_and_convert(hash_obj, base)
-    rates = get_rates(base)
+  def sum_and_convert(hash_obj, base, tenant_id)
+    rates = get_rates(base, tenant_id)
     base_value = 0
     hash_obj.each do |key, value|
       if rates[:today][key]
@@ -41,10 +46,12 @@ module CurrencyTools
     base_value
   end
 
-  def sum_and_convert_cargo(hash_obj, base)
-    rates = get_rates(base)
+  def sum_and_convert_cargo(hash_obj, base, tenant_id)
+    rates = get_rates(base, tenant_id)
     base_value = 0
-
+    # if rates[:tenant_id]
+    #   byebug
+    # end
     hash_obj.each do |_key, charge|
       if rates[:today][charge["currency"]]
         base_value += charge["value"] * (1 / rates[:today][charge["currency"]])

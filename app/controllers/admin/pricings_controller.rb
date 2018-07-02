@@ -1,24 +1,18 @@
 # frozen_string_literal: true
 
-class Admin::PricingsController < ApplicationController
+class Admin::PricingsController < Admin::AdminBaseController
   include ExcelTools
   include PricingTools
   include ItineraryTools
-  include DocumentTools
-
-  before_action :require_login_and_role_is_admin
 
   def index
-    # @ded_pricings = Pricing.where.not(customer_id: nil)
-    # @open_pricings = Pricing.where(customer_id: nil)
-
     @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     pricings = Pricing.where(tenant_id: current_user.tenant_id).order(updated_at: :desc)
     detailed_itineraries = itineraries.map(&:as_pricing_json)
     @pricings = pricings.map(&:as_json)
-    last_updated = pricings.first.updated_at
+    last_updated = pricings.first ? pricings.first.updated_at : DateTime.now
 
     response_handler(itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, lastUpdate: last_updated)
   end
@@ -76,7 +70,7 @@ class Admin::PricingsController < ApplicationController
   end
 
   def destroy
-    delete_pricing(params[:id])
+    pricing_delete(params[:id])
     response_handler({})
   end
 
@@ -125,12 +119,6 @@ class Admin::PricingsController < ApplicationController
   end
 
   private
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      redirect_to root_path
-    end
-  end
 
   def update_params
     params.require(:update).permit(
