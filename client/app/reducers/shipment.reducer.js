@@ -7,8 +7,14 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: false
       }
+    case shipmentConstants.REUSE_SHIPMENT_REQUEST:
+      return {
+        reusedShipment: action.payload,
+        loading: true
+      }
     case shipmentConstants.NEW_SHIPMENT_REQUEST:
       return {
+        ...state,
         request: {
           stage1: action.shipmentData
         },
@@ -152,6 +158,7 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage5: action.shipmentData
         },
+        reusedShipment: false,
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }

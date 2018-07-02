@@ -35,6 +35,19 @@ function newShipment (type) {
     )
   }
 }
+function reuseShipment (shipment) {
+  function request (shipmentData) {
+    return { type: shipmentConstants.REUSE_SHIPMENT_REQUEST, payload: shipmentData }
+  }
+  const newShipmentRequest = {
+    loadType: shipment.shipment.load_type,
+    direction: shipment.shipment.direction
+  }
+  return (dispatch) => {
+    dispatch(request(shipment))
+    dispatch(newShipment(newShipmentRequest))
+  }
+}
 
 function getOffers (data, redirect) {
   function request (shipmentData) {
@@ -429,6 +442,7 @@ function goTo (path) {
 }
 
 export const shipmentActions = {
+  reuseShipment,
   newShipment,
   chooseOffer,
   getOffers,

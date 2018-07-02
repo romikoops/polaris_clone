@@ -574,7 +574,7 @@ module ExcelTools
       stops = itinerary.stops.order(:index)
 
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.id, row[:closing_date], row[:vessel], row[:voyage_code])
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
         stats[:trips][:number_created] = generator_results[:trips].count

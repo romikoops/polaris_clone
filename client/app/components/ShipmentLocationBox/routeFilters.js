@@ -24,23 +24,28 @@ function getHubIds (indexes, lookupTablesForRoutes, routes, target) {
   if (!indexes.length) {
     return Object.keys(lookupTablesForRoutes[`${target}Hub`])
   }
-
   return Array.from(new Set(indexes.map(index => routes[index][target].hubId)))
 }
 
 function getNexusOption (nexusId, lookupTablesForRoutes, routes, target) {
-  const targetNexus = routes[lookupTablesForRoutes[`${target}Nexus`][nexusId][0]][target]
-  const option = {
-    label: targetNexus.nexusName,
-    value: {
-      id: targetNexus.nexusId,
-      latitude: targetNexus.latitude,
-      longitude: targetNexus.longitude,
-      name: targetNexus.nexusName
+  if (lookupTablesForRoutes[`${target}Nexus`] &&
+  lookupTablesForRoutes[`${target}Nexus`][nexusId] &&
+  lookupTablesForRoutes[`${target}Nexus`][nexusId][0]) {
+    const targetNexus = routes[lookupTablesForRoutes[`${target}Nexus`][nexusId][0]][target]
+    const option = {
+      label: targetNexus.nexusName,
+      value: {
+        id: targetNexus.nexusId,
+        latitude: targetNexus.latitude,
+        longitude: targetNexus.longitude,
+        name: targetNexus.nexusName
+      }
     }
+
+    return option
   }
 
-  return option
+  return false
 }
 
 const routeFilters = {
