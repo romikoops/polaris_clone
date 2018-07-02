@@ -2,6 +2,7 @@
 
 module DocumentService
   class ClientSheetWriter
+    include AwsConfig
     include WritingTool
     attr_reader :tenant, :hubs, :filename, :directory, :workbook, :worksheet
     

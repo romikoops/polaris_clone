@@ -1,6 +1,4 @@
 module WritingTool
-  include AwsConfig
-  extend  AwsConfig
 
   def write_to_aws(dir, tenant, filename, doc_type)
     file = open(dir)
