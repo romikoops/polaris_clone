@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::DiscountsController < ApplicationController
-  before_action :require_login_and_role_is_admin
+class Admin::DiscountsController < Admin::AdminBaseController
 
   def index
     (@filterrific = initialize_filterrific(
@@ -56,14 +55,5 @@ class Admin::DiscountsController < ApplicationController
     end
 
     redirect_to :back
-  end
-
-  private
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name == "admin"
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 end

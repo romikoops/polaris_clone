@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::SchedulesController < ApplicationController
-  before_action :require_login_and_role_is_admin
+class Admin::SchedulesController < Admin::AdminBaseController
   before_action :initialize_variables, only: [:index, :auto_generate_schedules]
   include ItineraryTools
   include ExcelTools
@@ -137,16 +136,5 @@ class Admin::SchedulesController < ApplicationController
 
   def trip
     @trip ||= Trip.find(params[:id])
-  end
-
-  def is_current_tenant?
-    current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-  end
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 end

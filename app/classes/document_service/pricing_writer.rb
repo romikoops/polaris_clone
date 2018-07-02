@@ -2,6 +2,7 @@
 
 module DocumentService
   class PricingWriter
+    include AwsConfig
     include WritingTool
     attr_reader :options, :filename, :tenant, :pricings, :aux_data, :dir, :workbook, :worksheet
 
