@@ -11,7 +11,7 @@ class ShipmentSeeder
     counter = 0
     nested_each_with_times(
       Tenant.demo.users.shipper.to_a, 1,
-      Shipment::STATUSES, 1,
+      %w(requested pending confirmed finished), 1,
       Shipment::LOAD_TYPES, 1,
       Shipment::DIRECTIONS, 0..1
     ) do |user, status, load_type, direction|
@@ -43,11 +43,13 @@ class ShipmentSeeder
         @shipment.save
 
         OfferCalculatorService::ChargeCalculator.new(
-          shipment: @shipment,
+          shipment:      @shipment,
           trucking_data: {},
           schedule:      schedule,
           user:          user
         ).perform
+
+        create_shipment_contacts(user)
       end
     end
 
@@ -111,6 +113,18 @@ class ShipmentSeeder
 
   def random_booking_placed_at
     @shipment.planned_origin_drop_off_date - rand(400..1500).hours
+  end
+
+  def create_shipment_contacts(user)
+    available_contacts = user.contacts.to_a.clone
+
+    ShipmentContact::CONTACT_TYPES.each do |contact_type|
+      ShipmentContact.create(
+        shipment:     @shipment,
+        contact:      available_contacts.delete(available_contacts.sample),
+        contact_type: contact_type
+      )
+    end
   end
 end
 
