@@ -3,13 +3,15 @@ import { shallow } from 'enzyme'
 import CargoItemGroupAggregated from './'
 
 const group = {
+  weight: 36,
+  tare_weight: 5,
+  gross_weight: 41,
   quantity: 'FOO_QUANTITY',
-  chargeable_weight: 4,
   size_class: 'dry_goods',
   cargoType: {
     category: 'FOO_CATEGORY'
   },
-  volume: 5,
+  volume: 7,
   items: [{
     chargeable_weight: 80,
     dimension_x: 90,

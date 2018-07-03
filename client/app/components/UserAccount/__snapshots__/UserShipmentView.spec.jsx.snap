@@ -18,6 +18,17 @@ exports[`loading is true 1`] = `
         Shipment
       </p>
     </div>
+    <div
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      onClick={[Function]}
+      style="#333"
+    >
+      <p
+        className="layout-align-center-center layout-row"
+      >
+        Reuse Shipment 
+      </p>
+    </div>
   </div>
   <div
     className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
@@ -610,6 +621,17 @@ exports[`shallow render 1`] = `
         Shipment
       </p>
     </div>
+    <div
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      onClick={[Function]}
+      style="#333"
+    >
+      <p
+        className="layout-align-center-center layout-row"
+      >
+        Reuse Shipment 
+      </p>
+    </div>
   </div>
   <div
     className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
@@ -1200,6 +1222,17 @@ exports[`shipmentData.cargoItems is present 1`] = `
         className="layout-align-start-center layout-row"
       >
         Shipment
+      </p>
+    </div>
+    <div
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      onClick={[Function]}
+      style="#333"
+    >
+      <p
+        className="layout-align-center-center layout-row"
+      >
+        Reuse Shipment 
       </p>
     </div>
   </div>
@@ -1853,6 +1886,17 @@ exports[`shipmentData.contacts is present 1`] = `
         Shipment
       </p>
     </div>
+    <div
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      onClick={[Function]}
+      style="#333"
+    >
+      <p
+        className="layout-align-center-center layout-row"
+      >
+        Reuse Shipment 
+      </p>
+    </div>
   </div>
   <div
     className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
@@ -2491,6 +2535,17 @@ exports[`shipmentData.documents is present 1`] = `
         className="layout-align-start-center layout-row"
       >
         Shipment
+      </p>
+    </div>
+    <div
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      onClick={[Function]}
+      style="#333"
+    >
+      <p
+        className="layout-align-center-center layout-row"
+      >
+        Reuse Shipment 
       </p>
     </div>
   </div>

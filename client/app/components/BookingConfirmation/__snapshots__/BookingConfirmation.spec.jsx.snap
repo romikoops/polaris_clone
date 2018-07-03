@@ -9208,7 +9208,7 @@ exports[`with containers 1`] = `
           <div
             className="flex-100 layout-row layout-wrap layout-align-start-center"
           >
-            <CargoItemGroup
+            <CargoContainerGroup
               group={
                 Object {
                   "cargo_group_id": 1,
@@ -9216,7 +9216,58 @@ exports[`with containers 1`] = `
                   "groupAlias": 1,
                   "hsCodes": Array [],
                   "hsText": "FOO_TEXT",
-                  "items": Array [],
+                  "items": Array [
+                    Object {
+                      "customs_text": "FOO_TEXT",
+                      "gross_weight": 130,
+                      "hs_codes": Array [],
+                      "id": 1,
+                      "payload_in_kg": 200,
+                      "quantity": 5,
+                      "size_class": "FOO_SIZE_CLASS",
+                      "tare_weight": 50,
+                    },
+                    Object {
+                      "customs_text": "FOO_TEXT",
+                      "gross_weight": 130,
+                      "hs_codes": Array [],
+                      "id": 1,
+                      "payload_in_kg": 200,
+                      "quantity": 5,
+                      "size_class": "FOO_SIZE_CLASS",
+                      "tare_weight": 50,
+                    },
+                    Object {
+                      "customs_text": "FOO_TEXT",
+                      "gross_weight": 130,
+                      "hs_codes": Array [],
+                      "id": 1,
+                      "payload_in_kg": 200,
+                      "quantity": 5,
+                      "size_class": "FOO_SIZE_CLASS",
+                      "tare_weight": 50,
+                    },
+                    Object {
+                      "customs_text": "FOO_TEXT",
+                      "gross_weight": 130,
+                      "hs_codes": Array [],
+                      "id": 1,
+                      "payload_in_kg": 200,
+                      "quantity": 5,
+                      "size_class": "FOO_SIZE_CLASS",
+                      "tare_weight": 50,
+                    },
+                    Object {
+                      "customs_text": "FOO_TEXT",
+                      "gross_weight": 130,
+                      "hs_codes": Array [],
+                      "id": 1,
+                      "payload_in_kg": 200,
+                      "quantity": 5,
+                      "size_class": "FOO_SIZE_CLASS",
+                      "tare_weight": 50,
+                    },
+                  ],
                   "payload_in_kg": 1000,
                   "quantity": 5,
                   "size_class": "FOO_SIZE_CLASS",
@@ -9277,7 +9328,7 @@ exports[`with containers 1`] = `
                 }
               }
             />
-            <CargoItemGroup
+            <CargoContainerGroup
               group={
                 Object {
                   "cargo_group_id": 2,
@@ -9285,7 +9336,78 @@ exports[`with containers 1`] = `
                   "groupAlias": 2,
                   "hsCodes": Array [],
                   "hsText": "BAR_TEXT",
-                  "items": Array [],
+                  "items": Array [
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                    Object {
+                      "customs_text": "BAR_TEXT",
+                      "gross_weight": 10,
+                      "hs_codes": Array [],
+                      "id": 2,
+                      "payload_in_kg": 4,
+                      "quantity": 7,
+                      "size_class": "BAR_SIZE_CLASS",
+                      "tare_weight": 7,
+                    },
+                  ],
                   "payload_in_kg": 28,
                   "quantity": 7,
                   "size_class": "BAR_SIZE_CLASS",

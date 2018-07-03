@@ -2,10 +2,10 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout-row flex-100 layout-wrap"
+  className="layout-row flex-100 layout-wrap layout-align-space-between-center"
 >
   <div
-    className="pointy flex-33"
+    className="pointy flex-30 flex-md-45 margin_bottom"
     key="addLocationButton"
     onClick={[Function]}
   >
@@ -29,11 +29,11 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-33"
+    className="flex-30 flex-md-45 margin_bottom"
     key="RANDOM_KEY_0"
   >
     <div
-      className="location-box"
+      className="location-box flex-100 layout-column"
     >
       <div
         className="header"
@@ -63,34 +63,47 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <div
-        className="content layout-row layout-wrap layout-align-start-start"
+        className="layout-row flex-100 location_address"
       >
-        <p
-          className="flex-100"
+        <i
+          className="fa fa-map-marker clip"
+          style={
+            Object {
+              "background": "#BDBDBD",
+            }
+          }
+        />
+        <div
+          className="content layout-row layout-wrap layout-align-start-start"
         >
-          579
-           
-          FOO_STREET
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          FOO_CITY
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          22456
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          Germany
-           
-        </p>
+          <p
+            className="flex-100"
+          >
+            579
+             
+            FOO_STREET
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            <strong>
+              FOO_CITY
+            </strong>
+          </p>
+          <p
+            className="flex-100"
+          >
+            22456
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            Germany
+             
+          </p>
+        </div>
       </div>
       <div
         className="footer"
@@ -102,25 +115,29 @@ exports[`shallow render 1`] = `
             className="emulate_link"
             onClick={[Function]}
           >
-            Edit
+            <i
+              className="fa fa-pencil"
+            />
           </span>
             |  
           <span
             className="emulate_link"
             onClick={[Function]}
           >
-            Delete
+            <i
+              className="fa fa-trash"
+            />
           </span>
         </div>
       </div>
     </div>
   </div>
   <div
-    className="flex-33"
+    className="flex-30 flex-md-45 margin_bottom"
     key="RANDOM_KEY_1"
   >
     <div
-      className="location-box"
+      className="location-box flex-100 layout-column"
     >
       <div
         className="header"
@@ -132,34 +149,47 @@ exports[`shallow render 1`] = `
         </h3>
       </div>
       <div
-        className="content layout-row layout-wrap layout-align-start-start"
+        className="layout-row flex-100 location_address"
       >
-        <p
-          className="flex-100"
+        <i
+          className="fa fa-map-marker clip"
+          style={
+            Object {
+              "background": "#BDBDBD",
+            }
+          }
+        />
+        <div
+          className="content layout-row layout-wrap layout-align-start-start"
         >
-          579
-           
-          FOO_STREET
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          FOO_CITY
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          22456
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          Germany
-           
-        </p>
+          <p
+            className="flex-100"
+          >
+            579
+             
+            FOO_STREET
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            <strong>
+              FOO_CITY
+            </strong>
+          </p>
+          <p
+            className="flex-100"
+          >
+            22456
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            Germany
+             
+          </p>
+        </div>
       </div>
       <div
         className="footer"
@@ -171,14 +201,18 @@ exports[`shallow render 1`] = `
             className="emulate_link"
             onClick={[Function]}
           >
-            Edit
+            <i
+              className="fa fa-pencil"
+            />
           </span>
             |  
           <span
             className="emulate_link"
             onClick={[Function]}
           >
-            Delete
+            <i
+              className="fa fa-trash"
+            />
           </span>
         </div>
       </div>

@@ -18,8 +18,33 @@ exports[`shallow render 1`] = `
         >
           <span
             className="cargo_type"
-          />
+          >
+            36
+          </span>
             kg 
+        </p>
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          Cargo Gross Weight
+        </p>
+      </div>
+    </div>
+    <div
+      className="flex-33 layout-row layout-align-space-around"
+    >
+      <div
+        className="layout-column"
+      >
+        <p
+          className="flex-none layout-row layout-align-center-center"
+        >
+          <span
+            className="cargo_type"
+          >
+            41
+          </span>
+            kg
         </p>
         <p
           className="flex-none layout-row layout-align-center-center"
@@ -40,40 +65,14 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            5.000
-          </span>
-            m
-          <sup>
-            3
-          </sup>
-        </p>
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          Volume
-        </p>
-      </div>
-    </div>
-    <div
-      className="flex-33 layout-row layout-align-space-around"
-    >
-      <div
-        className="layout-column"
-      >
-        <p
-          className="flex-none layout-row layout-align-center-center"
-        >
-          <span
-            className="cargo_type"
-          >
-            4
+            5
           </span>
            kg
         </p>
         <p
           className="flex-none layout-row layout-align-center-center"
         >
-          Chargeable Weight
+          Tare Weight
         </p>
       </div>
     </div>

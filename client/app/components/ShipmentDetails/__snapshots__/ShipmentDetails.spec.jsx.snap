@@ -64,6 +64,7 @@ exports[`shallow rendering 1`] = `
           },
         }
       }
+      reusedShipment={null}
       routeIds={Array []}
       scope={
         Object {

@@ -79,8 +79,6 @@ exports[`props.contactData.location is falsy 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -180,8 +178,6 @@ exports[`props.loading is true 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -306,8 +302,6 @@ exports[`shallow render 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -435,8 +429,6 @@ exports[`state.editBool is true 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",

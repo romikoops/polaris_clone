@@ -4,8 +4,8 @@ import CargoItemGroupAggregated from './'
 
 const group = {
   quantity: 'FOO_QUANTITY',
-  chargeable_weight: 4,
-  size_class: 'dry_goods',
+  weight: 4,
+  chargeable_weight: 7,
   cargoType: {
     category: 'FOO_CATEGORY'
   },
@@ -27,4 +27,14 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<CargoItemGroupAggregated {...propsBase} />)).toMatchSnapshot()
+})
+
+test('size_class is truthy', () => {
+  const props = {
+    group: {
+      ...propsBase.group,
+      size_class: 'dry_goods'
+    }
+  }
+  expect(shallow(<CargoItemGroupAggregated {...props} />)).toMatchSnapshot()
 })

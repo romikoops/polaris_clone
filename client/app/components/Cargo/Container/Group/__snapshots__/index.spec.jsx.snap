@@ -2,102 +2,107 @@
 
 exports[`props.viewHSCodes is true 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Container Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X Dry Goods
+        x 1
       </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
     </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
     <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Container Class
+          <span
+            className="cargo_type"
+          >
+            Dry Goods
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Dry Goods
+          Cargo type
         </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Toggle
-          checked={false}
-          className="flex-none"
-          icons={
+        <CargoContainerGroupAggregated
+          group={
             Object {
-              "checked": <Unknown />,
-              "unchecked": <Unknown />,
+              "items": Array [
+                Object {
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
             }
           }
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
         key="RANDOM_KEY_1"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -107,262 +112,200 @@ exports[`props.viewHSCodes is true 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span />
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Weight Class
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            20
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Cargo Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            76
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                76
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
-        <hr
-          className="flex-100"
-        />
+        <div
+          className="unit_data_cell flex layout-row layout-align-center-center"
+        >
+          <div
+            className="layout-column"
+          >
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                20
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Tare Weight
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <h4
-          className="flex-none"
-        >
-           Aggregate Values:
-        </h4>
-      </div>
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-      </div>
-      <hr
-        className="flex-100"
-      />
-    </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <div
-    className="flex-100 layout-row layout-wrap"
-    onClick={[Function]}
-  >
-    <i
-      className="fa fa-eye clip flex-none"
-      style={
-        Object {
-          "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-        }
-      }
-    />
-    <p
-      className="offset-5 flex-none"
-    >
-      View Hs Codes
-    </p>
-  </div>
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
 </div>
 `;
 
 exports[`shallow render 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Container Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X Dry Goods
+        x 1
       </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
     </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
     <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Container Class
+          <span
+            className="cargo_type"
+          >
+            Dry Goods
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Dry Goods
+          Cargo type
         </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Toggle
-          checked={false}
-          className="flex-none"
-          icons={
+        <CargoContainerGroupAggregated
+          group={
             Object {
-              "checked": <Unknown />,
-              "unchecked": <Unknown />,
+              "items": Array [
+                Object {
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
             }
           }
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
         key="RANDOM_KEY_0"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -372,244 +315,200 @@ exports[`shallow render 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span />
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Weight Class
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            20
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Cargo Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            76
-             kg
-          </p>
-        </div>
-        <hr
-          className="flex-100"
-        />
-      </div>
-    </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <h4
-          className="flex-none"
-        >
-           Aggregate Values:
-        </h4>
-      </div>
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                76
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                20
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Tare Weight
+            </p>
+          </div>
         </div>
       </div>
-      <hr
-        className="flex-100"
-      />
     </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
 </div>
 `;
 
 exports[`state.unitView is true 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Container Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X Dry Goods
+        x 1
       </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
     </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
     <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Container Class
+          <span
+            className="cargo_type"
+          >
+            Dry Goods
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Dry Goods
+          Cargo type
         </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Toggle
-          checked={true}
-          className="flex-none"
-          icons={
+        <CargoContainerGroupAggregated
+          group={
             Object {
-              "checked": <Unknown />,
-              "unchecked": <Unknown />,
+              "items": Array [
+                Object {
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
             }
           }
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
         key="RANDOM_KEY_3"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -619,244 +518,200 @@ exports[`state.unitView is true 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span />
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Weight Class
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            20
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Cargo Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            76
-             kg
-          </p>
-        </div>
-        <hr
-          className="flex-100"
-        />
-      </div>
-    </div>
-    <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <h4
-          className="flex-none"
-        >
-           Aggregate Values:
-        </h4>
-      </div>
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                76
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                20
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Tare Weight
+            </p>
+          </div>
         </div>
       </div>
-      <hr
-        className="flex-100"
-      />
     </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
 </div>
 `;
 
 exports[`state.viewer is true 1`] = `
 <div
-  className="info layout-row flex-100 layout-wrap layout-align-center"
+  className="info"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center"
+    className="flex-100 layout-row layout-align-center-center height_box height_box"
   >
     <div
-      className="flex-40 layout-row layout-align-start-center"
+      className="flex-5 layout-row layout-align-center-center side_border"
     >
-      <h5
-        className="flex-none"
-      >
-        Container Unit
-      </h5>
-      <div
-        className="flex-5"
-      />
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center cargo_unit"
       />
     </div>
     <div
-      className="flex-40 layout-row layout-align-end-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <p
-        className="flex-none"
+        className="flex-none layout-row layout-align-center-center"
       >
-        FOO_QUANTITY X Dry Goods
+        x 1
       </p>
+      <div
+        className="icon_cargo_item"
+        style={
+          Object {
+            "backgroundImage": "url(https://assets.itsmycargo.com/assets/icons/container.svg)",
+          }
+        }
+      />
     </div>
-  </div>
-  <hr />
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-start"
-  >
     <div
-      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+      className="flex-20 layout-row layout-align-center-center side_border"
     >
       <div
-        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+        className="layout-column"
       >
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Container Class
+          <span
+            className="cargo_type"
+          >
+            Dry Goods
+          </span>
         </p>
-        <div
-          className="flex-5"
-        />
         <p
-          className="flex-none"
+          className="flex-none layout-row layout-align-center-center"
         >
-          Dry Goods
+          Cargo type
         </p>
       </div>
+    </div>
+    <div
+      className="flex-55 layout-row"
+    >
       <div
-        className="flex-30 layout-row layout-align-end-center"
+        className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <p
-          className="flex-none"
-        >
-          Toggle Unit View
-        </p>
-        <div
-          className="flex-5"
-        />
-        <Toggle
-          checked={false}
-          className="flex-none"
-          icons={
+        <CargoContainerGroupAggregated
+          group={
             Object {
-              "checked": <Unknown />,
-              "unchecked": <Unknown />,
+              "items": Array [
+                Object {
+                  "gross_weight": 76,
+                  "payload_in_kg": 56,
+                  "tare_weight": 20,
+                },
+              ],
+              "quantity": "FOO_QUANTITY",
+              "size_class": "dry_goods",
             }
           }
-          id="unitView"
-          name="unitView"
-          onChange={[Function]}
         />
       </div>
     </div>
-    <hr
-      className="flex-100"
-    />
+    <div
+      className="flex-5 layout-row layout-align-center-center"
+      onChange={[Function]}
+      onClick={[Function]}
+    >
+      <i
+        className=" fa fa-chevron-down clip pointy"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-none-start layout-wrap"
+    className="unit_viewer closed_panel"
   >
     <div
-      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+      className="flex-100 layout-row layout-align-none-start layout-wrap"
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
         key="RANDOM_KEY_5"
       >
         <div
-          className="flex-100 layout-row layout-align-start-center"
+          className="flex-10 layout-row layout-align-center-center"
         >
           <p
             className="flex-none"
@@ -866,172 +721,93 @@ exports[`state.viewer is true 1`] = `
               }
             }
           >
-            Item 0
+            Single Item
           </p>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-            56
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span />
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Weight Class
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            20
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                56
+              </span>
+               kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Cargo Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-            76
-             kg
-          </p>
-        </div>
-        <hr
-          className="flex-100"
-        />
-      </div>
-    </div>
-    <div
-      className="open_panel panel flex-100 layout-row layout-wrap layout-align-start-center"
-    >
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <h4
-          className="flex-none"
-        >
-           Aggregate Values:
-        </h4>
-      </div>
-      <div
-        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-      >
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Payload in Kg
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                76
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Gross Weight
+            </p>
+          </div>
         </div>
         <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+          className="unit_data_cell flex layout-row layout-align-center-center"
         >
-          <p
-            className="flex-none"
+          <div
+            className="layout-column"
           >
-            Tare Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
-        </div>
-        <div
-          className="unit_data_cell flex-33 layout-row layout-align-space-between"
-        >
-          <p
-            className="flex-none"
-          >
-            Gross Weight
-          </p>
-          <p
-            className="flex-none"
-          >
-             kg
-          </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <span>
+                20
+              </span>
+                kg
+            </p>
+            <p
+              className="flex-none layout-row layout-align-center-center"
+            >
+              Tare Weight
+            </p>
+          </div>
         </div>
       </div>
-      <hr
-        className="flex-100"
-      />
     </div>
   </div>
-  <hr
-    className="flex-100"
-  />
-  <HsCodeViewer
-    close={[Function]}
-    hsCodes={
-      Array [
-        "FOO_HSCODE",
-        "BAR_HSCODE",
-      ]
-    }
-    item={
-      Object {
-        "items": Array [
-          Object {
-            "gross_weight": 76,
-            "payload_in_kg": 56,
-            "tare_weight": 20,
-          },
-        ],
-        "quantity": "FOO_QUANTITY",
-        "size_class": "dry_goods",
-      }
-    }
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-  <style>
-    
-      .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          undefined 0%,
-          undefined 100%
-        ) !important;
-        border: 0.5px solid rgba(0, 0, 0, 0);
-      }
-      .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
-      }
-      .react-toggle:hover .react-toggle-track{
-        background: rgba(0, 0, 0, 0.5) !important;
-      }
-    
-  </style>
 </div>
 `;

@@ -2,7 +2,7 @@
 
 exports[`props.loading is false, state.requested is true 1`] = `
 <div
-  className="flex-none layout-row upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
   data-for="RANDOM_KEY_3"
   data-tip="FOO_TOOLTIP"
 >
@@ -30,7 +30,7 @@ exports[`props.loading is false, state.requested is true 1`] = `
 
 exports[`props.loading is true, state.requested is true 1`] = `
 <div
-  className="flex-none layout-row upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
   data-for="RANDOM_KEY_5"
   data-tip="FOO_TOOLTIP"
 >
@@ -53,7 +53,7 @@ exports[`props.loading is true, state.requested is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-none layout-row upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
   data-for="RANDOM_KEY_0"
   data-tip="FOO_TOOLTIP"
 >
@@ -81,7 +81,7 @@ exports[`shallow render 1`] = `
 
 exports[`square is true 1`] = `
 <div
-  className="flex-none layout-row upload_btn_wrapper "
+  className="flex-none layout-row layout-align-center-center upload_btn_wrapper "
   data-for="RANDOM_KEY_1"
   data-tip="FOO_TOOLTIP"
 >
