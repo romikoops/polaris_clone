@@ -11,14 +11,13 @@ class ShipmentSeeder
     counter = 0
     nested_each_with_times(
       Tenant.demo.users.shipper.to_a, 1,
-      %w(requested pending confirmed finished), 1,
+      %w(requested confirmed finished), 1,
       Shipment::LOAD_TYPES, 1,
       Shipment::DIRECTIONS, 0..1
     ) do |user, status, load_type, direction|
       nested_each_with_times(
-        Trip.where(itinerary: user.tenant.itineraries).to_a, 0.07
+        Trip.where(itinerary_id: user.tenant.itineraries.ids.sample(5)).to_a.sample(7), 1
       ) do |trip|
-
         counter += 1
 
         @shipment = Shipment.new(
