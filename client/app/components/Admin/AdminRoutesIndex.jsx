@@ -172,7 +172,7 @@ export class AdminRoutesIndex extends Component {
           />
           <SideOptionsBox
             header="Filters"
-            flexOptions="layout-column flex-20 flex-md-30"
+            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
             content={
               <div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">

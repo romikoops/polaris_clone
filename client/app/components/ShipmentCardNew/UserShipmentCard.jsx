@@ -86,7 +86,7 @@ export class UserShipmentCard extends Component {
                 <div className="layout-column flex-100">
                   <div className="layout-align-center-center flex-100">
                     <div className={`flex-100 layout-align-center-center ${styles.hub_name}`}>
-                      <p className="layout-align-center-center flex-100">{shipment.origin_hub.name}</p>
+                      <p className="layout-align-center-center flex-100">{shipment.schedule_set['0'].origin_hub.name}</p>
                     </div>
                   </div>
                   <div className="layout-column flex-100">
@@ -107,7 +107,7 @@ export class UserShipmentCard extends Component {
               content={(
                 <div className="layout-column flex-100">
                   <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
-                    <p>{shipment.destination_hub.name}</p>
+                    <p>{shipment.schedule_set['0'].destination_hub.name}</p>
                   </div>
                   <div className="layout-column flex-100">
                     <span className="flex-100" style={bg2} />

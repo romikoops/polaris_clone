@@ -120,7 +120,7 @@ class AdminClientsIndex extends Component {
     ))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {/* {uploadStatus} */}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <AdminSearchableClients
@@ -165,7 +165,7 @@ class AdminClientsIndex extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions="layout-column flex-20 flex-md-30"
+            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <CollapsingBar

@@ -368,7 +368,7 @@ class AdminClients extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >

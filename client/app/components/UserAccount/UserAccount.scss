@@ -1,7 +1,7 @@
 :local {
   .location-box {
     position: relative;
-    height: 200px;
+    min-height: 170px;
     // margin: 15px 15px 0 0;
     padding: 0;
     border: 1px solid #BDBDBD;
@@ -331,7 +331,7 @@
       margin: 0 !important;
     }
     p {
-      font-size: 32px;
+      font-size: 28px;
       margin: 0;
     }
   }

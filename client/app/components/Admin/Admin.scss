@@ -953,5 +953,53 @@
   .header_margin_buffer{
     margin: 0 15px;
   }
- }
- 
+  .content_details {
+    padding-left: 25px;
+  }
+  .greyBg {
+    background-color: lightgrey;
+    margin-bottom: 20px;
+  }
+  .location_address {
+    padding: 25px;
+    padding-top: 0;
+    i {
+      font-size: 34px;
+    }
+    p {
+      padding-left: 25px;
+      margin: 0 0 12px 0;
+    }
+    input {
+      margin-bottom: 16px;
+    }
+  }
+  .username_title {
+    padding-left: 2vw;
+    h1 {
+      font-size: 35px;
+      text-transform: uppercase;
+      margin: 0 !important;
+    }
+    p {
+      font-size: 28px;
+      margin: 0;
+    }
+  }
+  .bigProfile {
+    font-size: 60px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .icons_location {
+    > * {
+      padding-left: 10px;
+    }
+    &:first-child {
+      color: #6FCF97;
+    }
+    .trashy {
+      color: #EB5757;
+    }
+  }
+}

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './Admin.scss'
-import { Tooltip } from '../Tooltip/Tooltip'
+import userStyles from '../UserAccount/UserAccount.scss'
 
 export class AdminAddressTile extends Component {
   constructor (props) {
@@ -30,18 +29,18 @@ export class AdminAddressTile extends Component {
     this.setState({ editor: { ...this.state.editor, [name]: value } })
   }
   saveEdit () {
+    // ??
     this.props.saveEdit(this.state.editor)
   }
   deleteAddress () {
+    // ??
     this.props.deleteAddress(this.props.address.id)
   }
 
   render () {
     const {
       theme,
-      address,
-      showTooltip,
-      tooltip
+      address
     } = this.props
     const { showEdit, editor } = this.state
     if (!address) {
@@ -54,31 +53,18 @@ export class AdminAddressTile extends Component {
           : 'black'
     }
     const addressData = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          <p className={`flex-100 ${styles.super}`}> Street No. </p>
-          <p className="flex-none no_m"> {address.street_number} </p>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          <p className={`flex-100 ${styles.super}`}> Street </p>
-          <p className="flex-none no_m"> {address.street} </p>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          <p className={`flex-100 ${styles.super}`}> City </p>
-          <p className="flex-none no_m"> {address.city} </p>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          <p className={`flex-100 ${styles.super}`}> Zip Code </p>
-          <p className="flex-none no_m"> {address.zip_code} </p>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          <p className={`flex-100 ${styles.super}`}> Country </p>
-          <p className="flex-none no_m"> {address.country} </p>
+      <div className={`layout-row flex-100 ${styles.location_address}`}>
+        <i className="fa fa-map-marker clip" style={textStyle} />
+        <div className="layout-column layout-align-start-start">
+          <p className="flex-none">{address.street_number} {address.street} </p>
+          <p className="flex-none"><strong>{address.city}</strong></p>
+          <p className="flex-none">{address.zip_code} </p>
+          <p className="flex-none">{address.country} </p>
         </div>
       </div>
     )
     const editorBox = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.location_address}`}>
         <div
           className={
             'flex-100 layout-row layout-wrap ' +
@@ -86,6 +72,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
+            placeholder="Street number"
             type="text"
             value={editor.street_number}
             name="street_number"
@@ -99,6 +86,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
+            placeholder="Street"
             type="text"
             value={editor.street}
             name="street"
@@ -112,6 +100,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
+            placeholder="City"
             type="text"
             value={editor.city}
             name="city"
@@ -125,6 +114,7 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
+            placeholder="ZIP Code"
             type="text"
             value={editor.zip_code}
             name="zip_code"
@@ -138,13 +128,14 @@ export class AdminAddressTile extends Component {
           }
         >
           <input
+            placeholder="Country"
             type="text"
             value={editor.country}
             name="country"
             onChange={this.handleChange}
           />
         </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-space-between-center ">
+        {/* <div className="flex-100 layout-row layout-wrap layout-align-space-between-center ">
           <RoundButton
             size="full"
             text="Save Edit"
@@ -159,45 +150,43 @@ export class AdminAddressTile extends Component {
             theme={theme}
             handleNext={this.deleteAddress}
           />
-        </div>
+        </div> */}
       </div>
     )
-    const pencilIcon = showTooltip ? (<Tooltip
-      icon="fa-pencil"
-      text={tooltip}
-      theme={theme}
-      toolText
-      iconClass
+    const pencilIcon = (<i
+      className="flex-none fa fa-edit clip"
+      style={{ background: '#BDBDBD', cursor: 'pointer' }}
     />)
-      : (<i
-        className="flex-none fa fa-pencil clip"
-        style={textStyle}
-      />)
+
     return (
       <div
         className={` ${
-          styles.address_card
-        } flex-none layout-row layout-wrap layout-align-start-start`}
+          userStyles['location-box']
+        } ${styles.margin_bottom} flex-20 layout-row layout-wrap layout-align-start-start`}
       >
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
+          className={`flex-100 layout-row layout-align-space-between-center extra_padding_right_sm ${
             styles.sec_subheader
           }`}
         >
           <p
             className={` ${styles.sec_subheader_text} ${styles.clip} flex-none no_m`}
             style={textStyle}
-          >
-            User Location
-          </p>
+          />
           <div
             className="flex-none layout-row layout-align-center-center"
             onClick={this.toggleEdit}
           >
-            {showEdit ? <i
-              className="flex-none fa fa-times clip"
-              style={textStyle}
-            />
+            {showEdit ? (
+              <div className={`layout-row flex-100 ${styles.icons_location}`}>
+                <i className="fa fa-check pointy" onClick={this.saveEdit} />
+                <i className={`fa fa-trash pointy ${styles.trashy}`} onClick={this.deleteAddress} />
+                <i
+                  className="flex-none fa fa-times clip extra_padding_right"
+                  style={{ background: '#BDBDBD', cursor: 'pointer' }}
+                />
+              </div>
+            )
               : pencilIcon }
           </div>
         </div>
@@ -210,16 +199,12 @@ AdminAddressTile.propTypes = {
   theme: PropTypes.theme,
   saveEdit: PropTypes.func.isRequired,
   deleteAddress: PropTypes.func.isRequired,
-  address: PropTypes.address,
-  tooltip: PropTypes.string,
-  showTooltip: PropTypes.bool
+  address: PropTypes.address
 }
 
 AdminAddressTile.defaultProps = {
   theme: null,
-  address: null,
-  tooltip: '',
-  showTooltip: false
+  address: null
 }
 
 export default AdminAddressTile

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-// import styled from 'styled-components'
-// import Select from 'react-select'
+import styled from 'styled-components'
+import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import adminStyles from '../Admin/Admin.scss'
@@ -9,7 +9,7 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-// import { currencyOptions } from '../../constants'
+import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -22,11 +22,6 @@ import {
 
 const ProfileBox = ({ user, style, edit }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
-    <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-15 layout-row layout-align-center-center" onClick={edit}>
-        <i className={`fa fa-pencil clip ${styles.edit_icon}`} style={style} />
-      </div>
-    </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
@@ -37,26 +32,6 @@ const ProfileBox = ({ user, style, edit }) => (
         <p className="flex-none"> {user.company_name}</p>
       </div>
     </div>
-    {/* <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          First Name
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.first_name}</p>
-      </div>
-    </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          Last Name
-        </sup>
-      </div>
-      <div className="flex-100 layout-row layout-align-start-center ">
-        <p className="flex-none"> {user.last_name}</p>
-      </div>
-    </div> */}
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
@@ -90,9 +65,7 @@ ProfileBox.defaultProps = {
   style: {}
 }
 
-const EditNameBox = ({
-  user, handleChange, style
-}) => (
+const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
 )
 
@@ -369,25 +342,25 @@ export class UserProfile extends Component {
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
-    // const StyledSelect = styled(Select)`
-    //   width: 50%;
-    //   .Select-control {
-    //     background-color: #f9f9f9;
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2 !important;
-    //   }
-    //   .Select-menu-outer {
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-value {
-    //     background-color: #f9f9f9;
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-option {
-    //     background-color: #f9f9f9;
-    //   }
-    // `
+    const StyledSelect = styled(Select)`
+      width: 50%;
+      .Select-control {
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+        border: 1px solid #f2f2f2 !important;
+      }
+      .Select-menu-outer {
+        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+        border: 1px solid #f2f2f2;
+      }
+      .Select-value {
+        background-color: #f9f9f9;
+        border: 1px solid #f2f2f2;
+      }
+      .Select-option {
+        background-color: #f9f9f9;
+      }
+    `
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }

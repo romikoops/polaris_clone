@@ -294,7 +294,7 @@ class AdminSchedules extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions="layout-column flex-20 flex-md-30"
+            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
             content={
               <div className="">
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
