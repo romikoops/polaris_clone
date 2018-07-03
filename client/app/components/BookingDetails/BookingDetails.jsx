@@ -9,6 +9,7 @@ import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { CargoDetails } from '../CargoDetails/CargoDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { isEmpty } from '../../helpers/objectTools'
+import reuseShipments from '../../helpers/reuseShipment'
 
 export class BookingDetails extends Component {
   static scrollTo (target, offset) {
@@ -83,8 +84,12 @@ export class BookingDetails extends Component {
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
   }
   componentDidMount () {
-    const { prevRequest, setStage, hideRegistration } = this.props
-    if (prevRequest && prevRequest.shipment) {
+    const {
+      prevRequest, setStage, hideRegistration, reusedShipment
+    } = this.props
+    if (reusedShipment && reusedShipment.shipment) {
+      this.loadReusedShipment(reusedShipment)
+    } else if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
     hideRegistration()
@@ -151,6 +156,18 @@ export class BookingDetails extends Component {
       notes: obj.notes,
       incotermText: obj.incotermText,
       customsCredit: obj.customsCredit
+    })
+  }
+  loadReusedShipment (obj) {
+    const contacts = reuseShipments.reuseContacts(obj.contacts)
+    this.setState({
+      ...contacts,
+      totalGoodsValue: obj.shipment.total_goods_value,
+      cargoNotes: obj.shipment.cargo_notes,
+      eori: obj.shipment.eori,
+      notes: obj.shipment.notes,
+      incotermText: obj.shipment.incoterm_text,
+      customsCredit: obj.shipment.customs_credit
     })
   }
   toggleAcceptTerms () {
@@ -220,6 +237,7 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
+
     return parseFloat(shipmentData.shipment.total_price.value, 10) + customs.val + insurance.val
   }
   toNextStage () {
@@ -241,11 +259,13 @@ export class BookingDetails extends Component {
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
+
       return
     }
     if (cargoNotes === '' || !cargoNotes) {
       BookingDetails.scrollTo('cargo_notes')
       this.setState({ finishBookingAttempted: true })
+
       return
     }
 
@@ -276,6 +296,7 @@ export class BookingDetails extends Component {
     const { shipper, consignee } = this.state
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
+
       return
     }
     BookingDetails.scrollTo('totalGoodsValue', -50)
@@ -409,6 +430,9 @@ BookingDetails.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
+  reusedShipment: PropTypes.shape({
+    shipment: PropTypes.shipment
+  }),
   setStage: PropTypes.func.isRequired,
   hideRegistration: PropTypes.func.isRequired,
   shipmentDispatch: PropTypes.shape({
@@ -425,7 +449,8 @@ BookingDetails.defaultProps = {
   theme: null,
   tenant: null,
   prevRequest: null,
-  shipmentData: null
+  shipmentData: null,
+  reusedShipment: null
 }
 
 export default BookingDetails

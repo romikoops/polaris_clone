@@ -2,6 +2,7 @@
 
 module DocumentService
   class HubsWriter
+    include AwsConfig
     include WritingTool
     attr_reader :tenant, :hubs, :filename, :directory, :workbook, :worksheet
     

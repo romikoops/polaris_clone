@@ -32,6 +32,7 @@ import {
   ROW,
   WRAP_ROW
 } from '../../classNames'
+import { CargoContainerGroup } from '../Cargo/Container/Group'
 
 const ACCEPT = `${ROW(33)} ${ALIGN_END} height_100`
 
@@ -616,7 +617,7 @@ function prepContainerGroups (cargos, props) {
 
     const parsedGross = parseFloat(singleCargo.gross_weight)
     const gross = parsedGross * parsedQuantity
-
+    const items = Array(parsedQuantity).fill(singleCargo)
     const base = pick(
       singleCargo,
       ['size_class', 'quantity']
@@ -629,14 +630,14 @@ function prepContainerGroups (cargos, props) {
       groupAlias: i + 1,
       hsCodes: singleCargo.hs_codes,
       hsText: singleCargo.customs_text,
-      items: [],
+      items,
       payload_in_kg: payload,
       tare_weight: tare
     }
   })
 
   return Object.keys(cargoGroups).map(prop =>
-    (<CargoItemGroup
+    (<CargoContainerGroup
       key={v4()}
       group={cargoGroups[prop]}
       theme={props.theme}

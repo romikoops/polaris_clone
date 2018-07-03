@@ -118,7 +118,7 @@ class DocumentsDownloader extends React.Component {
     }
     return (
       <div
-        className={`flex-none layout-row ${styles.upload_btn_wrapper} `}
+        className={`flex-none layout-row layout-align-center-center ${styles.upload_btn_wrapper} `}
         data-tip={tooltip}
         data-for={tooltipId}
       >

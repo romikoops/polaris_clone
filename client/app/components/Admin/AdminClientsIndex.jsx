@@ -28,6 +28,11 @@ class AdminClientsIndex extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.clients.length) {
+      this.prepFilters(nextProps.clients)
+    }
+  }
 
   prepFilters () {
     const { clients } = this.props

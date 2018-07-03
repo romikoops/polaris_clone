@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
+import adminStyles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
@@ -12,6 +13,7 @@ import '../../styles/select-css-custom.css'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
+import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
 import {
   OptOutCookies,
   OptOutTenant,
@@ -19,10 +21,10 @@ import {
 } from '../OptOut'
 
 const ProfileBox = ({ user, style, edit }) => (
-  <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
+  <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-15 layout-row layout-align-center-center" onClick={edit}>
-        <i className="fa fa-pencil clip" style={style} />
+        <i className={`fa fa-pencil clip ${styles.edit_icon}`} style={style} />
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
@@ -35,7 +37,7 @@ const ProfileBox = ({ user, style, edit }) => (
         <p className="flex-none"> {user.company_name}</p>
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    {/* <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           First Name
@@ -54,7 +56,7 @@ const ProfileBox = ({ user, style, edit }) => (
       <div className="flex-100 layout-row layout-align-start-center ">
         <p className="flex-none"> {user.last_name}</p>
       </div>
-    </div>
+    </div> */}
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
@@ -88,19 +90,55 @@ ProfileBox.defaultProps = {
   style: {}
 }
 
+const EditNameBox = ({
+  user, handleChange, style
+}) => (
+  <div className={`${styles.set_size} layout-row flex-100`} />
+)
+
+EditNameBox.propTypes = {
+  user: PropTypes.user.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  style: PropTypes.objectOf(PropTypes.string)
+}
+
+EditNameBox.defaultProps = {
+  style: {}
+}
+
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme
 }) => (
-  <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+  <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
+    <div className="layout-row flex-90" />
+    <div className="flex-10 layout-row layout-align-end-center layout-wrap">
+      <span className="layout-row flex-100 layout-align-center-stretch">
+        <div
+          onClick={onSave}
+          className={`layout-row flex-50 ${styles.save} layout-align-center-center`}
+        >
+          <i className="fa fa-check" />
+        </div>
+        <div
+          onClick={close}
+          className={`layout-row flex-50 ${styles.cancel} layout-align-center-center`}
+        >
+          <i className="fa fa-times" />
+        </div>
+      </span>
+    </div>
+    <div
+      className={`flex-100 layout-row layout-align-start-start layout-wrap
+      ${styles.margin_top} ${adminStyles.margin_bottom}`}
+    >
       <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
+        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Company
         </sup>
       </div>
       <div className="input_box flex-100 layout-row layout-align-start-center ">
         <input
-          className="flex-90"
+          className={`flex-90 ${styles.input_style}`}
           type="text"
           value={user.company_name}
           onChange={handleChange}
@@ -108,15 +146,15 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          First Name
+        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
+            First Name
         </sup>
       </div>
       <div className="input_box flex-100 layout-row layout-align-start-center ">
         <input
-          className="flex-none"
+          className={`flex-none ${styles.input_style}`}
           type="text"
           value={user.first_name}
           onChange={handleChange}
@@ -124,15 +162,15 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
-          Last Name
+        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
+            Last Name
         </sup>
       </div>
       <div className="input_box flex-100 layout-row layout-align-start-center ">
         <input
-          className="flex-none"
+          className={`flex-none ${styles.input_style}`}
           type="text"
           value={user.last_name}
           onChange={handleChange}
@@ -140,15 +178,15 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
+        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Email
         </sup>
       </div>
       <div className="input_box flex-100 layout-row layout-align-start-center ">
         <input
-          className="flex-none"
+          className={`flex-none ${styles.input_style}`}
           type="text"
           value={user.email}
           onChange={handleChange}
@@ -156,40 +194,19 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
-        <sup style={style} className="clip flex-none">
+        <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone
         </sup>
       </div>
       <div className="input_box flex-100 layout-row layout-align-start-center ">
         <input
-          className="flex-none"
+          className={`flex-none ${styles.input_style}`}
           type="text"
           value={user.phone}
           onChange={handleChange}
           name="phone"
-        />
-      </div>
-    </div>
-    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-      <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
-        <RoundButton
-          theme={theme}
-          handleNext={close}
-          size="small"
-          text="close"
-          iconClass="fa-times"
-        />
-      </div>
-      <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
-        <RoundButton
-          theme={theme}
-          handleNext={onSave}
-          active
-          size="small"
-          text="Save"
-          iconClass="fa-floppy-o"
         />
       </div>
     </div>
@@ -355,7 +372,6 @@ export class UserProfile extends Component {
     if (!user) {
       return ''
     }
-
     const {
       editBool, editObj, newAliasBool, newAlias, optOut
     } = this.state
@@ -506,182 +522,222 @@ export class UserProfile extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         {newAliasBool ? newAliasBox : ''}
-        <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding">
-          <h1 className="sec_title_text flex-none cli" style={textStyle}>
-            Profile
-          </h1>
+        <div className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
+          {editBool ? (
+            <EditNameBox
+              user={editObj}
+              handleChange={this.handleChange}
+            />
+          ) : (
+            <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
+              <span className="layout-row flex-20 layout-align-center-center">
+                <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
+              </span>
+              <div className="layout-align-center-center layout-row flex">
+                <p>Hello,&nbsp;</p>
+                <h1 className="flex-none cli">
+                  {user.first_name} {user.last_name}
+                </h1>
+              </div>
+            </div>
+          )}
         </div>
         <div
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
         >
-          <div className="flex-100 layout-row layout-align-space-between-center sec_header">
-            <p className="sec_header_text flex-none"> Account Details </p>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-            <div className="flex-50 layout-row layout-align-start-center">
-              {editBool ? (
-                <EditProfileBox
-                  user={editObj}
-                  style={textStyle}
-                  theme={theme}
-                  handleChange={this.handleChange}
-                  onSave={this.saveEdit}
-                  close={this.closeEdit}
-                />
-              ) : (
-                <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
+          <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch ">
+            <AlternativeGreyBox
+              wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
+              contentClassName="layout-row flex"
+              content={(
+                <div className="layout-row flex-100">
+                  {editBool ? (
+                    <EditProfileBox
+                      user={editObj}
+                      style={textStyle}
+                      theme={theme}
+                      handleChange={this.handleChange}
+                      onSave={this.saveEdit}
+                      close={this.closeEdit}
+                    />
+                  ) : (
+                    <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
+                  )}
+                  <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+                    <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+                      {/* <div className="flex-100 layout-row layout-align-end-center layout-wrap">
+                        <h3 className="flex-none"> Currency Settings:</h3>
+                      </div> */}
+                      <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
+                        <p className="flex-none">Currency:</p>
+                        <span><strong>{user.currency}</strong></span>
+                      </div>
+                    </div>
+                    <div className="flex-75 layout-row layout-align-space-around-center layout-wrap">
+                      {/* <StyledSelect
+                        name="currency"
+                        className={`${styles.select}`}
+                        value={this.state.currencySelect}
+                        options={currencyOptions}
+                        onChange={this.setCurrency}
+                        clearable={false}
+                      />
+                      <div
+                        onClick={this.saveCurrency}
+                        className={`layout-row flex-25 ${styles.save} layout-align-center-center`}
+                      >
+                        <i className="fa fa-check" /> Save
+                      </div> */}
+                      {/* <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
+                        <RoundButton
+                          theme={theme}
+                          size="small"
+                          active
+                          text="Save"
+                          handleNext={this.saveCurrency}
+                          iconClass="fa-floppy-o"
+                        />
+                      </div> */}
+                    </div>
+                  </div>
+                </div>
               )}
-            </div>
-            {/* <div className="flex-50 layout-row layout-align-end-center layout-wrap">
-              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-                  <h3 className="flex-none"> Currency Settings:</h3>
+            />
+            <AlternativeGreyBox
+              title="GDPR - Your Data"
+              wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
+              contentClassName="layout-column flex"
+              content={(
+                <div className={`layout-row layout-wrap ${styles.conditions_box}`}>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-50 layout-row layout-align-start-center">
+                      {/* <p className="flex-none">
+                        Here you can download all the data that ItsMyCargo has related to your account.
+                      </p> */}
+                      <p className="flex-none">
+                        Download all data from ItsMyCargo
+                      </p>
+                    </div>
+                    <div className={`flex-50 layout-row layout-align-center-center  ${styles.text_center}`}>
+                      <DocumentsDownloader
+                        theme={theme}
+                        target="gdpr"
+                        options={{ userId: user.id }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-50 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        {`${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions`}
+                      </p>
+                    </div>
+                    <div className="flex-50 layout-row layout-align-center-center ">
+                      <RoundButton
+                        theme={theme}
+                        size="small"
+                        active
+                        text="Opt Out"
+                        handleNext={() => this.optOut('tenant')}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-50 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        {`ItsMyCargo GMBH Terms and Conditions`}
+                      </p>
+                      {/* <p className="flex-none">
+                        {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
+                      </p> */}
+                    </div>
+                    <div className="flex-50 layout-row layout-align-center-center ">
+                      <RoundButton
+                        theme={theme}
+                        size="small"
+                        active
+                        text="Opt Out"
+                        handleNext={() => this.optOut('itsmycargo')}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
+                    <div className="flex-50 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        {`ItsMyCargo's use of cookies`}
+                      </p>
+                      {/* <p className="flex-none">
+                        {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
+                      </p> */}
+                    </div>
+                    <div className="flex-50 layout-row layout-align-center-center ">
+                      <RoundButton
+                        theme={theme}
+                        size="small"
+                        active
+                        text="Opt Out"
+                        handleNext={() => this.optOut('cookies')}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-                  <p className="flex-none">Current Selection: {user.currency}</p>
-                </div>
-              </div>
-               <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                <StyledSelect
-                  name="currency"
-                  className={`${styles.select}`}
-                  value={this.state.currencySelect}
-                  options={currencyOptions}
-                  onChange={this.setCurrency}
-                  clearable={false}
-                />
-                <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    active
-                    text="Save"
-                    handleNext={this.saveCurrency}
-                    iconClass="fa-floppy-o"
-                  />
-                </div>
-              </div>
-            </div> */}
+              )}
+            />
           </div>
         </div>
-        <div
-          className={`flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
-            styles.section
-          } `}
-        >
-          <div className="flex-100 layout-row layout-align-space-between-center sec_header">
-            <p className="sec_header_text flex-none"> Aliases </p>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+          <div
+            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right ${
+              styles.section
+            } `}
+          >
             <div
-              key="addNewAliasButton"
-              className={`${defaults.pointy} ${styles.margin} flex-33`}
-              onClick={this.toggleNewAlias}
+              className={`flex-100 layout-align-start-center ${styles.greyBg}`}
             >
+              <span><b>Aliases</b></span>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <div
-                className={`${styles['location-box']} ${
-                  styles['new-address']
-                } layout-row layout-align-start-center layout-wrap`}
+                key="addNewAliasButton"
+                className={`${defaults.pointy} ${styles.margin} flex-30 flex-md-45 `}
+                onClick={this.toggleNewAlias}
               >
-                <div className="layout-row layout-align-center flex-100">
-                  <div className={`${styles['plus-icon']}`} />
-                </div>
+                <div
+                  className={`${styles['location-box']} ${
+                    styles['new-address']
+                  } layout-row layout-align-start-center layout-wrap`}
+                >
+                  <div className="layout-row layout-align-center flex-100">
+                    <div className={`${styles['plus-icon']}`} />
+                  </div>
 
-                <div className="layout-row layout-align-center flex-100">
-                  <h3>Add Alias</h3>
+                  <div className="layout-row layout-align-center flex-100">
+                    <h3>Add Alias</h3>
+                  </div>
                 </div>
               </div>
+              {contactArr}
             </div>
-            {contactArr}
           </div>
-        </div>
 
-        <div
-          className={`flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
-            styles.section
-          } `}
-        >
-          <div className="flex-100 layout-row layout-align-space-between-center sec_header">
-            <p className="sec_header_text flex-none"> Saved Locations </p>
-          </div>
-          <UserLocations
-            setNav={() => {}}
-            locations={locations}
-            makePrimary={this.makePrimary}
-            userDispatch={userDispatch}
-            theme={theme}
-            user={user}
-          />
-        </div>
-        <div
-          className={`flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
-            styles.section
-          } `}
-        >
-          <div className="flex-100 layout-row layout-align-space-between-center sec_header">
-            <p className="sec_header_text flex-none"> GDPR - Your data </p>
-          </div>
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-75 layout-row layout-align-start-center">
-              <p className="flex-none">
-                Here you can download all the data that ItsMyCargo has related to your account.
-              </p>
+          <div
+            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
+              styles.section
+            } `}
+          >
+            <div
+              className={`flex-100 layout-align-start-center ${styles.greyBg}`}
+            >
+              <span><b>Saved Locations</b></span>
             </div>
-            <div className="flex-25 layout-row layout-align-end-center">
-              <DocumentsDownloader
-                theme={theme}
-                target="gdpr"
-                options={{ userId: user.id }}
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-75 layout-row layout-align-start-center">
-              <p className="flex-none">
-                {`To opt out of the ${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions click the "Opt Out" button to the right`}
-              </p>
-            </div>
-            <div className="flex-25 layout-row layout-align-end-center">
-              <RoundButton
-                theme={theme}
-                size="small"
-                active
-                text="Opt Out"
-                handleNext={() => this.optOut('tenant')}
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-75 layout-row layout-align-start-center">
-              <p className="flex-none">
-                {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
-              </p>
-            </div>
-            <div className="flex-25 layout-row layout-align-end-center">
-              <RoundButton
-                theme={theme}
-                size="small"
-                active
-                text="Opt Out"
-                handleNext={() => this.optOut('itsmycargo')}
-              />
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-75 layout-row layout-align-start-center">
-              <p className="flex-none">
-                {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
-              </p>
-            </div>
-            <div className="flex-25 layout-row layout-align-end-center">
-              <RoundButton
-                theme={theme}
-                size="small"
-                active
-                text="Opt Out"
-                handleNext={() => this.optOut('cookies')}
-              />
-            </div>
+            <UserLocations
+              setNav={() => {}}
+              locations={locations}
+              makePrimary={this.makePrimary}
+              userDispatch={userDispatch}
+              theme={theme}
+              user={user}
+            />
           </div>
         </div>
         {optOutModal}

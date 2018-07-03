@@ -10,6 +10,7 @@ subdomains = [
   { cloudfront: 'E42GZPFHU0WZO', subdomain: 'belglobe' },
   { cloudfront: 'E2IQ14Z9Z5JEGN', subdomain: 'greencarrier-sandbox' },
   { cloudfront: 'E1AMKNHZUXL589', subdomain: 'speedtrans' },
+  { cloudfront: 'EMDO0NOOSGVWK', subdomain: 'trucking' },
   { cloudfront: 'E4GVOGV46JUC2', subdomain: 'speedtrans-sandbox' }
 ]
 

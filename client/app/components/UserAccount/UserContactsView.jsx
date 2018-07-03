@@ -205,9 +205,6 @@ export class UserContactsView extends Component {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
     shipment.companyName = user ? `${user.company_name}` : ''
-    const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
-    shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''
-    shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
     return shipment
   }
 

@@ -37,6 +37,7 @@ import addressFieldsAreValid from './addressFieldsAreValid'
 import calcAvailableMotsForRoute,
 { shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
 import getRequests from '../ShipmentLocationBox/getRequests'
+import reuseShipments from '../../helpers/reuseShipment'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -154,9 +155,10 @@ export class ShipmentDetails extends Component {
     this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
   }
   componentWillMount () {
-    const { prevRequest, setStage } = this.props
-
-    if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
+    const { prevRequest, setStage, reusedShipment } = this.props
+    if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
+      this.loadReusedShipment(reusedShipment)
+    } else if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -178,7 +180,6 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
-
     if (
       shouldUpdateAvailableMotsForRoute(
         this.state.filteredRouteIndexes,
@@ -189,8 +190,8 @@ export class ShipmentDetails extends Component {
 
       return false
     }
-
-    if (!this.props.shipmentData.routes && nextProps.shipmentData.routes) {
+    if (nextProps.shipmentData.routes && nextProps.shipmentData.routes.length > 0 &&
+    nextState.filteredRouteIndexes.length === 0) {
       this.getInitalFilteredRouteIndexes()
     }
 
@@ -316,6 +317,35 @@ export class ShipmentDetails extends Component {
       prevRequestLoaded: true
     })
   }
+  loadReusedShipment (obj) {
+    const newCargoItemsErrors = obj.cargoItems.map(cia => ({
+      payload_in_kg: false,
+      dimension_x: false,
+      dimension_y: false,
+      dimension_z: false,
+      cargo_item_type_id: false,
+      quantity: false
+    }))
+    const newContainerErrors = obj.containers.map(cia => ({
+      payload_in_kg: false
+    }))
+    this.setState({
+      cargoItems: reuseShipments.reuseCargoItems(obj.cargoItems),
+      containers: reuseShipments.reuseContainers(obj.containers),
+      cargoItemsErrors: newCargoItemsErrors,
+      containersErrors: newContainerErrors,
+      selectedDay: obj.shipment.has_pre_carriage
+        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_dropp_off_date,
+      origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
+      destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
+      has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
+      has_pre_carriage: !!obj.shipment.trucking.pre_carriage.truck_type,
+      trucking: obj.shipment.trucking,
+      incoterm: obj.shipment.incoterm,
+      routeSet: true,
+      prevRequestLoaded: true
+    })
+  }
 
   updateAvailableMotsForRoute () {
     this.setState((prevState) => {
@@ -330,6 +360,7 @@ export class ShipmentDetails extends Component {
 
   newContainerGrossWeight () {
     const container = this.state.containers.new
+
     return container.type ? container.tare_weight + container.weight : 0
   }
 
@@ -410,6 +441,7 @@ export class ShipmentDetails extends Component {
     } else {
       excessChargeableWeightText = ''
     }
+
     return excessChargeableWeightText
   }
 
@@ -516,17 +548,20 @@ export class ShipmentDetails extends Component {
     ) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('map')
+
       return
     }
     if (!selectedDay) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('dayPicker')
+
       return
     }
 
     if (!incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('incoterms')
+
       return
     }
 
@@ -724,6 +759,7 @@ export class ShipmentDetails extends Component {
         handleTruckingDetailsChange={this.handleTruckingDetailsChange}
         filteredRouteIndexes={filteredRouteIndexes}
         updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
+        reusedShipment={this.props.reusedShipment}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -1036,6 +1072,9 @@ ShipmentDetails.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
+  reusedShipment: PropTypes.shape({
+    shipment: PropTypes.shipment
+  }),
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
@@ -1049,7 +1088,8 @@ ShipmentDetails.propTypes = {
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: []
+  messages: [],
+  reusedShipment: null
 }
 
 export default ShipmentDetails
