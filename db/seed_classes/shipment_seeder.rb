@@ -4,6 +4,7 @@ class ShipmentSeeder
   include IteratorHelpers
 
   def initialize(options={})
+    @users = determine_users_from_options(options)
   end
 
   def perform
@@ -11,12 +12,14 @@ class ShipmentSeeder
 
     counter = 0
     nested_each_with_times(
-      Tenant.demo.users.shipper.to_a, 1,
+      @users.to_a, 1,
       %w(requested confirmed finished), 1,
       Shipment::LOAD_TYPES, 1,
       Shipment::DIRECTIONS, 1
     ) do |user, status, load_type, direction|
-      puts "\n\n   #{user.full_name} | #{status} | #{load_type} | #{direction}".light_blue
+      puts  "\n\n  #{user.tenant.name.blue}" + " | #{user.full_name} | #{status} | " \
+            "#{load_type} | #{direction}".light_blue
+
       print "      New Shipment ids:  "
 
       nested_each_with_times(
@@ -60,6 +63,8 @@ class ShipmentSeeder
     puts
     counter
   end
+
+  private
 
   def schedule
     Schedule.new(
@@ -129,6 +134,16 @@ class ShipmentSeeder
         contact:      available_contacts.delete(available_contacts.sample),
         contact_type: contact_type
       )
+    end
+  end
+
+  def determine_users_from_options(options)
+    if options[:user_filter]
+      User.where(options[:user_filter])
+    elsif options[:tenant_filter]
+      User.where(tenant: Tenant.where(options[:tenant_filter])).shipper
+    else
+      User.shipper
     end
   end
 end
