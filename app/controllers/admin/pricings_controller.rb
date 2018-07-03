@@ -28,8 +28,49 @@ class Admin::PricingsController < Admin::AdminBaseController
     itinerary = Itinerary.find(params[:id])
     pricings = itinerary.pricings.where(user_id: nil).map { |pricing| { pricing: pricing, transport_category: pricing.transport_category } } # get_itinerary_pricings_hash(itinerary.id)
     user_pricings = itinerary.pricings.where.not(user_id: nil).map { |pricing| { pricing: pricing, transport_category: pricing.transport_category, user_id: pricing.user_id } }
-    stops = itinerary.stops.map { |s| { stop: s, hub: s.hub } }
+    stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(itineraryPricingData: pricings, itinerary: itinerary.as_options_json, stops: stops, userPricings: user_pricings)
+  end
+  def assign_dedicated
+    byebug
+    params[:clientIds].each do |client_id|
+      pricing_to_update = Pricing.new
+      new_pricing_data = params[:pricing].as_json
+      new_pricing_data.delete("controller")
+      new_pricing_data.delete("subdomain_id")
+      new_pricing_data.delete("action")
+      new_pricing_data.delete("id")
+      new_pricing_data.delete("created_at")
+      new_pricing_data.delete("updated_at")
+      new_pricing_data.delete("load_type")
+      new_pricing_data["user_id"] = client_id.to_i
+      pricing_details = new_pricing_data.delete("data")
+      pricing_exceptions = new_pricing_data.delete("exceptions")
+      pricing_to_update.update(new_pricing_data)
+      pricing_details.each do |shipping_type, pricing_detail_data|
+        currency = pricing_detail_data.delete("currency")
+        pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
+        range = pricing_detail_params.delete("range")
+        pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: current_user.tenant)
+        pricing_detail.update!(pricing_detail_params)
+        pricing_detail.update!(range: range, currency_name: currency) # , external_updated_at: external_updated_at)
+      end
+
+      pricing_exceptions.each do |pricing_exception_data|
+        pricing_details = pricing_exception_data.delete("data")
+        pricing_exception = pricing_to_update.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
+        pricing_details.each do |shipping_type, pricing_detail_data|
+          currency = pricing_detail_data.delete("currency")
+          range = pricing_detail_data.delete("range")
+          pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
+          pricing_detail = pricing_exception.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
+          pricing_detail.update!(range: range, currency_name: currency)
+        end
+      end
+    end
+    byebug
+    response_handler(pricing: pricing_to_update.as_json, transport_category: pricing_to_update.transport_category)
+    
   end
 
   def update_price

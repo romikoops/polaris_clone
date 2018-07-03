@@ -11,7 +11,7 @@ import {
 } from '../../../constants'
 import AdminPromptConfirm from '../Prompt/Confirm'
 
-class PricingRow extends PureComponent {
+class PricingRangeRow extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -38,7 +38,7 @@ class PricingRow extends PureComponent {
     this.closeConfirm()
     this.toggleEdit()
   }
-  renderFeeBoxes (fee, editCharge, selectOptions, direction, edit) {
+  renderFeeBoxes (fee, editCharge, selectOptions, edit) {
     const {
       handleSelect, handleChange, target, loadType
     } = this.props
@@ -107,7 +107,7 @@ class PricingRow extends PureComponent {
               type="number"
               value={editCharge.data[fee.key][chargeKey]}
               onChange={e => handleChange(e, target)}
-              name={`${direction}-${fee.key}-${chargeKey}`}
+              name={`${loadType}-${fee.key}-${chargeKey}`}
             />
           </div>
           {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
@@ -128,7 +128,46 @@ class PricingRow extends PureComponent {
 
     return cells
   }
-  renderDateBoxes (fee, editCharge, direction, edit) {
+  renderRangeFeeBoxes (rangeFee, index, editCharge, selectOptions, fee, edit) {
+    const {
+      handleRangeChange, target, loadType
+    } = this.props
+    const feeKeys = ['min', 'max', 'rate']
+    const cells = []
+    feeKeys.forEach((chargeKey, i) => {
+      const cell = edit ? (<div
+        key={chargeKey}
+        className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+          styles.price_cell
+        }`}
+      >
+        <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[chargeKey]}</p>
+        <div className="flex-95 layout-row input_box_full">
+          <input
+            type="number"
+            value={editCharge.data[fee.key].range[index][chargeKey]}
+            onChange={e => handleRangeChange(e, target)}
+            name={`${loadType}-${fee.key}-${index}-${chargeKey}`}
+          />
+        </div>
+        {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
+      </div>) : (<div
+        className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+          styles.price_cell
+        }`}
+      >
+        <p className={`flex-90 ${styles.price_cell_data}`}>
+          {rangeFee[chargeKey]} {chargeKey === 'rate' ? fee.currency : 'kg'}
+        </p>
+        <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary[chargeKey]}</p>
+        {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
+      </div>)
+      cells.push(cell)
+    })
+
+    return cells
+  }
+  renderDateBoxes (fee, editCharge, edit) {
     const { handleDateEdit } = this.props
     const dateKeys = ['effective_date', 'expiration_date']
     const cells = []
@@ -183,7 +222,7 @@ class PricingRow extends PureComponent {
   render () {
     const { edit, confirm } = this.state
     const {
-      fee, theme, selectOptions, direction, editCharge, initialEdit
+      fee, theme, selectOptions, editCharge, initialEdit
     } = this.props
     if (!selectOptions) {
       return ''
@@ -210,49 +249,56 @@ class PricingRow extends PureComponent {
         <i className="fa fa-times" />
       </div>
     </div>)
-    console.log(fee)
+    const rangeRows = fee.range.map((rFee, index) => (
+      <div className="flex-100 layout-row layout-align-end-center">
+        {this.renderRangeFeeBoxes(rFee, index, editCharge, selectOptions, fee, edit)}
+      </div>
+    ))
 
     return (
       <div
-        className={`${styles.fee_row} flex-100 layout-row layout-align-center-center`}
+        className={`${styles.fee_row} flex-100 layout-row layout-align-center-center layout-wrap`}
       >
         { confimPrompt }
-        <div className="flex-20 layout-row layout-align-start-center">
-          <p className="flex-none offset-5">{ `${fee.key} - ${fee.name}`}</p>
-        </div>
-        <div className="flex-50 layout-row ">
-          {this.renderFeeBoxes(fee, editCharge, selectOptions, direction, edit)}
-        </div>
-        <div className="flex-30 layout-row ">
-          <div className="flex-85 layout-row">
-            {this.renderDateBoxes(fee, editCharge, direction, edit)}
+        <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-20 layout-row layout-align-start-center">
+            <p className="flex-none offset-5">{ `${fee.key} - ${fee.name}`}</p>
           </div>
-          { !initialEdit ? <div className="flex-15 layout-row layout-align-center-center" >
-            { edit ? endEdit : startEdit }
-          </div> : ''}
+          <div className="flex-50 layout-row layout-align-end-center">
+            {this.renderFeeBoxes(fee, editCharge, selectOptions, edit)}
+          </div>
+          <div className="flex-30 layout-row ">
+            <div className="flex-85 layout-row">
+              {this.renderDateBoxes(fee, editCharge, edit)}
+            </div>
+            { !initialEdit ? <div className="flex-15 layout-row layout-align-center-center" >
+              { edit ? endEdit : startEdit }
+            </div> : ''}
+          </div>
         </div>
+        <div className="flex-100 layout-row layout-align-end-center layout-wrap" />
+        {rangeRows}
       </div>
     )
   }
 }
 
-PricingRow.propTypes = {
+PricingRangeRow.propTypes = {
   theme: PropTypes.theme.isRequired,
   target: PropTypes.string.isRequired,
   saveEdit: PropTypes.func.isRequired,
   handleSelect: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleRangeChange: PropTypes.func.isRequired,
   handleDateEdit: PropTypes.func.isRequired,
   editCharge: PropTypes.objectOf(PropTypes.any).isRequired,
-  direction: PropTypes.string.isRequired,
-  loadType: PropTypes.string,
+  loadType: PropTypes.string.isRequired,
   fee: PropTypes.objectOf(PropTypes.any).isRequired,
   selectOptions: PropTypes.objectOf(PropTypes.any).isRequired,
   isEditing: PropTypes.func.isRequired,
   initialEdit: PropTypes.bool
 }
-PricingRow.defaultProps = {
-  initialEdit: false,
-  loadType: ''
+PricingRangeRow.defaultProps = {
+  initialEdit: false
 }
-export default PricingRow
+export default PricingRangeRow

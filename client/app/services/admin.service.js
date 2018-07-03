@@ -288,6 +288,17 @@ function updatePricing (id, data) {
   return fetch(`${BASE_URL}/admin/pricings/update/${id}`, requestOptions)
     .then(handleResponse)
 }
+function assignDedicatedPricings (pricing, clientIds) {
+  // debugger // eslint-disable-line
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pricing, clientIds })
+  }
+
+  return fetch(`${BASE_URL}/admin/pricings/assign_dedicated`, requestOptions)
+    .then(handleResponse)
+}
 
 function updateServiceCharge (id, data) {
   const requestOptions = {
@@ -580,7 +591,8 @@ export const adminService = {
   editHub,
   deleteClient,
   editCustomsFees,
-  updateHubMandatoryCharges
+  updateHubMandatoryCharges,
+  assignDedicatedPricings
 }
 
 export default adminService

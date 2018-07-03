@@ -18,11 +18,12 @@ import {
 import { gradientGenerator } from '../../../helpers'
 import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
+import { RoundButton } from '../../RoundButton/RoundButton'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
 
-export class AdminPricingBox extends Component {
+export class AdminPricingDedicated extends Component {
   static selectFromOptions (options, value) {
     if (!value) {
       return options[0]
@@ -46,22 +47,15 @@ export class AdminPricingBox extends Component {
     super(props)
     this.state = {
       selectOptions: {
-        customs: {},
         charges: {}
       },
       editor: {
-        charges: {
-          import: {},
-          export: {}
-        },
-        customs: {
-          import: {},
-          export: {}
-        }
       },
-      edit: false,
+      edit: true,
       direction: 'import',
-      selectedCargoClass: 'lcl'
+      selectedCargoClass: 'lcl',
+      setUsers: false,
+      selectedClients: {}
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -78,11 +72,10 @@ export class AdminPricingBox extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
-    const { selectedCargoClass } = this.state
     if (nextProps.charges[0] && nextProps.charges[0].pricing) {
-      const charge = nextProps.charges
-        .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
-      this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      nextProps.charges.forEach((charge) => {
+        this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      })
     }
     if (this.state.charges !== nextProps.charges) {
       this.setState({
@@ -112,13 +105,13 @@ export class AdminPricingBox extends Component {
       Object.keys(charges.data[key]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
-          newObj[key][chargeKey] = AdminPricingBox.selectFromOptions(
+          newObj[key][chargeKey] = AdminPricingDedicated.selectFromOptions(
             opts,
             charges.data[key][chargeKey]
           )
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
-          newObj[key][chargeKey] = AdminPricingBox.selectFromOptions(
+          newObj[key][chargeKey] = AdminPricingDedicated.selectFromOptions(
             opts,
             charges.data[key][chargeKey]
           )
@@ -304,7 +297,7 @@ export class AdminPricingBox extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj[direction][oKey][chargeKey] = AdminPricingBox.selectFromOptions(
+        newObj[direction][oKey][chargeKey] = AdminPricingDedicated.selectFromOptions(
           opts,
           charges[direction][oKey][chargeKey]
         )
@@ -340,8 +333,36 @@ export class AdminPricingBox extends Component {
       }, () => this.prepAllOptions())
     }
   }
+  assignUsers () {
+    this.setState({ setUsers: !this.state.setUsers })
+  }
+  assignUser (id) {
+    this.setState({
+      selectedClients: {
+        ...this.state.selectedClients,
+        [id]: !this.state.selectedClients[id]
+      }
+    })
+  }
+  savePricings () {
+    const { adminDispatch } = this.props
+    const { editor, selectedClients } = this.state
+    const activeClients = []
+    Object.keys(selectedClients).forEach((ck) => {
+      if (selectedClients[ck]) {
+        activeClients.push(ck)
+      }
+    })
+    Object.keys(editor.data).forEach((fk) => {
+      delete editor.data[fk].key
+      delete editor.data[fk].name
+      delete editor.data[fk].effective_date
+      delete editor.data[fk].expiration_date
+    })
+    adminDispatch.assignDedicatedPricings(editor, activeClients)
+  }
   renderCargoClassButtons () {
-    const { selectedCargoClass, charges, isEditing } = this.state
+    const { selectedCargoClass, charges } = this.state
     const { theme } = this.props
     const { primary, secondary } = theme.colors
     const bgStyle = gradientGenerator(primary, secondary)
@@ -356,7 +377,7 @@ export class AdminPricingBox extends Component {
       return (<div
         className={`flex-25 layout-row layout-align-start-center ${inactiveStyle} ${styles2.cargo_class_button}`}
         style={buttonStyle}
-        onClick={hasCargoClass && !isEditing ? () => this.setCargoClass(cargoClass.value) : null}
+        onClick={hasCargoClass ? () => this.setCargoClass(cargoClass.value) : null}
       >
         <div className={`flex-none layout-row layout-align-center-center ${innerStyle} ${styles2.cargo_class_button_inner}`}>
           <p className="flex-none">{cargoClass.label}</p>
@@ -367,12 +388,14 @@ export class AdminPricingBox extends Component {
   }
 
   render () {
-    const { theme, title } = this.props
+    const { theme, title, clients } = this.props
 
     const {
       selectOptions,
       charges,
-      selectedCargoClass
+      selectedCargoClass,
+      setUsers,
+      selectedClients
     } = this.state
 
     if (!charges || (charges && !charges[0])) {
@@ -403,6 +426,7 @@ export class AdminPricingBox extends Component {
         saveEdit={e => this.saveEdit(e)}
         handleRangeChange={this.handleRangeChange}
         target="charges"
+        initialEdit
       />) : (<PricingRow
         className="flex-100"
         theme={theme}
@@ -416,11 +440,11 @@ export class AdminPricingBox extends Component {
         handleChange={this.handleChange}
         saveEdit={e => this.saveEdit(e)}
         target="charges"
+        initialEdit
       />)
     })
-
-    return (
-      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
+    const setPricingView = (
+      <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
           <div className="flex-30 layout-row layout-align-start-center">
             <p className={`flex-none ${styles2.text}`} >{title || 'Fees & Charges' }</p>
@@ -433,21 +457,72 @@ export class AdminPricingBox extends Component {
           <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
             {feeRows}
           </div>
+          <div className={`flex-100 layout-row layout-align-end-center layout-wrap ${styles.fee_row_container}`}>
+            <RoundButton
+              theme={theme}
+              handleNext={() => this.assignUsers()}
+              text="Assign Users"
+              size="small"
+              active
+            />
+          </div>
         </div>
+      </div>
+    )
+    const userTiles = clients.map(c => (
+      <div
+        className={`flex-100 flex-sm-50 flex-md-33 flex-gt-md-20 layout-row ${styles2.assign_user_tile}`}
+        onClick={() => this.assignUser(c.id)}
+      >
+        <div className="flex layout-row layout-align-start-center">
+          <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
+        </div>
+        <div className={`flex-none layout-row layout-align-center-center ${styles2.assigned_checkmark}`}>
+          { selectedClients[c.id] ? <i className="fa fa-check flex-none" /> : '' }
+        </div>
+
+      </div>
+    ))
+    const setUserView = (
+      <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
+          <div className="flex-30 layout-row layout-align-start-center">
+            <p className={`flex-none ${styles2.text}`} >Assign Users</p>
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+          {userTiles}
+        </div>
+        <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+          <RoundButton
+            theme={theme}
+            handleNext={() => this.savePricings()}
+            text="Save Pricings"
+            size="small"
+            active
+          />
+        </div>
+      </div>
+    )
+
+    return (
+      <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
+        {setUsers ? setUserView : setPricingView}
       </div>
     )
   }
 }
-AdminPricingBox.propTypes = {
+AdminPricingDedicated.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.arrayOf(PropTypes.any),
+  clients: PropTypes.arrayOf(PropTypes.user).isRequired,
   title: PropTypes.string
 }
-AdminPricingBox.defaultProps = {
+AdminPricingDedicated.defaultProps = {
   theme: {},
   charges: [],
   title: ''
 }
 
-export default AdminPricingBox
+export default AdminPricingDedicated
