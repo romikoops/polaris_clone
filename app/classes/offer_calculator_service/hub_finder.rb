@@ -2,7 +2,7 @@
 
 module OfferCalculatorService
   class HubFinder < Base
-    def exec
+    def perform
       { origin: "pre", destination: "on" }.reduce({}) do |hubs, (target, carriage)|
         hubs.merge(target => hubs_for_target(target, carriage))
       end

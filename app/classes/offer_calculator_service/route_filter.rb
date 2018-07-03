@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module OfferCalculatorService
   class RouteFilter < Base
-    def exec(routes)
+    def perform(routes)
       return routes unless should_apply_filter?(routes)
 
       filtered_routes = routes.select do |route|

@@ -49,7 +49,7 @@ module ShippingTools
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
 
-    offer_calculator.calc_offer!
+    offer_calculator.perform
 
     offer_calculator.shipment.save!
     {
