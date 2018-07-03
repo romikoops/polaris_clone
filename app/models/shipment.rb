@@ -2,7 +2,7 @@
 
 class Shipment < ApplicationRecord
   extend ShippingTools
-  include ActiveModel::Validations
+  # include ActiveModel::Validations
   STATUSES = %w(
     booking_process_started
     requested_by_unconfirmed_account
@@ -26,8 +26,7 @@ class Shipment < ApplicationRecord
 
   validate :planned_pickup_date_is_a_datetime?
   validate :user_tenant_match
-  validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validate :itinerary_trip_match
 
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
@@ -91,13 +90,13 @@ class Shipment < ApplicationRecord
   def origin_layover
     return nil if trip.nil?
 
-    trip.layovers.hub_id(origin_hub_id)
+    trip.layovers.hub_id(origin_hub_id).try(:first)
   end
 
   def destination_layover
     return nil if trip.nil?
 
-    trip.layovers.hub_id(destination_hub_id)
+    trip.layovers.hub_id(destination_hub_id).try(:first)
   end
 
   def origin_layover=(layover)
@@ -116,9 +115,10 @@ class Shipment < ApplicationRecord
   end
 
   def set_trip_using_layover(layover)
-    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id != trip_id
+    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id == trip_id
 
-    self.trip ||= layover.trip
+    self.trip      ||= layover.trip
+    self.itinerary ||= layover.trip.itinerary
   end
 
   def pickup_address
@@ -386,5 +386,11 @@ class Shipment < ApplicationRecord
     return if tenant_id == user.tenant_id
 
     errors.add(:user, "tenant_id does not match the shipment's tenant_id")
+  end
+
+  def itinerary_trip_match
+    return if trip.nil? || trip.itinerary_id == itinerary_id
+
+    errors.add(:user, "trip_id does not match the shipment's itinerary_id")
   end
 end

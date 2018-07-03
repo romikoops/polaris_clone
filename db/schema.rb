@@ -464,23 +464,16 @@ ActiveRecord::Schema.define(version: 20180702132909) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
     t.string "status"
     t.string "load_type"
     t.datetime "planned_pickup_date"
     t.boolean "has_pre_carriage"
-    t.decimal "pre_carriage_distance_km"
     t.boolean "has_on_carriage"
-    t.decimal "on_carriage_distance_km"
     t.string "cargo_notes"
-    t.string "haulage"
-    t.string "hs_code", default: [], array: true
-    t.jsonb "schedules_charges"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
@@ -500,10 +493,10 @@ ActiveRecord::Schema.define(version: 20180702132909) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.datetime "closing_date"
-    t.string "incoterm_text"
     t.integer "origin_nexus_id"
     t.integer "destination_nexus_id"
+    t.datetime "closing_date"
+    t.string "incoterm_text"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
@@ -673,6 +666,7 @@ ActiveRecord::Schema.define(version: 20180702132909) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
