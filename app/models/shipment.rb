@@ -75,9 +75,9 @@ class Shipment < ApplicationRecord
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
 
-  STATUSES.each do |status|
-    scope status, -> { where(status: status) }
-  end
+  # STATUSES.each do |status|
+  #   scope status, -> { where(status: status) }
+  # end
 
   %i(ocean air rail).each do |mot|
     scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }

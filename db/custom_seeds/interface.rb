@@ -94,7 +94,7 @@ main = ActionInterface.new(
     full_seed_without_geometries__: -> { full_seed_without_geometries },
     pricings:                       -> { puts "(!) Not implemented" },
     trucking_pricings__:            -> { trucking_pricings.init },
-    shipments:                      -> { puts "(!) Not implemented" },
+    shipments:                      -> { ShipmentSeeder.new.perform },
     geometries:                     -> { GeometrySeeder.perform }
   },
   welcome_message: "Welcome to the ItsMyCargo Seeding Interface"

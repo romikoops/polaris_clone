@@ -1,5 +1,4 @@
 require "#{Rails.root}/db/seed_helpers/iterator_helpers.rb"
-# require "#{Rails.root}/db/seed_classes/shipment_seeder.rb"
 
 class ShipmentSeeder
   include IteratorHelpers
@@ -8,15 +7,20 @@ class ShipmentSeeder
   end
 
   def perform
+    print "Seeding Shipments"
+
     counter = 0
     nested_each_with_times(
       Tenant.demo.users.shipper.to_a, 1,
       %w(requested confirmed finished), 1,
       Shipment::LOAD_TYPES, 1,
-      Shipment::DIRECTIONS, 0..1
+      Shipment::DIRECTIONS, 1
     ) do |user, status, load_type, direction|
+      puts "\n\n   #{user.full_name} | #{status} | #{load_type} | #{direction}".light_blue
+      print "      New Shipment ids:  "
+
       nested_each_with_times(
-        Trip.where(itinerary_id: user.tenant.itineraries.ids.sample(5)).to_a.sample(7), 1
+        Trip.where(itinerary_id: user.tenant.itineraries.ids.sample(10)).to_a.sample(15), 0.6
       ) do |trip|
         counter += 1
 
@@ -49,9 +53,11 @@ class ShipmentSeeder
         ).perform
 
         create_shipment_contacts(user)
+
+        @shipment.id && print(@shipment.id, "  ")
       end
     end
-
+    puts
     counter
   end
 
@@ -126,6 +132,10 @@ class ShipmentSeeder
     end
   end
 end
+
+
+# NOTES
+
 
 # Shipment Columns
 # 
