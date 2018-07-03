@@ -27,6 +27,7 @@ module OfferCalculatorService
       create_trucking_charges
       calc_cargo_charges
       @grand_total_charge.update_price!
+      @grand_total_charge.save
 
       @grand_total_charge
     end
@@ -112,7 +113,8 @@ module OfferCalculatorService
           @user,
           total_units,
           @shipment.planned_pickup_date,
-          @schedule.mode_of_transport)
+          @schedule.mode_of_transport
+        )
 
         next if charge_result.nil?
 

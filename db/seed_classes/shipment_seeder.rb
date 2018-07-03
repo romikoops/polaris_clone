@@ -1,4 +1,5 @@
 require "#{Rails.root}/db/seed_helpers/iterator_helpers.rb"
+# require "#{Rails.root}/db/seed_classes/shipment_seeder.rb"
 
 class ShipmentSeeder
   include IteratorHelpers
@@ -10,22 +11,24 @@ class ShipmentSeeder
     counter = 0
     nested_each_with_times(
       Tenant.demo.users.shipper.to_a, 1,
-      Shipment::STATUSES, 0..2,
-      Shipment::LOAD_TYPES, 0..1,
+      Shipment::STATUSES, 1,
+      Shipment::LOAD_TYPES, 1,
       Shipment::DIRECTIONS, 0..1
     ) do |user, status, load_type, direction|
       nested_each_with_times(
-        Trip.where(itinerary: user.tenant.itineraries).to_a, 0.1
+        Trip.where(itinerary: user.tenant.itineraries).to_a, 0.07
       ) do |trip|
 
         counter += 1
 
         @shipment = Shipment.new(
-          user: user,
-          status: status,
-          load_type: load_type,
-          direction: direction
+          user:              user,
+          status:            status,
+          load_type:         load_type,
+          direction:         direction,
+          total_goods_value: rand(1000..2500)
         )
+
         origin_layover, destination_layover = *trip.layovers.sample(2).sort_by do |layover|
           layover.stop.index
         end
@@ -36,13 +39,33 @@ class ShipmentSeeder
         @shipment.planned_origin_drop_off_date = random_origin_drop_off_date
         @shipment.booking_placed_at            = random_booking_placed_at
         @shipment.cargo_units                  = random_cargo_units
-        byebug
 
-        @shipment.save!
+        @shipment.save
+
+        OfferCalculatorService::ChargeCalculator.new(
+          shipment: @shipment,
+          trucking_data: {},
+          schedule:      schedule,
+          user:          user
+        ).perform
       end
     end
 
     counter
+  end
+
+  def schedule
+    Schedule.new(
+      origin_hub_id:        @shipment.origin_hub.id,
+      destination_hub_id:   @shipment.destination_hub.id,
+      origin_hub_name:      @shipment.origin_hub.name,
+      destination_hub_name: @shipment.destination_hub.name,
+      mode_of_transport:    @shipment.mode_of_transport,
+      eta:                  @shipment.planned_eta,
+      etd:                  @shipment.planned_etd,
+      closing_date:         @shipment.closing_date,
+      trip_id:              @shipment.trip_id
+    )
   end
 
   def random_cargo_units
@@ -59,12 +82,12 @@ class ShipmentSeeder
 
   def random_cargo_item_attributes
     {
-      payload_in_kg:   rand(100..300),
-      dimension_x:     rand(180..300),
-      dimension_y:     rand(180..300),
-      dimension_z:     rand(180..300),
-      quantity:        rand(1..50),
-      cargo_item_type: @shipment.tenant.cargo_item_types.sample,
+      payload_in_kg:   rand(50..200),
+      dimension_x:     rand(50..120),
+      dimension_y:     rand(50..80),
+      dimension_z:     rand(50..158),
+      quantity:        rand(1..5),
+      cargo_item_type: @shipment.user.tenant.cargo_item_types.sample,
       dangerous_goods: [true, false].sample,
       stackable:       [true, false].sample
     }
@@ -83,11 +106,11 @@ class ShipmentSeeder
   end
 
   def random_origin_drop_off_date
-    @shipment.origin_layover.closing_date - rand(2..30).hours
+    @shipment.origin_layover.closing_date - rand(90..200).hours
   end
 
   def random_booking_placed_at
-    @shipment.planned_origin_drop_off_date - rand(1..8).days - rand(2..30).hours
+    @shipment.planned_origin_drop_off_date - rand(400..1500).hours
   end
 end
 
