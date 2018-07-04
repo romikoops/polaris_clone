@@ -222,14 +222,13 @@ export class BookingDetails extends Component {
   handleCargoInput (event) {
     const { name, value } = event.target
     if (name === 'totalGoodsValue') {
-      const gVal = parseInt(value, 10)
       this.setState({
         [name]: {
           ...this.state[name],
-          value: gVal
+          value
         }
       })
-      this.calcInsurance(gVal, false)
+      this.calcInsurance(+value, false)
     } else {
       this.setState({ [name]: value })
     }

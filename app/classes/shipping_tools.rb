@@ -291,7 +291,6 @@ module ShippingTools
     shipment = Shipment.find(params[:shipment_id])
 
     shipment.user_id =        params[:user_id]
-    shipment.total_price =    params[:total]
     shipment.customs_credit = params[:customs_credit]
 
     shipment.trip_id =      params[:schedule]["trip_id"]
