@@ -87,6 +87,12 @@ class Shipment < ApplicationRecord
 
   # Instance methods
 
+  def total_price
+    return nil if selected_offer.nil?
+
+    selected_offer.total
+  end
+
   def origin_layover
     return nil if trip.nil?
 

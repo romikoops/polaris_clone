@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180702132909) do
+ActiveRecord::Schema.define(version: 20180704120933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -480,7 +480,6 @@ ActiveRecord::Schema.define(version: 20180702132909) do
     t.integer "itinerary_id"
     t.jsonb "trucking"
     t.boolean "customs_credit", default: false
-    t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
