@@ -15,10 +15,11 @@ import {
   moment,
   chargeGlossary
 } from '../../../constants'
-import { gradientGenerator } from '../../../helpers'
+import { gradientGenerator, gradientTextGenerator, gradientBorderGenerator } from '../../../helpers'
 import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
 import { RoundButton } from '../../RoundButton/RoundButton'
+import GradientBorder from '../../GradientBorder'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -443,6 +444,15 @@ export class AdminPricingDedicated extends Component {
         initialEdit
       />)
     })
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
+    const gradientBorderStyle =
+        theme && theme.colors
+          ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+          : { background: 'black' }
+
     const setPricingView = (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
@@ -470,17 +480,26 @@ export class AdminPricingDedicated extends Component {
       </div>
     )
     const userTiles = clients.map(c => (
-      <div
-        className={`flex-100 flex-sm-50 flex-md-33 flex-gt-md-20 layout-row ${styles2.assign_user_tile}`}
-        onClick={() => this.assignUser(c.id)}
-      >
-        <div className="flex layout-row layout-align-start-center">
-          <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
-        </div>
-        <div className={`flex-none layout-row layout-align-center-center ${styles2.assigned_checkmark}`}>
-          { selectedClients[c.id] ? <i className="fa fa-check flex-none" /> : '' }
-        </div>
-
+      <div className={`flex-100 flex-sm-50 flex-md-33 flex-gt-md-20 layout-row ${styles2.assign_user_tile}`}>
+        <GradientBorder
+          wrapperClassName="flex pointy"
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100 "
+          content={(
+            <div className={`flex layout-row layout-align-start-center ${styles2.assign_user_tile_inner}`}>
+              <div
+                onClick={() => this.assignUser(c.id)}
+                className="flex layout-row layout-align-start-center"
+              >
+                <i className="flex-none fa fa-user clip" style={gradientStyle} />
+                <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
+              </div>
+              <div className={`flex-none layout-row layout-align-center-center ${styles2.assigned_checkmark}`}>
+                { selectedClients[c.id] ? <i className="fa fa-check flex-none" /> : '' }
+              </div>
+            </div>
+          )}
+        />
       </div>
     ))
     const setUserView = (

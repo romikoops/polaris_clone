@@ -163,15 +163,6 @@ export class AdminPricingRouteView extends Component {
       </div>
     )
 
-    const pricingAdder = (
-      <AdminPricingDedicated
-        theme={theme}
-        adminDispatch={adminActions}
-        charges={itineraryPricingData}
-        clients={clients}
-      />
-    )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`layout-row flex-95 ${styles.margin_bottom}`}>
@@ -254,7 +245,14 @@ export class AdminPricingRouteView extends Component {
               />
             </div>
             {!selectedClient && !showPricingAdder ? clientsView : ''}
-            {showPricingAdder ? pricingAdder : ''}
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+              <AdminPricingDedicated
+                theme={theme}
+                adminDispatch={adminActions}
+                charges={itineraryPricingData}
+                clients={clients}
+              />
+            </div>
           </div>
 
         </div>

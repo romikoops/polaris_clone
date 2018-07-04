@@ -33,5 +33,8 @@ npm-debug.log
 .sass-cache/
 *.css.map
 
-#ngrok
+# ngrok
 ngrok
+
+# Node ENV variables
+.node-env

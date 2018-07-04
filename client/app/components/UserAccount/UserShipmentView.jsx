@@ -778,38 +778,6 @@ export class UserShipmentView extends Component {
           )}
         />
 
-        {/* <ShipmentCard
-        headingText="Documents"
-        theme={theme}
-        collapsed={collapser.documents}
-        handleCollapser={() => this.handleCollapser('documents')}
-        content={
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-start-center"
-              style={{ marginTop: '5px' }}
-            >
-              {docView}
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-start-center"
-              style={{ marginTop: '5px' }}
-            >
-              {missingDocs}
-            </div>
-          </div>
-        }
-      /> */}
-
-        {shipment.status === 'requested' ? (
-          <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-            <button onClick={this.handleDeny}>Refuse</button>
-          </div>
-        ) : (
-          ''
-        )}
-
       </div>
     )
   }
