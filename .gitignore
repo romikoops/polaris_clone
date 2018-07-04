@@ -19,6 +19,8 @@
 
 .byebug_history
 
+# Ignore ENV variable files
+.env
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
