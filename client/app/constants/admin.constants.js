@@ -767,3 +767,10 @@ export const truckingFees = [
     currency: 'EUR'
   }
 ]
+
+export const TRUCKING_ICONS = {
+  km: 'https://image.ibb.co/cnrhWd/02.png',
+  unit: 'https://image.ibb.co/eqWXWd/01.png',
+  fsc: 'https://image.ibb.co/hZgucJ/03.png',
+  fwc: 'https://image.ibb.co/dEj84y/04.png'
+}

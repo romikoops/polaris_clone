@@ -325,7 +325,6 @@ class SideNav extends Component {
         }`}
       >
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
-        {console.log(() => this.toggleActiveIndex())}
         <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
       </div>
     )

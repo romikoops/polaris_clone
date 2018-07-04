@@ -7,7 +7,8 @@ import {
   chargeGlossary,
   currencyOptions,
   truckingRateBasises,
-  rateBasisSchema
+  rateBasisSchema,
+  TRUCKING_ICONS
 } from '../../../constants'
 import { capitalize, gradientTextGenerator } from '../../../helpers'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
@@ -17,18 +18,22 @@ function getTruckingPricingKey (truckingPricing) {
   if (truckingPricing.zipcode) {
     const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
+
     return endResult
   }
   if (truckingPricing.city) {
     const joinedArrays = truckingPricing.city.map(zArray => zArray.join(', '))
     const endResult = joinedArrays.join(', ')
+
     return endResult
   }
   if (truckingPricing.distance) {
     const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
+
     return endResult
   }
+
   return ''
 }
 
@@ -40,6 +45,7 @@ export class TruckingDisplayPanel extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   static rateCellDisplayGenerator (fee, modKey) {
@@ -63,6 +69,7 @@ export class TruckingDisplayPanel extends Component {
         </div>
       </div>
     )
+
     return displayCell
   }
   static feeCellDisplayGenerator (fee) {
@@ -83,6 +90,7 @@ export class TruckingDisplayPanel extends Component {
         </div>)
       }
     })
+
     return (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
         <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
@@ -333,6 +341,7 @@ export class TruckingDisplayPanel extends Component {
         </div>)
       }
     })
+
     return (
       <div className={`${styles.cell_editor_wrapper} flex-100 layout-row layout-wrap`}>
         <div
@@ -476,9 +485,6 @@ export class TruckingDisplayPanel extends Component {
       default:
         break
     }
-    const headerStyle = {
-      background: theme && theme.colors ? theme.colors.primary : 'rgba(0,0,0,0.75)'
-    }
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
 
     const pricingsTypes = Object.keys(truckingPricing.rates).map((modKey) => {
@@ -492,7 +498,7 @@ export class TruckingDisplayPanel extends Component {
           className="flex-15 layout-row layout-align-end-center"
           onClick={() => this.toggleEdit(modKey)}
         >
-          <i className="fa fa-pencil " style={{ color: 'white' }} />
+          <i className="fa fa-edit " style={{ color: '#BDBDBD' }} />
         </div>
       )
       const saveClose = (
@@ -501,7 +507,7 @@ export class TruckingDisplayPanel extends Component {
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.saveEdit(modKey)}
           >
-            <i className="fa fa-floppy-o " style={{ color: 'white' }} />
+            <i className="fa fa-floppy-o " style={{ color: '#BDBDBD' }} />
           </div>
           <div
             className="flex-50 layout-row layout-align-end-center"
@@ -511,22 +517,23 @@ export class TruckingDisplayPanel extends Component {
           </div>
         </div>
       )
+
       return truckingPricing.rates[modKey][0] ? (
         <div
-          className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >
           <div className="flex-100 layout-row layout-wrap">
             <div
               className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
-              style={headerStyle}
             >
+              <img src={TRUCKING_ICONS[modKey]} alt="Group_5" border="0" />
               <p className="flex no_m">{`${capitalize(modKey)} Ranges`}:</p>
               {editable ? saveClose : startEdit}
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap margin_bottom">
             {pricingTypeCells}
           </div>
         </div>
@@ -540,7 +547,7 @@ export class TruckingDisplayPanel extends Component {
           className="flex-15 layout-row layout-align-end-center"
           onClick={() => this.toggleEdit(feeKey)}
         >
-          <i className="fa fa-pencil " style={{ color: 'white' }} />
+          <i className="fa fa-edit " style={{ color: '#BDBDBD' }} />
         </div>
       )
       const saveClose = (
@@ -549,7 +556,7 @@ export class TruckingDisplayPanel extends Component {
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.saveEdit(feeKey)}
           >
-            <i className="fa fa-floppy-o " style={{ color: 'white' }} />
+            <i className="fa fa-floppy-o " style={{ color: '#BDBDBD' }} />
           </div>
           <div
             className="flex-50 layout-row layout-align-end-center"
@@ -559,22 +566,23 @@ export class TruckingDisplayPanel extends Component {
           </div>
         </div>
       )
+
       return (
         <div
-          className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >
           <div className="flex-100 layout-row layout-wrap">
             <div
               className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
-              style={headerStyle}
             >
+              <img src={TRUCKING_ICONS[fee.key.toLowerCase()]} alt="Group_5" border="0" />
               <p className="flex no_m">{`${fee.name} Ranges`}:</p>
               {editable ? saveClose : startEdit}
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap margin_bottom">
             {editable
               ? this.feeCellEditorGenerator(feeKey)
               : TruckingDisplayPanel.feeCellDisplayGenerator(fee)}
@@ -582,6 +590,7 @@ export class TruckingDisplayPanel extends Component {
         </div>
       )
     })
+
     return (
       <div className="flex-90 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">

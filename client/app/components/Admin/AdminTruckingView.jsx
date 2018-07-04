@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
-import Truncate from 'react-truncate'
+// import Truncate from 'react-truncate'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Toggle from 'react-toggle'
@@ -16,25 +16,26 @@ import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
+import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
 
 function getTruckingPricingKey (truckingPricing) {
   if (truckingPricing.zipcode) {
     const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
   if (truckingPricing.city) {
     const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
   if (truckingPricing.distance) {
     const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
 
   return ''
@@ -241,25 +242,32 @@ export class AdminTruckingView extends Component {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <div
-              className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
-                styles.trucking_display_cell
-              }`}
-              key={v4()}
-              onClick={() => this.selectTruckingPricing(tp)}
-            >
-              {loadTypeBool
-                ? <div className="flex-100 layout-row">
-                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
-                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+            <AlternativeGreyBox
+              wrapperClassName="layout-row flex-40 card_margin_right margin_bottom"
+              contentClassName="layout-column flex"
+              content={(
+                <div
+                  className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
+                    styles.trucking_display_cell
+                  }`}
+                  key={v4()}
+                  onClick={() => this.selectTruckingPricing(tp)}
+                >
+                  {loadTypeBool
+                    ? <div className="flex-70 layout-row layout-align-center-center">
+                      <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
+                      <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+                    </div>
+                    : ''
+                  }
+                  <div className="flex-30 layout-column layout-wrap layout-align-center-center">
+                    <p className="flex-90">{capitalize(idenitfierKey)}</p>
+                    <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
+                  </div>
                 </div>
-                : ''
-              }
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-                <p className="flex-90">{capitalize(idenitfierKey)}</p>
-              </div>
-              <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
-            </div>
+              )}
+            />
+
           )
         })
       ) : (
@@ -316,58 +324,9 @@ export class AdminTruckingView extends Component {
                 styles.sec_header
               }`}
             >
-              <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
               { currentTruckingPricing ? backBtn : ''}
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-              {/* <div className="flex-25 layout-row layout-align-center-start layout-wrap">
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                  <div className="flex-90 layout-row layout-align-space-between-center">
-                    <p className="flex-none">LTL</p>
-                    <div className="flex-5" />
-                    <Toggle
-                      className="flex-none"
-                      id="unitView"
-                      name="unitView"
-                      checked={loadTypeBool}
-                      onChange={e => this.handleLoadTypeToggle(e)}
-                    />
-                    <div className="flex-5" />
-                    <p className="flex-none">FTL</p>
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                  <div className="flex-90 layout-row layout-align-space-between-center">
-                    <p className="flex-none">Export</p>
-                    <div className="flex-5" />
-                    <Toggle
-                      className="flex-none"
-                      id="unitView"
-                      name="unitView"
-                      checked={directionBool}
-                      onChange={e => this.handleDirectionToggle(e)}
-                    />
-                    <div className="flex-5" />
-                    <p className="flex-none">Import</p>
-                  </div>
-                </div>
-                {truckFilter}
-                <div className="flex-100 layout-row layout-alignstart-center input_box_full">
-                  <input
-                    type="text"
-                    value={searchFilter}
-                    placeholder="Search Trucking Zones"
-                    onChange={e => this.handleSearchChange(e)}
-                  />
-                </div>
-                <div
-                  className={`flex-100 layout-row layout-align-center-start layout-wrap ${
-                    styles.trucking_search_results
-                  }`}
-                >
-                  {searchResults}
-                </div>
-              </div> */}
               <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                 {truckView}
               </div>

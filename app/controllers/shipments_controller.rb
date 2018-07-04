@@ -35,7 +35,6 @@ class ShipmentsController < ApplicationController
 
   def reuse_booking_data
     resp = ShippingTools.reuse_booking_data(params[:shipment_id], current_user)
-    byebug
     response_handler(resp)
   end
 
