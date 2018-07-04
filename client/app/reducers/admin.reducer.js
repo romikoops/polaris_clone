@@ -823,13 +823,11 @@ export default function admin (state = {}, action) {
       return reqClient
     }
     case adminConstants.GET_CLIENT_SUCCESS: {
-      // ;
-      const succClient = merge({}, state, {
+      return {
+        ...state,
         client: action.payload.data,
         loading: false
-      })
-
-      return succClient
+      }
     }
     case adminConstants.GET_CLIENT_FAILURE: {
       const errClient = merge({}, state, {

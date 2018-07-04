@@ -91,9 +91,6 @@ export class AdminShipmentRow extends Component {
   render () {
     const { theme, shipment } = this.props
     const { confirm } = this.state
-    if (shipment.schedule_set.length < 1) {
-      return ''
-    }
     const schedule = {}
     const originHub = shipment.origin_hub
     const destHub = shipment.destination_hub

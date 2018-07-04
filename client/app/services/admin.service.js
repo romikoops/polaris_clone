@@ -289,7 +289,6 @@ function updatePricing (id, data) {
     .then(handleResponse)
 }
 function assignDedicatedPricings (pricing, clientIds) {
-  // debugger // eslint-disable-line
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },

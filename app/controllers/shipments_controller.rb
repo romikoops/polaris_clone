@@ -33,11 +33,6 @@ class ShipmentsController < ApplicationController
     tenant_notification_email(current_user, Shipment.first)
   end
 
-  def reuse_booking_data
-    resp = ShippingTools.reuse_booking_data(params[:shipment_id], current_user)
-    byebug
-    response_handler(resp)
-  end
 
   # Uploads document and returns Document item
   def upload_document
