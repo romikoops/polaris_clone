@@ -29,6 +29,20 @@ jest.mock('../../constants', () => {
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
   switchIcon: x => x,
+
+  /**
+   * Use of different currency from
+   * the currency used in `mocks.js`,
+   * so we distinct easier between different `jest.mock` declarations
+   */
+  totalPrice: () => ({ currency: 'BGN' }),
+
+  /**
+   * On purpose we are using Philippines's currency,
+   * as if `PHP` is missing in snapshots,
+   * then we know our test is incomplete.
+   */
+  formattedPriceValue: () => ({ currency: 'PHP' }),
   gradientGenerator: x => x,
   gradientBorderGenerator: x => x
 }))

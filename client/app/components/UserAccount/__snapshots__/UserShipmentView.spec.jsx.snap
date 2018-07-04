@@ -347,9 +347,8 @@ exports[`loading is true 1`] = `
         <h2
           className="layout-align-end-center layout-row flex"
         >
-          77.00
            
-          USD
+          BGN
         </h2>
       </div>
     </div>
@@ -950,9 +949,8 @@ exports[`shallow render 1`] = `
         <h2
           className="layout-align-end-center layout-row flex"
         >
-          77.00
            
-          USD
+          BGN
         </h2>
       </div>
     </div>
@@ -1553,9 +1551,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <h2
           className="layout-align-end-center layout-row flex"
         >
-          77.00
            
-          USD
+          BGN
         </h2>
       </div>
     </div>
@@ -2215,9 +2212,8 @@ exports[`shipmentData.contacts is present 1`] = `
         <h2
           className="layout-align-end-center layout-row flex"
         >
-          77.00
            
-          USD
+          BGN
         </h2>
       </div>
     </div>
@@ -2866,9 +2862,8 @@ exports[`shipmentData.documents is present 1`] = `
         <h2
           className="layout-align-end-center layout-row flex"
         >
-          77.00
            
-          USD
+          BGN
         </h2>
       </div>
     </div>

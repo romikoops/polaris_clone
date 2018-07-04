@@ -8,5 +8,8 @@ export default async function selectFirstOffer (puppeteer) {
 
   const finalDetailsURL = await puppeteer.url()
   expect(finalDetailsURL.endsWith('final_details')).toBeTruthy()
+
+  // expect(await puppeteer.shouldMatchScreenshot('booking.details')).toBeTruthy()
+
   await puppeteer.saveStep('selectFirstOffer.1')
 }
