@@ -524,69 +524,6 @@ module ExcelTools
     { stats: stats, results: results }
   end
 
-  def overwrite_all_schedules(params, user=current_user)
-    stats = {
-      type:     "schedules",
-      layovers: {
-        number_updated: 0,
-        number_created: 0
-      },
-      trips:    {
-        number_updated: 0,
-        number_created: 0
-      }
-    }
-
-    results = {
-      layovers: [],
-      trips:    []
-    }
-    xlsx = Roo::Spreadsheet.open(params["xlsx"])
-    first_sheet = xlsx.sheet(xlsx.sheets.first)
-
-    schedules = first_sheet.parse(
-      vessel:        "VESSEL",
-      voyage_code:   "VOYAGE_CODE",
-      from:          "FROM",
-      to:            "TO",
-      closing_date:  "CLOSING_DATE",
-      eta:           "ETA",
-      etd:           "ETD",
-      service_level: "SERVICE_LEVEL"
-    )
-    mot = params["mot"]
-
-    schedules.each do |row|
-      itinerary = Itinerary.find_by(name: "#{row[:from]} - #{row[:to]}", mode_of_transport: mot)
-      next unless itinerary
-      service_level = row[:service_level] ? row[:service_level] : "default"
-
-      tenant_vehicle = TenantVehicle.find_by(
-        tenant_id:         user.tenant_id,
-        mode_of_transport: itinerary.mode_of_transport,
-        name:              row[:service_level]
-      )
-      tenant_vehicle ||= Vehicle.create_from_name(service_level, itinerary.mode_of_transport, user.tenant_id)
-
-      startDate = row[:etd]
-      endDate = row[:eta]
-
-      stops = itinerary.stops.order(:index)
-
-      if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
-        results[:trips] = generator_results[:trips]
-        results[:layovers] = generator_results[:layovers]
-        stats[:trips][:number_created] = generator_results[:trips].count
-        stats[:layovers][:number_created] = generator_results[:layovers].count
-      else
-        raise "Route cannot be found!"
-      end
-    end
-
-    { results: results, stats: stats }
-  end
-
   def overwrite_hubs(params, user=current_user)
     xlsx = Roo::Spreadsheet.open(params["xlsx"])
     first_sheet = xlsx.sheet(xlsx.sheets.first)

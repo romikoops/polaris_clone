@@ -49,7 +49,7 @@ export class AdminHubTile extends Component {
         hubType = 'Airport'
         break
       case 'rail':
-        hubType = 'Railyyard'
+        hubType = 'Railyard'
         break
       default:
         break

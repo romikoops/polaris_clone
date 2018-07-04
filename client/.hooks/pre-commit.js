@@ -43,7 +43,7 @@ const failed = !files.every(({ file, modifier }) => {
   console.log(' - Checking', file, '...')
 
   if ('ACMR'.split('').indexOf(modifier) < 0) {
-    console.error('Unkown modifier', modifier)
+    console.error('Unknown modifier', modifier)
     return false
   }
 

@@ -85,8 +85,8 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency, current_user.tenant_id])
-    response_handler(user: current_user, rates: rates)
+    rates = get_rates(params[:currency], current_user.tenant_id)
+    response_handler(user: current_user.token_validation_response, rates: rates)
   end
 
   def hubs
@@ -104,7 +104,7 @@ class UsersController < ApplicationController
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
-    response_handler(user: current_user)
+    response_handler(user: current_user.token_validation_response)
   end
 
   private
