@@ -1,6 +1,5 @@
 /* eslint vars-on-top: "off", no-var: "off",
 no-ex-assign: "off", block-scoped-var: "off", "no-console": "off" */
-import open from 'open'
 import init from '../_modules/init'
 import { BASE_URL } from '../_modules/constants'
 import { isDocker } from '../_modules/isDocker'
@@ -11,7 +10,7 @@ import orderExportLCL from './orderExportLCL'
 
 const options = {
   headless: isDocker(),
-  log: true,
+  log: false,
   slowMo: 250,
   url: BASE_URL
 }
@@ -34,10 +33,12 @@ test.only('successful login and placing an export LCL order', async () => {
     console.log(e)
     console.log(await puppeteer.takeScreenshot('error', isDocker()))
 
+    /**
+     * - It logs all completed steps previous to this error
+     * - This happens with `mark` method from `init.js`
+     * - This method keeps track of selectors input and evaluation results
+     */
     puppeteer.onError()
-    if (!isDocker()) {
-      open(screen)
-    }
   }
 })
 
@@ -60,6 +61,5 @@ test('successful login and placing an export FCL order', async () => {
 
     console.log(e, screen)
     puppeteer.onError()
-    open(screen)
   }
 })
