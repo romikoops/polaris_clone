@@ -367,7 +367,7 @@ export class AdminHubFees extends Component {
       const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
 
       return (<div
-        className={`flex-25 layout-row layout-align-start-center ${inactiveStyle} ${styles2.cargo_class_button}`}
+        className={`flex-25 layout-row layout-align-start-center pointy ${inactiveStyle} ${styles2.cargo_class_button}`}
         style={buttonStyle}
         onClick={hasCargoClass ? () => this.setCargoClass(cargoClass.value) : null}
       >
@@ -446,14 +446,14 @@ export class AdminHubFees extends Component {
           </div>
           <div className="flex-30 layout-row layout-align-end-center">
             <div
-              className={`flex-none layout-row layout-align-center-center ${styles2.toggle} ${impStyle}`}
+              className={`flex-none layout-row layout-align-center-center pointy ${styles2.toggle} ${impStyle}`}
               style={bgStyle}
               onClick={() => this.handleDirectionChange()}
             >
               <p className="flex-none">Import</p>
             </div>
             <div
-              className={`flex-none layout-row layout-align-center-center ${styles2.toggle} ${expStyle}`}
+              className={`flex-none layout-row layout-align-center-center pointy ${styles2.toggle} ${expStyle}`}
               style={bgStyle}
               onClick={() => this.handleDirectionChange()}
             >
