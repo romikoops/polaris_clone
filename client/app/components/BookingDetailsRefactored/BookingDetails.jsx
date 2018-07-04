@@ -371,6 +371,7 @@ export class BookingDetails extends Component {
       <div className={`${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`}>
         <div className={trim(`
               ${defaults.content_width}
+              content-width
               ${ROW('none')} 
               ${ALIGN_START_CENTER}
             `)}

@@ -352,7 +352,7 @@ exports[`shallow render 1`] = `
       className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none layout-row layout-align-start-center"
+        className="content_width content-width flex-none layout-row layout-align-start-center"
       >
         <RoundButton
           active={false}
@@ -645,7 +645,7 @@ exports[`theme is falsy 1`] = `
       className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none layout-row layout-align-start-center"
+        className="content_width content-width flex-none layout-row layout-align-start-center"
       >
         <RoundButton
           active={false}
