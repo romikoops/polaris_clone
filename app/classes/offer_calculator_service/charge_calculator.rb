@@ -115,7 +115,6 @@ module OfferCalculatorService
           @shipment.planned_pickup_date,
           @schedule.mode_of_transport
         )
-
         next if charge_result.nil?
 
         cargo_unit_model = cargo_unit.class.to_s

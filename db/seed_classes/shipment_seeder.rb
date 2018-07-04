@@ -25,6 +25,10 @@ class ShipmentSeeder
       nested_each_with_times(
         Trip.where(itinerary_id: user.tenant.itineraries.ids.sample(10)).to_a.sample(15), 0.6
       ) do |trip|
+        @cargo_class = TransportCategory::LOAD_TYPE_CARGO_CLASSES[load_type].sample
+
+        next unless pricing_exists?(trip)
+
         counter += 1
 
         @shipment = Shipment.new(
@@ -100,20 +104,18 @@ class ShipmentSeeder
       dimension_z:     rand(50..158),
       quantity:        rand(1..5),
       cargo_item_type: @shipment.user.tenant.cargo_item_types.sample,
-      dangerous_goods: [true, false].sample,
-      stackable:       [true, false].sample
+      dangerous_goods: false,
+      stackable:       true
     }
   end
 
   def random_container_attributes
-    cargo_class = TransportCategory::LOAD_TYPE_CARGO_CLASSES["container"].sample
-
     {
       payload_in_kg:   rand(100..300),
-      size_class:      cargo_class,
-      tare_weight:     Container::TARE_WEIGHTS[cargo_class.to_sym],
-      quantity:        rand(1..50),
-      dangerous_goods: [true, false].sample
+      size_class:      @cargo_class,
+      tare_weight:     Container::TARE_WEIGHTS[@cargo_class.to_sym],
+      quantity:        rand(1..5),
+      dangerous_goods: false
     }
   end
 
@@ -145,6 +147,13 @@ class ShipmentSeeder
     else
       User.shipper
     end
+  end
+
+  def pricing_exists?(trip)
+    !!Pricing.where(
+      itinerary:          trip.itinerary,
+      transport_category: trip.tenant_vehicle.vehicle.transport_categories.cargo_class(@cargo_class)
+    ).first
   end
 end
 
