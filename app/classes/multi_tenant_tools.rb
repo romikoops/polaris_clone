@@ -22,8 +22,8 @@ module MultiTenantTools
       end
 
       s3 = Aws::S3::Client.new(
-        access_key_id:     ENV["AWS_KEY"],
-        secret_access_key: ENV["AWS_SECRET"],
+        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
         region:            "us-east-1"
       )
       objKey = tenant["subdomain"] + ".html"
@@ -53,8 +53,8 @@ module MultiTenantTools
       end
 
       s3 = Aws::S3::Client.new(
-        access_key_id:     ENV["AWS_KEY"],
-        secret_access_key: ENV["AWS_SECRET"],
+        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
         region:            "us-east-1"
       )
       objKey = tenant["subdomain"] + ".html"
@@ -233,8 +233,8 @@ module MultiTenantTools
     end
 
     s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
+      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
       region:            "us-east-1"
     )
     objKey = tenant[:subdomain] + ".html"
@@ -244,7 +244,7 @@ module MultiTenantTools
     end
     upFile = open("blank.html")
     s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
     # uploader.upload!
 
     # if is_demo
@@ -271,8 +271,8 @@ module MultiTenantTools
     end
 
     s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
+      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
       region:            "us-east-1"
     )
     objKey = tenant.subdomain + ".html"
@@ -282,7 +282,7 @@ module MultiTenantTools
     end
     upFile = open("blank.html")
     s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
     # uploader.upload!
 
     # if is_demo
@@ -293,8 +293,8 @@ module MultiTenantTools
 
   def create_distribution(subd)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
+      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
       region:            ENV["AWS_REGION"]
     )
     caller_reference = subd
@@ -373,8 +373,8 @@ module MultiTenantTools
 
   def new_record(domain, cf_name)
     client = Aws::Route53::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
+      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
       region:            ENV["AWS_REGION"]
     )
     resp = client.change_resource_record_sets(
@@ -573,8 +573,8 @@ module MultiTenantTools
 
   def invalidate(cfId, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
-      access_key_id:     ENV["AWS_KEY"],
-      secret_access_key: ENV["AWS_SECRET"],
+      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
+      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
       region:            ENV["AWS_REGION"]
     )
     invalArray = ["/#{subdomain}.html"]
