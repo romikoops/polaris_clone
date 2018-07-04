@@ -54,13 +54,14 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.sendgrid.net',
     port: 587,
-    domain: Rails.application.secrets.alfahosting_domain,
+    domain: Rails.application.secrets.mailer_domain,
     authentication: 'plain',
     enable_starttls_auto: true,
     user_name: Rails.application.secrets.sendgrid_username,
     password: Rails.application.secrets.sendgrid_password
   }
 end
+
 # Raven.configure do |config|
 #   config.dsn = 'http://2336829bacd74b3aba09c4cec37563dc:7ccc8dc14e0041a48e7feeb387b22c91@http://ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/2'
 # end
