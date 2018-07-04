@@ -111,10 +111,9 @@ Rails.application.routes.draw do
 
     post 'create_shipment', controller: 'shipments/booking_process', action: 'create_shipment'
     resources :shipments, only: %i[index show] do
-      get  'test_email'
-      get  'reuse_booking_data', as: :reuse_booking
-      post 'set_haulage',        as: :set_haulage
-      %w[choose_offer get_offers update_shipment request_shipment].each do |action|
+      get 'test_email'
+      get 'reuse_booking_data', as: :reuse_booking
+      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
     end

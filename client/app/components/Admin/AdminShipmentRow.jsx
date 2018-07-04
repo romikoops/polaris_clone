@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './AdminShipmentRow.scss'
 import { moment } from '../../constants'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, totalPrice, formattedPriceValue } from '../../helpers'
 import AdminPromptConfirm from './Prompt/Confirm'
 
 export class AdminShipmentRow extends Component {
@@ -219,8 +219,9 @@ export class AdminShipmentRow extends Component {
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
               <h4 className="flex-none letter_3 no_m">
-                {' '}
-                {`Total: ${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)}`}
+                Total: {' '}
+                {totalPrice(shipment).currency} {' '}
+                {formattedPriceValue(totalPrice(shipment).value)}
               </h4>
             </div>
           </div>

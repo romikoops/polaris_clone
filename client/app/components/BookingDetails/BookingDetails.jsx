@@ -8,7 +8,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { CargoDetails } from '../CargoDetails/CargoDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, totalPrice } from '../../helpers'
 import reuseShipments from '../../helpers/reuseShipment'
 
 export class BookingDetails extends Component {
@@ -199,7 +199,7 @@ export class BookingDetails extends Component {
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price.value, 10)) * 0.0017
+    const iVal = (gVal * 1.1 + +totalPrice(shipmentData.shipment).value) * 0.0017
     if (bool) {
       this.setState({ insurance: { bool, val: iVal } })
     } else {
@@ -222,14 +222,13 @@ export class BookingDetails extends Component {
   handleCargoInput (event) {
     const { name, value } = event.target
     if (name === 'totalGoodsValue') {
-      const gVal = parseInt(value, 10)
       this.setState({
         [name]: {
           ...this.state[name],
-          value: gVal
+          value
         }
       })
-      this.calcInsurance(gVal, false)
+      this.calcInsurance(+value, false)
     } else {
       this.setState({ [name]: value })
     }
@@ -238,7 +237,7 @@ export class BookingDetails extends Component {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
 
-    return parseFloat(shipmentData.shipment.total_price.value, 10) + customs.val + insurance.val
+    return +totalPrice(shipmentData.shipment).value + customs.val + insurance.val
   }
   toNextStage () {
     const {
