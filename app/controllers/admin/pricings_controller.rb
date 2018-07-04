@@ -32,9 +32,10 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler(itineraryPricingData: pricings, itinerary: itinerary.as_options_json, stops: stops, userPricings: user_pricings)
   end
   def assign_dedicated
-    byebug
-    params[:clientIds].each do |client_id|
-      pricing_to_update = Pricing.new
+    new_pricings = params[:clientIds].map do |client_id|
+      itinerary_id = params[:pricing][:itinerary_id]
+      ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id).first
+      pricing_to_update = ex_pricing || Pricing.new
       new_pricing_data = params[:pricing].as_json
       new_pricing_data.delete("controller")
       new_pricing_data.delete("subdomain_id")
@@ -67,10 +68,10 @@ class Admin::PricingsController < Admin::AdminBaseController
           pricing_detail.update!(range: range, currency_name: currency)
         end
       end
+      {pricing: pricing_to_update.as_json, transport_category: pricing_to_update.transport_category, user_id: client_id.to_i}
     end
-    byebug
-    response_handler(pricing: pricing_to_update.as_json, transport_category: pricing_to_update.transport_category)
-    
+    response_handler(new_pricings)
+
   end
 
   def update_price

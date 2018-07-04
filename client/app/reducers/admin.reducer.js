@@ -668,6 +668,24 @@ export default function admin (state = {}, action) {
     case adminConstants.UPDATE_PRICING_FAILURE:
       return state
 
+    case adminConstants.ASSIGN_DEDICATED_PRICING_REQUEST:
+      return state
+    case adminConstants.ASSIGN_DEDICATED_PRICING_SUCCESS: {
+      const { userPricings } = state.itineraryPricings
+
+      userPricings.push(action.payload)
+
+      return {
+        ...state,
+        itineraryPricings: {
+          ...state.itineraryPricings,
+          userPricings
+        }
+      }
+    }
+    case adminConstants.ASSIGN_DEDICATED_PRICING_FAILURE:
+      return state
+
     case adminConstants.UPDATE_SERVICE_CHARGES_REQUEST:
       return state
     case adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS: {

@@ -54,7 +54,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.sendgrid.net',
     port: 587,
-    domain: Rails.application.secrets.alfahosting_domain,
+    domain: 'itsmycargo.com',
     authentication: 'plain',
     enable_starttls_auto: true,
     user_name: Rails.application.secrets.sendgrid_username,

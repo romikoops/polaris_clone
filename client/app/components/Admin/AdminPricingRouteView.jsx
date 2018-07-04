@@ -10,8 +10,8 @@ import { history, gradientGenerator, gradientBorderGenerator, switchIcon } from 
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import { AdminPricingBox } from './Pricing/Box'
-import SquareButton from '../SquareButton'
 import { AdminPricingDedicated } from './Pricing/Dedicated'
+import { RoundButton } from '../RoundButton/RoundButton'
 
 export class AdminPricingRouteView extends Component {
   static backToIndex () {
@@ -20,7 +20,8 @@ export class AdminPricingRouteView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedClient: false
+      selectedClient: false,
+      showPricingAdder: false
     }
     this.editThis = this.editThis.bind(this)
     this.closeEdit = this.closeEdit.bind(this)
@@ -28,6 +29,7 @@ export class AdminPricingRouteView extends Component {
     this.closeClientView = this.closeClientView.bind(this)
   }
   componentDidMount () {
+    console.log('PARENT REMOUNTING')
     const {
       routePricings, loading, adminActions, match
     } = this.props
@@ -44,6 +46,9 @@ export class AdminPricingRouteView extends Component {
       editTransport: transport,
       editorBool: true
     })
+  }
+  addNewPricings () {
+    this.setState({ showPricingAdder: !this.state.showPricingAdder })
   }
   closeEdit () {
     this.setState({
@@ -84,7 +89,8 @@ export class AdminPricingRouteView extends Component {
       editPricing,
       editHubRoute,
       confirm,
-      pricingToDelete
+      pricingToDelete,
+      showPricingAdder
     } = this.state
     const { selectedClient } = this.state
     console.log(this.props)
@@ -113,12 +119,6 @@ export class AdminPricingRouteView extends Component {
     theme && theme.colors
       ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
       : { background: 'black' }
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
     const bg1 =
       fauxShipment.origin_hub && fauxShipment.origin_hub.photo
         ? { backgroundImage: `url(${fauxShipment.origin_hub.photo})` }
@@ -146,7 +146,7 @@ export class AdminPricingRouteView extends Component {
       ''
     )
     const clientTiles = userPricings.map((up) => {
-      const client = clients.filter(cl => cl.id === up.pricing.user_id)[0]
+      const client = clients.filter(cl => cl.id === up.user_id)[0]
 
       return (
         <AdminClientTile
@@ -158,32 +158,11 @@ export class AdminPricingRouteView extends Component {
       )
     })
     const clientsView = (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-center">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-center padding_top">
         {clientTiles}
       </div>
     )
-    const clientPriceView = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-        >
-          <p className={` ${styles.sec_header_text} flex-none`}> Dedicated Pricing </p>
-          <div
-            className="flex-none layout-row layout-align-center-center"
-            onClick={this.closeClientView}
-          >
-            <i className="fa fa-times clip flex-none" style={textStyle} />
-          </div>
-        </div>
-        <AdminPricingBox
-          itinerary={itinerary}
-          charges={userPricings.filter(up => up.pricing.user_id === selectedClient.id)[0]}
-          theme={theme}
-          adminDispatch={adminActions}
-          title={`Dedicated Pricing fro ${selectedClient.first_name} ${selectedClient.last_name}`}
-        />
-      </div>
-    )
+
     const pricingAdder = (
       <AdminPricingDedicated
         theme={theme}
@@ -253,19 +232,29 @@ export class AdminPricingRouteView extends Component {
               {' '}
                 Users With Dedicated Pricings{' '}
             </p>
-            <SquareButton
+            <RoundButton
               text="New Dedicated Pricing"
               theme={theme}
               active
               iconClass="fa-plus"
-              size="small"
+              size="large"
               handleNext={() => this.addNewPricings()}
               border
             />
           </div>
           <div className="flex-95 layout-row layout-wrap layout-align-space-between-center">
-            {selectedClient ? clientPriceView : clientsView}
-            {pricingAdder}
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={selectedClient && !showPricingAdder ? {} : { display: 'none' }}>
+              <AdminPricingBox
+                itinerary={itinerary}
+                charges={userPricings.filter(up => up.user_id === selectedClient.id)}
+                theme={theme}
+                adminDispatch={adminActions}
+                closeView={this.closeClientView}
+                title={`Dedicated Pricing fro ${selectedClient.first_name} ${selectedClient.last_name}`}
+              />
+            </div>
+            {!selectedClient && !showPricingAdder ? clientsView : ''}
+            {showPricingAdder ? pricingAdder : ''}
           </div>
 
         </div>

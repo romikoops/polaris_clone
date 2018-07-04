@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { AdminSearchableClients } from './AdminSearchables'
 import styles from './Admin.scss'
-import FileUploader from '../../components/FileUploader/FileUploader'
+// import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminClientsTooltips as clientTip } from '../../constants'
-import DocumentsDownloader from '../../components/Documents/Downloader'
+// import DocumentsDownloader from '../../components/Documents/Downloader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { filters, capitalize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -95,7 +95,7 @@ class AdminClientsIndex extends Component {
   render () {
     const { theme, adminDispatch } = this.props
     const { expander, searchFilters, searchResults } = this.state
-    const hubUrl = '/admin/clients/process_csv'
+    // const hubUrl = '/admin/clients/process_csv'
     const newButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -173,7 +173,7 @@ class AdminClientsIndex extends Component {
             flexOptions="layout-column flex-20 flex-md-30"
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <CollapsingBar
+                {/* <CollapsingBar
                   collapsed={!expander.upload}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('upload')}
@@ -212,7 +212,7 @@ class AdminClientsIndex extends Component {
                       <DocumentsDownloader theme={theme} target="clients" />
                     </div>
                   )}
-                />
+                /> */}
                 <CollapsingBar
                   collapsed={!expander.new}
                   theme={theme}

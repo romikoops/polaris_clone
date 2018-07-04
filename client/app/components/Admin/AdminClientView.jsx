@@ -5,9 +5,12 @@ import { AdminShipmentRow, AdminAddressTile } from './'
 import styles from './Admin.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
-import { NamedSelect } from '../NamedSelect/NamedSelect'
-import { managerRoles, adminClientsTooltips as clientTip } from '../../constants'
-import { RoundButton } from '../RoundButton/RoundButton'
+// import { NamedSelect } from '../NamedSelect/NamedSelect'
+import {
+  // managerRoles,
+  adminClientsTooltips as clientTip
+} from '../../constants'
+// import { RoundButton } from '../RoundButton/RoundButton'
 import AdminPromptConfirm from './Prompt/Confirm'
 
 export class AdminClientView extends Component {
@@ -69,7 +72,10 @@ export class AdminClientView extends Component {
     }
 
     const {
-      selectedManager, selectedRole, showAddManager, confirm
+      // selectedManager,
+      // selectedRole,
+      // showAddManager,
+      confirm
     } = this.state
     const {
       client, shipments, locations, managerAssignments
@@ -93,21 +99,20 @@ export class AdminClientView extends Component {
         return man
       })
       : []
-    console.log(managerAssignments)
-    const manArray = relManagers
-      ? relManagers.map(ma => (
-        <div className="flex-100 layout-row layout-align-start-center">
-          <div className="flex-50 layout-row layout-align-start-center">
-            <i className="fa fa-user flex-none clip" style={textStyle} />
-            <p className="flex-none">{`${ma.first_name} ${ma.last_name}`}</p>
-          </div>
-          <div className="flex-50 layout-row layout-align-start-center">
-            <i className="fa fa-book flex-none clip" style={textStyle} />
-            <p className="flex-none">{`Section: ${ma.section}`}</p>
-          </div>
-        </div>
-      ))
-      : []
+    // const manArray = relManagers
+    //   ? relManagers.map(ma => (
+    //     <div className="flex-100 layout-row layout-align-start-center">
+    //       <div className="flex-50 layout-row layout-align-start-center">
+    //         <i className="fa fa-user flex-none clip" style={textStyle} />
+    //         <p className="flex-none">{`${ma.first_name} ${ma.last_name}`}</p>
+    //       </div>
+    //       <div className="flex-50 layout-row layout-align-start-center">
+    //         <i className="fa fa-book flex-none clip" style={textStyle} />
+    //         <p className="flex-none">{`Section: ${ma.section}`}</p>
+    //       </div>
+    //     </div>
+    //   ))
+    //   : []
     console.log(relManagers)
     shipments.forEach((ship) => {
       shipRows.push(<AdminShipmentRow
@@ -140,73 +145,73 @@ export class AdminClientView extends Component {
         showTooltip
       />
     ))
-    const assignManagerBox = (
-      <div className="flex-100 layout-row layout-wrap">
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
-          <NamedSelect
-            name="manager"
-            placeholder="Choose manager"
-            classes={`${styles.select}`}
-            value={selectedManager}
-            options={managerOpts}
-            className="flex-100"
-            onChange={this.handleManagerAssigment}
-          />
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
-          <NamedSelect
-            name="manager"
-            placeholder="Choose area"
-            classes={`${styles.select}`}
-            value={selectedRole}
-            options={managerRoles}
-            className="flex-100"
-            onChange={this.handleRoleAssigment}
-          />
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
-          <div className="flex-none layout-row">
-            <RoundButton
-              theme={theme}
-              size="small"
-              text="Save"
-              handleNext={this.assignNewManager}
-              iconClass="fa-floppy-o"
-            />
-          </div>
-        </div>
-      </div>
-    )
-    const managerBox = (
-      <div className="flex-100 layout-row layout-wrap">
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-          <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
-            <RoundButton
-              theme={theme}
-              size="full"
-              text="Assign Manager"
-              handleNext={this.toggleNewManager}
-              iconClass="fa-plus"
-            />
-          </div>
-          <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
-            <RoundButton
-              theme={theme}
-              size="full"
-              text="Delete"
-              handleNext={() => this.confirmDelete()}
-              iconClass="fa-trash"
-            />
-          </div>
-        </div>
-        <div className="flex-100 layout-row layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-none">Account Managers</p>
-          </div>
-          {manArray}
-        </div>
-      </div>
-    )
+    // const assignManagerBox = (
+    //   <div className="flex-100 layout-row layout-wrap">
+    //     <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
+    //       <NamedSelect
+    //         name="manager"
+    //         placeholder="Choose manager"
+    //         classes={`${styles.select}`}
+    //         value={selectedManager}
+    //         options={managerOpts}
+    //         className="flex-100"
+    //         onChange={this.handleManagerAssigment}
+    //       />
+    //     </div>
+    //     <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
+    //       <NamedSelect
+    //         name="manager"
+    //         placeholder="Choose area"
+    //         classes={`${styles.select}`}
+    //         value={selectedRole}
+    //         options={managerRoles}
+    //         className="flex-100"
+    //         onChange={this.handleRoleAssigment}
+    //       />
+    //     </div>
+    //     <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
+    //       <div className="flex-none layout-row">
+    //         <RoundButton
+    //           theme={theme}
+    //           size="small"
+    //           text="Save"
+    //           handleNext={this.assignNewManager}
+    //           iconClass="fa-floppy-o"
+    //         />
+    //       </div>
+    //     </div>
+    //   </div>
+    // )
+    // const managerBox = (
+    //   <div className="flex-100 layout-row layout-wrap">
+    //     <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+    //       <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
+    //         <RoundButton
+    //           theme={theme}
+    //           size="full"
+    //           text="Assign Manager"
+    //           handleNext={this.toggleNewManager}
+    //           iconClass="fa-plus"
+    //         />
+    //       </div>
+    //       <div className="flex-60 layout-row" style={{ margin: '10px 0' }}>
+    //         <RoundButton
+    //           theme={theme}
+    //           size="full"
+    //           text="Delete"
+    //           handleNext={() => this.confirmDelete()}
+    //           iconClass="fa-trash"
+    //         />
+    //       </div>
+    //     </div>
+    //     <div className="flex-100 layout-row layout-wrap">
+    //       <div className="flex-100 layout-row layout-align-start-center">
+    //         <p className="flex-none">Account Managers</p>
+    //       </div>
+    //       {manArray}
+    //     </div>
+    //   </div>
+    // )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-wrap layout-align-start-start layout-wrap">
@@ -254,7 +259,7 @@ export class AdminClientView extends Component {
               </div>
             </div>
             <div className="flex-35 layout-row layout-align-start-start layout-wrap">
-              {showAddManager ? assignManagerBox : managerBox}
+              {/* {showAddManager ? assignManagerBox : managerBox} */}
             </div>
           </div>
         </div>

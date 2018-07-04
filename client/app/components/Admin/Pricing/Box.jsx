@@ -49,16 +49,8 @@ export class AdminPricingBox extends Component {
         customs: {},
         charges: {}
       },
-      editor: {
-        charges: {
-          import: {},
-          export: {}
-        },
-        customs: {
-          import: {},
-          export: {}
-        }
-      },
+      editor: {},
+      charges: props.charges,
       edit: false,
       direction: 'import',
       selectedCargoClass: 'lcl'
@@ -74,12 +66,12 @@ export class AdminPricingBox extends Component {
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
   }
-  componentWillMount () {
-    // this.setAllFromOptions()
-  }
+  // componentDidMount () {
+
+  // }
   componentWillReceiveProps (nextProps) {
     const { selectedCargoClass } = this.state
-    if (nextProps.charges[0] && nextProps.charges[0].pricing) {
+    if (nextProps.charges[0]) {
       const charge = nextProps.charges
         .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
       this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
@@ -95,13 +87,14 @@ export class AdminPricingBox extends Component {
     this.setState({ selectedCargoClass: type }, () => { this.prepAllOptions() })
   }
 
-  setAllFromOptions (charges, target, loadType) {
+  setAllFromOptions (pricing, target, loadType) {
     const newObj = { }
     const tmpObj = {}
-    if (!charges.data) {
+
+    if (!pricing.data) {
       return
     }
-    Object.keys(charges.data).forEach((key) => {
+    Object.keys(pricing.data).forEach((key) => {
       if (!newObj[key]) {
         newObj[key] = {}
       }
@@ -109,26 +102,27 @@ export class AdminPricingBox extends Component {
         tmpObj[key] = {}
       }
       let opts
-      Object.keys(charges.data[key]).forEach((chargeKey) => {
+      Object.keys(pricing.data[key]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
           newObj[key][chargeKey] = AdminPricingBox.selectFromOptions(
             opts,
-            charges.data[key][chargeKey]
+            pricing.data[key][chargeKey]
           )
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
           newObj[key][chargeKey] = AdminPricingBox.selectFromOptions(
             opts,
-            charges.data[key][chargeKey]
+            pricing.data[key][chargeKey]
           )
         }
       })
     })
+    const editor = { ...pricing }
 
     this.setState(prevState => (
       {
-        editor: charges,
+        editor,
         selectOptions: {
           ...prevState.selectOptions,
           [target]: {
@@ -250,7 +244,7 @@ export class AdminPricingBox extends Component {
           ...this.state.editor.data,
           [nameKeys[1]]: {
             ...this.state.editor.data[nameKeys[1]],
-            [nameKeys[2]]: parseInt(value, 10)
+            [nameKeys[2]]: parseFloat(value)
           }
         }
       }
@@ -260,7 +254,7 @@ export class AdminPricingBox extends Component {
     const { name, value } = event.target
     const nameKeys = name.split('-')
     const { range } = this.state.editor.data[nameKeys[1]]
-    range[nameKeys[2]][nameKeys[3]] = parseInt(value, 10)
+    range[nameKeys[2]][nameKeys[3]] = parseFloat(value)
     this.setState({
       editor: {
         ...this.state.editor,
@@ -275,7 +269,7 @@ export class AdminPricingBox extends Component {
     })
   }
   toggleEdit () {
-    this.setState({ edit: !this.state.edit })
+    this.setState({ edit: !this.state.edit }, () => { this.prepAllOptions() })
   }
   addFeeToPricing (key) {
     const { charges, direction, selectOptions } = this.state
@@ -367,20 +361,25 @@ export class AdminPricingBox extends Component {
   }
 
   render () {
-    const { theme, title } = this.props
+    const { theme, title, closeView } = this.props
 
     const {
       selectOptions,
       charges,
-      selectedCargoClass
+      selectedCargoClass,
+      editor
     } = this.state
 
     if (!charges || (charges && !charges[0])) {
       return ''
     }
+    const gradientStyle =
+    theme && theme.colors
+      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: 'black' }
 
+    const editCharge = { ...editor }
     const currentCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
-    const editCharge = this.state.editor
 
     const feeRows = Object.keys(currentCharge.pricing.data).map((ck) => {
       const fee = currentCharge.pricing.data[ck]
@@ -425,6 +424,12 @@ export class AdminPricingBox extends Component {
           <div className="flex-30 layout-row layout-align-start-center">
             <p className={`flex-none ${styles2.text}`} >{title || 'Fees & Charges' }</p>
           </div>
+          {closeView ? <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={closeView}
+          >
+            <i className="fa fa-times clip flex-none" style={gradientStyle} />
+          </div> : ''}
         </div>
         <div className="flex-100 layout-row layout-align-start-start layout-wrap">
           <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
@@ -441,13 +446,15 @@ export class AdminPricingBox extends Component {
 AdminPricingBox.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  closeView: PropTypes.objectOf(PropTypes.func),
   charges: PropTypes.arrayOf(PropTypes.any),
   title: PropTypes.string
 }
 AdminPricingBox.defaultProps = {
   theme: {},
   charges: [],
-  title: ''
+  title: '',
+  closeView: null
 }
 
 export default AdminPricingBox

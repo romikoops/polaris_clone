@@ -1,17 +1,17 @@
 import React, { PureComponent } from 'react'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import styles from './index.scss'
-import PropTypes from '../../../prop-types'
+import PropTypes from '../../../../prop-types'
 // import { gradientCSSGenerator } from '../../../../helpers'
-import { NamedSelect } from '../../NamedSelect/NamedSelect'
+import { NamedSelect } from '../../../NamedSelect/NamedSelect'
 import {
   chargeGlossary,
   rateBasises,
   moment
-} from '../../../constants'
-import AdminPromptConfirm from '../Prompt/Confirm'
+} from '../../../../constants'
+import AdminPromptConfirm from '../../Prompt/Confirm'
 
-class PricingRangeRow extends PureComponent {
+class FeeRangeRow extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -40,9 +40,9 @@ class PricingRangeRow extends PureComponent {
   }
   renderFeeBoxes (fee, editCharge, selectOptions, edit) {
     const {
-      handleSelect, handleChange, target, loadType
+      handleSelect, handleChange, target, direction
     } = this.props
-    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'range', 'rate']
+    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'range']
     let feeKeys = []
     switch (fee.rate_basis) {
       case 'PER_SHIPMENT' || 'PER_BILL' || 'PER_ITEM' || 'PER_CONTAINER' || 'PER_WM':
@@ -74,9 +74,9 @@ class PricingRangeRow extends PureComponent {
     >
       <p className={`flex-90 ${styles.price_cell_label}`}>{chargeGlossary.rate_basis}</p>
       <NamedSelect
-        name={`${loadType}-${fee.key}-${'rate_basis'}`}
+        name={`${direction}-${fee.key}-${'rate_basis'}`}
         classes={`${styles.select}`}
-        value={selectOptions ? selectOptions[loadType][fee.key].rate_basis : ''}
+        value={selectOptions ? selectOptions[direction][fee.key].rate_basis : ''}
         options={rateBasises}
         className="flex-100"
         onChange={e => handleSelect(e, target)}
@@ -105,9 +105,9 @@ class PricingRangeRow extends PureComponent {
           <div className="flex-95 layout-row input_box_full">
             <input
               type="number"
-              value={editCharge.data[fee.key][chargeKey]}
+              value={editCharge.fees[fee.key][chargeKey]}
               onChange={e => handleChange(e, target)}
-              name={`${loadType}-${fee.key}-${chargeKey}`}
+              name={`${direction}-${fee.key}-${chargeKey}`}
             />
           </div>
           {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
@@ -128,11 +128,10 @@ class PricingRangeRow extends PureComponent {
 
     return cells
   }
-  renderRangeFeeBoxes (rangeFee, index, edit) {
+  renderRangeFeeBoxes (rangeFee, index, editCharge, fee, edit) {
     const {
-      handleRangeChange, target, loadType, editCharge, fee
+      handleRangeChange, target, direction
     } = this.props
-
     const feeKeys = ['min', 'max', 'rate']
     const cells = []
     feeKeys.forEach((chargeKey, i) => {
@@ -146,9 +145,10 @@ class PricingRangeRow extends PureComponent {
         <div className="flex-95 layout-row input_box_full">
           <input
             type="number"
-            value={editCharge.data[fee.key].range[index][chargeKey]}
+            step="0.01"
+            value={editCharge.fees[fee.key].range[index][chargeKey]}
             onChange={e => handleRangeChange(e, target)}
-            name={`${loadType}-${fee.key}-${index}-${chargeKey}`}
+            name={`${direction}-${fee.key}-${index}-${chargeKey}`}
           />
         </div>
         {i !== feeKeys.length - 1 ? <div className={`flex-none ${styles.price_cell_divider}`} /> : ''}
@@ -200,7 +200,7 @@ class PricingRangeRow extends PureComponent {
           name="dayPicker"
           placeholder="DD/MM/YYYY"
           format="DD/MM/YYYY"
-          value={editCharge.data[fee.key][dk]}
+          value={editCharge.fees[fee.key][dk]}
           onDayChange={e => handleDateEdit(e, dk)}
           dayPickerProps={dayPickerProps}
         />
@@ -252,7 +252,7 @@ class PricingRangeRow extends PureComponent {
     </div>)
     const rangeRows = fee.range.map((rFee, index) => (
       <div className="flex-100 layout-row layout-align-end-center">
-        {this.renderRangeFeeBoxes(rFee, index, edit)}
+        {this.renderRangeFeeBoxes(rFee, index, editCharge, fee, edit)}
       </div>
     ))
 
@@ -284,7 +284,7 @@ class PricingRangeRow extends PureComponent {
   }
 }
 
-PricingRangeRow.propTypes = {
+FeeRangeRow.propTypes = {
   theme: PropTypes.theme.isRequired,
   target: PropTypes.string.isRequired,
   saveEdit: PropTypes.func.isRequired,
@@ -293,13 +293,13 @@ PricingRangeRow.propTypes = {
   handleRangeChange: PropTypes.func.isRequired,
   handleDateEdit: PropTypes.func.isRequired,
   editCharge: PropTypes.objectOf(PropTypes.any).isRequired,
-  loadType: PropTypes.string.isRequired,
+  direction: PropTypes.string.isRequired,
   fee: PropTypes.objectOf(PropTypes.any).isRequired,
   selectOptions: PropTypes.objectOf(PropTypes.any).isRequired,
   isEditing: PropTypes.func.isRequired,
   initialEdit: PropTypes.bool
 }
-PricingRangeRow.defaultProps = {
+FeeRangeRow.defaultProps = {
   initialEdit: false
 }
-export default PricingRangeRow
+export default FeeRangeRow
