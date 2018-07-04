@@ -772,5 +772,7 @@ export const TRUCKING_ICONS = {
   km: 'https://image.ibb.co/cnrhWd/02.png',
   unit: 'https://image.ibb.co/eqWXWd/01.png',
   fsc: 'https://image.ibb.co/hZgucJ/03.png',
-  fwc: 'https://image.ibb.co/dEj84y/04.png'
+  fwc: 'https://image.ibb.co/dEj84y/04.png',
+  kg: 'https://image.ibb.co/mYtzwd/05.png',
+  cgt: 'https://image.ibb.co/hRcsGd/no_stopping.png'
 }

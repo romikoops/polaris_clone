@@ -498,7 +498,12 @@ export class TruckingDisplayPanel extends Component {
           className="flex-15 layout-row layout-align-end-center"
           onClick={() => this.toggleEdit(modKey)}
         >
-          <i className="fa fa-edit " style={{ color: '#BDBDBD' }} />
+          <i
+            className="fa fa-edit pointy"
+            style={{ color: '#BDBDBD' }}
+            onFocus=" "
+            onMouseOver={{ color: '#4F4F4F' }}
+          />
         </div>
       )
       const saveClose = (
@@ -507,20 +512,20 @@ export class TruckingDisplayPanel extends Component {
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.saveEdit(modKey)}
           >
-            <i className="fa fa-floppy-o " style={{ color: '#BDBDBD' }} />
+            <i className="fa fa-check pointy" style={{ color: '#219653' }} />
           </div>
           <div
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.toggleEdit(modKey)}
           >
-            <i className="fa fa-times " style={{ color: 'red' }} />
+            <i className="fa fa-times pointy" style={{ color: 'red' }} />
           </div>
         </div>
       )
 
       return truckingPricing.rates[modKey][0] ? (
         <div
-          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-70 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >
@@ -528,6 +533,7 @@ export class TruckingDisplayPanel extends Component {
             <div
               className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
             >
+              {console.log(modKey)}
               <img src={TRUCKING_ICONS[modKey]} alt="Group_5" border="0" />
               <p className="flex no_m">{`${capitalize(modKey)} Ranges`}:</p>
               {editable ? saveClose : startEdit}
@@ -547,7 +553,7 @@ export class TruckingDisplayPanel extends Component {
           className="flex-15 layout-row layout-align-end-center"
           onClick={() => this.toggleEdit(feeKey)}
         >
-          <i className="fa fa-edit " style={{ color: '#BDBDBD' }} />
+          <i className="fa fa-edit pointy" style={{ color: '#BDBDBD' }} />
         </div>
       )
       const saveClose = (
@@ -556,20 +562,20 @@ export class TruckingDisplayPanel extends Component {
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.saveEdit(feeKey)}
           >
-            <i className="fa fa-floppy-o " style={{ color: '#BDBDBD' }} />
+            <i className="fa fa-check pointy" style={{ color: '#219653' }} />
           </div>
           <div
             className="flex-50 layout-row layout-align-end-center"
             onClick={() => this.toggleEdit(feeKey)}
           >
-            <i className="fa fa-times " style={{ color: 'red' }} />
+            <i className="fa fa-times pointy" style={{ color: 'red' }} />
           </div>
         </div>
       )
 
       return (
         <div
-          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-70 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >
@@ -594,7 +600,7 @@ export class TruckingDisplayPanel extends Component {
     return (
       <div className="flex-90 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-start-center layout-wrap margin_bottom ${styles.margin_top_align}`}>
             <h4 className="flex-none clip" style={textStyle}>
               {capitalize(modifier)}
             </h4>

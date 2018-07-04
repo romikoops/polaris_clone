@@ -73,7 +73,7 @@ class AdminHubs extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         <div className={`flex-100 layout-row layout-wrap layout-align-space-between-center ${styles.sec_title}`} />
         {/* <div className="flex-none layout-row layout-align-start-center">

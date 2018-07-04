@@ -43,6 +43,7 @@
   }
   .sec_title {
     min-height: 45px;
+    font-weight: bolder;
   }
   .sec_header {
     min-height: 60px;
@@ -227,9 +228,6 @@
   .charge_panel {
     // background: whitesmoke;
     height: max-content;
-  }
-  .shed_selector {
-
   }
   .sched_selector i, .sched_selector p {
     background-clip: text !important;
@@ -959,4 +957,13 @@
   .header_margin_buffer{
     margin: 0 15px;
   }
- }
+  .margin_top_align {
+    margin-top: -60px;
+  }
+  .back_button {
+    color: #BDBDBD;
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+}

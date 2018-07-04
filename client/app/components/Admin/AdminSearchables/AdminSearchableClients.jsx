@@ -105,7 +105,7 @@ export class AdminSearchableClients extends Component {
     //   </div>
     // )
     const viewType = (<div className="layout-row flex-100 layout-align-start-center ">
-      <div className="layout-row flex-none layout-align-space-around-center layout-wrap">
+      <div className="layout-row flex-none layout-align-space-between-center layout-wrap">
         {clientsArr}
       </div>
     </div>)
