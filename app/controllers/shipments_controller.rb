@@ -76,7 +76,6 @@ class ShipmentsController < ApplicationController
       aggregatedCargo: shipment.aggregated_cargo,
       contacts:        contacts,
       documents:       documents,
-      schedules:       shipment.schedule_set,
       cargoItemTypes:  cargo_item_types
     )
   end

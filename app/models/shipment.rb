@@ -2,7 +2,7 @@
 
 class Shipment < ApplicationRecord
   extend ShippingTools
-  include ActiveModel::Validations
+  # include ActiveModel::Validations
   STATUSES = %w(
     booking_process_started
     requested_by_unconfirmed_account
@@ -25,18 +25,19 @@ class Shipment < ApplicationRecord
   validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
-  validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validate :user_tenant_match
+  validate :itinerary_trip_match
 
   # validates :total_goods_value, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
-  before_validation :assign_uuid, :generate_imc_reference, :set_default_trucking, on: :create
-  before_validation :update_carriage_properties!
+  before_validation :assign_uuid, :generate_imc_reference,
+    :set_default_trucking, :set_tenant,
+    on: :create
+  before_validation :update_carriage_properties!, :sync_nexuses
 
   # ActiveRecord associations
-  belongs_to :user, optional: true
-  belongs_to :consignee, optional: true
+  belongs_to :user
   belongs_to :tenant
   has_many :documents
   has_many :shipment_contacts
@@ -74,9 +75,9 @@ class Shipment < ApplicationRecord
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
 
-  STATUSES.each do |status|
-    scope status, -> { where(status: status) }
-  end
+  # STATUSES.each do |status|
+  #   scope status, -> { where(status: status) }
+  # end
 
   %i(ocean air rail).each do |mot|
     scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
@@ -85,6 +86,46 @@ class Shipment < ApplicationRecord
   # Class methods
 
   # Instance methods
+
+  def total_price
+    return nil if selected_offer.nil?
+
+    selected_offer.total
+  end
+
+  def origin_layover
+    return nil if trip.nil?
+
+    trip.layovers.hub_id(origin_hub_id).try(:first)
+  end
+
+  def destination_layover
+    return nil if trip.nil?
+
+    trip.layovers.hub_id(destination_hub_id).try(:first)
+  end
+
+  def origin_layover=(layover)
+    set_trip_using_layover(layover)
+
+    self.planned_etd  = layover.etd
+    self.closing_date = layover.closing_date
+    self.origin_hub   = layover.hub
+  end
+
+  def destination_layover=(layover)
+    set_trip_using_layover(layover)
+
+    self.planned_eta     = layover.eta
+    self.destination_hub = layover.hub
+  end
+
+  def set_trip_using_layover(layover)
+    raise "Trip Mismatch" unless trip_id.nil? || layover.trip.id == trip_id
+
+    self.trip      ||= layover.trip
+    self.itinerary ||= layover.trip.itinerary
+  end
 
   def pickup_address
     Location.where(id: trucking.dig("pre_carriage", "location_id")).first
@@ -184,10 +225,6 @@ class Shipment < ApplicationRecord
     send("has_#{carriage}_carriage?")
   end
 
-  def mode_of_transport
-    itinerary.mode_of_transport
-  end
-
   def has_customs?
     !!customs
   end
@@ -220,22 +257,8 @@ class Shipment < ApplicationRecord
     planned_eta
   end
 
-  def has_on_carriage?
-    has_on_carriage
-  end
-
-  def has_pre_carriage?
-    has_pre_carriage
-  end
-
   def selected_offer
     charge_breakdowns.selected.to_nested_hash
-  end
-
-  def cargo_charges
-    schedule_set.reduce({}) do |cargo_charges, schedule|
-      cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
-    end
   end
 
   def as_options_json(options={})
@@ -260,24 +283,10 @@ class Shipment < ApplicationRecord
   end
 
   def with_address_options_json(options={})
-    shipment_hash = as_options_json(options).merge(
+    as_options_json(options).merge(
       pickup_address:   pickup_address_with_country,
       delivery_address: delivery_address_with_country
     )
-  end
-
-  def eta_catchup
-    ships = Shipment.all
-    ships.each do |s|
-      scheds = []
-      s.schedule_set.each do |ss|
-        scheds.push(Schedule.find(ss["id"]))
-      end
-      next unless scheds.first&.etd && scheds.last && scheds.last.eta
-      s.planned_etd = scheds.first.etd
-      s.planned_eta = scheds.last.eta
-      s.save!
-    end
   end
 
   def create_charge_breakdowns_from_schedules_charges!
@@ -365,5 +374,29 @@ class Shipment < ApplicationRecord
 
   def set_default_trucking
     self.trucking ||= { on_carriage: { truck_type: "" }, pre_carriage: { truck_type: "" } }
+  end
+
+  def set_tenant
+    self.tenant_id ||= user.tenant_id
+  end
+
+  def sync_nexuses
+    %w(origin destination).each do |target|
+      next if self["#{target}_hub"].nil?
+
+      self["#{target}_nexus"] ||= self["#{target}_hub"]
+    end
+  end
+
+  def user_tenant_match
+    return if tenant_id == user.tenant_id
+
+    errors.add(:user, "tenant_id does not match the shipment's tenant_id")
+  end
+
+  def itinerary_trip_match
+    return if trip.nil? || trip.itinerary_id == itinerary_id
+
+    errors.add(:user, "trip_id does not match the shipment's itinerary_id")
   end
 end
