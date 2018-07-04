@@ -8,7 +8,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { CargoDetails } from '../CargoDetails/CargoDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, totalPrice } from '../../helpers'
 
 export class BookingDetails extends Component {
   static scrollTo (target, offset) {
@@ -182,7 +182,7 @@ export class BookingDetails extends Component {
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price.value, 10)) * 0.0017
+    const iVal = (gVal * 1.1 + +totalPrice(shipmentData.shipment).value) * 0.0017
     if (bool) {
       this.setState({ insurance: { bool, val: iVal } })
     } else {
@@ -220,7 +220,8 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
-    return parseFloat(shipmentData.shipment.total_price.value, 10) + customs.val + insurance.val
+
+    return +totalPrice(shipmentData.shipment) + customs.val + insurance.val
   }
   toNextStage () {
     const {
@@ -241,11 +242,13 @@ export class BookingDetails extends Component {
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
+
       return
     }
     if (cargoNotes === '' || !cargoNotes) {
       BookingDetails.scrollTo('cargo_notes')
       this.setState({ finishBookingAttempted: true })
+
       return
     }
 

@@ -3,6 +3,7 @@ import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserShipmentRow.scss'
 import { moment } from '../../constants'
+import { totalPrice, formattedPriceValue } from '../../helpers'
 
 export class UserShipmentRow extends Component {
   static switchIcon (sched) {
@@ -21,6 +22,7 @@ export class UserShipmentRow extends Component {
         icon = <i className="fa fa-ship" />
         break
     }
+
     return icon
   }
   static calcCargoLoad (feeHash, loadType) {
@@ -35,6 +37,7 @@ export class UserShipmentRow extends Component {
     } else if (loadType === 'container' && cargoCount === 1) {
       noun = 'Container'
     }
+
     return `${cargoCount} X ${noun}`
   }
 
@@ -123,6 +126,7 @@ export class UserShipmentRow extends Component {
     //   </div>
     // )
     const feeHash = shipment.selected_offer
+
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
         <div
@@ -148,11 +152,6 @@ export class UserShipmentRow extends Component {
               styles.hub_mid_line
             } flex-none layout-row layout-align-space-around-center layout-wrap`}
           >
-            {/* <i className="fa fa-chevron-down flex-none" />
-            {/* <i className="fa fa-chevron-down flex-none" /> */}
-
-            {/* <i className="fa fa-chevron-down flex-none" /> */}
-            {/* <i className="fa fa-chevron-down flex-none" /> */}
             <div className="flex-100 layout-row layout-align-center-end">
               {UserShipmentRow.switchIcon(schedule, gradientFontStyle)}
             </div>
@@ -191,7 +190,7 @@ export class UserShipmentRow extends Component {
             <div className="flex-50 layout-row layout-align-end-center">
               <h4 className="flex-none letter_3 no_m">
                 {' '}
-                {`Total: ${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)}`}
+                {`Total: ${totalPrice(shipment).currency} ${formattedPriceValue(totalPrice(shipment).value)}`}
               </h4>
             </div>
           </div>

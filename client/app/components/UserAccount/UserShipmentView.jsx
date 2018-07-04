@@ -10,7 +10,14 @@ import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import { moment, documentTypes } from '../../constants'
-import { gradientTextGenerator, switchIcon, gradientGenerator, gradientBorderGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  switchIcon,
+  gradientGenerator,
+  gradientBorderGenerator,
+  formattedPriceValue,
+  totalPrice
+} from '../../helpers'
 import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
 import DocumentsForm from '../Documents/Form'
@@ -466,7 +473,6 @@ export class UserShipmentView extends Component {
                   et={etdJSX}
                   hub={shipment.origin_hub}
                   bg={bg1}
-
                 />
               </div>
             )}
@@ -491,7 +497,6 @@ export class UserShipmentView extends Component {
                   et={etaJSX}
                   hub={shipment.destination_hub}
                   bg={bg2}
-
                 />
               </div>
             )}
@@ -610,7 +615,7 @@ export class UserShipmentView extends Component {
                   <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
                 </div>
               </div>
-              <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
+              <h2 className="layout-align-end-center layout-row flex">{formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}</h2>
             </div>
           </div>
         </div>
