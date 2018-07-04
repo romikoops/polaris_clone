@@ -397,6 +397,6 @@ class Shipment < ApplicationRecord
   def itinerary_trip_match
     return if trip.nil? || trip.itinerary_id == itinerary_id
 
-    errors.add(:user, "trip_id does not match the shipment's itinerary_id")
+    errors.add(:itinerary, "id does not match the trips's itinerary_id")
   end
 end
