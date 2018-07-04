@@ -9,7 +9,9 @@ import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
-  switchIcon
+  switchIcon,
+  totalPrice,
+  formattedPriceValue
 } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 
@@ -292,10 +294,9 @@ export class AdminShipmentCardNew extends Component {
           </div>
           <div className="layout-align-end-center">
             <span className={`${styles.bigText}`}>
-              <span>{shipment.total_price ? shipment.total_price.currency : ''} </span>
+              <span> {totalPrice(shipment).currency} </span>
               <span>
-                {shipment.total_price ? Number.parseFloat(shipment.total_price.value)
-                  .toFixed(2) : 0}
+                {formattedPriceValue(totalPrice(shipment).value)}
               </span>
             </span>
           </div>

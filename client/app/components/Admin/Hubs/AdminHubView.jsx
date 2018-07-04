@@ -8,7 +8,14 @@ import { AdminHubFees } from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
-import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize, gradientBorderGenerator } from '../../../helpers'
+import {
+  gradientGenerator,
+  gradientTextGenerator,
+  switchIcon,
+  renderHubType,
+  capitalize,
+  gradientBorderGenerator
+} from '../../../helpers'
 import MandatoryChargeBox from './MandatoryChargeBox'
 import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'

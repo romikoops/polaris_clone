@@ -18,7 +18,9 @@ import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
-  switchIcon
+  switchIcon,
+  totalPrice,
+  formattedPriceValue
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 
@@ -77,26 +79,28 @@ export class AdminShipmentView extends Component {
   }
   constructor (props) {
     super(props)
+
+    const { shipment } = this.props.shipmentData
     this.state = {
       showEditPrice: false,
       showEditServicePrice: false,
       newTotal: 0,
       showEditTime: false,
-      currency: this.props.shipmentData.shipment.selected_offer.total.currency,
+      currency: totalPrice(shipment).currency,
       newTimes: {
         eta: {
-          day: new Date(moment(this.props.shipmentData.shipment.planned_eta).format())
+          day: new Date(moment(shipment.planned_eta).format())
         },
         etd: {
-          day: new Date(moment(this.props.shipmentData.shipment.planned_etd).format())
+          day: new Date(moment(shipment.planned_etd).format())
         }
       },
       newPrices: {
-        trucking_pre: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_pre),
-        trucking_on: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_on),
-        cargo: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.cargo),
-        insurance: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.insurance),
-        customs: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.customs)
+        trucking_pre: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_pre),
+        trucking_on: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_on),
+        cargo: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.cargo),
+        insurance: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.insurance),
+        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
@@ -344,8 +348,7 @@ export class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
-      aggregatedCargo,
-      schedules
+      aggregatedCargo
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -593,7 +596,7 @@ export class AdminShipmentView extends Component {
                 {switchIcon()}
               </div>
               <p className="">Estimated time delivery</p>
-              <h5>{moment(schedules[0].eta).diff(moment(schedules[0].etd), 'days')} days{' '}</h5>
+              <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
             </div>
           </div>
 
@@ -878,9 +881,7 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <h2 className="layout-align-end-center layout-row flex">
-                {shipment.selected_offer.edited_total && shipment.selected_offer.edited_total.value
-                  ? (+shipment.selected_offer.edited_total.value).toFixed(2)
-                  : (+shipment.total_price.value).toFixed(2)} {shipment.total_goods_value.currency}
+                {formattedPriceValue(totalPrice(shipment).value)}
               </h2>
             </div>
           </div>

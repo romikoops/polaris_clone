@@ -8,4 +8,18 @@ class Array
   def sql_format
     "(#{join(', ')})"
   end
+
+  def each_with_times(arg)
+    num_times =
+      case arg
+      when Float   then arg > rand ? 1 : 0
+      when Range   then rand(arg)
+      when Integer then arg
+      else raise ArgumentError
+      end
+
+    each do |elem|
+      num_times.times { yield elem }
+    end
+  end
 end
