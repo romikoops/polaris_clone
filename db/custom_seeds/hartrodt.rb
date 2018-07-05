@@ -21,15 +21,12 @@ subdomains.each do |sub|
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = File.open("#{Rails.root}/db/dummydata/hartrodt/hartrodt__trucking_ftl__hamburg_port.xlsx")
   req = { 'xlsx' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   trucking = File.open("#{Rails.root}/db/dummydata/hartrodt/hartrodt__trucking_ltl__hamburg_port.xlsx")
   req = { 'xlsx' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   hub = tenant.hubs.find_by_name('Shanghai Port')
   trucking = File.open("#{Rails.root}/db/dummydata/hartrodt/hartrodt__trucking_ftl__shanghai_port.xlsx")
   req = { 'xlsx' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 end

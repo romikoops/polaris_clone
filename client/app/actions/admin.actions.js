@@ -408,6 +408,33 @@ function updatePricing (id, req) {
     )
   }
 }
+function assignDedicatedPricings (pricing, clientIds) {
+  function request (prData) {
+    return { type: adminConstants.ASSIGN_DEDICATED_PRICING_REQUEST, payload: prData }
+  }
+  function success (prData) {
+    // ;
+    return { type: adminConstants.ASSIGN_DEDICATED_PRICING_SUCCESS, payload: prData }
+  }
+  function failure (error) {
+    return { type: adminConstants.ASSIGN_DEDICATED_PRICING_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.assignDedicatedPricings(pricing, clientIds).then(
+      (data) => {
+        dispatch(success(data.data))
+        dispatch(alertActions.success('Updating Pricing successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function getSchedules (redirect) {
   function request (schedData) {
@@ -1584,7 +1611,8 @@ export const adminActions = {
   saveItineraryNotes,
   editTruckingPrice,
   editCustomsFees,
-  updateHubMandatoryCharges
+  updateHubMandatoryCharges,
+  assignDedicatedPricings
 }
 
 export default adminActions
