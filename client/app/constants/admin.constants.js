@@ -771,3 +771,10 @@ export const truckingFees = [
     currency: 'EUR'
   }
 ]
+
+export const TRUCKING_ICONS = {
+  km: 'https://assets.itsmycargo.com/assets/icons/02.png',
+  unit: 'https://assets.itsmycargo.com/assets/icons/01.png',
+  kg: 'https://assets.itsmycargo.com/assets/icons/05.png',
+  rates: 'https://assets.itsmycargo.com/assets/icons/rates.png'
+}

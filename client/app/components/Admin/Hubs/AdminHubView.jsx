@@ -271,7 +271,7 @@ export class AdminHubView extends Component {
       />))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding">
         {editView ? editorModal : '' }
         <div
           className={`${

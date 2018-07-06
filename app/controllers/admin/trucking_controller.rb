@@ -168,7 +168,7 @@ class Admin::TruckingController < Admin::AdminBaseController
     end
 
     def update_item_truckingHubs
-      update_item("truckingHubs", 
+      update_item("truckingHubs",
         { _id: truckingHubId },
         type: (meta["type"]).to_s,
         load_type: meta["loadType"],

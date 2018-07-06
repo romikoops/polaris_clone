@@ -202,7 +202,7 @@ export class AdminHubsIndex extends Component {
     ))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="layout-row flex-80 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer">
