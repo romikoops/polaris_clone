@@ -370,7 +370,7 @@ export class BookingDetails extends Component {
               <div className="flex-50 layout-row layout-align-start-center" />
               <div className="flex-50 layout-row layout-align-end-center">
                 <div className="flex-none layout-row">
-                  <RoundButton theme={theme} text="Review Booking" active />
+                  <RoundButton theme={theme} text="Review Booking Request" active />
                 </div>
               </div>
             </div>
