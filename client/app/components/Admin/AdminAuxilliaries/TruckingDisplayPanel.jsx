@@ -584,7 +584,7 @@ export class TruckingDisplayPanel extends Component {
               className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
             >
               <img src={TRUCKING_ICONS[fee.key.toLowerCase()]} alt="Group_5" border="0" />
-              <p className="flex no_m">{`${fee.name} Ranges`}:</p>
+              <p className="flex no_m">{`${fee.name}`}:</p>
               {editable ? saveClose : startEdit}
             </div>
           </div>

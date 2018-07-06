@@ -76,6 +76,11 @@ export class AdminTruckingView extends Component {
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    if (this.state.filteredTruckingPricings.length === 0 &&
+      this.props.truckingDetail &&
+      this.props.truckingDetail.truckingPricings.length > 0) {
+      this.handleLoadTypeToggle()
+    }
   }
   filterTruckingPricingsByType (pricings) {
     const {
