@@ -199,13 +199,13 @@ class AdminSchedulesRoute extends Component {
     })
     // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+      <div className="layout-row flex-95 layout-wrap layout-align-start-center">
         <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
       </div>
     )
 
     const listView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">{tripArr}</div>
+      <div className="layout-row flex-95 layout-wrap layout-align-start-center">{tripArr}</div>
     )
     const typeFilters = Object.keys(searchFilters.sort).map((htk) => {
       const typeNames = {
@@ -258,9 +258,9 @@ class AdminSchedulesRoute extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left padding_top">
         {uploadStatus}
-        <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+        <div className="flex-75 layout-row layout-align-start-start layout-wrap">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >

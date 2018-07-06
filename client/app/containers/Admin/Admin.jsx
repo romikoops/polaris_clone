@@ -223,6 +223,7 @@ class Admin extends Component {
                     clients={clients}
                     {...props}
                     hubs={hubs}
+                    hubHash={hubHash}
                   />)}
                 />
                 <Route

@@ -62,6 +62,7 @@ export class WorldMap extends Component {
         routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
       })
     })
+
     return (
       <div className="flex-100">
         <svg width="100%" height={height || '100%'} viewBox="0 0 900 450">

@@ -16,6 +16,7 @@ import {
 } from '../../../../constants'
 import { gradientGenerator } from '../../../../helpers'
 import FeeRow from './FeeRow'
+import FeeRangeRow from './FeeRangeRow'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -70,6 +71,7 @@ export class AdminHubFees extends Component {
     this.deleteFee = this.deleteFee.bind(this)
     this.showAddFeePanel = this.showAddFeePanel.bind(this)
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
+    this.handleRangeChange = this.handleRangeChange.bind(this)
   }
   componentWillMount () {
     // this.setAllFromOptions()
@@ -146,6 +148,9 @@ export class AdminHubFees extends Component {
         }
       }
     ))
+  }
+  isEditing () {
+    this.setState({ isEditing: !this.state.isEditing })
   }
   prepAllOptions () {
     const {
@@ -283,7 +288,31 @@ export class AdminHubFees extends Component {
               ...this.state.editor[target][nameKeys[0]].fees,
               [nameKeys[1]]: {
                 ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
-                [nameKeys[2]]: parseInt(value, 10)
+                [nameKeys[2]]: parseFloat(value)
+              }
+            }
+          }
+        }
+      }
+    })
+  }
+  handleRangeChange (event, target) {
+    const { name, value } = event.target
+    const nameKeys = name.split('-')
+    const { range } = this.state.editor[target][nameKeys[0]].fees[nameKeys[1]]
+    range[nameKeys[2]][nameKeys[3]] = parseFloat(value)
+    this.setState({
+      editor: {
+        ...this.state.editor,
+        [target]: {
+          ...this.state.editor[target],
+          [nameKeys[0]]: {
+            ...this.state.editor[target][nameKeys[0]],
+            fees: {
+              ...this.state.editor[target][nameKeys[0]].fees,
+              [nameKeys[1]]: {
+                ...this.state.editor[target][nameKeys[0]].fees[nameKeys[1]],
+                range
               }
             }
           }
@@ -354,7 +383,7 @@ export class AdminHubFees extends Component {
     }
   }
   renderCargoClassButtons () {
-    const { selectedCargoClass, charges } = this.state
+    const { selectedCargoClass, charges, isEditing } = this.state
     const { theme } = this.props
     const { primary, secondary } = theme.colors
     const bgStyle = gradientGenerator(primary, secondary)
@@ -369,7 +398,7 @@ export class AdminHubFees extends Component {
       return (<div
         className={`flex-25 layout-row layout-align-start-center pointy ${inactiveStyle} ${styles2.cargo_class_button}`}
         style={buttonStyle}
-        onClick={hasCargoClass ? () => this.setCargoClass(cargoClass.value) : null}
+        onClick={hasCargoClass && !isEditing ? () => this.setCargoClass(cargoClass.value) : null}
       >
         <div className={`flex-none layout-row layout-align-center-center ${innerStyle} ${styles2.cargo_class_button_inner}`}>
           <p className="flex-none">{cargoClass.label}</p>
@@ -406,7 +435,7 @@ export class AdminHubFees extends Component {
     const feeRows = Object.keys(currentCharge.fees).map((ck) => {
       const fee = currentCharge.fees[ck]
 
-      return (<FeeRow
+      return fee.range ? (<FeeRangeRow
         className="flex-100"
         theme={theme}
         fee={fee}
@@ -416,6 +445,21 @@ export class AdminHubFees extends Component {
         handleDateEdit={this.handleDayChange}
         handleSelect={this.handleSelect}
         handleChange={this.handleChange}
+        handleRangeChange={this.handleRangeChange}
+        isEditing={() => this.isEditing()}
+        saveEdit={e => this.saveEdit(e)}
+        target="charges"
+      />) : (<FeeRow
+        className="flex-100"
+        theme={theme}
+        fee={fee}
+        selectOptions={selectOptions.charges[currentCharge.load_type]}
+        direction={direction}
+        editCharge={editCharge}
+        handleDateEdit={this.handleDayChange}
+        handleSelect={this.handleSelect}
+        handleChange={this.handleChange}
+        isEditing={() => this.isEditing()}
         saveEdit={e => this.saveEdit(e)}
         target="charges"
       />)

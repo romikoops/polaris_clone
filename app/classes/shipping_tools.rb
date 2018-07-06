@@ -49,7 +49,7 @@ module ShippingTools
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
 
-    offer_calculator.calc_offer!
+    offer_calculator.perform
 
     offer_calculator.shipment.save!
     {
@@ -101,6 +101,7 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
+      byebug
       contact = current_user.contacts.find_or_create_by!(contact_params(resource))
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
@@ -145,7 +146,7 @@ module ShippingTools
                                       currency: shipment_data[:customs][:import][:currency],
                                       value: shipment_data[:customs][:import][:val]
                                     ),
-          parent:                  @customs_charge
+          parent:                   @customs_charge
         )
       end
       if shipment_data[:customs][:export][:bool]
@@ -157,7 +158,7 @@ module ShippingTools
                                       currency: shipment_data[:customs][:total][:currency],
                                       value: shipment_data[:customs][:export][:val]
                                     ),
-          parent:                  @customs_charge
+          parent:                   @customs_charge
         )
       end
     end
@@ -221,7 +222,7 @@ module ShippingTools
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+
     locations = {
       startHub:    { data: origin_hub,      location: origin_hub.nexus.to_custom_hash },
       endHub:      { data: destination_hub, location: destination_hub.nexus.to_custom_hash },
@@ -230,11 +231,10 @@ module ShippingTools
     }
 
     {
-      shipment:        shipment.as_json(options),
+      shipment:        shipment.as_options_json,
       cargoItems:      cargo_items      || nil,
       containers:      containers       || nil,
       aggregatedCargo: aggregated_cargo || nil,
-      schedule:        shipment.schedule_set.first,
       locations:       locations,
       consignee:       consignee,
       notifyees:       notifyees,
@@ -292,10 +292,8 @@ module ShippingTools
     shipment = Shipment.find(params[:shipment_id])
 
     shipment.user_id =        params[:user_id]
-    shipment.total_price =    params[:total]
     shipment.customs_credit = params[:customs_credit]
 
-    shipment.schedule_set = [params[:schedule]]
     shipment.trip_id =      params[:schedule]["trip_id"]
     @schedule =             params[:schedule].as_json
 
@@ -317,9 +315,9 @@ module ShippingTools
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
-    shipment.planned_etd = shipment.schedule_set.first["etd"]
-    shipment.planned_eta = shipment.schedule_set.last["eta"]
-    shipment.closing_date = shipment.schedule_set.first["closing_date"]
+    shipment.closing_date      = @schedule["closing_date"]
+    shipment.planned_etd       = @schedule["etd"]
+    shipment.planned_eta       = @schedule["eta"]
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -408,6 +406,7 @@ module ShippingTools
       }
     }
   end
+
   def self.reuse_booking_data(id, user)
     old_shipment = Shipment.find(id)
     new_shipment_json = old_shipment.clone().as_json
@@ -445,6 +444,7 @@ module ShippingTools
       max_aggregate_dimensions: tenant.max_aggregate_dimensions
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
+
   def self.reuse_cargo_units(shipment, cargo_units)
     cargo_units.each do |cargo_unit|
       cargo_json = cargo_unit.clone().as_json
@@ -453,6 +453,7 @@ module ShippingTools
       shipment.cargo_units.create!(cargo_json)
     end
   end
+
   def self.reuse_contacts(old_shipment, new_shipment)
     old_shipment.shipment_contacts.each do |old_contact|
       new_contact_json = old_contact.clone().as_json
@@ -461,6 +462,7 @@ module ShippingTools
       new_shipment.shipment_contacts.create!(new_contact_json)
     end
   end
+
   def self.reuse_aggregrated_cargo(shipment, aggregated_cargo)
     aggregated_cargo_json = aggregated_cargo.clone().as_json
     aggregated_cargo_json.delete('id')

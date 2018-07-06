@@ -33,11 +33,6 @@ class ShipmentsController < ApplicationController
     tenant_notification_email(current_user, Shipment.first)
   end
 
-  def reuse_booking_data
-    resp = ShippingTools.reuse_booking_data(params[:shipment_id], current_user)
-    response_handler(resp)
-  end
-
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
@@ -75,7 +70,6 @@ class ShipmentsController < ApplicationController
       aggregatedCargo: shipment.aggregated_cargo,
       contacts:        contacts,
       documents:       documents,
-      schedules:       shipment.schedule_set,
       cargoItemTypes:  cargo_item_types
     )
   end

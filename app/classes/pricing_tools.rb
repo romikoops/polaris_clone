@@ -91,7 +91,7 @@ module PricingTools
   end
 
   def determine_cargo_item_price(cargo, schedule, user, _quantity, shipment_date, mot)
-    transport_category_id = transport_category(cargo, schedule)
+    transport_category_id = transport_category(cargo, schedule).id
     pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
     
     return nil if pricing.nil?
@@ -120,7 +120,7 @@ module PricingTools
   end
 
   def determine_container_price(container, schedule, user, _quantity, shipment_date, mot)
-    transport_category_id = transport_category(container, schedule)
+    transport_category_id = transport_category(container, schedule).id
     pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
     return if pricing.nil?
     totals = { "total" => {} }

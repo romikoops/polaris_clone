@@ -4,7 +4,7 @@ import { moment } from '../../constants'
 import { Price } from '../Price/Price'
 import { Tooltip } from '../Tooltip/Tooltip'
 import PropTypes from '../../prop-types'
-import { switchIcon } from '../../helpers'
+import { switchIcon, totalPrice } from '../../helpers'
 
 export class MessageShipmentData extends Component {
   static switchIcon (sched) {
@@ -40,13 +40,12 @@ export class MessageShipmentData extends Component {
 
   render () {
     const {
-      theme, shipmentData, user, closeInfo
+      theme, shipmentData, closeInfo
     } = this.props
     if (!shipmentData) {
       return ''
     }
     const { shipment } = shipmentData
-    const total = parseFloat(shipment.total_price.value, 10)
     const gradientFontStyle = {
       background:
         theme && theme.colors
@@ -228,7 +227,7 @@ export class MessageShipmentData extends Component {
             >
               <p>Total Price:</p>{' '}
               <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
-              <Price value={total} currency={user.currency} />
+              <Price value={totalPrice(shipment).value} currency={totalPrice(shipment).currency} />
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
@@ -255,7 +254,6 @@ MessageShipmentData.propTypes = {
   theme: PropTypes.theme,
   shipmentData: PropTypes.shipmentData.isRequired,
   closeInfo: PropTypes.func.isRequired,
-  user: PropTypes.user.isRequired,
   pickupDate: PropTypes.number.isRequired
 }
 

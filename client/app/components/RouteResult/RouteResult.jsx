@@ -55,6 +55,7 @@ export class RouteResult extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
+
     return (
       <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
         <div className="flex-70 layout-row layout-wrap">

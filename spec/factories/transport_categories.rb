@@ -6,8 +6,11 @@ FactoryBot.define do
     mode_of_transport 'ocean'
     cargo_class 'fcl_20'
     load_type 'container'
-
-    association :vehicle
+    before(:create) do |transport_category|
+      transport_category.update(
+        vehicle: Vehicle.where(mode_of_transport: "ocean").first || create(:vehicle)
+      )
+    end
   end
 
 end

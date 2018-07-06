@@ -174,7 +174,7 @@
     }
   }
   .container {
-    background: #E0E0E0;
+    // background: #E0E0E0;
     padding: 5px;
     position: relative;
   }
@@ -187,5 +187,22 @@
   }
   .close_icon {
     color: red;
+  }
+  .assigned_checkmark {
+    width: 40px;
+    height: 40px;
+  }
+  .assign_user_tile {
+    height: 40px;
+    background:transparent;
+    padding: 4px 10px;
+  }
+  .assign_user_tile_inner {
+    height: 32px;
+    background: white;
+    border: 1px solid grey;
+    i {
+      margin: 0 5px;
+    }
   }
 }

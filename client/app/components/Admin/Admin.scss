@@ -896,6 +896,18 @@
       font-weight: bold;
      }
    }
+   .title_grey_with_button {
+    background: #E0E0E0;
+    color: #212121;
+    // height: 38px;
+    &:first-child {
+     padding-left: 15px;
+     margin-top: 0;
+     margin-bottom: 0;
+     font-size: 18px;
+     font-weight: bold;
+    }
+  }
    .expander_icon i {
      font-size: 12px !important;
    }
