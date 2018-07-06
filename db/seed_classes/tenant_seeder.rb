@@ -115,7 +115,7 @@ class TenantSeeder
       },
       phones: {
         main: '+46 31-85 32 00',
-        support: '0173042031020'
+        support: '+46 8 470 4970'
       },
       emails: {
         sales: {

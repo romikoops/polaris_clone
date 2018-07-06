@@ -11,7 +11,7 @@ export function switchIcon (mot, style, flex) {
     case 'truck':
       return <i className={`fa fa-truck flip_icon_horizontal ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
     default:
-      return <i className="fa fa-anchor" />
+      return <i className={`fa fa-anchor ${style ? 'clip' : ''} ${flex || ''}`} style={style || {}} />
   }
 }
 
