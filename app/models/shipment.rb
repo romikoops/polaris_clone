@@ -389,7 +389,7 @@ class Shipment < ApplicationRecord
   end
 
   def user_tenant_match
-    return if tenant_id == user.tenant_id
+    return if user.nil? || tenant_id == user.tenant_id
 
     errors.add(:user, "tenant_id does not match the shipment's tenant_id")
   end
