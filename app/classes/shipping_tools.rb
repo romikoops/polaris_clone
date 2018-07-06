@@ -101,7 +101,6 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      byebug
       contact = current_user.contacts.find_or_create_by!(contact_params(resource))
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
