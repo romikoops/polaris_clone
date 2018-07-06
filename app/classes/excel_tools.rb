@@ -808,9 +808,10 @@ module ExcelTools
         results[:stops] << stop
         stop
       end
-      itinerary.stops << aux_data[pricing_key][:stops_in_order]
-
-      itinerary.save!
+      if aux_data[pricing_key][:stops_in_order].length > 0
+        itinerary.stops << aux_data[pricing_key][:stops_in_order]
+        itinerary.save!
+      end
 
       steps_in_order = []
       (aux_data[pricing_key][:stops_in_order].length - 1).times do
