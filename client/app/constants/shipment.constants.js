@@ -214,6 +214,8 @@ export const lclChargeGlossary = {
   TRF: 'Telex Release Fee'
 }
 export const chargeGlossary = {
+  BAS: 'Basic Freight',
+  HAS: 'Heavy Weight Freight',
   effective_date: 'Effective Date',
   expiration_date: 'Expiration Date',
   rate_basis: 'Rate Basis',
@@ -237,6 +239,11 @@ export const chargeGlossary = {
   PER_CBM_TON: 'Per cbm/ton',
   PER_BILL: 'Per B/L',
   PER_CBM: 'Per cbm',
+  PER_WM: 'Per W/M',
+  PER_KG: 'Per kg',
+  PER_KG_RANGE: 'Per kg range',
+  PER_TON: 'Per ton',
+  PERCENTAGE: 'Percentage',
   FSC: 'Fuel Surcharge',
   ULT: 'Loading/Unloading Time',
   VAT: 'VAT',

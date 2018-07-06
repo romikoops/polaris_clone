@@ -223,7 +223,7 @@ subdomains.each do |sub|
     "xlsx" => schedules,
     "itinerary" => itinerary
   }
-  overwrite_schedules_by_itinerary(params, shipper)
+  ExcelTool::OverwriteSchedulesByItinerary.new(params: params, _user: shipper).perform
 
 end
 # user = Tenant.greencarrier.users.find_by_email('demo@greencarrier.com')

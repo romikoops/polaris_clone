@@ -39,7 +39,7 @@ class PricingSeeder
     end
 
     puts "  - Seeding hubs..."           
-    overwrite_hubs(req, shipper)              
+    ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
   end
 
   def self.seed_freight_rates(req, shipper)

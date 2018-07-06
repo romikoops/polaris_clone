@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       post 'pricings/ocean_lcl_pricings/process_csv', to: 'pricings#overwrite_main_lcl_carriage', as: :main_lcl_carriage_pricings_overwrite
       post 'pricings/ocean_fcl_pricings/process_csv', to: 'pricings#overwrite_main_fcl_carriage', as: :main_fcl_carriage_pricings_overwrite
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/assign_dedicated', to: 'pricings#assign_dedicated'
 
       resources :open_pricings, only: [:index]
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
