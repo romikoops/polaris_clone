@@ -80,7 +80,7 @@ class Admin::HubsController < Admin::AdminBaseController
   def overwrite
     if params[:file]
       req = { "xlsx" => params[:file] }
-      resp = overwrite_hubs(req)
+      resp = ExcelTool::HubsOverwriter.new(params: req, _user: current_user).perform
       response_handler(resp)
     else
       response_handler(false)
