@@ -99,15 +99,15 @@ export class ChooseOffer extends Component {
     const { shipmentDispatch, req } = this.props
     let newDepartureDate
     if (operator === 'add') {
-      newDepartureDate = moment(req.shipment.planned_pickup_date)
+      newDepartureDate = moment(req.shipment.selected_day)
         .add(days, 'days')
         .format()
     } else {
-      newDepartureDate = moment(req.shipment.planned_pickup_date)
+      newDepartureDate = moment(req.shipment.selected_day)
         .subtract(days, 'days')
         .format()
     }
-    req.shipment.planned_pickup_date = newDepartureDate
+    req.shipment.selected_day = newDepartureDate
 
     shipmentDispatch.getOffers(req, false)
   }

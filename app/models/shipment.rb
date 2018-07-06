@@ -55,7 +55,7 @@ class Shipment < ApplicationRecord
   has_many :cargo_item_types, through: :cargo_items
   has_one :aggregated_cargo
   has_many :conversations
-  has_many :messages, through: :conversation
+  has_many :messages, through: :conversations
   has_many :charge_breakdowns do
     def to_schedules_charges
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
