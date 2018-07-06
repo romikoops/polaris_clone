@@ -721,7 +721,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none" style={{ marginRight: '5px' }}>
-                            {`Yes, I want ${tenant.data.name} to handle my customs`}
+                            {`Yes, I want ${tenant.data.name} to handle my customs clearance`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">

@@ -90,13 +90,7 @@ export class AdminSearchableClients extends Component {
           showTooltip={showTooltip}
         />))
     }
-    const viewType = (clientsArr.length > 3) ? (
-      <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-        <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-          {clientsArr}
-        </div>
-      </div>
-    ) : (
+    const viewType = (
       <div className="layout-row flex-100 layout-align-start-center ">
         <div className="layout-row flex-none layout-align-start-center layout-wrap">
           {clientsArr}
