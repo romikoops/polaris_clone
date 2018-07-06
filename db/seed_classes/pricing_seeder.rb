@@ -49,7 +49,7 @@ class PricingSeeder
     end
 
     puts "  - Seeding freight rates (fcl and lcl)..."
-    overwrite_freight_rates(req, shipper, true)
+    ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
   end
 
   def self.seed_local_charges(req, shipper)
