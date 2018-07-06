@@ -13,7 +13,7 @@ export function getSubdomain () {
     host.split('.')[0] === 'dev' ||
     host.split('.')[0] === '192'
   ) {
-    return 'demo'
+    return 'greencarrier'
   }
 
   return host.split('.')[0]
