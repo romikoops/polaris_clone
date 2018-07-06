@@ -707,14 +707,14 @@ function getDocs ({
 }) {
   const docChecker = {
     packing_sheet: false,
-    commercial_invoice: false,
-    customs_declaration: false,
-    customs_value_declaration: false,
-    eori: false,
-    certificate_of_origin: false,
-    dangerous_goods: false,
-    bill_of_lading: false,
-    invoice: false
+    commercial_invoice: false
+    // customs_declaration: false,
+    // customs_value_declaration: false,
+    // eori: false,
+    // certificate_of_origin: false,
+    // dangerous_goods: false,
+    // bill_of_lading: false,
+    // invoice: false
   }
   const docView = []
   const missingDocs = []
