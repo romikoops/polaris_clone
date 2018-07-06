@@ -18,7 +18,7 @@ subdomains.each do |sub|
   # puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__hubs.xlsx")
   req = { 'xlsx' => hubs }
-  overwrite_hubs(req, shipper)
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }

@@ -7,4 +7,4 @@ shipper = tenant.users.second
 puts '# Overwrite hubs from excel sheet'
 hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
 req = { 'xlsx' => hubs }
-overwrite_hubs(req, shipper)
+ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
