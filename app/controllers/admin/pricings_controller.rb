@@ -34,7 +34,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     itinerary = Itinerary.find(params[:id])
     pricings = ordinary_pricings(itinerary)
     user_pricings = user_pricing(itinerary)
-    stops = itinerary.stops.map { |s| { stop: s, hub: s.hub } }
+    stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(
       itineraryPricingData: pricings,
       itinerary: itinerary.as_options_json,
