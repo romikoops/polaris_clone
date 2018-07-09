@@ -3,7 +3,6 @@ import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './AdminClientTile.scss'
-import adminStyles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator, gradientBorderGenerator } from '../../helpers'
 import GradientBorder from '../GradientBorder'
@@ -140,7 +139,7 @@ export class AdminClientTile extends Component {
 
     return (
       <GradientBorder
-        wrapperClassName={`flex-none ${styles.client_card} ${adminStyles.margin_bottom} layout-row ${flexClasses} pointy`}
+        wrapperClassName={`flex-none ${styles.client_card} margin_bottom layout-row ${flexClasses} pointy`}
         gradient={gradientBorderStyle}
         className="layout-column flex-100"
         content={(

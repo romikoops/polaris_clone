@@ -4,7 +4,7 @@ FactoryBot.define do
 
     before(:create) do |charge_breakdown|
       if charge_breakdown.trip_id.nil?
-        charge_breakdown.update!(itinerary_id: charge_breakdown.shipment.trip_id)
+        charge_breakdown.update!(trip_id: charge_breakdown.shipment.trip_id)
       end
     end
   end

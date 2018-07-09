@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 // import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import adminStyles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
@@ -129,7 +128,7 @@ const EditProfileBox = ({
     </div>
     <div
       className={`flex-100 layout-row layout-align-start-start layout-wrap
-      ${styles.margin_top} ${adminStyles.margin_bottom}`}
+      ${styles.margin_top} margin_bottom`}
     >
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
@@ -146,7 +145,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
             First Name
@@ -162,7 +161,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
             Last Name
@@ -178,7 +177,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Email
@@ -194,7 +193,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone

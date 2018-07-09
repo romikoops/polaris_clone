@@ -73,7 +73,7 @@ class AdminHubs extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         {this.state.newHub ? (
           <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />

@@ -55,13 +55,13 @@ export class AdminShipmentView extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 2) {
+    if (loadType === 'cargo_item' && cargoCount > 3) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 2) {
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 2) {
+    } else if (loadType === 'container' && cargoCount > 3) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 2) {
+    } else if (loadType === 'container' && cargoCount === 3) {
       noun = 'Container'
     }
 
@@ -544,7 +544,7 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length - 1
+    const cargoCount = Object.keys(feeHash.cargo).length - 2
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -570,7 +570,7 @@ export class AdminShipmentView extends Component {
           <hr className="layout-row flex-md-40 flex-55" />
           <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.margin_bottom}`}>
+        <div className="layout-row flex-100 margin_bottom">
 
           <GradientBorder
             wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
@@ -620,7 +620,7 @@ export class AdminShipmentView extends Component {
           />
         </div>
 
-        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>
+        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
               <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
@@ -681,12 +681,12 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`${adminStyles.border_box} ${adminStyles.margin_bottom} layout-sm-column layout-xs-column layout-row flex-100`}>
+        <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
           <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                     <p>Pre-Carriage</p>
@@ -712,7 +712,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-offset-10 flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-truck clip flex-none layout-align-center-center"
@@ -741,7 +741,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-file-text clip flex-none layout-align-center-center"
@@ -754,7 +754,7 @@ export class AdminShipmentView extends Component {
                   </div>
                 </div>
                 <div
-                  className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}
+                  className="layout-column flex-offset-10 flex-45 margin_bottom"
                 >
                   <div className="layout-row">
                     <i
@@ -767,7 +767,7 @@ export class AdminShipmentView extends Component {
                     </p>
                   </div>
                 </div>
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-ship clip flex-none layout-align-center-center"
@@ -803,7 +803,7 @@ export class AdminShipmentView extends Component {
             <div className="layout-column flex-80">
               <h3>Additional Services</h3>
               <div className="">
-                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Customs</p>
@@ -829,7 +829,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Insurance</p>
@@ -901,7 +901,7 @@ export class AdminShipmentView extends Component {
 
         <AlternativeGreyBox
           wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-            ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}
+            ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
           contentClassName="layout-row flex-100"
           content={(
             <div className="layout-column flex-100">
@@ -1011,7 +1011,7 @@ export class AdminShipmentView extends Component {
 
         <AlternativeGreyBox
           title="Documents"
-          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
+          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom`}
           contentClassName="layout-column flex"
           content={(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>

@@ -58,7 +58,7 @@ export default class CookieConsentBar extends React.PureComponent {
         component={
           <div className={styles.cookie_modal} >
             <p>We use cookies to enhance your user experience. <br /><br />
-            The consense is not mandatory but necessary to continue using our website.
+            The consent is not mandatory but necessary to continue using our website.
             Are you sure you want to decline the usage of cookies?</p>
             <ConsentButton
               theme={theme}
@@ -90,7 +90,7 @@ export default class CookieConsentBar extends React.PureComponent {
       >
         { this.state.showModal && modal}
         <p className={styles.cookie_text}>
-          This website uses cookies to enhance your user experience. <a href="https://www.itsmycargo.com/" target="_blank">Learn more</a>
+          This website uses cookies to enhance your user experience. <a href="https://www.itsmycargo.com/en/privacy" target="_blank">Learn more</a>
         </p>
 
         <ConsentButton

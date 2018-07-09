@@ -55,7 +55,7 @@ class Shipment < ApplicationRecord
   has_many :cargo_item_types, through: :cargo_items
   has_one :aggregated_cargo
   has_many :conversations
-  has_many :messages, through: :conversation
+  has_many :messages, through: :conversations
   has_many :charge_breakdowns do
     def to_schedules_charges
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
@@ -389,7 +389,7 @@ class Shipment < ApplicationRecord
   end
 
   def user_tenant_match
-    return if tenant_id == user.tenant_id
+    return if user.nil? || tenant_id == user.tenant_id
 
     errors.add(:user, "tenant_id does not match the shipment's tenant_id")
   end
@@ -397,6 +397,6 @@ class Shipment < ApplicationRecord
   def itinerary_trip_match
     return if trip.nil? || trip.itinerary_id == itinerary_id
 
-    errors.add(:user, "trip_id does not match the shipment's itinerary_id")
+    errors.add(:itinerary, "id does not match the trips's itinerary_id")
   end
 end

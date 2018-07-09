@@ -37,10 +37,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def edit_service_price
     @shipment = Shipment.find(params[:id])
     new_price = Price.new(price_params)
-    edit_service_charge.edited_price = new_price
+    charge = edit_service_charge_breakdown.charge(params["charge_category"])
+    charge.edited_price = new_price
 
-    if edit_service_charge.save
-      update_charge_parent
+    if charge.save
+      update_charge_parent(charge)
       response_handler(@shipment.as_options_json)
     else
       response_handler(resp_error)
@@ -99,7 +100,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     )
   end
 
-  def update_charge_parent
+  def update_charge_parent(edit_service_charge)
     unless edit_service_charge.parent.nil?
       edit_service_charge.parent.update_edited_price!
       edit_service_charge.parent.save!
@@ -108,10 +109,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def edit_service_charge_breakdown
     @shipment.charge_breakdowns.selected
-  end
-
-  def edit_service_charge
-    edit_service_charge_breakdown.charge(params["charge_category"])
   end
 
   def shipment_action

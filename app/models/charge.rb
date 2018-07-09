@@ -62,8 +62,12 @@ class Charge < ApplicationRecord
   def update_price!
     rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
-      sum + charge.price.value / rates[charge.price.currency].to_d
+      price = charge.price
+      delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
+
+      sum + delta
     end
+  
     price.save!
   end
 
@@ -72,8 +76,11 @@ class Charge < ApplicationRecord
     rates = get_rates(edited_price.currency, tenant_id).today.merge(edited_price.currency => 1.0)
     edited_price.value = children.reduce(0) do |sum, charge|
       price = charge.edited_price || charge.price
-      sum + price.value / rates[price.currency].to_d
+      delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
+
+      sum + delta
     end
+    
     edited_price.save!
   end
 

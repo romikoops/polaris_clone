@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import adminStyles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { EditLocation } from './EditLocation'
 import { gradientTextGenerator } from '../../helpers'
@@ -11,7 +10,7 @@ import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient) => [
   <div
     key="addLocationButton"
-    className={`${defaults.pointy} flex-30 flex-md-45 ${adminStyles.margin_bottom}`}
+    className={`${defaults.pointy} flex-30 flex-md-45 margin_bottom`}
     onClick={() => toggleActiveView('editLocation')}
   >
     <div
@@ -29,7 +28,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
     </div>
   </div>,
   locInfo.map(op => (
-    <div key={v4()} className={`flex-30 flex-md-45 ${adminStyles.margin_bottom}`}>
+    <div key={v4()} className="flex-30 flex-md-45 margin_bottom">
       <div className={`${styles['location-box']} flex-100 layout-column`}>
         <div className={`${styles.header}`}>
           {op.user.primary ? (

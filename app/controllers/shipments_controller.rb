@@ -34,6 +34,7 @@ class ShipmentsController < ApplicationController
   end
 
 
+
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
