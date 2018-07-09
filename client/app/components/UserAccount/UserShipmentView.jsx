@@ -59,13 +59,13 @@ export class UserShipmentView extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 2) {
+    if (loadType === 'cargo_item' && cargoCount > 3) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 2) {
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 2) {
+    } else if (loadType === 'container' && cargoCount > 3) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 2) {
+    } else if (loadType === 'container' && cargoCount === 3) {
       noun = 'Container'
     }
 
@@ -422,7 +422,7 @@ export class UserShipmentView extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-100 flex-md-45 flex-gt-md-30 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -453,7 +453,7 @@ export class UserShipmentView extends Component {
         {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const cargoCount = Object.keys(feeHash.cargo).length
+    const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
@@ -750,8 +750,8 @@ export class UserShipmentView extends Component {
 
         <AlternativeGreyBox
           title="Documents"
-          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom`}
-          contentClassName="layout-column flex"
+          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
+          contentClassName="layout-row layout-wrap flex"
           content={(
             <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
               <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
@@ -777,7 +777,9 @@ export class UserShipmentView extends Component {
                   />
                 </div>
               </div>
-
+              <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                {docView}
+              </div>
               {missingDocs}
             </div>
           )}

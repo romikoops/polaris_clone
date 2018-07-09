@@ -55,13 +55,13 @@ export class AdminShipmentView extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 2) {
+    if (loadType === 'cargo_item' && cargoCount > 3) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 2) {
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 2) {
+    } else if (loadType === 'container' && cargoCount > 3) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 2) {
+    } else if (loadType === 'container' && cargoCount === 3) {
       noun = 'Container'
     }
 
@@ -544,7 +544,7 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length - 1
+    const cargoCount = Object.keys(feeHash.cargo).length - 2
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">

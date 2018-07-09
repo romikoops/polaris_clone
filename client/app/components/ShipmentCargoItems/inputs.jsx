@@ -142,6 +142,31 @@ export default function getInputs (
   )
 
   function chargeableWeightElemJSX (mot) {
+    if (
+      (
+        availableMotsForRoute.length > 0 &&
+        !availableMotsForRoute.includes(mot)
+      ) ||
+      (
+        cargoItem &&
+        maxDimensions[mot] &&
+        (
+          +cargoItem.dimension_z > +maxDimensions[mot].dimensionZ ||
+          +cargoItem.dimension_y > +maxDimensions[mot].dimensionY ||
+          chargeableWeight(cargoItem, mot) > +maxDimensions[mot].chargeableWeight
+        )
+      )
+    ) {
+      return (
+        <div className="flex-33 layout-row">
+          { switchIcon(mot) }
+          <p className={`${styles.chargeable_weight_value}`}>
+           Unavailable
+          </p>
+        </div>
+      )
+    }
+
     return (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
@@ -406,5 +431,6 @@ export default function getInputs (
       />
     </div>
   )
+
   return inputs
 }

@@ -6,7 +6,6 @@ module PricingTools
   def get_user_price(itinerary_id, transport_category_id, user, shipment_date)
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
-
     return if pricing.nil?
 
     pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)

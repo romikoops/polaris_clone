@@ -33,6 +33,8 @@ class ShipmentsController < ApplicationController
     tenant_notification_email(current_user, Shipment.first)
   end
 
+
+
   # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])

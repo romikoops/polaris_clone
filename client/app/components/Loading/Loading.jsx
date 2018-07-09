@@ -24,10 +24,18 @@ class Loading extends Component {
     const logo = theme && theme.logoLarge ? theme.logoLarge : ''
     const kfLogo = keyframes` 
                 0%, 100% {
+                  -webkit-transform: rotateY(0deg);
+                  -o-transform: rotateY(0deg);
+                  -moz-transform: rotateY(0deg);
+                  -ms-transform: rotateY(0deg);
                   transform: rotateY(0deg);
                   content:url(${logo});
                 }
                 50% {
+                  -webkit-transform: rotateY(360deg);
+                  -o-transform: rotateY(360deg);
+                  -moz-transform: rotateY(360deg);
+                  -ms-transform: rotateY(360deg);
                   transform: rotateY(360deg);
                   content:url('https://assets.itsmycargo.com/assets/logos/logo_box.png');
                 }
@@ -46,6 +54,7 @@ class Loading extends Component {
         `
 
     const FlipLogo = styled.img`
+            -webkit-animation: ${kfLogo} 10s linear infinite;
             animation: ${kfLogo} 10s linear infinite;
             height: 150px;
             width: 150px;
@@ -55,6 +64,8 @@ class Loading extends Component {
             box-sizing: border-box;
         `
     const AnimDot = styled.div`
+            -webkit-animation: ${kfDot} 2s linear infinite;
+            -webkit-animation-delay: ${props => (props.delay ? `${props.delay}s` : 0)};
             animation: ${kfDot} 2s linear infinite;
             animation-delay: ${props => (props.delay ? `${props.delay}s` : 0)};
             background-color: theme && theme.colors ? theme.colors.primary : 'darkslategrey';

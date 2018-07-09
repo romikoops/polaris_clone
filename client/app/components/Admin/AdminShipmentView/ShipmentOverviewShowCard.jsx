@@ -15,7 +15,8 @@ export default function ShipmentOverviewShowCard ({
     <div className="flex-100 layout-row">
       <div className={`${styles.info_hub_box} flex-60 layout-column`}>
         <h3>{hub.name}</h3>
-        <p className={styles.address}>{hub.location.geocoded_address}</p>
+        {console.log(hub)}
+        <p className={styles.address}>{hub.name}</p>
         {et ? <div className="layout-row layout-align-start-center">
           <div className="layout-column flex-60 layout-align-center-start">
             <span>

@@ -98,7 +98,7 @@ export class AdminShipmentCard extends Component {
             <div className={`layout-row flex-50 layout-align-end-end ${styles.smallText}`}>
               <span className="flex-80"><b>Booking placed at</b><br />
                 <span className={`${styles.grey}`}>
-                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}
+                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}
                 </span>
               </span>
             </div>

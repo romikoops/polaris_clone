@@ -93,7 +93,6 @@ export class AdminPricingRouteView extends Component {
       showPricingAdder
     } = this.state
     const { selectedClient } = this.state
-    console.log(this.props)
     if (!pricingData || !itineraryPricings) {
       return ''
     }

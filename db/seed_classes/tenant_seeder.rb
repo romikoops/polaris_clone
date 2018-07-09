@@ -158,7 +158,7 @@ class TenantSeeder
             cargo_item: false
           },
           ocean: {
-            container: false,
+            container: true,
             cargo_item: true
           },
           rail: {
