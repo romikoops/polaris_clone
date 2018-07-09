@@ -271,6 +271,13 @@
       outline: none;
     }
   }
+  .hover_text {
+    color: #BDBDBD !important;
+    &:hover {
+      color: #4F4F4F !important;
+    }
+  }
+
   .input_box_full textarea {
     width: 100%;
     border: 1px solid #F2F2F2;

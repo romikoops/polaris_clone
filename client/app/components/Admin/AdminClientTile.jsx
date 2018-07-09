@@ -6,6 +6,7 @@ import styles from './AdminClientTile.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator, gradientBorderGenerator } from '../../helpers'
 import GradientBorder from '../GradientBorder'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import defaults from '../../styles/default_classes.scss'
 
 export class AdminClientTile extends Component {
@@ -43,7 +44,13 @@ export class AdminClientTile extends Component {
       deleteable,
       showTooltip,
       tooltip,
-      flexClasses
+      flexClasses,
+      expander,
+      classNames,
+      toggleExpander,
+      faClass,
+      contentCollapsed,
+      showCollapsing
     } = this.props
     const { showDelete } = this.state
     if (!client) {
@@ -136,10 +143,9 @@ export class AdminClientTile extends Component {
     const switchView = showDelete ? deleter : content
     const contentView = deleteable ? switchView : content
     const tooltipId = v4()
-
-    return (
+    const contentTile = (
       <GradientBorder
-        wrapperClassName={`flex-none ${styles.client_card} margin_bottom layout-row ${flexClasses} pointy`}
+        wrapperClassName={`${styles.client_card} margin_bottom layout-row ${!flexClasses ? 'flex-none' : flexClasses} pointy`}
         gradient={gradientBorderStyle}
         className="layout-column flex-100"
         content={(
@@ -162,19 +168,26 @@ export class AdminClientTile extends Component {
                   : ''
               }
             </div>
-            {/* <div className={`${userStyles.footer}`}>
-              <div className="layout-row layout-align-center-center">
-                <span
-                  className="emulate_link"
-                  onClick={this.toggleShowDelete}
-                >
-                  <i className="fa fa-trash" />
-                </span>
-              </div>
-            </div> */}
           </div>
         )}
       />
+    )
+    const collapsingTile = (
+      <CollapsingBar
+        optClassName={styles.no_padding}
+        collapsed={expander}
+        theme={theme}
+        handleCollapser={toggleExpander}
+        contentHeader={contentTile}
+        faClass={faClass}
+        content={contentCollapsed}
+      />
+    )
+
+    return (
+      <div className={classNames}>
+        {showCollapsing ? collapsingTile : contentTile }
+      </div>
     )
   }
 }
@@ -188,7 +201,13 @@ AdminClientTile.propTypes = {
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
   flexClasses: PropTypes.string,
-  showTooltip: PropTypes.bool
+  showTooltip: PropTypes.bool,
+  expander: PropTypes.objectOf(PropTypes.string).isRequired,
+  showCollapsing: PropTypes.bool,
+  classNames: PropTypes.string,
+  toggleExpander: PropTypes.func,
+  faClass: PropTypes.string,
+  contentCollapsed: PropTypes.node
 }
 AdminClientTile.defaultProps = {
   theme: null,
@@ -199,7 +218,12 @@ AdminClientTile.defaultProps = {
   navFn: null,
   deleteFn: null,
   target: '',
-  flexClasses: 'flex-30 flex-md-45'
+  showCollapsing: false,
+  flexClasses: '',
+  classNames: '',
+  toggleExpander: null,
+  faClass: '',
+  contentCollapsed: null
 }
 
 export default AdminClientTile

@@ -201,6 +201,7 @@ export class AdminPricingClientView extends Component {
       })
 
       const tooltipId = v4()
+
       return (
         <div
           key={v4()}
@@ -270,8 +271,10 @@ export class AdminPricingClientView extends Component {
           pricing={pricingObj.pricing}
           theme={theme}
         />)
+
         return innerInner
       })
+
       return (
         <div
           key={v4()}
@@ -290,11 +293,12 @@ export class AdminPricingClientView extends Component {
     }
     const routeBoxes = Object.keys(userPricings).map((itKey) => {
       const { itinerary, pricings } = userPricings[itKey]
+
       return <RoutePricingBox key={v4()} routeData={itinerary} pricingsArr={pricings} />
     })
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
         {confimPrompt}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}

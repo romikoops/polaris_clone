@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from '../../prop-types'
 import CollapsingHeading from './Heading'
 import CollapsingContent from './Content'
-import Proptypes from '../../prop-types'
 import styles from './CollapsingBar.scss'
 
 export default function CollapsingBar ({
-  collapsed, theme, handleCollapser, content, headingText, faClass
+  collapsed, theme, handleCollapser, content, text, faClass, contentHeader, styleHeader, optClassName
 }) {
   return (
     <div className={
@@ -14,11 +14,14 @@ export default function CollapsingBar ({
     }
     >
       <CollapsingHeading
-        text={headingText}
+        text={text}
+        optClassName={optClassName}
+        contentHeader={contentHeader}
         collapsed={collapsed}
         theme={theme}
         handleCollapser={handleCollapser}
         faClass={faClass}
+        styleHeader={styleHeader}
       />
       <CollapsingContent collapsed={collapsed} content={content} />
     </div>
@@ -26,12 +29,15 @@ export default function CollapsingBar ({
 }
 
 CollapsingBar.propTypes = {
-  collapsed: Proptypes.bool,
-  theme: Proptypes.theme,
-  handleCollapser: Proptypes.func,
-  content: Proptypes.node,
-  headingText: Proptypes.string,
-  faClass: Proptypes.string
+  collapsed: PropTypes.bool,
+  theme: PropTypes.theme,
+  handleCollapser: PropTypes.func,
+  content: PropTypes.node,
+  contentHeader: PropTypes.node,
+  text: PropTypes.string,
+  optClassName: PropTypes.string,
+  faClass: PropTypes.string,
+  styleHeader: PropTypes.objectOf(PropTypes.string)
 }
 
 CollapsingBar.defaultProps = {
@@ -39,6 +45,9 @@ CollapsingBar.defaultProps = {
   theme: null,
   handleCollapser: null,
   content: '',
-  headingText: '',
-  faClass: ''
+  contentHeader: '',
+  optClassName: '',
+  text: '',
+  faClass: '',
+  styleHeader: {}
 }

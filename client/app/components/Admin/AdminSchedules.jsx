@@ -284,7 +284,8 @@ class AdminSchedules extends Component {
                     collapsed={!expander.mot}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('mot')}
-                    headingText="Mode of Transport"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Mode of Transport"
                     faClass="fa fa-ship"
                     content={typeFilters}
                   />
@@ -302,7 +303,8 @@ class AdminSchedules extends Component {
                     collapsed={!expander.upload}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('upload')}
-                    headingText="Upload Data"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Upload Data"
                     faClass="fa fa-cloud-upload"
                     content={(
                       <div>
@@ -365,7 +367,8 @@ class AdminSchedules extends Component {
                     collapsed={!expander.download}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('download')}
-                    headingText="Download Data"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Download Data"
                     faClass="fa fa-cloud-download"
                     content={(
                       <div>
@@ -384,7 +387,8 @@ class AdminSchedules extends Component {
                     collapsed={!expander.new}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('new')}
-                    headingText="Autogenerate Schedules"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Autogenerate Schedules"
                     faClass="fa fa-plus-circle"
                     content={(
                       <div

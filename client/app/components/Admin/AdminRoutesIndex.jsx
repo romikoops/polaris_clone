@@ -161,8 +161,9 @@ export class AdminRoutesIndex extends Component {
                   <CollapsingBar
                     collapsed={!expander.mot}
                     theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('mot')}
-                    headingText="Mode of Transport"
+                    text="Mode of Transport"
                     faClass="fa fa-ship"
                     content={typeFilters}
                   />
@@ -179,8 +180,9 @@ export class AdminRoutesIndex extends Component {
                   <CollapsingBar
                     collapsed={!expander.new}
                     theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('new')}
-                    headingText="Create New Route"
+                    text="Create New Route"
                     faClass="fa fa-plus-circle"
                     content={(
                       <div

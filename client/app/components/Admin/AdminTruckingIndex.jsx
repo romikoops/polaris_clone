@@ -205,7 +205,8 @@ export class AdminTruckingIndex extends Component {
                       collapsed={!expander.hubType}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('hubType')}
-                      headingText="Hub Type"
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Hub Type"
                       faClass="fa fa-ship"
                       content={typeFilters}
                     />
@@ -213,7 +214,8 @@ export class AdminTruckingIndex extends Component {
                       collapsed={!expander.status}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('status')}
-                      headingText="Status"
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Status"
                       faClass="fa fa-star-half-o"
                       content={statusFilters}
                     />
@@ -221,7 +223,8 @@ export class AdminTruckingIndex extends Component {
                       collapsed={!expander.countries}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('countries')}
-                      headingText="Country"
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Country"
                       faClass="fa fa-flag"
                       content={countryFilters}
                     />
