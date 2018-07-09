@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include MongoTools
+include DataParser
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
 subdomains = %w(demo)
 subdomains.each do |sub|
@@ -10,6 +10,9 @@ subdomains.each do |sub|
 
 
   shipper = tenant.users.shipper.first
+  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
+  data = DataParser::HubParser.new(path: path, _user: shipper).perform
+  res = DataInserter::HubInserter.new(data: data, _user: shipper).perform
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all
