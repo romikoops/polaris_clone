@@ -66,7 +66,7 @@ export class ChooseOffer extends Component {
   }
   setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
-    req.shipment.planned_pickup_date = date
+    req.shipment.selected_day = date
     shipmentDispatch.getOffers(req)
   }
   setMoT (val, target) {

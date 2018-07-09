@@ -110,7 +110,11 @@ export class AdminShipmentCard extends Component {
           <div className="layout-column flex-25">
             <span className="flex-100"><b>Pickup Date</b><br />
               <span className={`${styles.grey}`}>
-                {moment(shipment.planned_pickup_date).format('DD/MM/YYYY')}
+                {
+                  shipment.has_pre_carriage
+                    ? moment(shipment.planned_pickup_date).format('DD/MM/YYYY')
+                    : moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')
+                }
               </span>
             </span>
           </div>

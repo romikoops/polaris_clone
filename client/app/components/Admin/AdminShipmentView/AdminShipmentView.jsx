@@ -336,7 +336,7 @@ export class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients, tenant
+      theme, hubs, shipmentData, clients
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -623,8 +623,13 @@ export class AdminShipmentView extends Component {
         <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-              <h4 className="flex-95 layout-row">Pick-up</h4>
+              <div className="flex-40 layout-row layout-align-start-center">
+                <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
+                <h4 className="flex-95 layout-row">Pick-up</h4>
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center">
+                <p>{moment(shipment.planned_pickup_date).format('DD/MM/YYYY') }</p>
+              </div>
             </div>
             {shipment.pickup_address ? (
               <div className="flex-100 layout-row">
@@ -640,7 +645,7 @@ export class AdminShipmentView extends Component {
               {shipment.pickup_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.pickup_address.street}
+                  <p>{shipment.pickup_address.street},&nbsp;
                     {shipment.pickup_address.street_number},&nbsp;
                     <strong>{shipment.pickup_address.city},&nbsp;
                       {shipment.pickup_address.country.name} </strong>
@@ -669,7 +674,7 @@ export class AdminShipmentView extends Component {
               {shipment.delivery_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.delivery_address.street}
+                  <p>{shipment.delivery_address.street},&nbsp;
                     {shipment.delivery_address.street_number},&nbsp;
                     <strong>{shipment.delivery_address.city},&nbsp;
                       {shipment.delivery_address.country.name} </strong>
@@ -805,7 +810,7 @@ export class AdminShipmentView extends Component {
               <div className="">
                 <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
-                    <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                    <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Customs</p>
                   </div>
                   {showEditServicePrice && shipment.selected_offer.customs ? (
@@ -831,7 +836,7 @@ export class AdminShipmentView extends Component {
                 </div>
                 <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
-                    <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                    <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Insurance</p>
                   </div>
                   {showEditServicePrice && shipment.selected_offer.insurance ? (
@@ -1067,8 +1072,8 @@ AdminShipmentView.propTypes = {
   adminDispatch: PropTypes.shape({
     getShipment: PropTypes.func
   }).isRequired,
-  match: PropTypes.match.isRequired,
-  tenant: PropTypes.tenant
+  match: PropTypes.match.isRequired
+  // tenant: PropTypes.tenant
 }
 
 AdminShipmentView.defaultProps = {
@@ -1076,8 +1081,8 @@ AdminShipmentView.defaultProps = {
   hubs: [],
   clients: [],
   shipmentData: null,
-  loading: false,
-  tenant: {}
+  loading: false
+  // tenant: {}
 }
 
 export default AdminShipmentView

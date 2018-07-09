@@ -225,7 +225,7 @@ export class UserShipmentView extends Component {
 
   render () {
     const {
-      theme, hubs, shipmentData, user, userDispatch, tenant
+      theme, hubs, shipmentData, user, userDispatch
     } = this.props
 
     if (!shipmentData || !hubs || !user) {
@@ -522,8 +522,13 @@ export class UserShipmentView extends Component {
         <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-              <h4 className="flex-95 layout-row">Pick-up</h4>
+              <div className="flex-40 layout-row layout-align-start-center">
+                <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
+                <h4 className="flex-95 layout-row">Pick-up</h4>
+              </div>
+              <div className="flex-40 layout-row layout-align-start-center">
+                <p>{moment(shipment.planned_pickup_date).format('DD/MM/YYYY') }</p>
+              </div>
             </div>
             {shipment.pickup_address ? (
               <div className="flex-100 layout-row">
@@ -539,7 +544,7 @@ export class UserShipmentView extends Component {
               {shipment.pickup_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.pickup_address.street}
+                  <p>{shipment.pickup_address.street} &nbsp;
                     {shipment.pickup_address.street_number},&nbsp;
                     <strong>{shipment.pickup_address.city},&nbsp;
                       {shipment.pickup_address.country.name} </strong>
@@ -568,7 +573,7 @@ export class UserShipmentView extends Component {
               {shipment.delivery_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.delivery_address.street}
+                  <p>{shipment.delivery_address.street}&nbsp;
                     {shipment.delivery_address.street_number},&nbsp;
                     <strong>{shipment.delivery_address.city},&nbsp;
                       {shipment.delivery_address.country.name} </strong>
@@ -613,11 +618,11 @@ export class UserShipmentView extends Component {
               <h3>Additional Services</h3>
               <div className="">
                 <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                  <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Customs</p>
                 </div>
                 <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
+                  <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Insurance</p>
                 </div>
               </div>
@@ -800,16 +805,16 @@ UserShipmentView.propTypes = {
     deleteDocument: PropTypes.func
   }).isRequired,
   match: PropTypes.match.isRequired,
-  setNav: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant
+  setNav: PropTypes.func.isRequired
+  // tenant: PropTypes.tenant
 }
 
 UserShipmentView.defaultProps = {
   theme: null,
   hubs: [],
   loading: false,
-  user: null,
-  tenant: {}
+  user: null
+  // tenant: {}
 }
 
 export default UserShipmentView

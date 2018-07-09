@@ -234,10 +234,9 @@ export class BookingConfirmation extends Component {
       : 'Expected Time of Departure:'
 
     const plannedTime = shipment.has_pre_carriage
-      ? `${moment(shipment.closing_date)
-        .subtract(3, 'days')
+      ? `${moment(shipment.planned_pickup_date)
         .format('DD/MM/YYYY')}`
-      : `${moment(shipment.planned_etd).format('DD/MM/YYYY')}`
+      : `${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')}`
 
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>

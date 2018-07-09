@@ -6,7 +6,7 @@ import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
 // import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
-import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
+// import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
 // import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton'
@@ -144,7 +144,7 @@ class Landing extends Component {
             </div>
           </div>
         </div>
-        <BlogPostHighlights theme={theme} />
+        {/* <BlogPostHighlights theme={theme} /> */}
         <div className={`${styles.btm_promo} flex-100 layout-row`}>
           <div className={`flex-50 ${styles.btm_promo_img}`} />
           <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
