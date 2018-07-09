@@ -645,7 +645,7 @@ export class AdminShipmentView extends Component {
               {shipment.pickup_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.pickup_address.street},&nbsp;
+                  <p>{shipment.pickup_address.street}&nbsp;
                     {shipment.pickup_address.street_number},&nbsp;
                     <strong>{shipment.pickup_address.city},&nbsp;
                       {shipment.pickup_address.country.name} </strong>
@@ -674,7 +674,7 @@ export class AdminShipmentView extends Component {
               {shipment.delivery_address ? (
                 <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
                   {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.delivery_address.street},&nbsp;
+                  <p>{shipment.delivery_address.street}&nbsp;
                     {shipment.delivery_address.street_number},&nbsp;
                     <strong>{shipment.delivery_address.city},&nbsp;
                       {shipment.delivery_address.country.name} </strong>
@@ -886,7 +886,7 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <h2 className="layout-align-end-center layout-row flex">
-                {formattedPriceValue(totalPrice(shipment).value)}
+                {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
               </h2>
             </div>
           </div>
