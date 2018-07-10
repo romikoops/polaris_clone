@@ -281,6 +281,7 @@ class AdminSchedules extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.mot}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('mot')}
@@ -300,6 +301,7 @@ class AdminSchedules extends Component {
               <div className="">
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.upload}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('upload')}
@@ -364,6 +366,7 @@ class AdminSchedules extends Component {
                     )}
                   />
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.download}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('download')}
@@ -384,6 +387,7 @@ class AdminSchedules extends Component {
                     )}
                   />
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.new}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('new')}

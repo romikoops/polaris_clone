@@ -159,6 +159,7 @@ export class AdminRoutesIndex extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.mot}
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -179,6 +180,7 @@ export class AdminRoutesIndex extends Component {
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
                     collapsed={!expander.new}
+                    showArrow
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('new')}

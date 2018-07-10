@@ -11,7 +11,9 @@ export default function CollapsingHeading ({
   faClass,
   contentHeader,
   styleHeader,
-  optClassName
+  optClassName,
+  showArrow,
+  headerWrapClasses
 }) {
   return (
     <div
@@ -23,12 +25,23 @@ export default function CollapsingHeading ({
           <i className={faClass} />
           <TextHeading theme={theme} color="white" size={3} text={text} />
         </div>
-      ) : contentHeader }
+      ) : (
+        <div
+          className={`
+          ${collapsed ? styles.collapsed : ''}
+          ${headerWrapClasses}`}
+          onClick={handleCollapser}
+        >
+          {contentHeader}
+        </div>
+      )}
       <div
         className={`${text ? 'flex-10' : 'flex-100'} layout-row layout-align-center-center`}
         onClick={handleCollapser}
       >
-        <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
+        {showArrow ? (
+          <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
+        ) : '' }
       </div>
     </div>
   )
@@ -42,6 +55,8 @@ CollapsingHeading.propTypes = {
   faClass: Proptypes.string,
   contentHeader: Proptypes.node.isRequired,
   optClassName: Proptypes.string,
+  showArrow: Proptypes.bool,
+  headerWrapClasses: Proptypes.string,
   styleHeader: Proptypes.objectOf(Proptypes.string)
 }
 
@@ -51,6 +66,8 @@ CollapsingHeading.defaultProps = {
   theme: null,
   handleCollapser: null,
   faClass: '',
+  headerWrapClasses: '',
   optClassName: '',
-  styleHeader: {}
+  styleHeader: {},
+  showArrow: false
 }

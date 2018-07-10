@@ -215,6 +215,7 @@ class AdminClientsIndex extends Component {
                   )}
                 /> */}
                 <CollapsingBar
+                  showArrow
                   collapsed={!expander.new}
                   theme={theme}
                   styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}

@@ -220,6 +220,7 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.hubType}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -229,6 +230,7 @@ export class AdminHubsIndex extends Component {
                         content={typeFilters}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.status}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -238,6 +240,7 @@ export class AdminHubsIndex extends Component {
                         content={statusFilters}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.countries}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -256,6 +259,7 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.upload}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -296,6 +300,7 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.download}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
@@ -340,6 +345,7 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.new}
                         theme={theme}
                         styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}

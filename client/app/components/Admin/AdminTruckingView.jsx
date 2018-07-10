@@ -387,6 +387,7 @@ export class AdminTruckingView extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.load_type}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('load_type')}
@@ -413,6 +414,7 @@ export class AdminTruckingView extends Component {
 
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.direction}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('direction')}
@@ -439,6 +441,7 @@ export class AdminTruckingView extends Component {
                 {loadTypeBool
                   ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.truck_type}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('truck_type')}
@@ -451,6 +454,7 @@ export class AdminTruckingView extends Component {
                 {loadTypeBool
                   ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.cargo_class}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('cargo_class')}
@@ -480,6 +484,7 @@ export class AdminTruckingView extends Component {
               <div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.upload}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('upload')}
@@ -505,6 +510,7 @@ export class AdminTruckingView extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.download}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('download')}

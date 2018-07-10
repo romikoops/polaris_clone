@@ -6,10 +6,17 @@ import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
 import AdminPromptConfirm from './Prompt/Confirm'
 import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
-import { history, gradientGenerator, gradientBorderGenerator, switchIcon } from '../../helpers'
+import {
+  history,
+  gradientBorderGenerator,
+  gradientGenerator,
+  switchIcon
+} from '../../helpers'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import { AdminPricingDedicated } from './Pricing/Dedicated'
+import { AdminPricingBox } from './Pricing/Box'
+import CollapsingContent from '../CollapsingBar/Content'
 
 export class AdminPricingRouteView extends Component {
   static backToIndex () {
@@ -29,7 +36,6 @@ export class AdminPricingRouteView extends Component {
     this.viewClient = this.viewClient.bind(this)
   }
   componentDidMount () {
-    console.log('PARENT REMOUNTING')
     const {
       routePricings, loading, adminActions, match
     } = this.props
@@ -122,15 +128,15 @@ export class AdminPricingRouteView extends Component {
     }
     fauxShipment.origin_hub = stops[0].hub
     fauxShipment.destination_hub = stops[stops.length - 1].hub
-    const gradientStyle =
-    theme && theme.colors
-      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
-      : { background: 'black' }
 
     const gradientBorderStyle =
     theme && theme.colors
       ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
       : { background: 'black' }
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
     const bg1 =
       fauxShipment.origin_hub && fauxShipment.origin_hub.photo
         ? { backgroundImage: `url(${fauxShipment.origin_hub.photo})` }
@@ -143,7 +149,7 @@ export class AdminPricingRouteView extends Component {
         ? { backgroundImage: `url(${fauxShipment.destination_hub.photo})` }
         : {
           backgroundImage:
-            'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
+          'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
 
     const confimPrompt = confirm ? (
@@ -161,37 +167,37 @@ export class AdminPricingRouteView extends Component {
     const clientTiles = userPricings.map((up, i) => {
       const client = clients.filter(cl => cl.id === up.user_id)[0]
 
+      if (!client) {
+        return ''
+      }
+
       return (
-        <div className="flex-20 layout-row">
+        <div
+          className="flex-20 layout-row pointy"
+          onClick={() => this.selectClient(client)}
+        >
           {userPricings[i].length !== 0 ? (
             <AdminClientTile
               showCollapsing
+              hideContent
+              collapsed={!expander[client.id]}
+              handleCollapser={() => this.toggleExpander(client.id)}
               key={v4()}
-              toggleExpander={() => this.toggleExpander(client.id)}
-              expander={!expander[client.id]}
-              flexClasses="layout-row flex-100"
+              handleClick={() => this.selectClient(client)}
+              flexClasses="layout-row flex-100 pointy"
               client={client}
               theme={theme}
-              handleClick={() => this.viewClient(client)}
-              content={(
-                <div>
-                  ...
-                </div>
-              )}
             />
           ) : '' }
         </div>
       )
     })
-    // const clientsView = (
-    //   <div className="flex-100 layout-row layout-wrap layout-align-space-around-center padding_top">
-    //     {clientTiles}
-    //   </div>
-    // )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding">
-        <div className={`layout-row flex-95 ${styles.margin_bottom}`}>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
+      >
+        <div className="layout-row flex-95 margin_bottom">
           <GradientBorder
             wrapperClassName={`layout-row flex-40 ${shipmentStyles.hub_box_shipment}`}
             gradient={gradientBorderStyle}
@@ -206,9 +212,12 @@ export class AdminPricingRouteView extends Component {
             )}
           />
           <div className="layout-row flex-20 layout-align-center-center">
-            <div className={`layout-column flex layout-align-center-center ${shipmentStyles.font_adjustaments}`}>
-              <div className="layout-align-center-center layout-row" >
-                {switchIcon(itinerary.mode_of_transport, gradientStyle)}
+            <div
+              className={`layout-column flex layout-align-center-center
+              ${shipmentStyles.font_adjustaments}`}
+            >
+              <div className="layout-align-center-center layout-row" style={gradientStyle}>
+                {switchIcon(itinerary.mode_of_transport)}
               </div>
             </div>
           </div>
@@ -229,49 +238,73 @@ export class AdminPricingRouteView extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-center-center">
 
-          <div className="flex-95 layout-row layout-wrap layout-align-space-between-center">
-            {/* <AdminPricingBox
+          <div
+            className="flex-95 layout-row layout-wrap layout-align-space-between-center"
+          >
+            <AdminPricingBox
               itinerary={itinerary}
               charges={itineraryPricingData}
               theme={theme}
               adminDispatch={adminActions}
               title="Open Pricing"
-            /> */}
+            />
           </div>
         </div>
 
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center buffer_10">
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-center-center buffer_10"
+        >
           <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
             <span><b>Dedicated Pricings</b></span>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-            {!showPricingAdder ? (
-              <div className={`flex-20 layout-row ${styles.set_button_height} pointy`} onClick={() => this.addNewPricings()}>
-                <AlternativeGreyBox
-                  wrapperClassName="layout-row flex-100"
-                  contentClassName="layout-column flex layout-align-center-center"
-                  content={(
-                    <div>
-                      <h1><strong>+</strong></h1>
-                      <p>New Dedicated Pricing</p>
-                    </div>
-                  )}
-                />
+          {!showPricingAdder ? (
+            <div className="flex-100 layout-row layout-wrap">
+              <div className="layout-row flex-100 layout-align-start-center slider_container">
+                <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
+                  <div className={`flex-20 layout-row ${styles.set_button_height} pointy`} onClick={() => this.addNewPricings()}>
+                    <AlternativeGreyBox
+                      wrapperClassName="layout-row flex-100"
+                      contentClassName="layout-column flex layout-align-center-center"
+                      content={(
+                        <div>
+                          <h1><strong>+</strong></h1>
+                          <p>New Dedicated Pricing</p>
+                        </div>
+                      )}
+                    />
+                  </div>
+                  {clientTiles}
+                </div>
               </div>
-            ) : (
-              ''
-            )}
-            {!selectedClient && !showPricingAdder ? clientTiles : ''}
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
-              <AdminPricingDedicated
-                theme={theme}
-                backBtn={() => this.addNewPricings()}
-                closePricingView={() => this.addNewPricings()}
-                adminDispatch={adminActions}
-                charges={itineraryPricingData}
-                clients={clients}
+
+              <CollapsingContent
+                collapsed={!expander[selectedClient.id]}
+                content={
+                  <div style={{ minHeight: '800px' }}>
+                    {selectedClient ? (
+                      <AdminPricingBox
+                        itinerary={itinerary}
+                        charges={userPricings.filter(up => up.user_id === selectedClient.id)}
+                        theme={theme}
+                        adminDispatch={adminActions}
+                        title={`Dedicated Pricing for ${selectedClient.first_name} ${selectedClient.last_name}`}
+                      />
+                    ) : ''}
+                  </div>
+                }
               />
+
             </div>
+          ) : ''}
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+            <AdminPricingDedicated
+              theme={theme}
+              backBtn={() => this.addNewPricings()}
+              closePricingView={() => this.addNewPricings()}
+              adminDispatch={adminActions}
+              charges={itineraryPricingData}
+              clients={clients}
+            />
           </div>
 
         </div>

@@ -202,6 +202,7 @@ export class AdminTruckingIndex extends Component {
                   </div>
                   <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.hubType}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('hubType')}
@@ -211,6 +212,7 @@ export class AdminTruckingIndex extends Component {
                       content={typeFilters}
                     />
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.status}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('status')}
@@ -220,6 +222,7 @@ export class AdminTruckingIndex extends Component {
                       content={statusFilters}
                     />
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.countries}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('countries')}

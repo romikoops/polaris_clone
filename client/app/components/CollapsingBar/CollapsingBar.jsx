@@ -2,19 +2,25 @@ import React from 'react'
 import PropTypes from '../../prop-types'
 import CollapsingHeading from './Heading'
 import CollapsingContent from './Content'
-import styles from './CollapsingBar.scss'
 
 export default function CollapsingBar ({
-  collapsed, theme, handleCollapser, content, text, faClass, contentHeader, styleHeader, optClassName
+  collapsed,
+  theme,
+  handleCollapser,
+  content,
+  text,
+  faClass,
+  contentHeader,
+  styleHeader,
+  optClassName,
+  showArrow,
+  hideContent
 }) {
   return (
-    <div className={
-      `${styles.shipment_card} flex-100 ` +
-      'layout-row layout-align-start-center layout-wrap'
-    }
-    >
+    <div className="flex-100 layout-row layout-align-start-center layout-wrap">
       <CollapsingHeading
         text={text}
+        showArrow={showArrow}
         optClassName={optClassName}
         contentHeader={contentHeader}
         collapsed={collapsed}
@@ -23,7 +29,9 @@ export default function CollapsingBar ({
         faClass={faClass}
         styleHeader={styleHeader}
       />
-      <CollapsingContent collapsed={collapsed} content={content} />
+      {!hideContent ? (
+        <CollapsingContent collapsed={collapsed} content={content} />
+      ) : ''}
     </div>
   )
 }
@@ -34,9 +42,11 @@ CollapsingBar.propTypes = {
   handleCollapser: PropTypes.func,
   content: PropTypes.node,
   contentHeader: PropTypes.node,
+  hideContent: PropTypes.bool,
   text: PropTypes.string,
   optClassName: PropTypes.string,
   faClass: PropTypes.string,
+  showArrow: PropTypes.bool,
   styleHeader: PropTypes.objectOf(PropTypes.string)
 }
 
@@ -48,6 +58,8 @@ CollapsingBar.defaultProps = {
   contentHeader: '',
   optClassName: '',
   text: '',
+  hideContent: false,
   faClass: '',
-  styleHeader: {}
+  styleHeader: {},
+  showArrow: false
 }

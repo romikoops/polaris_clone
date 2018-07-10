@@ -51,7 +51,7 @@
   }
 
   .pointy {
-    cursor: pointer;
+    cursor: pointer !important;
   }
 
   .emulate_link {
@@ -313,7 +313,25 @@
     padding-right: 25px;
   }
   .card_margin_right{
-    margin-right: 25px;
+    > * {
+      margin-right: 25px;
+      &:last-child {
+        margin-right: 0 !important;
+      }
+    }
+  }
+  .slider_container {
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 250px;
+
+  }
+  .slider_inner {
+    margin-right: 15px;
+    position: relative;
+    width: max-content;
+    min-width: 100%;
   }
   .margin_bottom {
      margin-bottom: 25px;
