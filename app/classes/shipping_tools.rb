@@ -160,7 +160,9 @@ module ShippingTools
           parent:                   @customs_charge
         )
       end
+      @customs_charge.update_price!
     end
+    charge_breakdown.charge('grand_total').update_price!
     shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data["notes"]
 
