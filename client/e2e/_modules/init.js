@@ -1,4 +1,3 @@
-import open from 'open'
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
 
@@ -63,7 +62,7 @@ function compareImages (label, compareLabel, toleranceInput) {
           strict: false
         }, (diffErr) => {
           if (diffErr === null) {
-            open(diff)
+            console.log('!! Diff image', diff)
 
             return resolve(false)
           }
