@@ -1,9 +1,12 @@
+include Translator
+
 module DataInserter
   class HubInserter < DataInserter::BaseInserter
-    attr_reader :path, :user, :hub_data, :existing_hub_data
+    attr_reader :path, :user, :hub_data, :existing_hub_data, :data, :hub_type, :hub, :input_language
 
     def post_initialize(args)
-      
+      @user = args[:_user]
+      @hub_type = args[:hub_type]
     end
 
     def perform
@@ -34,7 +37,7 @@ module DataInserter
       end
 
       def find_port_data
-        byebug
+        
         port = Port.where(code: @hub_data[:code]).first
         if port
           return port
@@ -44,15 +47,55 @@ module DataInserter
       end
 
       def find_or_create_hub
-        byebug
+
+        temp_hub = @user.tenant.hubs.where(
+          name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
+          hub_type: @hub_type
+        ).first
+        @hub = temp_hub || @user.tenant.hubs.find_or_create_by(
+          name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
+          latitude: @existing_hub_data[:latitude],
+          longitude: @existing_hub_data[:longitude],
+          location: @existing_hub_data[:location],
+          nexus: @existing_hub_data[:nexus],
+          hub_type: @hub_type
+        )
+      end
+
+      def hub_type_name
+        @hub_type_name ||= {
+          "ocean" => "Port",
+          "air"   => "Airport",
+          "rail"  => "Railyard",
+          "truck" => "Depot"
+        }
+      end
+
+      def split_and_capitalise(str)
+        str_array = str.split(' ')
+        if str_array.length > 1
+          return str_array.map(&:capitalize!).join(' ')
+        else
+          return str_array.first.capitalize!
+        end
+      end
+
+      def get_hub_name(str)
+        cased_string = split_and_capitalise(str)
+        if @input_language && @input_language != 'en'
+          name = Translator::GoogleTranslator.new(origin_language: @input_language, target_language: 'en', text: cased_str).perform
+          return name
+        else
+          return cased_string
+        end
       end
 
       def geocode_port_data
-        port_location = Location.geocoded_location("#{@hub_data[:name]}, #{@hub_data[:country]}")
-        port_nexus = Location.from_short_name("#{@hub_data[:name]} ,#{@hub_data[:country]}", 'nexus')
+        port_location = Location.geocoded_location("#{@hub_data[:port]}, #{@hub_data[:country]}")
+        port_nexus = Location.from_short_name("#{@hub_data[:port]} ,#{@hub_data[:country]}", 'nexus')
         return {
           hub_code: @hub_data[:code],
-          name: port_location.city,
+          name: split_and_capitalise(@hub_data[:port]),
           latitude: port_location.latitude,
           longitude: port_location.longitude,
           location: port_location,

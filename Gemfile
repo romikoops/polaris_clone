@@ -98,6 +98,11 @@ gem 'mini_magick'
 # AWS SDK for hosting and S3
 gem 'aws-sdk', '~> 3'
 
+# Google translate api
+gem 'google-cloud-translate'
+gem 'signet'
+gem 'googleauth'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

@@ -150,6 +150,7 @@ module ExcelTool
         port_rows.map do |_port_row|
           @port_row = _port_row
           @country = country_by_code(port_row[:country])
+          next if !@country
           @nexus = _nexus
           @nexus ||= _nexus_create
 

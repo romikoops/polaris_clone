@@ -2,17 +2,23 @@
 
 include ExcelTools
 include DataParser
+include Translator
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(demo)
+subdomains = %w(easyshipping)
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
 
+# byebug
 
   shipper = tenant.users.shipper.first
-  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
-  data = DataParser::HubParser.new(path: path, _user: shipper).perform
-  res = DataInserter::HubInserter.new(data: data, _user: shipper).perform
+  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  data = DataParser::PfcNordic::RateParserImport.new(path: path, _user: shipper, counterpart_hub_name: 'Copenhagen Port', mot: 'ocean', load_type: 'cargo_item').perform
+  res = DataInserter::PfcNordic::RateInserter.new(rates: data, tenant: tenant, counterpart_hub: 'Copenhagen Port', direction: 'import', cargo_class: 'lcl').perform
+  
+  # res = Translator::GoogleTranslator.new(origin_language: 'de', target_language: 'en', text: 'TALLINN, ESTLAND').perform
+
+
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all

@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 
-module DataInserter
-  class BaseInserter
-    attr_reader :results, :stats, :hub, :tenant, :data, :hub_id, :input_language
+module Translator
+  class BaseTranslator
+    attr_reader :results, :origin_language, :target_language, :text, :tenant
 
     def initialize(args={ _user: current_user })
       params = args[:params]
-      @stats = _stats
+      @text = args[:text]
+      @target_language = args[:target_language]
+      @origin_language = args[:origin_language]
       @results = _results
-      if args[:hub_id]
-        @hub_id = args[:hub_id]
-        @hub = Hub.find(@hub_id)
-      end
-      @data = args[:data]
-      @input_language = args[:input_language]
+      
       post_initialize(args)
     end
 
@@ -39,6 +36,10 @@ module DataInserter
 
     def _results
       {}
+    end
+
+    def open_json(path)
+      JSON.parse(File.read("#{Rails.root}#{path.to_s}"))
     end
 
     def uuid
