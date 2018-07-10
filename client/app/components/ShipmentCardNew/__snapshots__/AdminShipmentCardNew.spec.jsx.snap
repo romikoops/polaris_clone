@@ -321,9 +321,11 @@ exports[`shallow rendering 1`] = `
       >
         <span>
            
+          CNY
+           
         </span>
         <span>
-          0
+          1034
         </span>
       </span>
     </div>

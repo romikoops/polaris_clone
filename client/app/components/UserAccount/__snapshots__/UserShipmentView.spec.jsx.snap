@@ -337,7 +337,7 @@ exports[`loading is true 1`] = `
               style="#333"
             >
               x 
-              0
+              -2
             </span>
             <p
               className="layout-align-sm-end-center layout-align-xs-end-center"
@@ -556,6 +556,9 @@ exports[`loading is true 1`] = `
           </div>
         </div>
         <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        />
+        <div
           className="flex-25 layout-row layout-align-start-center no_doc"
         >
           <div
@@ -597,7 +600,7 @@ exports[`loading is true 1`] = `
         </div>
       </div>
     }
-    contentClassName="layout-column flex"
+    contentClassName="layout-row layout-wrap flex"
     title="Documents"
     wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
   />
@@ -939,7 +942,7 @@ exports[`shallow render 1`] = `
               style="#333"
             >
               x 
-              0
+              -2
             </span>
             <p
               className="layout-align-sm-end-center layout-align-xs-end-center"
@@ -1158,6 +1161,9 @@ exports[`shallow render 1`] = `
           </div>
         </div>
         <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        />
+        <div
           className="flex-25 layout-row layout-align-start-center no_doc"
         >
           <div
@@ -1199,7 +1205,7 @@ exports[`shallow render 1`] = `
         </div>
       </div>
     }
-    contentClassName="layout-column flex"
+    contentClassName="layout-row layout-wrap flex"
     title="Documents"
     wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
   />
@@ -1541,7 +1547,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
               style="#333"
             >
               x 
-              0
+              -2
             </span>
             <p
               className="layout-align-sm-end-center layout-align-xs-end-center"
@@ -1819,6 +1825,9 @@ exports[`shipmentData.cargoItems is present 1`] = `
           </div>
         </div>
         <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        />
+        <div
           className="flex-25 layout-row layout-align-start-center no_doc"
         >
           <div
@@ -1860,7 +1869,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         </div>
       </div>
     }
-    contentClassName="layout-column flex"
+    contentClassName="layout-row layout-wrap flex"
     title="Documents"
     wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
   />
@@ -2202,7 +2211,7 @@ exports[`shipmentData.contacts is present 1`] = `
               style="#333"
             >
               x 
-              0
+              -2
             </span>
             <p
               className="layout-align-sm-end-center layout-align-xs-end-center"
@@ -2469,6 +2478,9 @@ exports[`shipmentData.contacts is present 1`] = `
           </div>
         </div>
         <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        />
+        <div
           className="flex-25 layout-row layout-align-start-center no_doc"
         >
           <div
@@ -2510,7 +2522,7 @@ exports[`shipmentData.contacts is present 1`] = `
         </div>
       </div>
     }
-    contentClassName="layout-column flex"
+    contentClassName="layout-row layout-wrap flex"
     title="Documents"
     wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
   />
@@ -2852,7 +2864,7 @@ exports[`shipmentData.documents is present 1`] = `
               style="#333"
             >
               x 
-              0
+              -2
             </span>
             <p
               className="layout-align-sm-end-center layout-align-xs-end-center"
@@ -3071,6 +3083,80 @@ exports[`shipmentData.documents is present 1`] = `
           </div>
         </div>
         <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center "
+        >
+          <div
+            className="flex-100 flex-md-45 flex-gt-md-30 layout-row"
+            style={
+              Object {
+                "padding": "10px",
+              }
+            }
+          >
+            <DocumentsForm
+              deleteFn={[Function]}
+              dispatchFn={[Function]}
+              displayOnly={false}
+              doc={
+                Object {
+                  "doc_type": "foo",
+                  "id": 0,
+                }
+              }
+              isRequired={false}
+              multiple={false}
+              text=""
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="foo"
+              uploadFn={null}
+              viewer={true}
+            />
+          </div>
+          <div
+            className="flex-100 flex-md-45 flex-gt-md-30 layout-row"
+            style={
+              Object {
+                "padding": "10px",
+              }
+            }
+          >
+            <DocumentsForm
+              deleteFn={[Function]}
+              dispatchFn={[Function]}
+              displayOnly={false}
+              doc={
+                Object {
+                  "doc_type": "bar",
+                  "id": 1,
+                }
+              }
+              isRequired={false}
+              multiple={false}
+              text=""
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              tooltip=""
+              type="bar"
+              uploadFn={null}
+              viewer={true}
+            />
+          </div>
+        </div>
+        <div
           className="flex-25 layout-row layout-align-start-center no_doc"
         >
           <div
@@ -3112,7 +3198,7 @@ exports[`shipmentData.documents is present 1`] = `
         </div>
       </div>
     }
-    contentClassName="layout-column flex"
+    contentClassName="layout-row layout-wrap flex"
     title="Documents"
     wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
   />

@@ -15,7 +15,7 @@ exports[`shallow render 1`] = `
   >
     This website uses cookies to enhance your user experience. 
     <a
-      href="https://www.itsmycargo.com/"
+      href="https://www.itsmycargo.com/en/privacy"
       target="_blank"
     >
       Learn more

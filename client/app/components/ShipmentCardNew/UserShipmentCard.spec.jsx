@@ -8,7 +8,9 @@ jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
   gradientGenerator: x => x,
   gradientBorderGenerator: x => x,
-  switchIcon: x => x
+  switchIcon: x => x,
+  totalPrice: () => ({ currency: 'DZD' }),
+  formattedPriceValue: () => 975
 }))
 jest.mock('uuid', () => {
   let counter = -1

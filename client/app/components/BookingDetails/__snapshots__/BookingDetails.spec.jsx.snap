@@ -331,7 +331,7 @@ exports[`shallow render 1`] = `
               icon=""
               iconClass=""
               size=""
-              text="Review Booking"
+              text="Review Booking Request"
               theme={
                 Object {
                   "colors": Object {
@@ -631,7 +631,7 @@ exports[`theme is falsy 1`] = `
               icon=""
               iconClass=""
               size=""
-              text="Review Booking"
+              text="Review Booking Request"
               theme={null}
             />
           </div>

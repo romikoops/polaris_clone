@@ -552,12 +552,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_43"
+              key="RANDOM_KEY_22"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_44"
+              key="RANDOM_KEY_23"
               textStyle="#333"
             />
           </div>
@@ -803,7 +803,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_45"
+              key="RANDOM_KEY_24"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -824,7 +824,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_46"
+              key="RANDOM_KEY_25"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -840,153 +840,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_47"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_48"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_49"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_50"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_51"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_52"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_53"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -1079,13 +932,13 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_54"
+                    key="RANDOM_KEY_26"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_55"
+                    key="RANDOM_KEY_27"
                   >
                      
                     BAR_TERM
@@ -1716,12 +1569,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_56"
+              key="RANDOM_KEY_28"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_57"
+              key="RANDOM_KEY_29"
               textStyle="#333"
             />
           </div>
@@ -2030,7 +1883,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_58"
+              key="RANDOM_KEY_30"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2051,7 +1904,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_59"
+              key="RANDOM_KEY_31"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -2067,153 +1920,6 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_60"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_61"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_62"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_63"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_64"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_65"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_66"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -2306,13 +2012,13 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_67"
+                    key="RANDOM_KEY_32"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_68"
+                    key="RANDOM_KEY_33"
                   >
                      
                     BAR_TERM
@@ -2937,12 +2643,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_69"
+              key="RANDOM_KEY_34"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_70"
+              key="RANDOM_KEY_35"
               textStyle="#333"
             />
           </div>
@@ -2952,7 +2658,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
              
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY_71"
+              key="RANDOM_KEY_36"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -2993,7 +2699,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY_72"
+              key="RANDOM_KEY_37"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -3034,7 +2740,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-40 layout-row"
-              key="RANDOM_KEY_73"
+              key="RANDOM_KEY_38"
             >
               <div
                 className="flex-15 layout-column layout-align-start-center"
@@ -3306,7 +3012,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_74"
+              key="RANDOM_KEY_39"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3327,7 +3033,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_75"
+              key="RANDOM_KEY_40"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -3343,153 +3049,6 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_76"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_77"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_78"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_79"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_80"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_81"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_82"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -3582,13 +3141,13 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_83"
+                    key="RANDOM_KEY_41"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_84"
+                    key="RANDOM_KEY_42"
                   >
                      
                     BAR_TERM
@@ -4229,12 +3788,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_98"
+              key="RANDOM_KEY_49"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_99"
+              key="RANDOM_KEY_50"
               textStyle="#333"
             />
           </div>
@@ -4472,7 +4031,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_100"
+              key="RANDOM_KEY_51"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4493,7 +4052,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_101"
+              key="RANDOM_KEY_52"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4509,153 +4068,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_102"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_103"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_104"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_105"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_106"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_107"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_108"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -4748,13 +4160,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_109"
+                    key="RANDOM_KEY_53"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_110"
+                    key="RANDOM_KEY_54"
                   >
                      
                     BAR_TERM
@@ -5394,12 +4806,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_85"
+              key="RANDOM_KEY_43"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_86"
+              key="RANDOM_KEY_44"
               textStyle="#333"
             />
           </div>
@@ -5637,7 +5049,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_87"
+              key="RANDOM_KEY_45"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5658,7 +5070,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_88"
+              key="RANDOM_KEY_46"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -5674,153 +5086,6 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_89"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_90"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_91"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_92"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_93"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_94"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_95"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -5913,13 +5178,13 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_96"
+                    key="RANDOM_KEY_47"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_97"
+                    key="RANDOM_KEY_48"
                   >
                      
                     BAR_TERM
@@ -6827,153 +6092,6 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
             </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_4"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_5"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_6"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_7"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_8"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_9"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_10"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -7063,13 +6181,13 @@ exports[`shallow render 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_11"
+                    key="RANDOM_KEY_4"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_12"
+                    key="RANDOM_KEY_5"
                   >
                      
                     BAR_TERM
@@ -7694,12 +6812,12 @@ exports[`with cargo items 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_30"
+              key="RANDOM_KEY_16"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_31"
+              key="RANDOM_KEY_17"
               textStyle="#333"
             />
           </div>
@@ -7839,7 +6957,7 @@ exports[`with cargo items 1`] = `
                   "volume": 0.18,
                 }
               }
-              key="RANDOM_KEY_28"
+              key="RANDOM_KEY_14"
               shipment={
                 Object {
                   "cargo_notes": "FOO_CARGO_NOTES",
@@ -8003,7 +7121,7 @@ exports[`with cargo items 1`] = `
                   "volume": 1.75,
                 }
               }
-              key="RANDOM_KEY_29"
+              key="RANDOM_KEY_15"
               shipment={
                 Object {
                   "cargo_notes": "FOO_CARGO_NOTES",
@@ -8240,7 +7358,7 @@ exports[`with cargo items 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_32"
+              key="RANDOM_KEY_18"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8261,7 +7379,7 @@ exports[`with cargo items 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_33"
+              key="RANDOM_KEY_19"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -8277,153 +7395,6 @@ exports[`with cargo items 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_34"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_35"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_36"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_37"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_38"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_39"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_40"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -8516,13 +7487,13 @@ exports[`with cargo items 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_41"
+                    key="RANDOM_KEY_20"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_42"
+                    key="RANDOM_KEY_21"
                   >
                      
                     BAR_TERM
@@ -9147,12 +8118,12 @@ exports[`with containers 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_15"
+              key="RANDOM_KEY_8"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_16"
+              key="RANDOM_KEY_9"
               textStyle="#333"
             />
           </div>
@@ -9274,7 +8245,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 250,
                 }
               }
-              key="RANDOM_KEY_13"
+              key="RANDOM_KEY_6"
               shipment={
                 Object {
                   "cargo_notes": "FOO_CARGO_NOTES",
@@ -9414,7 +8385,7 @@ exports[`with containers 1`] = `
                   "tare_weight": 49,
                 }
               }
-              key="RANDOM_KEY_14"
+              key="RANDOM_KEY_7"
               shipment={
                 Object {
                   "cargo_notes": "FOO_CARGO_NOTES",
@@ -9651,7 +8622,7 @@ exports[`with containers 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_17"
+              key="RANDOM_KEY_10"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9672,7 +8643,7 @@ exports[`with containers 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_18"
+              key="RANDOM_KEY_11"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -9688,153 +8659,6 @@ exports[`with containers 1`] = `
                   className="flex-none"
                 >
                   Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_19"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_20"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Customs Value Declaration: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_21"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  EORI: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_22"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Certificate Of Origin: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_23"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Dangerous Goods: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_24"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Bill of Lading: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_25"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Invoice: Not Uploaded
                 </p>
               </div>
             </div>
@@ -9927,13 +8751,13 @@ exports[`with containers 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_26"
+                    key="RANDOM_KEY_12"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_27"
+                    key="RANDOM_KEY_13"
                   >
                      
                     BAR_TERM
