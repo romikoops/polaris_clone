@@ -9,7 +9,8 @@ import orderExportFCL from './orderExportFCL'
 import orderExportLCL from './orderExportLCL'
 
 const options = {
-  headless: isDocker(),
+  headless: false,
+  // headless: isDocker(),
   log: false,
   slowMo: 250,
   url: BASE_URL
