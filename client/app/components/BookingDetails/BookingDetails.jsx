@@ -350,13 +350,7 @@ export class BookingDetails extends Component {
 
     const ReviewButtonComponent = (
       <div className={`${styles.btn_sec} ${WRAP_ROW(100)} layout-align-center`}>
-        <div
-          className={trim(`
-              ${defaults.content_width} 
-              ${WRAP_ROW('none')} 
-              ${ALIGN_START_CENTER}
-            `)}
-        >
+        <div className={`${defaults.content_width} ${WRAP_ROW('none')} ${ALIGN_START_CENTER}`}>
           <div className={`${ROW(50)} ${ALIGN_START_CENTER}`} />
           <div className={`${ROW(50)} ${ALIGN_END_CENTER}`}>
             <div className="flex-none layout-row">

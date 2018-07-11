@@ -576,8 +576,6 @@ handleInvalidSubmit () {
 }
 `
 
-## SUGGESTION: Order of complex `this.state`
-
 > Sort first by complexety, then alphabetically
 
 Before:
