@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_DETAILS flex-100 layout-row layout-wrap layout-align-center-start"
   style={
     Object {
       "paddingTop": "60px",
@@ -311,7 +311,7 @@ exports[`shallow render 1`] = `
       className="btn_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none  layout-row layout-wrap layout-align-start-center"
+        className="content_width flex-none layout-row layout-wrap layout-align-start-center"
       >
         <div
           className="flex-50 layout-row layout-align-start-center"
@@ -352,7 +352,7 @@ exports[`shallow render 1`] = `
       className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none content-width layout-row layout-align-start-center"
+        className="content_width content-width flex-none layout-row layout-align-start-center"
       >
         <RoundButton
           active={false}
@@ -385,7 +385,7 @@ exports[`shipmentData.shipment is falsy 1`] = `""`;
 
 exports[`theme is falsy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  className="BOOKING_DETAILS flex-100 layout-row layout-wrap layout-align-center-start"
   style={
     Object {
       "paddingTop": "60px",
@@ -611,7 +611,7 @@ exports[`theme is falsy 1`] = `
       className="btn_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none  layout-row layout-wrap layout-align-start-center"
+        className="content_width flex-none layout-row layout-wrap layout-align-start-center"
       >
         <div
           className="flex-50 layout-row layout-align-start-center"
@@ -645,7 +645,7 @@ exports[`theme is falsy 1`] = `
       className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
     >
       <div
-        className="content_width flex-none content-width layout-row layout-align-start-center"
+        className="content_width content-width flex-none layout-row layout-align-start-center"
       >
         <RoundButton
           active={false}
