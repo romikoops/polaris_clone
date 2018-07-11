@@ -31,6 +31,7 @@
     "@babel/preset-env": "7.0.0-beta.39",
     "babel-core": "^7.0.0-0",
     "babel-preset-env": "^1.7.0",
-    "jest": "^23.1.0"
+    "jest": "^23.1.0",
+    "log": "https://github.com/selfrefactor/log-fn#1.2.0"
   }
 }

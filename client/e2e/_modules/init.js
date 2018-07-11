@@ -1,7 +1,7 @@
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
+import { log } from 'log'
 
-import looksSame from '../_vendor/looks-same'
 import { delay } from './delay'
 import { initPuppeteer } from '../_vendor/init-puppeteer'
 import { isDocker } from '../_modules/isDocker'
@@ -11,66 +11,12 @@ const STEPS_SCREEN_DIR = path.resolve(__dirname, '../_screens')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
-function log (input) {
+function logFn (input) {
   if (input._type === 'log' && !input._text.startsWith('%')) {
     console.log(input._text)
   } else if (input._type === 'error') {
     console.error(input._text)
   }
-}
-
-function compareImages (label, compareLabel, toleranceInput) {
-  return new Promise((resolve) => {
-    const tolerance = toleranceInput === undefined ? 0 : toleranceInput
-    const base = `${SCREEN_DIR}/${label}.png`
-    const compareTo = `${SCREEN_DIR}/${compareLabel}.png`
-    const diff = `${SCREEN_DIR}/${label}.diff.png`
-
-    looksSame(
-      base,
-      compareTo,
-      { tolerance },
-      (err, numberOfDiffPixels) => {
-        if (err !== null) {
-          throw err
-        }
-
-        if (numberOfDiffPixels === 0) {
-          console.log(`(i) '${label}' successful visual regression testing`)
-
-          return resolve(true)
-        }
-
-        /**
-         * `false` indicates images with different size, so we skip the creation of diff image
-         */
-        if (numberOfDiffPixels === false) {
-          return resolve(false)
-        }
-        console.log(`'${label}' has ${numberOfDiffPixels} pixels difference in visual regression testing`)
-        console.log(`Building a diff image. It will take some time, please be patient!`)
-
-        if (existsSync(diff)) {
-          unlinkSync(diff)
-        }
-
-        looksSame.createDiff({
-          reference: base,
-          current: compareTo,
-          diff,
-          highlightColor: '#ff00ff',
-          strict: false
-        }, (diffErr) => {
-          if (diffErr === null) {
-            console.log('!! Diff image', diff)
-
-            return resolve(false)
-          }
-          throw diffErr
-        })
-      }
-    )
-  })
 }
 
 export default async function init (options) {
@@ -90,7 +36,7 @@ export default async function init (options) {
   }
 
   if (options.log !== false) {
-    page.on('console', log)
+    page.on('console', logFn)
   }
 
   const getHandle$ = async (selector) => {
@@ -423,7 +369,7 @@ export default async function init (options) {
     await takeScreenshot(label, true)
   }
 
-  const shouldMatchScreenshot = async (label, tolerance, resetFlag) => {
+  const shouldMatchScreenshot = async (label, tolerance) => {
     await delay(2 * DELAY)
     const filePath = `${SCREEN_DIR}/${label}.png`
 
@@ -433,15 +379,9 @@ export default async function init (options) {
        * As there is no screenshot to compare
        * we save the screen and return true
        */
+      log('Base image of visual regression testing is saved', 'info')
 
-      return true
-    }
-
-    if (resetFlag === true) {
-      unlinkSync(filePath)
-      await takeScreenshot(label)
-
-      return true
+      return log('You need to run the test once again to generate the second image', 'info')
     }
     const compareLabel = `${label}.to.compare`
     const compareFilePath = `${SCREEN_DIR}/${compareLabel}.png`
@@ -450,8 +390,11 @@ export default async function init (options) {
       unlinkSync(compareFilePath)
     }
     await takeScreenshot(compareLabel)
+    log('Second image of visual regression testing is saved', 'info')
 
-    return compareImages(label, compareLabel, tolerance)
+    return tolerance === undefined
+      ? log(`Run 'node compare ${label}' to complete visual regression testing`, 'success')
+      : log(`Run 'node compare ${label} ${tolerance}' to complete visual regression testing`, 'success')
   }
 
   const onError = () => {
