@@ -3,11 +3,13 @@ include Translator
 module DataInserter
   module PfcNordic
     class HubInserter < DataInserter::BaseInserter
-      attr_reader :path, :user, :hub_data, :existing_hub_data, :data, :hub_type, :hub, :input_language
+      attr_reader :path, :_user, :hub_data, :existing_hub_data, :data, :hub_type, :hub, :input_language, :checked_hubs, :mandatory_charge, :hubs
 
       def post_initialize(args)
         @user = args[:_user]
         @hub_type = args[:hub_type]
+        @checked_hubs = []
+        @hubs = []
       end
 
       def perform
@@ -47,20 +49,39 @@ module DataInserter
           end
         end
 
-        def find_or_create_hub
+        def default_mandatory_charge
+          if @hub_data[:routing] && @hub_data[:routing].include?('RTM') && @direction == 'import'
+            @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: nil, pre_carriage: nil, on_carriage: nil)
+          elsif @hub_data[:country] && ['Japan', 'United States of America'].include?(@hub_data[:country].name) && @direction == 'export'
+            @mandatory_charge = MandatoryCharge.find_by(export_charges: nil, import_charges: true, pre_carriage: nil, on_carriage: nil)
+          else
+            @mandatory_charge = MandatoryCharge.falsified
+          end
+          return @mandatory_charge
+        end
 
+        def find_or_create_hub
+          return if !@existing_hub_data
+          
           temp_hub = @user.tenant.hubs.where(
             name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
             hub_type: @hub_type
           ).first
+
           @hub = temp_hub || @user.tenant.hubs.find_or_create_by(
-            name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
+            name: "#{@existing_hub_data[:name].strip} #{hub_type_name[@hub_type]}",
             latitude: @existing_hub_data[:latitude],
             longitude: @existing_hub_data[:longitude],
             location: @existing_hub_data[:location],
             nexus: @existing_hub_data[:nexus],
-            hub_type: @hub_type
+            hub_type: @hub_type,
+            hub_code: @existing_hub_data[:code],
+            mandatory_charge: default_mandatory_charge
           )
+          if @hub.mandatory_charge_id.nil?
+            byebug
+          end
+          @hubs << {hub: @hub, data: @hub_data}
         end
 
         def hub_type_name
@@ -72,46 +93,51 @@ module DataInserter
           }
         end
 
-        def split_and_capitalise(str)
-          str_array = str.split(' ')
-          if str_array.length > 1
-            return str_array.map(&:capitalize!).join(' ')
-          else
-            return str_array.first.capitalize!
-          end
-        end
-
-        def get_hub_name(str)
-          cased_string = split_and_capitalise(str)
-          if @input_language && @input_language != 'en'
-            name = Translator::GoogleTranslator.new(origin_language: @input_language, target_language: 'en', text: cased_str).perform
-            return name
-          else
-            return cased_string
-          end
-        end
-
         def geocode_port_data
-          port_location = Location.geocoded_location("#{@hub_data[:port]}, #{@hub_data[:country]}")
-          port_nexus = Location.from_short_name("#{@hub_data[:port]} ,#{@hub_data[:country]}", 'nexus')
+          name = @hub_data[:data][:port]
+          country_name = @hub_data[:data][:country]
+          
+          
+          return if @checked_hubs.include?(name)
+          port_location = Location.geocoded_location("#{name}, #{country_name}")
+          puts port_location.city
+          port_nexus = Location.from_short_name("#{name} ,#{country_name}", 'nexus')
+          country = Country.find_by_name(country_name)
+          if country.nil?
+            string = ''
+            if country_name == 'Uk'
+              string = "United Kingdom of Great Britain and Northern Ireland"
+            elsif country_name == 'Usa'
+              string == 'United States of America'
+            end
+            country = Country.find_by_name(string)
+            if country.nil?
+              country = Country.where("name LIKE ?", "%#{country_name}%").first
+            end
+          end
           return {
             hub_code: @hub_data[:code],
-            name: split_and_capitalise(@hub_data[:port]),
+            name: name,
             latitude: port_location.latitude,
             longitude: port_location.longitude,
             location: port_location,
             nexus: port_nexus,
-            country_id: port_location.country_id
+            country_id: country.try(:id)
           }
         end
 
 
         def insert_hubs
+          
           @data.each do |hub_data|
             @hub_data = hub_data
+            #  if @hub_data[:port].include?('Brisbane')
+            #   byebug
+            #  end
             @existing_hub_data = find_port_data
             find_or_create_hub
           end
+          return @hubs
         end
     end
   end

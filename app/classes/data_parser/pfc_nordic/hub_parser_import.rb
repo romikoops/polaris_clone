@@ -39,24 +39,43 @@ module DataParser
           @sheet.row(row_index - 1).first
         end
 
-        def name_without_service_level(str)
+        # def name_without_service_level(str)
+        #   if str.include?('(Economy)')
+        #     name = str.split(' (').first
+        #     return name
+        #   elsif str.include?(' - Express 2xWeekly')
+        #     name = str.split(' - ').first
+        #     return name
+        #   elsif str.include?(' - Express')
+        #     name = str.split(' - ').first
+        #     return name
+        #   elsif str.include?('(')
+        #       name = str.split(' (').first
+        #       return name
+        #   else
+        #     return str
+        #   end
+        # end
+
+        def name_and_service_level(str)
           if str.include?('(Economy)')
             name = str.split(' (').first
-            return name
-          elsif str.include?(' - Express 2xWeekly')
+            return name, 'economy'
+          elsif str.include?(' - Express')
             name = str.split(' - ').first
-            return name
+            return name, 'express'
           elsif str.include?('(')
               name = str.split(' (').first
-              return name
+              return name, 'standard'
           else
-            return str
+            return str, 'standard'
           end
         end
       
         def row_to_hash(row_index, country)
           {
-            port:     name_without_service_level(@sheet.cell("B", row_index)),
+            port:     @sheet.cell("B", row_index),
+            routing:     @sheet.cell("G", row_index),
             country:  country
           }
         end
@@ -79,6 +98,9 @@ module DataParser
             row_index += 1
             row_hash = row_to_hash(row_index, country)
             while !row_hash[:port].nil?
+              name, service_level = name_and_service_level(row_hash[:port])
+              row_hash[:port] = name.strip
+              row_hash[:service_level] = service_level
               row_hashes << row_hash
               row_index += 1
               row_hash = row_to_hash(row_index, country)

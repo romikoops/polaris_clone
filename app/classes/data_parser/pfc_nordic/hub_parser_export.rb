@@ -40,11 +40,29 @@ module DataParser
         end
       
         def row_to_hash(row_index, country)
+          port = @sheet.cell("B", row_index)
+          code =  @sheet.cell("D", row_index)
+          puts port
           {
-            port:     @sheet.cell("B", row_index),
-            code:     @sheet.cell("D", row_index),
+            port:     port ? port.strip : '',
+            code:     code ? code.strip : nil,
             country:  country
           }
+        end
+
+        def name_and_service_level(str)
+          if str.include?('(Economy)')
+            name = str.split(' (').first
+            return name, 'economy'
+          elsif str.include?(' - Express')
+            name = str.split(' - ').first
+            return name, 'express'
+          elsif str.include?('(')
+              name = str.split(' (').first
+              return name, 'standard'
+          else
+            return str, 'standard'
+          end
         end
 
         def parse_hubs
@@ -55,6 +73,7 @@ module DataParser
             # "Hafen" is unique anchor that differentiates the data
             # of the individual countries.
             next unless @sheet.cell("B", row_index) == "Hafen"
+            
       
             country = get_country(row_index)
             
@@ -62,8 +81,16 @@ module DataParser
             # Look one row after the current one for actual data rows.
             # Stop iterating when no valid float value for the "Rate" column is found.
             row_index += 1
+            
             row_hash = row_to_hash(row_index, country)
             while !row_hash[:code].nil?
+              if @sheet.cell("A", row_index) == "x"
+                row_index += 1
+                row_hash = row_to_hash(row_index, country)
+              end
+              name, service_level = name_and_service_level(row_hash[:port])
+              row_hash[:port] = name
+              row_hash[:service_level] = service_level
               row_hashes << row_hash
               row_index += 1
               row_hash = row_to_hash(row_index, country)
