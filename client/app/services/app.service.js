@@ -19,6 +19,7 @@ function fetchCurrencies () {
     method: 'GET',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/currencies/get`, requestOptions).then(handleResponse)
 }
 
@@ -27,7 +28,9 @@ function refreshRates (base) {
     method: 'GET',
     headers: authHeader()
   }
-  return fetch(`${BASE_URL}/currencies/refresh/${base}`, requestOptions).then(handleResponse)
+
+  return fetch(`${BASE_URL}/currencies/refresh/${base}`, requestOptions)
+    .then(handleResponse)
 }
 
 function fetchCurrenciesForBase (base) {
@@ -35,6 +38,7 @@ function fetchCurrenciesForBase (base) {
     method: 'GET',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/currencies/base/${base}`, requestOptions).then(handleResponse)
 }
 
@@ -46,7 +50,16 @@ function setCurrency (currency) {
   }
   const url = `${BASE_URL}/currencies/set`
   // FIXME: console.log(url)
+
   return fetch(url, requestOptions).then(handleResponse)
+}
+function fetchCountries () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/countries`, requestOptions).then(handleResponse)
 }
 function toggleTenantCurrencyMode () {
   const requestOptions = {
@@ -55,6 +68,7 @@ function toggleTenantCurrencyMode () {
   }
   const url = `${BASE_URL}/admin/currencies/toggle_mode`
   // FIXME: console.log(url)
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 function setTenantCurrencyRates (base, rates) {
@@ -65,12 +79,14 @@ function setTenantCurrencyRates (base, rates) {
   }
   const url = `${BASE_URL}/admin/currencies/set_rates`
   // FIXME: console.log(url)
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
 const appService = {
   fetchCurrencies,
   setCurrency,
+  fetchCountries,
   fetchCurrenciesForBase,
   refreshRates,
   toggleTenantCurrencyMode,

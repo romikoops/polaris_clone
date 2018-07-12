@@ -10,8 +10,34 @@ class Admin::HubsController < Admin::AdminBaseController
   before_action :for_create, only: :create
 
   def index
-    @hubs = Hub.prepped(current_user)
-    response_handler(@hubs)
+    permitted_params
+
+    query = {
+      tenant_id: current_user.tenant_id
+    }
+    if params[:hub_type]
+      query[:hub_type] = params[:hub_type]
+    end
+
+    if params[:hub_status]
+      query[:hub_status] = params[:hub_status]
+    end
+    if params[:country]
+      country = Country.where(name: params[:country])
+      query[:country_id] = country.ids
+    end
+    hubs = Hub.where(query)
+    all_hubs = hubs.map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    response_handler(hubs: paginated_hub_hashes, all_hubs: all_hubs, num_pages: hubs.count / 12)
+  end
+
+  def permitted_params
+    params.permit(:hub_type, :hub_status)
   end
 
   def create

@@ -22,8 +22,12 @@ export class AdminHubsIndex extends Component {
         countries: []
       },
       searchResults: [],
-      expander: {}
+      expander: {},
+      page: 1
     }
+    this.nextPage = this.nextPage.bind(this)
+    this.handlePage = this.handlePage.bind(this)
+    this.prevPage = this.prevPage.bind(this)
   }
   componentWillMount () {
     if (this.props.hubs && !this.state.searchResults.length) {
@@ -53,7 +57,7 @@ export class AdminHubsIndex extends Component {
           [key]: !this.state.searchFilters[target][key]
         }
       }
-    })
+    }, () => this.handlePage(1))
   }
   prepFilters (nextHubs) {
     const { hubs } = this.props
@@ -77,6 +81,32 @@ export class AdminHubsIndex extends Component {
       searchResults: filterablehubs.slice()
     })
   }
+
+  handlePage (direction) {
+    const { searchFilters } = this.state
+
+    const hubFilterKeys =
+      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
+    const countryKeys =
+      Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
+    const statusFilterKeys =
+      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
+    this.setState((prevState) => {
+      this.props.getHubsFromPage(prevState.page + 1, hubFilterKeys, countryKeys, statusFilterKeys)
+
+      return { page: prevState.page + 1 * (direction) }
+    })
+  }
+  nextPage () {
+    this.handlePage(1)
+  }
+  prevPage () {
+    this.handlePage(-1)
+  }
+  doNothing () {
+    console.log(this.state.page)
+  }
+
   handleSearchQuery (e) {
     const { value } = e.target
     this.setState({
@@ -89,6 +119,7 @@ export class AdminHubsIndex extends Component {
 
   applyFilters (array) {
     const { searchFilters } = this.state
+
     const hubFilterKeys =
       Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
     const filter1 = array.filter(a => hubFilterKeys.includes(a.data.hub_type))
@@ -122,7 +153,7 @@ export class AdminHubsIndex extends Component {
   render () {
     const { searchResults, searchFilters, expander } = this.state
     const {
-      theme, viewHub, toggleNewHub, documentDispatch
+      theme, viewHub, toggleNewHub, documentDispatch, hubs, countries
     } = this.props
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
@@ -173,24 +204,23 @@ export class AdminHubsIndex extends Component {
         />
       </div>
     ))
-    const countryFilters = Object.keys(searchFilters.countries).map(country => (
+
+    const countryFilters = countries.map(country => (
       <div
         className={`${
           styles.action_section
         } flex-100 layout-row layout-align-center-center layout-wrap`}
       >
-        <p className="flex-70">{capitalize(country)}</p>
+        <p className="flex-70">{country.name}</p>
         <Checkbox
-          onChange={() => this.toggleFilterValue('countries', country)}
-          checked={searchFilters.countries[country]}
+          onChange={() => this.toggleFilterValue('countries', country.id)}
+          checked={searchFilters.countries[country.id]}
           theme={theme}
         />
       </div>
     ))
 
-    const results = this.applyFilters(searchResults)
-
-    const hubsArr = results.map(hub => (
+    const hubsArr = hubs.map(hub => (
       <AdminHubTile
         key={v4()}
         hub={hub}
@@ -205,10 +235,37 @@ export class AdminHubsIndex extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="layout-row flex-80 flex-sm-100">
-            <div className="layout-row flex-100 layout-align-start-center header_buffer">
-              <div className="layout-row flex-100 layout-align-space-around-start layout-wrap">
+            <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
+              <div className="layout-row flex-95 layout-align-space-around-start layout-wrap">
                 {hubsArr}
               </div>
+
+              <div className="flex-95 layout-row layout-align-center-center margin_bottom">
+                <div
+                  className={`
+                      flex-15 layout-row layout-align-center-center pointy
+                      ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
+                    `}
+                  onClick={this.prevPage}
+                >
+                  {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
+                  <i className="fa fa-chevron-left" />
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                </div>
+                {}
+                <p>{this.state.page}</p>
+                <div
+                  className={`
+                      flex-15 layout-row layout-align-center-center pointy
+                      ${styles.navigation_button} ${hubsArr.length < 12 ? styles.disabled : ''}
+                    `}
+                  onClick={this.nextPage}
+                >
+                  <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  <i className="fa fa-chevron-right" />
+                </div>
+              </div>
+
             </div>
           </div>
           <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
@@ -367,6 +424,7 @@ AdminHubsIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   viewHub: PropTypes.func.isRequired,
+  countries: PropTypes.arrayOf(PropTypes.any),
   toggleNewHub: PropTypes.func.isRequired,
   documentDispatch: PropTypes.shape({
     closeViewer: PropTypes.func,
@@ -376,7 +434,8 @@ AdminHubsIndex.propTypes = {
 
 AdminHubsIndex.defaultProps = {
   theme: null,
-  hubs: []
+  hubs: [],
+  countries: []
 }
 
 export default AdminHubsIndex
