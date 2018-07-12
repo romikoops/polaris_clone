@@ -647,3 +647,25 @@ this.state = {
   },
 }
 ```
+
+## Use `trim` method when 4 or more parts in class-name
+
+Before:
+```
+<div className={`${defaults.content_width} content-width ${ROW('none')} ${ALIGN_START_CENTER}`)}>
+```
+
+After:
+```
+import {trim} from '../../classNames'
+
+...
+
+<div className={trim(`
+    ${defaults.content_width}
+    content-width
+    ${ROW('none')} 
+    ${ALIGN_START_CENTER}
+  `)}
+>
+```

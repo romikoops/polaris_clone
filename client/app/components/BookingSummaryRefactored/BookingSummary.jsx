@@ -1,0 +1,164 @@
+import React from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import Truncate from 'react-truncate'
+import PropTypes from '../../prop-types'
+import styles from './BookingSummary.scss'
+import { dashedGradient, switchIcon } from '../../helpers'
+
+import {
+  trim,
+  ALIGN_END_CENTER,
+  ALIGN_CENTER_START,
+  ALIGN_START_CENTER,
+  ROW,
+  COLUMN,
+  WRAP_ROW
+} from '../../classNames'
+
+const CONTAINER = `BOOKING_SUMMARY ${styles.booking_summary} ${ROW(50)}`
+
+function BookingSummary (props) {
+  const {
+    theme,
+    totalWeight,
+    totalVolume,
+    cities,
+    nexuses,
+    trucking,
+    modeOfTransport,
+    loadType
+  } = props
+  const backgroundDashedLineStyles = theme && theme.colors
+    ? dashedGradient(theme.colors.primary, theme.colors.secondary)
+    : 'black'
+
+  const dashedLineStyles = {
+    marginTop: '6px',
+    height: '2px',
+    width: '100%',
+    background: backgroundDashedLineStyles,
+    backgroundSize: '16px 2px, 100% 2px'
+  }
+  const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
+
+  return (
+    <div className={CONTAINER}>
+      <div className={`${styles.route_sec} ${COLUMN(40)} layout-align-stretch`}>
+        <div className="flex-none layout-row layout-align-center">
+          <div className={`flex-none ${styles.connection_graphics}`}>
+            <i className={`fa fa-map-marker ${styles.map_marker}`} />
+            <i className={`fa fa-flag-o ${styles.flag}`} />
+            <div className={`${styles.mot_wrapper} layout-row layout-align-center-center`}>
+              {icon}
+            </div>
+            <div style={dashedLineStyles} />
+          </div>
+        </div>
+        <div className="flex-50 layout-row layout-align-space-between">
+          <div className="flex-50 layout-row layout-align-center-center">
+            <h4>From</h4>
+          </div>
+          <div className="flex-50 layout-row layout-align-center-center">
+            <h4>To</h4>
+          </div>
+        </div>
+        <div className="flex-50 layout-row layout-align-space-between">
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
+              <Truncate lines={1}>
+                {trucking.pre_carriage.truck_type ? cities.origin : nexuses.origin}
+              </Truncate>
+            </h4>
+            <p className={`${styles.trucking_elem} flex-none`}>
+              {
+                (
+                  (cities.origin && trucking.pre_carriage.truck_type) ||
+                  (nexuses.origin && !trucking.pre_carriage.truck_type)
+                ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+              }
+            </p>
+          </div>
+          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
+            <h4 className="flex-100">
+              {trucking.on_carriage.truck_type ? cities.destination : nexuses.destination}
+            </h4>
+            <p className={`${styles.trucking_elem} flex-none`}>
+              {
+                (
+                  (cities.destination && trucking.on_carriage.truck_type) ||
+                  (nexuses.destination && !trucking.on_carriage.truck_type)
+                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
+              }
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="flex layout-column layout-align-stretch">
+        <h4 className="flex-50 layout-row layout-align-center-center">Total Weight</h4>
+        <p className="flex-50 layout-row layout-align-center-start">
+          { totalWeight.toFixed(1) } kg
+        </p>
+      </div>
+      {
+        loadType === 'cargo_item' && (
+          <div className="flex layout-column layout-align-stretch">
+            <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
+            <p className="flex-50 layout-row layout-align-center-start">
+              { totalVolume.toFixed(3) } m³
+            </p>
+          </div>
+        )
+      }
+    </div>
+  )
+}
+
+BookingSummary.propTypes = {
+  theme: PropTypes.theme,
+  modeOfTransport: PropTypes.string,
+  totalWeight: PropTypes.number,
+  totalVolume: PropTypes.number,
+  cities: PropTypes.shape({
+    origin: PropTypes.string,
+    destination: PropTypes.string
+  }),
+  nexuses: PropTypes.shape({
+    origin: PropTypes.string,
+    destination: PropTypes.string
+  }),
+  trucking: PropTypes.shape({
+    onCarriage: PropTypes.objectOf(PropTypes.string),
+    preCarriage: PropTypes.objectOf(PropTypes.string)
+  }),
+  loadType: PropTypes.string
+}
+
+BookingSummary.defaultProps = {
+  theme: null,
+  modeOfTransport: '',
+  totalWeight: 0,
+  totalVolume: 0,
+  cities: {
+    origin: '',
+    destination: ''
+  },
+  nexuses: {
+    origin: '',
+    destination: ''
+  },
+  trucking: {
+    on_carriage: { truck_type: '' },
+    pre_carriage: { truck_type: '' }
+  },
+  loadType: ''
+}
+
+function mapStateToProps (state) {
+  const { tenant, bookingSummary } = state
+  const { theme } = tenant.data
+
+  return { ...bookingSummary, theme }
+}
+
+export default withRouter(connect(mapStateToProps)(BookingSummary))

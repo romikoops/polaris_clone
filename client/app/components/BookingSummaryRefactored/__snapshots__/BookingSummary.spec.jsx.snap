@@ -1,0 +1,698 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loadType is cargo_item 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-anchor"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_ORIGIN_CITY
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_DESTINATION_CITY
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Volume
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      200.000
+       m³
+    </p>
+  </div>
+</div>
+`;
+
+exports[`modeOfTransport is falsy 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+           
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_ORIGIN_CITY
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_DESTINATION_CITY
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-anchor"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_ORIGIN_CITY
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_DESTINATION_CITY
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+</div>
+`;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-anchor"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "black",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_ORIGIN_CITY
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_DESTINATION_CITY
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+</div>
+`;
+
+exports[`trucking.on_carriage is empty object 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-anchor"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_ORIGIN_CITY
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_NEXUSES_DESTINATION
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          without delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+</div>
+`;
+
+exports[`trucking.pre_carriage is empty object 1`] = `
+<div
+  className="BOOKING_SUMMARY booking_summary flex-50 layout-row"
+>
+  <div
+    className="route_sec flex-40 layout-column layout-align-stretch"
+  >
+    <div
+      className="flex-none layout-row layout-align-center"
+    >
+      <div
+        className="flex-none connection_graphics"
+      >
+        <i
+          className="fa fa-map-marker map_marker"
+        />
+        <i
+          className="fa fa-flag-o flag"
+        />
+        <div
+          className="mot_wrapper layout-row layout-align-center-center"
+        >
+          <i
+            className="fa fa-anchor"
+          />
+        </div>
+        <div
+          style={
+            Object {
+              "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+              "backgroundSize": "16px 2px, 100% 2px",
+              "height": "2px",
+              "marginTop": "6px",
+              "width": "100%",
+            }
+          }
+        />
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          From
+        </h4>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center"
+      >
+        <h4>
+          To
+        </h4>
+      </div>
+    </div>
+    <div
+      className="flex-50 layout-row layout-align-space-between"
+    >
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          <Truncate
+            ellipsis="…"
+            lines={1}
+            trimWhitespace={false}
+          >
+            FOO_NEXUSES_ORIGIN
+          </Truncate>
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          without pick-up
+        </p>
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+      >
+        <h4
+          className="flex-100"
+        >
+          FOO_DESTINATION_CITY
+        </h4>
+        <p
+          className="trucking_elem flex-none"
+        >
+          with delivery
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex layout-column layout-align-stretch"
+  >
+    <h4
+      className="flex-50 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </h4>
+    <p
+      className="flex-50 layout-row layout-align-center-start"
+    >
+      100.0
+       kg
+    </p>
+  </div>
+</div>
+`;

@@ -31,6 +31,6 @@ export const WRAP_ROW = (mode) => {
   return `flex-${mode} layout-row layout-wrap`
 }
 
-export const COLUMN_15 = 'flex-15 layout-column'
+export const COLUMN = mode => `flex-${mode} layout-column`
 
 export const trim = x => x.split('\n').map(y => y.trim()).join(' ').trim()
