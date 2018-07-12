@@ -847,6 +847,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.0)
+    vcr (2.8.0)
     warden (1.2.7)
       rack (>= 1.0)
     webmock (3.4.1)
@@ -912,6 +913,7 @@ DEPENDENCIES
   table_print
   timecop
   tzinfo-data
+  vcr (~> 2.8.0)
   webmock
   wicked_pdf
   will_paginate (~> 3.1.5)
@@ -921,4 +923,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
