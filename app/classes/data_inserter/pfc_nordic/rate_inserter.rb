@@ -61,19 +61,10 @@ module DataInserter
             end
           end
         end
-        def get_hub_name(str)
-          cased_string = split_and_capitalise(str)
-          if @input_language && @input_language != 'en'
-            name = Translator::GoogleTranslator.new(origin_language: @input_language, target_language: 'en', text: cased_string).perform
-            
-            return name.text
-          else
-            return cased_string
-          end
-        end
+       
 
         def find_or_create_itinerary
-          port_name = get_hub_name(@rate[:data][:port]).strip
+          port_name = @rate[:data][:port]
           if @direction == 'import'
             @itinerary = Itinerary.find_or_initialize_by(
               name: "#{port_name} - #{@counterpart_nexus}",
@@ -93,9 +84,9 @@ module DataInserter
 
         def create_stops(port_name)
           if @direction == 'import'
-            stop_names = ["#{port_name} #{hub_type_name[@rate[:data][:mot]]}", counterpart_hub]
+            stop_names = ["#{port_name.strip} #{hub_type_name[@rate[:data][:mot]]}", counterpart_hub]
           else
-            stop_names = [counterpart_hub, "#{port_name} #{hub_type_name[@rate[:data][:mot]]}"]
+            stop_names = [counterpart_hub, "#{port_name.strip} #{hub_type_name[@rate[:data][:mot]]}"]
           end
           stop_names.each_with_index do |stop_name, i|
               hub = @tenant.hubs.where(name: stop_name).first

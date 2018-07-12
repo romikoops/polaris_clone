@@ -63,7 +63,11 @@ module DataInserter
         end
 
         def us_charge
-          charge = @user.tenant.hubs.find_by_name('Chattanooga Port').local_charges.where(load_type: 'lcl', direction: 'import').first.as_json
+          hub = @user.tenant.hubs.find_by_name('Chattanooga Port')
+          if !hub 
+            byebug
+          end
+          charge = hub.local_charges.where(load_type: 'lcl', direction: 'import').first.as_json
           charge.delete("id")
           charge['counterpart_hub_id'] = @counterpart_hub.id
           charge['tenant_vehicle_id'] = @tenant_vehicle.id

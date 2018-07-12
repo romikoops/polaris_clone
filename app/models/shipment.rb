@@ -90,7 +90,7 @@ class Shipment < ApplicationRecord
   def total_price
     return nil if selected_offer.nil?
 
-    selected_offer.total
+    selected_offer["total"]
   end
 
   def origin_layover
