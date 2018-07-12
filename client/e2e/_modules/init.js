@@ -1,6 +1,6 @@
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
-import { log } from 'log'
+import { log } from '../_modules/log'
 
 import { delay } from './delay'
 import { initPuppeteer } from '../_vendor/init-puppeteer'
@@ -10,6 +10,12 @@ const SCREEN_DIR = path.resolve(__dirname, '../node_modules')
 const STEPS_SCREEN_DIR = path.resolve(__dirname, '../_screens')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
+
+function waitNotificator (selector, operationType) {
+  log('______________', 'warning')
+  console.log('Selector, Type', selector, operationType)
+  log('______________', 'warning')
+}
 
 function logFn (input) {
   if (input._type === 'log' && !input._text.startsWith('%')) {
@@ -99,6 +105,8 @@ export default async function init (options) {
   }
 
   const waitFor = async (selectorInput, countInput = 1) => {
+    waitNotificator(selectorInput, 'waitFor')
+    console.time('waitFor')
     const { selector, count: countValue } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, count: countInput }
@@ -113,15 +121,26 @@ export default async function init (options) {
       await delay(DELAY)
       counted = await count(selector)
     }
+    console.timeEnd('waitFor')
+    log('_____DELAY_START________', 'success')
+    await delay(1500)
+    log('_____DELAY_END________', 'success')
 
     return counted >= countValue
   }
 
   const waitForSelectors = async (...selectors) => {
+    waitNotificator(selectors, 'waitForSelectors')
+    console.time('waitForSelectors')
     mark('waitForSelectors', `[${selectors.toString()}]`)
 
     const promised = selectors.map(singleSelector => waitFor(singleSelector))
     const result = await Promise.all(promised)
+
+    console.timeEnd('waitForSelectors')
+    log('_____DELAY_START________', 'success')
+    await delay(1500)
+    log('_____DELAY_END________', 'success')
 
     return !result.includes(false)
   }
@@ -130,6 +149,8 @@ export default async function init (options) {
    * It waits 20 seconds for selector with specified index contains specified text
    */
   const waitForText = async (input) => {
+    waitNotificator(input, 'waitForText')
+    console.time('waitForText')
     mark('waitForText', input.selector)
 
     const waitIndex = input.index === undefined ? 0 : input.index
@@ -151,6 +172,10 @@ export default async function init (options) {
       )
       found = texts[waitIndex].includes(input.text)
     }
+    console.timeEnd('waitForText')
+    log('_____DELAY_START________', 'success')
+    await delay(1500)
+    log('_____DELAY_END________', 'success')
 
     return found
   }
@@ -265,10 +290,18 @@ export default async function init (options) {
 
   const waitAndClick = async (input) => {
     mark('waitAndClick', input)
+    waitNotificator(input, 'waitAndClick')
+    console.time('waitAndClick')
 
     if (await waitFor(input.selector, input.index + 1) === false) {
+      log('`waitFor` returns `false`', 'error')
+
       return false
     }
+    console.timeEnd('waitAndClick')
+    log('_____DELAY_START________', 'success')
+    await delay(1500)
+    log('_____DELAY_END________', 'success')
 
     return click(input.selector, input.index)
   }
@@ -345,28 +378,63 @@ export default async function init (options) {
     return page.evaluate(selectFirstAvailableDayFn)
   }
 
-  const takeScreenshot = async (label, screenDirectoryFlag) => {
-    const screenDirectory = screenDirectoryFlag
+  const takeScreenshot = async (label, options = {}) => {
+    const screenDirectory = options.screenDirectoryFlag
       ? STEPS_SCREEN_DIR
       : SCREEN_DIR
 
-    const screenshotPath = `${screenDirectory}/${label}.png`
+    const fileExtension = options.fullQuality
+      ? 'png'
+      : 'jpeg'
+
+    const screenshotPath = `${screenDirectory}/${label}.${fileExtension}`
+    const screenshotOptionsBase = {
+      fullPage: true,
+      type: fileExtension,
+      path: screenshotPath
+    }
+    const screenshotOptions = options.fullQuality
+      ? screenshotOptionsBase
+      : { ...screenshotOptionsBase, quality: 50 }
 
     if (existsSync(screenshotPath)) {
       unlinkSync(screenshotPath)
     }
-    await page.screenshot({
-      fullPage: true,
-      path: screenshotPath
-    })
+    await page.screenshot(screenshotOptions)
 
     return screenshotPath
   }
+
+  let saveStepCounter = 0
+  let labelHolder
+  let labelPairHolder
+
+  const logLabelPair = (labelX, labelY) => {
+    labelHolder = labelY
+    if (labelX === undefined) {
+      labelPairHolder = `${saveStepCounter} | ${labelY}`
+      console.time(labelPairHolder)
+
+      return
+    }
+    console.timeEnd(labelPairHolder)
+    labelPairHolder = `${saveStepCounter} | ${labelX} ==> ${labelY}`
+    console.time(labelPairHolder)
+  }
   const saveStep = async (label) => {
+    log(label, 'info')
     if (!isDocker()) {
       return
     }
-    await takeScreenshot(label, true)
+    const labelPair = logLabelPair(labelHolder, label)
+
+    log('screenshot start', 'info')
+    console.time('screenshot')
+    await takeScreenshot(
+      `${saveStepCounter++}__${label}`,
+      { screenDirectoryFlag: true }
+    )
+    console.timeEnd('screenshot')
   }
 
   const shouldMatchScreenshot = async (label, tolerance) => {
@@ -374,7 +442,7 @@ export default async function init (options) {
     const filePath = `${SCREEN_DIR}/${label}.png`
 
     if (!existsSync(filePath)) {
-      await takeScreenshot(label)
+      await takeScreenshot(label, { fullQuality: true })
       /**
        * As there is no screenshot to compare
        * we save the screen and return true
@@ -389,7 +457,7 @@ export default async function init (options) {
     if (existsSync(compareFilePath)) {
       unlinkSync(compareFilePath)
     }
-    await takeScreenshot(compareLabel)
+    await takeScreenshot(compareLabel, { fullQuality: true })
     log('Second image of visual regression testing is saved', 'info')
 
     return tolerance === undefined
