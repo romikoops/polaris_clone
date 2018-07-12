@@ -8,6 +8,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'vcr', '~>2.8.0'
+
 # Use Dotenv for managing ENV variables
 gem 'dotenv-rails', groups: [:development, :test]
 
