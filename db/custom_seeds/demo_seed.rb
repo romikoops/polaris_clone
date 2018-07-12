@@ -10,7 +10,7 @@ subdomains.each do |sub|
 
   shipper = tenant.users.shipper.first
 
-  tenant.itineraries.destroy_all
+#   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all
 # #   # tenant.trucking_pricings.delete_all
@@ -25,26 +25,26 @@ subdomains.each do |sub|
 
   
 
-  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
-  imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
-    _user: shipper,
-    counterpart_hub_name: 'Copenhagen Port',
-    hub_type: 'ocean',
-    cargo_class: 'lcl',
-    load_type: 'cargo_item').perform
-  imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
-    tenant: tenant,
-    counterpart_hub: 'Copenhagen Port',
-    _user: shipper,
-    hub_type: 'ocean',
-    direction: 'import').perform
+  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  # imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   cargo_class: 'lcl',
+  #   load_type: 'cargo_item').perform
+  # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   _user: shipper,
+  #   hub_type: 'ocean',
+  #   direction: 'import').perform
 
   # res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
   #   tenant: tenant,
   #   counterpart_hub: 'Copenhagen Port',
   #   direction: 'import',
   #   cargo_class: 'lcl').perform
-  
+
   path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
   
   ex_data = DataParser::PfcNordic::SheetParserExport.new(
@@ -66,13 +66,13 @@ subdomains.each do |sub|
     
     direction: 'export').perform
 
-  # res = DataInserter::PfcNordic::RateInserter.new(
-  #   rates: ex_data,
-  #   tenant: tenant,
-  #   counterpart_hub: 'Copenhagen Port',
-  #   direction: 'export',
-  #   cargo_class: 'lcl',
-  #   input_language: 'de',).perform
+  res = DataInserter::PfcNordic::RateInserter.new(
+    rates: ex_data,
+    tenant: tenant,
+    counterpart_hub: 'Copenhagen Port',
+    direction: 'export',
+    cargo_class: 'lcl',
+    input_language: 'de',).perform
 
   local_charges = File.open("#{Rails.root}/db/dummydata/easyshipping/ez_seeder_local_charges.xlsx")
   req = { 'xlsx' => local_charges }
@@ -87,12 +87,14 @@ subdomains.each do |sub|
     direction: 'export'
   ).perform
   
-  imp_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: imp_hubs,
-    _user: shipper,
-    counterpart_hub_name: 'Copenhagen Port',
-    hub_type: 'ocean',
-    direction: 'import'
-  ).perform
+
+  # imp_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: imp_hubs,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   direction: 'import'
+  # ).perform
+  
   
   #   # # #   # # # # puts "# Overwrite public pricings from excel sheet"
 

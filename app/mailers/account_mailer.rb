@@ -12,8 +12,8 @@ class AccountMailer < Devise::Mailer
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
-    @redirect_url = base_url(tenant) + "account"
-
+    redirect_url = base_url(tenant) + "account"
+    @confirmation_url = "http://api.itsmycargo.com/subdomain/#{tenant.subdomain}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
     @links = tenant.email_links ? tenant.email_links["confirmation_instructions"] : []
 
     # headers["Custom-header"] = "Some Headers"
@@ -38,7 +38,7 @@ class AccountMailer < Devise::Mailer
 
   def base_url(tenant)
     case Rails.env
-    when "production"  then "http://#{tenant.subdomain}.itsmycargo.com/"
+    when "production"  then "https://#{tenant.subdomain}.itsmycargo.com/"
     when "development" then "http://localhost:8080/"
     when "test"        then "http://localhost:8080/"
     end
