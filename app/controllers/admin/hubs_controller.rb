@@ -27,8 +27,7 @@ class Admin::HubsController < Admin::AdminBaseController
       query[:hub_status] = params[:hub_status].split(',')
     end
     if params[:country_ids]
-      byebug
-      hubs = Hub.where(query).joins(:locations).where("location.country_id = ?", params[:country_ids].split(',').map(&:to_i))
+      hubs = Hub.where(query).joins(:location).where("locations.country_id = ?", params[:country_ids].split(',').map(&:to_i))
     else
        hubs = Hub.where(query)
     end
