@@ -73,7 +73,8 @@ class AdminHubs extends Component {
       hubHash,
       adminDispatch,
       document,
-      documentDispatch
+      documentDispatch,
+      numHubPages
     } = this.props
 
     const uploadStatus = document.viewer ? (
@@ -107,6 +108,7 @@ class AdminHubs extends Component {
                 {...props}
                 toggleNewHub={this.toggleNewHub}
                 viewHub={this.viewHub}
+                numHubPages={numHubPages}
                 documentDispatch={documentDispatch}
                 getHubsFromPage={this.getHubsFromPage}
               />
@@ -141,6 +143,7 @@ AdminHubs.propTypes = {
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
   countries: PropTypes.arrayOf(PropTypes.any),
+  numHubPages: PropTypes.number,
   appDispatch: PropTypes.shape({
     fetchCountries: PropTypes.func
   }).isRequired,
@@ -160,7 +163,8 @@ AdminHubs.defaultProps = {
   loading: false,
   hub: null,
   hubHash: null,
-  countries: []
+  countries: [],
+  numHubPages: 1
 }
 
 function mapStateToProps (state) {
@@ -169,7 +173,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const {
-    clients, hubs, hub
+    clients, hubs, hub, num_hub_pages
   } = admin
   const { countries } = app
 
@@ -179,6 +183,7 @@ function mapStateToProps (state) {
     loggedIn,
     hubs,
     hub,
+    numHubPages: num_hub_pages,
     countries,
     clients,
     document

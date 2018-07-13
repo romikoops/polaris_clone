@@ -37,17 +37,6 @@ export class AdminHubsIndex extends Component {
     this.prevPage = this.prevPage.bind(this)
     this.handleInput = this.handleInput.bind(this)
   }
-  // componentWillMount () {
-  //   if (this.props.hubs && !this.state.searchResults.length) {
-  //     this.prepFilters()
-  //   }
-  // }
-
-  // componentWillReceiveProps (nextProps) {
-  //   if (nextProps.hubs.length) {
-  //     this.prepFilters(nextProps.hubs)
-  //   }
-  // }
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -69,7 +58,7 @@ export class AdminHubsIndex extends Component {
   }
   handleInput (selection) {
     delete selection.name
-    // debugger
+
     this.setState({
       searchFilters: {
         ...this.state.searchFilters,
@@ -77,35 +66,15 @@ export class AdminHubsIndex extends Component {
       }
     }, () => this.handleFilters())
   }
-  // prepFilters (nextHubs) {
-  //   const { hubs } = this.props
-  //   const filterablehubs = nextHubs || hubs
-  //   const tmpFilters = {
-  //     hubType: {},
-  //     countries: {},
-  //     status: {
-  //       active: true,
-  //       inactive: false
-  //     },
-  //     expander: {}
-  //   }
-  //   filterablehubs.forEach((hub) => {
-  //     tmpFilters.hubType[hub.data.hub_type] = true
-  //     tmpFilters.countries[hub.location.country] = true
-  //   })
 
-  //   this.setState({
-  //     searchFilters: tmpFilters,
-  //     searchResults: filterablehubs.slice()
-  //   })
-  // }
   handlePage (direction, hubType, country, status) {
     if (!hubType && !country && !status) {
       this.setState((prevState) => {
-        this.props.getHubsFromPage(prevState.page + (1 * direction))
+        const nextPage = prevState.page + (1 * direction)
+        this.props.getHubsFromPage(nextPage > 0 ? nextPage : 1)
 
         return { page: prevState.page + (1 * direction) }
-      })
+      }, () => this.handleFilters())
     } else {
       this.handleFilters()
     }
@@ -120,6 +89,8 @@ export class AdminHubsIndex extends Component {
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
 
+    // const setPage = !hubFilterKeys && !countryKeys && !statusFilterKeys ?
+      //   prevState.page : prevState.page + (1 * direction)
     this.setState((prevState) => {
       this.props.getHubsFromPage(prevState.page, hubFilterKeys, countryKeys, statusFilterKeys)
 
@@ -143,7 +114,7 @@ export class AdminHubsIndex extends Component {
         ...this.state.searchFilters,
         query: value
       }
-    })
+    }, () => this.handleFilters())
   }
 
   applyFilters (array) {
@@ -182,7 +153,7 @@ export class AdminHubsIndex extends Component {
   render () {
     const { searchFilters, expander } = this.state
     const {
-      theme, viewHub, toggleNewHub, documentDispatch, hubs, countries
+      theme, viewHub, toggleNewHub, documentDispatch, hubs, countries, numHubPages
     } = this.props
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
@@ -249,20 +220,6 @@ export class AdminHubsIndex extends Component {
         onChange={e => this.handleInput(e)}
       />
     )
-    // const countryFilters = countries.map(country => (
-    //   <div
-    //     className={`${
-    //       styles.action_section
-    //     } flex-100 layout-row layout-align-center-center layout-wrap`}
-    //   >
-    //     <p className="flex-70">{country.name}</p>
-    //     <Checkbox
-    //       onChange={() => this.toggleFilterValue('countries', country.id)}
-    //       checked={searchFilters.countries[country.id]}
-    //       theme={theme}
-    //     />
-    //   </div>
-    // ))
 
     const hubsArr = hubs.map(hub => (
       <AdminHubTile
@@ -290,7 +247,7 @@ export class AdminHubsIndex extends Component {
                       flex-15 layout-row layout-align-center-center pointy
                       ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
                     `}
-                  onClick={this.prevPage}
+                  onClick={this.state.page > 1 ? this.prevPage : null}
                 >
                   {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                   <i className="fa fa-chevron-left" />
@@ -301,9 +258,9 @@ export class AdminHubsIndex extends Component {
                 <div
                   className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${hubsArr.length < 12 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${this.state.page < numHubPages ? styles.disabled : ''}
                     `}
-                  onClick={this.nextPage}
+                  onClick={this.state.page < numHubPages ? this.nextPage : null}
                 >
                   <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   <i className="fa fa-chevron-right" />
@@ -317,34 +274,47 @@ export class AdminHubsIndex extends Component {
 
               <div className={`${styles.filter_panel} flex layout-row`}>
                 <SideOptionsBox
-                  header="Filter"
+                  header="Filters"
                   content={(
-                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                      <CollapsingBar
-                        collapsed={!expander.hubType}
-                        theme={theme}
-                        handleCollapser={() => this.toggleExpander('hubType')}
-                        headingText="Hub Type"
-                        faClass="fa fa-ship"
-                        content={typeFilters}
-                      />
-                      <CollapsingBar
-                        collapsed={!expander.status}
-                        theme={theme}
-                        handleCollapser={() => this.toggleExpander('status')}
-                        headingText="Status"
-                        faClass="fa fa-ship"
-                        content={statusFilters}
-                      />
-                      <CollapsingBar
-                        collapsed={!expander.countries}
-                        theme={theme}
-                        minHeight="400px"
-                        handleCollapser={() => this.toggleExpander('countries')}
-                        headingText="Country"
-                        faClass="fa fa-flag"
-                        content={namedCountries}
-                      />
+                    <div>
+                      <div
+                        className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
+                      >
+                        <input
+                          type="text"
+                          className="flex-100"
+                          value={searchFilters.query}
+                          placeholder="Search..."
+                          onChange={e => this.handleSearchQuery(e)}
+                        />
+                      </div>
+                      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                        <CollapsingBar
+                          collapsed={!expander.hubType}
+                          theme={theme}
+                          handleCollapser={() => this.toggleExpander('hubType')}
+                          headingText="Hub Type"
+                          faClass="fa fa-ship"
+                          content={typeFilters}
+                        />
+                        <CollapsingBar
+                          collapsed={!expander.status}
+                          theme={theme}
+                          handleCollapser={() => this.toggleExpander('status')}
+                          headingText="Status"
+                          faClass="fa fa-ship"
+                          content={statusFilters}
+                        />
+                        <CollapsingBar
+                          collapsed={!expander.countries}
+                          theme={theme}
+                          minHeight="400px"
+                          handleCollapser={() => this.toggleExpander('countries')}
+                          headingText="Country"
+                          faClass="fa fa-flag"
+                          content={namedCountries}
+                        />
+                      </div>
                     </div>
                   )}
                 />
