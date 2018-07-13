@@ -7,16 +7,17 @@ import styles from './BookingSummary.scss'
 import { dashedGradient, switchIcon } from '../../helpers'
 
 import {
-  trim,
-  ALIGN_END_CENTER,
   ALIGN_CENTER_START,
-  ALIGN_START_CENTER,
+  ALIGN_SPACE_BETWEEN,
   ROW,
   COLUMN,
-  WRAP_ROW
+  WRAP_ROW,
+  ALIGN_CENTER
 } from '../../classNames'
 
 const CONTAINER = `BOOKING_SUMMARY ${styles.booking_summary} ${ROW(50)}`
+const MARKER_ICON = 'fa fa-map-marker'
+const FLAG_ICON = 'fa fa-flag-o'
 
 function BookingSummary (props) {
   const {
@@ -29,6 +30,10 @@ function BookingSummary (props) {
     modeOfTransport,
     loadType
   } = props
+  const destination = trucking.on_carriage.truck_type
+    ? cities.destination
+    : nexuses.destination
+
   const backgroundDashedLineStyles = theme && theme.colors
     ? dashedGradient(theme.colors.primary, theme.colors.secondary)
     : 'black'
@@ -42,74 +47,93 @@ function BookingSummary (props) {
   }
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
 
+  const truckingWrapper = `${styles.trucking_elem} flex-none`
+  const TruckingElementOrigin = () => {
+    const originFlag = cities.origin && trucking.pre_carriage.truck_type
+    const nexusesFlag = nexuses.origin && !trucking.pre_carriage.truck_type
+    const ok = originFlag || nexusesFlag
+    const text = ok && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+
+    return <p className={truckingWrapper}>{text}</p>
+  }
+  const TruckingElementDestination = () => {
+    const originFlag = cities.destination && trucking.on_carriage.truck_type
+    const nexusesFlag = nexuses.destination && !trucking.on_carriage.truck_type
+    const ok = originFlag || nexusesFlag
+    const text = ok && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
+
+    return <p className={truckingWrapper}>{text}</p>
+  }
+  const TotalVolume = () => {
+    if (loadType !== 'cargo_item') {
+      return ''
+    }
+
+    return (
+      <div className="flex layout-column layout-align-stretch">
+        <h4 className={`${ROW(50)} ${ALIGN_CENTER}`}>Total Volume</h4>
+        <p className={`${ROW(50)} ${ALIGN_CENTER_START}`}>
+          { totalVolume.toFixed(3) } m³
+        </p>
+      </div>
+    )
+  }
+
+  const Icons = (
+    <div className={`${ROW('none')} layout-align-center`}>
+      <div className={`flex-none ${styles.connection_graphics}`}>
+        <i className={`${MARKER_ICON} ${styles.map_marker}`} />
+        <i className={`${FLAG_ICON} ${styles.flag}`} />
+        <div className={`${styles.mot_wrapper} layout-row ${ALIGN_CENTER}`}>
+          {icon}
+        </div>
+        <div style={dashedLineStyles} />
+      </div>
+    </div>
+  )
+  const FromTo = (
+    <div className={`${ROW(50)} ${ALIGN_SPACE_BETWEEN}`}>
+      <div className={`${ROW(50)} ${ALIGN_CENTER}`}>
+        <h4>From</h4>
+      </div>
+      <div className={`${ROW(50)} ${ALIGN_CENTER}`}>
+        <h4>To</h4>
+      </div>
+    </div>
+  )
+  const TruckingElements = (
+    <div className={`${ROW(50)} ${ALIGN_SPACE_BETWEEN}`}>
+      <div className={`${WRAP_ROW(50)} ${ALIGN_CENTER} ${styles.header_hub}`}>
+        <h4 className="flex-100">
+          <Truncate lines={1}>
+            {trucking.pre_carriage.truck_type ? cities.origin : nexuses.origin}
+          </Truncate>
+        </h4>
+        {TruckingElementOrigin()}
+      </div>
+      <div className={`${WRAP_ROW(50)} ${ALIGN_CENTER} ${styles.header_hub}`}>
+        <h4 className="flex-100">
+          {destination}
+        </h4>
+        {TruckingElementDestination()}
+      </div>
+    </div>
+  )
+
   return (
     <div className={CONTAINER}>
       <div className={`${styles.route_sec} ${COLUMN(40)} layout-align-stretch`}>
-        <div className="flex-none layout-row layout-align-center">
-          <div className={`flex-none ${styles.connection_graphics}`}>
-            <i className={`fa fa-map-marker ${styles.map_marker}`} />
-            <i className={`fa fa-flag-o ${styles.flag}`} />
-            <div className={`${styles.mot_wrapper} layout-row layout-align-center-center`}>
-              {icon}
-            </div>
-            <div style={dashedLineStyles} />
-          </div>
-        </div>
-        <div className="flex-50 layout-row layout-align-space-between">
-          <div className="flex-50 layout-row layout-align-center-center">
-            <h4>From</h4>
-          </div>
-          <div className="flex-50 layout-row layout-align-center-center">
-            <h4>To</h4>
-          </div>
-        </div>
-        <div className="flex-50 layout-row layout-align-space-between">
-          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
-            <h4 className="flex-100">
-              <Truncate lines={1}>
-                {trucking.pre_carriage.truck_type ? cities.origin : nexuses.origin}
-              </Truncate>
-            </h4>
-            <p className={`${styles.trucking_elem} flex-none`}>
-              {
-                (
-                  (cities.origin && trucking.pre_carriage.truck_type) ||
-                  (nexuses.origin && !trucking.pre_carriage.truck_type)
-                ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
-              }
-            </p>
-          </div>
-          <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
-            <h4 className="flex-100">
-              {trucking.on_carriage.truck_type ? cities.destination : nexuses.destination}
-            </h4>
-            <p className={`${styles.trucking_elem} flex-none`}>
-              {
-                (
-                  (cities.destination && trucking.on_carriage.truck_type) ||
-                  (nexuses.destination && !trucking.on_carriage.truck_type)
-                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
-              }
-            </p>
-          </div>
-        </div>
+        {Icons}
+        {FromTo}
+        {TruckingElements}
       </div>
       <div className="flex layout-column layout-align-stretch">
-        <h4 className="flex-50 layout-row layout-align-center-center">Total Weight</h4>
-        <p className="flex-50 layout-row layout-align-center-start">
+        <h4 className={`${ROW(50)} ${ALIGN_CENTER}`}>Total Weight</h4>
+        <p className={`${ROW(50)} ${ALIGN_CENTER_START}`}>
           { totalWeight.toFixed(1) } kg
         </p>
       </div>
-      {
-        loadType === 'cargo_item' && (
-          <div className="flex layout-column layout-align-stretch">
-            <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
-            <p className="flex-50 layout-row layout-align-center-start">
-              { totalVolume.toFixed(3) } m³
-            </p>
-          </div>
-        )
-      }
+      {TotalVolume()}
     </div>
   )
 }

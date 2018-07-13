@@ -423,11 +423,10 @@ export default async function init (options) {
   }
   const saveStep = async (label) => {
     log(label, 'info')
+    logLabelPair(labelHolder, label)
     if (!isDocker()) {
       return
     }
-    const labelPair = logLabelPair(labelHolder, label)
-
     log('screenshot start', 'info')
     console.time('screenshot')
     await takeScreenshot(

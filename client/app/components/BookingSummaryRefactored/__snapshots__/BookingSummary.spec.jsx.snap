@@ -61,7 +61,7 @@ exports[`loadType is cargo_item 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -81,7 +81,7 @@ exports[`loadType is cargo_item 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -188,7 +188,7 @@ exports[`modeOfTransport is falsy 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -208,7 +208,7 @@ exports[`modeOfTransport is falsy 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -302,7 +302,7 @@ exports[`shallow render 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -322,7 +322,7 @@ exports[`shallow render 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -416,7 +416,7 @@ exports[`theme is falsy 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -436,7 +436,7 @@ exports[`theme is falsy 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -530,7 +530,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -550,7 +550,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -644,7 +644,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
       className="flex-50 layout-row layout-align-space-between"
     >
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
@@ -664,7 +664,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
         </p>
       </div>
       <div
-        className="flex-50 layout-row layout-align-center-center layout-wrap header_hub"
+        className="flex-50 layout-row layout-wrap layout-align-center-center header_hub"
       >
         <h4
           className="flex-100"
