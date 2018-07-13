@@ -159,8 +159,9 @@ class AdminClientsIndex extends Component {
                   <CollapsingBar
                     collapsed={!expander.companies}
                     theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                     handleCollapser={() => this.toggleExpander('companies')}
-                    headingText="Company"
+                    text="Company"
                     faClass="fa fa-building"
                     content={typeFilters}
                   />
@@ -177,7 +178,7 @@ class AdminClientsIndex extends Component {
                   collapsed={!expander.upload}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('upload')}
-                  headingText="Upload Data"
+                  text="Upload Data"
                   faClass="fa fa-cloud-upload"
                   content={(
                     <div
@@ -200,7 +201,7 @@ class AdminClientsIndex extends Component {
                   collapsed={!expander.download}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('download')}
-                  headingText="Download Data"
+                  text="Download Data"
                   faClass="fa fa-cloud-download"
                   content={(
                     <div
@@ -214,10 +215,12 @@ class AdminClientsIndex extends Component {
                   )}
                 /> */}
                 <CollapsingBar
+                  showArrow
                   collapsed={!expander.new}
                   theme={theme}
+                  styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                   handleCollapser={() => this.toggleExpander('new')}
-                  headingText="Create New Client"
+                  text="Create New Client"
                   faClass="fa fa-plus-circle"
                   content={(
                     <div

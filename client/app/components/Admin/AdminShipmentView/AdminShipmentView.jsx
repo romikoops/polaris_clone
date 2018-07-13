@@ -401,7 +401,9 @@ export class AdminShipmentView extends Component {
 
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
-        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
+        wrapperClassName={`
+          layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
+          ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(

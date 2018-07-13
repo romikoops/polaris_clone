@@ -387,10 +387,12 @@ export class AdminTruckingView extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.load_type}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('load_type')}
-                    headingText="Load Type"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Load Type"
                     faClass="fa fa-ship"
                     content={(
                       <div className="flex-90 layout-row layout-align-space-between-center">
@@ -412,10 +414,12 @@ export class AdminTruckingView extends Component {
 
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.direction}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('direction')}
-                    headingText="Import / Export"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Import / Export"
                     faClass="fa fa-star-half-o"
                     content={(
                       <div className="flex-90 layout-row layout-align-space-between-center">
@@ -437,10 +441,12 @@ export class AdminTruckingView extends Component {
                 {loadTypeBool
                   ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.truck_type}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('truck_type')}
-                      headingText="Import / Export"
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Import / Export"
                       faClass="fa fa-flag"
                       content={truckFilter}
                     />
@@ -448,10 +454,12 @@ export class AdminTruckingView extends Component {
                 {loadTypeBool
                   ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <CollapsingBar
+                      showArrow
                       collapsed={!expander.cargo_class}
                       theme={theme}
                       handleCollapser={() => this.toggleExpander('cargo_class')}
-                      headingText="Cargo Class"
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Cargo Class"
                       faClass="fa fa-flag"
                       content={(
                         <NamedSelect
@@ -476,10 +484,12 @@ export class AdminTruckingView extends Component {
               <div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.upload}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('upload')}
-                    headingText="Upload Data"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Upload Data"
                     faClass="fa fa-cloud-upload"
                     content={(
                       <div
@@ -500,10 +510,12 @@ export class AdminTruckingView extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.download}
                     theme={theme}
                     handleCollapser={() => this.toggleExpander('download')}
-                    headingText="Download Data"
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Download Data"
                     faClass="fa fa-cloud-download"
                     content={(
                       <div>
