@@ -973,6 +973,9 @@
     height: 40px;
     width: 100%;
   }
+  .set_height {
+    min-height: 400px;
+  }
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;

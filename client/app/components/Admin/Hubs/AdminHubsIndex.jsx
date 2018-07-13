@@ -11,35 +11,43 @@ import { capitalize, filters } from '../../../helpers'
 import { AdminHubTile } from './AdminHubTile'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class AdminHubsIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
       searchFilters: {
-        hubType: {},
-        status: {},
+        hubType: {
+          air: true,
+          ocean: true
+        },
+        status: {
+          active: true,
+          inactive: false
+        },
         countries: []
       },
-      searchResults: [],
       expander: {},
       page: 1
     }
     this.nextPage = this.nextPage.bind(this)
+    this.handleFilters = this.handleFilters.bind(this)
     this.handlePage = this.handlePage.bind(this)
     this.prevPage = this.prevPage.bind(this)
+    this.handleInput = this.handleInput.bind(this)
   }
-  componentWillMount () {
-    if (this.props.hubs && !this.state.searchResults.length) {
-      this.prepFilters()
-    }
-  }
+  // componentWillMount () {
+  //   if (this.props.hubs && !this.state.searchResults.length) {
+  //     this.prepFilters()
+  //   }
+  // }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.hubs.length) {
-      this.prepFilters(nextProps.hubs)
-    }
-  }
+  // componentWillReceiveProps (nextProps) {
+  //   if (nextProps.hubs.length) {
+  //     this.prepFilters(nextProps.hubs)
+  //   }
+  // }
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -57,44 +65,65 @@ export class AdminHubsIndex extends Component {
           [key]: !this.state.searchFilters[target][key]
         }
       }
-    }, () => this.handlePage(1))
+    }, () => this.handleFilters())
   }
-  prepFilters (nextHubs) {
-    const { hubs } = this.props
-    const filterablehubs = nextHubs || hubs
-    const tmpFilters = {
-      hubType: {},
-      countries: {},
-      status: {
-        active: true,
-        inactive: false
-      },
-      expander: {}
-    }
-    filterablehubs.forEach((hub) => {
-      tmpFilters.hubType[hub.data.hub_type] = true
-      tmpFilters.countries[hub.location.country] = true
-    })
-
+  handleInput (selection) {
+    delete selection.name
+    // debugger
     this.setState({
-      searchFilters: tmpFilters,
-      searchResults: filterablehubs.slice()
-    })
+      searchFilters: {
+        ...this.state.searchFilters,
+        countries: Object.values(selection)
+      }
+    }, () => this.handleFilters())
   }
+  // prepFilters (nextHubs) {
+  //   const { hubs } = this.props
+  //   const filterablehubs = nextHubs || hubs
+  //   const tmpFilters = {
+  //     hubType: {},
+  //     countries: {},
+  //     status: {
+  //       active: true,
+  //       inactive: false
+  //     },
+  //     expander: {}
+  //   }
+  //   filterablehubs.forEach((hub) => {
+  //     tmpFilters.hubType[hub.data.hub_type] = true
+  //     tmpFilters.countries[hub.location.country] = true
+  //   })
 
-  handlePage (direction) {
+  //   this.setState({
+  //     searchFilters: tmpFilters,
+  //     searchResults: filterablehubs.slice()
+  //   })
+  // }
+  handlePage (direction, hubType, country, status) {
+    if (!hubType && !country && !status) {
+      this.setState((prevState) => {
+        this.props.getHubsFromPage(prevState.page + (1 * direction))
+
+        return { page: prevState.page + (1 * direction) }
+      })
+    } else {
+      this.handleFilters()
+    }
+  }
+  handleFilters () {
     const { searchFilters } = this.state
 
     const hubFilterKeys =
       Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
     const countryKeys =
-      Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
+      searchFilters.countries.map(selection => selection.value)
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-    this.setState((prevState) => {
-      this.props.getHubsFromPage(prevState.page + 1, hubFilterKeys, countryKeys, statusFilterKeys)
 
-      return { page: prevState.page + 1 * (direction) }
+    this.setState((prevState) => {
+      this.props.getHubsFromPage(prevState.page, hubFilterKeys, countryKeys, statusFilterKeys)
+
+      return { page: prevState.page }
     })
   }
   nextPage () {
@@ -151,7 +180,7 @@ export class AdminHubsIndex extends Component {
     return filter4
   }
   render () {
-    const { searchResults, searchFilters, expander } = this.state
+    const { searchFilters, expander } = this.state
     const {
       theme, viewHub, toggleNewHub, documentDispatch, hubs, countries
     } = this.props
@@ -204,21 +233,36 @@ export class AdminHubsIndex extends Component {
         />
       </div>
     ))
+    const loadCountries = countries ? countries.map(country => ({
+      label: country.name,
+      value: country.id
+    })) : []
 
-    const countryFilters = countries.map(country => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{country.name}</p>
-        <Checkbox
-          onChange={() => this.toggleFilterValue('countries', country.id)}
-          checked={searchFilters.countries[country.id]}
-          theme={theme}
-        />
-      </div>
-    ))
+    const namedCountries = (
+      <NamedSelect
+        className="flex-100"
+        multi
+        name="country_select"
+        value={searchFilters.countries}
+        autoload={false}
+        options={loadCountries}
+        onChange={e => this.handleInput(e)}
+      />
+    )
+    // const countryFilters = countries.map(country => (
+    //   <div
+    //     className={`${
+    //       styles.action_section
+    //     } flex-100 layout-row layout-align-center-center layout-wrap`}
+    //   >
+    //     <p className="flex-70">{country.name}</p>
+    //     <Checkbox
+    //       onChange={() => this.toggleFilterValue('countries', country.id)}
+    //       checked={searchFilters.countries[country.id]}
+    //       theme={theme}
+    //     />
+    //   </div>
+    // ))
 
     const hubsArr = hubs.map(hub => (
       <AdminHubTile
@@ -295,10 +339,11 @@ export class AdminHubsIndex extends Component {
                       <CollapsingBar
                         collapsed={!expander.countries}
                         theme={theme}
+                        minHeight="400px"
                         handleCollapser={() => this.toggleExpander('countries')}
                         headingText="Country"
                         faClass="fa fa-flag"
-                        content={countryFilters}
+                        content={namedCountries}
                       />
                     </div>
                   )}

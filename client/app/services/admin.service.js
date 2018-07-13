@@ -13,7 +13,7 @@ function handleResponse (response) {
   return response.json()
 }
 
-function getHubs (page, hubType, country, status) {
+function getHubs (page, hubType, countryId, status) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -25,8 +25,8 @@ function getHubs (page, hubType, country, status) {
   if (status) {
     query += `&status=${status}`
   }
-  if (country) {
-    query += `&country=${country}`
+  if (countryId && countryId.length) {
+    query += `&country_ids=${countryId}`
   }
 
   return fetch(`${BASE_URL}/admin/hubs?page=${page || 1}${query}`, requestOptions)

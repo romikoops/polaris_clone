@@ -23,11 +23,13 @@ class AdminHubs extends Component {
     this.getHubsFromPage = this.getHubsFromPage.bind(this)
   }
   componentDidMount () {
-    const { hubs, adminDispatch, loading, countries, appDispatch } = this.props
+    const {
+      hubs, adminDispatch, loading, countries, appDispatch
+    } = this.props
     if (!hubs && !loading) {
       adminDispatch.getHubs(false)
     }
-    if (!countries) {
+    if (!countries.length) {
       appDispatch.fetchCountries()
     }
   }
@@ -81,8 +83,8 @@ class AdminHubs extends Component {
         closeDialog={this.closeSuccessDialog}
       />
     ) : (
-        ''
-      )
+      ''
+    )
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -90,8 +92,8 @@ class AdminHubs extends Component {
         {this.state.newHub ? (
           <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />
         ) : (
-            ''
-          )}
+          ''
+        )}
         <Switch className="flex">
           <Route
             exact
@@ -138,6 +140,10 @@ AdminHubs.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
+  countries: PropTypes.arrayOf(PropTypes.any),
+  appDispatch: PropTypes.shape({
+    fetchCountries: PropTypes.func
+  }).isRequired,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     saveNewHub: PropTypes.func
@@ -153,7 +159,8 @@ AdminHubs.defaultProps = {
   hubs: null,
   loading: false,
   hub: null,
-  hubHash: null
+  hubHash: null,
+  countries: []
 }
 
 function mapStateToProps (state) {

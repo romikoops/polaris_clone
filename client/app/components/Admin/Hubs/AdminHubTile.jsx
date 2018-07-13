@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import styles from './AdminHubTile.scss'
-import { gradientGenerator, switchIcon } from '../../../helpers'
+import { gradientGenerator, switchIcon, capitalizeCities } from '../../../helpers'
 
 export class AdminHubTile extends Component {
   constructor (props) {
@@ -76,8 +76,8 @@ export class AdminHubTile extends Component {
       >
         { this.props.showIcon && icon }
         <div className={`${styles.content} layout-row layout-wrap`}>
-          <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-center`}>
-            <h1 className="flex-none"> {hubName} </h1>
+          <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-start`}>
+            <h1 className="flex-100"> {capitalizeCities(hubName)} </h1>
           </div>
           <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-start-start`}>
             <p className="flex-none">{hubType}</p>
