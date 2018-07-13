@@ -52,7 +52,7 @@ module DataInserter
         def default_mandatory_charge
           if @hub_data[:routing] && @hub_data[:routing].include?('RTM') && @direction == 'import'
             @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: nil, pre_carriage: nil, on_carriage: nil)
-          elsif @hub_data[:country] && ['Japan', 'United States of America'].include?(@hub_data[:country].name) && @direction == 'export'
+          elsif @hub_data[:country] && ['Japan', 'United States of America', 'USA', 'Usa'].include?(@hub_data[:country].name) && @direction == 'export'
             @mandatory_charge = MandatoryCharge.find_by(export_charges: nil, import_charges: true, pre_carriage: nil, on_carriage: nil)
           else
             @mandatory_charge = MandatoryCharge.falsified

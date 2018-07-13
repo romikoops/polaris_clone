@@ -68,8 +68,11 @@ module DataParser
           if @input_language && @input_language != 'en'
             to_translate = "city: #{str}"
             translation = Translator::GoogleTranslator.new(origin_language: @input_language, target_language: 'en', text: to_translate).perform
-            string = translation.text
-            string.delete('city: ')
+            result = translation.text
+            # if str.downcase.include?('chattan')
+            #   byebug
+            # end
+            string = result.gsub('city: ', '')
             puts string
           else
             string = str
