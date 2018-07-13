@@ -258,7 +258,7 @@ export class AdminHubsIndex extends Component {
                 <div
                   className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page < numHubPages ? styles.disabled : ''}
+                      ${styles.navigation_button} ${this.state.page < numHubPages ? '' : styles.disabled}
                     `}
                   onClick={this.state.page < numHubPages ? this.nextPage : null}
                 >
@@ -438,6 +438,7 @@ export class AdminHubsIndex extends Component {
 AdminHubsIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
+  numHubPages: PropTypes.number,
   viewHub: PropTypes.func.isRequired,
   countries: PropTypes.arrayOf(PropTypes.any),
   toggleNewHub: PropTypes.func.isRequired,
@@ -450,6 +451,7 @@ AdminHubsIndex.propTypes = {
 AdminHubsIndex.defaultProps = {
   theme: null,
   hubs: [],
+  numHubPages: 1,
   countries: []
 }
 
