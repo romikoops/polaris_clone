@@ -45,7 +45,7 @@
     padding: 2px;
   }
   .toggle_on {
-    
+
     p {
       margin: 0;
       width: 100%;
@@ -103,7 +103,7 @@
     }
     .cargo_class_button_selected {
       background: #F4F4F4;
-      p { 
+      p {
         font-style: normal;
         font-weight: bold;
         line-height: normal;
@@ -111,7 +111,7 @@
         letter-spacing: 0.02em;
         color: #333333;
       }
-    } 
+    }
     .cargo_class_button_inactive {
       background: white;
       opacity: 0.5;
@@ -126,7 +126,11 @@
 
         color: #4F4F4F;
       }
-    } 
+    }
+  }
+  .edit_wrapper {
+    border: 1px solid #E0E0E0 !important;
+    margin-bottom: 20px;
   }
   .fee_row_container {
     padding: 1px 3px;
@@ -188,19 +192,27 @@
   .close_icon {
     color: red;
   }
+  .users_wrapper {
+    height: 200px;
+    border: 1px solid #BDBDBD;
+    margin-bottom: 20px;
+  }
   .assigned_checkmark {
     width: 40px;
     height: 40px;
   }
+  .margin_fixes {
+    margin-top: 4px;
+  }
   .assign_user_tile {
-    height: 40px;
+    min-height: 40px;
     background:transparent;
-    padding: 4px 10px;
   }
   .assign_user_tile_inner {
-    height: 32px;
+    z-index: 1000;
+    height: 50px;
+    padding-left: 6px;
     background: white;
-    border: 1px solid grey;
     i {
       margin: 0 5px;
     }
