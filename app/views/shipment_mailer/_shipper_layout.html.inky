@@ -42,18 +42,17 @@
   <columns>
 
     <p>
-      <span class="bold">Greencarrier Freight Services International AB</span><br>
-      Torgny Segerstedtsgatan 80 <br>
-      P.O Box 1037 <br>
-      SE-405 22 Gothenburg <br>
-      Visiting adress: Redegatan 1B <br>
-      Phone: +46 31 85 79 00 
+      <span class="bold"><%=@user.tenant.name %></span><br>
+      <% @user.tenant.adresses["components"].each do |address_line| %>
+        <%= address_line %> <br>
+      <% end %>
+      Phone: <%= @user.tenant.phones["main"] %>
     <p>
   </columns>
 </row>
 
 <row>
   <columns>      
-    <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on <a href="http://freightservices.greencarrier.com/contact/">http://freightservices.greencarrier.com/contact/</a>.<p>
+    <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on <a href="<%= @user.tenant.scope["links"]["legal"]%>"><%= @user.tenant.scope["links"]["legal"]%></a>.<p>
   </columns>
 </row>

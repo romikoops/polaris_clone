@@ -173,6 +173,7 @@ export class ChooseOffer extends Component {
         pickup={shipment.has_pre_carriage}
         loadType={shipment.load_type}
         pickupDate={shipment.planned_pickup_date}
+        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
       />
     ))
     const closestRoutestoRender = closestRoutes.map(s => (
@@ -188,6 +189,7 @@ export class ChooseOffer extends Component {
         pickup={shipment.has_pre_carriage}
         loadType={shipment.load_type}
         pickupDate={shipment.planned_pickup_date}
+        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
       />
     ))
 

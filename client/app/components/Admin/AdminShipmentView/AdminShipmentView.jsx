@@ -69,12 +69,10 @@ export class AdminShipmentView extends Component {
   }
   static checkSelectedOffer (service) {
     let obj = {}
-
     if (service && service.total) {
       const total = service.edited_total || service.total
       obj = total
     }
-
     return obj
   }
   constructor (props) {
@@ -169,7 +167,6 @@ export class AdminShipmentView extends Component {
   }
   handlePriceChange (key, value) {
     const { newPrices } = this.state
-
     this.setState({
       newPrices: {
         ...newPrices,
@@ -444,7 +441,7 @@ export class AdminShipmentView extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-25 layout-padding layout-align-start-center layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-xs-100 flex-sm-45 flex-33 flex-gt-lg-25 layout-align-start-center layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -543,7 +540,6 @@ export class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-
     const cargoCount = Object.keys(feeHash.cargo).length - 2
 
     return (
@@ -628,7 +624,9 @@ export class AdminShipmentView extends Component {
                 <h4 className="flex-95 layout-row">Pick-up</h4>
               </div>
               <div className="flex-40 layout-row layout-align-start-center">
-                <p>{moment(shipment.planned_pickup_date).format('DD/MM/YYYY') }</p>
+                <p>{moment(shipment.planned_pickup_date)
+                  .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                  .format('DD/MM/YYYY') }</p>
               </div>
             </div>
             {shipment.pickup_address ? (
@@ -692,9 +690,21 @@ export class AdminShipmentView extends Component {
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
                 <div className="layout-column flex-45 margin_bottom">
-                  <div className="layout-row">
-                    <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                    <p>Pre-Carriage</p>
+                  <div className="layout-row flex-100">
+                    <div className="flex-none layout-row">
+                      <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                      <p>Pre-Carriage</p>
+                    </div>
+                    {feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
+                      <p>
+                        {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
+                        { ' ' }
+                        {feeHash.trucking_pre.edited_total
+                          ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
+                          : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
+                      </p>
+                    </div>
+                      : '' }
                   </div>
                   {showEditServicePrice && shipment.selected_offer.trucking_pre ? (
                     <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
@@ -718,12 +728,25 @@ export class AdminShipmentView extends Component {
                   )}
                 </div>
                 <div className="layout-column flex-offset-10 flex-45 margin_bottom">
-                  <div className="layout-row">
-                    <i
-                      className="fa fa-truck clip flex-none layout-align-center-center"
-                      style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                    />
-                    <p>On-Carriage</p>
+                  <div className="layout-row flex-100">
+                    <div className="flex-none layout-row">
+                      <i
+                        className="fa fa-truck clip flex-none layout-align-center-center"
+                        style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                      />
+                      <p>On-Carriage</p>
+                    </div>
+                    {feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
+                      <p>
+                        {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
+                        { ' ' }
+                        {feeHash.trucking_on.edited_total
+                          ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
+                          : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
+                      </p>
+                    </div>
+                      : ''}
+
                   </div>
                   {showEditServicePrice && shipment.selected_offer.trucking_on ? (
                     <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
@@ -747,38 +770,75 @@ export class AdminShipmentView extends Component {
                   )}
                 </div>
                 <div className="layout-column flex-45 margin_bottom">
-                  <div className="layout-row">
-                    <i
-                      className="fa fa-file-text clip flex-none layout-align-center-center"
-                      style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
-                    />
-                    <p>
+                  <div className="layout-row flex-100">
+                    <div className="layout-row flex-none">
+                      <i
+                        className="fa fa-file-text clip flex-none layout-align-center-center"
+                        style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                      />
+                      <p>
                       Origin<br />
                       Documentation
-                    </p>
+                      </p>
+                    </div>
+                    {feeHash.export ? <div className="flex layout-row layout-align-end-center">
+                      <p>
+                        {feeHash.export ? feeHash.export.total.currency : ''}
+                        { ' ' }
+                        {feeHash.export.edited_total
+                          ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
+                          : parseFloat(feeHash.export.total.value).toFixed(2)}
+                      </p>
+                    </div>
+                      : ''}
                   </div>
                 </div>
                 <div
                   className="layout-column flex-offset-10 flex-45 margin_bottom"
                 >
-                  <div className="layout-row">
-                    <i
-                      className="fa fa-file-text-o clip flex-none layout-align-center-center"
-                      style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
-                    />
-                    <p>
+                  <div className="layout-row flex-100">
+                    <div className="layout-row flex-none">
+                      <i
+                        className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                        style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                      />
+                      <p>
                       Destination<br />
                       Documentation
-                    </p>
+                      </p>
+                    </div>
+                    {feeHash.import ? <div className="flex layout-row layout-align-end-center">
+                      <p>
+                        {feeHash.import ? feeHash.import.total.currency : ''}
+                        { ' ' }
+                        {feeHash.import.edited_total
+                          ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
+                          : parseFloat(feeHash.import.total.value).toFixed(2)}
+                      </p>
+                    </div>
+                      : ''}
                   </div>
                 </div>
                 <div className="layout-column flex-45 margin_bottom">
-                  <div className="layout-row">
-                    <i
-                      className="fa fa-ship clip flex-none layout-align-center-center"
-                      style={selectedStyle}
-                    />
-                    <p>Freight</p>
+                  <div className="layout-row flex-100">
+                    <div className="layout-row flex-none">
+                      <i
+                        className="fa fa-ship clip flex-none layout-align-center-center"
+                        style={selectedStyle}
+                      />
+                      <p>Freight</p>
+                    </div>
+                    {feeHash.cargo
+                      ? <div className="flex layout-row layout-align-end-center">
+                        <p>
+                          {feeHash.cargo ? feeHash.cargo.total.currency : ''}
+                          { ' ' }
+                          {feeHash.cargo.edited_total
+                            ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
+                            : parseFloat(feeHash.cargo.total.value).toFixed(2)}
+                        </p>
+                      </div>
+                      : ''}
                   </div>
                   {showEditServicePrice && shipment.selected_offer.cargo ? (
                     <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
@@ -809,9 +869,22 @@ export class AdminShipmentView extends Component {
               <h3>Additional Services</h3>
               <div className="">
                 <div className="layout-column flex-100 margin_bottom">
-                  <div className="layout-row">
-                    <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                    <p>Customs</p>
+                  <div className="layout-row flex-100">
+                    <div className="layout-row flex-none">
+                      <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                      <p>Customs</p>
+                    </div>
+                    {feeHash.customs
+                      ? <div className="flex layout-row layout-align-end-center">
+                        <p>
+                          {feeHash.customs ? feeHash.customs.total.currency : ''}
+                          { ' ' }
+                          {feeHash.customs.edited_total
+                            ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
+                            : parseFloat(feeHash.customs.total.value).toFixed(2)}
+                        </p>
+                      </div>
+                      : '' }
                   </div>
                   {showEditServicePrice && shipment.selected_offer.customs ? (
                     <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
@@ -825,7 +898,7 @@ export class AdminShipmentView extends Component {
                       </span>
                       <input
                         type="number"
-                        onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                        onChange={e => this.handlePriceChange('customs', e.target.value)}
                         value={Number(newPrices.customs.value).toFixed(2)}
                         className="layout-padding flex-initial"
                       />
@@ -835,9 +908,29 @@ export class AdminShipmentView extends Component {
                   )}
                 </div>
                 <div className="layout-column flex-100 margin_bottom">
-                  <div className="layout-row">
-                    <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                    <p>Insurance</p>
+                  <div className="layout-row flex-100">
+                    <div className="layout-row flex-none">
+                      <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                      <p>Insurance</p>
+                    </div>
+                    {feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
+                      ? <div className="flex layout-row layout-align-end-center">
+                        <p>
+                          {feeHash.insurance ? feeHash.insurance.currency : ''}
+                          { ' ' }
+                          {feeHash.insurance.edited_total
+                            ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
+                            : ''}
+                          {feeHash.insurance.value
+                            ? parseFloat(feeHash.insurance.value).toFixed(2)
+                            : ''}
+                        </p>
+                      </div>
+                      : '' }
+                    {feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
+                      ? <div className="flex layout-row layout-align-end-center">
+                        <p>Requested  </p>
+                      </div> : ''}
                   </div>
                   {showEditServicePrice && shipment.selected_offer.insurance ? (
                     <div className={`layout-row layout-align-end-stretch ${styles.greyborder}`}>
@@ -1020,7 +1113,18 @@ export class AdminShipmentView extends Component {
           contentClassName="layout-column flex"
           content={(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
-              {missingDocs}
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
+                {docView}
+              </div>
+              <div
+                className="flex-100 layout-row layout-wrap layout-align-start-center"
+                style={{ marginTop: '5px' }}
+              >
+                {missingDocs}
+              </div>
             </div>
           )}
         />

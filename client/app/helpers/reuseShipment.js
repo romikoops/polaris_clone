@@ -77,10 +77,10 @@ function reuseContacts (contacts) {
       contact: camelizeKeys(oldShipper.contact),
       location: camelizeKeys(oldShipper.location)
     },
-    notifyees: oldNotifyees.map(n => ({
+    notifyees: oldNotifyees.length > 0 ? oldNotifyees.map(n => ({
       contact: camelizeKeys(n.contact),
       location: camelizeKeys(n.location)
-    }))
+    })) : []
   }
 
   return resp
