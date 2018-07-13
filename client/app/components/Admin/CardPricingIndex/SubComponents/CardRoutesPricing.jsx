@@ -28,33 +28,38 @@ class CardRoutesPricing extends Component {
 
     return (
       <div
-        className={`${styles.card_route_pricing} ${disabledClass} flex-100`}
+        className="card_padding flex-100 flex-md-50 flex-gt-md-33"
         onClick={disabled ? onDisabledClick : () => handleClick(itinerary.id)}
       >
-        <div className={styles.top_routes}>
-          <div>
-            <p>
+        <div
+          className={`${styles.card_route_pricing} ${disabledClass} flex`}
+
+        >
+          <div className={styles.top_routes}>
+            <div>
+              <p>
               From:{' '}
-              <strong>
-                <span> {originNexus} </span>
-              </strong>
+                <strong>
+                  <span> {originNexus} </span>
+                </strong>
+              </p>
+              <p>
+              To:{' '}
+                <strong>
+                  <span> {destinationNexus} </span>
+                </strong>
+              </p>
+            </div>
+            {switchIcon(itinerary.mode_of_transport, gradientFontStyle)}
+          </div>
+          <div className={styles.bottom_routes}>
+            <p>
+              <strong> {itinerary.users_with_pricing} </strong> clients
             </p>
             <p>
-              To:{' '}
-              <strong>
-                <span> {destinationNexus} </span>
-              </strong>
+              <strong> {itinerary.pricing_count} </strong> pricings
             </p>
           </div>
-          {switchIcon(itinerary.mode_of_transport, gradientFontStyle)}
-        </div>
-        <div className={styles.bottom_routes}>
-          <p>
-            <strong> {itinerary.users_with_pricing} </strong> clients
-          </p>
-          <p>
-            <strong> {itinerary.pricing_count} </strong> pricings
-          </p>
         </div>
       </div>
     )
