@@ -56,7 +56,7 @@ class ShipmentsController < ApplicationController
 
     contacts = shipment.shipment_contacts.map do |sc|
       if sc.contact
-        return { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
+        { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
       end
     end
 

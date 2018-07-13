@@ -653,7 +653,7 @@ export class UserShipmentView extends Component {
                   <div className="layout-row flex-100">
                     <div className="flex-none layout-row">
                       <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                      <p>Pre-Carriage</p>
+                      <p>Pickup</p>
                     </div>
                     {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
                       <p>
@@ -674,7 +674,7 @@ export class UserShipmentView extends Component {
                         className="fa fa-truck clip flex-none layout-align-center-center"
                         style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
                       />
-                      <p>On-Carriage</p>
+                      <p>Delivery</p>
                     </div>
                     {scope.detailed_billing && feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
                       <p>
