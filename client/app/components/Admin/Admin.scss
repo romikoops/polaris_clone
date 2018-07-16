@@ -327,6 +327,22 @@
       margin: 0;
     }
   }
+  .navigation_button {
+    background: white;
+    color: #BDBDBD;
+    i {
+      font-size: 25px;
+    }
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+  .disabled {
+    color: #E0E0E0 !important;
+    &:hover {
+      color: #E0E0E0 !important;
+    }
+  }
   .price_subheader {
     padding: 5px;
     p{
@@ -956,6 +972,9 @@
   .separator {
     height: 40px;
     width: 100%;
+  }
+  .set_height {
+    min-height: 400px;
   }
   @media only screen and (max-width: 960px) {
     .border_box {

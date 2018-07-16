@@ -20,6 +20,24 @@ export default function app (state = {}, action) {
       })
       return currErr
     }
+    case appConstants.FETCH_COUNTRIES_REQUEST: {
+      return state
+    }
+    case appConstants.FETCH_COUNTRIES_SUCCESS: {
+      return {
+        ...state,
+        countries: action.payload.countries,
+        loading: false
+      }
+    }
+    case appConstants.FETCH_COUNTRIES_FAILURE: {
+      const errCountries = merge({}, state, {
+        error: { countries: action.error },
+        loading: false
+      })
+
+      return errCountries
+    }
     case appConstants.REFRESH_CURRENCIES_REQUEST: {
       return state
     }

@@ -5,7 +5,7 @@ import Proptypes from '../../prop-types'
 import styles from './CollapsingBar.scss'
 
 export default function CollapsingBar ({
-  collapsed, theme, handleCollapser, content, headingText, faClass
+  collapsed, theme, handleCollapser, content, headingText, faClass, minHeight
 }) {
   return (
     <div className={
@@ -20,7 +20,7 @@ export default function CollapsingBar ({
         handleCollapser={handleCollapser}
         faClass={faClass}
       />
-      <CollapsingContent collapsed={collapsed} content={content} />
+      <CollapsingContent collapsed={collapsed} minHeight={minHeight} content={content} />
     </div>
   )
 }
@@ -31,7 +31,8 @@ CollapsingBar.propTypes = {
   handleCollapser: Proptypes.func,
   content: Proptypes.node,
   headingText: Proptypes.string,
-  faClass: Proptypes.string
+  faClass: Proptypes.string,
+  minHeight: Proptypes.string
 }
 
 CollapsingBar.defaultProps = {
@@ -40,5 +41,6 @@ CollapsingBar.defaultProps = {
   handleCollapser: null,
   content: '',
   headingText: '',
-  faClass: ''
+  faClass: '',
+  minHeight: ''
 }

@@ -30,9 +30,12 @@
   }
   .hub_name {
     h1 {
+      line-height: 25px;
+      text-align: left;
       margin: 0px;
       font-size: 25px;
       color: #4F4F4F;
+      hyphens: auto;
     }
   }
   .hub_type {

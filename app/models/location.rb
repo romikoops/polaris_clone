@@ -5,6 +5,7 @@ class Location < ApplicationRecord
   has_many :users, through: :user_locations, dependent: :destroy
   has_many :shipments
   has_many :contacts
+  has_one :hub
 
   has_many :hubs, foreign_key: :nexus_id do
     def tenant_id(tenant_id)
