@@ -546,6 +546,7 @@ export class AdminShipmentView extends Component {
       </p>
     )
     const cargoCount = Object.keys(feeHash.cargo).length - 2
+    const dnrEditKeys = ['in_process', 'finished', 'confirmed']
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -594,7 +595,7 @@ export class AdminShipmentView extends Component {
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
                           toggleEditTime={this.toggleEditTime}
-                          isAdmin
+                          isAdmin={!dnrEditKeys.includes(shipment.status)}
                         />
                       </div>
                     )}
@@ -622,7 +623,7 @@ export class AdminShipmentView extends Component {
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
                           toggleEditTime={this.toggleEditTime}
-                          isAdmin
+                          isAdmin={!dnrEditKeys.includes(shipment.status)}
                         />
                       </div>
                     )}

@@ -103,13 +103,17 @@ class Admin extends Component {
     }
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
-
+    const minHeightForFooter = window.innerHeight - 350
+    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
         {loadingScreen}
         {menu}
         <Header theme={theme} scrollable />
-        <div className="flex layout-row layout-align-center-start layout-wrap">
+        <div
+          className="flex layout-row layout-align-center-start layout-wrap"
+          style={footerStyle}
+        >
           <NavBar className={`${styles.top_margin}`} />
           <div
             className=" flex-100 layout-row
