@@ -4,7 +4,8 @@
   "description": "End-to-end tests",
   "main": "index.js",
   "scripts": {
-    "dev": "PUPPETEER_HEADLESS=true jest",
+    "dev": "E2E_DOCKER=true jest",
+    "devx": "PUPPETEER_HEADLESS=true E2E_DOCKER=true jest",
     "docker": "docker-compose up --remove-orphans",
     "build": "docker build -t e2e .",
     "clean": "sudo rm -rf -d _screens/*.png",

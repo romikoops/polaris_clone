@@ -9,8 +9,7 @@ import orderExportFCL from './orderExportFCL'
 import orderExportLCL from './orderExportLCL'
 
 const options = {
-  headless: false,
-  // headless: isDocker(),
+  headless: process.env.PUPPETEER_HEADLESS === 'true',
   log: false,
   slowMo: 250,
   url: BASE_URL
