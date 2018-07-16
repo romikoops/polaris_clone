@@ -211,7 +211,7 @@ export class AdminHubsIndex extends Component {
 
     const namedCountries = (
       <NamedSelect
-        className="flex-100"
+        className="flex-100 selectors"
         multi
         name="country_select"
         value={searchFilters.countries}
@@ -308,7 +308,7 @@ export class AdminHubsIndex extends Component {
                         <CollapsingBar
                           collapsed={!expander.countries}
                           theme={theme}
-                          minHeight="400px"
+                          minHeight="270px"
                           handleCollapser={() => this.toggleExpander('countries')}
                           headingText="Country"
                           faClass="fa fa-flag"
@@ -319,7 +319,7 @@ export class AdminHubsIndex extends Component {
                   )}
                 />
               </div>
-              <div className="flex layout-row">
+              <div className="flex layout-row margin_bottom">
                 <SideOptionsBox
                   header="Data manager"
                   content={(
