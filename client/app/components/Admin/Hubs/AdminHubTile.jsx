@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import styles from './AdminHubTile.scss'
-import { gradientGenerator, switchIcon, capitalizeCities } from '../../../helpers'
+import { gradientGenerator, switchIcon, capitalizeCities, gradientBorderGenerator } from '../../../helpers'
+import GradientBorder from '../../GradientBorder'
 
 export class AdminHubTile extends Component {
   constructor (props) {
@@ -57,6 +58,10 @@ export class AdminHubTile extends Component {
     const str = hub.data.name.replace(hubType, '')
     const hubName = str.substring(0, str.length - 1)
     const tooltipId = v4()
+    const gradientBorderStyle =
+      theme && theme.colors
+        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+        : { background: 'black' }
     const icon = (
       <div
         className={styles.hello}
@@ -67,29 +72,32 @@ export class AdminHubTile extends Component {
     )
 
     return (
-      <div
-        className={`something flex-none ${styles.hub_card} ${styles[hub.data.hub_status]} layout-row layout-wrap pointy`}
-        style={gradientStyle}
-        onClick={this.handleClick}
+      <GradientBorder
+        wrapperClassName={`flex-none ${styles.hub_card} ${styles[hub.data.hub_status]} layout-align-end-stretch layout-row layout-wrap pointy`}
+        gradient={gradientBorderStyle}
+        className="layout-column flex-100"
         data-for={tooltipId}
         data-tip={tooltip}
-      >
-        { this.props.showIcon && icon }
-        <div className={`${styles.content} layout-row layout-wrap`}>
-          <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-start`}>
-            <h1 className="flex-100"> {capitalizeCities(hubName)} </h1>
+        content={(
+          <div className="flex layout-column" onClick={this.handleClick}>
+            {this.props.showIcon && icon}
+            <div className={`${styles.content} layout-row layout-wrap`}>
+              <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-start`}>
+                <h1 className="flex-100"> {capitalizeCities(hubName)} </h1>
+              </div>
+              <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-start-start`}>
+                <p className="flex-none">{hubType}</p>
+              </div>
+            </div>
+            <div className={`${styles.image} flex-100 layout-row`} style={bg1} />
+            {showTooltip ? (
+              <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+            ) : (
+              ''
+            )}
           </div>
-          <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-start-start`}>
-            <p className="flex-none">{hubType}</p>
-          </div>
-        </div>
-        <div className={`${styles.image} flex-100 layout-row`} style={bg1} />
-        {showTooltip ? (
-          <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
-        ) : (
-          ''
         )}
-      </div>
+      />
     )
   }
 }

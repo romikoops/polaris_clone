@@ -8,10 +8,9 @@ class Admin::HubsController < Admin::AdminBaseController
   include AwsConfig
 
   before_action :for_create, only: :create
+  before_action :permitted_params, only: :index
 
   def index
-    permitted_params
-
     query = {
       tenant_id: current_user.tenant_id
     }
@@ -29,7 +28,7 @@ class Admin::HubsController < Admin::AdminBaseController
     if params[:country_ids]
       hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(',').map(&:to_i))
     else
-       hubs = Hub.where(query)
+       hubs = Hub.where(query).order('name ASC')
     end
 
     paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
