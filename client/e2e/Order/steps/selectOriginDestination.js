@@ -21,11 +21,13 @@ export default async function selectOriginDestination (puppeteer) {
 export async function selectOriginDestinationWithClick (puppeteer) {
   const {
     $,
-    page,
     focus,
+    page,
+    saveStep,
     selectWithTab
   } = puppeteer
-  await puppeteer.saveStep('selectOriginDestinationWithClick.0')
+  await saveStep('selectOriginDestinationWithClick.0')
+  await puppeteer.shouldMatchSnapshot('booking.summary')
 
   await focus('body')
   await selectWithTab(3)
@@ -41,5 +43,5 @@ export async function selectOriginDestinationWithClick (puppeteer) {
   await page.mouse.click(x + 10, y + 40)
   await delay(LONG_DELAY)
   await selectWithTab(7)
-  await puppeteer.saveStep('selectOriginDestinationWithClick.1')
+  await saveStep('selectOriginDestinationWithClick.1')
 }

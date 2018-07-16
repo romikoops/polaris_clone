@@ -464,6 +464,25 @@ export default async function init (options) {
       : log(`Run 'node compare ${label} ${tolerance}' to complete visual regression testing`, 'success')
   }
 
+  const shouldMatchSnapshot = async (label) => {
+    const baseFilePath = `${STEPS_SCREEN_DIR}/${label}.html`
+    const toCompareFilePath = `${STEPS_SCREEN_DIR}/${label}.to.compare.html`
+    const isCompareBranch = xistsSync(toCompareFilePath)
+    const html = await page.content()
+
+    if (isCompareBranch) {
+      unlinkSync(compareFilePath)
+    } else {
+      writeFileSync(baseFilePath, html)
+
+      return log(`Base html file with label '${label}' created`, 'success')
+    }
+
+    log(`To compare html file with label '${label}' created`, 'success')
+    log(`Run command 'node htmlCompare ${label}' to compare files`, 'info')
+    writeFileSync(toCompareFilePath, html)
+  }
+
   const onError = () => {
     holder.forEach(x => console.log(x))
   }
@@ -489,6 +508,7 @@ export default async function init (options) {
     selectFirstAvailableDay,
     selectWithTab,
     setInput,
+    shouldMatchSnapshot,
     shouldMatchScreenshot,
     stop,
     pressTabAndType,

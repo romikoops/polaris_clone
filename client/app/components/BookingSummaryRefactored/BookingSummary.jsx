@@ -56,6 +56,7 @@ function BookingSummary (props) {
 
     return <p className={truckingWrapper}>{text}</p>
   }
+
   const TruckingElementDestination = () => {
     const originFlag = cities.destination && trucking.on_carriage.truck_type
     const nexusesFlag = nexuses.destination && !trucking.on_carriage.truck_type
@@ -64,6 +65,7 @@ function BookingSummary (props) {
 
     return <p className={truckingWrapper}>{text}</p>
   }
+
   const TotalVolume = () => {
     if (loadType !== 'cargo_item') {
       return ''
@@ -91,6 +93,7 @@ function BookingSummary (props) {
       </div>
     </div>
   )
+
   const FromTo = (
     <div className={`${ROW(50)} ${ALIGN_SPACE_BETWEEN}`}>
       <div className={`${ROW(50)} ${ALIGN_CENTER}`}>
@@ -101,6 +104,7 @@ function BookingSummary (props) {
       </div>
     </div>
   )
+
   const TruckingElements = (
     <div className={`${ROW(50)} ${ALIGN_SPACE_BETWEEN}`}>
       <div className={`${WRAP_ROW(50)} ${ALIGN_CENTER} ${styles.header_hub}`}>
@@ -127,12 +131,14 @@ function BookingSummary (props) {
         {FromTo}
         {TruckingElements}
       </div>
+
       <div className="flex layout-column layout-align-stretch">
         <h4 className={`${ROW(50)} ${ALIGN_CENTER}`}>Total Weight</h4>
         <p className={`${ROW(50)} ${ALIGN_CENTER_START}`}>
           { totalWeight.toFixed(1) } kg
         </p>
       </div>
+
       {TotalVolume()}
     </div>
   )
