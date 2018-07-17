@@ -8,10 +8,13 @@
       </mj-text>
       
     </mj-column>
-    <mj-column width="50%" padding="0px">
+    <mj-column width="100%"  padding="0px">
       <mj-text>
         <h3 style="margin: 0;"><span class="bold">Route Details:</span></h3>
       </mj-text>
+    </mj-column>
+    <mj-column width="50%" padding="0px">
+      
       <mj-text line-height="24px">
         <h6 style="margin: 0;"><span class="bold">From:</span class="bold"></span></h6>
         <p>

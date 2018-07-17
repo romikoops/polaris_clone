@@ -479,24 +479,24 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    # if ENV['BETA'] != "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.tenant_notification(user, shipment).deliver_later
-    # end
+    end
   end
 
   def self.shipper_notification_email(user, shipment)
-    # if ENV['BETA'] != "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.shipper_notification(user, shipment).deliver_later
-    # end
+    end
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    # if ENV['BETA'] != "true"
+    if ENV['BETA'] != "true"
       ShipmentMailer.shipper_confirmation(
         user,
         shipment
       ).deliver_later
-    # end
+    end
   end
 
   def build_and_upload_pdf(args)

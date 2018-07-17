@@ -23,9 +23,9 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     mail(
-      # to:      tenant.email_for(:sales, shipment.mode_of_transport),
-      to: TESTING_EMAIL,
-      # bcc:     "bookings@itsmycargo.com",
+      to:      tenant.email_for(:sales, shipment.mode_of_transport),
+      # to: TESTING_EMAIL,
+      bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
@@ -42,9 +42,9 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline["logo_small.png"] = URI.try(:open, tenant.theme["logoSmall"]).try(:read)
 
     mail(
-      # to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
-      to: TESTING_EMAIL,
-      # bcc:     "bookings@itsmycargo.com",
+      to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
+      # to: TESTING_EMAIL,
+      bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
@@ -66,9 +66,9 @@ class ShipmentMailer < ApplicationMailer
     # FileUtils.rm(bill_of_lading.path)
 
     mail(
-      # to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
-      to: TESTING_EMAIL,
-      # bcc:     "bookings@itsmycargo.com",
+      to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
+      # to: TESTING_EMAIL,
+      bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html

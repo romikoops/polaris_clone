@@ -682,13 +682,13 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch, messages
+      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
-
+    if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
 
     if (this.state.aggregated) {
@@ -1083,13 +1083,17 @@ ShipmentDetails.propTypes = {
     update: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired
+  user: PropTypes.user.isRequired,
+  showRegistration: PropTypes.bool,
+  hideRegistration: PropTypes.func
 }
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
   messages: [],
-  reusedShipment: null
+  reusedShipment: null,
+  showRegistration: false,
+  hideRegistration: null
 }
 
 export default ShipmentDetails

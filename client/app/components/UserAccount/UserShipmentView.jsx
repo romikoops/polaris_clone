@@ -966,64 +966,6 @@ export class UserShipmentView extends Component {
               </div>
             </Tab>
           </Tabs>
-
-          {/* <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
-          <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-            <div className="layout-column flex-100">
-              <h3>Freight, Duties & Carriage:</h3>
-              <div className="layout-wrap layout-row flex">
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Pre-Carriage</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                  <p>On-Carriage</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-file-text clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Origin Documentation</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-file-text-o clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Destination Documentation</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-ship clip flex-none layout-align-center-center" style={selectedStyle} />
-                  <p>Freight</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
-            <div className="layout-column flex-100">
-              <h3>Additional Services</h3>
-              <div className="">
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                  <p>Customs</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
-                  <p>Insurance</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-            <div className="layout-column flex-100">
-              <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
-                <div className="layout-align-center-center layout-row flex">
-                  <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                  <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
-                </div>
-              </div>
-              <h2 className="layout-align-end-center layout-row flex">{formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}</h2>
-            </div>
-          </div>
-        </div> */}
-
         </div>
       </div>
     )
