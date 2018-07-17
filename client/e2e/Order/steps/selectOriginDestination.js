@@ -4,15 +4,25 @@ const LONG_DELAY = 10000
 const SELECTOR = '#origin'
 const ORIGIN = 'Gothenburg'
 
+/**
+ * Two versions are kept as UI often change between the two behaviours
+ */
+
 export default async function selectOriginDestination (puppeteer) {
   const {
     focus,
-    selectWithTab
+    saveStep,
+    selectWithTab,
+    shouldMatchHTML
   } = puppeteer
+  await saveStep('selectOriginDestinationWithClick.0')
 
   await focus('body')
   await selectWithTab(2)
   await selectWithTab(7)
+
+  await saveStep('selectOriginDestinationWithClick.1')
+  await shouldMatchHTML('booking.summary')
 }
 
 /**
@@ -27,7 +37,6 @@ export async function selectOriginDestinationWithClick (puppeteer) {
     selectWithTab
   } = puppeteer
   await saveStep('selectOriginDestinationWithClick.0')
-  await puppeteer.shouldMatchSnapshot('booking.summary')
 
   await focus('body')
   await selectWithTab(3)

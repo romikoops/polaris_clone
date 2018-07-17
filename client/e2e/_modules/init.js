@@ -1,5 +1,5 @@
 import path from 'path'
-import { existsSync, unlinkSync } from 'fs'
+import { existsSync, unlinkSync, writeFileSync } from 'fs'
 import { log } from '../_modules/log'
 
 import { delay } from './delay'
@@ -405,11 +405,12 @@ export default async function init (options) {
     return screenshotPath
   }
 
-  let saveStepCounter = 0
+  let saveStepCounter = -1
   let labelHolder
   let labelPairHolder
 
   const logLabelPair = (labelX, labelY) => {
+    saveStepCounter++
     labelHolder = labelY
     if (labelX === undefined) {
       labelPairHolder = `${saveStepCounter} | ${labelY}`
@@ -430,7 +431,7 @@ export default async function init (options) {
     log('screenshot start', 'info')
     console.time('screenshot')
     await takeScreenshot(
-      `${saveStepCounter++}__${label}`,
+      `${saveStepCounter}__${label}`,
       { screenDirectoryFlag: true }
     )
     console.timeEnd('screenshot')
@@ -459,28 +460,37 @@ export default async function init (options) {
     await takeScreenshot(compareLabel, { fullQuality: true })
     log('Second image of visual regression testing is saved', 'info')
 
+    const shortMessage = `Run 'node compare ${label}' to complete visual regression testing` 
+    const longMessage = `Run 'node compare ${label} ${tolerance}' to complete visual regression testing`
+
     return tolerance === undefined
-      ? log(`Run 'node compare ${label}' to complete visual regression testing`, 'success')
-      : log(`Run 'node compare ${label} ${tolerance}' to complete visual regression testing`, 'success')
+      ? log(shortMessage, 'success')
+      : log(longMessage, 'success')
   }
 
-  const shouldMatchSnapshot = async (label) => {
+  const shouldMatchHTML = async (label) => {
     const baseFilePath = `${STEPS_SCREEN_DIR}/${label}.html`
     const toCompareFilePath = `${STEPS_SCREEN_DIR}/${label}.to.compare.html`
-    const isCompareBranch = xistsSync(toCompareFilePath)
+    const isCompareBranch = existsSync(baseFilePath)
     const html = await page.content()
 
-    if (isCompareBranch) {
-      unlinkSync(compareFilePath)
-    } else {
+    if (!isCompareBranch) {
       writeFileSync(baseFilePath, html)
-
+      
       return log(`Base html file with label '${label}' created`, 'success')
     }
 
-    log(`To compare html file with label '${label}' created`, 'success')
-    log(`Run command 'node htmlCompare ${label}' to compare files`, 'info')
+    if(existsSync(toCompareFilePath)){
+      unlinkSync(toCompareFilePath)
+    }
+
+    log(`Run command 'node htmlCompare ${label}' to compare HTML files`, 'success')
     writeFileSync(toCompareFilePath, html)
+  }
+
+  const compare = async label => {
+    await shouldMatchScreenshot(label)
+    await shouldMatchHTML(label)
   }
 
   const onError = () => {
@@ -498,6 +508,7 @@ export default async function init (options) {
     clickWithPartialText,
     clickWithText,
     count,
+    compare,
     exists,
     fill,
     focus,
@@ -508,7 +519,7 @@ export default async function init (options) {
     selectFirstAvailableDay,
     selectWithTab,
     setInput,
-    shouldMatchSnapshot,
+    shouldMatchHTML,
     shouldMatchScreenshot,
     stop,
     pressTabAndType,

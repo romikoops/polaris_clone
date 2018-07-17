@@ -23,6 +23,7 @@
     "chalk": "^2.4.1",
     "color-diff": "^0.1.5",
     "concat-stream": "^1.5.0",
+    "html-differ": "^1.3.4",
     "lodash": "^4.17.3",
     "log-symbols": "^2.2.0",
     "parse-color": "^1.0.0",
