@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
 include ExcelTools
-include MongoTools
+include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(demo)
+subdomains = %w(greencarrier)
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
+  shipment = shipper.shipments.where(status: 'requested').first
+  conf_shipment = shipper.shipments.where(status: 'confirmed').first
+  ShippingTools.tenant_notification_email(shipper, shipment)
+  ShippingTools.shipper_notification_email(shipper, shipment)
+  ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all

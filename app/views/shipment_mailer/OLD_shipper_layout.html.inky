@@ -43,7 +43,7 @@
 
     <p>
       <span class="bold"><%=@user.tenant.name %></span><br>
-      <% @user.tenant.adresses["components"].each do |address_line| %>
+      <% @user.tenant.addresses["components"].each do |address_line| %>
         <%= address_line %> <br>
       <% end %>
       Phone: <%= @user.tenant.phones["main"] %>

@@ -30,7 +30,7 @@ class ShipmentsController < ApplicationController
   def new; end
 
   def test_email
-    tenant_notification_email(current_user, Shipment.first)
+    tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
   end
 
 

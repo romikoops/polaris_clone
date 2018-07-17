@@ -490,7 +490,7 @@ module ShippingTools
     end
   end
 
-  def shipper_confirmation_email(user, shipment)
+  def self.shipper_confirmation_email(user, shipment)
     if ENV['BETA'] != "true"
       ShipmentMailer.shipper_confirmation(
         user,

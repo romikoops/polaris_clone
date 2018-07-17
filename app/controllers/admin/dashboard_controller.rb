@@ -53,7 +53,7 @@ class Admin::DashboardController < Admin::AdminBaseController
 
   def detailed_itin_json
     Itinerary.for_tenant(current_user.tenant_id).map do |itinerary|
-       itinerary.as_options_json(methods: :routes)
+      itinerary.as_options_json(methods: :routes)
     end
   end
 
