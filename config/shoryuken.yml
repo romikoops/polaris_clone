@@ -8,5 +8,4 @@ aws:
 concurrency: 25
 pidfile: tmp/pids/shoryuken.pid
 queues:
-  - https://sqs.eu-central-1.amazonaws.com/003688427525/excel_worker
-  - https://sqs.eu-central-1.amazonaws.com/003688427525/mailers
+  - https://sqs.eu-central-1.amazonaws.com/003688427525/dev_mailers
