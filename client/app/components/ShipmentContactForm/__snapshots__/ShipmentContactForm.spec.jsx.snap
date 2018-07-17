@@ -55,6 +55,7 @@ exports[`shallow rendering 1`] = `
           handleNext={null}
           icon=""
           iconClass=""
+          inverse={false}
           size="small"
           text="Set "
           theme={

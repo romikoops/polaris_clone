@@ -1,82 +1,88 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`size is full 1`] = `
-<button
-  className="round_btn neutral full clickable"
-  onClick={[Function]}
-  style={Object {}}
->
-  <div
-    className="layout-fill layout-row layout-align-space-around-center"
+<div>
+  <button
+    className="round_btn neutral full clickable"
+    onClick={[Function]}
+    style={Object {}}
   >
-    <p
-      className="content"
+    <div
+      className="layout-fill layout-row layout-align-space-around-center"
     >
-      <span
-        className="icon"
+      <p
+        className="content"
       >
-        <img
-          alt=""
-          className="flex-none icon"
-          src="FOO_ICON"
-        />
-      </span>
-      FOO_TEXT
-    </p>
-  </div>
-</button>
+        <span
+          className="icon"
+        >
+          <img
+            alt=""
+            className="flex-none icon"
+            src="FOO_ICON"
+          />
+        </span>
+        FOO_TEXT
+      </p>
+    </div>
+  </button>
+</div>
 `;
 
 exports[`size is large 1`] = `
-<button
-  className="round_btn neutral large clickable"
-  onClick={[Function]}
-  style={Object {}}
->
-  <div
-    className="layout-fill layout-row layout-align-space-around-center"
+<div>
+  <button
+    className="round_btn neutral large clickable"
+    onClick={[Function]}
+    style={Object {}}
   >
-    <p
-      className="content"
+    <div
+      className="layout-fill layout-row layout-align-space-around-center"
     >
-      <span
-        className="icon"
+      <p
+        className="content"
       >
-        <img
-          alt=""
-          className="flex-none icon"
-          src="FOO_ICON"
-        />
-      </span>
-      FOO_TEXT
-    </p>
-  </div>
-</button>
+        <span
+          className="icon"
+        >
+          <img
+            alt=""
+            className="flex-none icon"
+            src="FOO_ICON"
+          />
+        </span>
+        FOO_TEXT
+      </p>
+    </div>
+  </button>
+</div>
 `;
 
 exports[`size is small 1`] = `
-<button
-  className="round_btn neutral small clickable"
-  onClick={[Function]}
-  style={Object {}}
->
-  <div
-    className="layout-fill layout-row layout-align-space-around-center"
+<div>
+  <button
+    className="round_btn neutral small clickable"
+    onClick={[Function]}
+    style={Object {}}
   >
-    <p
-      className="content"
+    <div
+      className="layout-fill layout-row layout-align-space-around-center"
     >
-      <span
-        className="icon"
+      <p
+        className="content"
       >
-        <img
-          alt=""
-          className="flex-none icon"
-          src="FOO_ICON"
-        />
-      </span>
-      FOO_TEXT
-    </p>
-  </div>
-</button>
+        <span
+          className="icon"
+        >
+          <img
+            alt=""
+            className="flex-none icon"
+            src="FOO_ICON"
+          />
+        </span>
+        FOO_TEXT
+      </p>
+    </div>
+  </button>
+</div>
 `;

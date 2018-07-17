@@ -133,6 +133,7 @@ exports[`shallow render 1`] = `
       handleNext={[Function]}
       icon=""
       iconClass="fa-check"
+      inverse={false}
       size="small"
       text="Save"
       theme={

@@ -832,6 +832,7 @@ exports[`state.showDenialDetails is true 1`] = `
             handleNext={[Function]}
             icon=""
             iconClass="fa-times"
+            inverse={false}
             size="small"
             text="Deny"
             theme={

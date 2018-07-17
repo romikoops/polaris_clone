@@ -60,6 +60,7 @@ exports[`shallow rendering 1`] = `
             handleNext={[Function]}
             icon=""
             iconClass="fa-angle0-left"
+            inverse={false}
             size=""
             text="Back to dashboard"
             theme={
