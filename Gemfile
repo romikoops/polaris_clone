@@ -73,6 +73,7 @@ gem 'mongo', '~> 2.4'
 
 # Use roo for handling CSV and Excel files
 gem 'roo'
+gem 'roo-xls'
 gem 'write_xlsx'
 
 # Usee http for simple requests
