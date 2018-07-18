@@ -8,10 +8,37 @@ class Admin::HubsController < Admin::AdminBaseController
   include AwsConfig
 
   before_action :for_create, only: :create
+  before_action :permitted_params, only: :index
 
   def index
-    @hubs = Hub.prepped(current_user)
-    response_handler(@hubs)
+    query = {
+      tenant_id: current_user.tenant_id
+    }
+    if params[:hub_type]
+      query[:hub_type] = params[:hub_type].split(',')
+    end
+
+    if params[:name]
+      query[:name] = params[:name]
+    end
+
+    if params[:hub_status]
+      query[:hub_status] = params[:hub_status].split(',')
+    end
+    if params[:country_ids]
+      hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(',').map(&:to_i))
+    else
+       hubs = Hub.where(query).order('name ASC')
+    end
+
+    paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 12)
+  end
+
+  def permitted_params
+    params.permit(:hub_type, :hub_status)
   end
 
   def create

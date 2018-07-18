@@ -14,7 +14,8 @@ import {
   filters,
   gradientBorderGenerator,
   gradientTextGenerator,
-  switchIcon
+  switchIcon,
+  capitalize
 } from '../../../helpers'
 import GradientBorder from '../../GradientBorder'
 
@@ -59,7 +60,7 @@ export default class CardPricingIndex extends Component {
     const { itineraries } = this.state
     const { hubs, theme } = this.props
     let itinerariesArr = []
-    const viewLimit = limit || 3
+    const viewLimit = limit - 1 || 3
     if (itineraries && itineraries.length > 0) {
       itinerariesArr = this.updateSearch(itineraries, mot)
         .filter(itinerary => itinerary.mode_of_transport === mot)
@@ -124,7 +125,7 @@ export default class CardPricingIndex extends Component {
   render () {
     const { searchTexts } = this.state
     const {
-      theme, limit, scope, toggleCreator
+      theme, limit, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
     const gradientBorderStyle =
@@ -135,10 +136,6 @@ export default class CardPricingIndex extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
-    const modesOfTransport = scope.modes_of_transport
-    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
-      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
-    const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
 
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
@@ -147,50 +144,48 @@ export default class CardPricingIndex extends Component {
           className={`${styles.flex_titles} ${adminStyles.margin_box_right} margin_bottom
           flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
         >
-          {modeOfTransportNames.map(modeOfTransportName => (
-            <div
-              className={`${columnFlex}
-                flex-sm-45 flex-md-45 flex-xs-100 layout-row layout-wrap layout-align-center-start card_padding_right ${
-            styles.titles_btn
+
+          <div
+            className={`flex-100 layout-row layout-wrap layout-align-center-start card_padding_right ${
+              styles.titles_btn
             }`}
-            >
-              <GradientBorder
-                wrapperClassName={`layout-column flex-100 ${styles.city}`}
-                gradient={gradientBorderStyle}
-                className="layout-column flex-100"
-                content={(
-                  <div
-                    className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
-                  >
-                    <div className={`${styles.card_over} flex-none`}>
-                      <div className={styles.center_items}>
-                        {switchIcon(modeOfTransportName, gradientFontStyle)}
-                        <div>
-                          <h5>{`${modeOfTransportName} freight`}</h5>
-                          <p>Routes</p>
-                        </div>
+          >
+            <GradientBorder
+              wrapperClassName={`layout-column flex-100 ${styles.city}`}
+              gradient={gradientBorderStyle}
+              className="layout-column flex-100"
+              content={(
+                <div
+                  className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
+                >
+                  <div className={`${styles.card_over} flex-none`}>
+                    <div className={styles.center_items}>
+                      {switchIcon(mot, gradientFontStyle)}
+                      <div>
+                        <h5>{`${mot} freight`}</h5>
+                        <p>Routes</p>
                       </div>
                     </div>
                   </div>
-                )}
-              />
-              <PricingSearchBar
-                onChange={(e, t) => this.handlePricingSearch(e, t)}
-                value={searchTexts[modeOfTransportName]}
-                target={modeOfTransportName}
-              />
-              <div className="flex-100 layout-row layout-align-center-start">
-                {this.generateViewType(modeOfTransportName, limit)}
-              </div>
-              <PricingButton
-                onClick={toggleCreator}
-                onDisabledClick={() => console.log('this button is disabled')}
-              />
+                </div>
+              )}
+            />
+
+            <div className="flex-100 layout-row layout-align-center-start">
+              {this.generateViewType(mot, limit)}
             </div>
-          ))}
+
+          </div>
+
         </div>
         <div className="flex-20 layout-row layout-align-end-end">
+
           <div className="hide-sm hide-xs">
+            <PricingSearchBar
+              onChange={(e, t) => this.handlePricingSearch(e, t)}
+              value={searchTexts[mot]}
+              target={mot}
+            />
             <SideOptionsBox
               header="Uploads"
               content={
@@ -227,28 +222,17 @@ export default class CardPricingIndex extends Component {
                       adminStyles.action_section
                     } flex-100 layout-row layout-wrap layout-align-center-center`}
                   >
-                    <p className="flex-100">Download Ocean Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
-                  </div>
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Download Air Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
-                  </div>
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Download Rail Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'rail' }} />
+                    <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
+                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot }} />
                   </div>
                 </div>
               }
             />
+            <PricingButton
+              onClick={toggleCreator}
+              onDisabledClick={() => console.log('this button is disabled')}
+            />
+
           </div>
         </div>
       </div>
@@ -269,14 +253,16 @@ CardPricingIndex.propTypes = {
     closeViewer: PropTypes.func,
     uploadPricings: PropTypes.func
   }).isRequired,
-  scope: PropTypes.scope
+  scope: PropTypes.scope,
+  mot: PropTypes.string
 }
 
 CardPricingIndex.defaultProps = {
   theme: null,
+  mot: '',
   hubs: [],
   itineraries: [],
   scope: null,
-  limit: 4,
+  limit: 9,
   toggleCreator: null
 }

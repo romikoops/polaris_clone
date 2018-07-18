@@ -4,7 +4,7 @@ import { adminService } from '../services/admin.service'
 import { alertActions, documentActions } from './'
 // import { Promise } from 'es6-promise-promise';
 
-function getHubs (redirect) {
+function getHubs (redirect, page, hubType, country, status) {
   function request (hubData) {
     return { type: adminConstants.GET_HUBS_REQUEST, payload: hubData }
   }
@@ -18,7 +18,7 @@ function getHubs (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getHubs().then(
+    adminService.getHubs(page, hubType, country, status).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
         if (redirect) {

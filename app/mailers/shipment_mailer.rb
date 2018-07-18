@@ -5,7 +5,7 @@ class ShipmentMailer < ApplicationMailer
   layout "mailer"
   add_template_helper(ApplicationHelper)
 
-  TESTING_EMAIL = "enter_your_email_here@email.com"
+  TESTING_EMAIL = "warwick@itsmycargo.com"
 
   def tenant_notification(user, shipment)
     @user = user
@@ -27,7 +27,10 @@ class ShipmentMailer < ApplicationMailer
       # to: TESTING_EMAIL,
       bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
-    )
+    ) do |format|
+      format.html
+      format.mjml
+    end
   end
 
   def shipper_notification(user, shipment)
@@ -43,7 +46,10 @@ class ShipmentMailer < ApplicationMailer
       # to: TESTING_EMAIL,
       bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
-    )
+    ) do |format|
+      format.html
+      format.mjml
+    end
   end
 
   def shipper_confirmation(user, shipment)
@@ -64,7 +70,10 @@ class ShipmentMailer < ApplicationMailer
       # to: TESTING_EMAIL,
       bcc:     "bookings@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
-    )
+    ) do |format|
+      format.html
+      format.mjml
+    end
   end
 
   private

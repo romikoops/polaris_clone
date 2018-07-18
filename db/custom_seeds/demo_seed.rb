@@ -1,22 +1,19 @@
 # frozen_string_literal: false
 
 include ExcelTools
-include DataParser
-include Translator
-subdomains = %w(easyshipping)
+include ShippingTools
+# subdomains = %w(demo greencarrier easyshipping hartrodt)
+subdomains = %w(greencarrier)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
-
-  options = {
-    mot: 'ocean',
-    tenant_id: tenant.id
-  }
-    
-    url = DocumentService::LocalChargesWriter.new(options).perform
-    puts url
+  shipment = shipper.shipments.where(status: 'requested').first
+  conf_shipment = shipper.shipments.where(status: 'confirmed').first
+  ShippingTools.tenant_notification_email(shipper, shipment)
+  ShippingTools.shipper_notification_email(shipper, shipment)
+  ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all

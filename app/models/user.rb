@@ -113,6 +113,17 @@ class User < ApplicationRecord
     end
   end
 
+  def sanitized_user(options)
+    to_include = {
+      optin_status: { except: %i(created_at updated_at) },
+    }.merge(options)
+    render_options = {
+      except: %i(tokens encrypted_password),
+      include: to_include
+    }
+    as_json(render_options)
+  end
+
   # Instance methods
   def full_name
     "#{first_name} #{last_name}"
@@ -149,7 +160,7 @@ class User < ApplicationRecord
   # Devise Token Auth override
   def token_validation_response
     as_json(
-      except: %i(tokens created_at updated_at optin_status_id role_id),
+      except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
       include: {
         optin_status: { except: %i(created_at updated_at) },
         role: { except: %i(created_at updated_at) }

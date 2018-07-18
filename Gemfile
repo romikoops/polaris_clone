@@ -8,6 +8,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'vcr', '~>2.8.0'
+
 # Use Dotenv for managing ENV variables
 gem 'dotenv-rails', groups: [:development, :test]
 
@@ -102,6 +104,8 @@ gem 'aws-sdk', '~> 3'
 gem 'google-cloud-translate'
 gem 'signet'
 gem 'googleauth'
+# New email gem
+gem 'mjml-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

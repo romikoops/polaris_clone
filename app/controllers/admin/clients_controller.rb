@@ -6,7 +6,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def index
     shipper_role = Role.find_by_name("shipper")
     manager_role = Role.find_by_name("sub_admin")
-    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false)
+    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:token_validation_response)
     managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
     response_handler(clients: clients, managers: managers)
   end
@@ -36,7 +36,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     }
     new_user = current_user.tenant.users.create!(user_data)
 
-    response_handler(new_user)
+    response_handler(new_user.token_validation_response)
   end
 
   # Destroy User account

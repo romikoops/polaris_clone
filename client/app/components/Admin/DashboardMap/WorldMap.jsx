@@ -62,6 +62,11 @@ export class WorldMap extends Component {
         routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
       })
     })
+    // const zoom = d3.behavior.zoom()
+    // .translate(projection.translate())
+    // .scale(projection.scale())
+    // .scaleExtent([height, 8 * height])
+    // .on("zoom", zoomed);
 
     return (
       <div className="flex-100">

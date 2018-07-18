@@ -52,7 +52,8 @@ class AdminShipments extends Component {
       loading,
       adminDispatch,
       hubHash,
-      tenant
+      tenant,
+      user
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
@@ -79,6 +80,7 @@ class AdminShipments extends Component {
                 adminDispatch={adminDispatch}
                 hubHash={hubHash}
                 shipments={shipments}
+                user={user}
                 viewShipment={this.viewShipment}
                 {...props}
               />
@@ -96,6 +98,7 @@ class AdminShipments extends Component {
                 handleShipmentAction={this.handleShipmentAction}
                 shipmentData={shipment}
                 clients={clients}
+                user={user}
                 tenant={tenant}
                 {...props}
               />
@@ -179,7 +182,8 @@ AdminShipments.propTypes = {
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
-  history: PropTypes.history.isRequired
+  history: PropTypes.history.isRequired,
+  user: PropTypes.user
 }
 
 AdminShipments.defaultProps = {
@@ -190,7 +194,8 @@ AdminShipments.defaultProps = {
   clients: [],
   loading: false,
   tenant: {},
-  hubHash: null
+  hubHash: null,
+  user: {}
 }
 
 function mapStateToProps (state) {

@@ -17,6 +17,7 @@ class TenantSeeder
   #   background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
   # },
   # addresses: {
+    # components: [],
   #   main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
   # },
   # phones:{
@@ -111,7 +112,8 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
       },
       addresses: {
-        main: 'Torgny Segerstedtsgatan 80 426 77 Västra Frölunda'
+        main: 'Torgny Segerstedtsgatan 80 426 77 Västra Frölunda',
+        components: ['Torgny Segerstedtsgatan 80', 'P.O Box 1037','SE-405 22 Gothenburg', 'Visiting adress: Redegatan 1B']
       },
       phones: {
         main: '+46 31-85 32 00',
@@ -233,7 +235,8 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
       },
       addresses: {
-        main: 'Brooktorkai 7, 20457 Hamburg, Germany'
+        main: 'Brooktorkai 7, 20457 Hamburg, Germany',
+        components: []
       },
       phones: {
         main: '+46 31-85 32 00',
@@ -339,7 +342,8 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg'
       },
       addresses: {
-        main: 'Bataljonsgatan 12,553 05 Jönköping, Sweden'
+        main: 'Bataljonsgatan 12,553 05 Jönköping, Sweden',
+        components: []
       },
       phones: {
         main: '+46 36 291 40 04',
@@ -410,6 +414,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/backgrounds/bg_easy_shipping.jpg'
       },
       addresses: {
+        components: [],
         main: 'Industrivej 2 DK-7860 Spøttrup Denmark'
       },
       phones: {
@@ -484,6 +489,7 @@ class TenantSeeder
         logoWide: 'https://assets.itsmycargo.com/assets/logos/integrail_wide.png'
       },
       addresses: {
+        components: [],
         main: 'Révész utca 27. (575.11 mi)Budapest, Hungary 1138'
       },
       phones: {
@@ -555,6 +561,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/backgrounds/bg_isa.jpg'
       },
       addresses: {
+        components: [],
         main: 'Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark'
       },
       phones: {
@@ -630,6 +637,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg'
       },
       addresses: {
+        components: [],
         main: 'Korngardar 2, 104 Reykjavík, Iceland'
       },
       phones: {
@@ -700,6 +708,7 @@ class TenantSeeder
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/belglobe.png'
       },
       addresses: {
+        components: [],
         main: 'Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND'
       },
       phones: {
@@ -770,6 +779,7 @@ class TenantSeeder
         logoSmall: 'https://assets.itsmycargo.com/assets/images/logos/gw.png'
       },
       addresses: {
+        components: [],
         main: 'Krohnskamp 22, 22301 Hamburg, Deutschland'
       },
       phones: {
@@ -842,6 +852,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
       },
       addresses: {
+        components: [],
         main: 'Hoegerdamm 35, 20097 Hamburg'
       },
       phones: {
@@ -931,6 +942,7 @@ class TenantSeeder
         welcome_text: 'online freight calculator'
       },
       addresses: {
+        components: [],
         main: 'Wollkämmereistraße 1, 21107 Hamburg'
       },
       phones: {
@@ -1020,6 +1032,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/logos/mol-logistics/mol-logistics_background.jpg'
       },
       addresses: {
+        components: [],
         main: 'Wahlerstr. 20 40472 Düsseldorf'
       },
       phones: {
@@ -1115,6 +1128,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/logos/gs-logistics/gs-logistics_background.jpg'
       },
       addresses: {
+        components: [],
         main: 'Martinistraße 58 28195 Bremen'
       },
       phones: {
@@ -1210,6 +1224,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/logos/gtg-seefracht/gtg-seefracht_background.jpg'
       },
       addresses: {
+        components: [],
         main: 'Nagelsweg 26 20097 Hamburg'
       },
       phones: {
@@ -1301,6 +1316,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg'
       },
       addresses: {
+        components: [],
         main: 'Afrikastraße 3, 20457 Hamburg'
       },
       phones: {
@@ -1389,6 +1405,7 @@ class TenantSeeder
         background: 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
       },
       addresses: {
+        components: [],
         main: 'Am Spitzwald 9 D-21509 Glinde'
       },
       phones: {
@@ -1511,6 +1528,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/logos/trucking/trucking_background.jpg"
       },
       addresses: {
+        components: [],
         main:"Brooktorkai 7, 20457 Hamburg, Germany"
       },
       phones:{
@@ -1617,6 +1635,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/logos/truck_bg_1.jpg"
       },
       addresses: {
+        components: [],
         main:"Marlowring 19, 22525 Hamburg"
       },
       phones:{
@@ -1704,6 +1723,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
       },
       addresses: {
+        components: [],
         main:"Südportal 3, 6th floor, 22848 Norderstedt"
       },
       phones:{

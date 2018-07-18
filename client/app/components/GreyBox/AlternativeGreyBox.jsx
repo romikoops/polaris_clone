@@ -6,13 +6,18 @@ export default function AlternativeGreyBox ({
   title,
   content,
   wrapperClassName,
-  contentClassName
+  contentClassName,
+  titleAction
 }) {
   return (
     <div className={`${adminStyles.border_box} ${wrapperClassName}`}>
       <div className={contentClassName}>
-        {title ? (
-          <p className={`layout-align-start-center flex-100 layout-row ${adminStyles.title_grey}`}>{title}</p>
+        {title || titleAction ? (
+          <div className={`layout-align-space-between-center flex layout-row ${adminStyles.title_grey}`}>
+            {title ? <p className={`layout-align-start-center flex layout-row ${adminStyles.title_grey}`}>{title}</p> : ''}
+            {titleAction || ''}
+          </div>
+
         ) : (
           ''
         )}
@@ -25,6 +30,7 @@ export default function AlternativeGreyBox ({
 AlternativeGreyBox.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.node,
+  titleAction: PropTypes.node,
   wrapperClassName: PropTypes.string,
   contentClassName: PropTypes.string
 }
@@ -32,5 +38,6 @@ AlternativeGreyBox.propTypes = {
 AlternativeGreyBox.defaultProps = {
   wrapperClassName: '',
   contentClassName: '',
-  content: ['']
+  content: [''],
+  titleAction: false
 }

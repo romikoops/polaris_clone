@@ -30,7 +30,7 @@ class ShipmentsController < ApplicationController
   def new; end
 
   def test_email
-    tenant_notification_email(current_user, Shipment.first)
+    tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
   end
 
 
@@ -55,7 +55,9 @@ class ShipmentsController < ApplicationController
     end
 
     contacts = shipment.shipment_contacts.map do |sc|
-      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
+      if sc.contact
+        { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
+      end
     end
 
     documents = shipment.documents.map do |doc|
