@@ -29,6 +29,7 @@ module ExcelTool
         set_cargo_type(row)
         populate_new_pricings
         aux_data[pricing_key] ||= {}
+
         populate_aux_data(row)
         @itinerary = aux_data[pricing_key][:itinerary]
         update_aux_data_itinerary(row)
@@ -174,8 +175,8 @@ module ExcelTool
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin])
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination])
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
-        # byebug
         puts row
+        next
       end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
