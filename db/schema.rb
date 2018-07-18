@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180717140930) do
+ActiveRecord::Schema.define(version: 20180718075838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -336,6 +336,17 @@ ActiveRecord::Schema.define(version: 20180717140930) do
     t.boolean "on_carriage"
     t.boolean "import_charges"
     t.boolean "export_charges"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "map_data", force: :cascade do |t|
+    t.jsonb "line"
+    t.jsonb "geo_json"
+    t.decimal "origin", default: [], array: true
+    t.decimal "destination", default: [], array: true
+    t.string "itinerary_id"
+    t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -168,6 +168,7 @@ class AdminScheduleGenerator extends Component {
         hubHash[hub.data.id] = hub
       })
     }
+    debugger // eslint-disable-line
     console.log('mot', mot)
     const vehicleTypeOptions = []
     if (vehicleTypes && mot) {

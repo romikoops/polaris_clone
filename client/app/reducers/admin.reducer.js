@@ -868,7 +868,8 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_ROUTES_SUCCESS: {
       return {
         ...state,
-        itineraries: action.payload.data,
+        itineraries: action.payload.data.itineraries,
+        mapData: action.payload.data.mapData,
         loading: false
       }
     }

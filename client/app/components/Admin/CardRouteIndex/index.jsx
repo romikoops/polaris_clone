@@ -3,23 +3,15 @@ import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
 import adminStyles from '../Admin.scss'
-import SideOptionsBox from '../SideOptions/SideOptionsBox'
-import { CardRoutesPricing, PricingButton } from './SubComponents'
-// import { RoundButton } from '../../RoundButton/RoundButton'
-import FileUploader from '../../FileUploader/FileUploader'
-import DocumentsDownloader from '../../Documents/Downloader'
-import { adminPricing as priceTip } from '../../../constants'
-import PricingSearchBar from './SubComponents/PricingSearchBar'
 import {
-  filters,
-  gradientBorderGenerator,
-  gradientTextGenerator,
-  switchIcon,
-  capitalize
-} from '../../../helpers'
-import GradientBorder from '../../GradientBorder'
+  PricingButton,
+  CardRoutes
+} from './SubComponents'
 
-export default class CardPricingIndex extends Component {
+import PricingSearchBar from './SubComponents/PricingSearchBar'
+import { filters } from '../../../helpers'
+
+export default class CardRoutesIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -41,8 +33,12 @@ export default class CardPricingIndex extends Component {
   }
 
   handleClick (id) {
-    const { adminDispatch } = this.props
-    adminDispatch.getItineraryPricings(id, true)
+    const { adminDispatch, handleClick } = this.props
+    if (handleClick) {
+      handleClick(id)
+    } else {
+      adminDispatch.getItinerary(id, true)
+    }
   }
   prepPages () {
     const { itineraries } = this.props
@@ -53,7 +49,7 @@ export default class CardPricingIndex extends Component {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
         <div className="layout-row flex-100 layout-align-start-center layout-wrap">
-          {this.generateCardPricings(mot, limit)}
+          {this.generateCards(mot, limit)}
         </div>
       </div>
     )
@@ -66,7 +62,7 @@ export default class CardPricingIndex extends Component {
       }
     })
   }
-  generateCardPricings (mot, limit) {
+  generateCards (mot, limit) {
     const { itineraries, page, numPerPage } = this.state
     const { hubs, theme } = this.props
     let itinerariesArr = []
@@ -77,7 +73,7 @@ export default class CardPricingIndex extends Component {
         .slice(sliceStartIndex, sliceEndIndex)
         .filter(itinerary => itinerary.mode_of_transport === mot)
         .map((rt, i) => (
-          <CardRoutesPricing
+          <CardRoutes
             key={v4()}
             hubs={hubs}
             itinerary={rt}
@@ -90,7 +86,7 @@ export default class CardPricingIndex extends Component {
         .slice(sliceStartIndex, sliceEndIndex)
         .filter(itinerary => itinerary.mode_of_transport === mot)
         .map((rt, i) => (
-          <CardRoutesPricing
+          <CardRoutes
             key={v4()}
             hubs={hubs}
             itinerary={rt}
@@ -99,13 +95,12 @@ export default class CardPricingIndex extends Component {
           />
         ))
     }
-
+    if (itinerariesArr.length < 1) {
+      itinerariesArr.push(<h3 className="flex-none">No routes to display</h3>)
+    }
     return itinerariesArr
   }
-  lclUpload (file) {
-    const { documentDispatch } = this.props
-    documentDispatch.uploadPricings(file, 'lcl', false)
-  }
+  
   updateSearch (array, mot) {
     const { searchTexts } = this.state
 
@@ -135,17 +130,9 @@ export default class CardPricingIndex extends Component {
   render () {
     const { searchTexts, page, numPages } = this.state
     const {
-      theme, limit, scope, toggleCreator, mot
+      limit, scope, toggleNew, mot, newText, sideMenuNodes
     } = this.props
     if (!scope) return ''
-    const gradientBorderStyle =
-      theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
-        : { background: 'black' }
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
 
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
@@ -160,50 +147,29 @@ export default class CardPricingIndex extends Component {
               styles.titles_btn
             }`}
           >
-            <GradientBorder
-              wrapperClassName={`layout-column flex-100 ${styles.city}`}
-              gradient={gradientBorderStyle}
-              className="layout-column flex-100"
-              content={(
-                <div
-                  className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
-                >
-                  <div className={`${styles.card_over} flex-none`}>
-                    <div className={styles.center_items}>
-                      {switchIcon(mot, gradientFontStyle)}
-                      <div>
-                        <h5>{`${mot} freight`}</h5>
-                        <p>Routes</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            />
 
-            <div className="flex-100 layout-row layout-align-center-start">
+            <div className="flex-100 layout-row layout-align-center-start" style={{ minHeight: '560px' }}>
               {this.generateViewType(mot, limit)}
             </div>
             <div className="flex-95 layout-row layout-align-center-center margin_bottom">
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
                     `}
-                onClick={this.state.page > 1 ? () => this.deltaPage(-1) : null}
+                onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
-                {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                 <i className="fa fa-chevron-left" />
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
               </div>
               {}
-              <p>{this.state.page}</p>
+              <p>{page}</p>
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
                     `}
-                onClick={this.state.page < numPages ? () => this.deltaPage(1) : null}
+                onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
                 <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />
@@ -214,58 +180,18 @@ export default class CardPricingIndex extends Component {
         </div>
         <div className="flex-20 layout-row layout-align-end-end">
 
-          <div className="hide-sm hide-xs">
+          <div className="hide-sm hide-xs flex-100">
             <PricingSearchBar
               onChange={(e, t) => this.handlePricingSearch(e, t)}
               value={searchTexts[mot]}
               target={mot}
             />
-            <SideOptionsBox
-              header="Uploads"
-              content={
-                <div
-                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={e => this.lclUpload(e)}
-                      tooltip={priceTip.upload_lcl}
-                      type="xlsx"
-                      text="Dedicated Pricings .xlsx"
-                    />
-
-                  </div>
-
-                </div>
-              }
-            />
-            <SideOptionsBox
-              header="Downloads"
-              content={
-                <div
-                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot }} />
-                  </div>
-                </div>
-              }
-            />
-            <PricingButton
-              onClick={toggleCreator}
+            {sideMenuNodes}
+            {toggleNew ? <PricingButton
+              onClick={toggleNew}
+              text={newText}
               onDisabledClick={() => console.log('this button is disabled')}
-            />
+            /> : ''}
 
           </div>
         </div>
@@ -273,30 +199,32 @@ export default class CardPricingIndex extends Component {
     )
   }
 }
-CardPricingIndex.propTypes = {
+CardRoutesIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
   limit: PropTypes.number,
-  toggleCreator: PropTypes.func,
+  toggleNew: PropTypes.func,
+  handleClick: PropTypes.func,
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
     getRoutePricings: PropTypes.func
   }).isRequired,
-  documentDispatch: PropTypes.shape({
-    closeViewer: PropTypes.func,
-    uploadPricings: PropTypes.func
-  }).isRequired,
   scope: PropTypes.scope,
-  mot: PropTypes.string
+  mot: PropTypes.string,
+  newText: PropTypes.string,
+  sideMenuNodes: PropTypes.arrayOf(PropTypes.node)
 }
 
-CardPricingIndex.defaultProps = {
+CardRoutesIndex.defaultProps = {
   theme: null,
   mot: '',
   hubs: [],
   itineraries: [],
   scope: null,
   limit: 9,
-  toggleCreator: null
+  toggleNew: null,
+  handleClick: null,
+  newText: '',
+  sideMenuNodes: null
 }

@@ -14,7 +14,8 @@ class Admin::DashboardController < Admin::AdminBaseController
         requested: @requested_shipments,
         open: @open_shipments,
         finished: @finished_shipments
-      })
+      },
+      mapData: @map_data)
   end
 
   private
@@ -25,7 +26,11 @@ class Admin::DashboardController < Admin::AdminBaseController
     @open_shipments = open_shipments
     @finished_shipments = finished_shipments
     @detailed_itineraries = detailed_itin_json
-    @hubs = Hub.prepped(current_user)
+    hubs = current_user.tenant.hubs
+    @hubs = hubs.limit(8).map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    @map_data = current_user.tenant.map_data
     @tenant = Tenant.find(current_user.tenant_id)
     @train_schedules = flap_map_schedule_by_mot("rail")
     @ocean_schedules = flap_map_schedule_by_mot("ocean")
@@ -52,8 +57,8 @@ class Admin::DashboardController < Admin::AdminBaseController
 
 
   def detailed_itin_json
-    Itinerary.for_tenant(current_user.tenant_id).map do |itinerary|
-      itinerary.as_options_json(methods: :routes)
+    Itinerary.for_tenant(current_user.tenant_id).limit(40).map do |itinerary|
+      itinerary.as_options_json()
     end
   end
 

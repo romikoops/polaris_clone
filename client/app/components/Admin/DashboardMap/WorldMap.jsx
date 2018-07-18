@@ -46,22 +46,32 @@ export class WorldMap extends Component {
 
   render () {
     const {
-      itineraries, hoverId, height, theme
+      itineraries, hoverId, height, theme, mapData
     } = this.props
     if (!itineraries) return ''
     /* eslint no-else-return: "off" */
     const originArr = []
     const destinationArr = []
     const routeArr = []
-    itineraries.forEach((itinerary) => {
-      itinerary.routes.forEach((route) => {
-        originArr.push({ hovered: itinerary.id === hoverId, data: route.origin, id: itinerary.id })
+    if (mapData.length > 0) {
+      mapData.forEach((route) => {
+        originArr.push({ hovered: route.itinerary_id === hoverId, data: route.origin, id: route.itinerary_id })
         destinationArr.push({
-          hovered: itinerary.id === hoverId, data: route.destination, id: itinerary.id
+          hovered: route.itinerary_id === hoverId, data: route.destination, id: route.itinerary_id
         })
-        routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
+        routeArr.push({ hovered: route.itinerary_id === hoverId, data: route.line, id: route.itinerary_id })
       })
-    })
+    } else {
+      itineraries.forEach((itinerary) => {
+        itinerary.routes.forEach((route) => {
+          originArr.push({ hovered: itinerary.id === hoverId, data: route.origin, id: itinerary.id })
+          destinationArr.push({
+            hovered: itinerary.id === hoverId, data: route.destination, id: itinerary.id
+          })
+          routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
+        })
+      })
+    }
     // const zoom = d3.behavior.zoom()
     // .translate(projection.translate())
     // .scale(projection.scale())

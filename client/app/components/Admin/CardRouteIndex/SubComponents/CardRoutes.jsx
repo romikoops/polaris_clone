@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styles from '../Card.scss'
 import { gradientTextGenerator, switchIcon } from '../../../../helpers'
 
-class CardRoutesPricing extends Component {
+class CardRoutes extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -52,30 +52,22 @@ class CardRoutesPricing extends Component {
             </div>
             {switchIcon(itinerary.mode_of_transport, gradientFontStyle)}
           </div>
-          <div className={styles.bottom_routes}>
-            {itinerary.users_with_pricing ? <p>
-              <strong> {itinerary.users_with_pricing} </strong> clients
-            </p> : '' }
-            { itinerary.pricing_count ? <p>
-              <strong> {itinerary.pricing_count} </strong> pricings
-            </p> : '' }
-          </div>
         </div>
       </div>
     )
   }
 }
 
-CardRoutesPricing.propTypes = {
+CardRoutes.propTypes = {
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
   handleClick: PropTypes.func.isRequired,
   onDisabledClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   theme: PropTypes.theme
 }
-CardRoutesPricing.defaultProps = {
+CardRoutes.defaultProps = {
   disabled: false,
   theme: {}
 }
 
-export default CardRoutesPricing
+export default CardRoutes

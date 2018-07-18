@@ -177,6 +177,7 @@ class Admin extends Component {
                       theme={theme}
                       {...props}
                       hubs={hubHash}
+                      scope={tenant.data.scope}
                       adminDispatch={adminDispatch}
                       scheduleData={schedules}
                     />

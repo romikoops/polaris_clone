@@ -38,6 +38,7 @@ class Tenant < ApplicationRecord
   has_many :buyer_incoterm_charges, through: :incoterms
   has_many :conversations
   has_many :max_dimensions_bundles
+  has_many :map_data
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true

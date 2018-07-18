@@ -90,7 +90,7 @@ export class AdminDashboard extends Component {
       return <Loading theme={theme} />
     }
     const {
-      shipments, air, ocean, itineraries
+      shipments, air, ocean, itineraries, mapData
     } = dashData
     const clientHash = {}
 
@@ -101,7 +101,7 @@ export class AdminDashboard extends Component {
     }
     const filteredClients = clients ? clients.filter(x => !x.guest) : []
     const schedArr = []
-
+    debugger // eslint-disable-line
     const mergedOpenShipments =
       shipments && shipments.open
         ? shipments.open
@@ -300,6 +300,7 @@ export class AdminDashboard extends Component {
               itineraries={itineraries}
               theme={theme}
               hubs={hubs}
+              mapData={mapData}
               adminDispatch={adminDispatch}
               tooltip={adminTip.routes}
               icon="fa-info-circle"
@@ -352,7 +353,8 @@ AdminDashboard.propTypes = {
   theme: PropTypes.theme,
   loading: PropTypes.bool,
   dashData: PropTypes.shape({
-    schedules: PropTypes.array
+    schedules: PropTypes.array,
+    mapData: PropTypes.arrayOf(PropTypes.object)
   }),
   adminDispatch: PropTypes.shape({
     getDashboard: PropTypes.func,
