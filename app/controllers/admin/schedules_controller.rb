@@ -15,7 +15,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def show
     itinerary = Itinerary.find(params[:id])
     schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
-    response_handler(schedules: schedules, itinerary: itinerary)
+    response_handler(schedules: schedules, itinerary: itinerary.as_options_json())
   end
 
   def auto_generate_schedules    
@@ -103,7 +103,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def itinerary_route_json
     Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
-      itinerary.as_options_json(methods: :routes)
+      itinerary.as_options_json()
     end
   end
 

@@ -10,7 +10,7 @@ import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
-import { capitalize } from '../../helpers'
+import { capitalize, gradientTextGenerator, switchIcon } from '../../helpers'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
@@ -79,12 +79,18 @@ export class AdminPricingsIndex extends Component {
       itineraries, detailedItineraries, transportCategories, lastUpdate
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+    const truckIcon = <i className="fa fa-truck clip flex-none" style={gradientFontStyle} />
 
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
+      icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardPricingIndex
         itineraries={detailedItineraries}
@@ -121,6 +127,7 @@ export class AdminPricingsIndex extends Component {
     motTabs.push(<Tab
       tabTitle="Trucking"
       theme={theme}
+      icon={truckIcon}
     >
       <AdminTrucking
         theme={theme}

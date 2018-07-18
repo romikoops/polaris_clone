@@ -98,9 +98,10 @@ export default class CardRoutesIndex extends Component {
     if (itinerariesArr.length < 1) {
       itinerariesArr.push(<h3 className="flex-none">No routes to display</h3>)
     }
+
     return itinerariesArr
   }
-  
+
   updateSearch (array, mot) {
     const { searchTexts } = this.state
 

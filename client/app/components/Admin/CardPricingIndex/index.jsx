@@ -12,12 +12,8 @@ import { adminPricing as priceTip } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import {
   filters,
-  gradientBorderGenerator,
-  gradientTextGenerator,
-  switchIcon,
   capitalize
 } from '../../../helpers'
-import GradientBorder from '../../GradientBorder'
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
@@ -138,15 +134,6 @@ export default class CardPricingIndex extends Component {
       theme, limit, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
-    const gradientBorderStyle =
-      theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
-        : { background: 'black' }
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
-
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
@@ -160,50 +147,29 @@ export default class CardPricingIndex extends Component {
               styles.titles_btn
             }`}
           >
-            <GradientBorder
-              wrapperClassName={`layout-column flex-100 ${styles.city}`}
-              gradient={gradientBorderStyle}
-              className="layout-column flex-100"
-              content={(
-                <div
-                  className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
-                >
-                  <div className={`${styles.card_over} flex-none`}>
-                    <div className={styles.center_items}>
-                      {switchIcon(mot, gradientFontStyle)}
-                      <div>
-                        <h5>{`${mot} freight`}</h5>
-                        <p>Routes</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            />
-
-            <div className="flex-100 layout-row layout-align-center-start">
+            <div className="flex-100 layout-row layout-align-center-start" style={{ minHeight: '560px' }}>
               {this.generateViewType(mot, limit)}
             </div>
             <div className="flex-95 layout-row layout-align-center-center margin_bottom">
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
                     `}
-                onClick={this.state.page > 1 ? () => this.deltaPage(-1) : null}
+                onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
-                {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
+                {/* style={page === 1 ? { display: 'none' } : {}} */}
                 <i className="fa fa-chevron-left" />
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
               </div>
               {}
-              <p>{this.state.page}</p>
+              <p>{page}</p>
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${this.state.page < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
                     `}
-                onClick={this.state.page < numPages ? () => this.deltaPage(1) : null}
+                onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
                 <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />

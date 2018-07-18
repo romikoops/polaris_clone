@@ -146,7 +146,10 @@ class AdminScheduleGenerator extends Component {
   }
   render () {
     const {
-      theme, hubs, vehicleTypes, itineraries
+      theme,
+      vehicleTypes,
+      itineraries,
+      itinerary
     } = this.props
     const {
       weekdays,
@@ -162,13 +165,6 @@ class AdminScheduleGenerator extends Component {
     const future = {
       after: new Date()
     }
-    const hubHash = {}
-    if (hubs) {
-      hubs.forEach((hub) => {
-        hubHash[hub.data.id] = hub
-      })
-    }
-    debugger // eslint-disable-line
     console.log('mot', mot)
     const vehicleTypeOptions = []
     if (vehicleTypes && mot) {
@@ -235,9 +231,9 @@ class AdminScheduleGenerator extends Component {
         (stops[i + 1] ? (
           <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none">{hubHash[s.hub_id].data.name}</p>
+              <p className="flex-none">{itinerary.stops[0].hub.name}</p>
               <p className="flex-none">-></p>
-              <p className="flex-none">{hubHash[stops[i + 1].hub_id].data.name}</p>
+              <p className="flex-none">{itinerary.stops[1].hub.name}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box_full">
               <input

@@ -89,8 +89,10 @@ export class AdminRoutesIndex extends Component {
         theme={theme}
         scope={scope}
         mot={mot}
+        newText="New Route"
         adminDispatch={adminDispatch}
-        toggleNewRoute={toggleNewRoute}
+        toggleNew={toggleNewRoute}
+        handleClick={id => adminDispatch.getItinerary(id, true)}
       />
     </Tab>))
     motTabs.push(<Tab
@@ -103,7 +105,7 @@ export class AdminRoutesIndex extends Component {
           itineraries={itineraries}
           theme={theme}
           mapData={mapData}
-         
+
         />
       </div>
     </Tab>)

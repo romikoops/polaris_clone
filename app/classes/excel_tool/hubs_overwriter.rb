@@ -128,7 +128,7 @@ module ExcelTool
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: mandatory_charge
+          mandatory_charge: @mandatory_charge
         )
       end
 
@@ -143,7 +143,7 @@ module ExcelTool
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: mandatory_charge
+          mandatory_charge: @mandatory_charge
         )
       end
 

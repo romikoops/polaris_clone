@@ -164,6 +164,9 @@ module ExcelTool
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= Location.find_by(name: row[:origin], location_type: "nexus")
       aux_data[pricing_key][:destination] ||= Location.find_by(name: row[:destination], location_type: "nexus")
+      if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
+        byebug
+      end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
