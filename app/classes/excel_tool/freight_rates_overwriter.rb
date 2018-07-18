@@ -154,6 +154,15 @@ module ExcelTool
         }
     end
 
+    def find_nexus(string)
+      nexus = Location.find_by(name: string, location_type: "nexus")
+      if nexus
+        return nexus
+      else
+        nexus = Location.where("name ILIKE ? AND location_type = ?", string, "nexus").first
+      end
+    end
+
     def populate_aux_data(row)
       if aux_data[pricing_key][:tenant_vehicle].blank?
         vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot], tenant_id: tenant.id)
@@ -162,8 +171,8 @@ module ExcelTool
 
       aux_data[pricing_key][:customer] = User.find(row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
-      aux_data[pricing_key][:origin] ||= Location.find_by(name: row[:origin], location_type: "nexus")
-      aux_data[pricing_key][:destination] ||= Location.find_by(name: row[:destination], location_type: "nexus")
+      aux_data[pricing_key][:origin] ||= find_nexus(row[:origin])
+      aux_data[pricing_key][:destination] ||= find_nexus(row[:destination])
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
         # byebug
         puts row
