@@ -135,7 +135,7 @@ module ExcelTool
         if row[:destination]
           counterpart_hub = find_hub(row)
           if !counterpart_hub
-            byebug
+            # byebug
           end
           counterpart_hub_id = counterpart_hub.id
           hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id]
