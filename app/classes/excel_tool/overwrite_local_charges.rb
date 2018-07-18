@@ -136,6 +136,7 @@ module ExcelTool
           counterpart_hub = find_hub(row)
           if !counterpart_hub
             # byebug
+            puts row
           end
           counterpart_hub_id = counterpart_hub.id
           hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id]
