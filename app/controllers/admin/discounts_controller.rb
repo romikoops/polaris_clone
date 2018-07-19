@@ -1,16 +1,9 @@
 # frozen_string_literal: true
 
-class Admin::DiscountsController < ApplicationController
-  before_action :require_login_and_role_is_admin
+class Admin::DiscountsController < Admin::AdminBaseController
 
   def index
-    (@filterrific = initialize_filterrific(
-      User,
-      params[:filterrific],
-      select_options: {
-        sorted_by: User.options_for_sorted_by
-      }
-    )) || return
+    (@filterrific = initialize_filters("User")) || return
     @users = @filterrific.find.page(params[:page])
 
     respond_to do |format|
@@ -21,16 +14,8 @@ class Admin::DiscountsController < ApplicationController
 
   def user_routes
     @user = User.find(params[:user_id])
-
-    (@filterrific = initialize_filterrific(
-      Route,
-      params[:filterrific],
-      select_options: {
-        sorted_by: Route.options_for_sorted_by
-      }
-    )) || return
+    (@filterrific = initialize_filters("Route")) || return
     @routes = @filterrific.find.page(params[:page])
-
     @user_discounts = UserRouteDiscount.where(user: @user)
 
     respond_to do |format|
@@ -47,12 +32,7 @@ class Admin::DiscountsController < ApplicationController
     routes = Route.where(id: params[:select_route])
 
     routes.each do |route|
-      urd = UserRouteDiscount.find_by(user: user, route: route)
-      if urd
-        urd.update_attributes(discount_by: discount_by)
-      else
-        UserRouteDiscount.create(user: user, route: route, discount_by: discount_by)
-      end
+      process_user_route_discount(user, route, discount_by)
     end
 
     redirect_to :back
@@ -60,10 +40,22 @@ class Admin::DiscountsController < ApplicationController
 
   private
 
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name == "admin"
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
+  def process_user_route_discount(user, route, discount_by)
+    urd = UserRouteDiscount.find_by(user: user, route: route)
+    if urd
+      urd.update_attributes(discount_by: discount_by)
+    else
+      UserRouteDiscount.create(user: user, route: route, discount_by: discount_by)
     end
+  end
+
+  def initialize_filters(klass)
+    initialize_filterrific(
+      klass.constantize,
+      params[:filterrific],
+      select_options: {
+        sorted_by: klass.constantize.options_for_sorted_by
+      }
+    )
   end
 end

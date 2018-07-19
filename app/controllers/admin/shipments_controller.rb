@@ -1,34 +1,32 @@
 # frozen_string_literal: true
 
-class Admin::ShipmentsController < ApplicationController
-  before_action :require_login_and_role_is_admin
+class Admin::ShipmentsController < Admin::AdminBaseController
   before_action :do_for_show, only: :show
   include ShippingTools
   include NotificationTools
 
   def index
-    response_handler({
+    response_handler(
       requested: requested_shipments,
       open:      open_shipments,
       finished:  finished_shipments,
       documents: documents
-    })
+    )
   end
 
   def show
     prepare_response
-    response_handler({
+    response_handler(
       shipment:        shipment_as_json,
       cargoItems:      @cargo_items,
       containers:      @containers,
       aggregatedCargo: @shipment.aggregated_cargo,
       contacts:        contacts,
       documents:       @documents,
-      schedules:       @schedules,
       locations:       locations,
       cargoItemTypes:  cargo_item_types,
       accountHolder:   @shipment.user
-    })
+    )
   end
 
   def edit_price
@@ -39,21 +37,18 @@ class Admin::ShipmentsController < ApplicationController
   def edit_service_price
     @shipment = Shipment.find(params[:id])
     new_price = Price.new(price_params)
-    edit_service_charge.edited_price = new_price
+    charge = edit_service_charge_breakdown.charge(params["charge_category"])
+    charge.edited_price = new_price
 
-    if edit_service_charge.save
-      update_charge_parent
-      response_handler(@shipment.as_options_json())
-	  else
+    if charge.save
+      update_charge_parent(charge)
+      response_handler(@shipment.as_options_json)
+    else
       response_handler(resp_error)
-	  end
+    end
   end
 
   def edit_time
-    options = {
-      methods: %i(selected_offer mode_of_transport),
-      include: %i(destination_nexus origin_nexus destination_hub origin_hub)
-    }
     add_message_to_convo(update_schedule_shipment.user, schedule_message, true)
     response_handler(update_schedule_shipment.with_address_options_json)
   end
@@ -67,9 +62,7 @@ class Admin::ShipmentsController < ApplicationController
 
   def update
     @shipment = Shipment.find(params[:id])
-    if params[:shipment_action]
-      shipment_action
-    end
+    shipment_action if params[:shipment_action]
   end
 
   def document_action
@@ -81,8 +74,6 @@ class Admin::ShipmentsController < ApplicationController
 
     response_handler(tmp)
   end
-
-  
 
   private
 
@@ -108,8 +99,8 @@ class Admin::ShipmentsController < ApplicationController
       message:   @shipments.errors.full_messages.join("\n")
     )
   end
-  
-  def update_charge_parent
+
+  def update_charge_parent(edit_service_charge)
     unless edit_service_charge.parent.nil?
       edit_service_charge.parent.update_edited_price!
       edit_service_charge.parent.save!
@@ -118,10 +109,6 @@ class Admin::ShipmentsController < ApplicationController
 
   def edit_service_charge_breakdown
     @shipment.charge_breakdowns.selected
-  end
-
-  def edit_service_charge
-    edit_service_charge_breakdown.charge(params["charge_category"])
   end
 
   def shipment_action
@@ -153,8 +140,6 @@ class Admin::ShipmentsController < ApplicationController
       shipment = Shipment.find(params[:id])
       shipment.planned_eta = new_eta
       shipment.planned_etd = new_etd
-      shipment.schedule_set[0]["eta"] = new_eta
-      shipment.schedule_set[0]["etd"] = new_etd
       shipment.save!
       @shipment = shipment
     end
@@ -169,7 +154,7 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def update_shipment
-    if @shipment 
+    if @shipment
       @shipment
     else
       shipment = Shipment.find(params[:id])
@@ -184,7 +169,6 @@ class Admin::ShipmentsController < ApplicationController
     add_hs_code
     populate_contacts
     populate_documents
-    @schedules = @shipment.schedule_set
   end
 
   def shipment_as_json
@@ -193,22 +177,21 @@ class Admin::ShipmentsController < ApplicationController
 
   def locations
     @locations ||= {
-      origin: @shipment.origin_nexus,
+      origin:      @shipment.origin_nexus,
       destination: @shipment.destination_nexus
     }
-    
   end
 
   def options
     @options ||= {
-      methods: [:selected_offer, :mode_of_transport],
-      include:[ { destination_nexus: {}},
-        { origin_nexus: {}},
-        { destination_hub: {}},
-        { origin_hub: {}} ]
+      methods: %i(selected_offer mode_of_transport),
+      include: [{ destination_nexus: {} },
+                { origin_nexus: {} },
+                { destination_hub: {} },
+                { origin_hub: {} }]
     }
   end
-  
+
   def populate_documents
     @documents = []
     @shipment.documents.each do |doc|
@@ -227,9 +210,9 @@ class Admin::ShipmentsController < ApplicationController
   def populate_contacts
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
-      contacts.push(contact: sc.contact,
-        type: sc.contact_type,
-        location: sc.contact.location)
+      contacts.push(contact:  sc.contact,
+                    type:     sc.contact_type,
+                    location: sc.contact.location)
     end
   end
 
@@ -266,40 +249,27 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def tenant_shipment
-     @shipment ||= Shipment.where(tenant_id: current_user.tenant_id)
+    @shipment ||= Shipment.where(tenant_id: current_user.tenant_id)
   end
 
   def requested_shipments
-    @requested_shipments ||= tenant_shipment.requested.map do |shipment|
-      shipment.with_address_options_json
-    end
+    @requested_shipments ||= tenant_shipment.requested.map(&:with_address_options_json)
   end
 
   def open_shipments
-    @open_shipments ||= tenant_shipment.open.map do |shipment|
-      shipment.with_address_options_json
-    end
+    @open_shipments ||= tenant_shipment.open.map(&:with_address_options_json)
   end
 
   def finished_shipments
-    @finished_shipments ||= tenant_shipment.finished.map do |shipment|
-      shipment.with_address_options_json
-    end
+    @finished_shipments ||= tenant_shipment.finished.map(&:with_address_options_json)
   end
 
   def documents
     @documents ||= {
       "requested_shipments" => Document.get_documents_for_array(tenant_shipment.requested),
-      "open_shipments" => Document.get_documents_for_array(tenant_shipment.open),
-      "finished_shipments" => Document.get_documents_for_array(tenant_shipment.finished)
+      "open_shipments"      => Document.get_documents_for_array(tenant_shipment.open),
+      "finished_shipments"  => Document.get_documents_for_array(tenant_shipment.finished)
     }
-  end
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 
   def shipment_params
@@ -312,24 +282,24 @@ class Admin::ShipmentsController < ApplicationController
 
   def approved_document_message
     {
-      title: "Document Approved",
-      message: "Your document #{@document.text} was approved",
+      title:       "Document Approved",
+      message:     "Your document #{@document.text} was approved",
       shipmentRef: @document.shipment.imc_reference
     }
   end
-  
+
   def rejected_document_message
     {
-      title: "Document Rejected",
-      message: "Your document #{@document.text} was rejected: #{params[:text]}",
+      title:       "Document Rejected",
+      message:     "Your document #{@document.text} was rejected: #{params[:text]}",
       shipmentRef: @document.shipment.imc_reference
     }
   end
 
   def price_message
     {
-      title: "Shipment Price Change",
-      message: "Your shipment #{update_shipment.imc_reference} has an updated price. \
+      title:       "Shipment Price Change",
+      message:     "Your shipment #{update_shipment.imc_reference} has an updated price. \
         Your new total is #{params[:priceObj]['currency']} #{params[:priceObj]['value']}. \
         For any issues, please contact your support agent.",
       shipmentRef: update_shipment.imc_reference
@@ -338,8 +308,8 @@ class Admin::ShipmentsController < ApplicationController
 
   def schedule_message
     {
-      title: "Shipment Schedule Updated",
-      message: "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
+      title:       "Shipment Schedule Updated",
+      message:     "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
         Your new estimated departure is #{params[:timeObj]['newEtd']}, estimated to \
         arrive at #{params[:timeObj]['newEta']}. For any issues, please contact your \
         support agent.",
@@ -349,8 +319,8 @@ class Admin::ShipmentsController < ApplicationController
 
   def booking_accepted_message
     {
-      title: "Booking Accepted",
-      message: "Your booking has been accepted! If you have any further questions or \
+      title:       "Booking Accepted",
+      message:     "Your booking has been accepted! If you have any further questions or \
         edits to your booking please contact the support department.",
       shipmentRef: @shipment.imc_reference
     }
@@ -358,8 +328,8 @@ class Admin::ShipmentsController < ApplicationController
 
   def booking_declined_message
     {
-      title: "Booking Declined",
-      message: "Your booking has been declined! This could be due to a number of \
+      title:       "Booking Declined",
+      message:     "Your booking has been declined! This could be due to a number of \
         reasons including cargo size/weight and goods type. For more info contact \
         us through the support channels.",
       shipmentRef: @shipment.imc_reference

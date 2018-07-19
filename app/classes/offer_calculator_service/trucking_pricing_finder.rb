@@ -2,14 +2,14 @@
 
 module OfferCalculatorService
   class TruckingPricingFinder < Base
-    def initialize(args = {})
+    def initialize(args={})
       @address          = args[:address]
       @trucking_details = args[:trucking_details]
       @carriage         = args[:carriage]
       super(args[:shipment])
     end
 
-    def exec(hub_id, distance)
+    def perform(hub_id, distance)
       TruckingPricing.find_by_filter(
         location:   @address,
         load_type:  @shipment.load_type,

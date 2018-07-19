@@ -8,7 +8,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, totalPriceString, totalPrice } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
@@ -227,7 +227,6 @@ export class BookingConfirmation extends Component {
     const LocationsOrigin = getLocationsOrigin({ shipment, locations })
     const LocationsDestination = getLocationsDestination({ shipment, locations })
     const arrivalTime = getArrivalTime(shipment)
-    const totalPrice = getTotalPrice(shipment)
     const status = shipmentStatii[shipment.status]
 
     const expectedTime = shipment.has_pre_carriage
@@ -341,7 +340,7 @@ export class BookingConfirmation extends Component {
                 </div>
                 <div className={`${ROW(30)} ${ALIGN_END_CENTER}`}>
                   <h5 className="flex-none letter_3">
-                    {`${shipment.total_price.currency} ${calcFareTotals(feeHash)}`}
+                    {`${totalPrice(shipment).currency} ${calcFareTotals(feeHash)}`}
                   </h5>
                 </div>
               </div>
@@ -369,7 +368,7 @@ export class BookingConfirmation extends Component {
                 </div>
                 <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
                   <h5 className="flex-none letter_3">{`${
-                    shipment.total_price.currency
+                    totalPrice(shipment).currency
                   } ${calcExtraTotals(feeHash)} `}</h5>
                   { feeHash.customs && feeHash.customs.hasUnknown && (
                     <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
@@ -396,7 +395,7 @@ export class BookingConfirmation extends Component {
             <h3 className="flex-none letter_3">Shipment Total: </h3>
           </div>
           <div className={`${WRAP_ROW(30)} ${ALIGN_END_CENTER}`}>
-            <h3 className="flex-none letter_3">{totalPrice}</h3>
+            <h3 className="flex-none letter_3">{totalPriceString(shipment)}</h3>
             <div className={`${ROW(100)} ${ALIGN_END_CENTER}`}>
               <p className="flex-none center no_m" style={{ fontSize: '12px' }}>
                 {' '}
@@ -707,14 +706,14 @@ function getDocs ({
 }) {
   const docChecker = {
     packing_sheet: false,
-    commercial_invoice: false,
-    customs_declaration: false,
-    customs_value_declaration: false,
-    eori: false,
-    certificate_of_origin: false,
-    dangerous_goods: false,
-    bill_of_lading: false,
-    invoice: false
+    commercial_invoice: false
+    // customs_declaration: false,
+    // customs_value_declaration: false,
+    // eori: false,
+    // certificate_of_origin: false,
+    // dangerous_goods: false,
+    // bill_of_lading: false,
+    // invoice: false
   }
   const docView = []
   const missingDocs = []
@@ -905,13 +904,6 @@ function getArrivalTime (shipment) {
   const format = 'DD/MM/YYYY | HH:mm'
 
   return `${moment(shipment.planned_eta).format(format)}`
-}
-
-function getTotalPrice (shipment) {
-  const { currency } = shipment.total_price
-  const price = parseFloat(shipment.total_price.value).toFixed(2)
-
-  return `${currency} ${price} `
 }
 
 function TotalGoodsValue (shipment) {

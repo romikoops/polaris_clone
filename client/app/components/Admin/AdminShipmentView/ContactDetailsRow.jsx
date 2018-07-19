@@ -105,7 +105,7 @@ export default function ContactDetailsRow ({
   }
 
   return (
-    <div className={`layout-row flex-100 layout-wrap ${adminStyles.margin_bottom} ${adminStyles.margin_box_right}`}>
+    <div className={`layout-row flex-100 layout-wrap margin_bottom ${adminStyles.margin_box_right}`}>
       <div className="flex-100 flex-gt-sm-40 layout-row layout-align-center-center card_padding_right">
         <AlternativeGreyBox
           title="Shipper"

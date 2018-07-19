@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class Admin::SchedulesController < ApplicationController
-  before_action :require_login_and_role_is_admin
+class Admin::SchedulesController < Admin::AdminBaseController
   before_action :initialize_variables, only: [:index, :auto_generate_schedules]
   include ItineraryTools
-  include ExcelTools
+  # include ExcelTools
 
   def index
     response_handler(air: @air_schedules,
@@ -56,8 +55,8 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_trains
     if params[:file]
-      req = { "xlsx" => params[:file], "mot" => "rail" }
-      results = overwrite_all_schedules(req)
+      req = { "xlsx" => params[:file]}
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "rail", _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -66,8 +65,8 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_vessels
     if params[:file]
-      req = { "xlsx" => params[:file], "mot" => "ocean" }
-      results = overwrite_all_schedules(req)
+      req = { "xlsx" => params[:file] }
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "ocean", _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -76,8 +75,8 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_air
     if params[:file]
-      req = { "xlsx" => params[:file], "mot" => "air" }
-      results = overwrite_all_schedules(req)
+      req = { "xlsx" => params[:file]}
+      results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "air", _user: current_user).perform
       response_handler(results)
     else
       response_handler(false)
@@ -137,16 +136,5 @@ class Admin::SchedulesController < ApplicationController
 
   def trip
     @trip ||= Trip.find(params[:id])
-  end
-
-  def is_current_tenant?
-    current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-  end
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 end

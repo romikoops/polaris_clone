@@ -202,7 +202,7 @@ export class AdminHubsIndex extends Component {
     ))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="layout-row flex-80 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer">
@@ -220,26 +220,32 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.hubType}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('hubType')}
-                        headingText="Hub Type"
+                        text="Hub Type"
                         faClass="fa fa-ship"
                         content={typeFilters}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.status}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('status')}
-                        headingText="Status"
+                        text="Status"
                         faClass="fa fa-ship"
                         content={statusFilters}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.countries}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('countries')}
-                        headingText="Country"
+                        text="Country"
                         faClass="fa fa-flag"
                         content={countryFilters}
                       />
@@ -253,10 +259,12 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.upload}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('upload')}
-                        headingText="Upload Data"
+                        text="Upload Data"
                         faClass="fa fa-cloud-upload"
                         content={(
                           <div>
@@ -292,10 +300,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.download}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('download')}
-                        headingText="Download Data"
+                        text="Download Data"
                         faClass="fa fa-cloud-download"
                         content={(
                           <div>
@@ -335,10 +345,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.new}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('new')}
-                        headingText="Create New Hub"
+                        text="Create New Hub"
                         faClass="fa fa-plus-circle"
                         content={(
                           <div

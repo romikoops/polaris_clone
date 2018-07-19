@@ -18,7 +18,9 @@ import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
-  switchIcon
+  switchIcon,
+  totalPrice,
+  formattedPriceValue
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 
@@ -53,13 +55,13 @@ export class AdminShipmentView extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 2) {
+    if (loadType === 'cargo_item' && cargoCount > 3) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 2) {
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 2) {
+    } else if (loadType === 'container' && cargoCount > 3) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 2) {
+    } else if (loadType === 'container' && cargoCount === 3) {
       noun = 'Container'
     }
 
@@ -77,26 +79,28 @@ export class AdminShipmentView extends Component {
   }
   constructor (props) {
     super(props)
+
+    const { shipment } = this.props.shipmentData
     this.state = {
       showEditPrice: false,
       showEditServicePrice: false,
       newTotal: 0,
       showEditTime: false,
-      currency: this.props.shipmentData.shipment.selected_offer.total.currency,
+      currency: totalPrice(shipment).currency,
       newTimes: {
         eta: {
-          day: new Date(moment(this.props.shipmentData.shipment.planned_eta).format())
+          day: new Date(moment(shipment.planned_eta).format())
         },
         etd: {
-          day: new Date(moment(this.props.shipmentData.shipment.planned_etd).format())
+          day: new Date(moment(shipment.planned_etd).format())
         }
       },
       newPrices: {
-        trucking_pre: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_pre),
-        trucking_on: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.trucking_on),
-        cargo: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.cargo),
-        insurance: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.insurance),
-        customs: AdminShipmentView.checkSelectedOffer(this.props.shipmentData.shipment.selected_offer.customs)
+        trucking_pre: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_pre),
+        trucking_on: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_on),
+        cargo: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.cargo),
+        insurance: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.insurance),
+        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
@@ -344,8 +348,7 @@ export class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
-      aggregatedCargo,
-      schedules
+      aggregatedCargo
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -398,7 +401,9 @@ export class AdminShipmentView extends Component {
 
     const statusRequested = (shipment.status === 'requested') ? (
       <GradientBorder
-        wrapperClassName={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 ${adminStyles.header_margin_buffer}  ${styles.status_box_requested}`}
+        wrapperClassName={`
+          layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
+          ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
@@ -541,7 +546,7 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const cargoCount = Object.keys(feeHash.cargo).length - 1
+    const cargoCount = Object.keys(feeHash.cargo).length - 2
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -567,7 +572,7 @@ export class AdminShipmentView extends Component {
           <hr className="layout-row flex-md-40 flex-55" />
           <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.margin_bottom}`}>
+        <div className="layout-row flex-100 margin_bottom">
 
           <GradientBorder
             wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
@@ -593,7 +598,7 @@ export class AdminShipmentView extends Component {
                 {switchIcon()}
               </div>
               <p className="">Estimated time delivery</p>
-              <h5>{moment(schedules[0].eta).diff(moment(schedules[0].etd), 'days')} days{' '}</h5>
+              <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
             </div>
           </div>
 
@@ -617,7 +622,7 @@ export class AdminShipmentView extends Component {
           />
         </div>
 
-        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>
+        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
               <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
@@ -678,12 +683,12 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`${adminStyles.border_box} ${adminStyles.margin_bottom} layout-sm-column layout-xs-column layout-row flex-100`}>
+        <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
           <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                     <p>Pre-Carriage</p>
@@ -709,7 +714,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-offset-10 flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-truck clip flex-none layout-align-center-center"
@@ -738,7 +743,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-file-text clip flex-none layout-align-center-center"
@@ -751,7 +756,7 @@ export class AdminShipmentView extends Component {
                   </div>
                 </div>
                 <div
-                  className={`layout-column flex-offset-10 flex-45 ${adminStyles.margin_bottom}`}
+                  className="layout-column flex-offset-10 flex-45 margin_bottom"
                 >
                   <div className="layout-row">
                     <i
@@ -764,7 +769,7 @@ export class AdminShipmentView extends Component {
                     </p>
                   </div>
                 </div>
-                <div className={`layout-column flex-45 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-45 margin_bottom">
                   <div className="layout-row">
                     <i
                       className="fa fa-ship clip flex-none layout-align-center-center"
@@ -800,7 +805,7 @@ export class AdminShipmentView extends Component {
             <div className="layout-column flex-80">
               <h3>Additional Services</h3>
               <div className="">
-                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Customs</p>
@@ -826,7 +831,7 @@ export class AdminShipmentView extends Component {
                     ''
                   )}
                 </div>
-                <div className={`layout-column flex-100 ${adminStyles.margin_bottom}`}>
+                <div className="layout-column flex-100 margin_bottom">
                   <div className="layout-row">
                     <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                     <p>Insurance</p>
@@ -878,9 +883,7 @@ export class AdminShipmentView extends Component {
                 </div>
               </div>
               <h2 className="layout-align-end-center layout-row flex">
-                {shipment.selected_offer.edited_total && shipment.selected_offer.edited_total.value
-                  ? (+shipment.selected_offer.edited_total.value).toFixed(2)
-                  : (+shipment.total_price.value).toFixed(2)} {shipment.total_goods_value.currency}
+                {formattedPriceValue(totalPrice(shipment).value)}
               </h2>
             </div>
           </div>
@@ -900,7 +903,7 @@ export class AdminShipmentView extends Component {
 
         <AlternativeGreyBox
           wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-            ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}
+            ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
           contentClassName="layout-row flex-100"
           content={(
             <div className="layout-column flex-100">
@@ -1010,7 +1013,7 @@ export class AdminShipmentView extends Component {
 
         <AlternativeGreyBox
           title="Documents"
-          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
+          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom`}
           contentClassName="layout-column flex"
           content={(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>

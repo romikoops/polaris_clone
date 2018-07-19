@@ -52,7 +52,7 @@ drop_tables = ActionInterface.new(actions: drop_tables_actions)
 
 ### Full Seed ###
 
-def full_seed_options_from_interface
+def tenant_options_from_interface
   tenant_subdomains = TenantSeeder::TENANT_DATA.map { |data| data[:subdomain] }
 
   choose_tenant_interface = ChooseOptionInterface.new(
@@ -65,11 +65,11 @@ def full_seed_options_from_interface
 end
 
 def full_seed
-  MainSeeder.perform(full_seed_options_from_interface)
+  MainSeeder.perform(tenant_options_from_interface)
 end
 
 def full_seed_without_geometries
-  MainSeeder.perform(full_seed_options_from_interface.merge(without_geometries: true))
+  MainSeeder.perform(tenant_options_from_interface.merge(without_geometries: true))
 end
 
 
@@ -85,6 +85,13 @@ end
 trucking_pricings = ActionInterface.new(actions: trucking_pricings_actions)
 
 
+### Shipments ###
+
+def shipments
+  ShipmentSeeder.new(tenant_options_from_interface).perform
+end
+
+
 ########## MAIN ##########
 
 main = ActionInterface.new(
@@ -94,7 +101,7 @@ main = ActionInterface.new(
     full_seed_without_geometries__: -> { full_seed_without_geometries },
     pricings:                       -> { puts "(!) Not implemented" },
     trucking_pricings__:            -> { trucking_pricings.init },
-    shipments:                      -> { puts "(!) Not implemented" },
+    shipments:                      -> { shipments },
     geometries:                     -> { GeometrySeeder.perform }
   },
   welcome_message: "Welcome to the ItsMyCargo Seeding Interface"

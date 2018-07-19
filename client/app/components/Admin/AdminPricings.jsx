@@ -90,8 +90,9 @@ class AdminPricings extends Component {
     )
     // const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
     const { nexuses } = trucking
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
@@ -178,6 +179,7 @@ class AdminPricings extends Component {
             path="/admin/pricings/routes/:id"
             render={props => (
               <AdminPricingRouteView
+                clientPricings={clientPricings}
                 theme={theme}
                 hubs={hubs}
                 hubHash={hubHash}

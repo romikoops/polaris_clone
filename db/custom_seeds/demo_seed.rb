@@ -3,7 +3,7 @@
 include ExcelTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(greencarrier)
+subdomains = %w(demo)
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -20,6 +20,9 @@ subdomains.each do |sub|
 #   hubs = File.open("#{Rails.root}/db/dummydata/st_hubs.xlsx")
 #   req = {"xlsx" => hubs}
 #   overwrite_hubs(req, shipper)
+  # hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
+  # req = { 'xlsx' => hubs }
+  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
 #   # # #   # # # # puts "# Overwrite public pricings from excel sheet"
 
@@ -29,10 +32,10 @@ subdomains.each do |sub|
 #   # public_pricings = File.open("#{Rails.root}/db/dummydata/demo_freight_rates.xlsx")
 #   # req = {"xlsx" => public_pricings}
 #   # overwrite_freight_rates(req, shipper, true)
-#   public_pricings = File.open("#{Rails.root}/db/dummydata/st_freight_rates.xlsx")
-#   req = {"xlsx" => public_pricings}
-#   overwrite_freight_rates(req, shipper, true)
-
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/demo/demo__freight_rates.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # response = ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  # pp response
 # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
 # #   # puts "# Overwrite Local Charges From Sheet"
@@ -217,13 +220,13 @@ subdomains.each do |sub|
   # )
   # # admin.skip_confirmation!
   # admin_air.save!
-  itinerary = tenant.itineraries.find_by(name:'Gothenburg - Shanghai')
-  schedules = File.open("#{Rails.root}/db/dummydata/#{PATH TO FILE}")
-  params = {
-    "xlsx" => schedules,
-    "itinerary" => itinerary
-  }
-  overwrite_schedules_by_itinerary(params, shipper)
+  # itinerary = tenant.itineraries.find_by(name:'Gothenburg - Shanghai')
+  # schedules = File.open("#{Rails.root}/db/dummydata/#{PATH TO FILE}")
+  # params = {
+    # "xlsx" => schedules,
+    # "itinerary" => itinerary
+  # }
+  # ExcelTool::OverwriteSchedulesByItinerary.new(params: params, _user: shipper).perform
 
 end
 # user = Tenant.greencarrier.users.find_by_email('demo@greencarrier.com')

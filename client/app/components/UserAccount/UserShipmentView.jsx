@@ -10,7 +10,14 @@ import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import { moment, documentTypes } from '../../constants'
-import { gradientTextGenerator, switchIcon, gradientGenerator, gradientBorderGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  switchIcon,
+  gradientGenerator,
+  gradientBorderGenerator,
+  formattedPriceValue,
+  totalPrice
+} from '../../helpers'
 import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
 import DocumentsForm from '../Documents/Form'
@@ -52,13 +59,13 @@ export class UserShipmentView extends Component {
   static calcCargoLoad (feeHash, loadType) {
     const cargoCount = Object.keys(feeHash.cargo).length
     let noun = ''
-    if (loadType === 'cargo_item' && cargoCount > 2) {
+    if (loadType === 'cargo_item' && cargoCount > 3) {
       noun = 'Cargo Items'
-    } else if (loadType === 'cargo_item' && cargoCount === 2) {
+    } else if (loadType === 'cargo_item' && cargoCount === 3) {
       noun = 'Cargo Item'
-    } else if (loadType === 'container' && cargoCount > 2) {
+    } else if (loadType === 'container' && cargoCount > 3) {
       noun = 'Containers'
-    } else if (loadType === 'container' && cargoCount === 2) {
+    } else if (loadType === 'container' && cargoCount === 3) {
       noun = 'Container'
     }
 
@@ -205,6 +212,16 @@ export class UserShipmentView extends Component {
         shipment={shipment}
       />))
   }
+  reuseShipment () {
+    const { shipmentData, userDispatch } = this.props
+    const {
+      shipment, cargoItems, containers, aggregatedCargo, contacts
+    } = shipmentData
+    const req = {
+      shipment, cargoItems, containers, aggregatedCargo, contacts
+    }
+    userDispatch.reuseShipment(req)
+  }
 
   render () {
     const {
@@ -287,6 +304,11 @@ export class UserShipmentView extends Component {
       </div>
     ) : (
       ''
+    )
+    const reuseShipment = (
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.header_margin_buffer}  ${styles.reuse_shipment_box}`}>
+        <p className="layout-align-center-center layout-row">Reuse Shipment </p>
+      </div>
     )
 
     const statusFinished = (shipment.status === 'finished') ? (
@@ -400,7 +422,7 @@ export class UserShipmentView extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-100 flex-md-45 flex-gt-md-30 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -431,7 +453,7 @@ export class UserShipmentView extends Component {
         {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const cargoCount = Object.keys(feeHash.cargo).length
+    const cargoCount = Object.keys(feeHash.cargo).length - 2
     const etaJSX = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
@@ -444,6 +466,7 @@ export class UserShipmentView extends Component {
           <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
           </div>
+          {reuseShipment}
           {statusRequested}
           {statusInProcess}
           {statusFinished}
@@ -454,7 +477,7 @@ export class UserShipmentView extends Component {
           <hr className="layout-row flex-md-40 flex-55" />
           <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
         </div>
-        <div className={`layout-row flex-100 ${adminStyles.margin_bottom}`}>
+        <div className="layout-row flex-100 margin_bottom">
 
           <GradientBorder
             wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
@@ -466,7 +489,6 @@ export class UserShipmentView extends Component {
                   et={etdJSX}
                   hub={shipment.origin_hub}
                   bg={bg1}
-
                 />
               </div>
             )}
@@ -491,14 +513,13 @@ export class UserShipmentView extends Component {
                   et={etaJSX}
                   hub={shipment.destination_hub}
                   bg={bg2}
-
                 />
               </div>
             )}
           />
         </div>
 
-        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} ${adminStyles.margin_bottom}`}>
+        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
           <div className="layout-column flex-60 layout-align-center-stretch">
             <div className="layout-row flex-100 layout-align-start-center">
               <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
@@ -559,28 +580,28 @@ export class UserShipmentView extends Component {
           </div>
         </div>
 
-        <div className={`${adminStyles.border_box} ${adminStyles.margin_bottom} layout-sm-column layout-xs-column layout-row flex-100`}>
+        <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
           <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
             <div className="layout-column flex-100">
               <h3>Freight, Duties & Carriage:</h3>
               <div className="layout-wrap layout-row flex">
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                   <p>Pre-Carriage</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                   <p>On-Carriage</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-file-text clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                   <p>Origin Documentation</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-file-text-o clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
                   <p>Destination Documentation</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-ship clip flex-none layout-align-center-center" style={selectedStyle} />
                   <p>Freight</p>
                 </div>
@@ -591,11 +612,11 @@ export class UserShipmentView extends Component {
             <div className="layout-column flex-100">
               <h3>Additional Services</h3>
               <div className="">
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Customs</p>
                 </div>
-                <div className={`layout-row flex-50 ${adminStyles.margin_bottom}`}>
+                <div className="layout-row flex-50 margin_bottom">
                   <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
                   <p>Insurance</p>
                 </div>
@@ -610,7 +631,7 @@ export class UserShipmentView extends Component {
                   <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
                 </div>
               </div>
-              <h2 className="layout-align-end-center layout-row flex">{(+feeHash.total.value).toFixed(2)} {shipment.total_goods_value.currency}</h2>
+              <h2 className="layout-align-end-center layout-row flex">{formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}</h2>
             </div>
           </div>
         </div>
@@ -629,7 +650,7 @@ export class UserShipmentView extends Component {
 
         <AlternativeGreyBox
           wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          ${styles.no_border_top} ${adminStyles.margin_bottom} ${adminStyles.no_margin_box_right}`}
+          ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
           contentClassName="layout-row flex-100"
           content={(
             <div className="layout-column flex-100">
@@ -730,7 +751,7 @@ export class UserShipmentView extends Component {
         <AlternativeGreyBox
           title="Documents"
           wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
-          contentClassName="layout-column flex"
+          contentClassName="layout-row layout-wrap flex"
           content={(
             <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
               <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
@@ -756,43 +777,13 @@ export class UserShipmentView extends Component {
                   />
                 </div>
               </div>
-
+              <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                {docView}
+              </div>
               {missingDocs}
             </div>
           )}
         />
-
-        {/* <ShipmentCard
-        headingText="Documents"
-        theme={theme}
-        collapsed={collapser.documents}
-        handleCollapser={() => this.handleCollapser('documents')}
-        content={
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-start-center"
-              style={{ marginTop: '5px' }}
-            >
-              {docView}
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-start-center"
-              style={{ marginTop: '5px' }}
-            >
-              {missingDocs}
-            </div>
-          </div>
-        }
-      /> */}
-
-        {shipment.status === 'requested' ? (
-          <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-            <button onClick={this.handleDeny}>Refuse</button>
-          </div>
-        ) : (
-          ''
-        )}
 
       </div>
     )

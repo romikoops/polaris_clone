@@ -27,6 +27,7 @@ export default class CollapsingContent extends React.PureComponent {
   render () {
     const { collapsed, content } = this.props
     const { firstRender } = this.state
+
     return (
       <div
         className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel}`}

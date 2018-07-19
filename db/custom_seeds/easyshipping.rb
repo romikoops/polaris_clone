@@ -18,11 +18,11 @@ subdomains.each do |sub|
   # puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__hubs.xlsx")
   req = { 'xlsx' => hubs }
-  overwrite_hubs(req, shipper)
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/ez_launch_rates.xlsx")
-  # req = { 'xlsx' => public_pricings }
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__freight_rates.xlsx")
+  req = { 'xlsx' => public_pricings }
+  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
 
   # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
@@ -35,13 +35,13 @@ subdomains.each do |sub|
 
   # puts 'Copenhagen Port'
   hub = tenant.hubs.find_by_name('Copenhagen Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl_copenhagen_port.xlsx")
+  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl__copenhagen_port.xlsx")
   req = { 'xlsx' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Copenhagen Railyard'
   hub = tenant.hubs.find_by_name('Copenhagen Railyard')
-  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl_copenhagen_port.xlsx")
+  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl__copenhagen_port.xlsx")
   req = { 'xlsx' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform

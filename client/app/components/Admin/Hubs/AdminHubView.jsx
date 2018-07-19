@@ -8,7 +8,14 @@ import { AdminHubFees } from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
-import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize, gradientBorderGenerator } from '../../../helpers'
+import {
+  gradientGenerator,
+  gradientTextGenerator,
+  switchIcon,
+  renderHubType,
+  capitalize,
+  gradientBorderGenerator
+} from '../../../helpers'
 import MandatoryChargeBox from './MandatoryChargeBox'
 import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'
@@ -264,7 +271,7 @@ export class AdminHubView extends Component {
       />))
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding">
         {editView ? editorModal : '' }
         <div
           className={`${

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import adminStyles from '../Admin/Admin.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
@@ -69,6 +68,16 @@ const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
 )
 
+EditNameBox.propTypes = {
+  user: PropTypes.user.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  style: PropTypes.objectOf(PropTypes.string)
+}
+
+EditNameBox.defaultProps = {
+  style: {}
+}
+
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme
 }) => (
@@ -92,7 +101,7 @@ const EditProfileBox = ({
     </div>
     <div
       className={`flex-100 layout-row layout-align-start-start layout-wrap
-      ${styles.margin_top} ${adminStyles.margin_bottom}`}
+      ${styles.margin_top} margin_bottom`}
     >
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
@@ -109,7 +118,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
             First Name
@@ -125,7 +134,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
             Last Name
@@ -141,7 +150,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Email
@@ -157,7 +166,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${adminStyles.margin_bottom}`}>
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone
@@ -485,7 +494,7 @@ export class UserProfile extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         {newAliasBool ? newAliasBox : ''}
-        <div className="flex-40 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
+        <div className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
           {editBool ? (
             <EditNameBox
               user={editObj}
@@ -510,7 +519,7 @@ export class UserProfile extends Component {
         >
           <div className="flex-100 layout-row layout-align-space-between-stretch">
             <AlternativeGreyBox
-              wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
+              wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
               contentClassName="layout-row flex"
               content={(
                 <div className="layout-row flex-100">
@@ -537,7 +546,7 @@ export class UserProfile extends Component {
                       </div>
                     </div>
                     <div className="flex-75 layout-row layout-align-space-around-center layout-wrap">
-                      <StyledSelect
+                      {/* <StyledSelect
                         name="currency"
                         className={`${styles.select}`}
                         value={this.state.currencySelect}
@@ -550,7 +559,7 @@ export class UserProfile extends Component {
                         className={`layout-row flex-25 ${styles.save} layout-align-center-center`}
                       >
                         <i className="fa fa-check" /> Save
-                      </div>
+                      </div> */}
                       {/* <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
                         <RoundButton
                           theme={theme}
@@ -567,12 +576,12 @@ export class UserProfile extends Component {
               )}
             />
             <AlternativeGreyBox
-              title="GDPR - Yuor Data"
-              wrapperClassName="flex-30 layout-row layout-align-start-start"
+              title="GDPR - Your Data"
+              wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
               contentClassName="layout-column flex"
               content={(
-                <div className={styles.conditions_box}>
-                  <div className="flex-100 layout-row layout-align-space-between-center">
+                <div className={`layout-row layout-wrap ${styles.conditions_box}`}>
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-50 layout-row layout-align-start-center">
                       {/* <p className="flex-none">
                         Here you can download all the data that ItsMyCargo has related to your account.
@@ -581,7 +590,7 @@ export class UserProfile extends Component {
                         Download all data from ItsMyCargo
                       </p>
                     </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.text_right}`}>
+                    <div className={`flex-50 layout-row layout-align-center-center  ${styles.text_center}`}>
                       <DocumentsDownloader
                         theme={theme}
                         target="gdpr"
@@ -589,13 +598,13 @@ export class UserProfile extends Component {
                       />
                     </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-space-between-center">
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-50 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions`}
                       </p>
                     </div>
-                    <div className="flex-50 layout-row layout-align-end-center">
+                    <div className="flex-50 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
                         size="small"
@@ -605,7 +614,7 @@ export class UserProfile extends Component {
                       />
                     </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-space-between-center">
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-50 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`ItsMyCargo GMBH Terms and Conditions`}
@@ -614,7 +623,7 @@ export class UserProfile extends Component {
                         {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
                       </p> */}
                     </div>
-                    <div className="flex-50 layout-row layout-align-end-center">
+                    <div className="flex-50 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
                         size="small"
@@ -624,7 +633,7 @@ export class UserProfile extends Component {
                       />
                     </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-space-between-center">
+                  <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-50 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`ItsMyCargo's use of cookies`}
@@ -633,7 +642,7 @@ export class UserProfile extends Component {
                         {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
                       </p> */}
                     </div>
-                    <div className="flex-50 layout-row layout-align-end-center">
+                    <div className="flex-50 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
                         size="small"
@@ -648,9 +657,9 @@ export class UserProfile extends Component {
             />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-start-start">
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div
-            className={`flex-50 layout-row layout-wrap layout-align-start-center section_padding card_padding_right ${
+            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding card_padding_right ${
               styles.section
             } `}
           >
@@ -662,7 +671,7 @@ export class UserProfile extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <div
                 key="addNewAliasButton"
-                className={`${defaults.pointy} ${styles.margin} flex-30`}
+                className={`${defaults.pointy} ${styles.margin} flex-30 flex-md-45 `}
                 onClick={this.toggleNewAlias}
               >
                 <div
@@ -684,7 +693,7 @@ export class UserProfile extends Component {
           </div>
 
           <div
-            className={`flex-50 layout-row layout-wrap layout-align-start-center section_padding ${
+            className={`flex-gt-sm-50 flex-100 layout-row layout-wrap layout-align-start-center section_padding ${
               styles.section
             } `}
           >
