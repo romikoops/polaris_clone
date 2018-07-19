@@ -11,10 +11,14 @@ const STEPS_SCREEN_DIR = path.resolve(__dirname, '../_screens')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
-function waitNotificator (selector, operationType) {
-  log('______________', 'warning')
+async function delayAndNotify (label) {
+  log(`__${label}__DELAY_START______`, 'success')
+  await delay(1500)
+  log(`__${label}__DELAY_END________`, 'success')
+}
+
+function waitNotificator (selector, operationType, optionalObject) {
   console.log('Selector, Type', selector, operationType)
-  log('______________', 'warning')
 }
 
 function logFn (input) {
@@ -98,11 +102,7 @@ export default async function init (options) {
     return result
   }
 
-  const count = (selector) => {
-    mark('count', selector)
-
-    return $$(selector, els => els.length)
-  }
+  const count = selector => $$(selector, els => els.length)
 
   const waitFor = async (selectorInput, countInput = 1) => {
     waitNotificator(selectorInput, 'waitFor')
@@ -110,8 +110,6 @@ export default async function init (options) {
     const { selector, count: countValue } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, count: countInput }
-
-    mark('waitFor', selector, countValue)
 
     let counter = 50
     let counted = await count(selector)
@@ -122,25 +120,20 @@ export default async function init (options) {
       counted = await count(selector)
     }
     console.timeEnd('waitFor')
-    log('_____DELAY_START________', 'success')
-    await delay(1500)
-    log('_____DELAY_END________', 'success')
+    await delayAndNotify('waitFor')
 
     return counted >= countValue
   }
 
   const waitForSelectors = async (...selectors) => {
     waitNotificator(selectors, 'waitForSelectors')
-    console.time('waitForSelectors')
-    mark('waitForSelectors', `[${selectors.toString()}]`)
+    console.time(`waitForSelectors`)
 
     const promised = selectors.map(singleSelector => waitFor(singleSelector))
     const result = await Promise.all(promised)
 
     console.timeEnd('waitForSelectors')
-    log('_____DELAY_START________', 'success')
-    await delay(1500)
-    log('_____DELAY_END________', 'success')
+    await delayAndNotify('waitForSelectors')
 
     return !result.includes(false)
   }
@@ -151,7 +144,6 @@ export default async function init (options) {
   const waitForText = async (input) => {
     waitNotificator(input, 'waitForText')
     console.time('waitForText')
-    mark('waitForText', input.selector)
 
     const waitIndex = input.index === undefined ? 0 : input.index
     let counter = 50
@@ -173,22 +165,14 @@ export default async function init (options) {
       found = texts[waitIndex].includes(input.text)
     }
     console.timeEnd('waitForText')
-    log('_____DELAY_START________', 'success')
-    await delay(1500)
-    log('_____DELAY_END________', 'success')
+    delayAndNotify('waitForText')
 
     return found
   }
 
-  const url = () => {
-    mark('url')
-
-    return page.evaluate(() => window.location.href)
-  }
+  const url = () => page.evaluate(() => window.location.href)
 
   const focus = async (selector) => {
-    mark('focus', selector)
-
     const handle = await getHandle$(selector)
     if (handle === false) {
       return false
@@ -199,18 +183,12 @@ export default async function init (options) {
     return true
   }
 
-  const exists = (selector) => {
-    mark('exists', selector)
-
-    return $$(selector, els => els.length > 0)
-  }
+  const exists = selector => $$(selector, els => els.length > 0)
 
   const click = async (selectorInput, indexInput) => {
     const { selector, index } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, index: indexInput }
-
-    mark('click', selector, index)
 
     if (index === undefined) {
       const handle = await getHandle$(selector)
@@ -227,8 +205,6 @@ export default async function init (options) {
   }
 
   const clickWithText = async (selector, text) => {
-    mark('clickWithText', selector, text)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -258,8 +234,6 @@ export default async function init (options) {
   }
 
   const clickWithPartialText = async (selector, text) => {
-    mark('clickWithPartialText', selector, text)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -289,7 +263,6 @@ export default async function init (options) {
   }
 
   const waitAndClick = async (input) => {
-    mark('waitAndClick', input)
     waitNotificator(input, 'waitAndClick')
     console.time('waitAndClick')
 
@@ -299,23 +272,17 @@ export default async function init (options) {
       return false
     }
     console.timeEnd('waitAndClick')
-    log('_____DELAY_START________', 'success')
-    await delay(1500)
-    log('_____DELAY_END________', 'success')
+    await delayAndNotify('waitAndClick')
 
     return click(input.selector, input.index)
   }
 
   const fill = async (selector, text) => {
-    mark('fill', selector, text)
-
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
   }
 
   const setInput = async (selector, newValue) => {
-    mark('setInput', selector, newValue)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -326,8 +293,6 @@ export default async function init (options) {
   }
 
   const inputWithTab = async (tabCount, text) => {
-    mark('inputWithTab', tabCount, text)
-
     for (const _ of Array(tabCount).fill('')) {
       await page.keyboard.press('Tab')
       await delay(DELAY)
@@ -345,8 +310,6 @@ export default async function init (options) {
     const arrowToPress = arrowToPressInput === undefined
       ? 'ArrowDown'
       : `Arrow${arrowToPressInput}`
-
-    mark('selectWithTab', tabCount, arrowToPress)
 
     for (const _ of Array(tabCount).fill('')) {
       await page.keyboard.press('Tab')
@@ -366,14 +329,24 @@ export default async function init (options) {
   }
 
   const selectFirstAvailableDay = async (selector) => {
-    mark('selectFirstAvailableDay', selector)
-
     if (await exists(selector) === false) {
       return false
     }
 
     await $(selector, el => el.click())
     await delay(DELAY)
+
+    const selectFirstAvailableDayFn = () => {
+      const els = Array.from(document.querySelectorAll('.DayPicker-Day'))
+      const filtered = els.filter(x => x.classList.length === 1)
+
+      if (filtered.length === 0) {
+        return false
+      }
+      filtered[0].click()
+
+      return true
+    }
 
     return page.evaluate(selectFirstAvailableDayFn)
   }
@@ -423,18 +396,17 @@ export default async function init (options) {
     console.time(labelPairHolder)
   }
   const saveStep = async (label) => {
-    log(label, 'info')
     logLabelPair(labelHolder, label)
-    if (!isDocker()) {
+    if (!isDocker() || process.env.SKIP_SAVE_STEP === 'true') {
       return
     }
-    log('screenshot start', 'info')
-    console.time('screenshot')
+    log(`${label} screenshot start`, 'info')
+    console.time(`${label}.screenshot`)
     await takeScreenshot(
       `${saveStepCounter}__${label}`,
       { screenDirectoryFlag: true }
     )
-    console.timeEnd('screenshot')
+    console.timeEnd(`${label}.screenshot`)
   }
 
   const shouldMatchScreenshot = async (label, tolerance) => {
@@ -460,8 +432,8 @@ export default async function init (options) {
     await takeScreenshot(compareLabel, { fullQuality: true })
     log('Second image of visual regression testing is saved', 'info')
 
-    const shortMessage = `Run 'node compare ${label}' to complete visual regression testing` 
-    const longMessage = `Run 'node compare ${label} ${tolerance}' to complete visual regression testing`
+    const shortMessage = `Run 'node compare ${label}'`
+    const longMessage = `Run 'node compare ${label} ${tolerance}'`
 
     return tolerance === undefined
       ? log(shortMessage, 'success')
@@ -476,19 +448,19 @@ export default async function init (options) {
 
     if (!isCompareBranch) {
       writeFileSync(baseFilePath, html)
-      
+
       return log(`Base html file with label '${label}' created`, 'success')
     }
 
-    if(existsSync(toCompareFilePath)){
+    if (existsSync(toCompareFilePath)) {
       unlinkSync(toCompareFilePath)
     }
-
-    log(`Run command 'node htmlCompare ${label}' to compare HTML files`, 'success')
+    const command = `node htmlCompare ${label}`
+    log(`Run command \`${command}\``, 'success')
     writeFileSync(toCompareFilePath, html)
   }
 
-  const compare = async label => {
+  const compare = async (label) => {
     await shouldMatchScreenshot(label)
     await shouldMatchHTML(label)
   }
@@ -552,16 +524,4 @@ function clickWhichSelector (els, i) {
 
 function setInputFn (el, newValue) {
   el.value = newValue
-}
-
-function selectFirstAvailableDayFn () {
-  const els = Array.from(document.querySelectorAll('.DayPicker-Day'))
-  const filtered = els.filter(x => x.classList.length === 1)
-
-  if (filtered.length === 0) {
-    return false
-  }
-  filtered[0].click()
-
-  return true
 }
