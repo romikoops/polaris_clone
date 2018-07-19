@@ -94,7 +94,7 @@ module DataInserter
                 hub = @tenant.hubs.where("name ILIKE ?", "%#{stop_name}%").first
               end
               if hub.nil?
-                byebug
+                # byebug
               end
             if hub
               stop = @itinerary.stops.find_by(hub_id: hub.id, index: i)

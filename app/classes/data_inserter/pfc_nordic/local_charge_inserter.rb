@@ -65,7 +65,7 @@ module DataInserter
         def us_charge
           hub = @user.tenant.hubs.find_by_name('Chattanooga Port')
           if !hub 
-            byebug
+            # byebug
           end
           charge = hub.local_charges.where(load_type: 'lcl', direction: 'import').first.as_json
           charge.delete("id")

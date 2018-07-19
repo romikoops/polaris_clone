@@ -176,6 +176,7 @@ class TenantSeeder
           about: 'https://freightservices.greencarrier.com/about-us/',
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
+        consolidate_cargo: false,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
@@ -291,6 +292,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -378,6 +380,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -453,6 +456,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -525,6 +529,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -600,6 +605,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -673,6 +679,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -744,6 +751,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -815,6 +823,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -889,6 +898,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -979,6 +989,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1071,6 +1082,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1167,6 +1179,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1261,6 +1274,7 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1353,6 +1367,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1469,6 +1484,7 @@ class TenantSeeder
           about: 'http://www.speedtrans.com/ueberuns.php',
           legal: 'http://www.speedtrans.com/impressum.php'
         },
+        consolidate_cargo: true,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1584,6 +1600,7 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        consolidate_cargo: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1673,6 +1690,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        consolidate_cargo: false,
         fixed_currency: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1758,6 +1776,7 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
+        consolidate_cargo: false,
         fixed_currency: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',

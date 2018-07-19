@@ -10,6 +10,7 @@ module DataInserter
         @hub_type = args[:hub_type]
         @checked_hubs = []
         @hubs = []
+        @direction = args[:direction]
       end
 
       def perform
@@ -50,10 +51,12 @@ module DataInserter
         end
 
         def default_mandatory_charge
+         
           if @hub_data[:routing] && @hub_data[:routing].include?('RTM') && @direction == 'import'
-            @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: nil, pre_carriage: nil, on_carriage: nil)
-          elsif @hub_data[:country] && ['Japan', 'United States of America', 'USA', 'Usa'].include?(@hub_data[:country].name) && @direction == 'export'
-            @mandatory_charge = MandatoryCharge.find_by(export_charges: nil, import_charges: true, pre_carriage: nil, on_carriage: nil)
+            
+            @mandatory_charge = MandatoryCharge.find_by(export_charges: true, import_charges: false, pre_carriage: false, on_carriage: false)
+          elsif @hub_data[:country] && ['Japan', 'United States of America', 'USA', 'Usa'].include?(@hub_data[:country]) && @direction == 'export'
+            @mandatory_charge = MandatoryCharge.find_by(export_charges: false, import_charges: true, pre_carriage: false, on_carriage: false)
           else
             @mandatory_charge = MandatoryCharge.falsified
           end
@@ -62,7 +65,7 @@ module DataInserter
 
         def find_or_create_hub
           return if !@existing_hub_data
-          
+          mandatory_charge = default_mandatory_charge
           temp_hub = @user.tenant.hubs.where(
             name: "#{@existing_hub_data[:name]} #{hub_type_name[@hub_type]}",
             hub_type: @hub_type
@@ -76,10 +79,11 @@ module DataInserter
             nexus: @existing_hub_data[:nexus],
             hub_type: @hub_type,
             hub_code: @existing_hub_data[:code],
-            mandatory_charge: default_mandatory_charge
+            mandatory_charge: mandatory_charge
           )
-          if @hub.mandatory_charge_id.nil?
-            byebug
+          if @hub.mandatory_charge_id != mandatory_charge.id
+            @hub.mandatory_charge = mandatory_charge
+            @hub.save!
           end
           @hubs << {hub: @hub, data: @hub_data}
         end
@@ -94,8 +98,8 @@ module DataInserter
         end
 
         def geocode_port_data
-          name = @hub_data[:data][:port]
-          country_name = @hub_data[:data][:country]
+          name = @hub_data[:port]
+          country_name = @hub_data[:country]
           
           
           return if @checked_hubs.include?(name)
@@ -130,7 +134,7 @@ module DataInserter
         def insert_hubs
           
           @data.each do |hub_data|
-            @hub_data = hub_data
+            @hub_data = hub_data[:data]
             #  if @hub_data[:port].include?('Brisbane')
             #   byebug
             #  end

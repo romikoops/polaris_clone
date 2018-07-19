@@ -22,7 +22,7 @@ class Hub < ApplicationRecord
     "rail"  => "Railway Station"
   }.freeze
 
-  self.per_page = 12
+  self.per_page = 9
 
   def self.update_all!
     # This is a temporary method used for quick fixes in development

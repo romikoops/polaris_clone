@@ -106,6 +106,10 @@ module OfferCalculatorService
       charge_category = ChargeCategory.from_code("cargo")
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
+      
+      if @user.tenant.scope["consolidate_cargo"] && cargo_unit_array.first.is_a?(CargoItem)
+        cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
+      end
       cargo_unit_array.each do |cargo_unit|
         charge_result = send("determine_#{@shipment.load_type}_price",
           cargo_unit,
@@ -117,11 +121,12 @@ module OfferCalculatorService
         )
         next if charge_result.nil?
 
-        cargo_unit_model = cargo_unit.class.to_s
+        cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
+        
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
           code:          cargo_unit_model.underscore,
-          cargo_unit_id: cargo_unit.id
+          cargo_unit_id: cargo_unit[:id]
         )
 
         create_charges_from_fees_data!(charge_result, children_charge_category, charge_category, parent_charge)
@@ -169,6 +174,32 @@ module OfferCalculatorService
 
     def destroy_previous_charge_breakdown
       ChargeBreakdown.find_by(shipment: @shipment, trip_id: @schedule.trip_id).try(:destroy)
+    end
+
+    def consolidate_cargo(cargo_array, mot)
+      cargo = {
+        id: 'ids',
+        dimension_x: 0,
+        dimension_y: 0,
+        dimension_z: 0,
+        volume: 0,
+        payload_in_kg: 0,
+        cargo_class: '',
+        chargeable_weight: 0,
+        num_of_items: 0
+      }
+      cargo_array.each do |cargo_unit|
+        cargo[:id] += "-#{cargo_unit.id}"
+        cargo[:dimension_x] += (cargo_unit.dimension_x * cargo_unit.quantity)
+        cargo[:dimension_y] += (cargo_unit.dimension_y * cargo_unit.quantity)
+        cargo[:dimension_z] += (cargo_unit.dimension_z * cargo_unit.quantity)
+        cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
+        cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
+        cargo[:cargo_class] = cargo_unit.cargo_class
+        cargo[:chargeable_weight] += (cargo_unit.calc_chargeable_weight(mot)  * cargo_unit.quantity)
+        cargo[:num_of_items] += cargo_unit.quantity
+      end
+      return [cargo]
     end
   end
 end

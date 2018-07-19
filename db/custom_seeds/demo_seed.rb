@@ -3,17 +3,17 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(greencarrier)
+subdomains = %w(easyshipping)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
-  shipment = shipper.shipments.where(status: 'requested').first
-  conf_shipment = shipper.shipments.where(status: 'confirmed').first
-  ShippingTools.tenant_notification_email(shipper, shipment)
-  ShippingTools.shipper_notification_email(shipper, shipment)
-  ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
+  # shipment = shipper.shipments.where(status: 'requested').first
+  # conf_shipment = shipper.shipments.where(status: 'confirmed').first
+  # ShippingTools.tenant_notification_email(shipper, shipment)
+  # ShippingTools.shipper_notification_email(shipper, shipment)
+  # ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all
@@ -29,19 +29,19 @@ subdomains.each do |sub|
 
   
 
-#   path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
-#   imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
-#     _user: shipper,
-#     counterpart_hub_name: 'Copenhagen Port',
-#     hub_type: 'ocean',
-#     cargo_class: 'lcl',
-#     load_type: 'cargo_item').perform
-#   imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
-#     tenant: tenant,
-#     counterpart_hub: 'Copenhagen Port',
-#     _user: shipper,
-#     hub_type: 'ocean',
-#     direction: 'import').perform
+  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
+    _user: shipper,
+    counterpart_hub_name: 'Copenhagen Port',
+    hub_type: 'ocean',
+    cargo_class: 'lcl',
+    load_type: 'cargo_item').perform
+  imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
+    tenant: tenant,
+    counterpart_hub: 'Copenhagen Port',
+    _user: shipper,
+    hub_type: 'ocean',
+    direction: 'import').perform
 
 #   res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
 #     tenant: tenant,

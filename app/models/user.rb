@@ -181,6 +181,22 @@ class User < ApplicationRecord
     send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
   end
 
+  def has_pricings
+    self.pricings.length > 0
+  end
+
+  def for_admin_json(options = {})
+    new_options = options.reverse_merge(
+      except: %i(tokens encrypted_password created_at updated_at optin_status_id role_id),
+      include: {
+        optin_status: { except: %i(created_at updated_at) },
+        role: { except: %i(created_at updated_at) }
+      },
+      methods: :has_pricings
+    )
+    as_json(new_options)
+  end
+
   def confirm
     update_shipments
     super
