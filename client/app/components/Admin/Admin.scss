@@ -1016,7 +1016,6 @@
     padding-left: 2vw;
     h1 {
       font-size: 35px;
-      text-transform: uppercase;
       margin: 0 !important;
     }
     p {
@@ -1038,9 +1037,12 @@
     }
     .trashy {
       color: #EB5757;
+    }
   .margin_top_align {
     margin-top: -60px;
   }
+}
+
   .back_button {
     color: #BDBDBD;
     &:hover {

@@ -50,7 +50,7 @@ export class ShipmentOverviewCard extends Component {
           />
         </div>
       )
-    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>
+    }) : (<span className={`${styles.wideelement}`}>
       No shipments available
     </span>)
   }
