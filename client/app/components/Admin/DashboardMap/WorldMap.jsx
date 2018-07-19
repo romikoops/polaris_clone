@@ -23,20 +23,7 @@ export class WorldMap extends Component {
     this.handleCountryClick = this.handleCountryClick.bind(this)
     this.handleMarkerClick = this.handleMarkerClick.bind(this)
   }
-  componentWillMount () {
-    // fetch('./world-110m.json')
-    //   .then((response) => {
-    //     if (response.status !== 200) {
-    //       // console.log(`There was a problem: ${response.status}`)
-    //       return
-    //     }
-    //     response.json().then((worlddata) => {
-    //       this.setState({
-    //         worlddata: feature(worlddata, worlddata.objects.countries).features
-    //       })
-    //     })
-    //   })
-  }
+
   handleCountryClick (countryIndex) {
     console.log('Clicked on country: ', this.state.worlddata[countryIndex])
   }
@@ -61,17 +48,18 @@ export class WorldMap extends Component {
         })
         routeArr.push({ hovered: route.itinerary_id === hoverId, data: route.line, id: route.itinerary_id })
       })
-    } else {
-      itineraries.forEach((itinerary) => {
-        itinerary.routes.forEach((route) => {
-          originArr.push({ hovered: itinerary.id === hoverId, data: route.origin, id: itinerary.id })
-          destinationArr.push({
-            hovered: itinerary.id === hoverId, data: route.destination, id: itinerary.id
-          })
-          routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
-        })
-      })
     }
+    // else {
+    //   itineraries.forEach((itinerary) => {
+    //     itinerary.routes.forEach((route) => {
+    //       originArr.push({ hovered: itinerary.id === hoverId, data: route.origin, id: itinerary.id })
+    //       destinationArr.push({
+    //         hovered: itinerary.id === hoverId, data: route.destination, id: itinerary.id
+    //       })
+    //       routeArr.push({ hovered: itinerary.id === hoverId, data: route.line, id: itinerary.id })
+    //     })
+    //   })
+    // }
     // const zoom = d3.behavior.zoom()
     // .translate(projection.translate())
     // .scale(projection.scale())

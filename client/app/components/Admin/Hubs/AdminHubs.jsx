@@ -21,6 +21,7 @@ class AdminHubs extends Component {
     this.closeModal = this.closeModal.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
     this.getHubsFromPage = this.getHubsFromPage.bind(this)
+    this.searchHubsFromPage = this.searchHubsFromPage.bind(this)
   }
   componentDidMount () {
     const {
@@ -36,6 +37,10 @@ class AdminHubs extends Component {
   getHubsFromPage (page, hubType, country, status) {
     const { adminDispatch } = this.props
     adminDispatch.getHubs(false, page, hubType, country, status)
+  }
+  searchHubsFromPage (text, page, hubType, country, status) {
+    const { adminDispatch } = this.props
+    adminDispatch.searchHubs(text, page, hubType, country, status)
   }
   fetchCountries () {
     const { appDispatch } = this.props
@@ -111,6 +116,7 @@ class AdminHubs extends Component {
                 numHubPages={numHubPages}
                 documentDispatch={documentDispatch}
                 getHubsFromPage={this.getHubsFromPage}
+                searchHubsFromPage={this.searchHubsFromPage}
               />
             )}
           />

@@ -110,12 +110,22 @@ export class AdminHubsIndex extends Component {
 
   handleSearchQuery (e) {
     const { value } = e.target
-    this.setState({
-      searchFilters: {
-        ...this.state.searchFilters,
-        query: value
-      }
-    }, () => this.handleFilters())
+    const { searchFilters } = this.state
+
+    const hubFilterKeys =
+      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
+    const countryKeys =
+      searchFilters.countries.map(selection => selection.value)
+    const statusFilterKeys =
+      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
+
+    // const setPage = !hubFilterKeys && !countryKeys && !statusFilterKeys ?
+      //   prevState.page : prevState.page + (1 * direction)
+    this.setState((prevState) => {
+      this.props.searchHubsFromPage(value, prevState.page, hubFilterKeys, countryKeys, statusFilterKeys)
+
+      return { page: prevState.page }
+    })
   }
 
   applyFilters (array) {
@@ -238,7 +248,7 @@ export class AdminHubsIndex extends Component {
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="layout-row flex-80 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
-              <div className="layout-row flex-95 layout-align-space-around-start layout-wrap">
+              <div className="layout-row flex-95 layout-align-space-around-start layout-wrap" style={{ minHeight: '560px' }}>
                 {hubsArr}
               </div>
 
@@ -447,7 +457,8 @@ AdminHubsIndex.propTypes = {
     closeViewer: PropTypes.func,
     uploadHubs: PropTypes.func
   }).isRequired,
-  getHubsFromPage: PropTypes.func
+  getHubsFromPage: PropTypes.func,
+  searchHubsFromPage: PropTypes.func
 }
 
 AdminHubsIndex.defaultProps = {
@@ -455,7 +466,8 @@ AdminHubsIndex.defaultProps = {
   hubs: [],
   numHubPages: 1,
   countries: [],
-  getHubsFromPage: null
+  getHubsFromPage: null,
+  searchHubsFromPage: null
 }
 
 export default AdminHubsIndex

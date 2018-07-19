@@ -10,12 +10,12 @@ export default function CollapsingHeading ({
     <div
       style={{ background: '#E0E0E0', color: '#4F4F4F' }}
       className={`${styles.heading} flex-100 layout-row layout-align-space-between-center`}
+      onClick={handleCollapser}
     >
       <i className={faClass} />
       <TextHeading theme={theme} color="white" size={3} text={text} />
       <div
         className="flex-10 layout-row layout-align-center-center"
-        onClick={handleCollapser}
       >
         <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
       </div>

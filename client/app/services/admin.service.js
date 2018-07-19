@@ -33,6 +33,29 @@ function getHubs (page, hubType, countryId, status) {
     .then(handleResponse)
 }
 
+function searchHubs (text, page, hubType, countryId, status) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (text) {
+    query += `&text=${text}`
+  }
+  if (hubType) {
+    query += `&hub_type=${hubType}`
+  }
+  if (status) {
+    query += `&status=${status}`
+  }
+  if (countryId && countryId.length) {
+    query += `&country_ids=${countryId}`
+  }
+
+  return fetch(`${BASE_URL}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
+    .then(handleResponse)
+}
+
 function getItineraries () {
   const requestOptions = {
     method: 'GET',
@@ -602,7 +625,8 @@ export const adminService = {
   deleteClient,
   editCustomsFees,
   updateHubMandatoryCharges,
-  assignDedicatedPricings
+  assignDedicatedPricings,
+  searchHubs
 }
 
 export default adminService
