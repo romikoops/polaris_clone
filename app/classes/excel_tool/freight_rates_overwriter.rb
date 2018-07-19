@@ -40,6 +40,7 @@ module ExcelTool
 
       add_exceptions_to_new_pricings
       process_hashes
+      generate_map_data
       { results: results, stats: stats, unsaved_initnerary: @unsaved_itins, saved: @saved}
     end
 
@@ -51,6 +52,12 @@ module ExcelTool
         @saved << itinerary
       else
         @unsaved_itins << @itinerary
+      end
+    end
+
+    def generate_map_data
+      @saved.each do |itinerary|
+        itinerary.generate_map_data
       end
     end
 

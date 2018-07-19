@@ -6,10 +6,11 @@ class Admin::SchedulesController < Admin::AdminBaseController
   # include ExcelTools
 
   def index
-    response_handler(air: @air_schedules,
-      train: @train_schedules,
-      ocean: @ocean_schedules,
-      itineraries: itinerary_route_json)
+    map_data = current_user.tenant.map_data
+    response_handler(
+      mapData: map_data,
+      itineraries: itinerary_route_json
+    )
   end
 
   def show

@@ -279,6 +279,13 @@ class Itinerary < ApplicationRecord
     stops.order(index: :asc).pluck(:hub_id)
   end
 
+  def generate_map_data
+    routes.each do |route_data|
+      route_data[:tenant_id] = itinerary.tenant_id
+      itinerary.map_data.find_or_create_by!(route_data)
+    end
+  end
+
   def ordered_nexus_ids
     stops.order(index: :asc).joins(:hub).pluck("hubs.nexus_id")
   end

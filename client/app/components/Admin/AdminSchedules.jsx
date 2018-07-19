@@ -142,14 +142,13 @@ class AdminSchedules extends Component {
       adminDispatch,
       document,
       documentDispatch,
-      scope,
-      mapData
+      scope
     } = this.props
 
     if (!scheduleData || !hubs) {
       return ''
     }
-    const { itineraries } = scheduleData
+    const { itineraries, mapData } = scheduleData
     const {
       showList, expander
     } = this.state
@@ -328,9 +327,7 @@ AdminSchedules.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scheduleData: PropTypes.shape({
     routes: PropTypes.arrayOf(PropTypes.route),
-    air: PropTypes.arrayOf(PropTypes.schedule),
-    train: PropTypes.arrayOf(PropTypes.schedule),
-    ocean: PropTypes.arrayOf(PropTypes.schedule),
+    mapData: PropTypes.arrayOf(PropTypes.object),
     detailedItineraries: PropTypes.array.isRequired,
     itineraryIds: PropTypes.Array,
     itineraries: PropTypes.objectOf(PropTypes.any).isRequired
@@ -339,7 +336,6 @@ AdminSchedules.propTypes = {
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
   documentDispatch: PropTypes.objectOf(PropTypes.func),
-  mapData: PropTypes.arrayOf(PropTypes.object),
   scope: PropTypes.objectOf(PropTypes.any)
 }
 
@@ -349,7 +345,6 @@ AdminSchedules.defaultProps = {
   scheduleData: null,
   document: {},
   documentDispatch: {},
-  mapData: [],
   scope: {}
 }
 function mapStateToProps (state) {
