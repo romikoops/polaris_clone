@@ -1273,7 +1273,7 @@ export class ShipmentLocationBox extends Component {
                       onChange={this.handleTrucking}
                     />
                     <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
-                    Pre-Carriage
+                    Pickup
                     </label>
                     {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
                   </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Pickup:</p></div> }
@@ -1310,7 +1310,7 @@ export class ShipmentLocationBox extends Component {
                     />
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
-                    On-Carriage
+                    Delivery
                     </label>
                     <Toggle
                       className="flex-none"

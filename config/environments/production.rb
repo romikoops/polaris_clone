@@ -94,7 +94,7 @@ Rails.application.configure do
     password: Rails.application.secrets.sendgrid_password
   }
 end
-if ENV['WORKER_MODE'] == 1
+if ENV['WORKER_MODE'] == "1"
   Raven.configure do |config|
     config.dsn = 'http://6d3b102312b84a62a8f6d982e2676152:79f79cc3abf14a4f94cd84397e28f658@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/5'
   end

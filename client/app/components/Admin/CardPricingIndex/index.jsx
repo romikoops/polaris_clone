@@ -12,11 +12,8 @@ import { adminPricing as priceTip } from '../../../constants'
 import PricingSearchBar from './SubComponents/PricingSearchBar'
 import {
   filters,
-  gradientBorderGenerator,
-  gradientTextGenerator,
-  switchIcon
+  capitalize
 } from '../../../helpers'
-import GradientBorder from '../../GradientBorder'
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
@@ -24,7 +21,9 @@ export default class CardPricingIndex extends Component {
     this.state = {
       itineraries: props.itineraries,
       expander: {},
-      searchTexts: {}
+      searchTexts: {},
+      page: 1,
+      numPerPage: 12
     }
     this.handleClick = this.handleClick.bind(this)
     this.iconClasses = {
@@ -33,10 +32,18 @@ export default class CardPricingIndex extends Component {
       rail: 'subway'
     }
   }
+  componentDidMount () {
+    this.prepPages()
+  }
 
   handleClick (id) {
     const { adminDispatch } = this.props
     adminDispatch.getItineraryPricings(id, true)
+  }
+  prepPages () {
+    const { itineraries } = this.props
+    const numPages = Math.ceil(itineraries.length / 12)
+    this.setState({ numPages })
   }
   generateViewType (mot, limit) {
     return (
@@ -56,46 +63,37 @@ export default class CardPricingIndex extends Component {
     })
   }
   generateCardPricings (mot, limit) {
-    const { itineraries } = this.state
+    const { itineraries, page, numPerPage } = this.state
     const { hubs, theme } = this.props
     let itinerariesArr = []
-    const viewLimit = limit || 3
+    const sliceStartIndex = (page - 1) * numPerPage
+    const sliceEndIndex = (page * numPerPage)
     if (itineraries && itineraries.length > 0) {
       itinerariesArr = this.updateSearch(itineraries, mot)
+        .slice(sliceStartIndex, sliceEndIndex)
         .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => {
-          if (i <= viewLimit) {
-            return (
-              <CardRoutesPricing
-                key={v4()}
-                hubs={hubs}
-                itinerary={rt}
-                theme={theme}
-                handleClick={this.handleClick}
-              />
-            )
-          }
-
-          return ''
-        })
+        .map((rt, i) => (
+          <CardRoutesPricing
+            key={v4()}
+            hubs={hubs}
+            itinerary={rt}
+            theme={theme}
+            handleClick={this.handleClick}
+          />
+        ))
     } else if (this.props.itineraries && this.props.itineraries.length > 0) {
       itinerariesArr = this.updateSearch(itineraries, mot)
+        .slice(sliceStartIndex, sliceEndIndex)
         .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => {
-          if (i <= viewLimit) {
-            return (
-              <CardRoutesPricing
-                key={v4()}
-                hubs={hubs}
-                itinerary={rt}
-                theme={theme}
-                handleClick={this.handleClick}
-              />
-            )
-          }
-
-          return ''
-        })
+        .map((rt, i) => (
+          <CardRoutesPricing
+            key={v4()}
+            hubs={hubs}
+            itinerary={rt}
+            theme={theme}
+            handleClick={this.handleClick}
+          />
+        ))
     }
 
     return itinerariesArr
@@ -115,31 +113,27 @@ export default class CardPricingIndex extends Component {
         searchTexts: {
           ...this.state.searchTexts,
           [target]: event.target.value
-        }
+        },
+        page: 1
       },
       this.updateSearch()
     )
   }
+  deltaPage (val) {
+    this.setState((prevState) => {
+      const newPageVal = prevState.page + val
+      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+
+      return { page }
+    })
+  }
 
   render () {
-    const { searchTexts } = this.state
+    const { searchTexts, page, numPages } = this.state
     const {
-      theme, limit, scope, toggleCreator
+      theme, limit, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
-    const gradientBorderStyle =
-      theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
-        : { background: 'black' }
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
-    const modesOfTransport = scope.modes_of_transport
-    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
-      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
-    const columnFlex = modeOfTransportNames.length === 3 ? 'flex-33' : 'flex-45'
-
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
@@ -147,50 +141,51 @@ export default class CardPricingIndex extends Component {
           className={`${styles.flex_titles} ${adminStyles.margin_box_right} margin_bottom
           flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
         >
-          {modeOfTransportNames.map(modeOfTransportName => (
-            <div
-              className={`${columnFlex}
-                flex-sm-45 flex-md-45 flex-xs-100 layout-row layout-wrap layout-align-center-start card_padding_right ${
-            styles.titles_btn
+
+          <div
+            className={`flex-100 layout-row layout-wrap layout-align-center-start card_padding_right ${
+              styles.titles_btn
             }`}
-            >
-              <GradientBorder
-                wrapperClassName={`layout-column flex-100 ${styles.city}`}
-                gradient={gradientBorderStyle}
-                className="layout-column flex-100"
-                content={(
-                  <div
-                    className={`${styles.card_title_pricing} flex-100 layout-row layout-align-center-center`}
-                  >
-                    <div className={`${styles.card_over} flex-none`}>
-                      <div className={styles.center_items}>
-                        {switchIcon(modeOfTransportName, gradientFontStyle)}
-                        <div>
-                          <h5>{`${modeOfTransportName} freight`}</h5>
-                          <p>Routes</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              />
-              <PricingSearchBar
-                onChange={(e, t) => this.handlePricingSearch(e, t)}
-                value={searchTexts[modeOfTransportName]}
-                target={modeOfTransportName}
-              />
-              <div className="flex-100 layout-row layout-align-center-start">
-                {this.generateViewType(modeOfTransportName, limit)}
-              </div>
-              <PricingButton
-                onClick={toggleCreator}
-                onDisabledClick={() => console.log('this button is disabled')}
-              />
+          >
+            <div className="flex-100 layout-row layout-align-center-start" style={{ minHeight: '560px' }}>
+              {this.generateViewType(mot, limit)}
             </div>
-          ))}
+            <div className="flex-95 layout-row layout-align-center-center margin_bottom">
+              <div
+                className={`
+                      flex-15 layout-row layout-align-center-center pointy
+                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+                    `}
+                onClick={page > 1 ? () => this.deltaPage(-1) : null}
+              >
+                {/* style={page === 1 ? { display: 'none' } : {}} */}
+                <i className="fa fa-chevron-left" />
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+              </div>
+              {}
+              <p>{page}</p>
+              <div
+                className={`
+                      flex-15 layout-row layout-align-center-center pointy
+                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+                    `}
+                onClick={page < numPages ? () => this.deltaPage(1) : null}
+              >
+                <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <i className="fa fa-chevron-right" />
+              </div>
+            </div>
+          </div>
+
         </div>
         <div className="flex-20 layout-row layout-align-end-end">
+
           <div className="hide-sm hide-xs">
+            <PricingSearchBar
+              onChange={(e, t) => this.handlePricingSearch(e, t)}
+              value={searchTexts[mot]}
+              target={mot}
+            />
             <SideOptionsBox
               header="Uploads"
               content={
@@ -227,28 +222,17 @@ export default class CardPricingIndex extends Component {
                       adminStyles.action_section
                     } flex-100 layout-row layout-wrap layout-align-center-center`}
                   >
-                    <p className="flex-100">Download Ocean Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'ocean' }} />
-                  </div>
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Download Air Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'air' }} />
-                  </div>
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Download Rail Pricings Sheet</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot: 'rail' }} />
+                    <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
+                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot }} />
                   </div>
                 </div>
               }
             />
+            <PricingButton
+              onClick={toggleCreator}
+              onDisabledClick={() => console.log('this button is disabled')}
+            />
+
           </div>
         </div>
       </div>
@@ -269,14 +253,16 @@ CardPricingIndex.propTypes = {
     closeViewer: PropTypes.func,
     uploadPricings: PropTypes.func
   }).isRequired,
-  scope: PropTypes.scope
+  scope: PropTypes.scope,
+  mot: PropTypes.string
 }
 
 CardPricingIndex.defaultProps = {
   theme: null,
+  mot: '',
   hubs: [],
   itineraries: [],
   scope: null,
-  limit: 4,
+  limit: 9,
   toggleCreator: null
 }

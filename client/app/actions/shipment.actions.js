@@ -88,6 +88,45 @@ function getOffers (data, redirect) {
     )
   }
 }
+function getOffersForNewDate (data, redirect) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.GET_NEW_DATE_OFFERS_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.GET_NEW_DATE_OFFERS_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GET_NEW_DATE_OFFERS_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(data))
+    shipmentService.getOffers(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
+        }
+        dispatch(alertActions.success('Set Shipment Details successful'))
+      },
+      (error) => {
+        error.then((newData) => {
+          dispatch(failure({
+            type: 'error',
+            text: newData.message || newData.error
+          }))
+          if (newData.error) console.error(newData.exception)
+        })
+      }
+    )
+  }
+}
 
 function chooseOffer (data) {
   function request (shipmentData) {
@@ -462,6 +501,7 @@ export const shipmentActions = {
   requestShipment,
   updateCurrency,
   logOut,
+  getOffersForNewDate,
   delete: _delete
 }
 

@@ -22,9 +22,11 @@ export class ChooseOffer extends Component {
     } else {
       prop = property
     }
+
     return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
       const result2 = result1 ? 1 : 0
+
       return result2 * sortOrder
     }
   }
@@ -42,7 +44,7 @@ export class ChooseOffer extends Component {
         focus: true,
         alt: true
       },
-      outerLimit: 10
+      outerLimit: 20
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
@@ -66,7 +68,7 @@ export class ChooseOffer extends Component {
   }
   setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
-    req.shipment.planned_pickup_date = date
+    req.shipment.selected_day = date
     shipmentDispatch.getOffers(req)
   }
   setMoT (val, target) {
@@ -94,6 +96,7 @@ export class ChooseOffer extends Component {
     const { shipmentDispatch, req } = this.props
     req.delay = outerLimit + dayFactor
     shipmentDispatch.getOffers(req, false)
+    this.setState({ outerLimit: req.delay })
   }
   shiftDepartureDate (operator, days) {
     const { shipmentDispatch, req } = this.props
@@ -109,7 +112,7 @@ export class ChooseOffer extends Component {
     }
     req.shipment.selected_day = newDepartureDate
 
-    shipmentDispatch.getOffers(req, false)
+    shipmentDispatch.getOffersForNewDate(req, false)
   }
 
   chooseResult (obj) {
@@ -117,18 +120,18 @@ export class ChooseOffer extends Component {
   }
   render () {
     const {
-      shipmentData, messages, user, shipmentDispatch, theme, tenant
+      shipmentData, messages, user, shipmentDispatch, theme, tenant, originalSelectedDay
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
-    const { limits, currentCurrency } = this.state
+    const { currentCurrency } = this.state
 
     const {
       shipment, originHubs, destinationHubs, schedules
     } = shipmentData
     if (!shipment || !schedules) return ''
 
-    const depDay = shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
+    const depDay = originalSelectedDay || shipment.selected_day
     schedules.sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     const availableMoTKeys = {}
     schedules.forEach((s) => {
@@ -146,7 +149,9 @@ export class ChooseOffer extends Component {
     const scheduleObj = {}
     mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
-      scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
+      scheduleObj[mk].sort((a, b) => Math.abs(moment(depDay).diff(a.closing_date)) - Math.abs(moment(depDay).diff(b.closing_date)))
+      // debugger // eslint-disable-line
+      // scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {
       if (scheduleObj[key]) {
@@ -154,6 +159,7 @@ export class ChooseOffer extends Component {
         if (topSched) {
           closestRoutes.push(topSched)
         }
+        scheduleObj[key].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
         focusRoutes.push(...scheduleObj[key])
       }
     })
@@ -173,6 +179,7 @@ export class ChooseOffer extends Component {
         pickup={shipment.has_pre_carriage}
         loadType={shipment.load_type}
         pickupDate={shipment.planned_pickup_date}
+        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
       />
     ))
     const closestRoutestoRender = closestRoutes.map(s => (
@@ -188,11 +195,11 @@ export class ChooseOffer extends Component {
         pickup={shipment.has_pre_carriage}
         loadType={shipment.load_type}
         pickupDate={shipment.planned_pickup_date}
+        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
       />
     ))
-
-    const limitedFocus = limits.focus ? focusRoutes.slice(0, 5) : focusRoutes
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+
     return (
       <div
         className="flex-100 layout-row layout-align-center-start layout-wrap"
@@ -267,34 +274,20 @@ export class ChooseOffer extends Component {
                 </div>
               </div>
               {focusRoutestoRender}
-              {limitedFocus.length !== focusRoutes.length ? (
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <div
-                    className="flex-33 layout-row layout-align-space-around-center"
-                    onClick={() => this.toggleLimits('focus')}
-                  >
-                    {limits.focus ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                    <div className="flex-5" />
-                    {limits.focus ? (
-                      <p className="flex-none">More</p>
-                    ) : (
-                      <p className="flex-none">Less</p>
-                    )}
-                    <div className="flex-5" />
-                    {limits.focus ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                  </div>
+
+              <div className="flex-100 layout-row layout-align-center-center">
+                <div
+                  className="flex-33 layout-row layout-align-space-around-center"
+                  onClick={() => this.showMore()}
+                >
+                  <i className="flex-none fa fa-angle-double-down" />
+                  <div className="flex-5" />
+                  <p className="flex-none">More</p>
+                  <div className="flex-5" />
+                  <i className="flex-none fa fa-angle-double-down" />
                 </div>
-              ) : (
-                ''
-              )}
+              </div>
+
             </div>
             {/* <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
@@ -364,6 +357,7 @@ ChooseOffer.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.string),
   req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
+  originalSelectedDay: PropTypes.string,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
@@ -378,7 +372,8 @@ ChooseOffer.defaultProps = {
   prevRequest: null,
   messages: [],
   req: {},
-  tenant: {}
+  tenant: {},
+  originalSelectedDay: false
 }
 
 export default ChooseOffer

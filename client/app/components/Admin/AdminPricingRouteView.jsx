@@ -236,7 +236,7 @@ export class AdminPricingRouteView extends Component {
             )}
           />
         </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
 
           <div
             className="flex-95 layout-row layout-wrap layout-align-space-between-center"

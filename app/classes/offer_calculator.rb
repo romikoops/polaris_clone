@@ -9,7 +9,7 @@ class OfferCalculator
   def initialize(shipment, params, user)
     @user     = user
     @shipment = shipment
-
+    @delay    = params['delay']
     instantiate_service_classes(params)
     update_shipment
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180704120933) do
+ActiveRecord::Schema.define(version: 20180718075838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,6 +340,17 @@ ActiveRecord::Schema.define(version: 20180704120933) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "map_data", force: :cascade do |t|
+    t.jsonb "line"
+    t.jsonb "geo_json"
+    t.decimal "origin", default: [], array: true
+    t.decimal "destination", default: [], array: true
+    t.string "itinerary_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "max_dimensions_bundles", force: :cascade do |t|
     t.string "mode_of_transport"
     t.integer "tenant_id"
@@ -390,6 +401,20 @@ ActiveRecord::Schema.define(version: 20180704120933) do
     t.boolean "cookies"
     t.boolean "tenant"
     t.boolean "itsmycargo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ports", force: :cascade do |t|
+    t.integer "country_id"
+    t.string "name"
+    t.decimal "latitude"
+    t.decimal "longitude"
+    t.string "telephone"
+    t.string "web"
+    t.string "code"
+    t.integer "nexus_id"
+    t.integer "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -504,6 +529,15 @@ ActiveRecord::Schema.define(version: 20180704120933) do
     t.integer "hub_id"
     t.integer "itinerary_id"
     t.integer "index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tag_type"
+    t.string "name"
+    t.string "model"
+    t.string "model_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

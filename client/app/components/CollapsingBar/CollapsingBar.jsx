@@ -4,17 +4,7 @@ import CollapsingHeading from './Heading'
 import CollapsingContent from './Content'
 
 export default function CollapsingBar ({
-  collapsed,
-  theme,
-  handleCollapser,
-  content,
-  text,
-  faClass,
-  contentHeader,
-  styleHeader,
-  optClassName,
-  showArrow,
-  hideContent
+  collapsed, theme, handleCollapser, content, headingText, faClass, minHeight
 }) {
   return (
     <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -29,25 +19,19 @@ export default function CollapsingBar ({
         faClass={faClass}
         styleHeader={styleHeader}
       />
-      {!hideContent ? (
-        <CollapsingContent collapsed={collapsed} content={content} />
-      ) : ''}
+      <CollapsingContent collapsed={collapsed} minHeight={minHeight} content={content} />
     </div>
   )
 }
 
 CollapsingBar.propTypes = {
-  collapsed: PropTypes.bool,
-  theme: PropTypes.theme,
-  handleCollapser: PropTypes.func,
-  content: PropTypes.node,
-  contentHeader: PropTypes.node,
-  hideContent: PropTypes.bool,
-  text: PropTypes.string,
-  optClassName: PropTypes.string,
-  faClass: PropTypes.string,
-  showArrow: PropTypes.bool,
-  styleHeader: PropTypes.objectOf(PropTypes.string)
+  collapsed: Proptypes.bool,
+  theme: Proptypes.theme,
+  handleCollapser: Proptypes.func,
+  content: Proptypes.node,
+  headingText: Proptypes.string,
+  faClass: Proptypes.string,
+  minHeight: Proptypes.string
 }
 
 CollapsingBar.defaultProps = {
@@ -55,11 +39,7 @@ CollapsingBar.defaultProps = {
   theme: null,
   handleCollapser: null,
   content: '',
-  contentHeader: '',
-  optClassName: '',
-  text: '',
-  hideContent: false,
+  headingText: '',
   faClass: '',
-  styleHeader: {},
-  showArrow: false
+  minHeight: ''
 }

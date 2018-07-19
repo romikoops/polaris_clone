@@ -2,21 +2,20 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import ReactTooltip from 'react-tooltip'
 import { documentActions } from '../../actions'
 import FileUploader from '../FileUploader/FileUploader'
-import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './Admin.scss'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import DocumentsDownloader from '../Documents/Downloader'
-import { adminSchedules as schedTip } from '../../constants'
-import { filters, capitalize } from '../../helpers'
+import { filters, capitalize, switchIcon, gradientTextGenerator } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
-import { AdminSearchableRoutes } from './AdminSearchables'
-import { Checkbox } from '../Checkbox/Checkbox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+import CardRoutesIndex from './CardRouteIndex'
+import { WorldMap } from './DashboardMap/WorldMap'
+import Tab from '../Tabs/Tab'
+import Tabs from '../Tabs/Tabs'
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -44,26 +43,13 @@ class AdminSchedules extends Component {
       expander: {},
       searchFilters: {
         mot: {}
-      },
-      searchResults: this.props.scheduleData ? this.props.scheduleData.itineraries : []
+      }
     }
     this.toggleView = this.toggleView.bind(this)
   }
-  componentWillMount () {
-    if (this.props.scheduleData && this.props.scheduleData.itineraries) {
-      this.prepFilters(this.props)
-    }
-  }
+
   componentDidMount () {
     window.scrollTo(0, 0)
-  }
-  componentWillReceiveProps (nextProps) {
-    if (
-      nextProps.scheduleData &&
-      nextProps.scheduleData.itineraries
-    ) {
-      this.prepFilters(nextProps)
-    }
   }
 
   getItinerary (sched) {
@@ -110,23 +96,7 @@ class AdminSchedules extends Component {
       }
     })
   }
-  prepFilters (props) {
-    const { scheduleData } = props
-    if (!scheduleData) {
-      return
-    }
-    const { itineraries } = scheduleData
-    const tmpFilters = {
-      mot: {}
-    }
-    itineraries.forEach((itin) => {
-      tmpFilters.mot[itin.mode_of_transport] = true
-    })
-    this.setState({
-      searchFilters: tmpFilters,
-      searchResults: itineraries
-    })
-  }
+
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -170,17 +140,17 @@ class AdminSchedules extends Component {
       hubs,
       scheduleData,
       adminDispatch,
-      limit,
       document,
-      documentDispatch
+      documentDispatch,
+      scope
     } = this.props
 
     if (!scheduleData || !hubs) {
       return ''
     }
-    const { itineraries } = scheduleData
+    const { itineraries, mapData } = scheduleData
     const {
-      showList, expander, searchFilters, searchResults
+      showList, expander
     } = this.state
 
     const uploadStatus = document.viewer ? (
@@ -198,216 +168,155 @@ class AdminSchedules extends Component {
       </div>
     )
 
-    const backButton = (
-      <RoundButton
-        theme={theme}
-        text="Back to list"
-        size="small"
-        iconClass="fa-th-list"
-        handleNext={() => this.toggleView()}
-        back
-      />
-    )
-    const newButton = (
-      <div data-for="tooltipId" data-tip={schedTip.upload_excel}>
-        <RoundButton
-          theme={theme}
-          text="Generate"
-          active
-          size="small"
-          iconClass="fa-plus"
-          handleNext={() => this.toggleView()}
-        />
-        <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
-      </div>
-    )
-    const typeFilters = Object.keys(searchFilters.mot).map(htk => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{capitalize(htk)}</p>
-        <Checkbox
-          onChange={() => this.toggleFilterValue('mot', htk)}
-          checked={searchFilters.mot[htk]}
-          theme={theme}
-        />
-      </div>
-    ))
+    const modesOfTransport = scope.modes_of_transport
+    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
+      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
 
-    const results = this.applyFilters(searchResults)
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
+    const mapIcon = <i className="fa fa-map clip flex-none" style={gradientFontStyle} />
 
-    const listView = (
-      <AdminSearchableRoutes
-        className="flex-100"
-        itineraries={results}
+    const sideMenuNodes = [
+      (<SideOptionsBox
+        header="Data manager"
+        content={(
+          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <CollapsingBar
+              collapsed={!expander.upload}
+              theme={theme}
+              handleCollapser={() => this.toggleExpander('upload')}
+              headingText="Upload Data"
+              faClass="fa fa-cloud-upload"
+              content={(
+                <div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-80">Upload Air Schedules Sheet</p>
+                    <FileUploader
+                      theme={theme}
+                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
+                      type="xlsx"
+                      text="Air Schedules .xlsx"
+                    />
+                  </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-80">Upload Train Schedules Sheet</p>
+                    <FileUploader
+                      theme={theme}
+                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
+                      type="xlsx"
+                      text="Train Schedules .xlsx"
+                    />
+                  </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-80">Upload Vessel Schedules Sheet</p>
+                    <FileUploader
+                      theme={theme}
+                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
+                      type="xlsx"
+                      text="Vessel Schedules .xlsx"
+                    />
+                  </div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    <p className="flex-80">Upload Trucking Schedules Sheet</p>
+                    <FileUploader
+                      theme={theme}
+                      dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
+                      type="xlsx"
+                      text="Truck Schedules .xlsx"
+                    />
+                  </div>
+                </div>
+              )}
+            />
+            <CollapsingBar
+              collapsed={!expander.download}
+              theme={theme}
+              handleCollapser={() => this.toggleExpander('download')}
+              headingText="Download Data"
+              faClass="fa fa-cloud-download"
+              content={(
+                <div>
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-wrap layout-align-center-center`}
+                  >
+                    <p className="flex-100">Download Schedules Sheet</p>
+                    <DocumentsDownloader theme={theme} target="schedules" />
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+        )}
+      />)
+    ]
+    const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
+      tabTitle={capitalize(mot)}
+      theme={theme}
+      icon={switchIcon(mot, gradientFontStyle)}
+    >
+      <CardRoutesIndex
+        itineraries={itineraries}
         theme={theme}
-        hubs={hubs}
-        hideFilters
-        limit={limit || 40}
-        heading="Schedules by route:"
+        scope={scope}
+        mot={mot}
+        newText="New Schedule/s"
         adminDispatch={adminDispatch}
-        sideScroll={false}
-        handleClick={e => this.viewSchedules(e)}
-        showTooltip
-        seeAll={false}
+        toggleNew={this.toggleView}
+        sideMenuNodes={sideMenuNodes}
+        handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
       />
+    </Tab>))
+    motTabs.push(<Tab
+      tabTitle="Map"
+      theme={theme}
+      icon={mapIcon}
+    >
+      <div className="flex-100 layout-row layout-align-center-start header_buffer">
+        <WorldMap
+          itineraries={itineraries}
+          theme={theme}
+          mapData={mapData}
+
+        />
+      </div>
+    </Tab>)
+    const listView = (
+      <div className="flex-100 layout-row layout-align-center-start header_buffer">
+        <Tabs
+          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+        >
+          {motTabs}
+
+        </Tabs>
+      </div>
     )
     const currView = showList ? listView : genView
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {uploadStatus}
-        <div className={`${styles.component_view} flex-80 flex-md-70 flex-sm-100 layout-row layout-align-start-start`}>
+        <div className={`${styles.component_view} flex layout-row layout-align-start-start`}>
           {currView}
-        </div>
-        <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
-          <SideOptionsBox
-            header="Filters"
-            flexOptions="layout-column flex-20 flex-md-30"
-            content={
-              <div className="">
-                <div
-                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                >
-                  <input
-                    type="text"
-                    className="flex-100"
-                    value={searchFilters.query}
-                    placeholder="Search..."
-                    onChange={e => this.handleSearchQuery(e)}
-                  />
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.mot}
-                    theme={theme}
-                    handleCollapser={() => this.toggleExpander('mot')}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Mode of Transport"
-                    faClass="fa fa-ship"
-                    content={typeFilters}
-                  />
-                </div>
-              </div>
-            }
-          />
-          <SideOptionsBox
-            header="Data manager"
-            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
-            content={
-              <div className="">
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.upload}
-                    theme={theme}
-                    handleCollapser={() => this.toggleExpander('upload')}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Upload Data"
-                    faClass="fa fa-cloud-upload"
-                    content={(
-                      <div>
-                        <div
-                          className={`${
-                            styles.action_section
-                          } flex-100 layout-row layout-align-center-center layout-wrap`}
-                        >
-                          <p className="flex-80">Upload Train Schedules Sheet</p>
-                          <FileUploader
-                            theme={theme}
-                            dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')}
-                            type="xlsx"
-                            text="Train Schedules .xlsx"
-                          />
-                        </div>
-                        <div
-                          className={`${
-                            styles.action_section
-                          } flex-100 layout-row layout-align-center-center layout-wrap`}
-                        >
-                          <p className="flex-80">Upload Air Schedules Sheet</p>
-                          <FileUploader
-                            theme={theme}
-                            dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')}
-                            type="xlsx"
-                            text="Air Schedules .xlsx"
-                          />
-                        </div>
-                        <div
-                          className={`${
-                            styles.action_section
-                          } flex-100 layout-row layout-align-center-center layout-wrap`}
-                        >
-                          <p className="flex-80">Upload Vessel Schedules Sheet</p>
-                          <FileUploader
-                            theme={theme}
-                            dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')}
-                            type="xlsx"
-                            text="Vessel Schedules .xlsx"
-                          />
-                        </div>
-                        <div
-                          className={`${
-                            styles.action_section
-                          } flex-100 layout-row layout-align-center-center layout-wrap`}
-                        >
-                          <p className="flex-80">Upload Trucking Schedules Sheet</p>
-                          <FileUploader
-                            theme={theme}
-                            dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')}
-                            type="xlsx"
-                            text="Truck Schedules .xlsx"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  />
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.download}
-                    theme={theme}
-                    handleCollapser={() => this.toggleExpander('download')}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Download Data"
-                    faClass="fa fa-cloud-download"
-                    content={(
-                      <div>
-                        <div
-                          className={`${
-                            styles.action_section
-                          } flex-100 layout-row layout-wrap layout-align-center-center`}
-                        >
-                          <p className="flex-100">Download Schedules Sheet</p>
-                          <DocumentsDownloader theme={theme} target="schedules" />
-                        </div>
-                      </div>
-                    )}
-                  />
-                  <CollapsingBar
-                    showArrow
-                    collapsed={!expander.new}
-                    theme={theme}
-                    handleCollapser={() => this.toggleExpander('new')}
-                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                    text="Autogenerate Schedules"
-                    faClass="fa fa-plus-circle"
-                    content={(
-                      <div
-                        className={`${
-                          styles.action_section
-                        } flex-100 layout-row layout-wrap layout-align-center-center`}
-                      >
-                        {showList ? newButton : backButton}
-                      </div>
-                    )}
-                  />
-                </div>
-              </div>
-            }
-          />
         </div>
       </div>
     )
@@ -418,9 +327,7 @@ AdminSchedules.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   scheduleData: PropTypes.shape({
     routes: PropTypes.arrayOf(PropTypes.route),
-    air: PropTypes.arrayOf(PropTypes.schedule),
-    train: PropTypes.arrayOf(PropTypes.schedule),
-    ocean: PropTypes.arrayOf(PropTypes.schedule),
+    mapData: PropTypes.arrayOf(PropTypes.object),
     detailedItineraries: PropTypes.array.isRequired,
     itineraryIds: PropTypes.Array,
     itineraries: PropTypes.objectOf(PropTypes.any).isRequired
@@ -428,17 +335,17 @@ AdminSchedules.propTypes = {
   document: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
-  limit: PropTypes.number,
-  documentDispatch: PropTypes.objectOf(PropTypes.func)
+  documentDispatch: PropTypes.objectOf(PropTypes.func),
+  scope: PropTypes.objectOf(PropTypes.any)
 }
 
 AdminSchedules.defaultProps = {
   theme: null,
   hubs: [],
   scheduleData: null,
-  limit: 0,
   document: {},
-  documentDispatch: {}
+  documentDispatch: {},
+  scope: {}
 }
 function mapStateToProps (state) {
   const { document } = state

@@ -20,7 +20,7 @@ export function Footer ({ theme, tenant }) {
     legal: 'https://www.itsmycargo.com/en/contact'
   }
   return (
-    <div className="flex-100 layout-row layout-wrap">
+    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper}`}>
       <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
         <div className={`flex-none ${defs.content_width} layout-row`}>
           <div className="flex-50 layout-row layout-align-start-center">

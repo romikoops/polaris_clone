@@ -147,47 +147,47 @@ export class AdminClientTile extends Component {
     const switchView = showDelete ? deleter : content
     const contentView = deleteable ? switchView : content
     const tooltipId = v4()
-    const contentTile = (
-      <GradientBorder
-        wrapperClassName={`
-          ${styles.client_card} margin_bottom layout-row
-          ${!flexClasses ? 'flex-none' : flexClasses} pointy`}
-        gradient={gradientBorderStyle}
-        className="layout-column flex-100"
-        content={(
-          <div className="layout-column flex-100">
-            {deleteable && !showDelete ? (
-              <div
-                className={`
-                  flex-none layout-row layout-align-center-center ${styles.delete_x}
-                `}
-                onClick={this.toggleShowDelete}
-              >
-                <i className="fa fa-trash" />
+
+    return (
+      <div className={`layout-row layout-align-center-center margin_bottom ${styles.tile_wrapper} ${flexClasses}`}>
+        <GradientBorder
+          wrapperClassName={`flex ${styles.client_card}  layout-row pointy`}
+          gradient={gradientBorderStyle}
+          className="layout-column flex-100"
+          content={(
+            <div className="layout-column flex-100">
+              {deleteable && !showDelete ? (
+                <div
+                  className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
+                  onClick={this.toggleShowDelete}
+                >
+                  <i className="fa fa-trash" />
+                </div>
+              ) : (
+                ''
+              )}
+              <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
+                {contentView}
+                {
+                  showTooltip
+                    ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+                    : ''
+                }
               </div>
-            ) : (
-              ''
-            )}
-            <div
-              className={`
-              ${styles.content} flex-100 layout-row layout-align-center-start`}
-              data-for={tooltipId}
-              data-tip={tooltip}
-            >
-              {contentView}
-              {
-                showTooltip
-                  ? <ReactTooltip
-                    className={styles.tooltip}
-                    id={tooltipId}
-                    effect="solid"
-                  />
-                  : ''
-              }
+              {/* <div className={`${userStyles.footer}`}>
+              <div className="layout-row layout-align-center-center">
+                <span
+                  className="emulate_link"
+                  onClick={this.toggleShowDelete}
+                >
+                  <i className="fa fa-trash" />
+                </span>
+              </div>
+            </div> */}
             </div>
-          </div>
-        )}
-      />
+          )}
+        />
+      </div>
     )
     const collapsingTile = (
       <CollapsingBar
