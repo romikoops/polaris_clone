@@ -64,6 +64,14 @@ module AwsConfig
       bucket: ENV["AWS_BUCKET"], key: obj_key, body: file,
       content_type: file.content_type, acl: "public-read")
     end
+
+    def fetch_object(args={})
+      obj = self.aws_client.get_object({
+        key: args[:key],
+        bucket: args[:bucket]
+      })
+      obj.body.read
+    end
   end
 
   # Instance methods

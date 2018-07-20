@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
-import { LandingTop } from '../../components/LandingTop/LandingTop'
+import LandingTop from '../../components/LandingTop/LandingTop' // eslint-disable-line
 // import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
 // import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
@@ -66,7 +67,7 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, t
     } = this.props
     const textStyle1 =
       theme && theme.colors
@@ -93,7 +94,7 @@ class Landing extends Component {
     )
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
-
+    // debugger // eslint-disable-line
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
@@ -115,7 +116,7 @@ class Landing extends Component {
             <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>
               <h2 className="flex-none">
                 {' '}
-              Introducing Online Freight Booking Services {this.props.loggedIn}
+                {t('landing:620e43ffc16c42119819d576be3b1b34')}
               </h2>
             </div>
             <div className={`${styles.services_row} flex-100 layout-row layout-align-center`}>
@@ -126,25 +127,25 @@ class Landing extends Component {
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-bolt" aria-hidden="true" style={textStyle1} />
-                  <h3> Instant Booking </h3>
+                  <h3> {t('landing:0a3ca67413e04252822ed1b086bb8d8f')} </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-edit" aria-hidden="true" style={textStyle2} />
-                  <h3> Real Time Quotes </h3>
+                  <h3> {t('landing:fb2d8c49293d414fb423e8c6ee9f7245')} </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1} />
-                  <h3> Full Transparency </h3>
+                  <h3> {t('landing:648402947f2944aaa7b271e63741b629')} </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-clock-o" aria-hidden="true" style={textStyle2} />
-                  <h3>Updates in Real Time </h3>
+                  <h3>{t('landing:769a4253e6b94bff9286a5efd923eea6')} </h3>
                 </div>
               </div>
             </div>
@@ -155,28 +156,28 @@ class Landing extends Component {
             <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
               <div className="flex-90 layout-column layout-align-start-start height_100">
                 <div className="flex-20 layout-column layout-align-center-start">
-                  <h2> There are tons of benefits of managing your logistics online: </h2>
+                  <h2> {t('landing:90b125e5-c64a-4599-b5fe-15d06a223e47')} </h2>
                 </div>
                 <div className="flex-65 layout-column layout-align-start-start">
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> Place bookings from wherever, whenever </p>
+                    <p> {t('landing:7eeb157e-3a82-47e3-b7a8-2f3a4cc26618')} </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> Get an instant overview of available offers </p>
+                    <p> {t('landing:ccdc9896-e47b-4e78-adb7-8b9a69e6e12f')} </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> Reuse old shipments and store addresses </p>
+                    <p> {t('landing:001e62fd-dace-4df6-a74a-779b9abe4b4b')} </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> View or download documents when you need them </p>
+                    <p> {t('landing:3f26e7eb-7556-4f0e-967c-f6cdc39bf527')} </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> Pull statistics and reports on your logistics </p>
+                    <p> {t('landing:93e98e3e-a917-4ea1-a637-7e478446212e')} </p>
                   </div>
                 </div>
                 <div className={
@@ -214,7 +215,8 @@ Landing.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  authDispatch: PropTypes.any.isRequired
+  authDispatch: PropTypes.any.isRequired,
+  t: PropTypes.func
 }
 
 Landing.defaultProps = {
@@ -222,7 +224,8 @@ Landing.defaultProps = {
   loading: false,
   theme: null,
   tenant: null,
-  user: null
+  user: null,
+  t: null
 }
 
 function mapDispatchToProps (dispatch) {
@@ -249,4 +252,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing))
+export default translate(['landing', 'common'])(withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing)))

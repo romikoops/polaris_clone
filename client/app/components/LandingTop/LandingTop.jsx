@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import SquareButton from '../SquareButton'
@@ -30,12 +31,12 @@ export class LandingTop extends Component {
   }
   render () {
     const {
-      theme, user, tenant, bookNow
+      theme, user, tenant, bookNow, t
     } = this.props
     const myAccount = (
       <div className="flex">
         <SquareButton
-          text="My Account"
+          text={t('common:99d2520b-b53a-460a-8d6e-c3faec10df6d')}
           theme={theme}
           handleNext={() => this.toAccount()}
           size="small"
@@ -46,7 +47,7 @@ export class LandingTop extends Component {
     const toAdmin = (
       <div className="flex">
         <SquareButton
-          text="Admin Dashboard"
+          text={t('landing:e05007dd-2948-4ef3-8da9-2d37f3d19ee1')}
           theme={theme}
           handleNext={() => this.toAdmin()}
           size="small"
@@ -56,7 +57,7 @@ export class LandingTop extends Component {
     )
     const findRates = (
       <div className="flex">
-        <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
+        <SquareButton text={t('landing:477ecc3d-75a2-4973-b9dc-809def131df7')} theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
 
@@ -69,7 +70,7 @@ export class LandingTop extends Component {
 
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
+    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:b17fb13b-8a4b-4a41-9bcf-02c3b3b9db82')
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -111,7 +112,7 @@ export class LandingTop extends Component {
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className="flex-none layout-row layout-align-start-center">
-                  <h4 className="flex-none">powered by</h4>
+                  <h4 className="flex-none">{t('landing:094ae8a8-c7b3-49bc-b4b7-8bf3fef33d7b')}</h4>
                   <div className="flex-5" />
                   <img
                     src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
@@ -135,7 +136,8 @@ LandingTop.propTypes = {
   user: PropTypes.user,
   tenant: PropTypes.tenant,
   toggleShowLogin: PropTypes.func,
-  bookNow: PropTypes.func
+  bookNow: PropTypes.func,
+  t: PropTypes.func
 }
 
 LandingTop.defaultProps = {
@@ -143,7 +145,8 @@ LandingTop.defaultProps = {
   user: null,
   tenant: null,
   toggleShowLogin: null,
-  bookNow: null
+  bookNow: null,
+  t: null
 }
 
-export default LandingTop
+export default translate(['landing', 'common'])(LandingTop)
