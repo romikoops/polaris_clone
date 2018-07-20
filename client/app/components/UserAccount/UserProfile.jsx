@@ -376,7 +376,7 @@ export class UserProfile extends Component {
     } = this.state
     const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
-      <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
+      <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} flexClasses="flex-30 flex-md-45 flex-lg-45" />
     ))
     // const StyledSelect = styled(Select)`
     //   width: 50%;
@@ -698,7 +698,7 @@ export class UserProfile extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <div
                 key="addNewAliasButton"
-                className={`${defaults.pointy} ${styles.margin} flex-30 flex-md-45 `}
+                className={`${defaults.pointy} ${styles.tile_padding} flex-30 flex-md-45 flex-lg-45 `}
                 onClick={this.toggleNewAlias}
               >
                 <div
