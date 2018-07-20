@@ -102,6 +102,15 @@
       padding-left: 25px !important;
     }
   }
+  .extra_padding_right_sm {
+    padding-right: 25px !important;
+    @media screen and (max-width: 768px) {
+      padding-right: 15px !important;
+    }
+    @media screen and (max-width: 420px) {
+      padding-right: 10px !important;
+    }
+  }
   .content_width {
     width: 100%;
     max-width: 100%;
@@ -263,13 +272,14 @@
   .input_box_full input {
     height: 34px;
     width: 100%;
-    border: 1px solid #F2F2F2;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    border: 0;
+    border-bottom: 1px solid #4F4F4F;
+    background-color: transparent;
+    // box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
-    &:focus {
-      outline: none;
-    }
+    // &:focus {
+    //   outline: none;
+    // }
   }
   .hover_text {
     color: #BDBDBD !important;

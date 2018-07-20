@@ -257,45 +257,41 @@ export class AdminPricingRouteView extends Component {
           <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
             <span><b>Dedicated Pricings</b></span>
           </div>
-          {!showPricingAdder ? (
-            <div className="flex-100 layout-row layout-wrap">
-              <div className="layout-row flex-100 layout-align-start-center slider_container">
-                <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
-                  <div className={`flex-20 layout-row ${styles.set_button_height} tile_padding pointy`} onClick={() => this.addNewPricings()}>
-                    <AlternativeGreyBox
-                      wrapperClassName="layout-row flex-100"
-                      contentClassName="layout-column flex layout-align-center-center"
-                      content={(
-                        <div>
-                          <h1><strong>+</strong></h1>
-                          <p>New Dedicated Pricing</p>
-                        </div>
-                      )}
-                    />
-                  </div>
-                  {clientTiles}
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>
+            <div className="layout-row flex-100 layout-align-start-center slider_container">
+              <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
+                <div className={`flex-20 layout-row ${styles.set_button_height} tile_padding pointy`} onClick={() => this.addNewPricings()}>
+                  <AlternativeGreyBox
+                    wrapperClassName="layout-row flex-100"
+                    contentClassName="layout-column flex layout-align-center-center"
+                    content={(
+                      <div>
+                        <h1><strong>+</strong></h1>
+                        <p>New Dedicated Pricing</p>
+                      </div>
+                    )}
+                  />
                 </div>
+                {clientTiles}
               </div>
-
-              <CollapsingContent
-                collapsed={!expander[selectedClient.id]}
-                content={
-                  <div style={{ minHeight: '800px' }}>
-                    {selectedClient ? (
-                      <AdminPricingBox
-                        itinerary={itinerary}
-                        charges={userPricings.filter(up => up.user_id === selectedClient.id)}
-                        theme={theme}
-                        adminDispatch={adminActions}
-                        title={`Dedicated Pricing for ${selectedClient.first_name} ${selectedClient.last_name}`}
-                      />
-                    ) : ''}
-                  </div>
-                }
-              />
-
             </div>
-          ) : ''}
+
+            <CollapsingContent
+              collapsed={!expander[selectedClient.id]}
+              minHeight="900px"
+              content={
+                <div>
+                  <AdminPricingBox
+                    itinerary={itinerary}
+                    charges={userPricings.filter(up => up.user_id === selectedClient.id)}
+                    theme={theme}
+                    adminDispatch={adminActions}
+                    title={`Dedicated Pricing for ${selectedClient.first_name} ${selectedClient.last_name}`}
+                  />
+                </div>
+              }
+            />
+          </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
             <AdminPricingDedicated
               theme={theme}

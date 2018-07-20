@@ -210,9 +210,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def populate_contacts
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
-      contacts.push(contact:  sc.contact,
+      if sc.contact
+        contacts.push(contact:  sc.contact,
                     type:     sc.contact_type,
                     location: sc.contact.location)
+      end
     end
   end
 

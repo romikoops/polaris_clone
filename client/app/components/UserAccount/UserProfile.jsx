@@ -3,12 +3,10 @@ import React, { Component } from 'react'
 // import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-// import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -21,11 +19,6 @@ import {
 
 const ProfileBox = ({ user, style, edit }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
-    <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-15 layout-row layout-align-center-center" onClick={edit}>
-        <i className={`fa fa-pencil clip ${styles.edit_icon}`} style={style} />
-      </div>
-    </div>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
@@ -69,21 +62,9 @@ ProfileBox.defaultProps = {
   style: {}
 }
 
-const EditNameBox = ({
-  user, handleChange, style
-}) => (
+const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
 )
-
-EditNameBox.propTypes = {
-  user: PropTypes.user.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
-}
-
-EditNameBox.defaultProps = {
-  style: {}
-}
 
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme
@@ -524,7 +505,7 @@ export class UserProfile extends Component {
         <div
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
         >
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch ">
+          <div className="flex-100 layout-row layout-align-space-between-stretch">
             <AlternativeGreyBox
               wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
               contentClassName="layout-row flex"
@@ -678,7 +659,7 @@ export class UserProfile extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <div
                 key="addNewAliasButton"
-                className={`${defaults.pointy} ${styles.tile_padding} flex-30 flex-md-45 flex-lg-45 `}
+                className={`pointy ${styles.tile_padding} flex-30 flex-md-45 flex-lg-45 `}
                 onClick={this.toggleNewAlias}
               >
                 <div

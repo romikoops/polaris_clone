@@ -225,7 +225,7 @@ class PricingRangeRow extends PureComponent {
     const {
       fee, theme, selectOptions, editCharge, initialEdit
     } = this.props
-    if (!selectOptions) {
+    if (!selectOptions || (edit && !editCharge)) {
       return ''
     }
     const confimPrompt = confirm ? (

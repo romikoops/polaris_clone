@@ -23,7 +23,7 @@ export default class CardPricingIndex extends Component {
       expander: {},
       searchTexts: {},
       page: 1,
-      numPerPage: 12
+      numPerPage: 9
     }
     this.handleClick = this.handleClick.bind(this)
     this.iconClasses = {
@@ -138,7 +138,7 @@ export default class CardPricingIndex extends Component {
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
         <div
-          className={`${styles.flex_titles} ${adminStyles.margin_box_right} margin_bottom
+          className={`${adminStyles.margin_box_right} margin_bottom
           flex-80 flex-sm-100 flex-xs-100 layout-row layout-wrap layout-align-start-start`}
         >
 

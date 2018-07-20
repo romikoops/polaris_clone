@@ -1,7 +1,7 @@
 :local {
   .location-box {
     position: relative;
-    height: 200px;
+    min-height: 170px;
     // margin: 15px 15px 0 0;
     padding: 0;
     border: 1px solid #BDBDBD;
@@ -197,7 +197,7 @@
     right: 0;
   }
   .location_address {
-      padding: 18px;
+      padding: 15px;
     i {
       font-size: 25px;
     }
@@ -298,12 +298,15 @@
   .username_title {
     padding-left: 2vw;
     h1 {
-      text-transform: uppercase;
+      font-size: 35px;
       margin: 0 !important;
+      color: #212121 !important;
     }
     p {
-      font-size: 32px;
+      color: #212121 !important;
+      font-size: 28px;
       margin: 0;
+      margin-bottom: -4px;
     }
   }
 .dashboard_top {

@@ -80,15 +80,12 @@ export class AdminSearchableClients extends Component {
     if (clients) {
       clientsArr = clients.map(client => (
         <AdminClientTile
-          classNames="flex-30 layout-row"
           key={v4()}
           client={client}
           theme={theme}
           handleClick={this.handleClick}
           tooltip={tooltip}
           showTooltip={showTooltip}
-          flexClasses="flex-85"
-
         />
       ))
     }
@@ -108,9 +105,9 @@ export class AdminSearchableClients extends Component {
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-space-between-start ${styles.searchable}`}>
-        <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+        <div className={`searchables flex-100 layout-row layout-align-end-center ${styles.searchable_header}`}>
           { !hideFilters
-            ? <div className="input_box_full flex-40 layout-row layout-align-start-center">
+            ? <div className="input_box_full flex-40 layout-row layout-align-end-center">
               <input
                 type="text"
                 name="search"
