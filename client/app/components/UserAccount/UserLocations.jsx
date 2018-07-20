@@ -27,53 +27,43 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
       </div>
     </div>
   </div>,
-  locInfo.map(op => (
+  locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
     <div key={v4()} className="flex-30 flex-md-45 margin_bottom">
       <div className={`${styles['location-box']} flex-100 layout-column`}>
-        <div className={`${styles.header}`}>
+        <div className={`${styles.header} layout-row layout-align-end-center`}>
           {op.user.primary ? (
-            <h3 className={`${styles.standard}`}>Primary</h3>
+            <i className={`fa fa-star clip ${styles.icon_primary}`} style={gradient} />
           ) : (
             <div className="layout-row layout-wrap">
-              <div className="layout-row flex-80">
-                <h3 className={`${styles.other}`}>Other</h3>
-              </div>
               <div className="layout-row flex-20 layout-align-end">
                 <div
-                  className={`${styles.makePrimary} ${
-                    defaults.pointy
-                  }`}
+                  className={`${styles.makePrimary} pointy`}
                   onClick={() => makePrimary(op.location.id)}
                 >
-                                        Set as primary
+                  <i className="fa fa-star-o clip" style={gradient} />
                 </div>
               </div>
             </div>
           )}
+          <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
+            <i className="fa fa-pencil" />
+          </span>
+          <span
+            className={`${defaults.emulate_link}`}
+            onClick={() =>
+              destroyLocation(op.location.id)
+            }
+          >
+            <i className={`fa fa-trash ${styles.icon_trash}`} />
+          </span>
         </div>
-        <div className={`layout-row flex-100 ${styles.location_address}`}>
-          <i className="fa fa-map-marker clip" style={{ background: '#BDBDBD' }} />
+        <div className={`layout-row flex-100 layout-align-center-start ${styles.location_address}`}>
+          <i className="fa fa-map-marker clip" style={gradient} />
           <div className={`${styles.content} layout-row layout-wrap layout-align-start-start`}>
             <p className="flex-100">{op.location.street_number} {op.location.street} </p>
             <p className="flex-100"><strong>{op.location.city}</strong></p>
             <p className="flex-100">{op.location.zip_code} </p>
             <p className="flex-100">{op.location.country} </p>
-          </div>
-        </div>
-        <div className={`${styles.footer}`}>
-          <div className="layout-row layout-align-center-center">
-            <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
-              <i className="fa fa-pencil" />
-            </span>
-                            &nbsp; | &nbsp;
-            <span
-              className={`${defaults.emulate_link}`}
-              onClick={() =>
-                destroyLocation(op.location.id)
-              }
-            >
-              <i className="fa fa-trash" />
-            </span>
           </div>
         </div>
       </div>

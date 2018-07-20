@@ -7,8 +7,12 @@
     border: 1px solid #BDBDBD;
 
     .header {
-      height: 23px;
+      height: 40px;
       padding: 5px;
+      color: black;
+      i {
+        color: #BDBDBD;
+      }
 
       h3 {
         margin: 0;
@@ -24,83 +28,49 @@
       }
 
       .makePrimary {
-        font-size: 70%;
         position: relative;
-        top: -4px;
-        left: 12px;
-        border: 1px solid rgb(220, 220, 220);
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        padding-left: 8px;
-        padding-right: 6px;
-        padding-bottom: 3px;
-        margin-right: 8px;
-        box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px inset;
-        background: linear-gradient(rgb(255, 255, 255) 5%, rgb(246, 246, 246) 100%) rgb(255, 255, 255);
-        color: rgb(102, 102, 102);
-        font-weight: bold;
-        text-shadow: rgb(255, 255, 255) 0px 1px 0px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
+        // -webkit-user-select: none;
+        // -moz-user-select: none;
+        // -ms-user-select: none;
+        // user-select: none;
 
-        &:hover {
-          background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
-          background: -moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-          background: -webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-          background: -o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-          background: -ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-          background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff', GradientType=0);
-          background-color: #f6f6f6;
-        }
+        // &:hover {
+        //   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+        //   background: -moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        //   background: -webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        //   background: -o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        //   background: -ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+        //   background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+        //   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff', GradientType=0);
+        //   background-color: #f6f6f6;
+        // }
 
         &:active {
           top: -3px
         }
 
       }
-
-      border-bottom:1px solid #c7c7c7;
     }
 
     .content {
-      margin: 0 15px 15px 15px;
+      padding-left: 12px;
       font-size: 87%;
-    }
-    .content p {
-      font-size: 12px;
-      margin: 0;
-      line-height: 2vh;
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background-color: #efefef;
-      border-top: 1px solid #c7c7c7;
-      border-right: 1px solid #c7c7c7;
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
-      padding: 7px 0 7px 0;
-
-      div {
-        margin: 1px;
-
-        span {
-          margin-right: 5px;
-        }
-
+      p {
+        padding-bottom: 10px;
+        font-size: 12px;
+        margin: 0;
       }
-
     }
-
+  }
+  .icon_primary {
+    padding-right: 12px;
   }
   .input_box {
     margin: 10px 0;
     padding: 5px;
+  }
+  .icon_trash {
+    padding-left: 12px;
   }
 
   .new-address {
@@ -113,9 +83,7 @@
         margin: 5px 0;
         color: #6b6b6b;
       }
-
     }
-
     .plus-icon {
       background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gMfFBUB8Kc3yAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAABmJLR0QA/wD/AP+gvaeTAAAAP0lEQVRYw+3UsQkAMAwDsPz/o29pHkjnlCKDV6PJVb8myZkKBgYGBgYGBvYg7Da+VTAwMD8GBgYGBgYGBraWBpeqjFTlGtDAAAAAAElFTkSuQmCC) left center no-repeat;
       width: 38px;
@@ -192,7 +160,7 @@
     margin-bottom: 15px;
   }
   .content_details {
-    padding-left: 25px;
+    padding: 18px;
   }
   .edit_icon {
     cursor: pointer;
@@ -229,7 +197,7 @@
     right: 0;
   }
   .location_address {
-    padding-left: 25px;
+      padding: 18px;
     i {
       font-size: 25px;
     }
@@ -425,14 +393,6 @@
     top: 0;
     right: 0;
     z-index: 8;
-  }
-  // .margin {
-  //   width: calc(33% - 10px);
-  //   margin: 0px -10px 10px 5px;
-  // }
-  .header {
-    height: 100%;
-    margin: 20px 0px;
   }
   .headerElement {
     padding: 20px 30px;
