@@ -6,7 +6,6 @@ import styles from './AdminClientTile.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator, gradientBorderGenerator } from '../../helpers'
 import GradientBorder from '../GradientBorder'
-import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import defaults from '../../styles/default_classes.scss'
 
 export class AdminClientTile extends Component {
@@ -44,12 +43,7 @@ export class AdminClientTile extends Component {
       deleteable,
       showTooltip,
       tooltip,
-      flexClasses,
-      collapsed,
-      classNames,
-      handleCollapser,
-      faClass,
-      showCollapsing
+      flexClasses
     } = this.props
     const { showDelete } = this.state
     if (!client) {
@@ -189,23 +183,6 @@ export class AdminClientTile extends Component {
         />
       </div>
     )
-    const collapsingTile = (
-      <CollapsingBar
-        hideContent
-        optClassName={styles.no_padding}
-        collapsed={collapsed}
-        theme={theme}
-        handleCollapser={handleCollapser}
-        contentHeader={contentTile}
-        faClass={faClass}
-      />
-    )
-
-    return (
-      <div className={classNames}>
-        {showCollapsing ? collapsingTile : contentTile }
-      </div>
-    )
   }
 }
 AdminClientTile.propTypes = {
@@ -218,12 +195,7 @@ AdminClientTile.propTypes = {
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
   flexClasses: PropTypes.string,
-  showTooltip: PropTypes.bool,
-  collapsed: PropTypes.objectOf(PropTypes.string).isRequired,
-  showCollapsing: PropTypes.bool,
-  classNames: PropTypes.string,
-  handleCollapser: PropTypes.func,
-  faClass: PropTypes.string
+  showTooltip: PropTypes.bool
 }
 AdminClientTile.defaultProps = {
   theme: null,
@@ -234,11 +206,7 @@ AdminClientTile.defaultProps = {
   navFn: null,
   deleteFn: null,
   target: '',
-  showCollapsing: false,
-  flexClasses: '',
-  classNames: '',
-  handleCollapser: null,
-  faClass: ''
+  flexClasses: 'flex-30 flex-md-45'
 }
 
 export default AdminClientTile

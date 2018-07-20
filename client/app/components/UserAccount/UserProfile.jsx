@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import Select from 'react-select'
+// import styled from 'styled-components'
+// import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
-import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { currencyOptions } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
@@ -67,16 +65,6 @@ ProfileBox.defaultProps = {
 const EditNameBox = () => (
   <div className={`${styles.set_size} layout-row flex-100`} />
 )
-
-EditNameBox.propTypes = {
-  user: PropTypes.user.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
-}
-
-EditNameBox.defaultProps = {
-  style: {}
-}
 
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme
@@ -351,25 +339,25 @@ export class UserProfile extends Component {
     const contactArr = aliases.map(cont => (
       <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias} />
     ))
-    const StyledSelect = styled(Select)`
-      width: 50%;
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
+    // const StyledSelect = styled(Select)`
+    //   width: 50%;
+    //   .Select-control {
+    //     background-color: #f9f9f9;
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2 !important;
+    //   }
+    //   .Select-menu-outer {
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-value {
+    //     background-color: #f9f9f9;
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-option {
+    //     background-color: #f9f9f9;
+    //   }
+    // `
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
@@ -671,7 +659,7 @@ export class UserProfile extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <div
                 key="addNewAliasButton"
-                className={`${defaults.pointy} ${styles.margin} flex-30 flex-md-45 `}
+                className="flex-30 flex-md-45 pointy"
                 onClick={this.toggleNewAlias}
               >
                 <div

@@ -87,8 +87,6 @@ export class AdminSearchableClients extends Component {
           handleClick={this.handleClick}
           tooltip={tooltip}
           showTooltip={showTooltip}
-          flexClasses="flex-85"
-
         />
       ))
     }
