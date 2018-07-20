@@ -85,7 +85,6 @@ export class AdminClientView extends Component {
       handleClick(shipment)
     } else {
       adminDispatch.getShipment(shipment.id, true)
-      debugger // eslint-disable-line no-debugger
     }
   }
   render () {

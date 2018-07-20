@@ -61,7 +61,7 @@ export function RoundButton ({
   }
 
   return (
-    <div>
+    <div className="flex-100">
       {!inverse ? (
         <button
           className={`${styles.round_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}

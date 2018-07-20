@@ -297,7 +297,7 @@ export class BookingConfirmation extends Component {
                   <p className="flex-100 letter_3">
                     {expectedTime}
                   </p>
-                  <p className="flex-90 offset-10 margin_5">
+                  <p className="flex-90 offset-10  center">
                     {plannedTime}
                   </p>
                 </div>
@@ -307,7 +307,7 @@ export class BookingConfirmation extends Component {
               <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
                   <p className="flex-100 letter_3"> Expected Time of Arrival:</p>
-                  <p className="flex-90 offset-10 margin_5">{arrivalTime}</p>
+                  <p className="flex-90 offset-10  center">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
               </div>
@@ -861,12 +861,12 @@ function getTerms ({ theme, terms }) {
 
 function getLocationsDestination ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_START}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
       <address className="flex-none">
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-        ,
-        {`${locations.destination.city}`},
-        {`${locations.destination.zip_code}`},
+        , <br />
+        {`${locations.destination.city}`}, <br />
+        {`${locations.destination.zip_code}`}, <br />
         {`${locations.destination.country}`}
       </address>
     </div>
@@ -877,11 +877,11 @@ function getLocationsDestination ({ shipment, locations }) {
 
 function getLocationsOrigin ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_START}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
       <address className="flex-none">
-        {`${locations.origin.street_number} ${locations.origin.street}`},
-        {`${locations.origin.city}`},
-        {`${locations.origin.zip_code}`},
+        {`${locations.origin.street_number} ${locations.origin.street}`},<br />
+        {`${locations.origin.city}`}, <br />
+        {`${locations.origin.zip_code}`}, <br />
         {`${locations.origin.country}`}
       </address>
     </div>
