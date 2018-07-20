@@ -25,6 +25,8 @@ import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from '../Admin/AdminShipmentView/ShipmentOverviewShowCard'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import Tab from '../Tabs/Tab'
+import Tabs from '../Tabs/Tabs'
 
 const StyledSelect = styled(Select)`
   .Select-control {
@@ -231,6 +233,7 @@ export class UserShipmentView extends Component {
     if (!shipmentData || !hubs || !user) {
       return ''
     }
+    const { scope } = tenant.data
     const {
       contacts,
       shipment,
@@ -471,320 +474,499 @@ export class UserShipmentView extends Component {
           {statusInProcess}
           {statusFinished}
         </div>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
+          <Tabs
+            wrapperTabs="layout-row flex-100"
+          >
+            <Tab
+              tabTitle="Overview"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+                <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
+                  <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
+                  <hr className="layout-row flex-md-40 flex-55" />
+                  <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
+                </div>
+                <div className="layout-row flex-100 margin_bottom">
 
-        <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
-          <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
-          <hr className="layout-row flex-md-40 flex-55" />
-          <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
-        </div>
-        <div className="layout-row flex-100 margin_bottom">
+                  <GradientBorder
+                    wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                    gradient={gradientBorderStyle}
+                    className="layout-row flex"
+                    content={(
+                      <div className="layout-row flex-100">
+                        <ShipmentOverviewShowCard
+                          et={etdJSX}
+                          hub={shipment.origin_hub}
+                          bg={bg1}
+                        />
+                      </div>
+                    )}
+                  />
+                  <div className="layout-row flex-20 layout-align-center-center">
+                    <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
+                      <div className="layout-align-center-center layout-row" style={gradientStyle}>
+                        {switchIcon(shipment)}
+                      </div>
+                      <p className="">Estimated time delivery</p>
+                      <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
+                    </div>
+                  </div>
 
-          <GradientBorder
-            wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-            gradient={gradientBorderStyle}
-            className="layout-row flex"
-            content={(
-              <div className="layout-row flex-100">
-                <ShipmentOverviewShowCard
-                  et={etdJSX}
-                  hub={shipment.origin_hub}
-                  bg={bg1}
+                  <GradientBorder
+                    wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                    gradient={gradientBorderStyle}
+                    className="layout-row flex"
+                    content={(
+                      <div className="layout-row flex-100">
+                        <ShipmentOverviewShowCard
+                          et={etaJSX}
+                          hub={shipment.destination_hub}
+                          bg={bg2}
+                        />
+                      </div>
+                    )}
+                  />
+                </div>
+
+                <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
+                  <div className="layout-column flex-60 layout-align-center-stretch">
+                    <div className="layout-row flex-100 layout-align-start-center">
+                      <div className="flex-40 layout-row layout-align-start-center">
+                        <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
+                        <h4 className="flex-95 layout-row">Pick-up</h4>
+                      </div>
+                      <div className="flex-40 layout-row layout-align-start-center">
+                        <p>{moment(shipment.planned_pickup_date)
+                          .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                          .format('DD/MM/YYYY') }</p>
+                      </div>
+                    </div>
+                    {shipment.pickup_address ? (
+                      <div className="flex-100 layout-row">
+                        <div className="flex-5 layout-row" />
+                        <hr className="flex-35 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
+                        <div className="flex-60 layout-row" />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    <div className="flex-100 layout-row">
+                      <div className="flex-5 layout-row" />
+                      {shipment.pickup_address ? (
+                        <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
+                          {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
+                          <p>{shipment.pickup_address.street} &nbsp;
+                            {shipment.pickup_address.street_number},&nbsp;
+                            <strong>{shipment.pickup_address.city},&nbsp;
+                              {shipment.pickup_address.country.name} </strong>
+                          </p>
+                        </div>
+                      ) : ''}
+                    </div>
+                  </div>
+
+                  <div className="layout-column flex-40 layout-align-center-stretch">
+                    <div className="layout-row flex-100 layout-align-start-center">
+                      <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
+                      <h4 className="flex-95 layout-row">Delivery</h4>
+                    </div>
+                    {shipment.delivery_address ? (
+                      <div className="flex-100 layout-row">
+                        <div className="flex-5 layout-row" />
+                        <hr className="flex-60 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
+                        <div className="flex-30 layout-row" />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    <div className="flex-100 layout-row">
+                      <div className="flex-5 layout-row" />
+                      {shipment.delivery_address ? (
+                        <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
+                          {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
+                          <p>{shipment.delivery_address.street}&nbsp;
+                            {shipment.delivery_address.street_number},&nbsp;
+                            <strong>{shipment.delivery_address.city},&nbsp;
+                              {shipment.delivery_address.country.name} </strong>
+
+                          </p>
+                        </div>
+                      ) : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Tab>
+            <Tab
+              tabTitle="Freight"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+                <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
+                  <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
+                    <div className="layout-column flex-100">
+                      <h3>Freight, Duties & Carriage:</h3>
+                      <div className="layout-wrap layout-row flex">
+                        <div className="layout-column flex-45 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="flex-none layout-row">
+                              <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
+                              <p>Pickup</p>
+                            </div>
+                            {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
+                                { ' ' }
+                                {feeHash.trucking_pre.edited_total
+                                  ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                              : '' }
+                          </div>
+                        </div>
+                        <div className="layout-column flex-offset-10 flex-45 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="flex-none layout-row">
+                              <i
+                                className="fa fa-truck clip flex-none layout-align-center-center"
+                                style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                              />
+                              <p>Delivery</p>
+                            </div>
+                            {scope.detailed_billing && feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
+                                { ' ' }
+                                {feeHash.trucking_on.edited_total
+                                  ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                              : ''}
+
+                          </div>
+                        </div>
+                        <div className="layout-column flex-45 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="layout-row flex-none">
+                              <i
+                                className="fa fa-file-text clip flex-none layout-align-center-center"
+                                style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle}
+                              />
+                              <p>
+                      Origin<br />
+                      Documentation
+                              </p>
+                            </div>
+                            {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.export ? feeHash.export.total.currency : ''}
+                                { ' ' }
+                                {feeHash.export.edited_total
+                                  ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.export.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                              : ''}
+                          </div>
+                        </div>
+                        <div
+                          className="layout-column flex-offset-10 flex-45 margin_bottom"
+                        >
+                          <div className="layout-row flex-100">
+                            <div className="layout-row flex-none">
+                              <i
+                                className="fa fa-file-text-o clip flex-none layout-align-center-center"
+                                style={shipment.has_on_carriage ? selectedStyle : deselectedStyle}
+                              />
+                              <p>
+                      Destination<br />
+                      Documentation
+                              </p>
+                            </div>
+                            {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">
+                              <p>
+                                {feeHash.import ? feeHash.import.total.currency : ''}
+                                { ' ' }
+                                {feeHash.import.edited_total
+                                  ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
+                                  : parseFloat(feeHash.import.total.value).toFixed(2)}
+                              </p>
+                            </div>
+                              : ''}
+                          </div>
+                        </div>
+                        <div className="layout-column flex-45 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="layout-row flex-none">
+                              <i
+                                className="fa fa-ship clip flex-none layout-align-center-center"
+                                style={selectedStyle}
+                              />
+                              <p>Freight</p>
+                            </div>
+                            {scope.detailed_billing && feeHash.cargo
+                              ? <div className="flex layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.cargo ? feeHash.cargo.total.currency : ''}
+                                  { ' ' }
+                                  {feeHash.cargo.edited_total
+                                    ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
+                                    : parseFloat(feeHash.cargo.total.value).toFixed(2)}
+                                </p>
+                              </div>
+                              : ''}
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
+                    <div className="layout-column flex-80">
+                      <h3>Additional Services</h3>
+                      <div className="">
+                        <div className="layout-column flex-100 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="layout-row flex-none">
+                              <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                              <p>Customs</p>
+                            </div>
+                            {scope.detailed_billing && feeHash.customs
+                              ? <div className="flex layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.customs ? feeHash.customs.total.currency : ''}
+                                  { ' ' }
+                                  {feeHash.customs.edited_total
+                                    ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
+                                    : parseFloat(feeHash.customs.total.value).toFixed(2)}
+                                </p>
+                              </div>
+                              : '' }
+                          </div>
+                        </div>
+                        <div className="layout-column flex-100 margin_bottom">
+                          <div className="layout-row flex-100">
+                            <div className="layout-row flex-none">
+                              <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
+                              <p>Insurance</p>
+                            </div>
+                            {scope.detailed_billing && feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
+                              ? <div className="flex layout-row layout-align-end-center">
+                                <p>
+                                  {feeHash.insurance ? feeHash.insurance.currency : ''}
+                                  { ' ' }
+                                  {feeHash.insurance.edited_total
+                                    ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
+                                    : ''}
+                                  {feeHash.insurance.value
+                                    ? parseFloat(feeHash.insurance.value).toFixed(2)
+                                    : ''}
+                                </p>
+                              </div>
+                              : '' }
+                            {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
+                              ? <div className="flex layout-row layout-align-end-center">
+                                <p>Requested  </p>
+                              </div> : ''}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="layout-row layout-padding flex-20 layout-align-center-start" />
+                  </div>
+                  <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
+                    <div className="layout-column flex-100">
+                      <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
+                        <div className="layout-align-center-center layout-row flex">
+                          <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
+                          <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
+                        </div>
+                      </div>
+                      <h2 className="layout-align-end-center layout-row flex">
+                        {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </Tab>
+            <Tab
+              tabTitle="Contacts"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+                <ContactDetailsRow
+                  contacts={contacts}
+                  style={selectedStyle}
+                  accountId={shipment.user_id}
+                  user={user}
                 />
               </div>
-            )}
-          />
-          <div className="layout-row flex-20 layout-align-center-center">
-            <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
-              <div className="layout-align-center-center layout-row" style={gradientStyle}>
-                {switchIcon(shipment)}
-              </div>
-              <p className="">Estimated time delivery</p>
-              <h5>{moment(shipment.planned_eta).diff(moment(shipment.planned_etd), 'days')} days{' '}</h5>
-            </div>
-          </div>
-
-          <GradientBorder
-            wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
-            gradient={gradientBorderStyle}
-            className="layout-row flex"
-            content={(
-              <div className="layout-row flex-100">
-                <ShipmentOverviewShowCard
-                  et={etaJSX}
-                  hub={shipment.destination_hub}
-                  bg={bg2}
+            </Tab>
+            <Tab
+              tabTitle="Cargo Details"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+                <AlternativeGreyBox
+                  title="Cargo Details"
+                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
+                  contentClassName="layout-column flex"
+                  content={cargoView}
                 />
-              </div>
-            )}
-          />
-        </div>
 
-        <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-          <div className="layout-column flex-60 layout-align-center-stretch">
-            <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-              <h4 className="flex-95 layout-row">Pick-up</h4>
-            </div>
-            {shipment.pickup_address ? (
-              <div className="flex-100 layout-row">
-                <div className="flex-5 layout-row" />
-                <hr className="flex-35 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
-                <div className="flex-60 layout-row" />
-              </div>
-            ) : (
-              ''
-            )}
-            <div className="flex-100 layout-row">
-              <div className="flex-5 layout-row" />
-              {shipment.pickup_address ? (
-                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                  {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.pickup_address.street}
-                    {shipment.pickup_address.street_number},&nbsp;
-                    <strong>{shipment.pickup_address.city},&nbsp;
-                      {shipment.pickup_address.country.name} </strong>
-                  </p>
-                </div>
-              ) : ''}
-            </div>
-          </div>
-
-          <div className="layout-column flex-40 layout-align-center-stretch">
-            <div className="layout-row flex-100 layout-align-start-center">
-              <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-              <h4 className="flex-95 layout-row">Delivery</h4>
-            </div>
-            {shipment.delivery_address ? (
-              <div className="flex-100 layout-row">
-                <div className="flex-5 layout-row" />
-                <hr className="flex-60 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
-                <div className="flex-30 layout-row" />
-              </div>
-            ) : (
-              ''
-            )}
-            <div className="flex-100 layout-row">
-              <div className="flex-5 layout-row" />
-              {shipment.delivery_address ? (
-                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                  {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                  <p>{shipment.delivery_address.street}
-                    {shipment.delivery_address.street_number},&nbsp;
-                    <strong>{shipment.delivery_address.city},&nbsp;
-                      {shipment.delivery_address.country.name} </strong>
-
-                  </p>
-                </div>
-              ) : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`${adminStyles.border_box} margin_bottom layout-sm-column layout-xs-column layout-row flex-100`}>
-          <div className={`flex-50 flex-sm-100 flex-xs-100 layout-row ${styles.services_box}`}>
-            <div className="layout-column flex-100">
-              <h3>Freight, Duties & Carriage:</h3>
-              <div className="layout-wrap layout-row flex">
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Pre-Carriage</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                  <p>On-Carriage</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-file-text clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Origin Documentation</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-file-text-o clip flex-none layout-align-center-center" style={shipment.has_on_carriage ? selectedStyle : deselectedStyle} />
-                  <p>Destination Documentation</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-ship clip flex-none layout-align-center-center" style={selectedStyle} />
-                  <p>Freight</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
-            <div className="layout-column flex-100">
-              <h3>Additional Services</h3>
-              <div className="">
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-id-card clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
-                  <p>Customs</p>
-                </div>
-                <div className="layout-row flex-50 margin_bottom">
-                  <i className="fa fa-umbrella clip flex-none" style={tenant.data.detailed_billing && feeHash.customs ? selectedStyle : deselectedStyle} />
-                  <p>Insurance</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
-            <div className="layout-column flex-100">
-              <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
-                <div className="layout-align-center-center layout-row flex">
-                  <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
-                  <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
-                </div>
-              </div>
-              <h2 className="layout-align-end-center layout-row flex">{formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}</h2>
-            </div>
-          </div>
-        </div>
-
-        <ContactDetailsRow
-          contacts={contacts}
-          style={selectedStyle}
-        />
-
-        <AlternativeGreyBox
-          title="Cargo Details"
-          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
-          contentClassName="layout-column flex"
-          content={cargoView}
-        />
-
-        <AlternativeGreyBox
-          wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
+                <AlternativeGreyBox
+                  wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
-          contentClassName="layout-row flex-100"
-          content={(
-            <div className="layout-column flex-100">
-              <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-                  {shipment.total_goods_value ? (
-                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                        {shipment.total_goods_value.value}
-                        {shipment.total_goods_value.currency}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
-                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
+                  contentClassName="layout-row flex-100"
+                  content={(
+                    <div className="layout-column flex-100">
+                      <div className={`layout-row flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+                        <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
+                          {shipment.total_goods_value ? (
+                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
+                                {shipment.total_goods_value.value}
+                                {shipment.total_goods_value.currency}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Total Value of Goods:</span>
+                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                         -
-                      </p>
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
+                          {shipment.eori ? (
+                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
+                                {shipment.eori}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
+                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
+                              <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
+                        -
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap">
+                          {shipment.incoterm_text ? (
+                            <div className="flex-100 layout-column layout-align-center-start">
+                              <span className="flex-40 flex-xs-100 layout-align-center-center layout-row">Incoterm:</span>
+                              <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                                {shipment.incoterm_text}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex-100 layout-column layout-align-start-start">
+                              <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
+                              <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
+                        -
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
+                        <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
+                          {shipment.cargo_notes ? (
+                            <div className="flex-100 layout-row layout-align-start-center">
+                              <span className="flex-20 layout-row">Description of Goods:</span>
+                              <p className="flex-80 layout-padding layout-row">
+                                {shipment.cargo_notes}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex-100 layout-row layout-align-start-center">
+                              <span className="flex-20 layout-row">Description of Goods:</span>
+                              <p className="flex-80 layout-padding layout-row">
+                        -
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
+                          {shipment.notes ? (
+                            <div className="flex-100 layout-row layout-align-start-center">
+                              <span className="flex-20 layout-row">Notes:</span>
+                              <p className="flex-80 layout-padding layout-row">
+                                {shipment.notes}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex-100 layout-row layout-align-start-center">
+                              <span className="flex-20 layout-row">Notes:</span>
+                              <p className="flex-80 layout-padding layout-row">
+                        -
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   )}
-                </div>
-                <div className={`flex-33 layout-row offset-5 layout-align-start-center layout-wrap ${styles.border_right}`}>
-                  {shipment.eori ? (
-                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                        {shipment.eori}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">EORI number:</span>
-                      <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
-                        -
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap">
-                  {shipment.incoterm_text ? (
-                    <div className="flex-100 layout-column layout-align-center-start">
-                      <span className="flex-40 flex-xs-100 layout-align-center-center layout-row">Incoterm:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                        {shipment.incoterm_text}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-column layout-align-start-start">
-                      <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">Incoterm:</span>
-                      <p className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row">
-                        -
-                      </p>
-                    </div>
-                  )}
-                </div>
+                />
               </div>
-              <div className={`layout-column flex-100 flex-sm-100 flex-xs-100 ${styles.column_info}`}>
-                <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
-                  {shipment.cargo_notes ? (
-                    <div className="flex-100 layout-row layout-align-start-center">
-                      <span className="flex-20 layout-row">Description of Goods:</span>
-                      <p className="flex-80 layout-padding layout-row">
-                        {shipment.cargo_notes}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-row layout-align-start-center">
-                      <span className="flex-20 layout-row">Description of Goods:</span>
-                      <p className="flex-80 layout-padding layout-row">
-                        -
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap">
-                  {shipment.notes ? (
-                    <div className="flex-100 layout-row layout-align-start-center">
-                      <span className="flex-20 layout-row">Notes:</span>
-                      <p className="flex-80 layout-padding layout-row">
-                        {shipment.notes}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-row layout-align-start-center">
-                      <span className="flex-20 layout-row">Notes:</span>
-                      <p className="flex-80 layout-padding layout-row">
-                        -
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        />
+            </Tab>
+            <Tab
+              tabTitle="Documents"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
 
-        <AlternativeGreyBox
-          title="Documents"
-          wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
-          contentClassName="layout-row layout-wrap flex"
-          content={(
-            <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
-                <div className="flex-50 layout-align-start-center layout-row">
-                  <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
+                <AlternativeGreyBox
+                  title="Documents"
+                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
+                  contentClassName="layout-row layout-wrap flex"
+                  content={(
+                    <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
+                      <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                        <div className="flex-50 layout-align-start-center layout-row">
+                          <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
                     Upload New Document
-                  </p>
-                  <StyledSelect
-                    name="file-type"
-                    className={`${styles.select} flex-50`}
-                    value={this.state.fileType}
-                    options={docOptions}
-                    onChange={this.setFileType}
-                  />
-                </div>
-                <div className="flex-50 layout-align-end-center layout-row">
-                  <FileUploader
-                    theme={theme}
-                    url={this.state.upUrl}
-                    type={this.state.fileType.value}
-                    text={this.state.fileType.label}
-                    uploadFn={userDispatch.uploadDocument}
-                  />
-                </div>
+                          </p>
+                          <StyledSelect
+                            name="file-type"
+                            className={`${styles.select} flex-50`}
+                            value={this.state.fileType}
+                            options={docOptions}
+                            onChange={this.setFileType}
+                          />
+                        </div>
+                        <div className="flex-50 layout-align-end-center layout-row">
+                          <FileUploader
+                            theme={theme}
+                            url={this.state.upUrl}
+                            type={this.state.fileType.value}
+                            text={this.state.fileType.label}
+                            uploadFn={userDispatch.uploadDocument}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
+                        {docView}
+                      </div>
+                      {missingDocs}
+                    </div>
+                  )}
+                />
               </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
-                {docView}
-              </div>
-              {missingDocs}
-            </div>
-          )}
-        />
-
+            </Tab>
+          </Tabs>
+        </div>
       </div>
     )
   }

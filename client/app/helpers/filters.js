@@ -16,14 +16,21 @@ function handleSearchChange (query, searchKeys, array) {
       keys
     }
     const fuse = new Fuse(array, options)
+
     return fuse.search(query)
   }
 
   const filteredResults = search(searchKeys)
+
   return filteredResults
 }
 
+function sortByDate (array, key) {
+  return array.sort((a, b) => new Date(b[key]) - new Date(a[key]))
+}
+
 const filters = {
-  handleSearchChange
+  handleSearchChange,
+  sortByDate
 }
 export default filters

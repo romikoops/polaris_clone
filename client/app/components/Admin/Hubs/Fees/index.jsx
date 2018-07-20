@@ -391,7 +391,7 @@ export class AdminHubFees extends Component {
     return cargoClassOptions.map((cargoClass, i) => {
       const hasCargoClass = charges
         .filter(charge => charge.load_type === cargoClass.value).length > 0
-      const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#E0E0E0' }
+      const buttonStyle = selectedCargoClass === cargoClass.value ? bgStyle : { background: '#F5f5f5' }
       const innerStyle = selectedCargoClass === cargoClass.value ? styles2.cargo_class_button_selected : ''
       const inactiveStyle = hasCargoClass ? '' : styles2.cargo_class_button_inactive
 

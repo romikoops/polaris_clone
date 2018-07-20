@@ -6,16 +6,17 @@ class Admin::SchedulesController < Admin::AdminBaseController
   # include ExcelTools
 
   def index
-    response_handler(air: @air_schedules,
-      train: @train_schedules,
-      ocean: @ocean_schedules,
-      itineraries: itinerary_route_json)
+    map_data = current_user.tenant.map_data
+    response_handler(
+      mapData: map_data,
+      itineraries: itinerary_route_json
+    )
   end
 
   def show
     itinerary = Itinerary.find(params[:id])
     schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
-    response_handler(schedules: schedules, itinerary: itinerary)
+    response_handler(schedules: schedules, itinerary: itinerary.as_options_json())
   end
 
   def auto_generate_schedules    
@@ -103,7 +104,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def itinerary_route_json
     Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
-      itinerary.as_options_json(methods: :routes)
+      itinerary.as_options_json()
     end
   end
 

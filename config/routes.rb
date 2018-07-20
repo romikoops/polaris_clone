@@ -94,6 +94,7 @@ Rails.application.routes.draw do
         to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
       get 'hubs',      to: 'hubs#index'
+      get 'search/hubs',      to: 'hubs#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
@@ -125,6 +126,7 @@ Rails.application.routes.draw do
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
     get 'currencies/base/:currency', to: 'currencies#get_currencies_for_base'
+    get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
@@ -147,7 +149,7 @@ Rails.application.routes.draw do
 
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
-   
+
 
     get 'search/hscodes/:query' => 'search#search_hs_codes'
     post 'super_admins/new_demo' => 'super_admins#new_demo_site'

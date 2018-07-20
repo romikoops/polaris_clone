@@ -119,14 +119,14 @@ class SideNav extends Component {
         target: 'routes',
         tooltip: menuTip.routes
       },
-      {
-        key: v4(),
-        icon: 'fa-magic',
-        text: 'Set Up',
-        url: '/admin/wizard',
-        target: 'wizard',
-        tooltip: menuTip.setup
-      },
+      // {
+      //   key: v4(),
+      //   icon: 'fa-magic',
+      //   text: 'Set Up',
+      //   url: '/admin/wizard',
+      //   target: 'wizard',
+      //   tooltip: menuTip.setup
+      // },
       {
         key: v4(),
         icon: 'fa-money',

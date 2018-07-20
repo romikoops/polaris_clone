@@ -5,6 +5,9 @@ class Location < ApplicationRecord
   has_many :users, through: :user_locations, dependent: :destroy
   has_many :shipments
   has_many :contacts
+  has_many :ports, foreign_key: :nexus_id
+  has_many :ports
+  has_one :hub
 
   has_many :hubs, foreign_key: :nexus_id do
     def tenant_id(tenant_id)
@@ -107,7 +110,7 @@ class Location < ApplicationRecord
   def self.create_and_geocode(raw_location_params)
     location = Location.find_or_create_by(location_params(raw_location_params))
     location.geocode_from_address_fields! if location.geocoded_address.nil?
-
+    location.reverse_geocode
     location
   end
 

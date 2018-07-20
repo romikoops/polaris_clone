@@ -284,6 +284,12 @@ module PricingTools
         weight:   (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
         quantity: cargo.try(:quantity) || 1
       }
+    elsif cargo.is_a?(Hash)
+      {
+        volume:   (cargo[:volume] || 1),
+        weight:   cargo[:chargeable_weight],
+        quantity: cargo[:num_of_items]
+      }
     else
       chargeable_weight = cargo.calc_chargeable_weight(mot)
 
