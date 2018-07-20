@@ -4,7 +4,16 @@ import styles from './CollapsingHeading.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
 
 export default function CollapsingHeading ({
-  text, theme, collapsed, handleCollapser, faClass
+  text,
+  theme,
+  collapsed,
+  handleCollapser,
+  faClass,
+  contentHeader,
+  styleHeader,
+  optClassName,
+  showArrow,
+  headerWrapClasses
 }) {
   return (
     <div
@@ -12,12 +21,27 @@ export default function CollapsingHeading ({
       className={`${styles.heading} flex-100 layout-row layout-align-space-between-center`}
       onClick={handleCollapser}
     >
-      <i className={faClass} />
-      <TextHeading theme={theme} color="white" size={3} text={text} />
+      {text ? (
+        <div className="layout-row flex layout-align-start-center">
+          <i className={faClass} />
+          <TextHeading theme={theme} color="white" size={3} text={text} />
+        </div>
+      ) : (
+        <div
+          className={`
+          ${collapsed ? styles.collapsed : ''}
+          ${headerWrapClasses}`}
+          onClick={handleCollapser}
+        >
+          {contentHeader}
+        </div>
+      )}
       <div
         className="flex-10 layout-row layout-align-center-center"
       >
-        <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
+        {showArrow ? (
+          <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />
+        ) : '' }
       </div>
     </div>
   )
@@ -28,7 +52,12 @@ CollapsingHeading.propTypes = {
   collapsed: Proptypes.bool,
   theme: Proptypes.theme,
   handleCollapser: Proptypes.func,
-  faClass: Proptypes.string
+  faClass: Proptypes.string,
+  contentHeader: Proptypes.node.isRequired,
+  optClassName: Proptypes.string,
+  showArrow: Proptypes.bool,
+  headerWrapClasses: Proptypes.string,
+  styleHeader: Proptypes.objectOf(Proptypes.string)
 }
 
 CollapsingHeading.defaultProps = {
@@ -36,5 +65,9 @@ CollapsingHeading.defaultProps = {
   collapsed: false,
   theme: null,
   handleCollapser: null,
-  faClass: ''
+  faClass: '',
+  headerWrapClasses: '',
+  optClassName: '',
+  styleHeader: {},
+  showArrow: false
 }

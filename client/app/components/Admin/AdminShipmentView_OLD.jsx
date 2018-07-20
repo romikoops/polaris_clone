@@ -632,7 +632,8 @@ export class AdminShipmentView extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <CollapsingBar
-          headingText="Overview"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Overview"
           theme={theme}
           collapsed={collapser.overview}
           handleCollapser={() => this.handleCollapser('overview')}
@@ -659,7 +660,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Itinerary"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Itinerary"
           theme={theme}
           collapsed={collapser.itinerary}
           handleCollapser={() => this.handleCollapser('itinerary')}
@@ -690,7 +692,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Fares & Fees"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Fares & Fees"
           theme={theme}
           collapsed={collapser.charges}
           handleCollapser={() => this.handleCollapser('charges')}
@@ -724,7 +727,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Additional Services"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Additional Services"
           theme={theme}
           collapsed={collapser.extras}
           handleCollapser={() => this.handleCollapser('extras')}
@@ -741,7 +745,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Contact Details"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Contact Details"
           theme={theme}
           collapsed={collapser.contacts}
           handleCollapser={() => this.handleCollapser('contacts')}
@@ -768,7 +773,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Cargo Details"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Cargo Details"
           theme={theme}
           collapsed={collapser.cargo}
           handleCollapser={() => this.handleCollapser('cargo')}
@@ -779,7 +785,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Additional Info"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Additional Info"
           theme={theme}
           collapsed={collapser.extra_info}
           handleCollapser={() => this.handleCollapser('extra_info')}
@@ -848,7 +855,8 @@ export class AdminShipmentView extends Component {
           }
         />
         <CollapsingBar
-          headingText="Documents"
+          styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+          text="Documents"
           theme={theme}
           collapsed={collapser.documents}
           handleCollapser={() => this.handleCollapser('documents')}

@@ -55,7 +55,8 @@ export class AdminClientTile extends Component {
         : { color: 'black' }
     const content = (
       <div
-        className={`${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center`}
+        className={`
+        ${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center`}
         onClick={this.clickEv}
       >
         <div
@@ -77,7 +78,9 @@ export class AdminClientTile extends Component {
           <i className="flex-none fa fa-envelope clip" style={gradientStyle} />
           <p className="flex-90">Email</p>
         </div>
-        <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
+        <div
+          className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}
+        >
           <p className="flex-90 flex-offset-10">{client.email}</p>
         </div>
         <div
@@ -89,7 +92,9 @@ export class AdminClientTile extends Component {
           <p className="flex-90">Company</p>
         </div>
         <div
-          className={`flex-100 layout-row layout-align-start-center-center ${styles.client_text}`}
+          className={`
+            flex-100 layout-row layout-align-start-center-center ${styles.client_text}
+          `}
         >
           <p className="flex-90 flex-offset-10">{client.company_name}</p>
         </div>
@@ -201,7 +206,7 @@ AdminClientTile.defaultProps = {
   navFn: null,
   deleteFn: null,
   target: '',
-  flexClasses: 'flex-30 flex-md-45'
+  flexClasses: ''
 }
 
 export default AdminClientTile

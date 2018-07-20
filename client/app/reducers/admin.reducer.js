@@ -669,13 +669,13 @@ export default function admin (state = {}, action) {
     case adminConstants.ASSIGN_DEDICATED_PRICING_SUCCESS: {
       const { userPricings } = state.itineraryPricings
 
-      userPricings.push(action.payload)
+      const newPricing = [...userPricings, ...action.payload]
 
       return {
         ...state,
         itineraryPricings: {
           ...state.itineraryPricings,
-          userPricings
+          userPricings: newPricing
         }
       }
     }

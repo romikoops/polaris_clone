@@ -336,10 +336,12 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.upload}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('upload')}
-                        headingText="Upload Data"
+                        text="Upload Data"
                         faClass="fa fa-cloud-upload"
                         content={(
                           <div>
@@ -375,10 +377,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.download}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('download')}
-                        headingText="Download Data"
+                        text="Download Data"
                         faClass="fa fa-cloud-download"
                         content={(
                           <div>
@@ -418,10 +422,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.new}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('new')}
-                        headingText="Create New Hub"
+                        text="Create New Hub"
                         faClass="fa fa-plus-circle"
                         content={(
                           <div
