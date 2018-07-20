@@ -187,7 +187,8 @@ class AdminSchedules extends Component {
               collapsed={!expander.upload}
               theme={theme}
               handleCollapser={() => this.toggleExpander('upload')}
-              headingText="Upload Data"
+              text="Upload Data"
+              showArrow
               faClass="fa fa-cloud-upload"
               content={(
                 <div>
@@ -250,8 +251,9 @@ class AdminSchedules extends Component {
               collapsed={!expander.download}
               theme={theme}
               handleCollapser={() => this.toggleExpander('download')}
-              headingText="Download Data"
+              text="Download Data"
               faClass="fa fa-cloud-download"
+              showArrow
               content={(
                 <div>
                   <div

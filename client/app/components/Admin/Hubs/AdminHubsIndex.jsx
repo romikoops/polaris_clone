@@ -304,16 +304,18 @@ export class AdminHubsIndex extends Component {
                           collapsed={!expander.hubType}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('hubType')}
-                          headingText="Hub Type"
+                          text="Hub Type"
                           faClass="fa fa-ship"
+                          showArrow
                           content={typeFilters}
                         />
                         <CollapsingBar
                           collapsed={!expander.status}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('status')}
-                          headingText="Status"
+                          text="Status"
                           faClass="fa fa-ship"
+                          showArrow
                           content={statusFilters}
                         />
                         <CollapsingBar
@@ -321,8 +323,9 @@ export class AdminHubsIndex extends Component {
                           theme={theme}
                           minHeight="270px"
                           handleCollapser={() => this.toggleExpander('countries')}
-                          headingText="Country"
+                          text="Country"
                           faClass="fa fa-flag"
+                          showArrow
                           content={namedCountries}
                         />
                       </div>
