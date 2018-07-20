@@ -375,7 +375,7 @@ class Itinerary < ApplicationRecord
             hub: {
               include: {
                 nexus:    { only: %i[id name] },
-                location: { only: %i[longitude latitude] }
+                location: { only: %i[longitude latitude geocoded_address] }
               },
               only:    %i[id name]
             }
