@@ -77,7 +77,7 @@ module ExcelTool
       
       def _nexus
         if country.nil?
-          byebug
+          # byebug
         end
         Nexus.find_by(
           name:             hub_row[:hub_name],
@@ -88,7 +88,7 @@ module ExcelTool
 
       def _nexus_create
         if country.nil?
-          byebug
+          # byebug
         end
         Nexus.create!(
           name:             hub_row[:hub_name],
@@ -186,7 +186,7 @@ module ExcelTool
           tmp_country = Country.find_by(code: code)
         end
         if !tmp_country
-          byebug
+          # byebug
         end
         tmp_country
       end
