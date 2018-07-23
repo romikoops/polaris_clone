@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       post 'pricings/ocean_lcl_pricings/process_csv', to: 'pricings#overwrite_main_lcl_carriage', as: :main_lcl_carriage_pricings_overwrite
       post 'pricings/ocean_fcl_pricings/process_csv', to: 'pricings#overwrite_main_fcl_carriage', as: :main_fcl_carriage_pricings_overwrite
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/assign_dedicated', to: 'pricings#assign_dedicated'
 
       resources :open_pricings, only: [:index]
       post 'open_pricings/ocean_lcl_pricings/process_csv', to: 'open_pricings#overwrite_main_lcl_carriage', as: :open_main_lcl_carriage_pricings_overwrite
@@ -93,6 +94,7 @@ Rails.application.routes.draw do
         to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
       get 'hubs',      to: 'hubs#index'
+      get 'search/hubs',      to: 'hubs#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
@@ -111,10 +113,9 @@ Rails.application.routes.draw do
 
     post 'create_shipment', controller: 'shipments/booking_process', action: 'create_shipment'
     resources :shipments, only: %i[index show] do
-      get  'test_email'
-      get  'reuse_booking_data', as: :reuse_booking
-      post 'set_haulage',        as: :set_haulage
-      %w[choose_offer get_offers update_shipment request_shipment].each do |action|
+      get 'test_email'
+      get 'reuse_booking_data', as: :reuse_booking
+      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
     end
@@ -125,6 +126,7 @@ Rails.application.routes.draw do
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
     get 'currencies/base/:currency', to: 'currencies#get_currencies_for_base'
+    get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
@@ -147,7 +149,7 @@ Rails.application.routes.draw do
 
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
-   
+
 
     get 'search/hscodes/:query' => 'search#search_hs_codes'
     post 'super_admins/new_demo' => 'super_admins#new_demo_site'

@@ -2,6 +2,7 @@
 
 module DocumentService
   class TruckingWriter
+    include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hub, :target_load_type, :filename, :directory, :header_values,
       :workbook, :unfiltered_results, :carriage_reducer, :results_by_truck_type, :dir_fees,
@@ -48,7 +49,7 @@ module DocumentService
     private
 
     def filtered_results
-      _results = unfiltered_results.select{ |ufr| ufr["truckingPricing"][:load_type] == target_load_type }
+      _results = unfiltered_results.select{ |ufr| ufr["truckingPricing"]["load_type"] == target_load_type }
       if identifier == 'distance'
         _results.sort_by! { |res| res[identifier][0][0].to_i }
       end
@@ -71,7 +72,7 @@ module DocumentService
 
     def _identifier
       ident = ""
-      results = unfiltered_results.select{ |ufr| ufr["truckingPricing"][:load_type] == target_load_type }
+      results = unfiltered_results.select{ |ufr| ufr["truckingPricing"]["load_type"] == target_load_type }
       if results.first["distance"]
         ident = 'distance'
       elsif results.first["zipcode"]
@@ -85,18 +86,18 @@ module DocumentService
     def _meta(ufr)
       {
         city: hub.nexus.name,
-        currency: ufr["truckingPricing"].rates.first[1][0]["rate"]["currency"],
-        load_meterage_ratio: ufr["truckingPricing"][:load_meterage]["ratio"],
-        load_meterage_limit: ufr["truckingPricing"][:load_meterage]["height_limit"],
-        cbm_ratio: ufr["truckingPricing"][:cbm_ratio],
-        scale: ufr["truckingPricing"][:modifier],
-        rate_basis: ufr["truckingPricing"].rates.first[1][0]["rate"]["rate_basis"],
-        base: ufr["truckingPricing"].rates.first[1][0]["rate"]["base"] || 1,
-        truck_type: ufr["truckingPricing"][:truck_type],
-        load_type: ufr["truckingPricing"][:load_type],
-        cargo_class: ufr["truckingPricing"][:cargo_class],
-        direction: ufr["truckingPricing"][:carriage] == 'pre' ? "export": "import",
-        courier: ufr["truckingPricing"].courier.name
+        currency: ufr["truckingPricing"]["rates"].first[1][0]["rate"]["currency"],
+        load_meterage_ratio: ufr["truckingPricing"]["load_meterage"]["ratio"],
+        load_meterage_limit: ufr["truckingPricing"]["load_meterage"]["height_limit"],
+        cbm_ratio: ufr["truckingPricing"]["cbm_ratio"],
+        scale: ufr["truckingPricing"]["modifier"],
+        rate_basis: ufr["truckingPricing"]["rates"].first[1][0]["rate"]["rate_basis"],
+        base: ufr["truckingPricing"]["rates"].first[1][0]["rate"]["base"] || 1,
+        truck_type: ufr["truckingPricing"]["truck_type"],
+        load_type: ufr["truckingPricing"]["load_type"],
+        cargo_class: ufr["truckingPricing"]["cargo_class"],
+        direction: ufr["truckingPricing"]["carriage"] == 'pre' ? "export": "import",
+        courier: Courier.find(ufr["truckingPricing"]["courier_id"]).name
       }
     end
 
@@ -113,8 +114,8 @@ module DocumentService
     end
 
     def identifier_to_write
-      if filtered_results.first["truckingPricing"].identifier_modifier
-        "#{identifier}_#{filtered_results.first["truckingPricing"].identifier_modifier}"
+      if filtered_results.first["truckingPricing"]["identifier_modifier"]
+        "#{identifier}_#{filtered_results.first["truckingPricing"]["identifier_modifier"]}"
       else
         identifier
       end
@@ -156,7 +157,7 @@ module DocumentService
 
     def update_dir_fees(meta, ufr)
       unless dir_fees[meta[:direction]]
-        dir_fees[meta[:direction]] = ufr["truckingPricing"].fees
+        dir_fees[meta[:direction]] = ufr["truckingPricing"]["fees"]
       end
     end
 
@@ -223,7 +224,7 @@ module DocumentService
           rates_sheet.write(1, meta_x, value)
           meta_x += 1
         end
-        page[:pricings].first["truckingPricing"].rates.each do |key, rates_array|
+        page[:pricings].first["truckingPricing"]["rates"].each do |key, rates_array|
           rates_array.each do |rate|
             next unless rate
             rates_sheet.write(2, x, key.downcase)
@@ -233,10 +234,10 @@ module DocumentService
         end
         page[:pricings].each_with_index do |result, i|
           rates_sheet.write(row, 0, i)
-          rates_sheet.write(row, 1, result["truckingPricing"].rates.first[1][0]["min_value"])
-          minimums[i] = result["truckingPricing"].rates.first[1][0]["min_value"]
+          rates_sheet.write(row, 1, result["truckingPricing"]["rates"].first[1][0]["min_value"])
+          minimums[i] = result["truckingPricing"]["rates"].first[1][0]["min_value"]
           x = 2
-          result["truckingPricing"].rates.each do |_key, rates_array|
+          result["truckingPricing"]["rates"].each do |_key, rates_array|
             rates_array.each do |rate|
               next unless rate
               if rate["min_value"]

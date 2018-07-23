@@ -5,8 +5,8 @@ import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
 import { AdminUploadsSuccess } from '../Uploads/Success'
-import { adminActions, documentActions } from '../../../actions'
-import styles from '../Admin.scss'
+import { adminActions, documentActions, appActions } from '../../../actions'
+// import styles from '../Admin.scss'
 
 class AdminHubs extends Component {
   constructor (props) {
@@ -20,14 +20,32 @@ class AdminHubs extends Component {
     this.saveNewHub = this.saveNewHub.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
+    this.getHubsFromPage = this.getHubsFromPage.bind(this)
+    this.searchHubsFromPage = this.searchHubsFromPage.bind(this)
   }
   componentDidMount () {
-    const { hubs, adminDispatch, loading } = this.props
+    const {
+      hubs, adminDispatch, loading, countries, appDispatch
+    } = this.props
     if (!hubs && !loading) {
       adminDispatch.getHubs(false)
     }
+    if (!countries.length) {
+      appDispatch.fetchCountries()
+    }
   }
-
+  getHubsFromPage (page, hubType, country, status) {
+    const { adminDispatch } = this.props
+    adminDispatch.getHubs(false, page, hubType, country, status)
+  }
+  searchHubsFromPage (text, page, hubType, country, status) {
+    const { adminDispatch } = this.props
+    adminDispatch.searchHubs(text, page, hubType, country, status)
+  }
+  fetchCountries () {
+    const { appDispatch } = this.props
+    appDispatch.fetchCountries()
+  }
   viewHub (hub) {
     const { adminDispatch } = this.props
     adminDispatch.getHub(hub.id, true)
@@ -55,11 +73,13 @@ class AdminHubs extends Component {
     const {
       theme,
       hubs,
+      countries,
       hub,
       hubHash,
       adminDispatch,
       document,
-      documentDispatch
+      documentDispatch,
+      numHubPages
     } = this.props
 
     const uploadStatus = document.viewer ? (
@@ -73,17 +93,8 @@ class AdminHubs extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
-        <div className={`flex-100 layout-row layout-wrap layout-align-space-between-center ${styles.sec_title}`} />
-        {/* <div className="flex-none layout-row layout-align-start-center">
-                  {showTooltip ? (
-                    <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} />
-                  ) : (
-                    ''
-                  )}
-                  {icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : ''}
-                </div> */}
         {this.state.newHub ? (
           <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />
         ) : (
@@ -97,12 +108,15 @@ class AdminHubs extends Component {
               <AdminHubsIndex
                 theme={theme}
                 hubs={hubs}
-                hubHash={hubHash}
+                countries={countries}
                 adminDispatch={adminDispatch}
                 {...props}
                 toggleNewHub={this.toggleNewHub}
                 viewHub={this.viewHub}
+                numHubPages={numHubPages}
                 documentDispatch={documentDispatch}
+                getHubsFromPage={this.getHubsFromPage}
+                searchHubsFromPage={this.searchHubsFromPage}
               />
             )}
           />
@@ -134,6 +148,11 @@ AdminHubs.propTypes = {
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
+  countries: PropTypes.arrayOf(PropTypes.any),
+  numHubPages: PropTypes.number,
+  appDispatch: PropTypes.shape({
+    fetchCountries: PropTypes.func
+  }).isRequired,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     saveNewHub: PropTypes.func
@@ -149,15 +168,20 @@ AdminHubs.defaultProps = {
   hubs: null,
   loading: false,
   hub: null,
-  hubHash: null
+  hubHash: null,
+  countries: [],
+  numHubPages: 1
 }
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, admin, document
+    authentication, tenant, admin, document, app
   } = state
   const { user, loggedIn } = authentication
-  const { clients, hubs, hub } = admin
+  const {
+    clients, hubs, hub, num_hub_pages // eslint-disable-line
+  } = admin
+  const { countries } = app
 
   return {
     user,
@@ -165,6 +189,8 @@ function mapStateToProps (state) {
     loggedIn,
     hubs,
     hub,
+    numHubPages: num_hub_pages,
+    countries,
     clients,
     document
   }
@@ -172,7 +198,8 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     adminDispatch: bindActionCreators(adminActions, dispatch),
-    documentDispatch: bindActionCreators(documentActions, dispatch)
+    documentDispatch: bindActionCreators(documentActions, dispatch),
+    appDispatch: bindActionCreators(appActions, dispatch)
   }
 }
 

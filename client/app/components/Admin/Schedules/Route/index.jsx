@@ -4,6 +4,9 @@ import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+
 import { documentActions } from '../../../../actions'
 import { AdminUploadsSuccess } from './../../Uploads/Success'
 import FileUploader from '../../../FileUploader/FileUploader'
@@ -14,7 +17,9 @@ import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 import DocumentsDownloader from '../../../Documents/Downloader'
 import { filters } from '../../../../helpers'
-import { Checkbox } from '../../../Checkbox/Checkbox'
+import { moment } from '../../../../constants'
+import SideOptionsBox from '../../SideOptions/SideOptionsBox'
+import CollapsingBar from '../../../CollapsingBar/CollapsingBar'
 
 class AdminSchedulesRoute extends Component {
   static dynamicSort (property) {
@@ -26,8 +31,10 @@ class AdminSchedulesRoute extends Component {
     } else {
       prop = property
     }
+
     return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : 1
+
       return result1 * sortOrder
     }
   }
@@ -65,8 +72,10 @@ class AdminSchedulesRoute extends Component {
       if (!itinerary) {
         return false
       }
+
       return itinerary.origin_hub_id === hub.id || itinerary.destination_hub_id === hub.id
     })
+
     return filteredItineraries.map(x => x.id)
   }
   toggleView () {
@@ -145,6 +154,7 @@ class AdminSchedulesRoute extends Component {
     }
 
     const filter2 = filter1.sort((a, b) => new Date(a[sortKey]) - new Date(b[sortKey]))
+
     return filter2
   }
   render () {
@@ -172,16 +182,42 @@ class AdminSchedulesRoute extends Component {
     ) : (
       ''
     )
-    const { itinerary, itineraryLayovers } = scheduleData
+    const columns = [
+      {
+        Header: 'Closing Date',
+        accessor: 'closing_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: 'ETD',
+        accessor: 'start_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: 'ETA',
+        accessor: 'end_date',
+        Cell: row => (
+          moment(row.value).format('ll')
+        )
+      },
+      {
+        Header: 'Voyage Code',
+        accessor: 'voyage_code'
+      },
+      {
+        Header: 'Vessel Name',
+        accessor: 'vessel'
+      }
+    ]
+    const { itinerary, itineraryLayovers, schedules } = scheduleData
     const tripArr = []
     const slimit = limit || 100
 
     const results = this.applyFilters(searchResults)
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
-    console.log(results)
     results.forEach((trip, i) => {
       if (i < slimit) {
         tripArr.push(<AdminTripPanel
@@ -199,35 +235,27 @@ class AdminSchedulesRoute extends Component {
     })
     // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+      <div className="layout-row flex-95 layout-wrap layout-align-start-center">
         <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
       </div>
     )
 
     const listView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">{tripArr}</div>
+      <div className="layout-row flex-95 layout-wrap layout-align-start-center">
+        <ReactTable
+          className="flex-100 height_100"
+          data={schedules}
+          columns={columns}
+          defaultSorted={[
+            {
+              id: 'closing_date',
+              desc: true
+            }
+          ]}
+          defaultPageSize={20}
+        />
+      </div>
     )
-    const typeFilters = Object.keys(searchFilters.sort).map((htk) => {
-      const typeNames = {
-        start_date: 'Expected Departure',
-        end_date: 'Expected Arrival',
-        closing_date: 'Closing Date'
-      }
-      return (
-        <div
-          className={`${
-            styles.action_section
-          } flex-100 layout-row layout-align-center-center layout-wrap`}
-        >
-          <p className="flex-70">{typeNames[htk]}</p>
-          <Checkbox
-            onChange={() => this.toggleFilterValue(htk)}
-            checked={searchFilters.sort[htk]}
-            theme={theme}
-          />
-        </div>
-      )
-    })
     const backButton = (
       <RoundButton
         theme={theme}
@@ -258,7 +286,7 @@ class AdminSchedulesRoute extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left padding_top">
         {uploadStatus}
         <div className="flex-80 layout-row layout-align-start-start layout-wrap">
           <div
@@ -269,174 +297,98 @@ class AdminSchedulesRoute extends Component {
           {showList ? listView : genView}
         </div>
         <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                className="flex-100"
-                value={searchFilters.query}
-                placeholder="Search..."
-                onChange={e => this.handleSearchQuery(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('sorter')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Sort By</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.sorter ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.sorter ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                {typeFilters}
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.upload ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
+          <SideOptionsBox
+            header="Filters"
+            flexOptions="flex-100"
+            content={(
+              <div>
                 <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
                 >
-                  <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={file =>
-                      documentDispatch.uploadItinerarySchedules(file, itinerary.id)
-                    }
-                    type="xlsx"
-                    text="Train Schedules .xlsx"
+                  <input
+                    type="text"
+                    className="flex-100"
+                    value={searchFilters.query}
+                    placeholder="Search..."
+                    onChange={e => this.handleSearchQuery(e)}
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
+            )}
+          />
+          <SideOptionsBox
+            header="Data manager"
+            flexOptions="flex-100"
+            content={(
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <CollapsingBar
+                  collapsed={!expander.upload}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('upload')}
+                  headingText="Upload Data"
+                  faClass="fa fa-cloud-upload"
+                  content={(
+                    <div>
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-align-center-center layout-wrap`}
+                      >
+                        <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
+                        <FileUploader
+                          theme={theme}
+                          dispatchFn={file =>
+                            documentDispatch.uploadItinerarySchedules(file, itinerary.id)
+                          }
+                          type="xlsx"
+                          text="Train Schedules .xlsx"
+                        />
+                      </div>
+                    </div>
                   )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.download ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-80">Download Schedules Sheet</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="schedules"
-                    options={{ itinerary_id: itinerary.id }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('new')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-plus-circle" />
-                  <p className="flex-none">Autogenerate Schedules</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.new ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
+                />
+                <CollapsingBar
+                  collapsed={!expander.download}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('download')}
+                  headingText="Download Data"
+                  faClass="fa fa-cloud-download"
+                  content={(
+                    <div>
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-wrap layout-align-center-center`}
+                      >
+                        <p className="flex-80">Download Schedules Sheet</p>
+                        <DocumentsDownloader
+                          theme={theme}
+                          target="schedules"
+                          options={{ itinerary_id: itinerary.id }}
+                        />
+                      </div>
+                    </div>
                   )}
-                </div>
+                />
+                <CollapsingBar
+                  collapsed={!expander.new}
+                  theme={theme}
+                  handleCollapser={() => this.toggleExpander('new')}
+                  headingText="Create New Hub"
+                  faClass="fa fa-plus-circle"
+                  content={(
+                    <div
+                      className={`${
+                        styles.action_section
+                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                    >
+                      {showList ? newButton : backButton}
+                    </div>
+                  )}
+                />
               </div>
-              <div
-                className={`${
-                  expander.new ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  {showList ? newButton : backButton}
-                </div>
-              </div>
-            </div>
-          </div>
+            )}
+          />
         </div>
       </div>
     )

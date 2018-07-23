@@ -60,6 +60,14 @@ export class ShipmentContainers extends Component {
   }
 
   deleteCargo (index) {
+    this.setState((prevState) => {
+      const { selectors } = prevState
+      selectors.splice(index, 1)
+
+      return {
+        selectors
+      }
+    })
     this.props.deleteItem('containers', index)
   }
 
@@ -107,6 +115,7 @@ export class ShipmentContainers extends Component {
     const optionsWithIndex = (options, index) => options.map((option) => {
       const optionCopy = Object.assign([], option)
       optionCopy.index = index
+
       return optionCopy
     })
     const generateSeparator = () => (
@@ -198,15 +207,21 @@ export class ShipmentContainers extends Component {
       </div>
     )
     const containersAdded = []
+
     if (containers) {
       containers.forEach((container, i) => {
         if (i > 0) containersAdded.push(generateSeparator())
-        if (!selectors[i].sizeClass) {
-          this.handleContainerSelect(optionsWithIndex(containerOptions, i)[0])
+        if (!selectors[i] || (selectors[i] && !selectors[i].sizeClass)) {
+          const currentSizeClassSelection = container.sizeClass
+            ? optionsWithIndex(containerOptions, i)
+              .find(option => option.value === container.sizeClass)
+            : optionsWithIndex(containerOptions, i)[0]
+          this.handleContainerSelect(currentSizeClassSelection)
         }
         containersAdded.push(generateContainer(container, i))
       })
     }
+
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-start">
         <div

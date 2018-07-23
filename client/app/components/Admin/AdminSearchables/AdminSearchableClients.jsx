@@ -88,21 +88,27 @@ export class AdminSearchableClients extends Component {
           handleClick={this.handleClick}
           tooltip={tooltip}
           showTooltip={showTooltip}
+          flexClasses="flex-30 flex-md-45 flex-gt-lg-15"
         />))
     }
-    const viewType = (clientsArr.length > 3) ? (
-      <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-        <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-          {clientsArr}
-        </div>
+    // const viewType = (clientsArr.length > 3) ? (
+    //   <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
+    //     <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+    //       {clientsArr}
+    //     </div>
+    //   </div>
+    // ) : (
+    //   <div className="layout-row flex-100 layout-align-start-center ">
+    //     <div className="layout-row flex-none layout-align-start-center layout-wrap">
+    //       {clientsArr}
+    //     </div>
+    //   </div>
+    // )
+    const viewType = (<div className="layout-row flex-100 layout-align-start-center ">
+      <div className="layout-row flex-none layout-align-space-between-center layout-wrap">
+        {clientsArr}
       </div>
-    ) : (
-      <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-none layout-align-start-center layout-wrap">
-          {clientsArr}
-        </div>
-      </div>
-    )
+    </div>)
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>

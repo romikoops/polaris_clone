@@ -2,15 +2,20 @@
 
 module OfferCalculatorService
   class ScheduleFinder < Base
-    def exec(routes, raw_delay_in_days, hubs)
+    def perform(routes, raw_delay_in_days, hubs)
       delay_in_days = sanitized_delay_in_days(raw_delay_in_days)
+      # byebug
       Schedule.from_routes(routes, current_etd_in_search(hubs), delay_in_days)
     end
 
     private
 
     def current_etd_in_search(hubs)
-      @shipment.selected_day + longest_trucking_time(hubs).seconds + 3.days
+      trucking_time = longest_trucking_time(hubs).seconds
+      if trucking_time != 0
+        @shipment.trucking["pre_carriage"]["trucking_time_in_seconds"] = [trucking_time, 129600].max
+      end
+      @shipment.selected_day + trucking_time
     end
 
     def longest_trucking_time(hubs)

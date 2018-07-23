@@ -25,6 +25,7 @@ export class RouteResult extends Component {
       default:
         break
     }
+
     return hubType
   }
   static dashedGradient (color1, color2) {
@@ -40,7 +41,7 @@ export class RouteResult extends Component {
   }
   render () {
     const {
-      theme, schedule, pickup
+      theme, schedule, pickup, truckingTime
     } = this.props
 
     const originHub = schedule.origin_hub
@@ -55,6 +56,7 @@ export class RouteResult extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
+
     return (
       <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
         <div className="flex-70 layout-row layout-wrap">
@@ -101,7 +103,9 @@ export class RouteResult extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
+                  {pickup
+                    ? moment(schedule.closing_date).subtract(truckingTime, 'seconds').format('DD-MM-YYYY')
+                    : moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
                 </p>
               </div>
             </div>
@@ -167,11 +171,13 @@ RouteResult.propTypes = {
   theme: PropTypes.theme,
   schedule: PropTypes.schedule.isRequired,
   selectResult: PropTypes.func.isRequired,
-  pickup: PropTypes.bool
+  pickup: PropTypes.bool,
+  truckingTime: PropTypes.number
 }
 RouteResult.defaultProps = {
   theme: null,
-  pickup: false
+  pickup: false,
+  truckingTime: 0
 }
 
 export default RouteResult

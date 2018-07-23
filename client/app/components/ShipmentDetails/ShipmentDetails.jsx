@@ -37,6 +37,7 @@ import addressFieldsAreValid from './addressFieldsAreValid'
 import calcAvailableMotsForRoute,
 { shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
 import getRequests from '../ShipmentLocationBox/getRequests'
+import reuseShipments from '../../helpers/reuseShipment'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -154,9 +155,10 @@ export class ShipmentDetails extends Component {
     this.updateFilteredRouteIndexes = this.updateFilteredRouteIndexes.bind(this)
   }
   componentWillMount () {
-    const { prevRequest, setStage } = this.props
-
-    if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
+    const { prevRequest, setStage, reusedShipment } = this.props
+    if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
+      this.loadReusedShipment(reusedShipment)
+    } else if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
@@ -311,6 +313,35 @@ export class ShipmentDetails extends Component {
       has_pre_carriage: !!obj.trucking.pre_carriage.truck_type,
       trucking: obj.trucking,
       incoterm: obj.incoterm,
+      routeSet: true,
+      prevRequestLoaded: true
+    })
+  }
+  loadReusedShipment (obj) {
+    const newCargoItemsErrors = obj.cargoItems.map(cia => ({
+      payload_in_kg: false,
+      dimension_x: false,
+      dimension_y: false,
+      dimension_z: false,
+      cargo_item_type_id: false,
+      quantity: false
+    }))
+    const newContainerErrors = obj.containers.map(cia => ({
+      payload_in_kg: false
+    }))
+    this.setState({
+      cargoItems: reuseShipments.reuseCargoItems(obj.cargoItems),
+      containers: reuseShipments.reuseContainers(obj.containers),
+      cargoItemsErrors: newCargoItemsErrors,
+      containersErrors: newContainerErrors,
+      selectedDay: obj.shipment.has_pre_carriage
+        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_dropp_off_date,
+      origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
+      destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
+      has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
+      has_pre_carriage: !!obj.shipment.trucking.pre_carriage.truck_type,
+      trucking: obj.shipment.trucking,
+      incoterm: obj.shipment.incoterm,
       routeSet: true,
       prevRequestLoaded: true
     })
@@ -651,13 +682,13 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch, messages
+      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
-
+    if (showRegistration) this.props.hideRegistration()
     if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
 
     if (this.state.aggregated) {
@@ -728,6 +759,7 @@ export class ShipmentDetails extends Component {
         handleTruckingDetailsChange={this.handleTruckingDetailsChange}
         filteredRouteIndexes={filteredRouteIndexes}
         updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
+        reusedShipment={this.props.reusedShipment}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -1040,6 +1072,9 @@ ShipmentDetails.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
+  reusedShipment: PropTypes.shape({
+    shipment: PropTypes.shipment
+  }),
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
@@ -1048,12 +1083,17 @@ ShipmentDetails.propTypes = {
     update: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired
+  user: PropTypes.user.isRequired,
+  showRegistration: PropTypes.bool,
+  hideRegistration: PropTypes.func
 }
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: []
+  messages: [],
+  reusedShipment: null,
+  showRegistration: false,
+  hideRegistration: null
 }
 
 export default ShipmentDetails

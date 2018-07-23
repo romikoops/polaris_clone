@@ -43,6 +43,7 @@
   }
   .sec_title {
     min-height: 45px;
+    font-weight: bolder;
   }
   .sec_header {
     min-height: 60px;
@@ -228,9 +229,6 @@
     // background: whitesmoke;
     height: max-content;
   }
-  .shed_selector {
-
-  }
   .sched_selector i, .sched_selector p {
     background-clip: text !important;
     -webkit-background-clip: text !important;
@@ -327,6 +325,22 @@
   .price_row {
     p {
       margin: 0;
+    }
+  }
+  .navigation_button {
+    background: white;
+    color: #BDBDBD;
+    i {
+      font-size: 25px;
+    }
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+  .disabled {
+    color: #E0E0E0 !important;
+    &:hover {
+      color: #E0E0E0 !important;
     }
   }
   .price_subheader {
@@ -630,22 +644,25 @@
     border-radius: 4px;
     margin: 5px;
     width: 95%;
-    box-shadow: 1px 1px 1px rgba(black, 0.3);
-     &:focus {
+    &:focus {
       outline: none;
     }
-    &:hover {
-      // margin: -1px 1px 1px -1px;
-      box-shadow: 1px 1px 1px rgba(black, 0.7);
-    }
+    // &:hover {
+    //   // margin: -1px 1px 1px -1px;
+    //   box-shadow: 1px 1px 1px rgba(black, 0.7);
+    // }
     &:active {
       margin: 0;
       box-shadow: none;
     }
     p {
-      margin: 4px;
+      margin: 4px 10px;
       text-align: center;
     }
+  }
+  .truck_type_border {
+    border-left: 1px solid #BDBDBD;
+    border-right: 1px solid #BDBDBD;
   }
   .trucking_inner_row {
     border-radius: 4px;
@@ -785,11 +802,17 @@
     transition: all 2s linear;
   }
   .range_header {
-    padding: 4px 15px;
+    padding: 4px 15px 22px 15px;
     height: 50px;
+    border-bottom: 4px solid #E0E0E0;
+    img {
+      width: 32px;
+    }
     p {
-      color: white;
-      font-size: 14px;
+      color: #4F4F4F;
+      font-weight: bolder;
+      margin-left: 25px;
+      font-size: 18px;
     }
   }
   .range_cell {
@@ -889,14 +912,23 @@
       font-weight: bold;
      }
    }
+   .title_grey_with_button {
+    background: #E0E0E0;
+    color: #212121;
+    // height: 38px;
+    &:first-child {
+     padding-left: 15px;
+     margin-top: 0;
+     margin-bottom: 0;
+     font-size: 18px;
+     font-weight: bold;
+    }
+  }
    .expander_icon i {
      font-size: 12px !important;
    }
    .border_box {
      border: 5px solid #E0E0E0;
-   }
-   .margin_bottom {
-     margin-bottom: 25px;
    }
    .margin_box_right {
      > * {
@@ -941,6 +973,9 @@
     height: 40px;
     width: 100%;
   }
+  .set_height {
+    min-height: 400px;
+  }
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;
@@ -953,5 +988,13 @@
   .header_margin_buffer{
     margin: 0 15px;
   }
- }
- 
+  .margin_top_align {
+    margin-top: -60px;
+  }
+  .back_button {
+    color: #BDBDBD;
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+}

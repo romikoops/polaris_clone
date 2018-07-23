@@ -3,7 +3,6 @@ import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './AdminClientTile.scss'
-import adminStyles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator, gradientBorderGenerator } from '../../helpers'
 import GradientBorder from '../GradientBorder'
@@ -43,7 +42,8 @@ export class AdminClientTile extends Component {
       client,
       deleteable,
       showTooltip,
-      tooltip
+      tooltip,
+      flexClasses
     } = this.props
     const { showDelete } = this.state
     if (!client) {
@@ -138,31 +138,32 @@ export class AdminClientTile extends Component {
     const tooltipId = v4()
 
     return (
-      <GradientBorder
-        wrapperClassName={`flex-none ${styles.client_card} ${adminStyles.margin_bottom} layout-row flex-30 flex-md-45 pointy`}
-        gradient={gradientBorderStyle}
-        className="layout-column flex-100"
-        content={(
-          <div className="layout-column flex-100">
-            {deleteable && !showDelete ? (
-              <div
-                className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
-                onClick={this.toggleShowDelete}
-              >
-                <i className="fa fa-trash" />
+      <div className={`layout-row layout-align-center-center margin_bottom ${styles.tile_wrapper} ${flexClasses}`}>
+        <GradientBorder
+          wrapperClassName={`flex ${styles.client_card}  layout-row pointy`}
+          gradient={gradientBorderStyle}
+          className="layout-column flex-100"
+          content={(
+            <div className="layout-column flex-100">
+              {deleteable && !showDelete ? (
+                <div
+                  className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
+                  onClick={this.toggleShowDelete}
+                >
+                  <i className="fa fa-trash" />
+                </div>
+              ) : (
+                ''
+              )}
+              <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
+                {contentView}
+                {
+                  showTooltip
+                    ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+                    : ''
+                }
               </div>
-            ) : (
-              ''
-            )}
-            <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
-              {contentView}
-              {
-                showTooltip
-                  ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
-                  : ''
-              }
-            </div>
-            {/* <div className={`${userStyles.footer}`}>
+              {/* <div className={`${userStyles.footer}`}>
               <div className="layout-row layout-align-center-center">
                 <span
                   className="emulate_link"
@@ -172,9 +173,10 @@ export class AdminClientTile extends Component {
                 </span>
               </div>
             </div> */}
-          </div>
-        )}
-      />
+            </div>
+          )}
+        />
+      </div>
     )
   }
 }
@@ -187,6 +189,7 @@ AdminClientTile.propTypes = {
   target: PropTypes.string,
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
+  flexClasses: PropTypes.string,
   showTooltip: PropTypes.bool
 }
 AdminClientTile.defaultProps = {
@@ -197,7 +200,8 @@ AdminClientTile.defaultProps = {
   showTooltip: false,
   navFn: null,
   deleteFn: null,
-  target: ''
+  target: '',
+  flexClasses: 'flex-30 flex-md-45'
 }
 
 export default AdminClientTile

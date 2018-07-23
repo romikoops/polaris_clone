@@ -14,7 +14,7 @@
 
   <row>
     <columns>
-    	<button href="<%= user_confirmation_url(@resource, confirmation_token: @token, redirect_url: @redirect_url) %>" class="success radius">Confirm my account</button>
+    	<button href="<%= @confirmation_url %>" class="success radius">Confirm my account</button>
     </columns>
   </row>
   <row>

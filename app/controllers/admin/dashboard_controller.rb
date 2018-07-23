@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-class Admin::DashboardController < ApplicationController
+class Admin::DashboardController < Admin::AdminBaseController
   include ItineraryTools
-  before_action :require_login_and_role_is_admin
   before_action :initialize_variables, only: :index
 
   def index
@@ -15,7 +14,8 @@ class Admin::DashboardController < ApplicationController
         requested: @requested_shipments,
         open: @open_shipments,
         finished: @finished_shipments
-      })
+      },
+      mapData: @map_data)
   end
 
   private
@@ -26,7 +26,11 @@ class Admin::DashboardController < ApplicationController
     @open_shipments = open_shipments
     @finished_shipments = finished_shipments
     @detailed_itineraries = detailed_itin_json
-    @hubs = Hub.prepped(current_user)
+    hubs = current_user.tenant.hubs
+    @hubs = hubs.limit(8).map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    @map_data = current_user.tenant.map_data
     @tenant = Tenant.find(current_user.tenant_id)
     @train_schedules = flap_map_schedule_by_mot("rail")
     @ocean_schedules = flap_map_schedule_by_mot("ocean")
@@ -53,24 +57,13 @@ class Admin::DashboardController < ApplicationController
 
 
   def detailed_itin_json
-    Itinerary.for_tenant(current_user.tenant_id).map do |itinerary|
-       itinerary.as_options_json(methods: :routes)
+    Itinerary.for_tenant(current_user.tenant_id).limit(40).map do |itinerary|
+      itinerary.as_options_json()
     end
   end
 
   def flap_map_schedule_by_mot(mot)
     @tenant.itineraries.where(mode_of_transport: mot).limit(10)
       .flat_map { |it| it.prep_schedules(5) }
-  end
-
-  def is_current_tenant?
-    current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id])&.id
-  end
-
-  def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin") && is_current_tenant?
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 end

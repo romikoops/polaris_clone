@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { userConstants } from '../constants'
 import { userService } from '../services'
 import { history } from '../helpers'
-import { alertActions, authenticationActions } from './'
+import { alertActions, authenticationActions, shipmentActions } from './'
 
 function getAll (redirect) {
   function request () {
@@ -10,11 +10,13 @@ function getAll (redirect) {
   }
   function success (response) {
     const payload = response.data
+
     return { type: userConstants.GETALL_SUCCESS, payload }
   }
   function failure (error) {
     return { type: userConstants.GETALL_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -62,11 +64,13 @@ function getLocations (user, redirect) {
   }
   function success (response) {
     const payload = response.data
+
     return { type: userConstants.GETLOCATIONS_SUCCESS, payload }
   }
   function failure (error) {
     return { type: userConstants.GETLOCATIONS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -88,11 +92,13 @@ function optOut (userId, target) {
   }
   function success (response) {
     const payload = response.data
+
     return { type: userConstants.OPT_OUT_SUCCESS, payload }
   }
   function failure (error) {
     return { type: userConstants.OPT_OUT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -120,11 +126,13 @@ function destroyLocation (userId, locationId, redirect) {
   }
   function success (response) {
     const payload = response.data
+
     return { type: userConstants.DESTROYLOCATION_SUCCESS, payload }
   }
   function failure (error) {
     return { type: userConstants.DESTROYLOCATION_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -146,11 +154,13 @@ function makePrimary (userId, locationId, redirect) {
   }
   function success (response) {
     const payload = response.data
+
     return { type: userConstants.MAKEPRIMARY_SUCCESS, payload }
   }
   function failure (error) {
     return { type: userConstants.MAKEPRIMARY_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -176,6 +186,7 @@ function getShipments (redirect) {
   function failure (error) {
     return { type: userConstants.GET_SHIPMENTS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -207,6 +218,7 @@ function getHubs (id) {
   function failure (error) {
     return { type: userConstants.GET_HUBS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -235,6 +247,7 @@ function getShipment (id, redirect) {
   function failure (error) {
     return { type: userConstants.USER_GET_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -247,11 +260,15 @@ function getShipment (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
     )
+  }
+}
+function reuseShipment (shipment) {
+  return (dispatch) => {
+    dispatch(shipmentActions.reuseShipment(shipment))
   }
 }
 
@@ -265,6 +282,7 @@ function getDashboard (id, redirect) {
   function failure (error) {
     return { type: userConstants.GET_DASHBOARD_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -295,6 +313,7 @@ function deleteDocument (id) {
   function failure (error) {
     return { type: userConstants.DELETE_DOCUMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -322,6 +341,7 @@ function uploadDocument (doc, type, url) {
   function failure (error) {
     return { type: userConstants.UPLOAD_DOCUMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -349,6 +369,7 @@ function getContact (id, redirect) {
   function failure (error) {
     return { type: userConstants.GET_CONTACT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -380,6 +401,7 @@ function updateContact (data, redirect) {
   function failure (error) {
     return { type: userConstants.UPDATE_CONTACT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -409,6 +431,7 @@ function newUserLocation (userId, data) {
   function failure (error) {
     return { type: userConstants.NEW_USER_LOCATION_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -434,6 +457,7 @@ function editUserLocation (userId, data) {
   function failure (error) {
     return { type: userConstants.EDIT_USER_LOCATION_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -460,6 +484,7 @@ function newContact (data) {
   function failure (error) {
     return { type: userConstants.NEW_CONTACT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -486,6 +511,7 @@ function newAlias (data) {
   function failure (error) {
     return { type: userConstants.NEW_ALIAS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -512,6 +538,7 @@ function deleteAlias (aliasId) {
   function failure (error) {
     return { type: userConstants.DELETE_ALIAS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -538,6 +565,7 @@ function deleteContactAddress (addressId) {
   function failure (error) {
     return { type: userConstants.DELETE_CONTACT_ADDRESS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -564,6 +592,7 @@ function saveAddressEdit (address) {
   function failure (error) {
     return { type: userConstants.UPDATE_CONTACT_ADDRESS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -623,7 +652,9 @@ export const userActions = {
   delete: _delete,
   logOut,
   editUserLocation,
-  optOut
+  optOut,
+  reuseShipment
+
 }
 
 export default userActions

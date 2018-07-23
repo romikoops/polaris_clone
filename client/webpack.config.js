@@ -2,22 +2,23 @@ const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
-const HtmlWebPackPlugin = require("html-webpack-plugin")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const NodeEnvPlugin = require('node-env-webpack-plugin')
+const DotenvWebpack = require('dotenv-webpack')
+
 const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
   cacheDirectory: true,
   babelrc: false
 })
 
-
 babelrc.plugins.push('react-hot-loader/babel')
 module.exports = {
   entry: './app/index.jsx',
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: true
   },
-  output : {
+  output: {
     publicPath: '/',
     filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js'
   },
@@ -27,7 +28,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: 'babel-loader'
         }
       },
       {
@@ -50,26 +51,26 @@ module.exports = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader",
+            loader: 'html-loader',
             options: { minimize: true }
           }
         ]
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"]
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
         test: /\.scss$/,
         use: [
           {
-            loader: "style-loader" // creates style nodes from JS strings
+            loader: 'style-loader' // creates style nodes from JS strings
           },
           {
-            loader: "css-loader" // translates CSS into CommonJS
+            loader: 'css-loader' // translates CSS into CommonJS
           },
           {
-            loader: "sass-loader" // compiles Sass to CSS
+            loader: 'sass-loader' // compiles Sass to CSS
           }
         ]
       },
@@ -95,7 +96,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.css' : '[name].css',
-      chunkFilename: "[id].css"
+      chunkFilename: '[id].css'
     }),
     NodeEnvPlugin.isProduction
       ? false
@@ -103,6 +104,9 @@ module.exports = {
         host: 'localhost',
         port: 3001,
         proxy: 'http://localhost:8080/'
-      })
+      }),
+    new DotenvWebpack({
+      path: './.node-env'
+    })
   ].filter(Boolean)
-};
+}

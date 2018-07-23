@@ -1,6 +1,4 @@
 module WritingTool
-  include AwsConfig
-  extend  AwsConfig
 
   def write_to_aws(dir, tenant, filename, doc_type)
     file = open(dir)
@@ -46,7 +44,7 @@ module WritingTool
   def add_worksheet_to_workbook(workbook, header_text, worksheet_name = nil)
     header_format = workbook.add_format
     header_format.set_bold
-
+    # byebug
     if worksheet_name
       worksheet = workbook.add_worksheet(worksheet_name)
     else

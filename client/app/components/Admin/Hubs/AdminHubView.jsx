@@ -8,7 +8,14 @@ import { AdminHubFees } from './Fees'
 import AdminPromptConfirm from '../Prompt/Confirm'
 import hubStyles from './index.scss'
 import '../../../styles/react-toggle.scss'
-import { gradientGenerator, gradientTextGenerator, switchIcon, renderHubType, capitalize, gradientBorderGenerator } from '../../../helpers'
+import {
+  gradientGenerator,
+  gradientTextGenerator,
+  switchIcon,
+  renderHubType,
+  capitalize,
+  gradientBorderGenerator
+} from '../../../helpers'
 import MandatoryChargeBox from './MandatoryChargeBox'
 import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'
@@ -23,13 +30,16 @@ export class AdminHubView extends Component {
       currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
       editedHub: { data: {}, location: {} },
       mandatoryCharge: {},
-      editView: false
+      editView: false,
+      page: 1,
+      numPerPage: 10
     }
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
   }
   componentDidMount () {
     this.checkAndSetCharges(this.props)
+    this.prepPages()
   }
   componentWillReceiveProps (nextProps) {
     if (!this.state.mapWidth) {
@@ -61,6 +71,20 @@ export class AdminHubView extends Component {
     const { routes } = this.props.hubData
 
     return routes.filter(x => x.id === id)[0]
+  }
+  deltaPage (val) {
+    this.setState((prevState) => {
+      const newPageVal = prevState.page + val
+      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+
+      return { page }
+    })
+  }
+  prepPages () {
+    const { hubData } = this.props
+    const { routes } = hubData
+    const numPages = Math.ceil(routes.length / 12)
+    this.setState({ numPages })
   }
   toggleHubActive () {
     const { hubData, adminActions } = this.props
@@ -153,7 +177,10 @@ export class AdminHubView extends Component {
       currentFeeLoadType,
       editView,
       confirm,
-      mandatoryCharge
+      mandatoryCharge,
+      page,
+      numPages,
+      numPerPage
     } = this.state
     if (!hubData || !theme) {
       return ''
@@ -256,15 +283,47 @@ export class AdminHubView extends Component {
       theme={theme}
       saveChanges={e => this.saveMandatoryChargeEdit(e)}
     />)
-    const itinerariesBox = routes.map(r =>
-      (<ItineraryRow
-        itinerary={r}
-        theme={theme}
-        adminDispatch={adminActions}
-      />))
+    const sliceStartIndex = (page - 1) * numPerPage
+    const sliceEndIndex = (page * numPerPage)
+    const itinerariesBox =
+    (<div className="flex-100 layout-row layout-wrap">
+      {routes
+        .slice(sliceStartIndex, sliceEndIndex)
+        .map(r =>
+          (<ItineraryRow
+            itinerary={r}
+            theme={theme}
+            adminDispatch={adminActions}
+          />))}
+      <div className="flex-95 layout-row layout-align-center-center margin_bottom">
+        <div
+          className={`
+                flex-15 layout-row layout-align-center-center pointy
+                ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+              `}
+          onClick={page > 1 ? () => this.deltaPage(-1) : null}
+        >
+          {/* style={page === 1 ? { display: 'none' } : {}} */}
+          <i className="fa fa-chevron-left" />
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+        </div>
+        {}
+        <p>{page}</p>
+        <div
+          className={`
+                flex-15 layout-row layout-align-center-center pointy
+                ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+              `}
+          onClick={page < numPages ? () => this.deltaPage(1) : null}
+        >
+          <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <i className="fa fa-chevron-right" />
+        </div>
+      </div>
+    </div>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding">
         {editView ? editorModal : '' }
         <div
           className={`${

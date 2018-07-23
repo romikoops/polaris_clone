@@ -5,7 +5,7 @@ import { gradientBorderGenerator } from '../../helpers'
 
 export default function Tab (props) {
   const {
-    linkClassName, isActive, onClick, tabIndex, tabTitle, theme
+    linkClassName, isActive, onClick, tabIndex, tabTitle, theme, icon
   } = props
 
   const borderGradient =
@@ -21,13 +21,14 @@ export default function Tab (props) {
       <div className={styles.gradient} style={isActive ? borderGradient : deselectedStyle} />
       <div className={`${styles.content}`}>
         <a
-          className={` ${linkClassName} ${isActive ? 'active' && styles.active : styles.disabled}`}
+          className={` layout-row layout-align-space-around-end ${linkClassName} ${isActive ? 'active' && styles.active : styles.disabled}`}
           onClick={(event) => {
             event.preventDefault()
             onClick(tabIndex)
           }}
         >
-          <p>{tabTitle}</p>
+          {icon}
+          <p className="flex-none">{tabTitle}</p>
         </a>
       </div>
     </div>
@@ -40,12 +41,14 @@ Tab.propTypes = {
   isActive: PropTypes.bool,
   linkClassName: PropTypes.string.isRequired,
   tabTitle: PropTypes.string.isRequired,
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  icon: PropTypes.node
 }
 
 Tab.defaultProps = {
   onClick: null,
   tabIndex: 0,
   isActive: false,
-  theme: null
+  theme: null,
+  icon: null
 }

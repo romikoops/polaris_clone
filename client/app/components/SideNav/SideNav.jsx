@@ -119,14 +119,14 @@ class SideNav extends Component {
         target: 'routes',
         tooltip: menuTip.routes
       },
-      {
-        key: v4(),
-        icon: 'fa-magic',
-        text: 'Set Up',
-        url: '/admin/wizard',
-        target: 'wizard',
-        tooltip: menuTip.setup
-      },
+      // {
+      //   key: v4(),
+      //   icon: 'fa-magic',
+      //   text: 'Set Up',
+      //   url: '/admin/wizard',
+      //   target: 'wizard',
+      //   tooltip: menuTip.setup
+      // },
       {
         key: v4(),
         icon: 'fa-money',
@@ -325,7 +325,6 @@ class SideNav extends Component {
         }`}
       >
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
-        {console.log(() => this.toggleActiveIndex())}
         <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
       </div>
     )

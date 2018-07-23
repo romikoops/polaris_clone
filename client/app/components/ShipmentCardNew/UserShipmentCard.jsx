@@ -8,7 +8,9 @@ import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
-  switchIcon
+  switchIcon,
+  totalPrice,
+  formattedPriceValue
 } from '../../helpers'
 
 export class UserShipmentCard extends Component {
@@ -139,7 +141,7 @@ export class UserShipmentCard extends Component {
             <div className={`layout-row flex-50 layout-align-end-end ${styles.smallText}`}>
               <span className="flex-80"><b>Booking placed at</b><br />
                 <span className={`${styles.grey}`}>
-                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}
+                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}
                 </span>
               </span>
             </div>
@@ -149,9 +151,15 @@ export class UserShipmentCard extends Component {
             ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
         >
           <div className="layout-column flex-20">
-            <span className="flex-100"><b>Pickup Date</b><br />
+            <span className="flex-100"><b>{ shipment.has_pre_carriage ? 'Pickup Date' : 'Drop Off Date'}</b><br />
               <span className={`${styles.grey}`}>
-                {moment(shipment.planned_pickup_date).format('DD/MM/YYYY')}
+                {
+                  shipment.has_pre_carriage
+                    ? moment(shipment.planned_pickup_date)
+                      .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                      .format('DD/MM/YYYY')
+                    : moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')
+                }
               </span>
             </span>
           </div>
@@ -206,10 +214,9 @@ export class UserShipmentCard extends Component {
           </div>
           <div className="layout-align-end-center">
             <span className={`${styles.bigText}`}>
-              <span>{shipment.total_price ? shipment.total_price.currency : ''} </span>
+              <span>{totalPrice(shipment).currency} </span>
               <span>
-                {shipment.total_price ? Number.parseFloat(shipment.total_price.value)
-                  .toFixed(2) : 0}
+                {formattedPriceValue(totalPrice(shipment).value)}
               </span>
             </span>
           </div>

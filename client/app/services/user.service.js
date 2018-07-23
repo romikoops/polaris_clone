@@ -240,7 +240,7 @@ function reuseShipment (id) {
     method: 'GET',
     headers: authHeader()
   }
-  return fetch(`${BASE_URL}/shipments/${id}/reuse`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
 }
 
 export const userService = {

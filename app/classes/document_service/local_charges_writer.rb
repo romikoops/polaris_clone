@@ -2,6 +2,7 @@
 
 module DocumentService
   class LocalChargesWriter
+    include AwsConfig
     include WritingTool
     attr_reader :options, :tenant, :hubs, :results_by_hub, :filename, :directory, :header_values, :workbook
 
@@ -19,7 +20,9 @@ module DocumentService
     def perform
       results_by_hub.each do |hub, results|
         row = 1
-        workbook_hash = add_worksheet_to_workbook(workbook, header_values, hub)
+        hub_string = hub.dup()
+        # byebug
+        workbook_hash = add_worksheet_to_workbook(workbook, header_values, hub_string.gsub('/', ''))
         @workbook = workbook_hash[:workbook]
         worksheet = workbook_hash[:worksheet]
         results.each do |result|

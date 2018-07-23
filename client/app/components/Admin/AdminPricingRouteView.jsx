@@ -3,21 +3,16 @@ import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from './'
 import styles from './Admin.scss'
-import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
+import shipmentStyles from './AdminShipments.scss'
 import AdminPromptConfirm from './Prompt/Confirm'
 
-import {
-  CONTAINER_DESCRIPTIONS,
-  fclChargeGlossary,
-  lclChargeGlossary,
-  chargeGlossary
-} from '../../constants'
-import { history } from '../../helpers'
+import { history, gradientGenerator, gradientBorderGenerator, switchIcon } from '../../helpers'
+import GradientBorder from '../GradientBorder'
+import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
+import { AdminPricingBox } from './Pricing/Box'
+import { AdminPricingDedicated } from './Pricing/Dedicated'
+import { RoundButton } from '../RoundButton/RoundButton'
 
-const containerDescriptions = CONTAINER_DESCRIPTIONS
-const fclChargeGloss = fclChargeGlossary
-const lclChargeGloss = lclChargeGlossary
-const chargeGloss = chargeGlossary
 export class AdminPricingRouteView extends Component {
   static backToIndex () {
     history.goBack()
@@ -25,7 +20,8 @@ export class AdminPricingRouteView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedClient: false
+      selectedClient: false,
+      showPricingAdder: false
     }
     this.editThis = this.editThis.bind(this)
     this.closeEdit = this.closeEdit.bind(this)
@@ -33,6 +29,7 @@ export class AdminPricingRouteView extends Component {
     this.closeClientView = this.closeClientView.bind(this)
   }
   componentDidMount () {
+    console.log('PARENT REMOUNTING')
     const {
       routePricings, loading, adminActions, match
     } = this.props
@@ -49,6 +46,9 @@ export class AdminPricingRouteView extends Component {
       editTransport: transport,
       editorBool: true
     })
+  }
+  addNewPricings () {
+    this.setState({ showPricingAdder: !this.state.showPricingAdder })
   }
   closeEdit () {
     this.setState({
@@ -89,7 +89,8 @@ export class AdminPricingRouteView extends Component {
       editPricing,
       editHubRoute,
       confirm,
-      pricingToDelete
+      pricingToDelete,
+      showPricingAdder
     } = this.state
     const { selectedClient } = this.state
     console.log(this.props)
@@ -98,13 +99,10 @@ export class AdminPricingRouteView extends Component {
     }
     const fauxShipment = {
     }
-    console.log(itineraryPricings)
-    const { transportCategories } = pricingData
     const {
       itinerary,
       itineraryPricingData,
       stops,
-      detailedItineraries,
       userPricings
     } = itineraryPricings
     if (!itinerary || !itineraryPricingData) {
@@ -112,140 +110,30 @@ export class AdminPricingRouteView extends Component {
     }
     fauxShipment.origin_hub = stops[0].hub
     fauxShipment.destination_hub = stops[stops.length - 1].hub
+    const gradientStyle =
+    theme && theme.colors
+      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: 'black' }
 
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
-    const RPBInner = ({ hubRoute, pricing, transport }) => {
-      const panel = []
-      let gloss
-      if (transport.cargo_class.includes('lcl')) {
-        gloss = lclChargeGloss
-      } else {
-        gloss = fclChargeGloss
-      }
-      Object.keys(pricing.data).forEach((key) => {
-        const cells = []
-        Object.keys(pricing.data[key]).forEach((chargeKey) => {
-          if (
-            chargeKey !== 'currency' &&
-            chargeKey !== 'rate_basis' &&
-            chargeKey !== 'hw_rate_basis' &&
-            chargeKey !== 'range'
-          ) {
-            cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-              <p className="flex-none">{chargeGloss[chargeKey]}</p>
-              <p className="flex">
-                {pricing.data[key][chargeKey]} {pricing.data[key].currency}
-              </p>
-            </div>)
-          } else if (chargeKey === 'rate_basis' || chargeKey === 'hw_rate_basis') {
-            cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-              <p className="flex-none">{chargeGloss[chargeKey]}</p>
-              <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
-            </div>)
-          } else if (chargeKey === 'range') {
-            pricing.data[key].range.forEach((rangeFee, i) => {
-              const ellipsis = (
-                <div className="flex-10 layout-row layout-align-center-center">
-                  <i className="flex-none fa fa-balance-scale" />
-                </div>
-              )
-              const rangeCells = [ellipsis]
-              Object.keys(rangeFee).forEach((rfKey) => {
-                if (rfKey !== 'currency' && rfKey !== 'max' && rfKey !== 'min') {
-                  rangeCells.push(<div
-                    className={`flex-20 layout-row layout-align-none-center ${styles.price_cell}`}
-                  >
-                    <p className="flex-none">{chargeGloss[rfKey]}</p>
-                    <p className="flex">
-                      {pricing.data[key].range[i][rfKey]} {pricing.data[key].currency}
-                    </p>
-                  </div>)
-                } else if (rfKey === 'min' || rfKey === 'max') {
-                  rangeCells.push(<div
-                    className={`flex-20 layout-row layout-align-none-center ${styles.price_cell}`}
-                  >
-                    <p className="flex-none">{rfKey}</p>
-                    <p className="flex">{pricing.data[key].range[i][rfKey]} kg</p>
-                  </div>)
-                }
-              })
-              cells
-                .push(<div className="flex-100 layout-row layout-align-start-center">
-                  {rangeCells}
-                </div>)
-            })
-          }
-        })
-        panel.push(<div className="flex-100 layout-row layout-align-none-center layout-wrap">
-          <div
-            className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}
-          >
-            <p className="flex-none">
-              {key} - {gloss[key]}
-            </p>
-          </div>
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">{cells}</div>
-        </div>)
-      })
+    const gradientBorderStyle =
+    theme && theme.colors
+      ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: 'black' }
+    const bg1 =
+      fauxShipment.origin_hub && fauxShipment.origin_hub.photo
+        ? { backgroundImage: `url(${fauxShipment.origin_hub.photo})` }
+        : {
+          backgroundImage:
+            'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
+        }
+    const bg2 =
+      fauxShipment.destination_hub && fauxShipment.destination_hub.photo
+        ? { backgroundImage: `url(${fauxShipment.destination_hub.photo})` }
+        : {
+          backgroundImage:
+            'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
+        }
 
-      return (
-        <div
-          key={v4()}
-          className={` ${
-            styles.hub_route_price
-          } flex-100 layout-row layout-wrap layout-align-center-start`}
-        >
-          <div className="flex-100 layout-row layout-align-start-center">
-            <div className="flex layout-row layout-align-start-center">
-              <i className="fa fa-map-signs clip" style={textStyle} />
-              <p className="flex-none offset-5">{hubRoute.name}</p>
-            </div>
-            <div
-              className="flex-5 layout-row layout-align-center-center"
-              onClick={() => this.editThis(pricing, hubRoute, transport)}
-            >
-              <i className="flex-none fa fa-pencil clip pointy" style={textStyle} />
-            </div>
-            <div
-              className="flex-5 layout-row layout-align-center-center"
-              onClick={() => this.confirmDelete(pricing)}
-            >
-              <i className="flex-none fa fa-trash pointy" />
-            </div>
-          </div>
-          <div
-            className={`flex-33 layout-row layout-align-space-between-center ${
-              styles.price_row_detail
-            }`}
-          >
-            <p className="flex-none">MoT:</p>
-            <p className="flex-none"> {transport.mode_of_transport}</p>
-          </div>
-          <div
-            className={`flex-33 layout-row layout-align-space-between-center ${
-              styles.price_row_detail
-            }`}
-          >
-            <p className="flex-none">Cargo Type: </p>
-            <p className="flex-none">{transport.name}</p>
-          </div>
-          <div
-            className={`flex-33 layout-row layout-align-space-between-center ${
-              styles.price_row_detail
-            }`}
-          >
-            <p className="flex-none">Cargo Class:</p>
-            <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
-          </div>
-          {panel}
-        </div>
-      )
-    }
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
@@ -257,115 +145,119 @@ export class AdminPricingRouteView extends Component {
     ) : (
       ''
     )
-    const RoutePricingBox = ({ routeData, pricingsArr, userId }) => {
-      const filteredPricingsArr =
-        userId === 'open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
-      const inner = filteredPricingsArr.map((pricingObj) => {
-        const innerInner = []
-        innerInner.push(<RPBInner
-          key={v4()}
-          hubRoute={routeData}
-          transport={pricingObj.transport_category}
-          pricing={pricingObj.pricing}
-          theme={theme}
-        />)
-        return innerInner
-      })
+    const clientTiles = userPricings.map((up) => {
+      const client = clients.filter(cl => cl.id === up.user_id)[0]
+
       return (
-        <div
+        <AdminClientTile
           key={v4()}
-          className={` ${
-            styles.route_price
-          } flex-100 layout-row layout-wrap layout-align-start-start `}
-        >
-          <div className="flex-100 layout-row layout-align-start-center">
-            <h3 className="flex-none clip"> {routeData.name} </h3>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-            {inner}
-          </div>
-        </div>
+          client={client}
+          theme={theme}
+          handleClick={() => this.selectClient(client)}
+        />
       )
-    }
-    const clientTiles = clients.map(cl => (
-      <AdminClientTile
-        key={v4()}
-        client={cl}
-        theme={theme}
-        handleClick={() => this.selectClient(cl)}
-      />
-    ))
+    })
     const clientsView = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-        >
-          <p className={` ${styles.sec_header_text} flex-none`}> Client Pricings </p>
-        </div>
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-center padding_top">
         {clientTiles}
       </div>
     )
-    const clientPriceView = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-        >
-          <p className={` ${styles.sec_header_text} flex-none`}> Dedicated Pricing </p>
-          <div
-            className="flex-none layout-row layout-align-center-center"
-            onClick={this.closeClientView}
-          >
-            <i className="fa fa-times clip flex-none" style={textStyle} />
-          </div>
-        </div>
-        <RoutePricingBox
-          key={v4()}
-          routeData={itinerary}
-          pricingsArr={userPricings}
-          transports={transportCategories}
-          userId={selectedClient.id}
-        />
-      </div>
-    )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            {itinerary.name}
-          </p>
-        </div>
-        <RouteHubBox shipment={fauxShipment} itinerary={detailedItineraries} theme={theme} />
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-          <div
-            className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none`}> Open Pricing </p>
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+        <div className={`layout-row flex-95 ${styles.margin_bottom}`}>
+
+          <GradientBorder
+            wrapperClassName={`layout-row flex-40 ${shipmentStyles.hub_box_shipment}`}
+            gradient={gradientBorderStyle}
+            className="layout-row flex"
+            content={(
+              <div className="layout-row flex-100">
+                <ShipmentOverviewShowCard
+                  hub={stops[0].hub}
+                  bg={bg1}
+                />
+              </div>
+            )}
+          />
+          <div className="layout-row flex-20 layout-align-center-center">
+            <div className={`layout-column flex layout-align-center-center ${shipmentStyles.font_adjustaments}`}>
+              <div className="layout-align-center-center layout-row" >
+                {switchIcon(itinerary.mode_of_transport, gradientStyle)}
+              </div>
+            </div>
           </div>
-          <div className="flex-80 layout-row layout-wrap layout-align-space-between-center">
-            <RoutePricingBox
-              key={v4()}
-              routeData={itinerary}
-              pricingsArr={itineraryPricingData}
-              userId="open"
+
+          <GradientBorder
+            wrapperClassName={`layout-row flex-40 ${shipmentStyles.hub_box_shipment}`}
+            gradient={gradientBorderStyle}
+            className="layout-row flex"
+            content={(
+              <div className="layout-row flex-100">
+                <ShipmentOverviewShowCard
+                  hub={stops[1].hub}
+                  bg={bg2}
+                />
+              </div>
+            )}
+          />
+        </div>
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
+
+          <div className="flex-95 layout-row layout-wrap layout-align-space-between-center">
+            <AdminPricingBox
+              itinerary={itinerary}
+              charges={itineraryPricingData}
+              theme={theme}
+              adminDispatch={adminActions}
+              title="Open Pricing"
             />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+
+        <div className="flex-100 layout-row layout-wrap layout-align-center-center buffer_10">
           <div
-            className={`flex-80 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-95 layout-row layout-align-space-between-center ${styles.title_grey_with_button}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}>
+            <p className=" flex-none">
               {' '}
-              Users With Dedicated Pricings{' '}
+                Users With Dedicated Pricings{' '}
             </p>
+            <RoundButton
+              text="New Dedicated Pricing"
+              theme={theme}
+              active
+              iconClass="fa-plus"
+              size="large"
+              handleNext={() => this.addNewPricings()}
+              border
+            />
           </div>
-          <div className="flex-80 layout-row layout-wrap layout-align-space-between-center">
-            {selectedClient ? clientPriceView : clientsView}
+          <div className="flex-95 layout-row layout-wrap layout-align-space-between-center">
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={selectedClient && !showPricingAdder ? {} : { display: 'none' }}>
+              <AdminPricingBox
+                itinerary={itinerary}
+                charges={userPricings.filter(up => up.user_id === selectedClient.id)}
+                theme={theme}
+                adminDispatch={adminActions}
+                closeView={this.closeClientView}
+                title={`Dedicated Pricing fro ${selectedClient.first_name} ${selectedClient.last_name}`}
+              />
+            </div>
+            {!selectedClient && !showPricingAdder ? clientsView : ''}
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+              <AdminPricingDedicated
+                theme={theme}
+                adminDispatch={adminActions}
+                charges={itineraryPricingData}
+                clients={clients}
+              />
+            </div>
           </div>
-          {confimPrompt}
+
         </div>
+
+        {confimPrompt}
         {editorBool ? (
           <AdminPriceEditor
             closeEdit={this.closeEdit}

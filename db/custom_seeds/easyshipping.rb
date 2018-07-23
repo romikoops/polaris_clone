@@ -12,17 +12,19 @@ subdomains.each do |sub|
   tenant.itineraries.destroy_all
   tenant.local_charges.destroy_all
   tenant.customs_fees.destroy_all
+  tps = tenant.trucking_pricings
+  HubTrucking.where(trucking_pricing_id: tps.ids).delete_all
   tenant.trucking_pricings.delete_all
   tenant.hubs.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__hubs.xlsx")
   req = { 'xlsx' => hubs }
-  overwrite_hubs(req, shipper)
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
-  overwrite_freight_rates(req, shipper, true)
+  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
 
   # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
@@ -40,21 +42,21 @@ subdomains.each do |sub|
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Copenhagen Railyard'
-  hub = tenant.hubs.find_by_name('Copenhagen Railyard')
-  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl__copenhagen_port.xlsx")
-  req = { 'xlsx' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # hub = tenant.hubs.find_by_name('Copenhagen Railyard')
+  # trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ltl__copenhagen_port.xlsx")
+  # req = { 'xlsx' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Copenhagen Port'
   hub = tenant.hubs.find_by_name('Copenhagen Port')
   trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ftl__copenhagen_port.xlsx")
   req = { 'xlsx' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
-  puts 'Copenhagen Railyard'
-  hub = tenant.hubs.find_by_name('Copenhagen Railyard')
-  trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ftl__copenhagen_port.xlsx")
-  req = { 'xlsx' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # puts 'Copenhagen Railyard'
+  # hub = tenant.hubs.find_by_name('Copenhagen Railyard')
+  # trucking = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__trucking_ftl__copenhagen_port.xlsx")
+  # req = { 'xlsx' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
 end
