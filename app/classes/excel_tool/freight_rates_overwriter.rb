@@ -163,11 +163,11 @@ module ExcelTool
     end
 
     def find_nexus(string)
-      nexus = Location.find_by(name: string, location_type: "nexus")
+      nexus = Nexus.find_by(name: string)
       if nexus
         return nexus
       else
-        nexus = Location.where("name ILIKE ? AND location_type = ?", string, "nexus").first
+        nexus = Nexus.where("name ILIKE ?", "%#{string}%").first
       end
     end
 

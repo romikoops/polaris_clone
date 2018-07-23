@@ -166,7 +166,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def nexus
-    Location.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", "nexus")
+    Nexus.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}")
   end
 
   def new_mandatory_charge

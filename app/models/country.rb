@@ -2,6 +2,7 @@
 
 class Country < ApplicationRecord
   has_many :locations
+  has_many :nexuses
   Geoplace = Struct.new(:name, :code)
   # Class Methods
   def self.geo_find_by_name(name)

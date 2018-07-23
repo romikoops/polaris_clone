@@ -9,11 +9,11 @@ class Location < ApplicationRecord
   has_many :ports
   has_one :hub
 
-  has_many :hubs, foreign_key: :nexus_id do
-    def tenant_id(tenant_id)
-      where(tenant_id: tenant_id)
-    end
-  end
+  # has_many :hubs, foreign_key: :nexus_id do
+  #   def tenant_id(tenant_id)
+  #     where(tenant_id: tenant_id)
+  #   end
+  # end
   has_many :routes
   has_many :stops, through: :hubs
   belongs_to :country, optional: true
@@ -173,9 +173,7 @@ class Location < ApplicationRecord
     end
   end
 
-  def hubs_by_type(hub_type, tenant_id)
-    hubs.where(hub_type: hub_type, tenant_id: tenant_id)
-  end
+  
 
   def hubs_by_type_seeder(hub_type, tenant_id)
     hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)

@@ -25,23 +25,23 @@ subdomains.each do |sub|
 #   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
 #   req = { 'xlsx' => hubs }
 #   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
-
+# Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
 
   
 
-  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
-  imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
-    _user: shipper,
-    counterpart_hub_name: 'Copenhagen Port',
-    hub_type: 'ocean',
-    cargo_class: 'lcl',
-    load_type: 'cargo_item').perform
-  imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
-    tenant: tenant,
-    counterpart_hub: 'Copenhagen Port',
-    _user: shipper,
-    hub_type: 'ocean',
-    direction: 'import').perform
+  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  # imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   cargo_class: 'lcl',
+  #   load_type: 'cargo_item').perform
+  # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   _user: shipper,
+  #   hub_type: 'ocean',
+  #   direction: 'import').perform
 
 #   res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
 #     tenant: tenant,
