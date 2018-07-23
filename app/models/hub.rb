@@ -2,7 +2,7 @@
 
 class Hub < ApplicationRecord
   belongs_to :tenant
-  belongs_to :nexus, class_name: "Location"
+  belongs_to :nexus
   belongs_to :location
 
   has_many :stops,    dependent: :destroy

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180718075838) do
+ActiveRecord::Schema.define(version: 20180723085805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -382,6 +382,17 @@ ActiveRecord::Schema.define(version: 20180718075838) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nexuses", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "photo"
+    t.integer "country_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
