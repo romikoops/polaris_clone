@@ -45,7 +45,7 @@ class Nexus < ApplicationRecord
         nexus_name = hub.name.gsub(" #{hub_type_name[hub.hub_type]}", '')
         old_nexus = Location.where("name ILIKE ? AND location_type = ?", nexus_name, 'nexus').first
         if !old_nexus
-          byebug
+          # byebug
         end
       end
       new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: hub.tenant_id)
@@ -60,7 +60,7 @@ class Nexus < ApplicationRecord
         )
       end
       if !new_nexus
-        byebug
+        # byebug
       end
       hub.nexus_id = new_nexus.id
       hub.save!
@@ -84,7 +84,7 @@ class Nexus < ApplicationRecord
           nexus_name = shipment["#{dir}_hub"].name.gsub(" #{shipment_type_name[shipment.shipment_type]}", '')
           old_nexus = Location.where("name ILIKE ? AND location_type = ?", nexus_name, 'nexus').first
           if !old_nexus
-            byebug
+            # byebug
           end
         end
         new_nexus = Nexus.find_by(name: old_nexus.name, tenant_id: shipment.tenant_id)
@@ -99,7 +99,7 @@ class Nexus < ApplicationRecord
           )
         end
         if !new_nexus
-          byebug
+          # byebug
         end
         shipment["#{dir}_nexus_id"] = new_nexus.id
       end

@@ -38,6 +38,7 @@ export class ShipmentCargoItems extends Component {
     this.props.addCargoItem()
     this.setState({ firstRenderInputs: true, cargoItemInfoExpanded })
   }
+
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
     const modifiedEvent = {
