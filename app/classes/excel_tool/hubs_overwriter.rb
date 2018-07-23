@@ -77,7 +77,7 @@ module ExcelTool
       
       def _nexus
         if country.nil?
-          byebug
+          # byebug
         end
         Nexus.find_by(
           name:             hub_row[:hub_name],
@@ -88,7 +88,7 @@ module ExcelTool
 
       def _nexus_create
         if country.nil?
-          byebug
+          # byebug
         end
         Nexus.create!(
           name:             hub_row[:hub_name],
@@ -177,13 +177,16 @@ module ExcelTool
       end
 
       def country_by_code(name)
+        if name.include?('Korea')
+          name = "Korea (Republic of)"
+        end
         tmp_country = Country.find_by_name(name)
         if !tmp_country
           code = geoplace.select{ |geo| geo.name == name }&.first&.code
           tmp_country = Country.find_by(code: code)
         end
         if !tmp_country
-          byebug
+          # byebug
         end
         tmp_country
       end
