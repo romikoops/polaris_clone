@@ -304,7 +304,8 @@ export class AdminHubsIndex extends Component {
                           collapsed={!expander.hubType}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('hubType')}
-                          headingText="Hub Type"
+                          text="Hub Type"
+                          showArrow
                           faClass="fa fa-ship"
                           content={typeFilters}
                         />
@@ -312,7 +313,8 @@ export class AdminHubsIndex extends Component {
                           collapsed={!expander.status}
                           theme={theme}
                           handleCollapser={() => this.toggleExpander('status')}
-                          headingText="Status"
+                          text="Status"
+                          showArrow
                           faClass="fa fa-ship"
                           content={statusFilters}
                         />
@@ -321,7 +323,8 @@ export class AdminHubsIndex extends Component {
                           theme={theme}
                           minHeight="270px"
                           handleCollapser={() => this.toggleExpander('countries')}
-                          headingText="Country"
+                          text="Country"
+                          showArrow
                           faClass="fa fa-flag"
                           content={namedCountries}
                         />
@@ -336,10 +339,12 @@ export class AdminHubsIndex extends Component {
                   content={(
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.upload}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('upload')}
-                        headingText="Upload Data"
+                        text="Upload Data"
                         faClass="fa fa-cloud-upload"
                         content={(
                           <div>
@@ -375,10 +380,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.download}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('download')}
-                        headingText="Download Data"
+                        text="Download Data"
                         faClass="fa fa-cloud-download"
                         content={(
                           <div>
@@ -418,10 +425,12 @@ export class AdminHubsIndex extends Component {
                         )}
                       />
                       <CollapsingBar
+                        showArrow
                         collapsed={!expander.new}
                         theme={theme}
+                        styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
                         handleCollapser={() => this.toggleExpander('new')}
-                        headingText="Create New Hub"
+                        text="Create New Hub"
                         faClass="fa fa-plus-circle"
                         content={(
                           <div

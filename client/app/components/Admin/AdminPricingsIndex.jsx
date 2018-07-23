@@ -103,6 +103,26 @@ export class AdminPricingsIndex extends Component {
         lastUpdate={lastUpdate}
       />
       {/* <AdminSearchableClients
+    return (
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+
+        <Tabs
+          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+        >
+          <Tab
+            tabTitle="Routes"
+            theme={theme}
+          >
+            <CardPricingIndex
+              itineraries={detailedItineraries}
+              theme={theme}
+              scope={scope}
+              adminDispatch={adminDispatch}
+              toggleCreator={this.toggleCreator}
+              documentDispatch={this.props.documentDispatch}
+              lastUpdate={lastUpdate}
+            />
+            {/* <AdminSearchableClients
               theme={theme}
               clients={clients}
               handleClick={this.viewClient}
@@ -136,7 +156,7 @@ export class AdminPricingsIndex extends Component {
     </Tab>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
 
         <Tabs
           wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"

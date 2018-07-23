@@ -48,7 +48,7 @@ export default class CardPricingIndex extends Component {
   generateViewType (mot, limit) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-100 layout-align-start-center layout-wrap">
+        <div className="layout-row flex-90 layout-align-start-center layout-wrap">
           {this.generateCardPricings(mot, limit)}
         </div>
       </div>

@@ -90,7 +90,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     pricing_to_update.update(new_pricing_data)
     update_pricing_details(pricing_to_update)
     update_pricing_exception_data(pricing_to_update)
-    
+
     response_handler(
       pricing: pricing_to_update.as_json,
       transport_category: pricing_to_update.transport_category)
@@ -179,7 +179,7 @@ class Admin::PricingsController < Admin::AdminBaseController
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type, tenant: current_user.tenant)
         pricing_detail.update!(pricing_detail_params)
-        pricing_detail.update!(range: range, currency_name: currency) 
+        pricing_detail.update!(range: range, currency_name: currency)
       end
     end
 
@@ -205,7 +205,7 @@ class Admin::PricingsController < Admin::AdminBaseController
       new_pricing_data = params.as_json
       new_pricing_data.except(
         "controller", "subdomain_id", "action", "id", "created_at",
-        "updated_at", "load_type", "currency", "data", "exceptions")    
+        "updated_at", "load_type", "currency", "data", "exceptions")
     end
 
     def update_params
