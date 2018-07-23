@@ -92,6 +92,7 @@ typings/
 
 # dotenv environment variables file
 .env
+client/.node-env
 # /config/database.yml
 .idea
 .DS_Store
