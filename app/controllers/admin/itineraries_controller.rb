@@ -80,8 +80,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_params
     {
-      mode_of_transport: params["mot"],
-      name:              params["name"],
+      mode_of_transport: params['itinerary']["mot"],
+      name:              params['itinerary']["name"],
       tenant_id:         current_user.tenant_id
     }
   end

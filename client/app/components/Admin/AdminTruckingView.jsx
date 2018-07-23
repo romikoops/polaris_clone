@@ -24,7 +24,7 @@ import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
@@ -249,38 +249,39 @@ export class AdminTruckingView extends Component {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <AlternativeGreyBox
-              wrapperClassName="layout-row flex-40 card_margin_right margin_bottom"
-              contentClassName="layout-column flex"
-              content={(
-                <div
-                  className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
-                    styles.trucking_display_cell
-                  }`}
-                  key={v4()}
-                  onClick={() => this.selectTruckingPricing(tp)}
-                >
-                  {loadTypeBool
-                    ? <div className="flex-70 layout-row layout-align-center-center">
-                      <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
-                      <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
-                    </div>
-                    : ''
-                  }
-                  {idenitfierKey === 'distance' ? (
-                    <div className="flex-30 layout-column layout-wrap layout-align-center-center">
-                      <p className="flex-90">{capitalize(idenitfierKey)}</p>
-                      <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
-                    </div>
-                  ) : (
-                    <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-                      <p className="flex-90">{capitalize(idenitfierKey)} {getTruckingPricingKey(tp)}</p>
-                    </div>
-                  )}
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center">
+              <GBox
+                padding
+                component={(
+                  <div
+                    className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
+                      styles.trucking_display_cell
+                    }`}
+                    key={v4()}
+                    onClick={() => this.selectTruckingPricing(tp)}
+                  >
+                    {loadTypeBool
+                      ? <div className="flex-70 layout-row layout-align-center-center">
+                        <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
+                        <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+                      </div>
+                      : ''
+                    }
+                    {idenitfierKey === 'distance' ? (
+                      <div className="flex-30 layout-column layout-wrap layout-align-center-center">
+                        <p className="flex-90">{capitalize(idenitfierKey)}</p>
+                        <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
+                      </div>
+                    ) : (
+                      <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+                        <p className="flex-90">{capitalize(idenitfierKey)} {getTruckingPricingKey(tp)}</p>
+                      </div>
+                    )}
 
-                </div>
-              )}
-            />
+                  </div>
+                )}
+              />
+            </div>
 
           )
         })
@@ -318,7 +319,7 @@ export class AdminTruckingView extends Component {
       </div>) : ''
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {uploadStatus}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -333,7 +334,7 @@ export class AdminTruckingView extends Component {
             </div> */}
             <div
               className={`
-                flex-85 flex-xs-100 flex-sm-100 layout-row layout-align-center-center
+                flex-95 layout-row layout-align-center-center
                 ${currentTruckingPricing ? 'margin_bottom' : ''}
                 ${hubStyles.hub_title}
               `}

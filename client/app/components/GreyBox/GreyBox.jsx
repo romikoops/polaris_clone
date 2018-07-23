@@ -9,7 +9,8 @@ export function GreyBox (props) {
     flexMd,
     padding,
     fullWidth,
-    component
+    component,
+    noMargin
   } = props
   /* eslint prefer-template: 0 */
   return (
@@ -23,7 +24,7 @@ export function GreyBox (props) {
           ${fullWidth ? styles.fullWidth : ''}`
       }
     >
-      <div className={`flex layout-row layout-align-center-stretch ${styles.greyboxborder}`}>
+      <div className={`flex layout-row layout-align-center-stretch ${styles.greyboxborder}  ${noMargin ? styles.no_margin : ''}`}>
         {component}
       </div>
 
@@ -37,7 +38,8 @@ GreyBox.propTypes = {
   flexGtLg: PropTypes.number,
   flexMd: PropTypes.number,
   fullWidth: PropTypes.bool,
-  padding: PropTypes.bool
+  padding: PropTypes.bool,
+  noMargin: PropTypes.bool
 }
 
 GreyBox.defaultProps = {
@@ -46,7 +48,8 @@ GreyBox.defaultProps = {
   flexGtLg: 0,
   flexMd: 0,
   fullWidth: false,
-  padding: false
+  padding: false,
+  noMargin: false
 }
 
 export default GreyBox

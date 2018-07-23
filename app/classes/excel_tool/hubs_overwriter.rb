@@ -76,6 +76,9 @@ module ExcelTool
       end
       
       def _nexus
+        if country.nil?
+          byebug
+        end
         Nexus.find_by(
           name:             hub_row[:hub_name],
           country:          country,
@@ -84,6 +87,9 @@ module ExcelTool
       end
 
       def _nexus_create
+        if country.nil?
+          byebug
+        end
         Nexus.create!(
           name:             hub_row[:hub_name],
           latitude:         hub_row[:latitude],
@@ -175,6 +181,9 @@ module ExcelTool
         if !tmp_country
           code = geoplace.select{ |geo| geo.name == name }&.first&.code
           tmp_country = Country.find_by(code: code)
+        end
+        if !tmp_country
+          byebug
         end
         tmp_country
       end

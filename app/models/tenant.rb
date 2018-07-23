@@ -7,6 +7,7 @@ class Tenant < ApplicationRecord
   has_many :shipments
   has_many :routes
   has_many :hubs
+  has_many :nexuses
   has_many :routes
   has_many :hub_routes, through: :routes
   has_many :schedules
