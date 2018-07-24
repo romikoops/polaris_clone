@@ -117,7 +117,7 @@ export class AdminShipmentCardNew extends Component {
     )
     const plannedDate =
     shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
-    const requestedButtons = shipment.status === 'requested' ? (
+    const requestedButtons = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
       <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
         <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
         <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />

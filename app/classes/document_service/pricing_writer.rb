@@ -102,6 +102,7 @@ module DocumentService
       if !aux_data[:itineraries][pricing[:itinerary_id]]
         aux_data[:itineraries][pricing[:itinerary_id]] = itinerary.as_options_json
       end
+
       itinerary
     end
 
@@ -126,8 +127,8 @@ module DocumentService
     end
 
     def location_and_aux_data(pricing, key1, key2)
-      if !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1] || !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
-        # byebug
+      if !aux_data[:itineraries][pricing[:itinerary_id]] || !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1] || !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
+        byebug
       end
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       if !aux_data[:nexuses][stop_id]
