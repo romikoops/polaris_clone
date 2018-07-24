@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
-import { AdminSearchableClients } from './AdminSearchables'
 import styles from './Admin.scss'
 // import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminClientsTooltips as clientTip } from '../../constants'
@@ -10,6 +10,9 @@ import { filters, capitalize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
+import Tabs from '../Tabs/Tabs'
+import Tab from '../Tabs/Tab'
+import { AdminClientTile } from './AdminClientTile'
 
 class AdminClientsIndex extends Component {
   constructor (props) {
@@ -17,13 +20,16 @@ class AdminClientsIndex extends Component {
     this.state = {
       expander: {},
       searchFilters: {},
-      searchResults: []
+      searchResults: [],
+      numPerPage: 9,
+      page: 1
     }
   }
   componentWillMount () {
     if (this.props.clients && !this.state.searchResults.length) {
       this.prepFilters()
     }
+    this.prepPages()
   }
   componentDidMount () {
     window.scrollTo(0, 0)
@@ -32,6 +38,11 @@ class AdminClientsIndex extends Component {
     if (nextProps.clients.length) {
       this.prepFilters(nextProps.clients)
     }
+  }
+  prepPages () {
+    const { clients } = this.props
+    const numPages = Math.ceil(clients.length / 12)
+    this.setState({ numPages })
   }
 
   prepFilters () {
@@ -92,9 +103,21 @@ class AdminClientsIndex extends Component {
       }
     })
   }
+  deltaPage (val) {
+    this.setState((prevState) => {
+      const newPageVal = prevState.page + val
+      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+
+      return { page }
+    })
+  }
   render () {
     const { theme, adminDispatch } = this.props
-    const { expander, searchFilters, searchResults } = this.state
+    const {
+      expander, searchFilters, searchResults, page, numPages, numPerPage
+    } = this.state
+    const sliceStartIndex = (page - 1) * numPerPage
+    const sliceEndIndex = (page * numPerPage)
     // const hubUrl = '/admin/clients/process_csv'
     const newButton = (
       <div className="flex-none layout-row">
@@ -123,19 +146,83 @@ class AdminClientsIndex extends Component {
         />
       </div>
     ))
+    const dedicatedTiles = results.filter(user => user.has_pricings)
+      .slice(sliceStartIndex, sliceEndIndex)
+      .map(u => (<AdminClientTile
+        key={v4()}
+        client={u}
+        theme={theme}
+        handleClick={() => adminDispatch.getClient(u.id, true)}
+        tooltip={clientTip}
+        showTooltip
+        flexClasses="flex-30 flex-md-45 flex-gt-lg-15"
+      />))
+    const openTiles = results
+      .slice(sliceStartIndex, sliceEndIndex)
+      .map(u => (<AdminClientTile
+        key={v4()}
+        client={u}
+        theme={theme}
+        handleClick={() => adminDispatch.getClient(u.id, true)}
+        tooltip={clientTip}
+        showTooltip
+        flexClasses="flex-30 flex-md-45 flex-gt-lg-15"
+      />))
+    const paginationRow = (
+      <div className="flex-95 layout-row layout-align-center-center margin_bottom">
+        <div
+          className={`
+                flex-15 layout-row layout-align-center-center pointy
+                ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+              `}
+          onClick={page > 1 ? () => this.deltaPage(-1) : null}
+        >
+          {/* style={page === 1 ? { display: 'none' } : {}} */}
+          <i className="fa fa-chevron-left" />
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+        </div>
+        {}
+        <p>{page}</p>
+        <div
+          className={`
+                flex-15 layout-row layout-align-center-center pointy
+                ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+              `}
+          onClick={page < numPages ? () => this.deltaPage(1) : null}
+        >
+          <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <i className="fa fa-chevron-right" />
+        </div>
+      </div>
+    )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {/* {uploadStatus} */}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
-          <AdminSearchableClients
-            theme={theme}
-            clients={results}
-            adminDispatch={adminDispatch}
-            tooltip={clientTip.manage}
-            showTooltip
-            hideFilters
-          />
+          <Tabs
+            wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+          >
+            <Tab
+              tabTitle="Open"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size" style={{ minHeight: '560px' }}>
+                {openTiles}
+                {paginationRow}
+              </div>
+            </Tab>
+            <Tab
+              tabTitle="Dedicated"
+              theme={theme}
+            >
+              <div className="flex-100 layout-row layout-align-start-start layout-wrap header_buffer tab_size">
+                {dedicatedTiles}
+                {paginationRow}
+              </div>
+            </Tab>
+
+          </Tabs>
         </div>
         <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
           <SideOptionsBox
@@ -171,7 +258,7 @@ class AdminClientsIndex extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions="layout-column flex-20 flex-md-30"
+            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 {/* <CollapsingBar

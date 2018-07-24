@@ -2,6 +2,7 @@
 :local {
   .wrapper_landing {
     background: $light-grey;
+    position: relative;
   }
   .service_label{
     background-color: $light-grey;
@@ -20,6 +21,9 @@
       font-weight: normal;
       margin-bottom: 0;
     }
+  }
+  .service_box{
+    position: relative;
   }
   .services_row:before {
     top: 0;
@@ -85,6 +89,7 @@
   .btm_promo {
     margin-bottom: 120px;
     background: white;
+    position: relative;
     min-height: 500px;
     box-shadow: 0 1.5px 8px rgba(black, .12);
     i {

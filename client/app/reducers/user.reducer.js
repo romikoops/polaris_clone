@@ -50,6 +50,7 @@ export default function users (state = initialState, action) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = newUserData
             console.log(deleting)
+
             // return copy of user with 'deleteError:[error]' property
             return { ...userCopy, deleteError: action.error }
           }
@@ -157,6 +158,7 @@ export default function users (state = initialState, action) {
       const reqShips = merge({}, state, {
         loading: true
       })
+
       return reqShips
     }
     case userConstants.GET_SHIPMENTS_SUCCESS: {
@@ -171,12 +173,14 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { shipments: action.error }
       })
+
       return errShips
     }
     case userConstants.GET_HUBS_REQUEST: {
       const reqHubs = merge({}, state, {
         loading: true
       })
+
       return reqHubs
     }
     case userConstants.GET_HUBS_SUCCESS: {
@@ -184,6 +188,7 @@ export default function users (state = initialState, action) {
         hubs: action.payload.data,
         loading: false
       })
+
       return succHubs
     }
     case userConstants.GET_HUBS_FAILURE: {
@@ -191,6 +196,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { hubs: action.error }
       })
+
       return errHubs
     }
 
@@ -198,6 +204,7 @@ export default function users (state = initialState, action) {
       const reqShip = merge({}, state, {
         loading: true
       })
+
       return reqShip
     }
     case userConstants.USER_GET_SHIPMENT_SUCCESS: {
@@ -212,6 +219,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { shipments: action.error }
       })
+
       return errShip
     }
 
@@ -219,6 +227,7 @@ export default function users (state = initialState, action) {
       const reqDash = merge({}, state, {
         loading: true
       })
+
       return reqDash
     }
     case userConstants.GET_DASHBOARD_SUCCESS: {
@@ -233,6 +242,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { hubs: action.error }
       })
+
       return errDash
     }
 
@@ -240,6 +250,7 @@ export default function users (state = initialState, action) {
       const reqContact = merge({}, state, {
         loading: true
       })
+
       return reqContact
     }
     case userConstants.GET_CONTACT_SUCCESS: {
@@ -254,6 +265,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { contact: action.error }
       })
+
       return errContact
     }
 
@@ -261,11 +273,19 @@ export default function users (state = initialState, action) {
       const reqNewContact = merge({}, state, {
         loading: true
       })
+
       return reqNewContact
     }
     case userConstants.NEW_CONTACT_SUCCESS: {
+      const contacts = state.dashboard.contacts.filter(c => c.id !== action.payload.data.id)
+      contacts.push(action.payload.data)
+
       return {
         ...state,
+        dashboard: {
+          ...state.dashboard,
+          contacts
+        },
         contactData: action.payload.data,
         loading: false
       }
@@ -275,6 +295,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { contactData: action.error }
       })
+
       return errNewContact
     }
 
@@ -282,11 +303,13 @@ export default function users (state = initialState, action) {
       const reqNewAlias = merge({}, state, {
         loading: true
       })
+
       return reqNewAlias
     }
     case userConstants.NEW_ALIAS_SUCCESS: {
       const { aliases } = state.dashboard
       aliases.push(action.payload.data)
+
       return {
         ...state,
         contactData: aliases,
@@ -298,6 +321,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { contactData: action.error }
       })
+
       return errNewAlias
     }
 
@@ -305,11 +329,13 @@ export default function users (state = initialState, action) {
       const reqDeleteAlias = merge({}, state, {
         loading: true
       })
+
       return reqDeleteAlias
     }
     case userConstants.DELETE_ALIAS_SUCCESS: {
       const aliasless = state.dashboard.aliases
         .filter(x => x.id !== parseInt(action.payload.data, 10))
+
       return {
         ...state,
         dashboard: {
@@ -324,16 +350,19 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { contactData: action.error }
       })
+
       return errDeleteAlias
     }
 
     case userConstants.UPLOAD_DOCUMENT_REQUEST: {
       const reqDocUpload = merge({}, state, {})
+
       return reqDocUpload
     }
     case userConstants.UPLOAD_DOCUMENT_SUCCESS: {
       const docs = state.shipment.documents
       docs.push(action.payload)
+
       return {
         ...state,
         shipment: {
@@ -348,11 +377,13 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { hubs: action.error }
       })
+
       return errDocUpload
     }
 
     case userConstants.DELETE_DOCUMENT_REQUEST: {
       const reqDocDelete = merge({}, state, {})
+
       return reqDocDelete
     }
     case userConstants.DELETE_DOCUMENT_SUCCESS: {
@@ -370,6 +401,7 @@ export default function users (state = initialState, action) {
         loading: false,
         error: { hubs: action.error }
       })
+
       return errDocDelete
     }
 
@@ -378,6 +410,7 @@ export default function users (state = initialState, action) {
     case userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS: {
       const cLData = state.contactData
       cLData.location = action.payload
+
       return {
         ...state,
         contactData: cLData,
@@ -396,6 +429,7 @@ export default function users (state = initialState, action) {
     case userConstants.DELETE_CONTACT_ADDRESS_SUCCESS: {
       const caData = state.contactData
       caData.location = false
+
       return {
         ...state,
         contactData: caData,
@@ -414,6 +448,7 @@ export default function users (state = initialState, action) {
     case userConstants.UPDATE_CONTACT_SUCCESS: {
       const cData = state.contactData
       cData.contact = action.payload
+
       return {
         ...state,
         contactData: cData,

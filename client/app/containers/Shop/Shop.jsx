@@ -172,11 +172,11 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
-      request, response, error, reusedShipment
+      request, response, error, reusedShipment, originalSelectedDay
     } = bookingData
     console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
-    const { req } = this.state
+    const { req, showRegistration } = this.state
 
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
@@ -235,6 +235,8 @@ class Shop extends Component {
               shipmentDispatch={shipmentDispatch}
               bookingSummaryDispatch={bookingSummaryDispatch}
               reusedShipment={reusedShipment}
+              showRegistration={showRegistration}
+              hideRegistration={() => this.hideRegistration()}
             />
           )}
         />
@@ -254,6 +256,7 @@ class Shop extends Component {
               messages={error ? error.stage3 : []}
               shipmentDispatch={shipmentDispatch}
               reusedShipment={reusedShipment}
+              originalSelectedDay={originalSelectedDay}
             />
           )}
         />

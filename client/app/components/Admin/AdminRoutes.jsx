@@ -46,10 +46,11 @@ class AdminRoutes extends Component {
 
   render () {
     const {
-      theme, hubs, itinerary, itineraries, hubHash, adminDispatch, loading
+      theme, hubs, itinerary, itineraries, hubHash, adminDispatch, loading, tenant, mapData
     } = this.props
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
         {this.state.newRoute ? (
           <AdminRouteForm
             theme={theme}
@@ -74,6 +75,8 @@ class AdminRoutes extends Component {
                 {...props}
                 viewItinerary={this.viewItinerary}
                 loading={loading}
+                tenant={tenant}
+                mapData={mapData}
                 toggleNewRoute={this.toggleNewRoute}
               />
             )}
@@ -109,24 +112,28 @@ AdminRoutes.propTypes = {
   history: PropTypes.history.isRequired,
   route: PropTypes.route.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired,
+  mapData: PropTypes.arrayOf(PropTypes.object),
   hubHash: PropTypes.objectOf(PropTypes.hub),
   loading: PropTypes.bool,
   itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
+  itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
+  tenant: PropTypes.tenant
 }
 
 AdminRoutes.defaultProps = {
   theme: null,
   hubs: [],
+  mapData: [],
   hubHash: {},
-  loading: false
+  loading: false,
+  tenant: { data: {} }
 }
 
 function mapStateToProps (state) {
   const { authentication, tenant, admin } = state
   const { user, loggedIn } = authentication
   const {
-    clients, hubs, itinerary, itineraries, loading
+    clients, hubs, itinerary, itineraries, loading, mapData
   } = admin
 
   return {
@@ -137,7 +144,8 @@ function mapStateToProps (state) {
     itinerary,
     itineraries,
     clients,
-    loading
+    loading,
+    mapData
   }
 }
 function mapDispatchToProps (dispatch) {

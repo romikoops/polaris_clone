@@ -79,7 +79,7 @@ export class AdminDashboardNew extends Component {
     const { hoverId } = this.state
 
     if (!dashData) return ''
-    const { itineraries } = dashData
+    const { itineraries, mapData } = dashData
 
     const clientHash = {}
     if (clients) {
@@ -111,6 +111,7 @@ export class AdminDashboardNew extends Component {
             itineraries={itineraries}
             hoverId={hoverId}
             theme={theme}
+            mapData={mapData}
           />
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 class Hub < ApplicationRecord
   belongs_to :tenant
-  belongs_to :nexus, class_name: "Location"
+  belongs_to :nexus
   belongs_to :location
 
   has_many :stops,    dependent: :destroy
@@ -21,6 +21,8 @@ class Hub < ApplicationRecord
     "air"   => "Airport",
     "rail"  => "Railway Station"
   }.freeze
+
+  self.per_page = 9
 
   def self.update_all!
     # This is a temporary method used for quick fixes in development
@@ -145,7 +147,7 @@ class Hub < ApplicationRecord
     dest_customs = self.customs_fees.find_by(
       load_type: load_type,
       direction: direction,
-      mode_of_transport: mot, 
+      mode_of_transport: mot,
       tenant_vehicle_id: tenant_vehicle_id,
       counterpart_hub_id: destination_hub_id
     )
@@ -155,7 +157,7 @@ class Hub < ApplicationRecord
       customs = self.customs_fees.find_by(
         load_type: load_type,
         direction: direction,
-        mode_of_transport: mot, 
+        mode_of_transport: mot,
         tenant_vehicle_id: tenant_vehicle_id
       )
       return customs

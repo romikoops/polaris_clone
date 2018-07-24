@@ -49,8 +49,8 @@ export class AdminShipmentCardNew extends Component {
     dispatches.getShipment(shipment.id, true)
   }
   handleFinished () {
-    const { shipment } = this.props
-    this.handleShipmentAction(shipment.id, 'finished')
+    const { shipment, dispatches } = this.props
+    dispatches.confirmShipment(shipment.id, 'finished')
   }
   confirmDelete () {
     this.setState({

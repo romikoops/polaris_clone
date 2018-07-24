@@ -15,10 +15,12 @@ export default function CollapsingHeading ({
   showArrow,
   headerWrapClasses
 }) {
+  // debugger // eslint-disable-line
   return (
     <div
-      style={styleHeader}
-      className={`${styles.heading} ${optClassName} flex-100 layout-row layout-wrap layout-align-space-between-center`}
+      style={{ background: '#E0E0E0', color: '#4F4F4F' }}
+      className={`${styles.heading} flex-100 layout-row layout-align-space-between-center`}
+      onClick={handleCollapser}
     >
       {text ? (
         <div className="layout-row flex layout-align-start-center">
@@ -36,8 +38,7 @@ export default function CollapsingHeading ({
         </div>
       )}
       <div
-        className={`${text ? 'flex-10' : 'flex-100'} layout-row layout-align-center-center`}
-        onClick={handleCollapser}
+        className="flex-10 layout-row layout-align-center-center"
       >
         {showArrow ? (
           <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down pointy`} />

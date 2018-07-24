@@ -42,8 +42,8 @@ class Shipment < ApplicationRecord
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin_nexus, class_name: "Location", optional: true
-  belongs_to :destination_nexus, class_name: "Location", optional: true
+  belongs_to :origin_nexus, class_name: "Nexus", optional: true
+  belongs_to :destination_nexus, class_name: "Nexus", optional: true
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
@@ -72,6 +72,7 @@ class Shipment < ApplicationRecord
   scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
   scope :order_booking_desc, -> { order(booking_placed_at: :desc) }
   scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
+  scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
 
@@ -90,7 +91,7 @@ class Shipment < ApplicationRecord
   def total_price
     return nil if selected_offer.nil?
 
-    selected_offer.total
+    selected_offer["total"]
   end
 
   def origin_layover

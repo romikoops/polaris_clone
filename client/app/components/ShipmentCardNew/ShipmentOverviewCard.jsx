@@ -50,7 +50,7 @@ export class ShipmentOverviewCard extends Component {
           />
         </div>
       )
-    }) : (<span className={`${styles.wideelement} ${styles.height_block}`}>
+    }) : (<span className={`${styles.wideelement}`}>
       No shipments available
     </span>)
   }
@@ -61,8 +61,7 @@ export class ShipmentOverviewCard extends Component {
       noTitle
     } = this.props
     const titleBox = (<div
-      className={`${adminStyles.card_padding} flex-100
-      layout-align-start-center  ${styles.greyBg}`}
+      className={`${adminStyles.greyBg} layout-padding flex-100 layout-align-start-center`}
     >
       <span><b>Requested Shipments</b></span>
     </div>)

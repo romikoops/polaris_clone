@@ -61,9 +61,9 @@ module Queries
             ON origin_hubs.id = origin_stops.hub_id
           JOIN hubs AS destination_hubs
             ON destination_hubs.id = destination_stops.hub_id
-          JOIN locations AS origin_nexuses
+          JOIN nexuses AS origin_nexuses
             ON origin_nexuses.id = origin_hubs.nexus_id
-          JOIN locations AS destination_nexuses
+          JOIN nexuses AS destination_nexuses
             ON destination_nexuses.id = destination_hubs.nexus_id
           LEFT OUTER JOIN hub_truck_type_availabilities AS origin_hub_truck_type_availabilities
             ON origin_hubs.id = origin_hub_truck_type_availabilities.hub_id
@@ -124,9 +124,9 @@ module Queries
             ON origin_hubs.id = origin_stops.hub_id
           JOIN hubs AS destination_hubs
             ON destination_hubs.id = destination_stops.hub_id
-          JOIN locations AS origin_nexuses
+          JOIN nexuses AS origin_nexuses
             ON origin_nexuses.id = origin_hubs.nexus_id
-          JOIN locations AS destination_nexuses
+          JOIN nexuses AS destination_nexuses
             ON destination_nexuses.id = destination_hubs.nexus_id
           WHERE itineraries.id IN (:itinerary_ids)
           AND   origin_stops.index < destination_stops.index

@@ -63,6 +63,7 @@ function listClients (clients, theme) {
           title=""
           subtitle=""
           component={clientCard}
+          noMargin
         />
       </div>
     )

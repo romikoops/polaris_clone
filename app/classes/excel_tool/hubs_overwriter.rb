@@ -76,23 +76,21 @@ module ExcelTool
       end
       
       def _nexus
-        Location.find_by(
-          name: hub_row[:hub_name],
-          location_type: "nexus",
-          country: country
+        Nexus.find_by(
+          name:             hub_row[:hub_name],
+          country:          country,
+          tenant_id:        @user.tenant_id
         )
       end
 
       def _nexus_create
-        Location.create!(
+        Nexus.create!(
           name:             hub_row[:hub_name],
-          location_type:    "nexus",
           latitude:         hub_row[:latitude],
           longitude:        hub_row[:longitude],
           photo:            hub_row[:photo],
           country:          country,
-          city:             hub_row[:hub_name],
-          geocoded_address: hub_row[:geocoded_address]
+          tenant_id:        @user.tenant_id
         )
       end
 
@@ -128,7 +126,7 @@ module ExcelTool
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: mandatory_charge
+          mandatory_charge: @mandatory_charge
         )
       end
 
@@ -143,7 +141,7 @@ module ExcelTool
           longitude:        hub_row[:longitude],
           name:             "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
           photo:            hub_row[:photo],
-          mandatory_charge: mandatory_charge
+          mandatory_charge: @mandatory_charge
         )
       end
 
@@ -173,8 +171,21 @@ module ExcelTool
       end
 
       def country_by_code(name)
-        code = geoplace.select{ |geo| geo.name == name }&.first&.code
-        Country.find_by(code: code)
+        if name.include?('Korea')
+          name = "Korea (Republic of)"
+        end
+        tmp_country = Country.find_by_name(name)
+        if !tmp_country
+          code = geoplace.select{ |geo| geo.name == name }&.first&.code
+          tmp_country = Country.find_by(code: code)
+        end
+        if !tmp_country
+          tmp_country = Country.where("name ILIKE ?", "%#{name}%").first
+        end
+        if !tmp_country
+          # byebug
+        end
+        tmp_country
       end
       def overwrite_hubs
 
@@ -184,6 +195,7 @@ module ExcelTool
           @country = country_by_code(hub_row[:country])
           @mandatory_charge = MandatoryCharge.find_by(mandatory_charge_values)
           @mandatory_charge ||= default_mandatory_charge
+          
           @nexus = _nexus
           @nexus ||= _nexus_create
 

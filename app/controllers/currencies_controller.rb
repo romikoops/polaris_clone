@@ -23,6 +23,6 @@ class CurrenciesController < ApplicationController
     current_user.currency = params[:currency]
     current_user.save!
     rates = get_rates(params[:currency], current_user.tenant_id)
-    response_handler(user: current_user, rates: rates)
+    response_handler(user: current_user.token_validation_response, rates: rates)
   end
 end

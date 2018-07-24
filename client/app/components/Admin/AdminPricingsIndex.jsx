@@ -10,13 +10,15 @@ import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
+import { capitalize, gradientTextGenerator, switchIcon } from '../../helpers'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
       redirectRoutes: false,
-      redirectClients: false
+      redirectClients: false,
+      newPricing: {}
     }
     this.viewAllRoutes = this.viewAllRoutes.bind(this)
     this.viewAllClients = this.viewAllClients.bind(this)
@@ -27,8 +29,13 @@ export class AdminPricingsIndex extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
   }
-  toggleCreator () {
-    this.setState({ newPricing: !this.state.newPricing })
+  toggleCreator (mot) {
+    this.setState(prevState => ({
+      newPricing: {
+        ...prevState.newPricing,
+        [mot]: !this.state.newPricing[mot]
+      }
+    }))
   }
   viewAllRoutes () {
     this.setState({ redirectRoutes: true })
@@ -71,27 +78,31 @@ export class AdminPricingsIndex extends Component {
     const {
       itineraries, detailedItineraries, transportCategories, lastUpdate
     } = pricingData
+    const modesOfTransport = scope.modes_of_transport
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
+    const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
+      Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
+    const truckIcon = <i className="fa fa-truck clip flex-none" style={gradientFontStyle} />
 
-    return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
-
-        <Tabs
-          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
-        >
-          <Tab
-            tabTitle="Routes"
-            theme={theme}
-          >
-            <CardPricingIndex
-              itineraries={detailedItineraries}
-              theme={theme}
-              scope={scope}
-              adminDispatch={adminDispatch}
-              toggleCreator={this.toggleCreator}
-              documentDispatch={this.props.documentDispatch}
-              lastUpdate={lastUpdate}
-            />
-            {/* <AdminSearchableClients
+    const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
+      tabTitle={capitalize(mot)}
+      theme={theme}
+      icon={switchIcon(mot, gradientFontStyle)}
+    >
+      <CardPricingIndex
+        itineraries={detailedItineraries}
+        theme={theme}
+        scope={scope}
+        mot={mot}
+        adminDispatch={adminDispatch}
+        toggleCreator={() => this.toggleCreator(mot)}
+        documentDispatch={this.props.documentDispatch}
+        lastUpdate={lastUpdate}
+      />
+      {/* <AdminSearchableClients
               theme={theme}
               clients={clients}
               handleClick={this.viewClient}
@@ -99,29 +110,39 @@ export class AdminPricingsIndex extends Component {
               tooltip={priceTip.clients}
               showTooltip
             /> */}
-            {newPricing ? (
-              <AdminPriceCreator
-                theme={theme}
-                itineraries={itineraries}
-                clients={clients}
-                adminDispatch={adminDispatch}
-                detailedItineraries={detailedItineraries}
-                transportCategories={transportCategories}
-                closeForm={this.toggleCreator}
-              />
-            ) : (
-              ''
-            )}
-          </Tab>
-          <Tab
-            tabTitle="Trucking"
-            theme={theme}
-          >
-            <AdminTrucking
-              theme={theme}
-              hubHash={hubHash}
-            />
-          </Tab>
+      {newPricing[mot] ? (
+        <AdminPriceCreator
+          theme={theme}
+          itineraries={itineraries}
+          clients={clients}
+          adminDispatch={adminDispatch}
+          detailedItineraries={detailedItineraries}
+          transportCategories={transportCategories}
+          closeForm={this.toggleCreator}
+        />
+      ) : (
+        ''
+      )}
+    </Tab>))
+    motTabs.push(<Tab
+      tabTitle="Trucking"
+      theme={theme}
+      icon={truckIcon}
+    >
+      <AdminTrucking
+        theme={theme}
+        hubHash={hubHash}
+      />
+    </Tab>)
+
+    return (
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start" style={{ paddingLeft: '15px' }}>
+
+        <Tabs
+          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+        >
+          {motTabs}
+
         </Tabs>
 
       </div>

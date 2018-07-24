@@ -83,21 +83,21 @@ module ShippingTools
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id).merge(alias: shipment.export?)
+      contact_params(resource, contact_location.id)  # NOT CORRECT: .merge(alias: shipment.export?)
     )
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
     shipper = { data: contact, location: contact_location.to_custom_hash }
-    UserLocation.create(user: current_user, location: contact_location) if shipment.export?
+    # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact = current_user.contacts.find_or_create_by!(
-      contact_params(resource, contact_location.id).merge(alias: shipment.import?)
+      contact_params(resource, contact_location.id)    # NOT CORRECT: .merge(alias: shipment.import?)
     )
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "consignee")
     consignee = { data: contact, location: contact_location.to_custom_hash }
-    UserLocation.create(user: current_user, location: contact_location) if shipment.import?
+    # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
@@ -124,8 +124,8 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-    
-    if shipment_data[:customs][:total][:val].to_d > 0
+    # byebug
+    if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),
         charge_category:          ChargeCategory.grand_total,
@@ -160,7 +160,9 @@ module ShippingTools
           parent:                   @customs_charge
         )
       end
+      @customs_charge.update_price!
     end
+    charge_breakdown.charge('grand_total').update_price!
     shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data["notes"]
 
@@ -488,7 +490,7 @@ module ShippingTools
     end
   end
 
-  def shipper_confirmation_email(user, shipment)
+  def self.shipper_confirmation_email(user, shipment)
     if ENV['BETA'] != "true"
       ShipmentMailer.shipper_confirmation(
         user,

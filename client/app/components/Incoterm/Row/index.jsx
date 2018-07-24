@@ -20,13 +20,17 @@ export function IncotermRow ({
       : { color: 'black' }
   const deselectedStyle = {
     ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
-    opacity: '0.5'
+    opacity: '0.25'
   }
   const { scope } = tenant.data
   const preCarriageStyle = preCarriage ? selectedStyle : deselectedStyle
   const onCarriageStyle = onCarriage ? selectedStyle : deselectedStyle
   const originDocumentStyle = originFees ? selectedStyle : deselectedStyle
   const destinationDocumentStyle = destinationFees ? selectedStyle : deselectedStyle
+  const preCarriageTextStyle = preCarriage ? '' : styles.deselected_text
+  const onCarriageTextStyle = onCarriage ? '' : styles.deselected_text
+  const originDocumentTextStyle = originFees ? '' : styles.deselected_text
+  const destinationDocumentTextStyle = destinationFees ? '' : styles.deselected_text
   const freightStyle = selectedStyle
 
   const freightFeesValue =
@@ -130,7 +134,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m">Pre-Carriage</p>
+        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pickup</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? preCarriageFeesValue : ''}
     </div>
@@ -143,7 +147,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m">On-Carriage</p>
+        <p className={`flex-none no_m ${onCarriageTextStyle}`}>Delivery</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? onCarriageFeesValue : ''}
     </div>
@@ -156,7 +160,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m center">
+        <p className={`flex-none no_m center ${originDocumentTextStyle}`}>
           Origin <br /> Documentation
         </p>
       </div>
@@ -171,7 +175,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className="flex-none no_m center">
+        <p className={`flex-none no_m center ${destinationDocumentTextStyle}`}>
           Destination <br /> Documentation
         </p>
       </div>

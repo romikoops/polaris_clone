@@ -25,13 +25,16 @@ export default class CollapsingContent extends React.PureComponent {
     }
   }
   render () {
-    const { collapsed, content } = this.props
+    const { collapsed, content, minHeight } = this.props
     const { firstRender } = this.state
-
+    if (!collapsed) {
+      // debugger // eslint-disable-line
+    }
     return (
       <div
         className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel}`}
         style={{
+          minHeight: `${!collapsed ? minHeight : ''}`,
           maxHeight: this.state.panelHeight,
           transition: `max-height ${Math.log(1 + this.state.panelHeight) / 10}s linear`
         }}
@@ -51,10 +54,12 @@ export default class CollapsingContent extends React.PureComponent {
 
 CollapsingContent.propTypes = {
   collapsed: Proptypes.bool,
-  content: Proptypes.node
+  content: Proptypes.node,
+  minHeight: Proptypes.string
 }
 
 CollapsingContent.defaultProps = {
   collapsed: false,
-  content: ''
+  content: '',
+  minHeight: ''
 }

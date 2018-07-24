@@ -138,12 +138,17 @@ class UserAccount extends Component {
 
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
+    const minHeightForFooter = window.innerHeight - 350
+    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
     return (
       <div className="layout-row flex-100 hundred">
         {loadingScreen}
         {menu}
         <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
-        <div className="layout-row flex layout-wrap layout-align-center-start">
+        <div
+          className="layout-row flex layout-wrap layout-align-center-start"
+          style={footerStyle}
+        >
           <NavBar className={`${styles.top_margin}`} />
           <div
             className={`flex-95 ${defs.spacing_md_bottom} ${

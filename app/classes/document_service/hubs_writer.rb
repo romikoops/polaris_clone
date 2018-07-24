@@ -40,10 +40,11 @@ module DocumentService
       worksheet.write(row, 9, @mandatory_charges[hub.id].export_charges)
       worksheet.write(row, 10, @mandatory_charges[hub.id].pre_carriage)
       worksheet.write(row, 11, @mandatory_charges[hub.id].on_carriage)
+      worksheet.write(row, 12, hub.photo)
     end
 
     def header_values
-      %w(STATUS TYPE NAME CODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE ON_CARRIAGE)
+      %w(STATUS TYPE NAME CODE LATITUDE LONGITUDE COUNTRY FULL_ADDRESS IMPORT_CHARGES EXPORT_CHARGES PRE_CARRIAGE ON_CARRIAGE PHOTO)
     end
   end
 end

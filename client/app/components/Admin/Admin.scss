@@ -20,7 +20,7 @@
     margin-bottom: 20px;
   }
   .set_button_height {
-    min-height: 200px;
+    min-height: 220px;
     color: #BDBDBD;
     p {
       margin-top: 12px;
@@ -347,6 +347,22 @@
   .price_row {
     p {
       margin: 0;
+    }
+  }
+  .navigation_button {
+    background: white;
+    color: #BDBDBD;
+    i {
+      font-size: 25px;
+    }
+    &:hover {
+      color: #4F4F4F;
+    }
+  }
+  .disabled {
+    color: #E0E0E0 !important;
+    &:hover {
+      color: #E0E0E0 !important;
     }
   }
   .price_subheader {
@@ -979,6 +995,9 @@
     height: 40px;
     width: 100%;
   }
+  .set_height {
+    min-height: 400px;
+  }
   @media only screen and (max-width: 960px) {
     .border_box {
       margin-right: 0 !important;
@@ -991,9 +1010,58 @@
   .header_margin_buffer{
     margin: 0 15px;
   }
+  .content_details {
+    padding-left: 25px;
+  }
+  .greyBg {
+    background-color: lightgrey;
+    margin-bottom: 20px;
+  }
+  .location_address {
+    padding: 15px;
+    padding-top: 0;
+    i {
+      font-size: 34px;
+    }
+    p {
+      padding-left: 25px;
+      margin: 0 0 12px 0;
+    }
+    input {
+      margin-bottom: 16px;
+    }
+  }
+  .username_title {
+    padding-left: 2vw;
+    h1 {
+      font-size: 35px;
+      margin: 0 !important;
+    }
+    p {
+      font-size: 28px;
+      margin: 0;
+    }
+  }
+  .bigProfile {
+    font-size: 60px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .icons_location {
+    > * {
+      padding-left: 10px;
+    }
+    &:first-child {
+      color: #6FCF97;
+    }
+    .trashy {
+      color: #EB5757;
+    }
   .margin_top_align {
     margin-top: -60px;
   }
+}
+
   .back_button {
     color: #BDBDBD;
     &:hover {

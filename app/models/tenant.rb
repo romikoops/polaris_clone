@@ -7,6 +7,7 @@ class Tenant < ApplicationRecord
   has_many :shipments
   has_many :routes
   has_many :hubs
+  has_many :nexuses
   has_many :routes
   has_many :hub_routes, through: :routes
   has_many :schedules
@@ -38,6 +39,7 @@ class Tenant < ApplicationRecord
   has_many :buyer_incoterm_charges, through: :incoterms
   has_many :conversations
   has_many :max_dimensions_bundles
+  has_many :map_data
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true

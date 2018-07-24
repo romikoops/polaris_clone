@@ -1,30 +1,106 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 include ExcelTools
-include MongoTools
+include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(demo)
+subdomains = %w(easyshipping)
 subdomains.each do |sub|
-  # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
+  # shipment = shipper.shipments.where(status: 'requested').first
+  # conf_shipment = shipper.shipments.where(status: 'confirmed').first
+  # ShippingTools.tenant_notification_email(shipper, shipment)
+  # ShippingTools.shipper_notification_email(shipper, shipment)
+  # ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
 #   tenant.itineraries.destroy_all
 #   tenant.local_charges.destroy_all
 #   tenant.customs_fees.destroy_all
-#   # tenant.trucking_pricings.delete_all
+# # #   # tenant.trucking_pricings.delete_all
 #   tenant.hubs.destroy_all
-# # # #   # # # # #Overwrite hubs from excel sheet
-#   # puts "# Overwrite hubs from excel sheet"
-#   hubs = File.open("#{Rails.root}/db/dummydata/st_hubs.xlsx")
-#   req = {"xlsx" => hubs}
-#   overwrite_hubs(req, shipper)
-  # hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
-  # req = { 'xlsx' => hubs }
-  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+# # # # #   # # # # #Overwrite hubs from excel sheet
+# #   # puts "# Overwrite hubs from excel sheet"
 
-#   # # #   # # # # puts "# Overwrite public pricings from excel sheet"
+#   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
+#   req = { 'xlsx' => hubs }
+#   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+# Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
+
+  
+
+  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  # imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   cargo_class: 'lcl',
+  #   load_type: 'cargo_item').perform
+  # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   _user: shipper,
+  #   hub_type: 'ocean',
+  #   direction: 'import').perform
+
+#   res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
+#     tenant: tenant,
+#     counterpart_hub: 'Copenhagen Port',
+#     direction: 'import',
+#     cargo_class: 'lcl').perform
+
+#   path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
+  
+#   ex_data = DataParser::PfcNordic::SheetParserExport.new(
+#     path: path,
+#     _user: shipper,
+#     counterpart_hub_name: 'Copenhagen Port',
+#     hub_type: 'ocean',
+#     input_language: 'de',
+#     cargo_class: 'lcl',
+#     load_type: 'cargo_item'
+#     ).perform
+  
+#   ex_hubs = DataInserter::PfcNordic::HubInserter.new(
+#     data: ex_data,
+#     tenant: tenant,
+#     counterpart_hub: 'Copenhagen Port',
+#     _user: shipper,
+#     hub_type: 'ocean',
+    
+#     direction: 'export').perform
+
+#   res = DataInserter::PfcNordic::RateInserter.new(
+#     rates: ex_data,
+#     tenant: tenant,
+#     counterpart_hub: 'Copenhagen Port',
+#     direction: 'export',
+#     cargo_class: 'lcl',
+#     input_language: 'de',).perform
+
+#   local_charges = File.open("#{Rails.root}/db/dummydata/easyshipping/ez_seeder_local_charges.xlsx")
+#   req = { 'xlsx' => local_charges }
+#   ExcelTool::OverwriteLocalCharges.new(params: req,
+#     user: shipper).perform
+#   # byebug
+  
+#   ex_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: ex_hubs,
+#     _user: shipper,
+#     counterpart_hub_name: 'Copenhagen Port',
+#     hub_type: 'ocean',
+#     direction: 'export'
+#   ).perform
+  
+
+#   imp_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: imp_hubs,
+#     _user: shipper,
+#     counterpart_hub_name: 'Copenhagen Port',
+#     hub_type: 'ocean',
+#     direction: 'import'
+#   ).perform
+  
+  
+  #   # # #   # # # # puts "# Overwrite public pricings from excel sheet"
 
 #   # public_pricings = File.open("#{Rails.root}/db/dummydata/NEW_hartrodt_rates.xlsx")
 #   # req = {"xlsx" => public_pricings}

@@ -10,6 +10,7 @@ export default function CollapsingBar ({
   content,
   text,
   faClass,
+  minHeight,
   contentHeader,
   styleHeader,
   optClassName,
@@ -30,7 +31,7 @@ export default function CollapsingBar ({
         styleHeader={styleHeader}
       />
       {!hideContent ? (
-        <CollapsingContent collapsed={collapsed} content={content} />
+        <CollapsingContent collapsed={collapsed} content={content} minHeight={minHeight} />
       ) : ''}
     </div>
   )
@@ -46,6 +47,7 @@ CollapsingBar.propTypes = {
   text: PropTypes.string,
   optClassName: PropTypes.string,
   faClass: PropTypes.string,
+  minHeight: PropTypes.string,
   showArrow: PropTypes.bool,
   styleHeader: PropTypes.objectOf(PropTypes.string)
 }
@@ -60,6 +62,7 @@ CollapsingBar.defaultProps = {
   text: '',
   hideContent: false,
   faClass: '',
+  minHeight: '',
   styleHeader: {},
   showArrow: false
 }

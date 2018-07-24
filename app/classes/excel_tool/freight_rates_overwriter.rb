@@ -29,6 +29,7 @@ module ExcelTool
         set_cargo_type(row)
         populate_new_pricings
         aux_data[pricing_key] ||= {}
+
         populate_aux_data(row)
         @itinerary = aux_data[pricing_key][:itinerary]
         update_aux_data_itinerary(row)
@@ -39,17 +40,27 @@ module ExcelTool
 
       add_exceptions_to_new_pricings
       process_hashes
+      generate_map_data
       { results: results, stats: stats, unsaved_initnerary: @unsaved_itins, saved: @saved}
     end
 
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
+      if aux_data[pricing_key][:stops_in_order].length != 2
+        # byebug
+      end
       if aux_data[pricing_key][:stops_in_order].length > 0
         itinerary.stops << aux_data[pricing_key][:stops_in_order]
         itinerary.save!
         @saved << itinerary
       else
         @unsaved_itins << @itinerary
+      end
+    end
+
+    def generate_map_data
+      @saved.each do |itinerary|
+        itinerary.generate_map_data
       end
     end
 
@@ -154,6 +165,15 @@ module ExcelTool
         }
     end
 
+    def find_nexus(string, tenant_id)
+      nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
+      if nexus
+        return nexus
+      else
+        nexus = Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
+      end
+    end
+
     def populate_aux_data(row)
       if aux_data[pricing_key][:tenant_vehicle].blank?
         vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot], tenant_id: tenant.id)
@@ -162,8 +182,12 @@ module ExcelTool
 
       aux_data[pricing_key][:customer] = User.find(row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
-      aux_data[pricing_key][:origin] ||= Location.find_by(name: row[:origin], location_type: "nexus")
-      aux_data[pricing_key][:destination] ||= Location.find_by(name: row[:destination], location_type: "nexus")
+      aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
+      aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
+      if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
+        puts row
+        # byebug
+      end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]

@@ -12,6 +12,7 @@ class Itinerary < ApplicationRecord
   has_many :notes,     dependent: :destroy
   has_many :pricings,  dependent: :destroy
   has_many :hubs,      through: :stops
+  has_many :map_data,  dependent: :destroy
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
   scope :for_tenant, -> (tenant_id) { where(tenant_id: tenant_id) }
@@ -278,6 +279,13 @@ class Itinerary < ApplicationRecord
     stops.order(index: :asc).pluck(:hub_id)
   end
 
+  def generate_map_data
+    routes.each do |route_data|
+      route_data[:tenant_id] = self.tenant_id
+      self.map_data.find_or_create_by!(route_data)
+    end
+  end
+
   def ordered_nexus_ids
     stops.order(index: :asc).joins(:hub).pluck("hubs.nexus_id")
   end
@@ -367,7 +375,7 @@ class Itinerary < ApplicationRecord
             hub: {
               include: {
                 nexus:    { only: %i[id name] },
-                location: { only: %i[longitude latitude] }
+                location: { only: %i[longitude latitude geocoded_address] }
               },
               only:    %i[id name]
             }

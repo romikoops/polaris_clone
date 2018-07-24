@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "halogen-rampart-109720",
+  "private_key_id": "72769cffc24ad0ad06a3f6461cbda133a1db5493",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDHgj69HYKMT7Nw\nLH2GrpHKRcOiQN2uMcJksd4u00mexIpT3uBaZxswCG6jHUe1HrRC/DWd3qmOSpFv\nN/IsmcWbcZk6C2GdXm2gDaIZYyyUNoJrGptRz4ZjOpi2ddHVPdBKp3nV+w7Tv8V9\nJTHpuCTvutRwg44AoYe5lA6xn6/tOdaYtsqcDBaD0eS0YpoFTH9IyJ/seJPdXsKZ\nK1wHMcQK6mNZcod623tLub7Pj02qThN5ikuHkAYZIMZYSu1K22Oe7nbvVOedbtCw\nPND5eHDdo/A1wwYJNxuW6rNKBJuvLKt6rOiCp4syqggz0c0rBdKp5Q/Z6t7NKcxf\nasiNYf9TAgMBAAECggEAOvgxaR6O1sA8DnzoAWYZ64qhX5UCsRk+FxtHy9lh2k7H\ngDDRaYcuTw0+/nGKH2va5i27/1SwE0HRKOmFaE9vTBnQq4pvqN8fUf6VmiFpLMnL\n1LKBlDXdx/iq6Mt8YSYrKdXEuk3BvS7ixbG3xhhKup0ja7pGv8L+5ghwK2pCysAW\nPzzDH9rdDkBphLtjBJn+bk9NeoaZQVc7tIG1+3EaPhv3Gw5QQ9bG4wi1v1Eg+sHi\nFoMZ8NJqZMf/NQmZsduWNJxT7wr8ZTQQTWhkGKoZHqgSOvmONLJOGUHpgumaRF6e\ngaQXI/yBYi5fMLLg0HLXmWt0QNmDSbbuueD7pB5tSQKBgQD97IqyAkvOAQeFHwoH\nVGxGJkXktpot7S7ROPIU8F9mCL+2pI7jaOoBKE2KWtv8XtNbtoG1DFEoSQoARzoK\niB+HUDD8krU1IsIXboykOfIPtGINyOGP1NG3gdtygOl3iczWvPpvwjUOgyB2br/F\nVqBg04W6YiJBzmS475xM8pJpBQKBgQDJI9Awl462bH1US5qgx2iKwCMUT/65/Y4X\nJktMH04YnEIaZWRDr7zDeXLULfw5amtB8HQC/vlqW8Xk6Veh8fZ4l9DHYKs6iBiA\n8EVOeUSfFGMptbcCv+S9TojCuVaYkBeR0EieC5UvuNTJsoqM5L+gpMlhYmdiUJW7\nUUGBO7XWdwKBgQClJbMPE286DHFXo1hibAX/meTbW+fq9tf8O403ER76vbXylBRa\n02FeX1gPJAjvmrzcaVby6Y/fI6HdjHWzY9UdrIovuzsf0/toQf420XkdvbQIQx5w\n7Xl4YHzZe/5cQMN45m/7P9RCHAaBAIa5Uh3825WeIzUkl5fqr+x4H0waAQKBgQCl\ntDpkfcdVpEUP+AUYZY9Ll4SOzGRXB3tSuPqZaMTm43xV0KfsV1AUXe5qvMOo7XIV\nbam1eicyJw7+Sfom8XaS3MdkKdCGtO4y8z61qpQM1jfnecuemUYxawyiFxwvLa4t\nM0FP6szp9sReshcQgbcY+gjpkK8JQMhJ/GQRuoZQewKBgQDid2lFC0bRyV4m4Ym9\ns8Tnx4N3CopOHOSK68P/8rp+ulCx8Djznxk/Q3wdbVWDw4VFjQ9T835TURuG3eQ9\n5KL7tJxMgxiWEuFSEZVfK9UKcclfD5Kkn23tEIE1mAe8E4gSMft/BBKGB7o0w1FE\nUGjyctIlwPmoM7QqFPXrrdTbYA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "translations@halogen-rampart-109720.iam.gserviceaccount.com",
+  "client_id": "111621679776860909760",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/translations%40halogen-rampart-109720.iam.gserviceaccount.com"
+}

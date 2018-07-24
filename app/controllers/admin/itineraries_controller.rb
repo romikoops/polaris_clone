@@ -5,7 +5,8 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    response_handler(as_json_itineraries)
+    map_data = current_user.tenant.map_data
+    response_handler(mapData: map_data, itineraries: as_json_itineraries)
   end
 
   def create
@@ -79,15 +80,15 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_params
     {
-      mode_of_transport: params["mot"],
-      name:              params["name"],
+      mode_of_transport: params['itinerary']["mot"],
+      name:              params['itinerary']["name"],
       tenant_id:         current_user.tenant_id
     }
   end
 
   def as_json_itineraries
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    itineraries.map { |itinerary| itinerary.as_options_json(methods: :routes) }
+    itineraries.map { |itinerary| itinerary.as_options_json() }
   end
 
   def params_stops

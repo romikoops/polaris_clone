@@ -81,6 +81,11 @@ export class AdminPricingBox extends Component {
         charges: nextProps.charges
       })
     }
+    if (this.state.editor === {}) {
+      const charge = nextProps.charges
+        .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
+      this.setState({ editor: charge })
+    }
   }
 
   setCargoClass (type) {
@@ -380,14 +385,14 @@ export class AdminPricingBox extends Component {
 
     const editCharge = { ...editor }
     const currentCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
-
+    console.log('#########')
+    console.log(editor)
     const feeRows = Object.keys(currentCharge.pricing.data).map((ck) => {
       const fee = currentCharge.pricing.data[ck]
       fee.key = ck
       fee.name = chargeGlossary[ck]
       fee.effective_date = currentCharge.pricing.effective_date
       fee.expiration_date = currentCharge.pricing.expiration_date
-
       return fee.range ? (<PricingRangeRow
         className="flex-100"
         theme={theme}

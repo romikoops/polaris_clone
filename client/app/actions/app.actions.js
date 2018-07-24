@@ -43,7 +43,33 @@ function fetchCurrencies (type) {
     )
   }
 }
+function fetchCountries () {
+  function request (countryReq) {
+    return { type: appConstants.FETCH_COUNTRIES_REQUEST, payload: countryReq }
+  }
+  function success (countryData) {
+    return { type: appConstants.FETCH_COUNTRIES_SUCCESS, payload: countryData }
+  }
+  function failure (error) {
+    return { type: appConstants.FETCH_COUNTRIES_ERROR, error }
+  }
 
+  return (dispatch) => {
+    dispatch(request())
+    appService.fetchCountries().then(
+      (resp) => {
+        const currData = resp.data
+        dispatch(alertActions.success('Fetching Countries successful'))
+        dispatch(success(currData))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
+}
 function refreshRates (type) {
   function request (currencyReq) {
     return { type: appConstants.REFRESH_CURRENCIES_REQUEST, payload: currencyReq }
@@ -146,7 +172,8 @@ function toggleTenantCurrencyMode () {
     appService.toggleTenantCurrencyMode().then(
       (resp) => {
         dispatch(success(resp.data.rates))
-        dispatch(tenantActions.receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
+        dispatch(tenantActions
+          .receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
         dispatch(alertActions.success('Toggle Currency Mode successful'))
       },
       (error) => {
@@ -294,6 +321,7 @@ function goTo (path) {
 
 export const appActions = {
   fetchCurrencies,
+  fetchCountries,
   shouldFetchTenant,
   fetchTenantIfNeeded,
   invalidateSubdomain,
