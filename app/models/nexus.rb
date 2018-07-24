@@ -116,6 +116,10 @@ class Nexus < ApplicationRecord
     end
   end
 
+  def city_country
+    "#{name}, #{country.name}"
+  end
+
   def self.from_short_name(input, tenant_id)
     city, country_name = *input.split(" ,")
     puts input
