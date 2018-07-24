@@ -131,7 +131,7 @@ class Nexus < ApplicationRecord
     nexus = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
     return nexus unless nexus.nil?
     if country.nil? && temp_location.country.nil?
-      byebug
+      # byebug
     end
     country_to_save = country || temp_location.country
     nexus = Nexus.create!(
