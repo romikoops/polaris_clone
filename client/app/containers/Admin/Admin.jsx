@@ -92,7 +92,8 @@ class Admin extends Component {
       clients,
       dashboard,
       loading,
-      itinerarySchedules
+      itinerarySchedules,
+      allHubs
     } = adminData
 
     const hubHash = {}
@@ -234,7 +235,7 @@ class Admin extends Component {
                 <Route
                   path="/admin/routes"
                   render={props => (
-                    <AdminRoutes theme={theme} {...props} hubHash={hubHash} clients={clients} />
+                    <AdminRoutes theme={theme} {...props} hubHash={hubHash} clients={clients} allHubs={allHubs} loading={loading} />
                   )}
                 />
                 <Route

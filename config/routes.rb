@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       resources :hubs, only: %i[index show create update] do
         patch 'set_status'
       end
+      get  'hubs/all/processed', to: 'hubs#all_hubs'
       post 'hubs/:id/update_mandatory_charges', to: 'hubs#update_mandatory_charges'
       post 'hubs/:hub_id/delete', to: 'hubs#delete'
       post 'hubs/:hub_id/image', to: 'hubs#update_image'

@@ -260,7 +260,7 @@ module TruckingTools
           (!cargo.stackable && trucking_pricing.load_meterage["height_limit"])
           calc_cargo_load_meterage_height(trucking_pricing, cargo_object, cargo)
         elsif (trucking_pricing.load_meterage["area_limit"] &&
-          ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) > trucking_pricing.load_meterage["area_limit"])) || 
+          ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) >= trucking_pricing.load_meterage["area_limit"])) || 
           (!cargo.stackable && trucking_pricing.load_meterage["area_limit"])
           calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
         else
