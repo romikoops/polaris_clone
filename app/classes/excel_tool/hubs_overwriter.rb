@@ -106,6 +106,14 @@ module ExcelTool
         )
       end
 
+      def find_alternative_country_names(name)
+        results = AlternativeName.where("model = ? AND name ILIKE ?", "Country", "%#{name}%")
+        if !results.empty?
+          class_name = results.first.model.constantize
+          country = class_name.find(results.first.model_id)
+        end
+      end
+
       def hub
         @hub = Hub.find_by(
           nexus_id:  nexus.id,
@@ -183,7 +191,7 @@ module ExcelTool
           tmp_country = Country.where("name ILIKE ?", "%#{name}%").first
         end
         if !tmp_country
-          # byebug
+          tmp_country = find_alternative_country_names(name)
         end
         tmp_country
       end
