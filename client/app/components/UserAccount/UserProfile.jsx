@@ -380,9 +380,9 @@ export class UserProfile extends Component {
           }`}
         >
           <div
-            className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
+            className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center margin-bottom`}
           >
-            <i className="fa fa-user flex-none" style={textStyle} />
+            <i className="fa fa-user flex-10" style={textStyle} />
             <p className="flex-none">New Alias</p>
           </div>
           <input
@@ -480,7 +480,7 @@ export class UserProfile extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {newAliasBool ? newAliasBox : ''}
         <div className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
           {editBool ? (
@@ -652,7 +652,7 @@ export class UserProfile extends Component {
             } `}
           >
             <div
-              className={`flex-100 layout-align-start-center ${styles.greyBg}`}
+              className="flex-100 layout-align-start-center greyBg"
             >
               <span><b>Aliases</b></span>
             </div>
@@ -686,7 +686,7 @@ export class UserProfile extends Component {
             } `}
           >
             <div
-              className={`flex-100 layout-align-start-center ${styles.greyBg}`}
+              className="flex-100 layout-align-start-center greyBg"
             >
               <span><b>Saved Locations</b></span>
             </div>

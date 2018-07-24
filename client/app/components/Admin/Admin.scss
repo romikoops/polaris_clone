@@ -15,10 +15,6 @@
     width: 100%;
     cursor: pointer;
   }
-  .greyBg {
-    background-color: lightgrey;
-    margin-bottom: 20px;
-  }
   .set_button_height {
     min-height: 220px;
     color: #BDBDBD;
@@ -51,7 +47,7 @@
     }
   }
   .searchable_header{
-    padding: 26px 0;
+    padding: 0;
   }
   .searchable_header.overlay {
     position: absolute;
@@ -194,8 +190,8 @@
     border: 0;
     border-radius: 3px;
     background-color: transparent;
-    margin-top: -70px;
-    margin-bottom: 50px;
+    margin-top: -60px;
+    margin-bottom: 40px;
   }
   .inpu_box_right_margin {
     margin-right: 10px;
@@ -1012,10 +1008,6 @@
   }
   .content_details {
     padding-left: 25px;
-  }
-  .greyBg {
-    background-color: lightgrey;
-    margin-bottom: 20px;
   }
   .location_address {
     padding: 15px;

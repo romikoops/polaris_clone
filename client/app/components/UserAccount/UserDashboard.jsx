@@ -4,7 +4,6 @@ import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
@@ -89,7 +88,7 @@ export class UserDashboard extends Component {
         : { color: 'black' }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         <div
           className={`flex-100 layout-row layout-wrap layout-align-start-start ${
             ustyles.dashboard_main
@@ -101,7 +100,7 @@ export class UserDashboard extends Component {
             }
           >
             <div
-              className={`layout-row flex-100 layout-align-start-center 
+              className={`layout-row flex-100 layout-align-start-center
               ${ustyles.headerElement}`}
             >
               <span className="layout-row flex-10 layout-align-center-center">
@@ -137,9 +136,7 @@ export class UserDashboard extends Component {
           </div>
         </div>
         <div
-          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
-            defaults.border_divider
-          }`}
+          className="layout-row flex-100 layout-wrap layout-align-center-center"
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
             <AdminSearchableClients
@@ -157,7 +154,13 @@ export class UserDashboard extends Component {
           }`}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <TextHeading theme={theme} size={1} text="My Shipment Addresses" />
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div
+                className="flex-100 layout-align-start-center greyBg"
+              >
+                <span><b>My Shipment Addresses</b></span>
+              </div>
+            </div>
             <UserLocations
               setNav={() => {}}
               userDispatch={userDispatch}

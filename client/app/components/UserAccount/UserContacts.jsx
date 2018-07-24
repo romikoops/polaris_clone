@@ -68,18 +68,6 @@ class UserContacts extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="New"
-          active
-          handleNext={this.toggleNewContact}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
     const newContactBox = (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -196,14 +184,9 @@ class UserContacts extends Component {
         </div>
       </div>
     )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        {newContactBool ? newContactBox : ''}
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          {newButton}
-        </div>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
         <Switch className="flex">
           <Route
             exact
@@ -212,6 +195,8 @@ class UserContacts extends Component {
               <UserContactsIndex
                 theme={theme}
                 loading={loading}
+                newContactBox={newContactBool ? newContactBox : ''}
+                toggleNewContact={this.toggleNewContact}
                 handleClientAction={this.handleClientAction}
                 contacts={contacts}
                 hubs={hubs}

@@ -69,6 +69,7 @@ export class AdminSearchableClients extends Component {
     const {
       theme,
       // seeAll,
+      title,
       placeholder,
       tooltip,
       showTooltip,
@@ -105,6 +106,15 @@ export class AdminSearchableClients extends Component {
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-space-between-start ${styles.searchable}`}>
+        {title ? (
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div
+              className="flex-100 layout-align-start-center greyBg"
+            >
+              <span><b>{title}</b></span>
+            </div>
+          </div>
+        ) : ''}
         <div className={`searchables flex-100 layout-row layout-align-end-center ${styles.searchable_header}`}>
           { !hideFilters
             ? <div className="input_box_full flex-40 layout-row layout-align-end-center">
@@ -145,8 +155,8 @@ AdminSearchableClients.propTypes = {
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
   tooltip: PropTypes.string,
-  hideFilters: PropTypes.bool
-
+  hideFilters: PropTypes.bool,
+  title: PropTypes.string
 }
 
 AdminSearchableClients.defaultProps = {
@@ -157,7 +167,8 @@ AdminSearchableClients.defaultProps = {
   tooltip: '',
   placeholder: '',
   adminDispatch: null,
-  hideFilters: false
+  hideFilters: false,
+  title: ''
 }
 
 export default AdminSearchableClients

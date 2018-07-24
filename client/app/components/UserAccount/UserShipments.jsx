@@ -45,7 +45,7 @@ export class UserShipments extends Component {
       .map(sh => UserShipments.prepShipment(sh, user))
 
     const listView = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
         <Tabs>
           <Tab
             tabTitle="Requested"
@@ -55,7 +55,6 @@ export class UserShipments extends Component {
               handleClick={this.viewShipment}
               dispatches={userDispatch}
               shipments={mergedReqShipments}
-              title="Requested Shipments"
               theme={theme}
               userView
               tooltip={adminTip.requested}
@@ -70,7 +69,6 @@ export class UserShipments extends Component {
               handleClick={this.viewShipment}
               dispatches={userDispatch}
               shipments={mergedOpenShipments}
-              title="Open Shipments"
               theme={theme}
               userView
               tooltip={adminTip.open}
@@ -85,7 +83,6 @@ export class UserShipments extends Component {
               handleClick={this.viewShipment}
               dispatches={userDispatch}
               shipments={mergedFinishedShipments}
-              title="Finished Shipments"
               theme={theme}
               userView
               tooltip={adminTip.finished}
