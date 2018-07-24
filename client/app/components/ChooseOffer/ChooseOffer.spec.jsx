@@ -46,11 +46,11 @@ afterEach(() => {
   Date = originalDate
 })
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
 })
 
-test('state.selectedMoT.ocean is false', () => {
+test.skip('state.selectedMoT.ocean is false', () => {
   const wrapper = shallow(<ChooseOffer {...propsBase} />)
   wrapper.setState({
     selectedMoT: {

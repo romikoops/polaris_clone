@@ -5,8 +5,7 @@ exports[`admin is true 1`] = `
   className="layout-wrap flex-100 layout-row layout-align-start-start"
 >
   <div
-    className="card_padding flex-100
-      layout-align-start-center  greyBg"
+    className="greyBg layout-padding flex-100 layout-align-start-center"
   >
     <span>
       <b>
@@ -75,6 +74,7 @@ exports[`admin is true 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        titleAction={false}
         wrapperClassName="layout-row flex layout-align-center-center"
       />
     </div>
@@ -87,8 +87,7 @@ exports[`shallow rendering 1`] = `
   className="layout-wrap flex-100 layout-row layout-align-start-start"
 >
   <div
-    className="card_padding flex-100
-      layout-align-start-center  greyBg"
+    className="greyBg layout-padding flex-100 layout-align-start-center"
   >
     <span>
       <b>
@@ -139,6 +138,7 @@ exports[`shallow rendering 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        titleAction={false}
         wrapperClassName="layout-row flex layout-align-center-center"
       />
     </div>

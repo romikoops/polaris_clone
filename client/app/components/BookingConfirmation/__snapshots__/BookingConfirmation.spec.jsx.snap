@@ -209,7 +209,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -227,7 +227,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -1228,7 +1228,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -1246,7 +1246,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -2304,7 +2304,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -2322,7 +2322,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -3435,7 +3435,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -3453,24 +3453,27 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-start-start"
+                className="flex-100 layout-row layout-align-center-center"
               >
                 <address
                   className="flex-none"
                 >
                   9 BAR_STREET
                    
-                  ,
+                  , 
+                  <br />
                   BAR_CITY
-                  ,
+                  , 
+                  <br />
                   845321
-                  ,
+                  , 
+                  <br />
                   China
                 </address>
               </div>
@@ -3794,12 +3797,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_49"
+              key="RANDOM_KEY_43"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_50"
+              key="RANDOM_KEY_44"
               textStyle="#333"
             />
           </div>
@@ -4037,7 +4040,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_51"
+              key="RANDOM_KEY_45"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4058,7 +4061,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_52"
+              key="RANDOM_KEY_46"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4166,13 +4169,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_53"
+                    key="RANDOM_KEY_47"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_54"
+                    key="RANDOM_KEY_48"
                   >
                      
                     BAR_TERM
@@ -5476,7 +5479,7 @@ exports[`shallow render 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -5494,7 +5497,7 @@ exports[`shallow render 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -6481,7 +6484,7 @@ exports[`with cargo items 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -6499,7 +6502,7 @@ exports[`with cargo items 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -7789,7 +7792,7 @@ exports[`with containers 1`] = `
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -7807,7 +7810,7 @@ exports[`with containers 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>

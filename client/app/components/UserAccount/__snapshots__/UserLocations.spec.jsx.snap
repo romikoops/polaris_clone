@@ -36,40 +36,41 @@ exports[`shallow render 1`] = `
       className="location-box flex-100 layout-column"
     >
       <div
-        className="header"
+        className="header layout-row layout-align-end-center"
       >
-        <div
-          className="layout-row layout-wrap"
+        <i
+          className="fa fa-star clip icon_primary"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+        <span
+          className="emulate_link"
+          onClick={[Function]}
         >
-          <div
-            className="layout-row flex-80"
-          >
-            <h3
-              className="other"
-            >
-              Other
-            </h3>
-          </div>
-          <div
-            className="layout-row flex-20 layout-align-end"
-          >
-            <div
-              className="makePrimary pointy"
-              onClick={[Function]}
-            >
-              Set as primary
-            </div>
-          </div>
-        </div>
+          <i
+            className="fa fa-pencil"
+          />
+        </span>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-trash icon_trash"
+          />
+        </span>
       </div>
       <div
-        className="layout-row flex-100 location_address"
+        className="layout-row flex-100 layout-align-center-start location_address"
       >
         <i
           className="fa fa-map-marker clip"
           style={
             Object {
-              "background": "#BDBDBD",
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             }
           }
         />
@@ -103,31 +104,6 @@ exports[`shallow render 1`] = `
             Germany
              
           </p>
-        </div>
-      </div>
-      <div
-        className="footer"
-      >
-        <div
-          className="layout-row layout-align-center-center"
-        >
-          <span
-            className="emulate_link"
-            onClick={[Function]}
-          >
-            <i
-              className="fa fa-pencil"
-            />
-          </span>
-            |  
-          <span
-            className="emulate_link"
-            onClick={[Function]}
-          >
-            <i
-              className="fa fa-trash"
-            />
-          </span>
         </div>
       </div>
     </div>
@@ -140,22 +116,54 @@ exports[`shallow render 1`] = `
       className="location-box flex-100 layout-column"
     >
       <div
-        className="header"
+        className="header layout-row layout-align-end-center"
       >
-        <h3
-          className="standard"
+        <div
+          className="layout-row layout-wrap"
         >
-          Primary
-        </h3>
+          <div
+            className="layout-row flex-20 layout-align-end"
+          >
+            <div
+              className="makePrimary pointy"
+              onClick={[Function]}
+            >
+              <i
+                className="fa fa-star-o clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-pencil"
+          />
+        </span>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-trash icon_trash"
+          />
+        </span>
       </div>
       <div
-        className="layout-row flex-100 location_address"
+        className="layout-row flex-100 layout-align-center-start location_address"
       >
         <i
           className="fa fa-map-marker clip"
           style={
             Object {
-              "background": "#BDBDBD",
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
             }
           }
         />
@@ -189,31 +197,6 @@ exports[`shallow render 1`] = `
             Germany
              
           </p>
-        </div>
-      </div>
-      <div
-        className="footer"
-      >
-        <div
-          className="layout-row layout-align-center-center"
-        >
-          <span
-            className="emulate_link"
-            onClick={[Function]}
-          >
-            <i
-              className="fa fa-pencil"
-            />
-          </span>
-            |  
-          <span
-            className="emulate_link"
-            onClick={[Function]}
-          >
-            <i
-              className="fa fa-trash"
-            />
-          </span>
         </div>
       </div>
     </div>

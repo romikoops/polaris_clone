@@ -93,7 +93,7 @@ exports[`pickup is false 1`] = `
         <p
           className="flex-none five_m"
         >
-          Pre Carriage
+          Pickup
         </p>
         <p
           className="flex-none five_m"
@@ -111,7 +111,7 @@ exports[`pickup is false 1`] = `
         <p
           className="flex-none five_m"
         >
-          On Carriage
+          Delivery
         </p>
         <p
           className="flex-none five_m"
@@ -258,7 +258,7 @@ exports[`shallow rendering 1`] = `
         <p
           className="flex-none five_m"
         >
-          Pre Carriage
+          Pickup
         </p>
         <p
           className="flex-none five_m"
@@ -276,7 +276,7 @@ exports[`shallow rendering 1`] = `
         <p
           className="flex-none five_m"
         >
-          On Carriage
+          Delivery
         </p>
         <p
           className="flex-none five_m"

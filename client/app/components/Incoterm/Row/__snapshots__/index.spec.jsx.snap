@@ -15,7 +15,7 @@ exports[`destinationFees is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -24,9 +24,9 @@ exports[`destinationFees is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -42,7 +42,7 @@ exports[`destinationFees is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -51,7 +51,7 @@ exports[`destinationFees is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -116,7 +116,7 @@ exports[`destinationFees is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center "
       >
         Destination 
         <br />
@@ -144,7 +144,7 @@ exports[`destinationFees is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -153,9 +153,9 @@ exports[`destinationFees is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
     <div
@@ -186,7 +186,7 @@ exports[`feeHash is empty object 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -195,9 +195,9 @@ exports[`feeHash is empty object 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -213,7 +213,7 @@ exports[`feeHash is empty object 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -222,7 +222,7 @@ exports[`feeHash is empty object 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -258,7 +258,7 @@ exports[`feeHash is empty object 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -267,7 +267,7 @@ exports[`feeHash is empty object 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Destination 
         <br />
@@ -286,7 +286,7 @@ exports[`feeHash is empty object 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -295,9 +295,9 @@ exports[`feeHash is empty object 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
   </div>
@@ -319,7 +319,7 @@ exports[`firstStep is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -328,9 +328,9 @@ exports[`firstStep is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -346,7 +346,7 @@ exports[`firstStep is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -355,7 +355,7 @@ exports[`firstStep is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -412,7 +412,7 @@ exports[`firstStep is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -421,7 +421,7 @@ exports[`firstStep is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Destination 
         <br />
@@ -449,7 +449,7 @@ exports[`firstStep is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -458,9 +458,9 @@ exports[`firstStep is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
     <div
@@ -491,7 +491,7 @@ exports[`onCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -500,9 +500,9 @@ exports[`onCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -518,7 +518,7 @@ exports[`onCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -527,7 +527,7 @@ exports[`onCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -584,7 +584,7 @@ exports[`onCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -593,7 +593,7 @@ exports[`onCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Destination 
         <br />
@@ -629,9 +629,9 @@ exports[`onCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m "
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
     <div
@@ -670,9 +670,9 @@ exports[`preCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m "
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -688,7 +688,7 @@ exports[`preCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -697,7 +697,7 @@ exports[`preCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -754,7 +754,7 @@ exports[`preCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -763,7 +763,7 @@ exports[`preCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Destination 
         <br />
@@ -791,7 +791,7 @@ exports[`preCarriage is true 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -800,9 +800,9 @@ exports[`preCarriage is true 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
     <div
@@ -833,7 +833,7 @@ exports[`shallow render 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -842,9 +842,9 @@ exports[`shallow render 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        Pre-Carriage
+        Pickup
       </p>
     </div>
   </div>
@@ -860,7 +860,7 @@ exports[`shallow render 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -869,7 +869,7 @@ exports[`shallow render 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Origin 
         <br />
@@ -926,7 +926,7 @@ exports[`shallow render 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -935,7 +935,7 @@ exports[`shallow render 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m center"
+        className="flex-none no_m center deselected_text"
       >
         Destination 
         <br />
@@ -963,7 +963,7 @@ exports[`shallow render 1`] = `
         style={
           Object {
             "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
-            "opacity": "0.5",
+            "opacity": "0.25",
           }
         }
       />
@@ -972,9 +972,9 @@ exports[`shallow render 1`] = `
       className="fee_text flex-none layout-row layout-align-center-center width_100"
     >
       <p
-        className="flex-none no_m"
+        className="flex-none no_m deselected_text"
       >
-        On-Carriage
+        Delivery
       </p>
     </div>
     <div

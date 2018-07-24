@@ -224,7 +224,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.shipment.has_pre_carriage is true', () => {
+test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {

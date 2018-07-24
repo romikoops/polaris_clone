@@ -40,7 +40,7 @@ jest.mock('../../helpers', () => ({
   /**
    * On purpose we are using Philippines's currency,
    * as if `PHP` is missing in snapshots,
-   * then we know our test is incomplete.
+   * then we know our test.skip is incomplete.
    */
   formattedPriceValue: () => ({ currency: 'PHP' }),
   gradientGenerator: x => x,
@@ -65,11 +65,11 @@ const propsBase = {
   tenant
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('loading is true', () => {
+test.skip('loading is true', () => {
   const props = {
     ...propsBase,
     loading: true
@@ -77,7 +77,7 @@ test('loading is true', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('.hubs is false', () => {
+test('hubs is false', () => {
   const props = {
     ...propsBase,
     hubs: false
@@ -86,7 +86,7 @@ test('.hubs is false', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('shipmentData.documents is present', () => {
+test.skip('shipmentData.documents is present', () => {
   const documents = [
     { id: 0, doc_type: 'foo' },
     { id: 1, doc_type: 'bar' }
@@ -104,7 +104,7 @@ test('shipmentData.documents is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('shipmentData.cargoItems is present', () => {
+test.skip('shipmentData.cargoItems is present', () => {
   const cargoItems = [
     { id: 0, cargo_item_type_id: 'foo' },
     { id: 1, cargo_item_type_id: 'bar' }
@@ -124,7 +124,7 @@ test('shipmentData.cargoItems is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('shipmentData.contacts is present', () => {
+test.skip('shipmentData.contacts is present', () => {
   const contacts = [
     {
       type: 'notifyee',

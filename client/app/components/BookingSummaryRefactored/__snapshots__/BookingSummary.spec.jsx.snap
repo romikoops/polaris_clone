@@ -23,7 +23,8 @@ exports[`loadType is cargo_item 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor"
+            className="fa fa-anchor  "
+            style={Object {}}
           />
         </div>
         <div
@@ -264,7 +265,8 @@ exports[`shallow render 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor"
+            className="fa fa-anchor  "
+            style={Object {}}
           />
         </div>
         <div
@@ -378,7 +380,8 @@ exports[`theme is falsy 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor"
+            className="fa fa-anchor  "
+            style={Object {}}
           />
         </div>
         <div
@@ -492,7 +495,8 @@ exports[`trucking.on_carriage is empty object 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor"
+            className="fa fa-anchor  "
+            style={Object {}}
           />
         </div>
         <div
@@ -606,7 +610,8 @@ exports[`trucking.pre_carriage is empty object 1`] = `
           className="mot_wrapper layout-row layout-align-center-center"
         >
           <i
-            className="fa fa-anchor"
+            className="fa fa-anchor  "
+            style={Object {}}
           />
         </div>
         <div

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`.hubs is false 1`] = `""`;
+exports[`hubs is false 1`] = `""`;
 
 exports[`loading is true 1`] = `
 <div

@@ -12,6 +12,7 @@ exports[`shallow render 1`] = `
       wrapperTabs="layout-row flex-40"
     >
       <Tab
+        icon={null}
         isActive={false}
         onClick={null}
         tabIndex={0}
@@ -49,6 +50,7 @@ exports[`shallow render 1`] = `
         />
       </Tab>
       <Tab
+        icon={null}
         isActive={false}
         onClick={null}
         tabIndex={0}
@@ -86,6 +88,7 @@ exports[`shallow render 1`] = `
         />
       </Tab>
       <Tab
+        icon={null}
         isActive={false}
         onClick={null}
         tabIndex={0}

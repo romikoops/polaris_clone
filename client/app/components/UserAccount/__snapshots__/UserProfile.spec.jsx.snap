@@ -38,7 +38,7 @@ exports[`props.aliases is truthy 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch "
+      className="flex-100 layout-row layout-align-space-between-stretch"
     >
       <AlternativeGreyBox
         content={
@@ -99,6 +99,7 @@ exports[`props.aliases is truthy 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
       />
       <AlternativeGreyBox
@@ -254,6 +255,7 @@ exports[`props.aliases is truthy 1`] = `
         }
         contentClassName="layout-column flex"
         title="GDPR - Your Data"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
       />
     </div>
@@ -277,7 +279,7 @@ exports[`props.aliases is truthy 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-space-between-start"
       >
         <div
-          className="pointy margin flex-30 flex-md-45 "
+          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -308,6 +310,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
+          flexClasses="flex-30 flex-md-45 flex-lg-45"
           theme={
             Object {
               "colors": Object {
@@ -325,6 +328,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
+          flexClasses="flex-30 flex-md-45 flex-lg-45"
           theme={
             Object {
               "colors": Object {
@@ -427,7 +431,7 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch "
+      className="flex-100 layout-row layout-align-space-between-stretch"
     >
       <AlternativeGreyBox
         content={
@@ -488,6 +492,7 @@ exports[`shallow render 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
       />
       <AlternativeGreyBox
@@ -643,6 +648,7 @@ exports[`shallow render 1`] = `
         }
         contentClassName="layout-column flex"
         title="GDPR - Your Data"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
       />
     </div>
@@ -666,7 +672,7 @@ exports[`shallow render 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-space-between-start"
       >
         <div
-          className="pointy margin flex-30 flex-md-45 "
+          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -751,7 +757,6 @@ exports[`state.editBool is true 1`] = `
   >
     <EditNameBox
       handleChange={[Function]}
-      style={Object {}}
       user={Object {}}
     />
   </div>
@@ -759,7 +764,7 @@ exports[`state.editBool is true 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch "
+      className="flex-100 layout-row layout-align-space-between-stretch"
     >
       <AlternativeGreyBox
         content={
@@ -809,6 +814,7 @@ exports[`state.editBool is true 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
       />
       <AlternativeGreyBox
@@ -964,6 +970,7 @@ exports[`state.editBool is true 1`] = `
         }
         contentClassName="layout-column flex"
         title="GDPR - Your Data"
+        titleAction={false}
         wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
       />
     </div>
@@ -987,7 +994,7 @@ exports[`state.editBool is true 1`] = `
         className="flex-100 layout-row layout-wrap layout-align-space-between-start"
       >
         <div
-          className="pointy margin flex-30 flex-md-45 "
+          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
           key="addNewAliasButton"
           onClick={[Function]}
         >

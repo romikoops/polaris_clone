@@ -194,7 +194,7 @@ exports[`shallow rendering 1`] = `
         className="flex-100"
       >
         <b>
-          Pickup Date
+          Drop Off Date
         </b>
         <br />
         <span
