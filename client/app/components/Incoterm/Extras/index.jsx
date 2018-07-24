@@ -126,11 +126,13 @@ export function IncotermExtras ({
       </div>
     </div>
   )
+
   return (
     <div
       className={`flex-100 layout-row layout-align-space-around-center  ${styles.incoterm_wrapper}`}
     >
-      {customsFeesTile} {insuranceFeesTile}
+      {scope.has_customs ? customsFeesTile : ''}
+      {scope.has_insurance ? insuranceFeesTile : '' }
     </div>
   )
 }

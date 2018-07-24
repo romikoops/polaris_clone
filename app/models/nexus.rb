@@ -116,24 +116,33 @@ class Nexus < ApplicationRecord
     end
   end
 
-  def self.from_short_name(input, location_type)
+  def self.from_short_name(input, tenant_id)
     city, country_name = *input.split(" ,")
+    puts input
     country = Country.geo_find_by_name(country_name)
-    location = Nexus.find_by(name: city, country: country)
+    awesome_print country
+    location = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
     return location unless location.nil?
 
-    temp_location = Nexus.new(geocoded_address: input)
+    temp_location = Location.new(geocoded_address: input)
     temp_location.geocode
     temp_location.reverse_geocode
+    awesome_print temp_location.country
+    nexus = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
+    return nexus unless nexus.nil?
+    if country.nil? && temp_location.country.nil?
+      byebug
+    end
+    country_to_save = country || temp_location.country
+    nexus = Nexus.create!(
+      name: city,
+      latitude: temp_location.latitude,
+      longitude: temp_location.longitude,
+      photo: '',
+      country_id: country_to_save.id,
+      tenant_id: tenant_id
+    )
 
-    location = Nexus.find_by(city: temp_location.city, country: temp_location.country)
-    return location unless location.nil?
-
-    location = temp_location
-
-    location.name = city
-    location.location_type = location_type
-    location.save!
-    location
+    nexus
   end
 end
