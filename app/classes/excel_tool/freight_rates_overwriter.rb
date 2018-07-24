@@ -186,6 +186,7 @@ module ExcelTool
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
         puts row
+        # byebug
       end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
