@@ -120,9 +120,12 @@ export class ShipmentLocationBox extends Component {
   }
 
   componentWillMount () {
-    if (this.props.prevRequest && this.props.prevRequest.shipment) {
+    if (this.props.reusedShipment && this.props.reusedShipment.shipment) {
+      this.loadReusedShipment()
+    } else if (this.props.prevRequest && this.props.prevRequest.shipment) {
       this.loadPrevReq()
     }
+
     if (this.props.scope) {
       const speciality = determineSpecialism(this.props.scope.modes_of_transport)
       this.setState({ speciality })
@@ -588,7 +591,7 @@ export class ShipmentLocationBox extends Component {
       loadType,
       prefix,
       availableHubIds,
-      (truckingAvailable, nexusIds, hubIds, truckTypeObject) => {
+      (truckingAvailable, nexusIds, hubIds) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
             const { direction } = this.props.shipmentData.shipment
@@ -713,6 +716,47 @@ export class ShipmentLocationBox extends Component {
 
     this.setState(newState)
   }
+  loadReusedShipment () {
+    const { reusedShipment, shipmentData } = this.props
+    const { routes } = shipmentData
+    if (!reusedShipment.shipment) {
+      return
+    }
+    const { shipment } = reusedShipment
+    const newState = {}
+    if (!this.props.has_pre_carriage) {
+      const newStateOrigin = routes.find(o => (
+        o.origin.nexusId === shipment.origin_nexus_id
+      ))
+      newState.oSelect = routeHelpers.routeOption(newStateOrigin.origin)
+    }
+    if (!this.props.has_on_carriage) {
+      const newStateDestination = routes.find(d => (
+        d.destination.nexusId === shipment.destination_nexus_id
+      ))
+      newState.dSelect = routeHelpers.routeOption(newStateDestination.destination)
+    }
+    newState.autoText = {
+      origin: shipment.has_pre_carriage ? shipment.pickup_address.geocoded_address : '',
+      destination: shipment.has_on_carriage ? shipment.delivery_address.geocoded_address : ''
+    }
+    if (shipment.origin_nexus_id) {
+      this.state.map
+        ? this.setOriginNexus(newState.oSelect)
+        : setTimeout(() => {
+          this.setOriginNexus(newState.oSelect)
+        }, 500)
+    }
+    if (shipment.destination_nexus_id) {
+      this.state.map
+        ? this.setDestNexus(newState.dSelect)
+        : setTimeout(() => {
+          this.setDestNexus(newState.dSelect)
+        }, 500)
+    }
+
+    this.setState(newState)
+  }
   handleSwap () {
     /* eslint-disable camelcase */
     const { has_on_carriage, has_pre_carriage } = this.props
@@ -761,6 +805,7 @@ export class ShipmentLocationBox extends Component {
   }
 
   prepForSelect (target) {
+    console.log('target')
     this.setState((prevState) => {
       const {
         truckingHubs, oSelect, dSelect
@@ -1238,7 +1283,7 @@ export class ShipmentLocationBox extends Component {
                       onChange={this.handleTrucking}
                     />
                     <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
-                    Pre-Carriage
+                    Pickup
                     </label>
                     {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
                   </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Pickup:</p></div> }
@@ -1275,7 +1320,7 @@ export class ShipmentLocationBox extends Component {
                     />
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
-                    On-Carriage
+                    Delivery
                     </label>
                     <Toggle
                       className="flex-none"
@@ -1333,6 +1378,9 @@ ShipmentLocationBox.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
+  reusedShipment: PropTypes.shape({
+    shipment: PropTypes.shipment
+  }),
   scope: PropTypes.scope.isRequired,
   filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
   updateFilteredRouteIndexes: PropTypes.func.isRequired
@@ -1348,7 +1396,8 @@ ShipmentLocationBox.defaultProps = {
   prevRequest: null,
   has_on_carriage: true,
   has_pre_carriage: true,
-  handleTruckingDetailsChange: null
+  handleTruckingDetailsChange: null,
+  reusedShipment: null
 }
 
 export default ShipmentLocationBox

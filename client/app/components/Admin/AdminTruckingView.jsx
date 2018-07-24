@@ -1,14 +1,22 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import Fuse from 'fuse.js'
-import Truncate from 'react-truncate'
+// import Truncate from 'react-truncate'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Toggle from 'react-toggle'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { history, capitalize, nameToDisplay } from '../../helpers'
+import hubStyles from './Hubs/index.scss'
+import {
+  history,
+  capitalize,
+  nameToDisplay,
+  switchIcon,
+  gradientGenerator,
+  renderHubType
+} from '../../helpers'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../../components/Documents/Selector'
@@ -16,25 +24,28 @@ import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
+import { GreyBox as GBox } from '../GreyBox/GreyBox'
+import SideOptionsBox from './SideOptions/SideOptionsBox'
+import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
 function getTruckingPricingKey (truckingPricing) {
   if (truckingPricing.zipcode) {
     const joinedArrays = truckingPricing.zipcode.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
   if (truckingPricing.city) {
     const joinedArrays = truckingPricing.city.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
   if (truckingPricing.distance) {
     const joinedArrays = truckingPricing.distance.map(zArray => zArray.join(' - '))
     const endResult = joinedArrays.join(', ')
 
-    return <Truncate className="flex-100" lines={1}> {endResult}</Truncate>
+    return endResult
   }
 
   return ''
@@ -65,6 +76,11 @@ export class AdminTruckingView extends Component {
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    if (this.state.filteredTruckingPricings.length === 0 &&
+      this.props.truckingDetail &&
+      this.props.truckingDetail.truckingPricings.length > 0) {
+      this.handleLoadTypeToggle()
+    }
   }
   filterTruckingPricingsByType (pricings) {
     const {
@@ -198,12 +214,8 @@ export class AdminTruckingView extends Component {
       ''
     )
     const { hub } = truckingDetail
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
+    const { primary, secondary } = theme.colors
+    const gradientBackground = gradientGenerator(primary, secondary)
     const truckingPricingToDisplay =
       truckingDetail.truckingPricings
         .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
@@ -231,35 +243,46 @@ export class AdminTruckingView extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
 
     const { expander } = this.state
-    const sectionStyle =
-      theme && theme.colors
-        ? { background: theme.colors.secondary, color: 'white' }
-        : { background: 'darkslategrey', color: 'white' }
     const searchResults =
       filteredTruckingPricings.length > 0 ? (
         filteredTruckingPricings.map((tp) => {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <div
-              className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
-                styles.trucking_display_cell
-              }`}
-              key={v4()}
-              onClick={() => this.selectTruckingPricing(tp)}
-            >
-              {loadTypeBool
-                ? <div className="flex-100 layout-row">
-                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
-                  <p className="flex-50">{nameToDisplay(tp.truckingPricing.truck_type)}</p>
-                </div>
-                : ''
-              }
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-                <p className="flex-90">{capitalize(idenitfierKey)}</p>
-              </div>
-              <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center">
+              <GBox
+                padding
+                component={(
+                  <div
+                    className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
+                      styles.trucking_display_cell
+                    }`}
+                    key={v4()}
+                    onClick={() => this.selectTruckingPricing(tp)}
+                  >
+                    {loadTypeBool
+                      ? <div className="flex-70 layout-row layout-align-center-center">
+                        <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
+                        <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
+                      </div>
+                      : ''
+                    }
+                    {idenitfierKey === 'distance' ? (
+                      <div className="flex-30 layout-column layout-wrap layout-align-center-center">
+                        <p className="flex-90">{capitalize(idenitfierKey)}</p>
+                        <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
+                      </div>
+                    ) : (
+                      <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+                        <p className="flex-90">{capitalize(idenitfierKey)} {getTruckingPricingKey(tp)}</p>
+                      </div>
+                    )}
+
+                  </div>
+                )}
+              />
             </div>
+
           )
         })
       ) : (
@@ -269,14 +292,12 @@ export class AdminTruckingView extends Component {
       )
     const backBtn = (
       <div
-        className="flex-20 layout-row layout-align-center-center"
+        className={`flex-20 layout-row pointy layout-align-end-center ${styles.back_button}`}
         onClick={() => this.backToList()}
       >
-        <div className="flex-none layout-row layout-aling-center-center">
-          <i className="flex-none fa fa-long-arrow-left" />
-        </div>
-        <div className="flex-40 layout-row layout-aling-center-center">
-          <p className="flex-none">Back to list</p>
+        <div className="flex-none layout-row layout-align-center-center">
+          <i className="flex-none fa fa-angle-left" />
+          <p className="flex-none">&nbsp;&nbsp;Back to list</p>
         </div>
       </div>)
     const truckView = currentTruckingPricing ? displayPanel : searchResults
@@ -298,11 +319,11 @@ export class AdminTruckingView extends Component {
       </div>) : ''
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {uploadStatus}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            <div
+            {/* <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.sec_title
               }`}
@@ -310,64 +331,37 @@ export class AdminTruckingView extends Component {
               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
                 {hub.name}
               </p>
+            </div> */}
+            <div
+              className={`
+                flex-95 layout-row layout-align-center-center
+                ${currentTruckingPricing ? 'margin_bottom' : ''}
+                ${hubStyles.hub_title}
+              `}
+              style={gradientBackground}
+            >
+              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
+                <div className="flex-70 layout-row layout-align-start-center">
+                  <h3 className="flex-none"> {hub.name}</h3>
+                </div>
+                <div className="flex-30 layout-row layout-align-end-center">
+                  <div className="flex-none layout-row layout-align-center-center">
+                    <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
+                  </div>
+                  <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
+                    {switchIcon(hub.hub_type)}
+                  </div>
+                </div>
+              </div>
             </div>
             <div
-              className={`flex-100 layout-row layout-align-space-between-center ${
+              className={`flex-85 layout-row layout-align-end-center ${
                 styles.sec_header
               }`}
             >
-              <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
               { currentTruckingPricing ? backBtn : ''}
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-              {/* <div className="flex-25 layout-row layout-align-center-start layout-wrap">
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                  <div className="flex-90 layout-row layout-align-space-between-center">
-                    <p className="flex-none">LTL</p>
-                    <div className="flex-5" />
-                    <Toggle
-                      className="flex-none"
-                      id="unitView"
-                      name="unitView"
-                      checked={loadTypeBool}
-                      onChange={e => this.handleLoadTypeToggle(e)}
-                    />
-                    <div className="flex-5" />
-                    <p className="flex-none">FTL</p>
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                  <div className="flex-90 layout-row layout-align-space-between-center">
-                    <p className="flex-none">Export</p>
-                    <div className="flex-5" />
-                    <Toggle
-                      className="flex-none"
-                      id="unitView"
-                      name="unitView"
-                      checked={directionBool}
-                      onChange={e => this.handleDirectionToggle(e)}
-                    />
-                    <div className="flex-5" />
-                    <p className="flex-none">Import</p>
-                  </div>
-                </div>
-                {truckFilter}
-                <div className="flex-100 layout-row layout-alignstart-center input_box_full">
-                  <input
-                    type="text"
-                    value={searchFilter}
-                    placeholder="Search Trucking Zones"
-                    onChange={e => this.handleSearchChange(e)}
-                  />
-                </div>
-                <div
-                  className={`flex-100 layout-row layout-align-center-start layout-wrap ${
-                    styles.trucking_search_results
-                  }`}
-                >
-                  {searchResults}
-                </div>
-              </div> */}
               <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                 {truckView}
               </div>
@@ -376,260 +370,187 @@ export class AdminTruckingView extends Component {
           {styleTagJSX}
         </div>
         <div className="flex-20 layout-row layout-wrap layout-align-center-start">
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-filter" />
-              <h2 className="flex-none offset-5 letter_3 no_m"> Filters </h2>
-            </div>
-            <div
-              className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-            >
-              <input
-                type="text"
-                value={searchFilter}
-                placeholder="Search Trucking Zones"
-                onChange={e => this.handleSearchChange(e)}
-              />
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('load_type')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-ship" />
-                  <p className="flex-none">Load Type</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.load_type ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.load_type ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div className="flex-90 layout-row layout-align-space-between-center">
-                  <p className="flex-none">LTL</p>
-                  <div className="flex-5" />
-                  <Toggle
-                    className="flex-none"
-                    id="unitView"
-                    name="unitView"
-                    checked={loadTypeBool}
-                    onChange={e => this.handleLoadTypeToggle(e)}
-                  />
-                  <div className="flex-5" />
-                  <p className="flex-none">FTL</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('direction')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-star-half-o" />
-                  <p className="flex-none">Import / Export</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.direction ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.direction ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div className="flex-90 layout-row layout-align-space-between-center">
-                  <p className="flex-none">Export</p>
-                  <div className="flex-5" />
-                  <Toggle
-                    className="flex-none"
-                    id="unitView"
-                    name="unitView"
-                    checked={directionBool}
-                    onChange={e => this.handleDirectionToggle(e)}
-                  />
-                  <div className="flex-5" />
-                  <p className="flex-none">Import</p>
-                </div>
-              </div>
-            </div>
-            { loadTypeBool
-              ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+
+          <SideOptionsBox
+            header="Filters"
+            flexOptions="layout-column flex-100 flex-md-30"
+            content={(
+              <div>
                 <div
-                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                  onClick={() => this.toggleExpander('truck_type')}
+                  className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
                 >
-                  <div className="flex-90 layout-align-start-center layout-row">
-                    <i className="flex-none fa fa-flag" />
-                    <p className="flex-none">Truck Type</p>
-                  </div>
-                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                    {expander.truck_type ? (
-                      <i className="flex-none fa fa-chevron-up" />
-                    ) : (
-                      <i className="flex-none fa fa-chevron-down" />
+                  <input
+                    type="text"
+                    value={searchFilter}
+                    placeholder="Search Trucking Zones"
+                    onChange={e => this.handleSearchChange(e)}
+                  />
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.load_type}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('load_type')}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Load Type"
+                    faClass="fa fa-ship"
+                    content={(
+                      <div className="flex-90 layout-row layout-align-space-between-center">
+                        <p className="flex-none">LTL</p>
+                        <div className="flex-5" />
+                        <Toggle
+                          className="flex-none"
+                          id="unitView"
+                          name="unitView"
+                          checked={loadTypeBool}
+                          onChange={e => this.handleLoadTypeToggle(e)}
+                        />
+                        <div className="flex-5" />
+                        <p className="flex-none">FTL</p>
+                      </div>
                     )}
-                  </div>
+                  />
                 </div>
-                <div
-                  className={`${
-                    expander.truck_type ? styles.open_filter : styles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  {truckFilter}
-                </div>
-              </div> : '' }
-            { loadTypeBool
-              ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div
-                  className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                  onClick={() => this.toggleExpander('cargo_class')}
-                >
-                  <div className="flex-90 layout-align-start-center layout-row">
-                    <i className="flex-none fa fa-flag" />
-                    <p className="flex-none">Cargo Class</p>
-                  </div>
-                  <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                    {expander.cargo_class ? (
-                      <i className="flex-none fa fa-chevron-up" />
-                    ) : (
-                      <i className="flex-none fa fa-chevron-down" />
+
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.direction}
+                    theme={theme}
+                    handleCollapser={() => this.toggleExpander('direction')}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Import / Export"
+                    faClass="fa fa-star-half-o"
+                    content={(
+                      <div className="flex-90 layout-row layout-align-space-between-center">
+                        <p className="flex-none">Export</p>
+                        <div className="flex-5" />
+                        <Toggle
+                          className="flex-none"
+                          id="unitView"
+                          name="unitView"
+                          checked={directionBool}
+                          onChange={e => this.handleDirectionToggle(e)}
+                        />
+                        <div className="flex-5" />
+                        <p className="flex-none">Import</p>
+                      </div>
                     )}
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    expander.cargo_class ? styles.open_filter : styles.closed_filter
-                  } flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  <NamedSelect
-                    placeholder="Cargo Class"
-                    className={styles.select}
-                    name="cargo_class"
-                    value={cargoClass}
-                    options={cargoClassOptions}
-                    onChange={e => this.handleCargoClass(e)}
                   />
                 </div>
-              </div> : '' }
-          </div>
-          <div
-            className={`${
-              styles.action_box
-            } flex-95 layout-row layout-wrap layout-align-center-start`}
-          >
-            <div
-              className={`${styles.side_title} flex-100 layout-row layout-align-start-center`}
-              style={sectionStyle}
-            >
-              <i className="flex-none fa fa-bolt" />
-              <h2 className="flex-none letter_3 no_m"> Actions </h2>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('upload')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-upload" />
-                  <p className="flex-none">Upload Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.upload ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
+                {loadTypeBool
+                  ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.truck_type}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('truck_type')}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Import / Export"
+                      faClass="fa fa-flag"
+                      content={truckFilter}
+                    />
+                  </div> : ''}
+                {loadTypeBool
+                  ? <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                    <CollapsingBar
+                      showArrow
+                      collapsed={!expander.cargo_class}
+                      theme={theme}
+                      handleCollapser={() => this.toggleExpander('cargo_class')}
+                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                      text="Cargo Class"
+                      faClass="fa fa-flag"
+                      content={(
+                        <NamedSelect
+                          placeholder="Cargo Class"
+                          className={styles.select}
+                          name="cargo_class"
+                          value={cargoClass}
+                          options={cargoClassOptions}
+                          onChange={e => this.handleCargoClass(e)}
+                        />
+                      )}
+                    />
+                  </div> : ''}
               </div>
-              <div
-                className={`${
-                  expander.upload ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-align-center-center layout-wrap`}
-                >
-                  <p className="flex-90 center">Upload Trucking Zones Sheet</p>
-                  <DocumentsSelector
+            )}
+          />
+
+          <SideOptionsBox
+            header="Data manager"
+            flexOptions="layout-column flex-100 flex-md-30 margin_bottom"
+            content={(
+              <div>
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.upload}
                     theme={theme}
-                    dispatchFn={(file, dir) => this.handleUpload(file, dir)}
-                    type="xlsx"
-                    text="Routes .xlsx"
+                    handleCollapser={() => this.toggleExpander('upload')}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Upload Data"
+                    faClass="fa fa-cloud-upload"
+                    content={(
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-align-center-center layout-wrap`}
+                      >
+                        <p className="flex-90 center">Upload Trucking Zones Sheet</p>
+                        <DocumentsSelector
+                          theme={theme}
+                          dispatchFn={(file, dir) => this.handleUpload(file, dir)}
+                          type="xlsx"
+                          text="Routes .xlsx"
+                        />
+                      </div>
+                    )}
                   />
                 </div>
-              </div>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-              <div
-                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
-                onClick={() => this.toggleExpander('download')}
-              >
-                <div className="flex-90 layout-align-start-center layout-row">
-                  <i className="flex-none fa fa-cloud-download" />
-                  <p className="flex-none">Download Data</p>
-                </div>
-                <div className={`${styles.expander_icon} flex-10 layout-align-center-center`}>
-                  {expander.download ? (
-                    <i className="flex-none fa fa-chevron-up" />
-                  ) : (
-                    <i className="flex-none fa fa-chevron-down" />
-                  )}
-                </div>
-              </div>
-              <div
-                className={`${
-                  expander.download ? styles.open_filter : styles.closed_filter
-                } flex-100 layout-row layout-wrap layout-align-center-start`}
-              >
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">Download Cargo Item Sheet</p>
-                  <DocumentsDownloader
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.download}
                     theme={theme}
-                    target="trucking"
-                    options={{ hub_id: hub.id, load_type: 'cargo_item' }}
-                  />
-                </div>
-                <div
-                  className={`${
-                    styles.action_section
-                  } flex-100 layout-row layout-wrap layout-align-center-center`}
-                >
-                  <p className="flex-100 center">Download Container Sheet</p>
-                  <DocumentsDownloader
-                    theme={theme}
-                    target="trucking"
-                    options={{ hub_id: hub.id, load_type: 'container' }}
+                    handleCollapser={() => this.toggleExpander('download')}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    text="Download Data"
+                    faClass="fa fa-cloud-download"
+                    content={(
+                      <div>
+                        <div
+                          className={`${
+                            styles.action_section
+                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                        >
+                          <p className="flex-100 center">Download Cargo Item Sheet</p>
+                          <DocumentsDownloader
+                            theme={theme}
+                            target="trucking"
+                            options={{ hub_id: hub.id, load_type: 'cargo_item' }}
+                          />
+                        </div>
+                        <div
+                          className={`${
+                            styles.action_section
+                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                        >
+                          <p className="flex-100 center">Download Container Sheet</p>
+                          <DocumentsDownloader
+                            theme={theme}
+                            target="trucking"
+                            options={{ hub_id: hub.id, load_type: 'container' }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   />
                 </div>
               </div>
-            </div>
-          </div>
+            )}
+          />
         </div>
       </div>
     )

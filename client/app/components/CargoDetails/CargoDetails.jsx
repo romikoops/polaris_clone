@@ -163,6 +163,7 @@ export class CargoDetails extends Component {
       // handleHsTextChange,
       // setHsCode,
       // deleteCode,
+      totalGoodsValue,
       customsData,
       finishBookingAttempted,
       tenant,
@@ -444,6 +445,7 @@ export class CargoDetails extends Component {
                           fontSize: '13px',
                           bottom: '-17px'
                         }}
+                        value={totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
                         onChange={this.handleChange}

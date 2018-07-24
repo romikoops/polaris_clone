@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180628130604) do
+ActiveRecord::Schema.define(version: 20180723085805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -340,6 +340,17 @@ ActiveRecord::Schema.define(version: 20180628130604) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "map_data", force: :cascade do |t|
+    t.jsonb "line"
+    t.jsonb "geo_json"
+    t.decimal "origin", default: [], array: true
+    t.decimal "destination", default: [], array: true
+    t.string "itinerary_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "max_dimensions_bundles", force: :cascade do |t|
     t.string "mode_of_transport"
     t.integer "tenant_id"
@@ -375,6 +386,17 @@ ActiveRecord::Schema.define(version: 20180628130604) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "nexuses", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "photo"
+    t.integer "country_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notes", force: :cascade do |t|
     t.integer "itinerary_id"
     t.integer "hub_id"
@@ -390,6 +412,20 @@ ActiveRecord::Schema.define(version: 20180628130604) do
     t.boolean "cookies"
     t.boolean "tenant"
     t.boolean "itsmycargo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ports", force: :cascade do |t|
+    t.integer "country_id"
+    t.string "name"
+    t.decimal "latitude"
+    t.decimal "longitude"
+    t.string "telephone"
+    t.string "web"
+    t.string "code"
+    t.integer "nexus_id"
+    t.integer "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -464,30 +500,22 @@ ActiveRecord::Schema.define(version: 20180628130604) do
 
   create_table "shipments", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "route_id"
     t.string "uuid"
     t.string "imc_reference"
     t.string "status"
     t.string "load_type"
     t.datetime "planned_pickup_date"
     t.boolean "has_pre_carriage"
-    t.decimal "pre_carriage_distance_km"
     t.boolean "has_on_carriage"
-    t.decimal "on_carriage_distance_km"
     t.string "cargo_notes"
-    t.string "haulage"
-    t.string "hs_code", default: [], array: true
-    t.jsonb "schedules_charges"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
     t.boolean "customs_credit", default: false
-    t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
@@ -512,6 +540,15 @@ ActiveRecord::Schema.define(version: 20180628130604) do
     t.integer "hub_id"
     t.integer "itinerary_id"
     t.integer "index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "tag_type"
+    t.string "name"
+    t.string "model"
+    t.string "model_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -618,7 +655,6 @@ ActiveRecord::Schema.define(version: 20180628130604) do
     t.integer "tenant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
     t.string "identifier_modifier"

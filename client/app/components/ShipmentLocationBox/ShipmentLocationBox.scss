@@ -63,6 +63,7 @@
   }
   .toggle_box {
     padding: 20px 10px;
+  
     position: relative;
     &.not_available {
       opacity: 0.85;
@@ -72,6 +73,7 @@
     background: black;
     opacity: 0;
     position: absolute;
+    height: 40px;
     top: 0;
     bottom: 0;
     height: 40px;

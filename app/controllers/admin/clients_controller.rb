@@ -6,7 +6,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def index
     shipper_role = Role.find_by_name("shipper")
     manager_role = Role.find_by_name("sub_admin")
-    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false)
+    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json)
     managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
     response_handler(clients: clients, managers: managers)
   end
@@ -16,7 +16,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def show
     client = User.find(params[:id])
     locations = client.locations
-    shipments = client.shipments.where(status: %w[requested open finished]).map(&:with_address_options_json)
+    shipments = client.shipments.where(status: %w[requested open in_progress finished]).map(&:with_address_options_json)
     manager_assignments = UserManager.where(user_id: client)
     resp = { client: client, locations: locations, shipments: shipments, managerAssignments: manager_assignments }
     response_handler(resp)
@@ -36,7 +36,7 @@ class Admin::ClientsController < Admin::AdminBaseController
     }
     new_user = current_user.tenant.users.create!(user_data)
 
-    response_handler(new_user)
+    response_handler(new_user.token_validation_response)
   end
 
   # Destroy User account

@@ -35,6 +35,19 @@ function newShipment (type) {
     )
   }
 }
+function reuseShipment (shipment) {
+  function request (shipmentData) {
+    return { type: shipmentConstants.REUSE_SHIPMENT_REQUEST, payload: shipmentData }
+  }
+  const newShipmentRequest = {
+    loadType: shipment.shipment.load_type,
+    direction: shipment.shipment.direction
+  }
+  return (dispatch) => {
+    dispatch(request(shipment))
+    dispatch(newShipment(newShipmentRequest))
+  }
+}
 
 function getOffers (data, redirect) {
   function request (shipmentData) {
@@ -51,6 +64,45 @@ function getOffers (data, redirect) {
   }
   function failure (error) {
     return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(data))
+    shipmentService.getOffers(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
+        }
+        dispatch(alertActions.success('Set Shipment Details successful'))
+      },
+      (error) => {
+        error.then((newData) => {
+          dispatch(failure({
+            type: 'error',
+            text: newData.message || newData.error
+          }))
+          if (newData.error) console.error(newData.exception)
+        })
+      }
+    )
+  }
+}
+function getOffersForNewDate (data, redirect) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.GET_NEW_DATE_OFFERS_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.GET_NEW_DATE_OFFERS_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GET_NEW_DATE_OFFERS_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request(data))
@@ -429,6 +481,7 @@ function goTo (path) {
 }
 
 export const shipmentActions = {
+  reuseShipment,
   newShipment,
   chooseOffer,
   getOffers,
@@ -448,6 +501,7 @@ export const shipmentActions = {
   requestShipment,
   updateCurrency,
   logOut,
+  getOffersForNewDate,
   delete: _delete
 }
 

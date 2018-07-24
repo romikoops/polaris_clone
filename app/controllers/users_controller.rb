@@ -9,15 +9,15 @@ class UsersController < ApplicationController
   def home
     @shipper = current_user
     options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
-    requested_shipments = Shipment.where(
+    requested_shipments = @shipper.shipments.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
-    open_shipments = Shipment.where(
+    open_shipments = @shipper.shipments.where(
       status:    %w[in_progress confirmed],
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
-    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
+    finished_shipments = @shipper.shipments.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
     @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
     @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
     @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     @user.update_attributes(user_params)
 
     if @user.valid? && !@user.guest && params[:update][:location]
-      location = Location.create_from_raw_params(location_params)
+      location = Location.create_from_raw_params!(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
       @user.optin_status = OptinStatus.find_by(tenant: true, itsmycargo: true, cookies: @user.optin_status.cookies)
@@ -85,8 +85,8 @@ class UsersController < ApplicationController
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!
-    rates = get_rates(params[:currency, current_user.tenant_id])
-    response_handler(user: current_user, rates: rates)
+    rates = get_rates(params[:currency], current_user.tenant_id)
+    response_handler(user: current_user.token_validation_response, rates: rates)
   end
 
   def hubs
@@ -104,7 +104,7 @@ class UsersController < ApplicationController
     optin_status = OptinStatus.find_by(new_status)
     current_user.optin_status = optin_status
     current_user.save!
-    response_handler(user: current_user)
+    response_handler(user: current_user.token_validation_response)
   end
 
   private

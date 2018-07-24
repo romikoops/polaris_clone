@@ -134,7 +134,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pre-Carriage</p>
+        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pickup</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? preCarriageFeesValue : ''}
     </div>
@@ -147,7 +147,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className={`flex-none no_m ${onCarriageTextStyle}`}>On-Carriage</p>
+        <p className={`flex-none no_m ${onCarriageTextStyle}`}>Delivery</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? onCarriageFeesValue : ''}
     </div>

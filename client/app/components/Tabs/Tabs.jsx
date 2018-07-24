@@ -30,6 +30,7 @@ export default class Tabs extends PureComponent {
     const { children } = this.props
     const { activeTabIndex } = this.state
     if (children[activeTabIndex]) {
+      // debugger // eslint-disable-line
       return children[activeTabIndex].props.children
     }
     return ''

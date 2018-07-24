@@ -58,6 +58,7 @@ class Shop extends Component {
 
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
+
     return loading || !(loggingIn || registering)
   }
 
@@ -148,6 +149,7 @@ class Shop extends Component {
 
     if (this.props.user.guest) {
       this.toggleShowRegistration(req)
+
       return
     }
     this.hideRegistration()
@@ -169,12 +171,15 @@ class Shop extends Component {
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
-    const { request, response, error } = bookingData
+    const {
+      request, response, error, reusedShipment, originalSelectedDay
+    } = bookingData
     console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
-    const { req } = this.state
+    const { req, showRegistration } = this.state
 
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
+
     return (
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
@@ -229,6 +234,9 @@ class Shop extends Component {
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
               bookingSummaryDispatch={bookingSummaryDispatch}
+              reusedShipment={reusedShipment}
+              showRegistration={showRegistration}
+              hideRegistration={() => this.hideRegistration()}
             />
           )}
         />
@@ -247,6 +255,8 @@ class Shop extends Component {
               setStage={this.selectShipmentStage}
               messages={error ? error.stage3 : []}
               shipmentDispatch={shipmentDispatch}
+              reusedShipment={reusedShipment}
+              originalSelectedDay={originalSelectedDay}
             />
           )}
         />
@@ -267,6 +277,7 @@ class Shop extends Component {
                 user={user}
                 shipmentDispatch={shipmentDispatch}
                 hideRegistration={this.hideRegistration}
+                reusedShipment={reusedShipment}
               />
             )}
           />
@@ -284,6 +295,7 @@ class Shop extends Component {
               shipmentData={shipmentData}
               setStage={this.selectShipmentStage}
               shipmentDispatch={shipmentDispatch}
+              reusedShipment={reusedShipment}
             />
           )}
         />
@@ -359,6 +371,7 @@ function mapStateToProps (state) {
   } = authentication
   const { currencies } = app
   const { loading } = bookingData
+
   return {
     user,
     users,

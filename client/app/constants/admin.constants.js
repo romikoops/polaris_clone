@@ -221,7 +221,11 @@ export const adminConstants = {
 
   UPDATE_MANDATORY_CHARGE_REQUEST: 'UPDATE_MANDATORY_CHARGE_REQUEST',
   UPDATE_MANDATORY_CHARGE_SUCCESS: 'UPDATE_MANDATORY_CHARGE_SUCCESS',
-  UPDATE_MANDATORY_CHARGE_FAILURE: 'UPDATE_MANDATORY_CHARGE_FAILURE'
+  UPDATE_MANDATORY_CHARGE_FAILURE: 'UPDATE_MANDATORY_CHARGE_FAILURE',
+
+  ASSIGN_DEDICATED_PRICING_REQUEST: 'ASSIGN_DEDICATED_PRICING_REQUEST',
+  ASSIGN_DEDICATED_PRICING_SUCCESS: 'ASSIGN_DEDICATED_PRICING_SUCCESS',
+  ASSIGN_DEDICATED_PRICING_FAILURE: 'ASSIGN_DEDICATED_PRICING_FAILURE'
 }
 
 export const serviceChargeNames = {
@@ -767,3 +771,10 @@ export const truckingFees = [
     currency: 'EUR'
   }
 ]
+
+export const TRUCKING_ICONS = {
+  km: 'https://assets.itsmycargo.com/assets/icons/02.png',
+  unit: 'https://assets.itsmycargo.com/assets/icons/01.png',
+  kg: 'https://assets.itsmycargo.com/assets/icons/05.png',
+  rates: 'https://assets.itsmycargo.com/assets/icons/rates.png'
+}

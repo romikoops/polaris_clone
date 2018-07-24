@@ -2,6 +2,13 @@ export function capitalize (str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export function capitalizeCities (str) {
+  const splittedArr = str.split(' ')
+  const string = splittedArr.map(a => a.charAt(0).toUpperCase() + a.slice(1).toLowerCase())
+
+  return string.join(' ')
+}
+
 export function camelize (str) {
   return str.replace(/[_.-](\w|$)/g, (_, x) => x.toUpperCase())
 }

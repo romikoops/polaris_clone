@@ -43,7 +43,7 @@ module OfferCalculatorService
     def update_selected_day
       date = Chronic.parse(@params[:shipment][:selected_day], endian_precedence: :little)
       date_limit = Date.today + 5.days
-      @shipment.selected_day = [date, date_limit].min
+      @shipment.selected_day = [date, date_limit].max
     end
 
     private

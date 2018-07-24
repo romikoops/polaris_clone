@@ -30,8 +30,10 @@ class ShipmentsController < ApplicationController
   def new; end
 
   def test_email
-    tenant_notification_email(current_user, Shipment.first)
+    tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
   end
+
+
 
   # Uploads document and returns Document item
   def upload_document
@@ -53,7 +55,9 @@ class ShipmentsController < ApplicationController
     end
 
     contacts = shipment.shipment_contacts.map do |sc|
-      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
+      if sc.contact
+        { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
+      end
     end
 
     documents = shipment.documents.map do |doc|
@@ -70,7 +74,6 @@ class ShipmentsController < ApplicationController
       aggregatedCargo: shipment.aggregated_cargo,
       contacts:        contacts,
       documents:       documents,
-      schedules:       shipment.schedule_set,
       cargoItemTypes:  cargo_item_types
     )
   end

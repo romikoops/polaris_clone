@@ -19,22 +19,23 @@ class TransportCategory < ApplicationRecord
 
   validates :cargo_class, presence: true
 
-  LOAD_TYPES.each do |_load_type|
+  LOAD_TYPES.each do |load_type|
     validates :cargo_class,
       inclusion: {
-        in:      LOAD_TYPE_CARGO_CLASSES[_load_type],
-        message: "must be included in #{LOAD_TYPE_CARGO_CLASSES[_load_type].log_format}"
+        in:      LOAD_TYPE_CARGO_CLASSES[load_type],
+        message: "must be included in #{LOAD_TYPE_CARGO_CLASSES[load_type].log_format}"
       },
-      if:        -> { load_type == _load_type }
+      if:        -> { self.load_type == load_type }
 
     # This allows the following example usage for every load type:
     # TransportCategory.container_load_type #=> collection of TransportCategory instances
-    scope "#{_load_type}_load_type".to_sym, -> { where(load_type: _load_type) }
+    scope "#{load_type}_load_type".to_sym, -> { where(load_type: load_type) }
   end
 
   # This allows the following example usage:
   # TransportCategory.load_type("container") #=> collection of TransportCategory instances
-  scope :load_type, ->(_load_type) { where(load_type: _load_type) }
+  scope :load_type,   ->(load_type)   { where(load_type: load_type) }
+  scope :cargo_class, ->(cargo_class) { where(cargo_class: cargo_class) }
 
   validates :load_type,
     presence:  true,

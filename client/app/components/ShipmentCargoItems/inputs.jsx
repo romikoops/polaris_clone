@@ -142,7 +142,6 @@ export default function getInputs (
   )
 
   function chargeableWeightElemJSX (mot) {
-    // debugger // eslint-disable-line
     if (
       (
         availableMotsForRoute.length > 0 &&

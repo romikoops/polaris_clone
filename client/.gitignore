@@ -28,10 +28,13 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
-
+.node-env
 # sass
 .sass-cache/
 *.css.map
 
-#ngrok
+# ngrok
 ngrok
+
+# Node ENV variables
+.node-env

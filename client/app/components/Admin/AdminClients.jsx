@@ -114,7 +114,7 @@ class AdminClients extends Component {
   render () {
     const { newClient, newClientBool } = this.state
     const {
-      theme, clients, hubs, client, adminDispatch
+      theme, clients, hubs, hubHash, client, adminDispatch
     } = this.props
     const textStyle = {
       background:
@@ -368,7 +368,7 @@ class AdminClients extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
@@ -405,7 +405,7 @@ class AdminClients extends Component {
             render={props => (
               <AdminClientView
                 theme={theme}
-                hubs={hubs}
+                hubHash={hubHash}
                 handleClientAction={this.handleClientAction}
                 clientData={client}
                 adminDispatch={adminDispatch}
@@ -421,6 +421,7 @@ class AdminClients extends Component {
 AdminClients.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hubs),
+  hubHash: PropTypes.objectOf(PropTypes.hubs),
   clients: PropTypes.arrayOf(PropTypes.client),
   client: PropTypes.client.isRequired,
   adminDispatch: PropTypes.shape({
@@ -432,7 +433,8 @@ AdminClients.propTypes = {
 AdminClients.defaultProps = {
   theme: null,
   clients: [],
-  hubs: []
+  hubs: [],
+  hubHash: {}
 }
 function mapStateToProps (state) {
   const { authentication, tenant, admin } = state

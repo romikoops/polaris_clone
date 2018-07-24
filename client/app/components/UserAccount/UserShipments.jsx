@@ -7,6 +7,7 @@ import { adminDashboard as adminTip } from '../../constants'
 import { AdminSearchableShipments } from '../Admin/AdminSearchables'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
+import { filters } from '../../helpers'
 
 export class UserShipments extends Component {
   static prepShipment (baseShipment, user, hubsObj) {
@@ -36,12 +37,12 @@ export class UserShipments extends Component {
     if (!shipments) {
       return ''
     }
-    const mergedOpenShipments = shipments.open.map(sh =>
-      UserShipments.prepShipment(sh, user))
-    const mergedReqShipments = shipments.requested.map(sh =>
-      UserShipments.prepShipment(sh, user))
-    const mergedFinishedShipments = shipments.finished.map(sh =>
-      UserShipments.prepShipment(sh, user))
+    const mergedOpenShipments = filters.sortByDate(shipments.open, 'booking_placed_at')
+      .map(sh => UserShipments.prepShipment(sh, user))
+    const mergedReqShipments = filters.sortByDate(shipments.requested, 'booking_placed_at')
+      .map(sh => UserShipments.prepShipment(sh, user))
+    const mergedFinishedShipments = filters.sortByDate(shipments.finished, 'booking_placed_at')
+      .map(sh => UserShipments.prepShipment(sh, user))
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">

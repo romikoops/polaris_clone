@@ -99,7 +99,7 @@ export class CargoItemGroup extends Component {
               <span>
                 {(group.items[0].dimension_y *
                 group.items[0].dimension_x *
-                group.items[0].dimension_y / 1000000).toFixed(2)}
+                group.items[0].dimension_z / 1000000).toFixed(2)}
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">Volume</p>

@@ -88,10 +88,10 @@ export class AdminSearchableRoutes extends Component {
       tooltip,
       icon,
       hideFilters,
-      tile
+      tile,
+      mapData
     } = this.props
     const { itineraries, hoverId } = this.state
-
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
         <div
@@ -129,6 +129,7 @@ export class AdminSearchableRoutes extends Component {
             <div className="layout-padding flex-100">
               <WorldMap
                 itineraries={itineraries}
+                mapData={mapData}
                 hoverId={hoverId}
                 height={250}
                 theme={theme}
@@ -176,7 +177,8 @@ AdminSearchableRoutes.propTypes = {
   icon: PropTypes.string,
   tooltip: PropTypes.string,
   hideFilters: PropTypes.bool,
-  tile: PropTypes.bool
+  tile: PropTypes.bool,
+  mapData: PropTypes.arrayOf(PropTypes.object)
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -189,7 +191,8 @@ AdminSearchableRoutes.defaultProps = {
   tooltip: '',
   showTooltip: false,
   hideFilters: false,
-  tile: false
+  tile: false,
+  mapData: []
 }
 
 export default AdminSearchableRoutes

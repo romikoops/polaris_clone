@@ -1,37 +1,55 @@
 import React from 'react'
+import PropTypes from '../../prop-types'
 import CollapsingHeading from './Heading'
 import CollapsingContent from './Content'
-import Proptypes from '../../prop-types'
-import styles from './CollapsingBar.scss'
 
 export default function CollapsingBar ({
-  collapsed, theme, handleCollapser, content, headingText, faClass
+  collapsed,
+  theme,
+  handleCollapser,
+  content,
+  text,
+  faClass,
+  minHeight,
+  contentHeader,
+  styleHeader,
+  optClassName,
+  showArrow,
+  hideContent
 }) {
   return (
-    <div className={
-      `${styles.shipment_card} flex-100 ` +
-      'layout-row layout-align-start-center layout-wrap'
-    }
-    >
+    <div className="flex-100 layout-row layout-align-start-center layout-wrap">
       <CollapsingHeading
-        text={headingText}
+        text={text}
+        showArrow={showArrow}
+        optClassName={optClassName}
+        contentHeader={contentHeader}
         collapsed={collapsed}
         theme={theme}
         handleCollapser={handleCollapser}
         faClass={faClass}
+        styleHeader={styleHeader}
       />
-      <CollapsingContent collapsed={collapsed} content={content} />
+      {!hideContent ? (
+        <CollapsingContent collapsed={collapsed} content={content} minHeight={minHeight} />
+      ) : ''}
     </div>
   )
 }
 
 CollapsingBar.propTypes = {
-  collapsed: Proptypes.bool,
-  theme: Proptypes.theme,
-  handleCollapser: Proptypes.func,
-  content: Proptypes.node,
-  headingText: Proptypes.string,
-  faClass: Proptypes.string
+  collapsed: PropTypes.bool,
+  theme: PropTypes.theme,
+  handleCollapser: PropTypes.func,
+  content: PropTypes.node,
+  contentHeader: PropTypes.node,
+  hideContent: PropTypes.bool,
+  text: PropTypes.string,
+  optClassName: PropTypes.string,
+  faClass: PropTypes.string,
+  minHeight: PropTypes.string,
+  showArrow: PropTypes.bool,
+  styleHeader: PropTypes.objectOf(PropTypes.string)
 }
 
 CollapsingBar.defaultProps = {
@@ -39,6 +57,12 @@ CollapsingBar.defaultProps = {
   theme: null,
   handleCollapser: null,
   content: '',
-  headingText: '',
-  faClass: ''
+  contentHeader: '',
+  optClassName: '',
+  text: '',
+  hideContent: false,
+  faClass: '',
+  minHeight: '',
+  styleHeader: {},
+  showArrow: false
 }

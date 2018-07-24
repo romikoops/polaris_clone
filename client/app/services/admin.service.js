@@ -13,13 +13,47 @@ function handleResponse (response) {
   return response.json()
 }
 
-function getHubs () {
+function getHubs (page, hubType, countryId, status) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  let query = ''
+  if (hubType) {
+    query += `&hub_type=${hubType}`
+  }
+  if (status) {
+    query += `&status=${status}`
+  }
+  if (countryId && countryId.length) {
+    query += `&country_ids=${countryId}`
+  }
 
-  return fetch(`${BASE_URL}/admin/hubs`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/hubs?page=${page || 1}${query}`, requestOptions)
+    .then(handleResponse)
+}
+
+function searchHubs (text, page, hubType, countryId, status) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  if (text) {
+    query += `&text=${text}`
+  }
+  if (hubType) {
+    query += `&hub_type=${hubType}`
+  }
+  if (status) {
+    query += `&status=${status}`
+  }
+  if (countryId && countryId.length) {
+    query += `&country_ids=${countryId}`
+  }
+
+  return fetch(`${BASE_URL}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
+    .then(handleResponse)
 }
 
 function getItineraries () {
@@ -286,6 +320,16 @@ function updatePricing (id, data) {
   }
 
   return fetch(`${BASE_URL}/admin/pricings/update/${id}`, requestOptions)
+    .then(handleResponse)
+}
+function assignDedicatedPricings (pricing, clientIds) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pricing, clientIds })
+  }
+
+  return fetch(`${BASE_URL}/admin/pricings/assign_dedicated`, requestOptions)
     .then(handleResponse)
 }
 
@@ -580,7 +624,9 @@ export const adminService = {
   editHub,
   deleteClient,
   editCustomsFees,
-  updateHubMandatoryCharges
+  updateHubMandatoryCharges,
+  assignDedicatedPricings,
+  searchHubs
 }
 
 export default adminService

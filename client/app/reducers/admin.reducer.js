@@ -153,17 +153,13 @@ export default function admin (state = {}, action) {
       return errWzOpenPric
     }
 
-    case adminConstants.GET_HUBS_REQUEST: {
-      const reqHubs = merge({}, state, {
-        loading: true
-      })
-
-      return reqHubs
-    }
+    case adminConstants.GET_HUBS_REQUEST:
+      return state
     case adminConstants.GET_HUBS_SUCCESS:
       return {
         ...state,
-        hubs: action.payload.data,
+        num_hub_pages: action.payload.data.num_pages,
+        hubs: action.payload.data.hubs,
         loading: false
       }
     case adminConstants.GET_HUBS_FAILURE: {
@@ -668,6 +664,24 @@ export default function admin (state = {}, action) {
     case adminConstants.UPDATE_PRICING_FAILURE:
       return state
 
+    case adminConstants.ASSIGN_DEDICATED_PRICING_REQUEST:
+      return state
+    case adminConstants.ASSIGN_DEDICATED_PRICING_SUCCESS: {
+      const { userPricings } = state.itineraryPricings
+
+      const newPricing = [...userPricings, ...action.payload]
+
+      return {
+        ...state,
+        itineraryPricings: {
+          ...state.itineraryPricings,
+          userPricings: newPricing
+        }
+      }
+    }
+    case adminConstants.ASSIGN_DEDICATED_PRICING_FAILURE:
+      return state
+
     case adminConstants.UPDATE_SERVICE_CHARGES_REQUEST:
       return state
     case adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS: {
@@ -854,7 +868,8 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_ROUTES_SUCCESS: {
       return {
         ...state,
-        itineraries: action.payload.data,
+        itineraries: action.payload.data.itineraries,
+        mapData: action.payload.data.mapData,
         loading: false
       }
     }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import adminStyles from './Admin.scss'
 import { AdminSearchableShipments } from './AdminSearchables'
 import { adminDashboard as adminTip } from '../../constants'
+import { filters } from '../../helpers'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 
@@ -49,12 +50,12 @@ export class AdminShipmentsIndex extends Component {
       clientHash[cl.id] = cl
     })
 
-    const mergedOpenShipments = shipments.open.map(sh =>
-      AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
-    const mergedReqShipments = shipments.requested.map(sh =>
-      AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
-    const mergedFinishedShipments = shipments.finished.map(sh =>
-      AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
+    const mergedOpenShipments = filters.sortByDate(shipments.open, 'booking_placed_at')
+      .map(sh => AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
+    const mergedReqShipments = filters.sortByDate(shipments.requested, 'booking_placed_at')
+      .map(sh => AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
+    const mergedFinishedShipments = filters.sortByDate(shipments.finished, 'booking_placed_at')
+      .map(sh => AdminShipmentsIndex.prepShipment(sh, clientHash, hubHash))
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">

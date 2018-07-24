@@ -111,7 +111,8 @@ module ExcelTool
     end
 
     def find_hub(row)
-      Hub.find_by(name: "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}", tenant_id: user.tenant_id)
+      hub_name = row[:destination].include?(hub_type_name[row[:mot].downcase]) ? row[:destination] : "#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"
+      Hub.find_by(name: hub_name, tenant_id: user.tenant_id)
     end
 
     def tenant_vehicle_id(row)
@@ -133,6 +134,10 @@ module ExcelTool
       rows.each do |row|
         if row[:destination]
           counterpart_hub = find_hub(row)
+          if !counterpart_hub
+            # byebug
+            puts row
+          end
           counterpart_hub_id = counterpart_hub.id
           hub_fees[counterpart_hub_id] = {} if !hub_fees[counterpart_hub_id]
           customs[counterpart_hub_id] = {}  if !customs[counterpart_hub_id]

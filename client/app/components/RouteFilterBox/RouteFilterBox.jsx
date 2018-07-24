@@ -120,13 +120,13 @@ export class RouteFilterBox extends Component {
           </div>
           <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <p className="flex-none five_m">Pre Carriage</p>
+              <p className="flex-none five_m">Pickup</p>
               <p className="flex-none five_m">{shipment.has_pre_carriage ? 'Yes' : 'No'}</p>
             </div>
           </div>
           <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <p className="flex-none five_m">On Carriage</p>
+              <p className="flex-none five_m">Delivery</p>
               <p className="flex-none five_m">{shipment.has_on_carriage ? 'Yes' : 'No'}</p>
             </div>
           </div>

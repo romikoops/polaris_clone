@@ -1,15 +1,23 @@
 import React from 'react'
 import PropTypes from '../../prop-types'
 import styles from './RoundButton.scss'
-import { gradientCSSGenerator } from '../../helpers'
+import GradientBorder from '../GradientBorder'
+import {
+  gradientCSSGenerator,
+  gradientBorderGenerator
+} from '../../helpers'
 
 export function RoundButton ({
-  text, theme, active, back, icon, iconClass, size, disabled, handleNext, handleDisabled
+  text, theme, active, back, icon, iconClass, size, disabled, handleNext, handleDisabled, inverse
 }) {
   const activeBtnBackground =
     theme && theme.colors
       ? gradientCSSGenerator(theme.colors.primary, theme.colors.secondary)
       : 'black'
+  const gradientBorderStyle =
+    theme && theme.colors
+      ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: '#E0E0E0' }
 
   const btnStyle = active ? { background: activeBtnBackground } : {}
 
@@ -51,19 +59,44 @@ export function RoundButton ({
       sizeClass = styles.large
       break
   }
+
   return (
-    <button
-      className={`${styles.round_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
-      onClick={disabled ? handleDisabled : handleNext}
-      style={btnStyle}
-    >
-      <div className="layout-fill layout-row layout-align-space-around-center">
-        <p className={styles.content}>
-          <span className={styles.icon}>{iconC}</span>
-          {text}
-        </p>
-      </div>
-    </button>
+    <div className="flex-100">
+      {!inverse ? (
+        <button
+          className={`${styles.round_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
+          onClick={disabled ? handleDisabled : handleNext}
+          style={btnStyle}
+        >
+          <div className="layout-fill layout-row layout-align-space-around-center">
+            <p className={styles.content}>
+              <span className={styles.icon}>{iconC}</span>
+              {text}
+            </p>
+          </div>
+        </button>
+      ) : (
+        <GradientBorder
+          wrapperClassName="flex pointy"
+          gradient={gradientBorderStyle}
+          className="layout-row flex-100"
+          content={(
+            <button
+              className={`${styles.round_btn_inverse} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
+              onClick={disabled ? handleDisabled : handleNext}
+            >
+              <div className="layout-fill layout-row layout-align-space-around-center">
+                <p className={styles.content}>
+                  <span className={styles.icon}>{iconC}</span>
+                  {text}
+                </p>
+              </div>
+            </button>
+          )}
+        />
+      )}
+
+    </div>
   )
 }
 
@@ -77,7 +110,8 @@ RoundButton.propTypes = {
   icon: PropTypes.string,
   iconClass: PropTypes.string,
   size: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  inverse: PropTypes.bool
 }
 
 RoundButton.defaultProps = {
@@ -89,7 +123,8 @@ RoundButton.defaultProps = {
   size: '',
   handleNext: null,
   handleDisabled: null,
-  disabled: false
+  disabled: false,
+  inverse: false
 }
 
 export default RoundButton

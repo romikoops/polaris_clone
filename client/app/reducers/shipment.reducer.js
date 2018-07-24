@@ -7,8 +7,14 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: false
       }
+    case shipmentConstants.REUSE_SHIPMENT_REQUEST:
+      return {
+        reusedShipment: action.payload,
+        loading: true
+      }
     case shipmentConstants.NEW_SHIPMENT_REQUEST:
       return {
+        ...state,
         request: {
           stage1: action.shipmentData
         },
@@ -51,15 +57,19 @@ export default function shipment (state = {}, action) {
         loading: false
       }
 
-    case shipmentConstants.GET_OFFERS_REQUEST:
+    case shipmentConstants.GET_OFFERS_REQUEST: {
+      const originalSelectedDay = action.shipmentData.shipment.selected_day
+
       return {
         ...state,
         request: {
           ...state.request,
           stage2: action.shipmentData
         },
+        originalSelectedDay,
         loading: true
       }
+    }
     case shipmentConstants.GET_OFFERS_SUCCESS:
       return {
         ...state,
@@ -71,6 +81,54 @@ export default function shipment (state = {}, action) {
         activeShipment: action.shipmentData.shipment.id
       }
     case shipmentConstants.GET_OFFERS_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage2: [action.error]
+        },
+        loading: false
+      }
+    case shipmentConstants.GET_NEW_DATE_OFFERS_REQUEST: {
+      const originalSelectedDay = state.originalSelectedDay ||
+        state.request.stage2.shipment.selected_day
+
+      return {
+        ...state,
+        request: {
+          ...state.request,
+          stage2: action.shipmentData
+        },
+        originalSelectedDay,
+        loading: true
+      }
+    }
+    case shipmentConstants.GET_NEW_DATE_OFFERS_SUCCESS: {
+      const shipmentToEdit = action.shipmentData.shipment
+      const { schedules } = state.response.stage2
+      action.shipmentData.schedules.forEach((sched) => {
+        if (schedules.filter(sched2 => sched2.trip_id === sched.trip_id).length < 1) {
+          schedules.push(sched)
+        }
+      })
+      // shipmentToEdit.selected_day = state.originalSelectedDay
+      const adjustedShipmentData = {
+        ...action.shipmentData,
+        shipment: shipmentToEdit,
+        schedules
+      }
+
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage2: adjustedShipmentData
+        },
+        loading: false,
+        activeShipment: action.shipmentData.shipment.id
+      }
+    }
+    case shipmentConstants.GET_NEW_DATE_OFFERS_FAILURE:
       return {
         ...state,
         error: {
@@ -152,6 +210,7 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage5: action.shipmentData
         },
+        reusedShipment: false,
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }
@@ -216,6 +275,7 @@ export default function shipment (state = {}, action) {
       })
       const stage4 = state.response.stage4
         ? state.response.stage4.documents.filter(d => d.id !== action.payload) : []
+
       return {
         ...state,
         response: {
@@ -260,6 +320,7 @@ export default function shipment (state = {}, action) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = user
             console.log(deleting)
+
             // return copy of user with 'deleteError:[error]' property
             return { ...userCopy, deleteError: [action.error] }
           }
