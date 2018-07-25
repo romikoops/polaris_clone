@@ -177,6 +177,7 @@ class TenantSeeder
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
@@ -293,6 +294,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -381,6 +383,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -457,6 +460,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -530,6 +534,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -606,6 +611,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -680,6 +686,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -752,6 +759,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -824,6 +832,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -899,6 +908,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -990,6 +1000,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1083,6 +1094,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1180,6 +1192,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1275,6 +1288,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1368,6 +1382,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1485,13 +1500,14 @@ class TenantSeeder
           legal: 'http://www.speedtrans.com/impressum.php'
         },
         consolidate_cargo: true,
+        customs_export_paper: true,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
-        has_insurance: true,
-        has_customs: true,
+        has_insurance: false,
+        has_customs: false,
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1601,6 +1617,7 @@ class TenantSeeder
           }
         },
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1691,6 +1708,7 @@ class TenantSeeder
         },
         dangerous_goods: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1777,6 +1795,7 @@ class TenantSeeder
         dangerous_goods: false,
         detailed_billing: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',

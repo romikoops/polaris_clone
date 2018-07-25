@@ -61,6 +61,7 @@ export class BookingDetails extends Component {
           val: 0
         }
       },
+      addons: {},
       hsCodes: {},
       hsTexts: {},
       totalGoodsValue: { value: 0, currency: 'EUR' },
@@ -82,6 +83,7 @@ export class BookingDetails extends Component {
     this.setContact = this.setContact.bind(this)
     this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
+    this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
   }
   componentDidMount () {
     const {
@@ -188,6 +190,21 @@ export class BookingDetails extends Component {
       customsCredit: !this.state.customsCredit
     })
   }
+  toggleCustomAddon (target) {
+    const { addons } = this.props.shipmentData
+    const charge = addons[target].fees.total
+
+    this.setState((prevState) => {
+      const newTarget = !prevState[target] ? charge : false
+
+      return ({
+        addons: {
+          ...prevState.addons,
+          [target]: newTarget
+        }
+      })
+    })
+  }
   handleInsurance (bool) {
     // const { insurance } = this.state
     if (!bool) {
@@ -253,7 +270,8 @@ export class BookingDetails extends Component {
       eori,
       notes,
       incotermText,
-      customsCredit
+      customsCredit,
+      addons
     } = this.state
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
@@ -283,7 +301,8 @@ export class BookingDetails extends Component {
         eori,
         notes,
         incotermText,
-        customsCredit
+        customsCredit,
+        addons
       }
     }
 
@@ -359,6 +378,7 @@ export class BookingDetails extends Component {
             handleChange={this.handleCargoInput}
             shipmentData={shipmentData}
             handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
+            toggleCustomAddon={this.toggleCustomAddon}
             hsCodes={this.state.hsCodes}
             hsTexts={this.state.hsTexts}
             setHsCode={this.setHsCode}

@@ -10,11 +10,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180724072817) do
+ActiveRecord::Schema.define(version: 20180725124554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "addon_charges", force: :cascade do |t|
+    t.string "title"
+    t.string "text"
+    t.jsonb "rate"
+    t.string "input_type"
+    t.jsonb "conditions"
+    t.integer "addon_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "addons", force: :cascade do |t|
+    t.string "title"
+    t.jsonb "text", default: [], array: true
+    t.integer "tenant_id"
+    t.string "read_more"
+    t.string "accept_text"
+    t.string "decline_text"
+    t.string "additional_info_text"
+    t.string "cargo_class"
+    t.integer "hub_id"
+    t.integer "counterpart_hub_id"
+    t.string "mode_of_transport"
+    t.integer "tenant_vehicle_id"
+    t.string "direction"
+    t.string "addon_type"
+    t.jsonb "fees"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "aggregated_cargos", force: :cascade do |t|
     t.decimal "weight"

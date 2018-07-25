@@ -19,6 +19,8 @@ export function IncotermExtras ({
     feeHash && feeHash.customs ? selectedStyle : deselectedStyle
   const insuranceStyle =
     feeHash && feeHash.insurance ? selectedStyle : deselectedStyle
+  const exportPaperStyle =
+    feeHash && feeHash.addons && feeHash.addons.customs_export_paper ? selectedStyle : deselectedStyle
   const insuranceFeesValue = feeHash ? (
     <div
       className={`${
@@ -39,7 +41,8 @@ export function IncotermExtras ({
   ) : (
     ''
   )
-  const insuranceRequested = (
+
+  const requested = (
     <div
       className={`${
         styles.fee_value
@@ -48,16 +51,7 @@ export function IncotermExtras ({
       <p className="flex-none no_m letter_3 center">Requested</p>
     </div>
   )
-  const customsRequested = (
-    <div
-      className={`${
-        styles.fee_value
-      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
-    >
-      <p className="flex-none no_m letter_3 center">Requested</p>
-    </div>
-  )
-  const noInsurance = (
+  const none = (
     <div
       className={`${
         styles.fee_value
@@ -66,15 +60,7 @@ export function IncotermExtras ({
       <p className="flex-none no_m letter_3 center">None</p>
     </div>
   )
-  const noCustoms = (
-    <div
-      className={`${
-        styles.fee_value
-      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
-    >
-      <p className="flex-none no_m letter_3 center">None</p>
-    </div>
-  )
+
   const customsFeesValue = feeHash ? (
     <div
       className={`${
@@ -95,6 +81,26 @@ export function IncotermExtras ({
   ) : (
     ''
   )
+  const exportPaperFeesValue = feeHash ? (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      {feeHash.addons && feeHash.addons && feeHash.addons.customs_export_paper ? (
+        <p className="flex-none no_m letter_3 center">{feeHash.addons.customs_export_paper.currency}</p>
+      ) : (
+        ''
+      )}
+      <p className="flex-none no_m letter_3 center">
+        {feeHash.addons && feeHash.addons && feeHash.addons.customs_export_paper
+          ? `${parseFloat(feeHash.addons.customs_export_paper.value).toFixed(2)}`
+          : 'None'}
+      </p>
+    </div>
+  ) : (
+    ''
+  )
 
   const customsFeesTile = (
     <div className={`${styles.fee_tile} flex-none layout-row layout-align-space-around-center`}>
@@ -106,8 +112,8 @@ export function IncotermExtras ({
           <h4 className="flex-none no_m">Customs</h4>
         </div>
         {scope.detailed_billing && feeHash.customs ? customsFeesValue : ''}
-        {!scope.detailed_billing && feeHash.customs ? customsRequested : ''}
-        {!feeHash || (feeHash && !feeHash.customs) ? noCustoms : ''}
+        {!scope.detailed_billing && feeHash.customs ? requested : ''}
+        {!feeHash || (feeHash && !feeHash.customs) ? none : ''}
       </div>
     </div>
   )
@@ -121,8 +127,23 @@ export function IncotermExtras ({
           <h4 className="flex-none no_m">Insurance</h4>
         </div>
         {scope.detailed_billing && feeHash.insurance ? insuranceFeesValue : ''}
-        {!scope.detailed_billing && feeHash.insurance ? insuranceRequested : ''}
-        {!feeHash || (feeHash && !feeHash.insurance) ? noInsurance : ''}
+        {!scope.detailed_billing && feeHash.insurance ? requested : ''}
+        {!feeHash || (feeHash && !feeHash.insurance) ? none : ''}
+      </div>
+    </div>
+  )
+  const exportPaperFeesTile = (
+    <div className={`${styles.fee_tile} flex-none layout-row layout-align-space-around-center`}>
+      <div className="flex-none layout-row layout-align-center-center ">
+        <i className="fa fa-id-card clip flex-none" style={exportPaperStyle} />
+      </div>
+      <div className="flex layout-row layout-align-center-space-around layout-wrap">
+        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+          <h4 className="flex-none no_m">Customs Export Paper</h4>
+        </div>
+        {scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? exportPaperFeesValue : ''}
+        {!scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? requested : ''}
+        {!feeHash || (feeHash && feeHash.addons && !feeHash.addons.customs_export_paper) ? none : ''}
       </div>
     </div>
   )
@@ -133,6 +154,7 @@ export function IncotermExtras ({
     >
       {scope.has_customs ? customsFeesTile : ''}
       {scope.has_insurance ? insuranceFeesTile : '' }
+      {scope.customs_export_paper ? exportPaperFeesTile : '' }
     </div>
   )
 }
