@@ -1,8 +1,9 @@
 module ExcelTool
   class OverwriteLocalCharges < ExcelTool::BaseTool
-    attr_reader :user
+    attr_reader :user, :dangerous
     def post_initialize(args)
       @user = args[:user]
+      @dangerous = {}
     end
 
     def perform
@@ -30,7 +31,7 @@ module ExcelTool
             update_hashes(row, hub_fees, customs, tenant_vehicles, counterparts)
           end
         end
-
+        save_dangerous_fees(hub_fees, tenant_vehicles, hub)
        update_result_and_stats_fees(hub_fees, tenant_vehicles, hub)
        update_result_and_stats_customs(customs, tenant_vehicles, hub)
       end
@@ -81,7 +82,8 @@ module ExcelTool
         range_max:       "RANGE_MAX",
         service_level:   "SERVICE_LEVEL",
         destination:     "DESTINATION",
-        base:             "BASE"
+        base:            "BASE",
+        dangerous:       "DANGEROUS"
       )
     end
 
@@ -136,7 +138,7 @@ module ExcelTool
         if row[:destination]
           counterpart_hub = find_hub(row)
           if !counterpart_hub
-            # byebug
+            # 
             puts row
           end
           counterpart_hub_id = counterpart_hub.id
@@ -156,17 +158,72 @@ module ExcelTool
           tenant_vehicles["standard-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
           tenant_vehicles["standard-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row, "standard")
         end
+        counterpart_id = counterpart_hub_id || "general"
 
-        if counterpart_hub_id
-          hub_fees[counterpart_hub_id][tenant_vehicle_id] = {}
-          customs[counterpart_hub_id][tenant_vehicle_id] = {}
-        else
-          hub_fees["general"][tenant_vehicle_id] = {}
-          customs["general"][tenant_vehicle_id] = {}
+        hub_fees[counterpart_id][tenant_vehicle_id] = {}
+        customs[counterpart_id][tenant_vehicle_id] = {}
+        if row[:dangerous]
+          store_dangerous_fees(row, counterpart_id, tenant_vehicle_id)
         end
+          
       end
+      
       hash_builder = expand_customs_hub_fees(hub_fees, customs, rows, hub)
       { hub_fees: hash_builder[:hub_fees], customs: hash_builder[:customs], tenant_vehicles: tenant_vehicles, counterparts: counterparts }
+    end
+
+    def store_dangerous_fees(row, counterpart_id, tenant_vehicle_id)
+      
+      @dangerous[counterpart_id] = {} if !@dangerous[counterpart_id]
+      @dangerous[counterpart_id][tenant_vehicle_id] = {} if !@dangerous[counterpart_id][tenant_vehicle_id]
+      if row[:load_type].downcase == 'fcl'
+        load_types = %w[fcl_20 fcl_40 fcl_40_hq]
+      else
+        load_types = [row[:load_type].downcase]
+      end
+      charge = build_charge(row)
+      load_types.each do |lt|
+        @dangerous[counterpart_id][tenant_vehicle_id][row[:direction].downcase] = {} if !@dangerous[counterpart_id][tenant_vehicle_id][row[:direction].downcase]
+        @dangerous[counterpart_id][tenant_vehicle_id][row[:direction].downcase][lt] = {} if !@dangerous[counterpart_id][tenant_vehicle_id][row[:direction].downcase][lt]
+        @dangerous[counterpart_id][tenant_vehicle_id][row[:direction].downcase][lt][charge[:key]] = charge
+      end
+    end
+
+    def save_dangerous_fees(hub_fees, tenant_vehicles, hub)
+      
+      hub_fees.each do |hub_key, tv_ids|
+        
+        tv_ids.each do |tv_id, directions|
+          directions.each do |direction_key, load_type_values|
+            load_type_values.each do |lt, obj|
+              next if !@dangerous[hub_key]
+              next if !@dangerous[hub_key][tv_id]
+              next if !@dangerous[hub_key][tv_id][direction_key]
+              next if !@dangerous[hub_key][tv_id][direction_key][lt]
+              dangerous_fees = @dangerous[hub_key][tv_id][direction_key][lt]
+              
+              if dangerous_fees
+                dangerous_fees.each do |key, fee|
+                  obj['fees'][key] = fee
+                end
+                obj['dangerous'] = true
+                obj["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{obj["mode_of_transport"]}"]
+                
+                lc = hub.local_charges.find_by(mode_of_transport: obj["mode_of_transport"], load_type: lt,
+                  direction: direction_key, tenant_vehicle_id: obj["tenant_vehicle_id"],
+                  counterpart_hub_id: obj["counterpart_hub_id"], dangerous: true)
+                if lc
+                  lc.update_attributes(obj)
+                else
+                  hub.local_charges.create!(obj)
+                end
+                results[:charges] << obj
+                stats[:charges][:number_updated] += 1
+              end
+            end
+          end
+        end
+      end
     end
     
     def expand_customs_hub_fees(hub_fees, customs, rows, hub)
@@ -272,7 +329,7 @@ module ExcelTool
               
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k,
                 direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"],
-                counterpart_hub_id: v["counterpart_hub_id"])
+                counterpart_hub_id: v["counterpart_hub_id"], dangerous:false)
               if lc
                 lc.update_attributes(v)
               else

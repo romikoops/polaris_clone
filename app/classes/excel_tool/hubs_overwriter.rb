@@ -49,7 +49,8 @@ module ExcelTool
           import_charges: "IMPORT_CHARGES",
           export_charges: "EXPORT_CHARGES",
           pre_carriage: "PRE_CARRIAGE",
-          on_carriage: "ON_CARRIAGE"
+          on_carriage: "ON_CARRIAGE",
+          alternative_names: "ALTERNATIVE_NAMES"
         )
       end
 
@@ -138,6 +139,18 @@ module ExcelTool
         )
       end
 
+      def create_alternative_names
+        if hub_row[:alternative_names]
+          if hub_row[:alternative_names].include?(',')
+            hub_row[:alternative_names].split(',').each do |str|
+              AlternativeName.find_or_create_by!(model: 'Hub', model_id: @hub.id, name: str)
+            end
+          else
+            AlternativeName.find_or_create_by!(model: 'Hub', model_id: @hub.id, name: hub_row[:alternative_names])
+          end
+        end
+      end
+
       def create_nexus_hub
         nexus.hubs.create!(
           nexus_id:         nexus.id,
@@ -212,7 +225,7 @@ module ExcelTool
           update_or_create_hub
           results[:nexuses] << nexus
           stats[:nexuses][:number_updated] += 1
-
+          create_alternative_names
           hub.generate_hub_code!(user.tenant_id) unless hub.hub_code
           hub
         end
