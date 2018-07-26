@@ -1832,6 +1832,99 @@ class TenantSeeder
           "Barrel"
         ]
       }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#e10f21",
+          secondary: "#1d1d1b",
+          brightPrimary: "#ffffff",
+          brightSecondary: "#9d9d9c"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+      },
+      addresses: {
+        components: [],
+        main:"Niendorfer Str. 170, 22848 Norderstedt, Germany"
+      },
+      phones:{
+        main:"+49 (0)40 85 40 68-0",
+        support: "+49 (0)40 85 40 68-0"
+      },
+      emails: {
+        sales: {
+          general: "cglitscher@gatewaycargo.de"
+        },
+        support: {
+          general: "cglitscher@gatewaycargo.de"
+        }
+      },
+      subdomain: "gateway",
+      name: "Gateway Cargo Systems GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: false,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: true,
+        detailed_billing: false,
+        consolidate_cargo: false,
+        customs_export_paper: false,
+        fixed_currency: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: false,
+        has_customs: false,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Gateway Cargo Systems GmbH is to discuss the validity of the presented prices with the product owners."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: %w[
+          EXW
+          FCA
+          FOB
+          FAS
+        ]
+      }
     }
   ].freeze
 
