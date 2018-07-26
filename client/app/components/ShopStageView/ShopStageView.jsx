@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
-import { SHIPMENT_STAGES } from '../../constants'
+import { SHIPMENT_STAGES, QUOTE_STAGES } from '../../constants'
 import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
 import { HelpContact } from '../Help/Contact'
 
@@ -13,13 +13,15 @@ export class ShopStageView extends Component {
   constructor (props) {
     super(props)
     this.state = {}
+    this.applicableStages = this.props.tenant.data.scope.quotation_tool
+      ? QUOTE_STAGES : SHIPMENT_STAGES
   }
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
   }
 
   setStageHeader (currentStage) {
-    const { header } = SHIPMENT_STAGES.find(stage => stage.step === currentStage) || {}
+    const { header } = this.applicableStages.find(stage => stage.step === currentStage) || {}
     this.setState({ stageHeader: header })
   }
   handleClickStage (stage) {
@@ -96,7 +98,7 @@ export class ShopStageView extends Component {
   render () {
     const { theme, hasNextStage, tenant } = this.props
     const { showHelp } = this.state
-    const stageBoxes = SHIPMENT_STAGES.map(stage => this.stageBox(stage))
+    const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -154,6 +156,7 @@ export class ShopStageView extends Component {
     ) : (
       <div className={`${styles.stage_box} flex-none layout-column layout-align-start-center`} />
     )
+
     return (
       <div className="layout-row flex-100 layout-align-center layout-wrap">
         <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>

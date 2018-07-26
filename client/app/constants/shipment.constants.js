@@ -49,6 +49,26 @@ export const SHIPMENT_STAGES = [
     url: '/finish_booking'
   }
 ]
+export const QUOTE_STAGES = [
+  {
+    step: 1,
+    text: 'Choose shipment type',
+    header: 'Choose shipment',
+    url: '/'
+  },
+  {
+    step: 2,
+    text: 'Shipment Details',
+    header: 'Shipment Details',
+    url: '/shipment_details'
+  },
+  {
+    step: 3,
+    text: 'View Quotes',
+    header: 'View Quotes',
+    url: '/choose_offer'
+  }
+]
 export const documentTypes = {
   packing_sheet: 'Packing Sheet',
   commercial_invoice: 'Commercial Invoice',
