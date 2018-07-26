@@ -291,6 +291,7 @@ exports[`shallow render 1`] = `
           },
         }
       }
+      toggleCustomAddon={[Function]}
       toggleCustomsCredit={[Function]}
       user={
         Object {
@@ -593,6 +594,7 @@ exports[`theme is falsy 1`] = `
         }
       }
       theme={null}
+      toggleCustomAddon={[Function]}
       toggleCustomsCredit={[Function]}
       user={
         Object {

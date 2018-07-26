@@ -42,6 +42,7 @@ export class BookingDetails extends Component {
     }
 
     this.state = {
+      addons: {},
       acceptTerms: false,
       cargoNotes: '',
       consignee: {},
@@ -84,6 +85,7 @@ export class BookingDetails extends Component {
     this.setHsCode = this.setHsCode.bind(this)
     this.toNextStage = this.toNextStage.bind(this)
     this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
+    this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
     this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
   }
   componentDidMount () {
@@ -168,6 +170,21 @@ export class BookingDetails extends Component {
   toggleCustomsCredit () {
     this.setState({ customsCredit: !this.state.customsCredit })
   }
+  toggleCustomAddon (target) {
+    const { addons } = this.props.shipmentData
+    const charge = addons[target].fees.total
+
+    this.setState((prevState) => {
+      const newTarget = !prevState[target] ? charge : false
+
+      return ({
+        addons: {
+          ...prevState.addons,
+          [target]: newTarget
+        }
+      })
+    })
+  }
   handleInsurance (bool) {
     if (bool) {
       return this.calcInsurance(false, true)
@@ -221,6 +238,7 @@ export class BookingDetails extends Component {
   }
   toNextStage () {
     const {
+      addons,
       cargoNotes,
       consignee,
       customs,
@@ -251,6 +269,7 @@ export class BookingDetails extends Component {
     const data = {
       shipment: {
         id: this.props.shipmentData.shipment.id,
+        addons,
         consignee,
         shipper,
         notifyees,
@@ -307,46 +326,51 @@ export class BookingDetails extends Component {
       ? <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
       : ''
 
-    const ContactSetterComponent = (<ContactSetter
-      consignee={consignee}
-      contacts={contacts}
-      direction={shipment.direction}
-      finishBookingAttempted={this.state.finishBookingAttempted}
-      notifyees={notifyees}
-      removeNotifyee={this.removeNotifyee}
-      setContact={this.setContact}
-      shipper={shipper}
-      theme={theme}
-      userLocations={userLocations}
-    />)
+    const ContactSetterComponent = (
+      <ContactSetter
+        consignee={consignee}
+        contacts={contacts}
+        direction={shipment.direction}
+        finishBookingAttempted={this.state.finishBookingAttempted}
+        notifyees={notifyees}
+        removeNotifyee={this.removeNotifyee}
+        setContact={this.setContact}
+        shipper={shipper}
+        theme={theme}
+        userLocations={userLocations}
+      />
+    )
 
-    const CargoDetailsComponent = (<CargoDetails
-      theme={theme}
-      handleChange={this.handleCargoInput}
-      shipmentData={shipmentData}
-      handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
-      hsCodes={this.state.hsCodes}
-      hsTexts={this.state.hsTexts}
-      setHsCode={this.setHsCode}
-      handleHsTextChange={this.handleHsTextChange}
-      deleteCode={this.deleteCode}
-      cargoNotes={this.state.cargoNotes}
-      totalGoodsValue={this.state.totalGoodsValue}
-      handleInsurance={this.handleInsurance}
-      insurance={this.state.insurance}
-      shipmentDispatch={shipmentDispatch}
-      currencies={currencies}
-      customsData={customs}
-      notes={this.state.notes}
-      setCustomsFee={this.setCustomsFee}
-      user={user}
-      eori={eori}
-      customsCredit={customsCredit}
-      tenant={tenant}
-      incotermText={this.state.incotermText}
-      toggleCustomsCredit={this.toggleCustomsCredit}
-      finishBookingAttempted={this.state.finishBookingAttempted}
-    />)
+    const CargoDetailsComponent = (
+      <CargoDetails
+        cargoNotes={this.state.cargoNotes}
+        currencies={currencies}
+        customsCredit={customsCredit}
+        customsData={customs}
+        deleteCode={this.deleteCode}
+        eori={eori}
+        finishBookingAttempted={this.state.finishBookingAttempted}
+        handleChange={this.handleCargoInput}
+        handleHsTextChange={this.handleHsTextChange}
+        handleInsurance={this.handleInsurance}
+        handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
+        hsCodes={this.state.hsCodes}
+        hsTexts={this.state.hsTexts}
+        incotermText={this.state.incotermText}
+        insurance={this.state.insurance}
+        notes={this.state.notes}
+        setCustomsFee={this.setCustomsFee}
+        setHsCode={this.setHsCode}
+        shipmentData={shipmentData}
+        shipmentDispatch={shipmentDispatch}
+        tenant={tenant}
+        theme={theme}
+        toggleCustomAddon={this.toggleCustomAddon}
+        toggleCustomsCredit={this.toggleCustomsCredit}
+        totalGoodsValue={this.state.totalGoodsValue}
+        user={user}
+      />
+    )
 
     const ReviewButtonComponent = (
       <div className={`${styles.btn_sec} ${WRAP_ROW(100)} layout-align-center`}>
