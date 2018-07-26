@@ -23,8 +23,8 @@ export default async function selectOriginDestination (puppeteer) {
   await selectWithTab(7)
 
   await saveStep('selectOriginDestinationWithClick.1')
-  await shouldMatchScreenshot('booking.summary')
-  await shouldMatchHTML('booking.summary')
+  // await shouldMatchScreenshot('booking.summary')
+  // await shouldMatchHTML('booking.summary')
 }
 
 /**
