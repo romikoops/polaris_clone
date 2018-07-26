@@ -32,10 +32,11 @@ class CustomsExportPaper extends PureComponent {
             </strong>
           </p>
           <p className="flex-90">
-            {`${tenant.data.name} will orgnaise the ADB on your behalf. Initially
-              ${charge.currency} ${Number(charge.value).toFixed(2)} will be
-              added to your booking. Additional Customs Export Papers will be charged as
-              needed at ${charge.currency} 12.50 per paper`}
+            {`
+              Küster Speedtrans Übersee Spedition GmbH will organise the ABD on your
+              behalf. Initially USD 75.00 will be added to your booking.
+              This includes 1 customs tariff number. For each more we will charge you
+              USD 12.50 per customs tariff number.`}
           </p>
         </div>
         <div
