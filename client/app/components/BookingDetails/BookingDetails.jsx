@@ -185,6 +185,21 @@ export class BookingDetails extends Component {
       })
     })
   }
+  toggleCustomAddon (target) {
+    const { addons } = this.props.shipmentData
+    const charge = addons[target].fees.total
+
+    this.setState((prevState) => {
+      const newTarget = !prevState[target] ? charge : false
+
+      return ({
+        addons: {
+          ...prevState.addons,
+          [target]: newTarget
+        }
+      })
+    })
+  }
   handleInsurance (bool) {
     if (bool) {
       return this.calcInsurance(false, true)
@@ -282,7 +297,8 @@ export class BookingDetails extends Component {
         eori,
         notes,
         incotermText,
-        customsCredit
+        customsCredit,
+        addons
       }
     }
 

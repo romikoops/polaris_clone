@@ -34,6 +34,33 @@ function getHubs (redirect, page, hubType, country, status) {
     )
   }
 }
+function getAllHubs () {
+  function request (hubData) {
+    return { type: adminConstants.GET_ALL_HUBS_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.GET_ALL_HUBS_SUCCESS, payload: hubData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_ALL_HUBS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.getAllHubs().then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function searchHubs (text, page, hubType, country, status) {
   function request (hubData) {
     return { type: adminConstants.GET_HUBS_REQUEST, payload: hubData }
@@ -1640,7 +1667,8 @@ export const adminActions = {
   editCustomsFees,
   updateHubMandatoryCharges,
   assignDedicatedPricings,
-  searchHubs
+  searchHubs,
+  getAllHubs
 }
 
 export default adminActions

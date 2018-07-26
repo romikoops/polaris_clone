@@ -153,7 +153,7 @@ export class AdminClientTile extends Component {
           gradient={gradientBorderStyle}
           className="layout-column flex-100"
           content={(
-            <div className="layout-column flex-100">
+            <div className="layout-column flex-100" onClick={handleCollapser}>
               {deleteable && !showDelete ? (
                 <div
                   className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}

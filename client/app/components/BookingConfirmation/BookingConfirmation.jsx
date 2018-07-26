@@ -81,7 +81,7 @@ export function calcFareTotals (feeHash) {
   const total = feeHash.total && +feeHash.total.value
 
   return Object.keys(feeHash).reduce((sum, k) => (
-    feeHash[k] && ['customs', 'insurance']
+    feeHash[k] && ['customs', 'insurance', 'addons']
       .includes(k) && feeHash[k].total ? sum - feeHash[k].total.value : sum
   ), total).toFixed(2)
 }
@@ -99,6 +99,12 @@ export function calcExtraTotals (feeHash) {
     feeHash.insurance.total &&
     feeHash.insurance.total.value) {
     res1 += parseFloat(feeHash.insurance.total.value)
+  }
+  if (feeHash &&
+    feeHash.addons &&
+    feeHash.addons.customs_export_paper &&
+    feeHash.addons.customs_export_paper.value) {
+    res1 += parseFloat(feeHash.addons.customs_export_paper.value)
   }
 
   return res1.toFixed(2)

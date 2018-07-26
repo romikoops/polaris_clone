@@ -15,7 +15,7 @@ import {
   moment,
   chargeGlossary
 } from '../../../constants'
-import { gradientGenerator, gradientTextGenerator, gradientBorderGenerator } from '../../../helpers'
+import { gradientGenerator, gradientTextGenerator, gradientBorderGenerator, filters } from '../../../helpers'
 import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
 import { RoundButton } from '../../RoundButton/RoundButton'
@@ -60,6 +60,7 @@ export class AdminPricingDedicated extends Component {
       selectedClients: {}
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
@@ -346,6 +347,12 @@ export class AdminPricingDedicated extends Component {
       }
     })
   }
+  handleSearchChange (event) {
+    const { value } = event.target
+    this.setState({
+      clientSearch: value
+    })
+  }
   savePricings () {
     const { adminDispatch, closePricingView } = this.props
     const { editor, selectedClients } = this.state
@@ -400,7 +407,8 @@ export class AdminPricingDedicated extends Component {
       charges,
       selectedCargoClass,
       setUsers,
-      selectedClients
+      selectedClients,
+      clientSearch
     } = this.state
 
     if (!charges || (charges && !charges[0])) {
@@ -456,7 +464,11 @@ export class AdminPricingDedicated extends Component {
         theme && theme.colors
           ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
           : { background: 'black' }
-
+    const filteredClients = filters.handleSearchChange(
+      clientSearch,
+      ['first_name', 'last_name', 'company_name', 'phone', 'email'],
+      clients
+    )
     const setPricingView = (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
         <div className="flex-5 layout-row pointy" onClick={backBtn}>
@@ -473,19 +485,21 @@ export class AdminPricingDedicated extends Component {
             {feeRows}
           </div>
         </div>
-        <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.fee_row_container}`}>
-          <RoundButton
-            inverse
-            theme={theme}
-            handleNext={() => this.assignUsers()}
-            text="Next >"
-            size="small"
-            active
-          />
+        <div className={`flex-100 layout-row layout-align-end-center layout-wrap ${styles.fee_row_container}`}>
+          <div className="flex-33 layout-row">
+            <RoundButton
+              inverse
+              theme={theme}
+              handleNext={() => this.assignUsers()}
+              text="Next >"
+              size="small"
+              active
+            />
+          </div>
         </div>
       </div>
     )
-    const userTiles = clients.map(c => (
+    const userTiles = filteredClients.slice(0, 7).map(c => (
       <div className={`flex-100 flex-sm-50 flex-md-33 flex-gt-md-20 layout-row ${styles2.assign_user_tile}`}>
         {selectedClients[c.id] ? (
           <GradientBorder
@@ -531,10 +545,18 @@ export class AdminPricingDedicated extends Component {
         <div className="flex-5 layout-row pointy" onClick={() => this.assignUsers()}>
           <span className="hover_text">{'< Back'}</span>
         </div>
-        <div className="flex-100 layout-row">
+        <div className="flex-100 layout-row layout-align-space-between-center">
           <h2>Choose users</h2>
+          <div className="input_box_full flex-40 layout-row layout-align-end-center">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search clients"
+              onChange={this.handleSearchChange}
+            />
+          </div>
         </div>
-        <div className={`flex-100 layout-row layout-align-space-around-start layout-wrap layout-padding ${styles2.users_wrapper}`}>
+        <div className={`flex-100 layout-row layout-align-start-start layout-wrap layout-padding ${styles2.users_wrapper}`}>
           {userTiles}
         </div>
         <div className="flex-100 layout-row layout-align-center-center layout-wrap">
