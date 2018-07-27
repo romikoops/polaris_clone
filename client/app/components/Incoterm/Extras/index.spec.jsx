@@ -28,11 +28,11 @@ const propsBase = {
   shipment
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<IncotermExtras {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.feeHash is empty object', () => {
+test.skip('props.feeHash is empty object', () => {
   const props = {
     ...propsBase,
     feeHash: {}
