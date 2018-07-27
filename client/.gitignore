@@ -28,8 +28,8 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
-.node-env
-# sass
+
+# SASS
 .sass-cache/
 *.css.map
 
