@@ -1,53 +1,63 @@
-import React, { Component } from 'react'
+/* eslint react/prop-types: "off", consistent-return: "off" */
 import * as Scroll from 'react-scroll'
 import Formsy from 'formsy-react'
-import PropTypes from '../../prop-types'
-import styles from './BookingDetails.scss'
+import React, { Component } from 'react'
 import defaults from '../../styles/default_classes.scss'
-import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
-import { ContactSetter } from '../ContactSetter/ContactSetter'
+import styles from './BookingDetails.scss'
 import { CargoDetails } from '../CargoDetails/CargoDetails'
+import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { isEmpty, totalPrice } from '../../helpers'
-import reuseShipments from '../../helpers/reuseShipment'
+import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
+import { isEmpty } from '../../helpers/objectTools'
+
+import {
+  trim,
+  ALIGN_END_CENTER,
+  ALIGN_CENTER_START,
+  ALIGN_START_CENTER,
+  ROW,
+  WRAP_ROW
+} from '../../classNames'
+
+const CONTAINER = `BOOKING_DETAILS ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 
 export class BookingDetails extends Component {
-  static scrollTo (target, offset) {
-    Scroll.scroller.scrollTo(target, {
-      duration: 2000,
-      smooth: true,
-      offset: offset || 0
-    })
-  }
   constructor (props) {
     super(props)
     this.newContactData = {
       contact: {
         companyName: '',
+        email: '',
         firstName: '',
         lastName: '',
-        email: '',
         phone: ''
       },
       location: {
+        city: '',
+        country: '',
         street: '',
         streetNumber: '',
-        zipCode: '',
-        city: '',
-        country: ''
+        zipCode: ''
       }
     }
 
     this.state = {
+      addons: {},
       acceptTerms: false,
+      cargoNotes: '',
       consignee: {},
-      shipper: {},
+      customsCredit: false,
+      finishBookingAttempted: false,
+      hsCodes: {},
+      hsTexts: {},
+      incotermText: '',
       notifyees: [],
+      shipper: {},
+      totalGoodsValue: { value: 0, currency: 'EUR' },
       insurance: {
         bool: null,
         val: 0
       },
-      incotermText: '',
       customs: {
         import: {
           bool: false,
@@ -60,38 +70,27 @@ export class BookingDetails extends Component {
         total: {
           val: 0
         }
-      },
-      addons: {},
-      hsCodes: {},
-      hsTexts: {},
-      totalGoodsValue: { value: 0, currency: 'EUR' },
-      cargoNotes: '',
-      finishBookingAttempted: false,
-      customsCredit: false
+      }
     }
-    this.removeNotifyee = this.removeNotifyee.bind(this)
-    this.toNextStage = this.toNextStage.bind(this)
-    this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
-    this.handleCargoInput = this.handleCargoInput.bind(this)
-    this.handleInsurance = this.handleInsurance.bind(this)
     this.calcInsurance = this.calcInsurance.bind(this)
-    this.setHsCode = this.setHsCode.bind(this)
-    this.handleHsTextChange = this.handleHsTextChange.bind(this)
     this.deleteCode = this.deleteCode.bind(this)
-    this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
-    this.setCustomsFee = this.setCustomsFee.bind(this)
-    this.setContact = this.setContact.bind(this)
-    this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
+    this.handleCargoInput = this.handleCargoInput.bind(this)
+    this.handleHsTextChange = this.handleHsTextChange.bind(this)
+    this.handleInsurance = this.handleInsurance.bind(this)
+    this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
+    this.removeNotifyee = this.removeNotifyee.bind(this)
+    this.setContact = this.setContact.bind(this)
+    this.setCustomsFee = this.setCustomsFee.bind(this)
+    this.setHsCode = this.setHsCode.bind(this)
+    this.toNextStage = this.toNextStage.bind(this)
+    this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
     this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
+    this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
   }
   componentDidMount () {
-    const {
-      prevRequest, setStage, hideRegistration, reusedShipment
-    } = this.props
-    if (reusedShipment && reusedShipment.shipment) {
-      this.loadReusedShipment(reusedShipment)
-    } else if (prevRequest && prevRequest.shipment) {
+    const { prevRequest, setStage, hideRegistration } = this.props
+    if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
     hideRegistration()
@@ -99,12 +98,10 @@ export class BookingDetails extends Component {
     window.scrollTo(0, 0)
   }
   setHsCode (id, codes) {
-    let exCodes
-    if (this.state.hsCodes[id]) {
-      exCodes = [...this.state.hsCodes[id], ...codes]
-    } else {
-      exCodes = codes
-    }
+    const exCodes = this.state.hsCodes[id]
+      ? [...this.state.hsCodes[id], ...codes]
+      : codes
+
     this.setState({
       hsCodes: {
         ...this.state.hsCodes,
@@ -116,10 +113,10 @@ export class BookingDetails extends Component {
     if (type === 'notifyee') {
       const { notifyees } = this.state
       notifyees[index] = contactData
-      this.setState({ notifyees })
-    } else {
-      this.setState({ [type]: contactData })
+
+      return this.setState({ notifyees })
     }
+    this.setState({ [type]: contactData })
   }
   setCustomsFee (target, fee) {
     const { customs } = this.state
@@ -132,10 +129,7 @@ export class BookingDetails extends Component {
     if ((customsData.unknown && fee.bool) || existsUnknown) {
       customs.total.hasUnknown = true
     }
-
-    this.setState({
-      customs
-    })
+    this.setState({ customs })
   }
   handleHsTextChange (event) {
     const { name, value } = event.target
@@ -148,28 +142,16 @@ export class BookingDetails extends Component {
   }
   loadPrevReq (obj) {
     this.setState({
-      consignee: obj.consignee,
-      shipper: obj.shipper,
-      notifyees: obj.notifyees,
-      hsCodes: obj.hsCodes,
-      totalGoodsValue: obj.totalGoodsValue,
       cargoNotes: obj.cargoNotes,
+      consignee: obj.consignee,
+      customsCredit: obj.customsCredit,
       eori: obj.eori,
-      notes: obj.notes,
+      hsCodes: obj.hsCodes,
       incotermText: obj.incotermText,
-      customsCredit: obj.customsCredit
-    })
-  }
-  loadReusedShipment (obj) {
-    const contacts = reuseShipments.reuseContacts(obj.contacts)
-    this.setState({
-      ...contacts,
-      totalGoodsValue: obj.shipment.total_goods_value,
-      cargoNotes: obj.shipment.cargo_notes,
-      eori: obj.shipment.eori,
-      notes: obj.shipment.notes,
-      incotermText: obj.shipment.incoterm_text,
-      customsCredit: obj.shipment.customs_credit
+      notes: obj.notes,
+      notifyees: obj.notifyees,
+      shipper: obj.shipper,
+      totalGoodsValue: obj.totalGoodsValue
     })
   }
   toggleAcceptTerms () {
@@ -186,9 +168,7 @@ export class BookingDetails extends Component {
     })
   }
   toggleCustomsCredit () {
-    this.setState({
-      customsCredit: !this.state.customsCredit
-    })
+    this.setState({ customsCredit: !this.state.customsCredit })
   }
   toggleCustomAddon (target) {
     const { addons } = this.props.shipmentData
@@ -206,22 +186,20 @@ export class BookingDetails extends Component {
     })
   }
   handleInsurance (bool) {
-    // const { insurance } = this.state
-    if (!bool) {
-      this.setState({ insurance: { bool: false, val: 0 } })
-    } else if (bool) {
-      this.calcInsurance(false, true)
+    if (bool) {
+      return this.calcInsurance(false, true)
     }
+    this.setState({ insurance: { bool: false, val: 0 } })
   }
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const iVal = (gVal * 1.1 + +totalPrice(shipmentData.shipment).value) * 0.0017
+    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const iVal = (gVal * 1.1 + parsed) * 0.0017
     if (bool) {
-      this.setState({ insurance: { bool, val: iVal } })
-    } else {
-      this.setState({ insurance: { ...this.state.insurance, val: iVal } })
+      return this.setState({ insurance: { bool, val: iVal } })
     }
+    this.setState({ insurance: { ...this.state.insurance, val: iVal } })
   }
   removeNotifyee (i) {
     const { notifyees } = this.state
@@ -239,48 +217,50 @@ export class BookingDetails extends Component {
   handleCargoInput (event) {
     const { name, value } = event.target
     if (name === 'totalGoodsValue') {
+      const gVal = parseInt(value, 10)
       this.setState({
         [name]: {
           ...this.state[name],
-          value
+          value: gVal
         }
       })
-      this.calcInsurance(+value, false)
-    } else {
-      this.setState({ [name]: value })
+
+      return this.calcInsurance(gVal, false)
     }
+    this.setState({ [name]: value })
   }
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
+    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
 
-    return +totalPrice(shipmentData.shipment).value + customs.val + insurance.val
+    return parsed + customs.val + insurance.val
   }
   toNextStage () {
     const {
-      consignee,
-      shipper,
-      notifyees,
-      hsCodes,
-      totalGoodsValue,
+      addons,
       cargoNotes,
-      insurance,
+      consignee,
       customs,
-      hsTexts,
-      eori,
-      notes,
-      incotermText,
       customsCredit,
-      addons
+      eori,
+      hsCodes,
+      hsTexts,
+      incotermText,
+      insurance,
+      notes,
+      notifyees,
+      shipper,
+      totalGoodsValue
     } = this.state
     if ([shipper, consignee].some(isEmpty)) {
-      BookingDetails.scrollTo('contact_setter')
+      scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
 
       return
     }
     if (cargoNotes === '' || !cargoNotes) {
-      BookingDetails.scrollTo('cargo_notes')
+      scrollTo('cargo_notes')
       this.setState({ finishBookingAttempted: true })
 
       return
@@ -289,6 +269,7 @@ export class BookingDetails extends Component {
     const data = {
       shipment: {
         id: this.props.shipmentData.shipment.id,
+        addons,
         consignee,
         shipper,
         notifyees,
@@ -301,8 +282,7 @@ export class BookingDetails extends Component {
         eori,
         notes,
         incotermText,
-        customsCredit,
-        addons
+        customsCredit
       }
     }
 
@@ -313,11 +293,11 @@ export class BookingDetails extends Component {
 
     const { shipper, consignee } = this.state
     if ([shipper, consignee].some(isEmpty)) {
-      BookingDetails.scrollTo('contact_setter')
+      scrollTo('contact_setter')
 
       return
     }
-    BookingDetails.scrollTo('totalGoodsValue', -50)
+    scrollTo('totalGoodsValue', -50)
   }
   backToDashboard (e) {
     e.preventDefault()
@@ -330,13 +310,11 @@ export class BookingDetails extends Component {
     if (!shipmentData) return ''
 
     const {
-      shipment,
-      hubs,
       contacts,
-      userLocations,
-      // containers,
-      // cargoItems,
-      locations
+      hubs,
+      locations,
+      shipment,
+      userLocations
     } = shipmentData
     if (!shipment || !hubs) return ''
 
@@ -344,132 +322,120 @@ export class BookingDetails extends Component {
       consignee, shipper, notifyees, customs, customsCredit, eori
     } = this.state
 
-    return (
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-center-start"
-        style={{ paddingTop: '60px' }}
-      >
-        {shipment && theme && hubs ? (
-          <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
-        ) : (
-          ''
-        )}
-        <div className={`${styles.wrapper_contact_setter} flex-100 layout-row`}>
-          <ContactSetter
-            contacts={contacts}
-            userLocations={userLocations}
-            shipper={shipper}
-            consignee={consignee}
-            notifyees={notifyees}
-            direction={shipment.direction}
-            setContact={this.setContact}
+    const maybeRouteHubBox = shipment && theme && hubs
+      ? <RouteHubBox shipment={shipment} theme={theme} locations={locations} />
+      : ''
+
+    const ContactSetterComponent = (
+      <ContactSetter
+        consignee={consignee}
+        contacts={contacts}
+        direction={shipment.direction}
+        finishBookingAttempted={this.state.finishBookingAttempted}
+        notifyees={notifyees}
+        removeNotifyee={this.removeNotifyee}
+        setContact={this.setContact}
+        shipper={shipper}
+        theme={theme}
+        userLocations={userLocations}
+      />
+    )
+
+    const CargoDetailsComponent = (
+      <CargoDetails
+        cargoNotes={this.state.cargoNotes}
+        currencies={currencies}
+        customsCredit={customsCredit}
+        customsData={customs}
+        deleteCode={this.deleteCode}
+        eori={eori}
+        finishBookingAttempted={this.state.finishBookingAttempted}
+        handleChange={this.handleCargoInput}
+        handleHsTextChange={this.handleHsTextChange}
+        handleInsurance={this.handleInsurance}
+        handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
+        hsCodes={this.state.hsCodes}
+        hsTexts={this.state.hsTexts}
+        incotermText={this.state.incotermText}
+        insurance={this.state.insurance}
+        notes={this.state.notes}
+        setCustomsFee={this.setCustomsFee}
+        setHsCode={this.setHsCode}
+        shipmentData={shipmentData}
+        shipmentDispatch={shipmentDispatch}
+        tenant={tenant}
+        theme={theme}
+        toggleCustomAddon={this.toggleCustomAddon}
+        toggleCustomsCredit={this.toggleCustomsCredit}
+        totalGoodsValue={this.state.totalGoodsValue}
+        user={user}
+      />
+    )
+
+    const ReviewButtonComponent = (
+      <div className={`${styles.btn_sec} ${WRAP_ROW(100)} layout-align-center`}>
+        <div className={`${defaults.content_width} ${WRAP_ROW('none')} ${ALIGN_START_CENTER}`}>
+          <div className={`${ROW(50)} ${ALIGN_START_CENTER}`} />
+          <div className={`${ROW(50)} ${ALIGN_END_CENTER}`}>
+            <div className="flex-none layout-row">
+              <RoundButton theme={theme} text="Review Booking Request" active />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+
+    const BackButtonComponent = (
+      <div className={`${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`}>
+        <div className={trim(`
+              ${defaults.content_width}
+              content-width
+              ${ROW('none')} 
+              ${ALIGN_START_CENTER}
+            `)}
+        >
+          <RoundButton
+            back
+            handleNext={e => this.backToDashboard(e)}
+            iconClass="fa-angle-left"
+            text="Back to dashboard"
             theme={theme}
-            removeNotifyee={this.removeNotifyee}
-            finishBookingAttempted={this.state.finishBookingAttempted}
           />
         </div>
+      </div>
+    )
+
+    return (
+      <div
+        className={CONTAINER}
+        style={{ paddingTop: '60px' }}
+      >
+        {maybeRouteHubBox}
+        <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
+          {ContactSetterComponent}
+        </div>
+
         <Formsy
-          onValidSubmit={this.toNextStage}
-          onInvalidSubmit={this.handleInvalidSubmit}
           className="flex-100"
+          onInvalidSubmit={this.handleInvalidSubmit}
+          onValidSubmit={this.toNextStage}
         >
-          <CargoDetails
-            theme={theme}
-            handleChange={this.handleCargoInput}
-            shipmentData={shipmentData}
-            handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
-            toggleCustomAddon={this.toggleCustomAddon}
-            hsCodes={this.state.hsCodes}
-            hsTexts={this.state.hsTexts}
-            setHsCode={this.setHsCode}
-            handleHsTextChange={this.handleHsTextChange}
-            deleteCode={this.deleteCode}
-            cargoNotes={this.state.cargoNotes}
-            totalGoodsValue={this.state.totalGoodsValue}
-            handleInsurance={this.handleInsurance}
-            insurance={this.state.insurance}
-            shipmentDispatch={shipmentDispatch}
-            currencies={currencies}
-            customsData={customs}
-            notes={this.state.notes}
-            setCustomsFee={this.setCustomsFee}
-            user={user}
-            eori={eori}
-            customsCredit={customsCredit}
-            tenant={tenant}
-            incotermText={this.state.incotermText}
-            toggleCustomsCredit={this.toggleCustomsCredit}
-            finishBookingAttempted={this.state.finishBookingAttempted}
-          />
-          <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-            <div
-              className={`${
-                defaults.content_width
-              } flex-none  layout-row layout-wrap layout-align-start-center`}
-            >
-              <div className="flex-50 layout-row layout-align-start-center" />
-              <div className="flex-50 layout-row layout-align-end-center">
-                <div className="flex-none layout-row">
-                  <RoundButton theme={theme} text="Review Booking Request" active />
-                </div>
-              </div>
-            </div>
-          </div>
+          {CargoDetailsComponent}
+          {ReviewButtonComponent}
           <hr className={`${styles.sec_break} flex-100`} />
-          <div
-            className={`${
-              styles.back_to_dash_sec
-            } flex-100 layout-row layout-wrap layout-align-center`}
-          >
-            <div
-              className={`${
-                defaults.content_width
-              } flex-none content-width layout-row layout-align-start-center`}
-            >
-              <RoundButton
-                theme={theme}
-                text="Back to dashboard"
-                back
-                iconClass="fa-angle-left"
-                handleNext={e => this.backToDashboard(e)}
-              />
-            </div>
-          </div>
+          {BackButtonComponent}
         </Formsy>
       </div>
     )
   }
 }
 
-BookingDetails.propTypes = {
-  theme: PropTypes.theme,
-  tenant: PropTypes.objectOf(PropTypes.any),
-  shipmentData: PropTypes.shipmentData,
-  nextStage: PropTypes.func.isRequired,
-  prevRequest: PropTypes.shape({
-    shipment: PropTypes.shipment
-  }),
-  reusedShipment: PropTypes.shape({
-    shipment: PropTypes.shipment
-  }),
-  setStage: PropTypes.func.isRequired,
-  hideRegistration: PropTypes.func.isRequired,
-  shipmentDispatch: PropTypes.shape({
-    toDashboard: PropTypes.func
-  }).isRequired,
-  currencies: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string,
-    rate: PropTypes.number
-  })).isRequired,
-  user: PropTypes.user.isRequired
-}
-
-BookingDetails.defaultProps = {
-  theme: null,
-  tenant: null,
-  prevRequest: null,
-  shipmentData: null,
-  reusedShipment: null
+function scrollTo (target, offset) {
+  Scroll.scroller.scrollTo(target, {
+    duration: 2000,
+    smooth: true,
+    offset: offset || 0
+  })
 }
 
 export default BookingDetails

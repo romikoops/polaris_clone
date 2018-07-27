@@ -5,6 +5,7 @@ import TruckingDetails from './TruckingDetails'
 
 const propsBase = {
   theme,
+  target: 'on_carriage',
   trucking: {
     on_carriage: {
       truck: 'FOO_ON_CARRIAGE'
@@ -23,7 +24,7 @@ test('shallow render', () => {
   expect(shallow(<TruckingDetails {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.handleTruckingDetailsChange is called', () => {
+test('handleTruckingDetailsChange is called', () => {
   const props = {
     ...propsBase,
     handleTruckingDetailsChange: jest.fn()

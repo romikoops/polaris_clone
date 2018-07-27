@@ -18,7 +18,9 @@ jest.mock('../../helpers', () => ({
   gradientGenerator: x => x,
   gradientTextGenerator: x => x,
   gradientBorderGenerator: x => x,
-  switchIcon: x => x
+  switchIcon: x => x,
+  formattedPriceValue: () => 1034,
+  totalPrice: () => ({ currency: 'CNY' })
 }))
 jest.mock('moment', () => {
   const format = () => 19

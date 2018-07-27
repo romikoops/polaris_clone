@@ -20,62 +20,6 @@ jest.mock('../../helpers', () => ({
   isEmpty: () => true,
   camelize: x => x
 }))
-jest.mock('../Checkbox/Checkbox', () => ({
-  // eslint-disable-next-line react/prop-types
-  Checkbox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('./getModals', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Incoterm/Box', () => ({
-  // eslint-disable-next-line react/prop-types
-  IncotermBox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Incoterm/Row', () => ({
-  // eslint-disable-next-line react/prop-types
-  IncotermRow: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Tooltip/Tooltip', () => ({
-  // eslint-disable-next-line react/prop-types
-  Tooltip: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../FlashMessages/FlashMessages', () => ({
-  // eslint-disable-next-line react/prop-types
-  FlashMessages: ({ children }) => <div>{children}</div>
-}))
-jest.mock('react-day-picker/DayPickerInput', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../../hocs/GmapsLoader', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../TruckingDetails/TruckingDetails', () => ({
-  // eslint-disable-next-line react/prop-types
-  default: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../ShipmentLocationBox/ShipmentLocationBox', () => ({
-  // eslint-disable-next-line react/prop-types
-  ShipmentLocationBox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../ShipmentContainers/ShipmentContainers', () => ({
-  // eslint-disable-next-line react/prop-types
-  ShipmentContainers: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../ShipmentCargoItems/ShipmentCargoItems', () => ({
-  // eslint-disable-next-line react/prop-types
-  ShipmentCargoItems: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../TextHeading/TextHeading', () => ({
-  // eslint-disable-next-line react/prop-types
-  TextHeading: ({ children }) => <div>{children}</div>
-}))
 
 // eslint-disable-next-line import/first
 import { ShipmentDetails } from './ShipmentDetails'

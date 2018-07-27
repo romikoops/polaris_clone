@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, identity } from 'enzyme'
+import { mount } from 'enzyme'
 import { Alert } from './Alert'
 
 /**
@@ -7,7 +7,6 @@ import { Alert } from './Alert'
  */
 
 const propsBase = {
-  onClose: identity,
   message: {
     type: 'notice',
     text: 'FOO_MESSAGE_TEXT'
@@ -19,10 +18,8 @@ test('click calls onClose function', () => {
     ...propsBase,
     onClose: jest.fn()
   }
-
   const wrapper = mount(<Alert {...props} />)
-
-  expect(props.onClose).not.toHaveBeenCalled()
   wrapper.find('i.fa').first().simulate('click')
+
   expect(props.onClose).toHaveBeenCalled()
 })
