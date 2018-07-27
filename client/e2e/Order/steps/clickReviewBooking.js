@@ -6,7 +6,7 @@ const FINISH_BOOKING_LOADED = {
 export default async function clickReviewBooking (puppeteer) {
   await puppeteer.saveStep('clickReviewBooking.0')
 
-  expect(await puppeteer.clickWithText('p', 'Review Booking')).toBeTruthy()
+  expect(await puppeteer.clickWithText('p', 'Review Booking Request')).toBeTruthy()
   expect(await puppeteer.waitForText(FINISH_BOOKING_LOADED)).toBeTruthy()
 
   // expect(await puppeteer.shouldMatchScreenshot('review.booking', 110)).toBeTruthy()
