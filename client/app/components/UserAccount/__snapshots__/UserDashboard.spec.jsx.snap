@@ -99,6 +99,7 @@ exports[`shallow render 1`] = `
       <AdminSearchableClients
         clients={Array []}
         handleClick={[Function]}
+        placeholder="Search Contacts"
         seeAll={[Function]}
         theme={
           Object {
