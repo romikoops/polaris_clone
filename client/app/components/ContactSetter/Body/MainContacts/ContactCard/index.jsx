@@ -3,6 +3,7 @@ import Truncate from 'react-truncate'
 import PropTypes from '../../../../../prop-types'
 import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../../../../helpers'
+import { RoundButton } from '../../../../RoundButton/RoundButton';
 
 function commaSeparatedWhenBothExist (str1, str2) {
   return str1 && str2 ? `${str1}, ${str2}` : (str1 || str2)
@@ -20,7 +21,7 @@ function locationForDisplay (location) {
 }
 
 export default function ShipmentContactsBoxMainContactsContactCard ({
-  contactData, theme, contactType, showAddressBook
+  contactData, theme, contactType, showAddressBook, showEditContact, handleClick
 }) {
   const { contact, location } = contactData
   const iconStyle = {
@@ -29,17 +30,24 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
 
   const borderStyles = theme ? { borderColor: theme.colors.secondary } : {}
 
-  const editIcon = (
-    <i
-      className={`${styles.edit_icon} fa fa-pencil-square-o`}
-      onClick={() => showAddressBook(contactType)}
-    />
+  const icons = (
+    <div className="flex layout-row" onClick={handleClick}>
+      <i
+        className={`${styles.plus_icon} fa fa-plus`}
+        onClick={() => showAddressBook(contactType)}
+      />
+      <i
+        className={`${styles.edit_icon} fa fa-pencil`}
+        onClick={() => showEditContact(contactType)}
+      />
+    </div>
   )
 
   const { addressDetails, cityCountry } = locationForDisplay(location)
+
   return (
     <div className={`flex-100 layout-row layout-wrap ${styles.contact_card}`} style={borderStyles}>
-      {editIcon}
+      {icons}
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>

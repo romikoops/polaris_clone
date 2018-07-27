@@ -7,7 +7,7 @@ import { PlaceSearch } from '../../Maps/PlaceSearch'
 import IconLable from '../IconLable'
 
 export default function AddressDetailsSection ({
-  theme, contactData, handlePlaceChange, setContactAttempted, setContactBtn
+  theme, contactData, handlePlaceChange, setContactAttempted, setContactBtn, handleChange
 }) {
   return (
     <div className="flex offset-5 layout-row layout-wrap layout-align-start-start">
@@ -44,6 +44,7 @@ export default function AddressDetailsSection ({
                 fontSize: '12px',
                 bottom: '-19px'
               }}
+              onChanghe={handleChange}
               validations="minLength:2"
               validationErrors={{
                 isDefaultRequiredValue: 'Minimum 2 characters',

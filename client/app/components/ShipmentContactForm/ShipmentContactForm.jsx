@@ -83,7 +83,7 @@ export class ShipmentContactForm extends Component {
   }
 
   render () {
-    const { theme, contactType } = this.props
+    const { theme, contactType, handleChange } = this.props
     const { contactData } = this.state
 
     const setContactBtn = (
@@ -103,6 +103,7 @@ export class ShipmentContactForm extends Component {
         theme={theme}
         contactData={contactData}
         handlePlaceChange={place => this.handlePlaceChange(place)}
+        handleChange={handleChange}
         setContactAttempted={this.state.setContactAttempted}
         setContactBtn={setContactBtn}
       />

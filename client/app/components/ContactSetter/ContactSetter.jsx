@@ -5,6 +5,7 @@ import defs from '../../styles/default_classes.scss'
 import { Modal } from '../Modal/Modal'
 import ContactSetterBody from './Body'
 import ContactSetterNewContactWrapper from './NewContactWrapper'
+import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 
 export class ContactSetter extends Component {
   constructor (props) {
@@ -33,12 +34,18 @@ export class ContactSetter extends Component {
 
     this.state = {
       modal: '',
-      showModal: false
+      showModal: false,
+      contactData: {
+        contact: {},
+        location: {}
+      }
     }
+    this.setContactForEdit = this.setContactForEdit.bind(this)
   }
 
   setContactForEdit (contactData) {
     this.setState({ contactData, showModal: true })
+    debugger // eslint-disable-line no-debugger
   }
 
   autofillContact (contactData) {
@@ -59,6 +66,7 @@ export class ContactSetter extends Component {
     if (contactType === this.contactTypes[0]) {
       contacts = [...userLocations, ...contacts]
     }
+
     return contacts.filter(contactData => (
       shipper !== contactData &&
       consignee !== contactData &&
@@ -102,9 +110,47 @@ export class ContactSetter extends Component {
     this.setState({ modal, showModal: true })
   }
 
+  editProfile () {
+    const { contactData } = this.props
+    const { contact } = contactData
+    this.setState({
+      editBool: true,
+      editObj: contact
+    })
+  }
+
+  handleChange (ev) {
+    const { contact, location } = ev.target
+    this.setState({
+      contactData: {
+        ...this.state.contactData,
+        contact,
+        location
+      }
+    })
+  }
+
+  showEditContact (contactType, contact) {
+    const modal = (
+      <Modal
+        component={
+          <ShipmentContactForm
+            theme={this.props.theme}
+            contactType={contactType}
+            handleChange={e => this.handleChange(e)}
+          />
+        }
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleShowModal()}
+      />
+    )
+    this.setState({ modal, showModal: true, contact })
+  }
+
   render () {
     const {
-      theme, shipper, consignee, notifyees
+      theme, shipper, consignee, notifyees, contacts
     } = this.props
     const { showModal, modal } = this.state
 
@@ -122,10 +168,14 @@ export class ContactSetter extends Component {
             className={`${styles.wrapper_main_h1} flex-100`}
             onClick={null}
           >
+
             <h1> Set Contact Details</h1>
             <hr className={styles.main_hr} />
           </div>
-          <div className="flex-100 layout-row layout-align-center-center">
+          <div
+            className="flex-100 layout-row layout-align-center-center"
+          >
+          {console.log(contacts)}
             <ContactSetterBody
               consignee={consignee}
               shipper={shipper}
@@ -133,6 +183,8 @@ export class ContactSetter extends Component {
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
+              handleClick={(contactData, index) => this.setContact(contactData, index)}
+              showEditContact={contactType => this.showEditContact(contactType)}
               showAddressBook={(contactType, index) => this.showAddressBook(contactType, index)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
