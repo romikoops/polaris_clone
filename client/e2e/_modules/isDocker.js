@@ -1,3 +1,3 @@
 export function isDocker () {
-  return process.env.PUPPETEER_HEADLESS === 'true'
+  return process.env.E2E_DOCKER === 'true'
 }

@@ -100,7 +100,7 @@ module MultiTenantTools
       },
       emails:    {
         sales:   "sales@hartrodt.com",
-        support: " ah_ham@hartrodt.com"
+        support: "ah_ham@hartrodt.com"
       },
       subdomain: "hartrodt",
       name:      "a.hartrodt",
@@ -130,7 +130,6 @@ module MultiTenantTools
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
           "a.hartrodt is to discuss the validity of the presented prices with the product owners."
-
         ],
         carriage_options:    {
           on_carriage:  {

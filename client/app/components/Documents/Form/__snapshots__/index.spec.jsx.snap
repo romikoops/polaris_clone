@@ -2,13 +2,15 @@
 
 exports[`displayOnly is true 1`] = `
 <div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  className="form flex-100 layout-row
+        layout-align-none-center layout-wrap"
 >
   <div
     className="flex layout-row layout-wrap"
   >
     <div
-      className="form_label flex-40 layout-row layout-align-start-center"
+      className="form_label flex-40 layout-row
+          layout-align-start-center"
     >
       <p
         className="flex-none"
@@ -36,10 +38,12 @@ exports[`displayOnly is true 1`] = `
     className="icon_row flex-none layout-row layout-align-none-center"
   >
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+            layout-align-center-center"
     />
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+              layout-align-center-center"
       onClick={[Function]}
     >
       <i
@@ -47,11 +51,13 @@ exports[`displayOnly is true 1`] = `
       />
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none
+            layout-row layout-align-center-center"
     />
   </div>
   <div
-    className="file_error  flex-100 layout-row layout-align-center"
+    className="file_error  flex-100
+          layout-row layout-align-center"
   >
     <p
       className="flex-100"
@@ -64,13 +70,15 @@ exports[`displayOnly is true 1`] = `
 
 exports[`multiple is true 1`] = `
 <div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  className="form flex-100 layout-row
+        layout-align-none-center layout-wrap"
 >
   <div
     className="flex layout-row layout-wrap"
   >
     <div
-      className="form_label flex-40 layout-row layout-align-start-center"
+      className="form_label flex-40 layout-row
+          layout-align-start-center"
     >
       <p
         className="flex-none"
@@ -104,7 +112,8 @@ exports[`multiple is true 1`] = `
     >
       <form>
         <button
-          className="icon_btn flex-none layout-row layout-align-center-center"
+          className="icon_btn flex-none layout-row
+                    layout-align-center-center"
           onClick={[Function]}
         >
           <i
@@ -128,14 +137,17 @@ exports[`multiple is true 1`] = `
       </form>
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+            layout-align-center-center"
     />
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none
+            layout-row layout-align-center-center"
     />
   </div>
   <div
-    className="file_error  flex-100 layout-row layout-align-center"
+    className="file_error  flex-100
+          layout-row layout-align-center"
   >
     <p
       className="flex-100"
@@ -148,13 +160,15 @@ exports[`multiple is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  className="form flex-100 layout-row
+        layout-align-none-center layout-wrap"
 >
   <div
     className="flex layout-row layout-wrap"
   >
     <div
-      className="form_label flex-40 layout-row layout-align-start-center"
+      className="form_label flex-40 layout-row
+          layout-align-start-center"
     >
       <p
         className="flex-none"
@@ -188,7 +202,8 @@ exports[`shallow render 1`] = `
     >
       <form>
         <button
-          className="icon_btn flex-none layout-row layout-align-center-center"
+          className="icon_btn flex-none layout-row
+                    layout-align-center-center"
           onClick={[Function]}
         >
           <i
@@ -212,7 +227,8 @@ exports[`shallow render 1`] = `
       </form>
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+              layout-align-center-center"
       onClick={[Function]}
     >
       <i
@@ -220,11 +236,13 @@ exports[`shallow render 1`] = `
       />
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none
+            layout-row layout-align-center-center"
     />
   </div>
   <div
-    className="file_error  flex-100 layout-row layout-align-center"
+    className="file_error  flex-100
+          layout-row layout-align-center"
   >
     <p
       className="flex-100"
@@ -237,13 +255,15 @@ exports[`shallow render 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  className="form flex-100 layout-row
+        layout-align-none-center layout-wrap"
 >
   <div
     className="flex layout-row layout-wrap"
   >
     <div
-      className="form_label flex-40 layout-row layout-align-start-center"
+      className="form_label flex-40 layout-row
+          layout-align-start-center"
     >
       <p
         className="flex-none"
@@ -277,7 +297,8 @@ exports[`theme is falsy 1`] = `
     >
       <form>
         <button
-          className="icon_btn flex-none layout-row layout-align-center-center"
+          className="icon_btn flex-none layout-row
+                    layout-align-center-center"
           onClick={[Function]}
         >
           <i
@@ -305,7 +326,8 @@ exports[`theme is falsy 1`] = `
       </form>
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+              layout-align-center-center"
       onClick={[Function]}
     >
       <i
@@ -313,11 +335,13 @@ exports[`theme is falsy 1`] = `
       />
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none
+            layout-row layout-align-center-center"
     />
   </div>
   <div
-    className="file_error  flex-100 layout-row layout-align-center"
+    className="file_error  flex-100
+          layout-row layout-align-center"
   >
     <p
       className="flex-100"
@@ -330,13 +354,15 @@ exports[`theme is falsy 1`] = `
 
 exports[`viewer is true 1`] = `
 <div
-  className="form flex-100 layout-row layout-align-none-center layout-wrap"
+  className="form flex-100 layout-row
+        layout-align-none-center layout-wrap"
 >
   <div
     className="flex layout-row layout-wrap"
   >
     <div
-      className="form_label flex-40 layout-row layout-align-start-center"
+      className="form_label flex-40 layout-row
+          layout-align-start-center"
     >
       <p
         className="flex-none"
@@ -370,7 +396,8 @@ exports[`viewer is true 1`] = `
     >
       <form>
         <button
-          className="icon_btn flex-none layout-row layout-align-center-center"
+          className="icon_btn flex-none layout-row
+                    layout-align-center-center"
           onClick={[Function]}
         >
           <i
@@ -394,27 +421,28 @@ exports[`viewer is true 1`] = `
       </form>
     </div>
     <div
-      className="icon_btn flex-none layout-row layout-align-center-center"
+      className="icon_btn flex-none layout-row
+              layout-align-center-center"
       onClick={[Function]}
     >
       <i
         className="fa fa-trash"
       />
     </div>
-    <Link
+    <a
       className="icon_btn flex-none layout-row layout-align-center-center"
-      replace={false}
+      href="FOO_SIGNED_URL"
       target="_blank"
-      to="FOO_SIGNED_URL"
     >
       <i
         className="clip fa fa-eye"
         style="#333"
       />
-    </Link>
+    </a>
   </div>
   <div
-    className="file_error  flex-100 layout-row layout-align-center"
+    className="file_error  flex-100
+          layout-row layout-align-center"
   >
     <p
       className="flex-100"

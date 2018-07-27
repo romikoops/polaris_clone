@@ -134,6 +134,7 @@ exports[`shallow render 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value={11}
                   wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
@@ -650,6 +651,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value={11}
                   wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
@@ -1195,6 +1197,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value={11}
                   wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
@@ -1879,6 +1882,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value={20001}
                   wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>

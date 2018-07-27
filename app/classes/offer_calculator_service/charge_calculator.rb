@@ -28,7 +28,6 @@ module OfferCalculatorService
       calc_cargo_charges
       @grand_total_charge.update_price!
       @grand_total_charge.save
-
       @grand_total_charge
     end
 

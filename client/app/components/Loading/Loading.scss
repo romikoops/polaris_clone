@@ -1,5 +1,133 @@
 :local {
+
+  .cube {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    font-size: 37px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transition: -webkit-transform 0.5s 0.1s;
+    transition: transform 0.5s 0.1s;
+    perspective: 9999px;
+    margin: -40px 0 0 -40px;
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    margin-left: -37px;
+    top: 65px;
+    opacity: 1;
+
+    &.preload {
+      z-index: 11;
+      top: 50%;
+      margin-top: -60px;
+      -webkit-animation: panel 2.2s infinite forwards;
+      animation: panel 2.2s infinite forwards;
+
+      .cube_face {
+        color: black;
+        // border: 1px solid #E0E0E0;
+        // box-shadow: inset 0 0 0 1px #E0E0E0, 0 0 1px 1px #E0E0E0;
+      }
+    }
+
+    .cube_face {
+      width: inherit;
+      height: inherit;
+      position: absolute;
+      background: white;
+      // box-shadow: inset 0 0 0 1px #333, 0 0 1px 1px #333;
+      opacity: 1;
+    }
+
+    .cube_face_front {
+      transform: translate3d(0, 0, 40px);
+      -webkit-transform: translate3d(0, 0, 40px);
+    }
+
+    .cube_face_back {
+      -webkit-transform: rotateY(180deg) translate3d(0, 0, 40px);
+              transform: rotateY(180deg) translate3d(0, 0, 40px);
+    }
+
+    .cube_face_left {
+      i {
+        transform: scaleX(-1)
+      }
+      -webkit-transform: rotateY(-90deg) translate3d(0, 0, 40px);
+              transform: rotateY(-90deg) translate3d(0, 0, 40px);
+    }
+
+    .cube_face_right {
+       i {
+         transform: scaleX(-1)
+       }
+      -webkit-transform: rotateY(90deg) translate3d(0, 0, 40px);
+              transform: rotateY(90deg) translate3d(0, 0, 40px);
+    }
+
+    .cube_face_top {
+      -webkit-transform: rotateX(90deg) translate3d(0, 0, 40px);
+              transform: rotateX(90deg) translate3d(0, 0, 40px);
+    }
+
+    .cube_face_bottom {
+      -webkit-transform: rotateX(-90deg) translate3d(0, 0, 40px);
+              transform: rotateX(-90deg) translate3d(0, 0, 40px);
+    }
+  }
+
+  @-webkit-keyframes tvA3rrxSrASEeIEzhrhIN {
+    0% {
+      -webkit-transform: rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+      -webkit-transform: rotateY(90deg) rotateZ(0deg);
+    }
+    40% {
+      -webkit-transform: rotateX(45deg) rotateZ(45deg);
+    }
+    60% {
+      -webkit-transform: rotateX(90deg) rotateY(180deg) rotateX(90deg);
+    }
+    80% {
+      -webkit-transform: rotateX(310deg) rotateZ(230deg);
+    }
+    100% {
+      -webkit-transform: rotateX(360deg) rotateZ(360deg);
+    }
+  }
+
+  @keyframes tvA3rrxSrASEeIEzhrhIN {
+    0% {
+      -webkit-transform: rotateY(0deg) rotateZ(0deg);
+      transform: rotateY(0deg) rotateZ(0deg);
+    }
+    20% {
+    -webkit-transform: rotateY(90deg) rotateZ(0deg);
+    transform: rotateY(90deg) rotateZ(0deg);
+    }
+    40% {
+    -webkit-transform: rotateX(45deg) rotateZ(45deg);
+    transform: rotateX(45deg) rotateZ(45deg);
+    }
+    60% {
+    -webkit-transform: rotateX(90deg) rotateY(180deg) rotateX(90deg);
+    transform: rotateX(90deg) rotateY(180deg) rotateX(90deg);
+    }
+    80% {
+    -webkit-transform: rotateX(310deg) rotateZ(230deg);
+    transform: rotateX(310deg) rotateZ(230deg)
+    }
+    100% {
+    -webkit-transform: rotateX(360deg) rotateZ(360deg);
+    transform: rotateX(360deg) rotateZ(360deg)
+    }
+  }
   .loader_box {
+    background: white;
     position: fixed;
     height: 100%;
     width:100%;
@@ -9,77 +137,77 @@
     bottom: 0;
     z-index: 500;
   }
-  .loader {
-    position: fixed;
-    height: 100%;
-    width:100%;
-    top:0;
-    right:0;
-    left:0;
-    bottom: 0;
-    background: whitesmoke;
-  }
-  .loader_anim-enter {
-    opacity: 0.01;
-  }
+  // .loader {
+  //   position: fixed;
+  //   height: 100%;
+  //   width:100%;
+  //   top:0;
+  //   right:0;
+  //   left:0;
+  //   bottom: 0;
+  //   background: whitesmoke;
+  // }
+  // .loader_anim-enter {
+  //   opacity: 0.01;
+  // }
 
-  .loader_anim-enter.loader_anim-enter-active {
-    opacity: 1;
-    transition: opacity 500ms ease-in;
-  }
+  // .loader_anim-enter.loader_anim-enter-active {
+  //   opacity: 1;
+  //   transition: opacity 500ms ease-in;
+  // }
 
-  .loader_anim-leave {
-    opacity: 1;
-  }
+  // .loader_anim-leave {
+  //   opacity: 1;
+  // }
 
-  .loader_anim-leave.loader_anim-leave-active {
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
-  }
-   @keyframes dot_bulge {
-    0%, 100% {
-      height: 10px;
-      width: 10px;
-    }
-    50% {
-      height: 20px;
-      width: 20px;
-    }
-  }
-  @keyframes infinite-spinning {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  .dot {
-    border-radius: 50%;
-    height: 15px;
-    width: 15px;
-  }
-  .dot1{
-    @extend .dot;
-    // animation: dot_bulge 3s infinite;
-    // animation-delay: 1s;
-  }
-  .dot2{
-    @extend .dot;
-    // animation: dot_bulge 3s infinite;
-    // animation-delay: 2s;
-  }
-  .dot3{
-    @extend .dot;
-    // animation: dot_bulge 3s infinite;
-    // animation-delay: 3s;
-  }
-  .logo {
-    // animation: infinite-spinning 3s infinite;
-  }
-  .dot_row {
-    width:200px;
-    height: 50px;
-  }
- 
+  // .loader_anim-leave.loader_anim-leave-active {
+  //   opacity: 0.01;
+  //   transition: opacity 300ms ease-in;
+  // }
+  //  @keyframes dot_bulge {
+  //   0%, 100% {
+  //     height: 10px;
+  //     width: 10px;
+  //   }
+  //   50% {
+  //     height: 20px;
+  //     width: 20px;
+  //   }
+  // }
+  // @keyframes infinite-spinning {
+  //   from {
+  //     transform: rotate(0deg);
+  //   }
+  //   to {
+  //     transform: rotate(360deg);
+  //   }
+  // }
+  // .dot {
+  //   border-radius: 50%;
+  //   height: 15px;
+  //   width: 15px;
+  // }
+  // .dot1{
+  //   @extend .dot;
+  //   // animation: dot_bulge 3s infinite;
+  //   // animation-delay: 1s;
+  // }
+  // .dot2{
+  //   @extend .dot;
+  //   // animation: dot_bulge 3s infinite;
+  //   // animation-delay: 2s;
+  // }
+  // .dot3{
+  //   @extend .dot;
+  //   // animation: dot_bulge 3s infinite;
+  //   // animation-delay: 3s;
+  // }
+  // .logo {
+  //   // animation: infinite-spinning 3s infinite;
+  // }
+  // .dot_row {
+  //   width:200px;
+  //   height: 50px;
+  // }
+
 }

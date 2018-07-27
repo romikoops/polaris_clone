@@ -157,6 +157,12 @@
   .edit_icon {
     cursor: pointer;
   }
+  .profile_edit_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
   .save {
     font-size: 15px;
     color: #219653;

@@ -8,178 +8,39 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-start dashboard_main"
   >
     <div
-      className="flex-100 layout-row layout-wrap layout-align-start-start dashboard_top"
+      className="layout-row flex-100 layout-align-space-between-start header"
     >
       <div
-        className="flex-100 layout-row left layout-align-center-center"
+        className="layout-row flex-100 layout-align-start-center 
+              headerElement"
       >
-        <div
-          className="flex-100 layout-row layout-align-start-center welcome"
+        <span
+          className="layout-row flex-10 layout-align-center-center"
         >
-          <h2
-            className="flex-none"
-          >
-            Welcome back, 
+          <i
+            className="fa fa-user clip bigProfile"
+            style="#333"
+          />
+        </span>
+        <span
+          className="welcome flex-90 layout-row"
+        >
+          Welcome back,  
+          <b>
             John
-          </h2>
-        </div>
-        <div
-          className="flex-none layout-row layout-align-center-center carousel"
-        >
-          <Carousel
-            fade={true}
-            noSlides={1}
-            slides={
-              Array [
-                Object {
-                  "header": "New York",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/NY_sm.jpg",
-                  "subheader": "USA",
-                },
-                Object {
-                  "header": "Shanghai",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/shanghai_sm.jpg",
-                  "subheader": "China",
-                },
-                Object {
-                  "header": "Singapore",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/Singapore_sm.jpg",
-                  "subheader": "Singapore",
-                },
-                Object {
-                  "header": "Seoul",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/seoul_sm.jpg",
-                  "subheader": "South Korea",
-                },
-                Object {
-                  "header": "Hanoi",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/Hanoi_sm.jpg",
-                  "subheader": "Vietnam",
-                },
-                Object {
-                  "header": "Shenzhen",
-                  "image": "https://assets.itsmycargo.com/assets/cityimages/Shenzhen_sm.jpg",
-                  "subheader": "China",
-                },
-              ]
-            }
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <div
-          className="flex-none layout-row layout-align-center-center dash_btn"
-        >
-          <RoundButton
-            active={true}
-            handleNext={[Function]}
-            iconClass="fa-archive"
-            size="large"
-            text="Find Rates"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <div
-          className="flex-50 layout-row right layout-wrap layout-align-space-between-space-between"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center stat_box"
-          >
-            <h1
-              className="flex-none"
-            >
-              0
-            </h1>
-            <div
-              className="flex-none layout-row layout-align-center-center stat_box_title"
-            >
-              <h3
-                className="flex-none"
-              >
-                Total Shipments
-              </h3>
-            </div>
-          </div>
-          <div
-            className="flex-none layout-row layout-align-center-center stat_box"
-          >
-            <h1
-              className="flex-none"
-            >
-              0
-            </h1>
-            <div
-              className="flex-none layout-row layout-align-center-center stat_box_title"
-            >
-              <h3
-                className="flex-none"
-              >
-                Requested Shipments
-              </h3>
-            </div>
-          </div>
-          <div
-            className="flex-none layout-row layout-align-center-center stat_box"
-          >
-            <h1
-              className="flex-none"
-            >
-              0
-            </h1>
-            <div
-              className="flex-none layout-row layout-align-center-center stat_box_title"
-            >
-              <h3
-                className="flex-none"
-              >
-                Shipments in Progress
-              </h3>
-            </div>
-          </div>
-          <div
-            className="flex-none layout-row layout-align-center-center stat_box"
-          >
-            <h1
-              className="flex-none"
-            >
-              0
-            </h1>
-            <div
-              className="flex-none layout-row layout-align-center-center stat_box_title"
-            >
-              <h3
-                className="flex-none"
-              >
-                Completed Shipments
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="layout-row flex-100 layout-wrap layout-align-center-center border_divider"
-    >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-start"
-      >
-        <TextHeading
-          className="flex-non clip"
-          size={1}
-          text="Shipments"
+          </b>
+        </span>
+        <SquareButton
+          active={true}
+          back={false}
+          border={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-archive"
+          size="large"
+          text="Find Rates"
           theme={
             Object {
               "colors": Object {
@@ -189,71 +50,44 @@ exports[`shallow render 1`] = `
             }
           }
         />
-        <UserMergedShipHeaders
-          title="Requested Shipments"
-          total={0}
-        />
-        <div
-          className="flex-100 layout-row layout-align-start-center layout-wrap"
-        >
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-          >
-            <p
-              className="flex-none"
-            >
-               No Shipments requested.
-            </p>
-          </div>
-          <div
-            className="flex-100 layout-row layout-align-end-center"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center pointy"
-              onClick={[Function]}
-              value="1"
-            >
-              <p
-                className="flex-none"
-              >
-                See all
-              </p>
-            </div>
-          </div>
-        </div>
-        <UserMergedShipHeaders
-          title="In Process"
-          total={0}
-        />
-        <div
-          className="flex-100 layout-row layout-align-start-center layout-wrap"
-        >
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-          >
-            <p
-              className="flex-none"
-            >
-               No Shipments in process.
-            </p>
-          </div>
-          <div
-            className="flex-100 layout-row layout-align-end-center"
-          >
-            <div
-              className="flex-none layout-row layout-align-center-center pointy"
-              onClick={[Function]}
-              value="2"
-            >
-              <p
-                className="flex-none"
-              >
-                See all
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
+    </div>
+    <ShipmentOverviewCard
+      admin={false}
+      dispatches={
+        Object {
+          "getShipment": [Function],
+          "goTo": [Function],
+        }
+      }
+      hubs={Object {}}
+      noTitle={false}
+      shipments={Array []}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <div
+      className="layout-row flex-100 layout-align-center-center space"
+    >
+      <span
+        className="flex-15"
+        onClick={[Function]}
+      >
+        <u>
+          <b>
+            See more shipments
+          </b>
+        </u>
+      </span>
+      <div
+        className="flex-85 separator"
+      />
     </div>
   </div>
   <div
@@ -265,6 +99,7 @@ exports[`shallow render 1`] = `
       <AdminSearchableClients
         clients={Array []}
         handleClick={[Function]}
+        placeholder="Search Contacts"
         seeAll={[Function]}
         theme={
           Object {
@@ -285,6 +120,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row layout-wrap layout-align-start-center"
     >
       <TextHeading
+        color=""
         size={1}
         text="My Shipment Addresses"
         theme={
@@ -302,10 +138,13 @@ exports[`shallow render 1`] = `
             Object {
               "city": "FOO_CITY",
               "country": "Germany",
+              "geocodedAddress": "FOO_GEOCODED_ADDRESS",
               "id": 246,
               "primary": true,
               "street": "FOO_STREET",
+              "streetNumber": 579,
               "street_number": 579,
+              "zipCode": "22456",
               "zip_code": "22456",
             },
           ]

@@ -142,6 +142,7 @@ export class UserDashboard extends Component {
             <AdminSearchableClients
               theme={theme}
               clients={contacts}
+              placeholder="Search Contacts"
               title="Most used Contacts"
               handleClick={this.viewClient}
               seeAll={() => userDispatch.goTo('/account/contacts')}

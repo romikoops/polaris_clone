@@ -26,9 +26,15 @@ exports[`props.shipment is truthy 1`] = `
             "clientName": "undefined undefined",
             "companyName": "undefined",
             "destinationHub": "",
+            "destination_hub": Object {
+              "name": "FOO_DESTINATION_HUB",
+            },
             "id": 654,
             "imc_reference": "FOO_IMC_REFERENCE",
             "originHub": undefined,
+            "origin_hub": Object {
+              "name": "FOO_ORIGIN_HUB",
+            },
             "planned_etd": 789,
             "schedule_set": Array [
               Object {
@@ -39,7 +45,6 @@ exports[`props.shipment is truthy 1`] = `
           },
         ]
       }
-      sideScroll={false}
       theme={
         Object {
           "colors": Object {
@@ -50,7 +55,6 @@ exports[`props.shipment is truthy 1`] = `
       }
       title="FOO_TITLE Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      user={Object {}}
       userView={true}
     />
   </div>
@@ -76,7 +80,6 @@ exports[`shallow render 1`] = `
       limit={0}
       seeAll={false}
       shipments={Array []}
-      sideScroll={false}
       theme={
         Object {
           "colors": Object {
@@ -87,7 +90,6 @@ exports[`shallow render 1`] = `
       }
       title="FOO_TITLE Shipments"
       tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
-      user={Object {}}
       userView={true}
     />
     <div

@@ -22,6 +22,12 @@ class AdminRoutes extends Component {
     this.closeModal = this.closeModal.bind(this)
     this.saveNewRoute = this.saveNewRoute.bind(this)
   }
+  componentDidMount () {
+    const { adminDispatch, allHubs, loading } = this.props
+    if (allHubs.length < 1 && !loading) {
+      adminDispatch.getAllHubs()
+    }
+  }
 
   viewItinerary (itinerary) {
     const { adminDispatch } = this.props
@@ -46,7 +52,7 @@ class AdminRoutes extends Component {
 
   render () {
     const {
-      theme, hubs, itinerary, itineraries, hubHash, adminDispatch, loading, tenant, mapData
+      theme, allHubs, itinerary, itineraries, hubHash, adminDispatch, loading, tenant, mapData
     } = this.props
 
     return (
@@ -55,8 +61,9 @@ class AdminRoutes extends Component {
           <AdminRouteForm
             theme={theme}
             close={this.closeModal}
-            hubs={hubs}
+            hubs={allHubs}
             saveRoute={this.saveNewRoute}
+            adminDispatch={adminDispatch}
           />
         ) : (
           ''
@@ -68,7 +75,7 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRoutesIndex
                 theme={theme}
-                hubs={hubs}
+                // hubs={hubs}
                 hubHash={hubHash}
                 itineraries={itineraries}
                 adminDispatch={adminDispatch}
@@ -87,7 +94,7 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRouteView
                 theme={theme}
-                hubs={hubs}
+                // hubs={hubs}
                 hubHash={hubHash}
                 itineraryData={itinerary}
                 adminDispatch={adminDispatch}
@@ -103,7 +110,7 @@ class AdminRoutes extends Component {
 }
 AdminRoutes.propTypes = {
   theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
+  allHubs: PropTypes.arrayOf(PropTypes.hub),
   adminDispatch: PropTypes.shape({
     getRoute: PropTypes.func,
     newRoute: PropTypes.func
@@ -122,7 +129,7 @@ AdminRoutes.propTypes = {
 
 AdminRoutes.defaultProps = {
   theme: null,
-  hubs: [],
+  allHubs: [],
   mapData: [],
   hubHash: {},
   loading: false,

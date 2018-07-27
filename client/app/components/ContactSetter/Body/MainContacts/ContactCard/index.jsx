@@ -36,7 +36,8 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
     />
   )
 
-  const { addressDetails, cityCountry } = locationForDisplay(location)
+  const { addressDetails } = locationForDisplay(location)
+
   return (
     <div className={`flex-100 layout-row layout-wrap ${styles.contact_card}`} style={borderStyles}>
       {editIcon}
@@ -49,12 +50,23 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
           </span>
         </h3>
       </div>
-      <div className="flex-100 layout-row layout-align-start-start">
-        <i className={`${styles.main_icon} fa fa-map-marker`} style={iconStyle} />
-        <p className={styles.secondary_info}>
-          { addressDetails } <br />
-          <b> { cityCountry } </b>
-        </p>
+      <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+        <div className="flex-100 layout-row layout-align-space-around-center">
+          <i className={`${styles.main_icon} fa fa-map-marker flex-10`} style={iconStyle} />
+          <p className={`${styles.secondary_info} flex`}>
+            { addressDetails }
+          </p>
+        </div>
+        <div className="flex-100 layout-row layout-align-end-center">
+          <p className={`${styles.secondary_info_city} flex-90 offset-10`}>
+            <b> { location.city } </b>
+          </p>
+        </div>
+        <div className="flex-100 layout-row layout-align-end-center">
+          <p className={`${styles.secondary_info_country} flex-90 offset-10`}>
+            <Truncate lines={1}> { location.country }</Truncate>
+          </p>
+        </div>
       </div>
       <div className={
         `${styles.contact_data_sec} flex-100 ` +
