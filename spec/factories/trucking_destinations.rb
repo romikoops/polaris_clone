@@ -10,7 +10,7 @@ FactoryBot.define do
   	end
 
   	trait :distance do
-  		distance 179
+  		distance 172
   	end
 
     trait :zipcode_sequence do

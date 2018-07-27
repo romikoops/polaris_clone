@@ -16,17 +16,6 @@ ActiveRecord::Schema.define(version: 20180726093353) do
   enable_extension "plpgsql"
   enable_extension "postgis"
 
-  create_table "addon_charges", force: :cascade do |t|
-    t.string "title"
-    t.string "text"
-    t.jsonb "rate"
-    t.string "input_type"
-    t.jsonb "conditions"
-    t.integer "addon_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "addons", force: :cascade do |t|
     t.string "title"
     t.jsonb "text", default: [], array: true
@@ -569,10 +558,10 @@ ActiveRecord::Schema.define(version: 20180726093353) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
