@@ -12,13 +12,13 @@ const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
 async function delayAndNotify (label) {
-  log(`__${label}__DELAY_START______`, 'success')
+  // log(`__${label}__DELAY_START______`, 'success')
   await delay(1500)
-  log(`__${label}__DELAY_END________`, 'success')
+  // log(`__${label}__DELAY_END________`, 'success')
 }
 
-function waitNotificator (selector, operationType, optionalObject) {
-  console.log('Selector, Type', selector, operationType)
+function waitNotificator (selector, type) {
+  log({ selector, type }, 'SELECTOR')
 }
 
 function logFn (input) {
