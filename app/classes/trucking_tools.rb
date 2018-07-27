@@ -131,7 +131,6 @@ module TruckingTools
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
     return {} if cargo_values["weight"] == 0
-    
     case trucking_pricing.modifier
     when "kg"
       
