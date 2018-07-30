@@ -464,7 +464,7 @@ export class UserShipmentView extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
           <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>

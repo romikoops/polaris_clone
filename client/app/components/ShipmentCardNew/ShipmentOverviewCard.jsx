@@ -61,7 +61,7 @@ export class ShipmentOverviewCard extends Component {
       noTitle
     } = this.props
     const titleBox = (<div
-      className={`${adminStyles.greyBg} layout-padding flex-100 layout-align-start-center`}
+      className="greyBg layout-padding flex-100 layout-align-start-center"
     >
       <span><b>Requested Shipments</b></span>
     </div>)
