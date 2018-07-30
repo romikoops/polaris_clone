@@ -1,12 +1,10 @@
 module.exports = function (wallaby) {
   return {
     files: [
-      'app/**/*.jsx',
-      'app/**/*.snap',
-      'app/**/*.js',
       'jest.init.js',
       'package.json',
-      'app/components/**/*.js?(x)',
+      'app/**/*.js?(x)',
+      'app/components/**/*.snap',
       '!app/components/**/*.spec.jsx'
     ],
     tests: [
@@ -22,6 +20,10 @@ module.exports = function (wallaby) {
       '**/*.js?(x)': wallaby.compilers.babel()
     },
     testFramework: 'jest',
+    workers: {
+      initial: 1,
+      regular: 1
+    },
     debug: true
   }
 }
