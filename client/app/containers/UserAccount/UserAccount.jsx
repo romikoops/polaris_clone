@@ -140,6 +140,7 @@ class UserAccount extends Component {
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
+
     return (
       <div className="layout-row flex-100 hundred">
         {loadingScreen}
@@ -151,7 +152,7 @@ class UserAccount extends Component {
         >
           <NavBar className={`${styles.top_margin}`} />
           <div
-            className={`flex-95 ${defs.spacing_md_bottom} ${
+            className={`flex-100 ${defs.spacing_md_bottom} ${
               styles.top_margin
             } layout-row flex-none `}
           >
@@ -374,6 +375,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const { currencies } = app
+
   return {
     users,
     user,
