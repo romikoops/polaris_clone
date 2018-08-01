@@ -35,7 +35,11 @@ const shipment = {
   schedule_set: [{ hub_route_key: 'foo-bar' }]
 }
 const contactData = {
-  contact,
+  contact: {
+    ...contact,
+    first_name: 'John',
+    last_name: 'Doe'
+  },
   shipments: [shipment],
   location: identity
 }

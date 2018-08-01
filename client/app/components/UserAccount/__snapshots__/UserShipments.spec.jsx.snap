@@ -5,7 +5,7 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start"
 >
   <div
-    className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
+    className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
   >
     <Tabs
       defaultActiveTabIndex={0}
@@ -44,7 +44,7 @@ exports[`shallow render 1`] = `
               },
             }
           }
-          title="Requested Shipments"
+          title=""
           tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
           userView={true}
         />
@@ -82,7 +82,7 @@ exports[`shallow render 1`] = `
               },
             }
           }
-          title="Open Shipments"
+          title=""
           tooltip="Shipments that have been accepted or edited. Shipments in this category requires transportation"
           userView={true}
         />
@@ -120,7 +120,7 @@ exports[`shallow render 1`] = `
               },
             }
           }
-          title="Finished Shipments"
+          title=""
           tooltip="Shipments that have been processed and will be saved as history"
           userView={true}
         />

@@ -119,6 +119,9 @@ const barCargoItem = {
 const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
 const shipment = {
   ...shipmentData.shipment,
+  trucking: {
+    pre_carriage: { trucking_time_in_seconds: 55 }
+  },
   selected_offer: {
     customs: { val: 12 },
     insurance: { val: 5 },
@@ -224,7 +227,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
+test('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {

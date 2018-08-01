@@ -178,6 +178,11 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -1196,6 +1201,11 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -2272,6 +2282,11 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -3404,6 +3419,11 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -3797,12 +3817,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <Contact
               contactType="Shipper"
-              key="RANDOM_KEY_43"
+              key="RANDOM_KEY_49"
               textStyle="#333"
             />
             <Contact
               contactType="Consignee"
-              key="RANDOM_KEY_44"
+              key="RANDOM_KEY_50"
               textStyle="#333"
             />
           </div>
@@ -4040,7 +4060,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           >
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_45"
+              key="RANDOM_KEY_51"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4061,7 +4081,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             </div>
             <div
               className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_46"
+              key="RANDOM_KEY_52"
             >
               <div
                 className="flex-none layout-row layout-align-center-center"
@@ -4169,13 +4189,13 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   className="flex-100 terms_list"
                 >
                   <li
-                    key="RANDOM_KEY_47"
+                    key="RANDOM_KEY_53"
                   >
                      
                     FOO_TERM
                   </li>
                   <li
-                    key="RANDOM_KEY_48"
+                    key="RANDOM_KEY_54"
                   >
                      
                     BAR_TERM
@@ -4428,6 +4448,11 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -4459,23 +4484,26 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   Expected Time of Collection:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-start-start"
+                className="flex-100 layout-row layout-align-center-center"
               >
                 <address
                   className="flex-none"
                 >
                   7 FOO_STREET
                   ,
+                  <br />
                   FOO_CITY
-                  ,
+                  , 
+                  <br />
                   21177
-                  ,
+                  , 
+                  <br />
                   Germany
                 </address>
               </div>
@@ -4492,7 +4520,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 margin_5"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -5447,6 +5475,11 @@ exports[`shallow render 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -6453,6 +6486,11 @@ exports[`with cargo items 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -7015,6 +7053,11 @@ exports[`with cargo items 1`] = `
                     "currency": "USD",
                     "value": 12,
                   },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 }
               }
               theme={
@@ -7178,6 +7221,11 @@ exports[`with cargo items 1`] = `
                   "total_price": Object {
                     "currency": "USD",
                     "value": 12,
+                  },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                   },
                 }
               }
@@ -7761,6 +7809,11 @@ exports[`with containers 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -8305,6 +8358,11 @@ exports[`with containers 1`] = `
                     "currency": "USD",
                     "value": 12,
                   },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 }
               }
               theme={
@@ -8444,6 +8502,11 @@ exports[`with containers 1`] = `
                   "total_price": Object {
                     "currency": "USD",
                     "value": 12,
+                  },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                   },
                 }
               }
