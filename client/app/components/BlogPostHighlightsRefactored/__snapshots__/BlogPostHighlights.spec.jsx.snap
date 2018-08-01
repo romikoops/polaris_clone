@@ -17,7 +17,7 @@ exports[`shallow render 1`] = `
     className="flex-100 flex-gt-sm-75 layout-row layout-align-center-center"
   >
     <div
-      className="blog_post layout-column"
+      className="BLOG_POST_HIGHLIGHTS blog_post layout-column"
       key="0"
     >
       <div
@@ -100,7 +100,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="blog_post layout-column"
+      className="BLOG_POST_HIGHLIGHTS blog_post layout-column"
       key="1"
     >
       <div
@@ -183,7 +183,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
     <div
-      className="blog_post layout-column"
+      className="BLOG_POST_HIGHLIGHTS blog_post layout-column"
       key="2"
     >
       <div

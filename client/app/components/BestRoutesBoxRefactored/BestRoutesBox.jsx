@@ -6,6 +6,14 @@ import styles from './BestRoutesBox.scss'
 import { gradientGenerator } from '../../helpers'
 import { trim, ROW } from '../../classNames'
 
+const CONTAINER = trim(`
+  BEST_ROUTES_BOX
+  flex-none 
+  layout-row 
+  layout-wrap 
+  ${styles.best_card}
+`)
+
 export class BestRoutesBox extends Component {
   calcFastest (schedules, fees) {
     let fastestTime
@@ -28,12 +36,7 @@ export class BestRoutesBox extends Component {
 
     return (
       <div
-        className={trim(`
-          flex-none 
-          layout-row 
-          layout-wrap 
-          ${styles.best_card}
-        `)}
+        className={CONTAINER}
         onClick={() => this.props.chooseResult(fastestSchedule)}
       >
         <div className="flex-100 layout-row">

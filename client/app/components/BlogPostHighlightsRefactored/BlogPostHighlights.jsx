@@ -5,6 +5,12 @@ import styles from './BlogPostHighlights.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { trim } from '../../classNames'
 
+const CONTAINER = trim(`
+  BLOG_POST_HIGHLIGHTS
+  ${styles.blog_post}
+  layout-column
+`)
+
 const dummyPosts = [
   {
     title: 'How Digitalisation is changing shipping',
@@ -38,9 +44,7 @@ export function BlogPostHighlights ({ theme }) {
       // eslint-disable-next-line react/no-array-index-key
       <div
         key={i}
-        className={trim(`
-          ${styles.blog_post}
-          layout-column`)}
+        className={CONTAINER}
       >
         <div
           className={trim(`

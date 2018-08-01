@@ -2,7 +2,7 @@
 
 exports[`code && selectedType === code 1`] = `
 <div
-  className="card_link layout-column flex-none selected"
+  className="CARD_LINK card_link layout-column flex-none selected"
   onClick=""
 >
   <div
@@ -54,7 +54,7 @@ exports[`code && selectedType === code 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="card_link layout-column flex-none unselected"
+  className="CARD_LINK card_link layout-column flex-none unselected"
   onClick={[Function]}
 >
   <div
@@ -95,7 +95,7 @@ exports[`state.redirect is true 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="card_link layout-column flex-none unselected"
+  className="CARD_LINK card_link layout-column flex-none unselected"
   onClick={[Function]}
 >
   <div

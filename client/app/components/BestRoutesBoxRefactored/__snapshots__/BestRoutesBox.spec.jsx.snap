@@ -60,7 +60,7 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-none layout-row layout-wrap best_card"
+    className="BEST_ROUTES_BOX flex-none layout-row layout-wrap best_card"
     onClick={[Function]}
   >
     <div

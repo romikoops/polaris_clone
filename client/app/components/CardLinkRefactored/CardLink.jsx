@@ -26,12 +26,17 @@ export class CardLink extends Component {
     if (this.state.redirect) {
       return <Redirect push to={this.props.path} />
     }
+    const buttonStyle = code && selectedType === code ? styles.selected : styles.unselected
+    const CONTAINER = trim(`
+      CARD_LINK
+      ${styles.card_link}
+      layout-column flex-none 
+      ${buttonStyle}
+    `)
     const theme = this.props.theme ? this.props.theme : tenantDefaults.theme
 
     const handleClickFn = () => this.setState({ redirect: true })
     const handleClick = path ? handleClickFn : this.props.handleClick
-
-    const buttonStyle = code && selectedType === code ? styles.selected : styles.unselected
 
     const backgroundSize = options && options.contained ? 'contain' : 'cover'
 
@@ -54,7 +59,8 @@ export class CardLink extends Component {
           flex-none 
           layout-row 
           layout-align-center-end
-        `)}>
+        `)}
+        >
           <h3 className="flex-none">Coming Soon</h3>
         </div>
       )
@@ -78,19 +84,12 @@ export class CardLink extends Component {
     const onClickContainer = allowedCargoTypes[code] ? handleClick : ''
 
     return (
-      <div
-        onClick={onClickContainer}
-        className={trim(`
-          ${styles.card_link}
-          layout-column flex-none 
-          ${buttonStyle}
-        `)}
-      >
+      <div className={CONTAINER} onClick={onClickContainer}>
         {inActive()}
 
-        <div 
-          style={imgStyles} 
-          className={`${styles.card_img} flex-85`} 
+        <div
+          style={imgStyles}
+          className={`${styles.card_img} flex-85`}
         />
 
         <div

@@ -8,6 +8,7 @@ import {
 } from '../../classNames'
 
 const LOGO_BOX = 'https://assets.itsmycargo.com/assets/logos/logo_box.png'
+const CONTAINER = 'ALERT_MODAL_BODY layout row layout-align-center'
 
 export function AlertModalBody (props) {
   const {
@@ -19,11 +20,7 @@ export function AlertModalBody (props) {
 
   return (
     <div
-      className={trim(`
-        layout
-        row
-        layout-align-center
-      `)}
+      className={CONTAINER}
       style={{ maxWidth: maxWidth || '600px', width: '80vw' }}
     >
       <i
