@@ -26,7 +26,11 @@ test('shallow render', () => {
   expect(shallow(<BestRoutesBox {...propsBase} />)).toMatchSnapshot()
 })
 
-test('chooseResult is called', () => {
+
+/**
+ * Three cases as `chooseResult` is used in three places
+ */
+test('chooseResult is called | case 0', () => {
   const props = {
     ...propsBase,
     chooseResult: jest.fn()
@@ -34,6 +38,30 @@ test('chooseResult is called', () => {
   const wrapper = mount(<BestRoutesBox {...props} />)
   const clickableDiv = wrapper.find('.best_card').first()
   clickableDiv.simulate('click')
+  
+  expect(props.chooseResult).toHaveBeenCalled()
+})
 
+test('chooseResult is called | case 1', () => {
+  const props = {
+    ...propsBase,
+    chooseResult: jest.fn()
+  }
+  const wrapper = mount(<BestRoutesBox {...props} />)
+  const clickableDiv = wrapper.find('.best_card').at(1)
+  clickableDiv.simulate('click')
+  
+  expect(props.chooseResult).toHaveBeenCalled()
+})
+
+test('chooseResult is called | case 2', () => {
+  const props = {
+    ...propsBase,
+    chooseResult: jest.fn()
+  }
+  const wrapper = mount(<BestRoutesBox {...props} />)
+  const clickableDiv = wrapper.find('.best_card').last()
+  clickableDiv.simulate('click')
+  
   expect(props.chooseResult).toHaveBeenCalled()
 })

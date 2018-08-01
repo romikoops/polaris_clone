@@ -66,8 +66,12 @@ exports[`shallow render 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -114,8 +118,12 @@ exports[`shallow render 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -267,8 +275,14 @@ exports[`state.showDetails is true 1`] = `
       shipmentData={
         Object {
           "clientName": "FOO_CLIENT_NAME",
+          "destination_hub": Object {
+            "name": "FOO_DESTINATION_HUB",
+          },
           "id": 654,
           "imc_reference": "FOO_IMC_REFERENCE",
+          "origin_hub": Object {
+            "name": "FOO_ORIGIN_HUB",
+          },
           "planned_etd": 789,
           "schedule_set": Array [],
           "status": "FOO_STATUS",
@@ -368,8 +382,12 @@ exports[`theme is falsy 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -409,8 +427,12 @@ exports[`theme is falsy 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -569,8 +591,12 @@ exports[`with admin user 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",
@@ -617,8 +643,12 @@ exports[`with admin user 1`] = `
                   "id": 123,
                   "scope": Object {
                     "modes_of_transport": Object {
-                      "BAR_MODE_TRANSPORT": Object {},
-                      "FOO_MODE_TRANSPORT": Object {},
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
                     },
                   },
                   "subdomain": "foosubdomain",

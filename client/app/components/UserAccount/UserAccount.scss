@@ -125,14 +125,6 @@
   .currency_box {
     border-left: 2px solid #E0E0E0;
   }
-  .greyBg {
-    background-color: lightgrey;
-    margin-bottom: 20px;
-    padding: 12px 18px;
-    b {
-      margin: 15px auto;
-    }
-  }
   .currency_grey {
     p {
       padding: 8px 16px;
@@ -160,9 +152,15 @@
     margin-bottom: 15px;
   }
   .content_details {
-    padding: 18px;
+    padding: 18px 18px 18px 4vw;
   }
   .edit_icon {
+    cursor: pointer;
+  }
+  .profile_edit_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
   }
   .save {
@@ -296,7 +294,7 @@
     -webkit-text-fill-color: transparent !important;
   }
   .username_title {
-    padding-left: 2vw;
+    padding: 2vw;
     h1 {
       font-size: 35px;
       margin: 0 !important;

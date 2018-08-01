@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { GreyBox as GBox } from '../GreyBox/GreyBox'
 import { AdminShipmentCard as AShipCard } from './AdminShipmentCard'
-import styles from './AdminShipmentCards.scss'
 
 function listShipments (shipments) {
   return shipments.map((shipment) => {
@@ -37,7 +36,7 @@ export class AdminShipmentCards extends Component {
 
     return (
       <div className="layout-wrap layout-row layout-align-space-between-start">
-        <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+        <div className="layout-padding flex-100 layout-align-start-center greyBg">
           <span><b>Requested Shipments</b></span>
         </div>
         {listShipments(shipments)}

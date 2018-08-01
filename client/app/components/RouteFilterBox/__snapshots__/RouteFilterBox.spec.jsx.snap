@@ -93,7 +93,7 @@ exports[`pickup is false 1`] = `
         <p
           className="flex-none five_m"
         >
-          Pre Carriage
+          Pickup
         </p>
         <p
           className="flex-none five_m"
@@ -111,7 +111,7 @@ exports[`pickup is false 1`] = `
         <p
           className="flex-none five_m"
         >
-          On Carriage
+          Delivery
         </p>
         <p
           className="flex-none five_m"
@@ -144,12 +144,22 @@ exports[`pickup is false 1`] = `
     <p
       style={
         Object {
-          "fontSize": "12px",
+          "fontSize": "10px",
           "marginTop": "0",
         }
       }
     >
       * Transit time (T/T) not guaranteed
+    </p>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      ** You will be invoiced in local currency based on the exchange rate valid at the time
     </p>
   </div>
 </div>
@@ -248,7 +258,7 @@ exports[`shallow rendering 1`] = `
         <p
           className="flex-none five_m"
         >
-          Pre Carriage
+          Pickup
         </p>
         <p
           className="flex-none five_m"
@@ -266,7 +276,7 @@ exports[`shallow rendering 1`] = `
         <p
           className="flex-none five_m"
         >
-          On Carriage
+          Delivery
         </p>
         <p
           className="flex-none five_m"
@@ -299,12 +309,22 @@ exports[`shallow rendering 1`] = `
     <p
       style={
         Object {
-          "fontSize": "12px",
+          "fontSize": "10px",
           "marginTop": "0",
         }
       }
     >
       * Transit time (T/T) not guaranteed
+    </p>
+    <p
+      style={
+        Object {
+          "fontSize": "10px",
+          "marginTop": "0",
+        }
+      }
+    >
+      ** You will be invoiced in local currency based on the exchange rate valid at the time
     </p>
   </div>
 </div>

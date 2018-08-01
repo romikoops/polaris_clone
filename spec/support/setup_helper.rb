@@ -1,34 +1,76 @@
 module SetupHelper
   module InstanceMethods
-    def variables_setup(args = {})
-      _user = user
-      _transport_category = transport_category(cargo_class: args[:cargo_class], load_type: args[:load_type], mot: args[:mode_of_transport])
+    def variables_setup(args = {}, is_json = false)
+      args[:rate] =  is_json ? JSON.parse(args[:rate].to_json) : JSON.parse(args[:rate])
+      args[:extras] = (is_json ? JSON.parse(args[:extras].to_json) : JSON.parse(args[:extras])).deep_symbolize_keys
+      _user = user(currency: args[:target_currency], rate: args[:rate],
+        mot: args[:mode_of_transport], load_type: args[:load_type],
+        customs_export_paper: args[:extras][:customs_export_paper],
+        consolidate_cargo: args[:extras][:consolidate_cargo])
+
+      _currency = currency(today_value: { USD: 1, SEK:8.88957, CNY: 6.596105, EUR: 0.8575 }, base: args[:target_currency], tenant_id: _user.tenant.id)
+      _transport_category = transport_category(cargo_class: args[:cargo_class],
+        load_type: args[:load_type], mot: args[:mode_of_transport])
       _vehicle = vehicle(categories: [_transport_category], name: args[:vehicle_name])
-      _tenant_vehicle = tenant_vehicle(name: args[:tenant_vehicle_name], vehicle: _vehicle)
-      _itinerary = itinerary(mot: args[:mode_of_transport])
+      _tenant_vehicle = tenant_vehicle(name: args[:tenant_vehicle_name], vehicle: _vehicle, tenant: _user.tenant)
+      _itinerary = itinerary(mot: args[:mode_of_transport], tenant: _user.tenant)
       _trip = trip(tenant_vehicle: _tenant_vehicle, itinerary: _itinerary)
       _pricing = pricing(user: _user, transport_category: _transport_category, trip: _trip)
-      
+
+      _pricing_detail = pricing_detail(tenant: _user.tenant, pricing: _pricing,
+        currency: args[:target_currency], rate: args[:rate]["BAS"] ? args[:rate]["BAS"]["rate"] : nil,
+        min: args[:rate]["BAS"] ? args[:rate]["BAS"]["min"] : nil, pricing: _pricing)
       _cargo_item = cargo_item(quantity: args[:quantity], dimension_x: args[:dimension_x],
         dimension_y: args[:dimension_y], dimension_z: args[:dimension_z],
         payload_in_kg: args[:payload_in_kg], cargo_class: args[:cargo_class])
 
-      _container = container(quantity: args[:quantity], payload_in_kg: args[:payload_in_kg],
-        cargo_class: args[:cargo_class], size_class: args[:size_class], weight_class: args[:weight_class])
+      destination_country = create(:country)
+      origin_country = create(:country)
+      pre_carriage_trucking_location = { country: origin_country }.merge((JSON.parse(is_json ? args[:pre_carriage_location].to_json : args[:pre_carriage_location])).deep_symbolize_keys)
+      origin_location =  JSON.parse(is_json ? args[:origin_location].to_json : args[:origin_location])
+      origin_location[:country] = origin_country
+      origin = location(origin_location.deep_symbolize_keys)
+      destination = location(country: destination_country)
+      trucking_location = (JSON.parse(is_json ? args[:trucking_location].to_json : args[:trucking_location])).deep_symbolize_keys
+      trucking_location[:country] = destination_country
+      final_destination = location(trucking_location)
 
-      _origin_nexus = origin_nexus(name: args[:origin_nexus_name], latitude: args[:origin_latitude],
-        longitude: args[:origin_longitude])
-      _origin_hub  = origin_hub(port: args[:origin_port], origin_nexus: _origin_nexus,
-        atitude: args[:origin_latitude], longitude: args[:origin_longitude])
+      # findout how to implement origin trucking for pre_carriage
+      origin_trucking = location(pre_carriage_trucking_location)
+
+     _mandatory_charge_type = mandatory_charge(origin_charges: charge_type(args), import_charges: charge_type(args))
+      _origin_nexus = origin_nexus(name: args[:origin_nexus_name], latitude: args[:origin_latitude], longitude: args[:origin_longitude])
+      _origin_hub  = origin_hub(port: args[:origin_port], origin_nexus: _origin_nexus, tenant: _user.tenant,
+        atitude: args[:origin_latitude], longitude: args[:origin_longitude], mandatory_charge: _mandatory_charge_type, location: origin)
+      
       _destination_nexus = destination_nexus(name: args[:destination_nexus_name], latitude: args[:destination_latitude],
         longitude: args[:destination_longitude])
+
       _destination_hub = destination_hub(port: args[:destination_port], destination_nexus: _destination_nexus,
-        latitude: args[:destination_latitute], longitude: args[:destination_longitude])
+        latitude: args[:destination_latitude], longitude: args[:destination_longitude],
+        mandatory_charge: _mandatory_charge_type, location: destination, tenant: _user.tenant)
 
       _shipment = shipment(cargo_items: [_cargo_item], user: _user, shipment_status: args[:shipment_status],
         trip: _trip, load_type: args[:load_type], direction: args[:direction], origin_hub: _origin_hub,
         origin_nexus: _origin_nexus, destination_hub: _destination_hub, destination_nexus:  _destination_nexus,
         trucking: args[:trucking], eta: args[:eta], etd: args[:etd], closing_date: args[:closing_date])
+
+       _container = container(quantity: args[:quantity], payload_in_kg: args[:payload_in_kg],
+        cargo_class: args[:cargo_class], size_class: args[:size_class], shipment: _shipment)
+
+      _origin_charge = local_charge(mot: args[:mode_of_transport], size_class: args[:size_class], hub: _origin_hub,
+        tenant: _user.tenant, tenant_vehicle: _tenant_vehicle, direction: args[:direction], fees: JSON.parse(is_json ? args[:fees].to_json : args[:fees]))
+
+      _destination_charge = local_charge(mot: args[:mode_of_transport], size_class: args[:size_class], hub: _destination_hub,
+        tenant: _user.tenant, tenant_vehicle: _tenant_vehicle, direction: args[:direction], fees: JSON.parse(is_json ? args[:fees].to_json : args[:fees]))
+      _trucking_pricing_scope = trucking_pricing_scope(load_type: args[:load_type],
+        cargo_class: args[:cargo_class], carriage: args[:extras][:carriage], truck_type: args[:trucking][:on_carriage][:truck_type])
+     
+      _trucking_pricing = trucking_pricing(tenant: _user.tenant, trucking_pricing_scope: _trucking_pricing_scope, modifier: args[:extras][:modifier],
+        truck_type: args[:trucking][:on_carriage][:truck_type], carriage: args[:extras][:carriage], load_type: args[:load_type], location: final_destination)
+      _trucking_destination = trucking_destination(zipcode: trucking_location[:zip_code])
+      _hub_trucking = hub_trucking(trucking_pricing: _trucking_pricing, hub: _destination_hub, trucking_destination: _trucking_destination)
+
       _schedule = schedule(_shipment)
 
       {
@@ -46,17 +88,77 @@ module SetupHelper
         _destination_hub: _destination_hub,
         _itinerary: _itinerary,
         _shipment: _shipment,
-        _schedule: _schedule
+        _schedule: _schedule,
+        _pricing_detail: _pricing_detail,
+        _hub_trucking: _hub_trucking,
+        _trucking_pricing: _trucking_pricing,
+        _final_destination: final_destination,
+        _origin_charge: _origin_charge,
+        _destination_charge: _destination_charge,
+        _carriage: args[:extras][:carriage],
+        _origin_trucking: origin_trucking
       }
     end
 
-    def user
-      create(:user)
+    def trucking_destination(arg = {})
+      create(:trucking_destination, zipcode: arg[:zipcode] || '54016' )
+    end
+    def currency(arg)
+      create(:currency, today: arg[:today_value], yesterday: arg[:yesterday_value], base: arg[:base], tenant_id: arg[:tenant_id])
+    end
+    def hub_trucking(arg)
+      create(:hub_trucking, trucking_pricing: arg[:trucking_pricing], hub: arg[:hub], trucking_destination: arg[:trucking_destination])
+    end
+
+    def trucking_pricing(arg = {})
+      create(:trucking_pricing, rates: container_rates, fees: container_fees,
+        tenant: arg[:tenant], trucking_pricing_scope: arg[:trucking_pricing_scope], modifier: arg[:modifier])
+    end
+
+    def trucking_pricing_scope(arg)
+      create(:trucking_pricing_scope, load_type: arg[:load_type],
+        cargo_class: arg[:cargo_class], carriage: arg[:carriage], truck_type: arg[:truck_type])
+    end
+    
+    def local_charge(arg)
+      create(:local_charge, mode_of_transport: arg[:mot], load_type: arg[:size_class], hub: arg[:hub], tenant: arg[:tenant],
+        tenant_vehicle_id: arg[:tenant_vehicle].id, direction: arg[:direction], fees: arg[:fees])
+    end
+
+    def location(arg = {})
+      create(:location, name: arg[:name] || 'Gothenburg', latitude: arg[:latitude] || '57.694253',
+        longitude: arg[:longitude] || '11.854048', zip_code: arg[:zip_code] || '43813',
+        geocoded_address: arg[:geocoded_address] || '438 80 Landvetter, Sweden',
+        city: arg[:city] || 'Gothenburg', country: arg[:country]
+      )
+    end
+
+    def charge_type(arg)
+      if arg[:direction] == 'export'
+        true
+      elsif arg[:direction] == 'import'
+        true
+      else
+        false
+      end
+    end
+
+    def pricing_exception(arg)
+      create(:pricing_exception, tenant: arg[:tenant], pricing: arg[:pricing])
+    end
+
+    def pricing_detail(arg)
+      create(:pricing_detail, rate: arg[:rate], currency_name: arg[:currency],
+        tenant: arg[:tenant], priceable: arg[:pricing], min: arg[:min])
+    end
+
+    def user(arg)
+      tenant = create(:tenant, currency: arg[:currency], scope: tenant_scope(arg))
+      create(:user, tenant: tenant)
     end
 
     def transport_category(arg = {})
-      create(:transport_category, cargo_class: arg[:cargo_class].blank? ? 'lcl' : arg[:cargo_class],
-        load_type: arg[:load_type] || 'cargo_item', mode_of_transport: arg[:mot])
+      create(:transport_category, cargo_class: arg[:cargo_class].blank? ? 'lcl' : arg[:cargo_class], load_type: arg[:load_type] || 'cargo_item', mode_of_transport: arg[:mot])
     end
 
     def vehicle(arg)
@@ -64,11 +166,12 @@ module SetupHelper
     end
     
     def tenant_vehicle(arg)
-      create(:tenant_vehicle, name: arg[:name] || 'express', vehicle: arg[:vehicle])
+      create(:tenant_vehicle, name: arg[:name] || 'express', vehicle: arg[:vehicle],
+        tenant: arg[:tenant])
     end
 
     def itinerary(arg = {})
-      create(:itinerary, mode_of_transport:  arg[:mot] || 'ocean')
+      create(:itinerary, mode_of_transport:  arg[:mot] || 'ocean', tenant: arg[:tenant])
     end
 
     def trip(arg)
@@ -78,7 +181,7 @@ module SetupHelper
     end
 
     def pricing(arg)
-      create(:pricing, tenant: arg[:user].tenant,
+      create(:pricing, tenant: arg[:user].tenant, wm_rate: arg[:wm_rate],
       transport_category: arg[:transport_category], itinerary: arg[:trip].itinerary)
     end
 
@@ -91,7 +194,7 @@ module SetupHelper
     def container(arg = {})
       create(:container, quantity: arg[:quantity] || 1, payload_in_kg: arg[:payload_in_kg] || 10000,
         cargo_class: arg[:cargo_class] || 'fcl_20', size_class: arg[:size_class].blank? ? 'fcl_20' : arg[:size_class],
-        weight_class: arg[:weight_class] || '14t')
+        shipment: arg[:shipment])
     end
 
     def origin_nexus(arg)
@@ -100,7 +203,7 @@ module SetupHelper
 
     def origin_hub(arg)
       create(:hub, name: arg[:port] || "Shanghai Port", nexus: arg[:origin_nexus], latitude: arg[:latitude],
-        longitude: arg[:longitude])
+        longitude: arg[:longitude], mandatory_charge: arg[:mandatory_charge], tenant: arg[:tenant], location: arg[:location])
     end
 
     def destination_nexus(arg)
@@ -109,7 +212,13 @@ module SetupHelper
 
     def destination_hub(arg)
       create(:hub, name: arg[:port] || "Gothenburg port", nexus: arg[:destination_nexus],
-        latitude: arg[:latitude], longitude: arg[:longitude])
+        latitude: arg[:latitude], longitude: arg[:longitude], mandatory_charge: arg[:mandatory_charge], tenant: arg[:tenant],
+        location: arg[:location])
+
+    end
+
+    def mandatory_charge(arg)
+      create(:mandatory_charge, import_charges: arg[:import_charges], export_charges: arg[:export_charges])
     end
 
     def shipment(arg)
@@ -135,6 +244,113 @@ module SetupHelper
         closing_date:         shipment.closing_date,
         trip_id:              shipment.trip_id
       )
+    end
+
+    def container_rates
+      {
+          "km" => [
+            {
+                   "rate" => {
+                        "base" => 1.0,
+                       "value" => 19.4,
+                    "currency" => "SEK",
+                  "rate_basis" => "PER_CONTAINER_KM"
+                },
+                "min_value" => 0
+            }
+        ],
+        "unit" => [
+            {
+                     "rate" => {
+                          "base" => 1.0,
+                         "value" => 350.0,
+                      "currency" => "SEK",
+                    "rate_basis" => "PER_CONTAINER_KM"
+                },
+                 "max_unit" => "1.0",
+                 "min_unit" => "1.0",
+                "min_value" => 2552.0
+            }
+        ]
+      }
+    end
+    def container_fees
+      {
+        "FSC" => {
+                   "key" => "FSC",
+                  "name" => "Fuel Surcharge",
+                 "value" => 0.19,
+              "currency" => "SEK",
+            "rate_basis" => "PERCENTAGE"
+        },
+        "FWC" => {
+                   "key" => "FWC",
+                  "name" => "Freeways Charge",
+                 "value" => 40.0,
+              "currency" => "SEK",
+            "rate_basis" => "PER_SHIPMENT"
+        }
+      }
+    end
+
+    def container_load_meterage
+      { "ratio" => 1850.0, "height_limit" => 130 }
+    end
+
+
+    def is_valid_combination?(arg, mot, load_type)
+      arg[:mot] == mot && arg[:load_type] == load_type ? true : false
+    end
+
+    def tenant_scope(arg={})
+      {
+        modes_of_transport: {
+          truck: {
+            container: is_valid_combination?(arg, 'truck', 'container'),
+            cargo_item: is_valid_combination?(arg, 'truck', 'cargo_item')
+          },
+          ocean: {
+            container: is_valid_combination?(arg, 'ocean', 'container'),
+            cargo_item: is_valid_combination?(arg, 'ocean', 'cargo_item')
+          },
+          rail: {
+            container: is_valid_combination?(arg, 'rail', 'container'),
+            cargo_item: is_valid_combination?(arg, 'rail', 'cargo_item')
+          },
+          air: {
+            container: is_valid_combination?(arg, 'air', 'container'),
+            cargo_item: is_valid_combination?(arg, 'air', 'cargo_item')
+          }
+        },
+        links: {
+          about: 'https://freightservices.greencarrier.com/about-us/',
+          legal: 'https://freightservices.greencarrier.com/contact/'
+        },
+        customs_export_paper: arg[:customs_export_paper],
+        consolidate_cargo: arg[:consolidate_cargo],
+        fixed_currency: true,
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          'You verify that all the information provided above is true',
+          'You agree to the presented terms and conditions.',
+          'Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid.'
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'
+          }
+        }
+      }.deep_symbolize_keys
     end
 
     def request_stubber(access_key, currency)
@@ -181,19 +397,24 @@ module SetupHelper
         direction: 'direction',
         origin_latitude: 'origin_latitude',
         origin_longitude: 'origin_longitude',
-        destination_latitutde: 'destination_latitutde',
+        destination_latitude: 'destination_latitude',
         destination_longitude: 'destination_longitude',
         target_price: 'target_price',
         target_currency: 'target_currency',
         size_class: 'size_class',
         cargo_class: 'cargo_class',
-        weight_class: 'weight_class'
+        rate: 'rate',
+        fees: 'fees',
+        trucking_location: 'trucking_location',
+        origin_location: 'origin_location',
+        extras: 'extras',
+        pre_carriage_location: 'pre_carriage_location'
       ) 
 
       test_sheet.each do |sheet|
-        sheet[:eta] = DateTime.parse(sheet[:eta])
-        sheet[:etd] = DateTime.parse(sheet[:etd])
-        sheet[:closing_date] = DateTime.parse(sheet[:closing_date])
+        sheet[:eta] = sheet[:eta] ? DateTime.parse(sheet[:eta]) : DateTime.now + 10
+        sheet[:etd] = sheet[:etd] ? DateTime.parse(sheet[:etd]) : DateTime.now + 7
+        sheet[:closing_date] = sheet[:closing_date] ? DateTime.parse(sheet[:closing_date]) : DateTime.now + 5
         sheet[:trucking] = JSON.parse(sheet[:trucking])
       end
     end

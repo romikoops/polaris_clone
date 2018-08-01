@@ -64,7 +64,6 @@ class Charge < ApplicationRecord
     price.value = children.reduce(0) do |sum, charge|
       price = charge.price
       delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
-
       sum + delta
     end
   

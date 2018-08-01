@@ -69,7 +69,6 @@ export class AdminShipmentsIndex extends Component {
               hubs={hubHash}
               dispatches={adminDispatch}
               shipments={mergedReqShipments}
-              title="Requested Shipments"
               theme={theme}
               handleShipmentAction={handleShipmentAction}
               tooltip={adminTip.requested}
@@ -85,7 +84,6 @@ export class AdminShipmentsIndex extends Component {
               hubs={hubHash}
               dispatches={adminDispatch}
               shipments={mergedOpenShipments}
-              title="Open Shipments"
               theme={theme}
               handleShipmentAction={handleShipmentAction}
               tooltip={adminTip.open}
@@ -101,7 +99,6 @@ export class AdminShipmentsIndex extends Component {
               hubs={hubHash}
               dispatches={adminDispatch}
               shipments={mergedFinishedShipments}
-              title="Finished Shipments"
               theme={theme}
               handleAction={handleShipmentAction}
               tooltip={adminTip.finished}
