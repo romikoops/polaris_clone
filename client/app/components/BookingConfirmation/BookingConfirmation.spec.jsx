@@ -119,9 +119,6 @@ const barCargoItem = {
 const cargoItems = [fooCargoItem, barCargoItem, fooCargoItem]
 const shipment = {
   ...shipmentData.shipment,
-  trucking: {
-    pre_carriage: { trucking_time_in_seconds: 55 }
-  },
   selected_offer: {
     customs: { val: 12 },
     insurance: { val: 5 },

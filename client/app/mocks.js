@@ -66,6 +66,9 @@ export const shipmentInShipmentData = {
     value: 15,
     currency: 'USD'
   },
+  trucking: {
+    pre_carriage: { trucking_time_in_seconds: 55 }
+  },
   has_on_carriage: false,
   has_pre_carriage: false,
   notes: 'FOO_NOTES',

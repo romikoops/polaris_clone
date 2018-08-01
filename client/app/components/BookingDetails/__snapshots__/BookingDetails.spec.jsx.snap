@@ -67,6 +67,11 @@ exports[`shallow render 1`] = `
           "currency": "USD",
           "value": 12,
         },
+        "trucking": Object {
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        },
       }
     }
     theme={
@@ -250,6 +255,11 @@ exports[`shallow render 1`] = `
             "total_price": Object {
               "currency": "USD",
               "value": 12,
+            },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
             },
           },
         }
@@ -560,6 +570,11 @@ exports[`theme is falsy 1`] = `
             "total_price": Object {
               "currency": "USD",
               "value": 12,
+            },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
             },
           },
         }

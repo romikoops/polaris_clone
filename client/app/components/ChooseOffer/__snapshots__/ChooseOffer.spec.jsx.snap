@@ -81,6 +81,11 @@ exports[`shallow render 1`] = `
               "currency": "USD",
               "value": 12,
             },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
           }
         }
         theme={
@@ -336,6 +341,7 @@ exports[`shallow render 1`] = `
               },
             }
           }
+          truckingTime={55}
           user={
             Object {
               "company_name": "FOO_COMPANY",
@@ -373,6 +379,32 @@ exports[`shallow render 1`] = `
                   },
                 }
               }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-33 layout-row layout-align-space-around-center"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              More
+            </p>
+            <div
+              className="flex-5"
+            />
+            <i
+              className="flex-none fa fa-angle-double-down"
             />
           </div>
         </div>
@@ -494,6 +526,11 @@ exports[`state.selectedMoT.ocean is false 1`] = `
             "total_price": Object {
               "currency": "USD",
               "value": 12,
+            },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
             },
           }
         }
@@ -737,6 +774,32 @@ exports[`state.selectedMoT.ocean is false 1`] = `
                   },
                 }
               }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-33 layout-row layout-align-space-around-center"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              More
+            </p>
+            <div
+              className="flex-5"
+            />
+            <i
+              className="flex-none fa fa-angle-double-down"
             />
           </div>
         </div>
