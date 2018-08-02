@@ -208,7 +208,7 @@ export class CargoItemGroup extends Component {
       : <div className={styles.icon_cargo_item} style={imgFCL} />)
 
     return (
-      <div className={`${styles.info}`}>
+      <div className={styles.info}>
         <div className={trim(`
           ${ROW(100)} 
           ${ALIGN_CENTER} 
