@@ -80,6 +80,17 @@ test('doc.approved === null', () => {
   expect(shallow(<FileTile {...props} />)).toMatchSnapshot()
 })
 
+test('doc.signed_url is truthy', () => {
+  const props = {
+    ...propsBase,
+    doc: {
+      ...propsBase.doc,
+      signed_url: 'FOO_SIGNED_URL'
+    }
+  }
+  expect(shallow(<FileTile {...props} />)).toMatchSnapshot()
+})
+
 test('isAdmin is true', () => {
   const props = {
     ...propsBase,

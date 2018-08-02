@@ -8,6 +8,7 @@ export const ALIGN_END = 'layout-align-end-end'
 export const ALIGN_END_CENTER = 'layout-align-end-center'
 export const ALIGN_AROUND_STRETCH = 'layout-align-space-around-stretch'
 export const ALIGN_AROUND_CENTER = 'layout-align-space-around-center'
+export const ALIGN_SPACE_BETWEEN = 'layout-align-space-between'
 
 export const ROW = (mode) => {
   if (mode === undefined) {
@@ -31,4 +32,6 @@ export const WRAP_ROW = (mode) => {
   return `flex-${mode} layout-row layout-wrap`
 }
 
-export const COLUMN_15 = 'flex-15 layout-column'
+export const COLUMN = mode => `flex-${mode} layout-column`
+
+export const trim = x => x.split('\n').map(y => y.trim()).join(' ').trim()

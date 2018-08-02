@@ -81,6 +81,9 @@
   .relative {
     position: relative;
   }
+  .absolute {
+    position: absolute;
+  }
   .extra_padding {
     padding-left: 70px;
     padding-right: 70px;
@@ -329,6 +332,11 @@
         margin-right: 0 !important;
       }
     }
+  }
+  .greyBg {
+    background-color: #E0E0E0;
+    margin-bottom: 20px;
+    padding: 12px 18px;
   }
   .slider_container {
     position: relative;

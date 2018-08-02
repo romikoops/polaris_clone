@@ -49,6 +49,13 @@ exports[`shallow rendering 1`] = `
       setContactBtn={
         <RoundButton
           active={true}
+          back={false}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={null}
+          icon=""
+          iconClass=""
+          inverse={false}
           size="small"
           text="Set "
           theme={

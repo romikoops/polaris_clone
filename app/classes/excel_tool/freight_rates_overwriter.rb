@@ -180,13 +180,13 @@ module ExcelTool
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 
-      aux_data[pricing_key][:customer] = User.find(row[:customer_id]) if row[:customer_id]
+      aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
         puts row
-        # byebug
+        byebug
       end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids

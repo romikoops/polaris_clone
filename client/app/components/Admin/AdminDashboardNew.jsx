@@ -20,6 +20,7 @@ export class AdminDashboardNew extends Component {
     shipment.companyName = clients[shipment.user_id]
       ? `${clients[shipment.user_id].company_name}`
       : ''
+
     return shipment
   }
 
@@ -35,6 +36,7 @@ export class AdminDashboardNew extends Component {
   handleRouteHover (id) {
     this.setState((prevState) => {
       const { hoverId } = prevState
+
       return { hoverId: hoverId === id ? false : id }
     })
   }
@@ -135,7 +137,7 @@ export class AdminDashboardNew extends Component {
             <span className={`${styles.welcome} flex-90 layout-row`}>Welcome back,&nbsp; <b>{user.first_name}</b></span>
           </div>
         </div>
-        <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+        <div className="layout-padding flex-100 layout-align-start-center greyBg">
           <span><b>Requested Shipments</b></span>
         </div>
         <ShipmentOverviewCard

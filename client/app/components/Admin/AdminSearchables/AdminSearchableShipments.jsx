@@ -3,8 +3,6 @@ import React, { Component } from 'react'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
-// import { AdminShipmentRow } from '../'
-// import { UserShipmentRow } from '../../UserAccount'
 import { ShipmentOverviewCard } from '../../ShipmentCardNew/ShipmentOverviewCard'
 
 export class AdminSearchableShipments extends Component {
@@ -91,6 +89,7 @@ export class AdminSearchableShipments extends Component {
       theme,
       userView,
       seeAll,
+      title,
       dispatches
     } = this.props
     const { shipments } = this.state
@@ -106,22 +105,22 @@ export class AdminSearchableShipments extends Component {
         className={`layout-row flex-100
          layout-wrap layout-align-start-center ${styles.searchable}`}
       >
+        {title !== '' ? (
+          <div className="flex-60 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div
+                className="flex-100 layout-align-start-center greyBg"
+              >
+                <span><b>{title}</b></span>
+              </div>
+            </div>
+          </div>
+        ) : ''}
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
+          className={`flex-100 layout-row layout-align-end-center ${
             styles.searchable_header
           }`}
         >
-          <div className="flex-60 layout-row layout-align-start-center">
-            <div className="flex-100 layout-row layout-align-space-between-center">
-              {/* <div className="flex-none layout-row layout-align-start-center">
-                <div className="flex-none">
-                  <TextHeading theme={theme} size={2}
-                  color="white" text={title || 'Shipments'} />
-                </div>
-                <Tooltip theme={theme} icon="fa-info-circle" toolText={tooltip} />
-              </div> */}
-            </div>
-          </div>
           <div
             className={`${styles.input_box} flex-40 layout-row layout-align-end-center`}
           >
@@ -166,7 +165,8 @@ AdminSearchableShipments.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   limit: PropTypes.number,
-  userView: PropTypes.bool
+  userView: PropTypes.bool,
+  title: PropTypes.string
 }
 
 AdminSearchableShipments.defaultProps = {
@@ -174,7 +174,8 @@ AdminSearchableShipments.defaultProps = {
   seeAll: null,
   theme: null,
   limit: 0,
-  userView: false
+  userView: false,
+  title: ''
 }
 
 export default AdminSearchableShipments

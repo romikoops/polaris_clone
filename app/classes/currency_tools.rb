@@ -63,7 +63,6 @@ module CurrencyTools
 
   def refresh_rates(base)
     currency_obj = Currency.find_by(base: base)
-    # old___response = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)
     url = "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}"
     response = JSON.parse(HTTP.get(url).to_s)
     rates = response["rates"]

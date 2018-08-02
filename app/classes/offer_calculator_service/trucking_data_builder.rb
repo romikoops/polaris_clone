@@ -22,9 +22,9 @@ module OfferCalculatorService
         carriage:         carriage,
         shipment:         @shipment
       )
-
       Hub.where(id: hub_ids).each_with_object({}) do |hub, obj|
         distance = calc_distance(address, hub)
+        
         trucking_pricings = trucking_pricing_finder.perform(hub.id, distance)
 
         trucking_charge_data = data_for_trucking_charges(trucking_pricings, distance)

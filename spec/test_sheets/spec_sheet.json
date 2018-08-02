@@ -1,34 +1,40 @@
 [{
-  "origin_nexus_name": "Stockholm",
-  "origin_port": "Stockholm Airport",
-  "destination_nexus_name": "Shanghai",
-  "destination_port": "Shanghai Airport",
+  "origin_nexus_name": "Shanghai",
+  "origin_port": "Shanghai Port",
+  "destination_nexus_name": "Gothenburg",
+  "destination_port": "Gothenburg Port",
   "trucking": {
     "on_carriage": {
-      "truck_type": ""
+      "truck_type": "chassis"
     },
     "pre_carriage": {
       "truck_type": ""
     }
   },
-  "load_type": "cargo_item",
-  "mode_of_transport": "air",
+  "load_type": "container",
+  "mode_of_transport": "ocean",
   "quantity": 1,
   "dimension_x": 100,
-  "dimension_y": 50,
-  "dimension_z": 50,
-  "payload_in_kg": 500,
+  "dimension_y": 100,
+  "dimension_z": 100,
+  "payload_in_kg": 1499,
   "eta": "21/07/2018",
   "etd": "17/07/2018",
   "closing_date": "15/07/2018",
-  "direction": "export",
-  "origin_latitude": 59.650856,
-  "origin_longitude": 17.931097,
-  "destination_latitutde": 30.626539,
-  "destination_longitude": 122.064958,
-  "target_price": 1111.00,
-  "target_currency": "EUR",
+  "direction": "import",
+  "origin_latitude": 31.219832454,
+  "origin_longitude": 121.486998052,
+  "destination_latitutde": 57.694253,
+  "destination_longitude": 11.854048,
+  "rate": {"BAS": {"rate": 1175, "rate_basis": "PER_CONTAINER", "currency": "USD", "min": 1175}},
+  "target_price": 2042.37,
+  "target_currency": "USD",
   "weight_class": "",
-  "cargo_class": "",
-  "size_class": ""
+  "cargo_class": "fcl_40",
+  "size_class": "fcl_40",
+  "fees": {"DOC": {"key": "DOC", "min": "", "name": "Documentation", "value": 695.0, "currency": "SEK", "rate_basis": "PER_BILL", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}, "HDF": {"value": 295.0, "name": "Harbour Dues", "currency": "SEK", "rate_basis": "PER_CONTAINER", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}, "HDL": {"key": "HDL", "name": "Handling Fee", "value": 650.0, "currency": "SEK", "rate_basis": "PER_SHIPMENT", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}, "THC": {"value": 1450.0, "name": "Terminal Handling Charge", "currency": "SEK", "rate_basis": "PER_CONTAINER", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}, "FDC": {"key": "FDC", "min": "", "name": "Swedish Fairways Due Charge", "value": 80.0, "currency": "SEK", "rate_basis": "PER_CONTAINER", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}, "ISPS": {"key": "ISPS", "min": "", "name": "ISPS", "value": 15.0, "currency": "EUR", "rate_basis": "PER_CONTAINER", "effective_date": "2018-06-13", "expiration_date": "2019-06-13"}},
+  "trucking_location": { "geocoded_address": "Norrqvarns Slussområde, 548 93 Lyrestad, Sweden",  "latitude": 58.5274857, "longitude": 13.7413548, "city": "Timmersdala", "zip_code": 54016 },
+  "origin_location": { "name": "Shanghai", "latitude":  31.219832454, "longitude":  121.486998052,  "geocoded_address": "Zhoushan, Zhejiang, China", "city": "Shanghai", "zip_code": 20457},
+  "extras": {"carriage": "on", "modifier": "unit_per_km", "customs_export_paper": false, "consolidate_cargo": false},
+  "pre_carriage_location": {}
 }]

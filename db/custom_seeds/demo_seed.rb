@@ -3,7 +3,7 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(easyshipping)
+subdomains = %w(speedtrans)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
@@ -25,6 +25,10 @@ subdomains.each do |sub|
 #   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
 #   req = { 'xlsx' => hubs }
 #   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  Addon.destroy_all
+  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
 # Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
 
   
@@ -43,61 +47,60 @@ subdomains.each do |sub|
   #   hub_type: 'ocean',
   #   direction: 'import').perform
 
-#   res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
-#     tenant: tenant,
-#     counterpart_hub: 'Copenhagen Port',
-#     direction: 'import',
-#     cargo_class: 'lcl').perform
+  # res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   direction: 'import',
+  #   cargo_class: 'lcl').perform
 
-#   path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
+  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
   
-#   ex_data = DataParser::PfcNordic::SheetParserExport.new(
-#     path: path,
-#     _user: shipper,
-#     counterpart_hub_name: 'Copenhagen Port',
-#     hub_type: 'ocean',
-#     input_language: 'de',
-#     cargo_class: 'lcl',
-#     load_type: 'cargo_item'
-#     ).perform
+  # ex_data = DataParser::PfcNordic::SheetParserExport.new(
+  #   path: path,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   input_language: 'de',
+  #   cargo_class: 'lcl',
+  #   load_type: 'cargo_item'
+  #   ).perform
   
-#   ex_hubs = DataInserter::PfcNordic::HubInserter.new(
-#     data: ex_data,
-#     tenant: tenant,
-#     counterpart_hub: 'Copenhagen Port',
-#     _user: shipper,
-#     hub_type: 'ocean',
-    
-#     direction: 'export').perform
+  # ex_hubs = DataInserter::PfcNordic::HubInserter.new(
+  #   data: ex_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   _user: shipper,
+  #   hub_type: 'ocean',
+  #   direction: 'export').perform
 
-#   res = DataInserter::PfcNordic::RateInserter.new(
-#     rates: ex_data,
-#     tenant: tenant,
-#     counterpart_hub: 'Copenhagen Port',
-#     direction: 'export',
-#     cargo_class: 'lcl',
-#     input_language: 'de',).perform
+  # res = DataInserter::PfcNordic::RateInserter.new(
+  #   rates: ex_data,
+  #   tenant: tenant,
+  #   counterpart_hub: 'Copenhagen Port',
+  #   direction: 'export',
+  #   cargo_class: 'lcl',
+  #   input_language: 'de',).perform
 
-#   local_charges = File.open("#{Rails.root}/db/dummydata/easyshipping/ez_seeder_local_charges.xlsx")
-#   req = { 'xlsx' => local_charges }
-#   ExcelTool::OverwriteLocalCharges.new(params: req,
-#     user: shipper).perform
-#   # byebug
+  # local_charges = File.open("#{Rails.root}/db/dummydata/easyshipping/ez_seeder_local_charges.xlsx")
+  # req = { 'xlsx' => local_charges }
+  # ExcelTool::OverwriteLocalCharges.new(params: req,
+  #   user: shipper).perform
+  # # byebug
   
-#   ex_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: ex_hubs,
-#     _user: shipper,
-#     counterpart_hub_name: 'Copenhagen Port',
-#     hub_type: 'ocean',
-#     direction: 'export'
-#   ).perform
+  # ex_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: ex_hubs,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   direction: 'export'
+  # ).perform
   
 
-#   imp_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: imp_hubs,
-#     _user: shipper,
-#     counterpart_hub_name: 'Copenhagen Port',
-#     hub_type: 'ocean',
-#     direction: 'import'
-#   ).perform
+  # imp_lc_data = DataInserter::PfcNordic::LocalChargeInserter.new(data: imp_hubs,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   direction: 'import'
+  # ).perform
   
   
   #   # # #   # # # # puts "# Overwrite public pricings from excel sheet"

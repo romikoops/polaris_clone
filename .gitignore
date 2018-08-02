@@ -30,7 +30,6 @@
 # Ignore files built by 'npm run build'
 /client/dist/*
 
-
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
@@ -90,9 +89,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-client/.node-env
 # /config/database.yml
 .idea
 .DS_Store

@@ -3,7 +3,8 @@ import { mount, shallow } from 'enzyme'
 import { theme, shipmentData, user, identity } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
-  switchIcon: x => x
+  switchIcon: x => x,
+  totalPrice: x => x
 }))
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -21,8 +22,6 @@ jest.mock('../Tooltip/Tooltip', () => ({
 
 // eslint-disable-next-line
 import { MessageShipmentData } from './MessageShipmentData'
-
-const createWrapper = propsInput => mount(<MessageShipmentData {...propsInput} />)
 
 const editedShipment = {
   ...shipmentData.shipment,
@@ -57,7 +56,7 @@ test('props.closeInfo is called', () => {
     ...propsBase,
     closeInfo: jest.fn()
   }
-  const wrapper = createWrapper(props)
+  const wrapper = mount(<MessageShipmentData {...props} />)
   const selector = 'div[className="flex-33 layout-row layout-align-space-around-center"]'
 
   const clickableDiv = wrapper.find(selector).last()

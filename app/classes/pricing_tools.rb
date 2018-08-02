@@ -48,11 +48,11 @@ module PricingTools
 
     lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
     charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
-    charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id)
+    charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
     return {} if charge.nil?
     totals = { "total" => {} }
 
-    charge.fees.each do |k, fee|
+    charge&.fees&.each do |k, fee|
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"]
       totals[k]["value"] += fee_value(fee, cargo_hash)
@@ -82,6 +82,35 @@ module PricingTools
       totals[k]["currency"] ||= fee["currency"]
 
       totals[k]["value"] += fee_value(fee, cargo_hash)
+    end
+
+    converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
+    totals["total"] = { value: converted, currency: user.currency }
+    totals
+  end
+  def calc_addon_charges(charge, cargos, user, mot)
+    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      weight = if cargo_unit.is_a?(CargoItem) || cargo_unit.is_a?(AggregatedCargo)
+                 cargo_unit.calc_chargeable_weight(mot) * (cargo_unit.quantity || 1)
+               else
+                 cargo_unit.payload_in_kg * (cargo_unit.quantity || 1)
+               end
+      return_h[:quantity] += cargo_unit.quantity unless cargo_unit.quantity.nil?
+      return_h[:volume]          += cargo_unit.try(:volume) * (cargo_unit.quantity || 1) || 0
+      return_h[:weight]          += (cargo_unit.try(:weight) || weight)
+    end
+
+    return {} if charge.nil?
+    totals = { "total" => {} }
+    charge.each do |k, fee|
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
+      if !fee['unknown']
+        totals[k]["currency"] ||= fee["currency"]
+
+        totals[k]["value"] += fee_value(fee, cargo_hash)
+      else
+        totals[k]["value"]  += 0
+      end
     end
 
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
@@ -246,15 +275,23 @@ module PricingTools
   end
 
   def fee_value(fee, cargo_hash)
+    
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
     when "PER_ITEM", "PER_CONTAINER"
       (fee["value"] || fee["rate"]).to_d * cargo_hash[:quantity]
     when "PER_CBM"
-      fee["value"].to_d * cargo_hash[:volume]
+      min = fee["min"] || 0
+      cbm = fee["value"].to_d * cargo_hash[:volume]
+      [cbm, min].max
     when "PER_KG"
       val = fee["value"].to_d * cargo_hash[:weight]
+      min = fee["min"] || 0
+      [val, min].max
+    when "PER_X_KG_FLAT"
+      base = fee['base'].to_d
+      val = fee['value'] * (cargo_hash[:weight] / base).ceil * base
       min = fee["min"] || 0
       [val, min].max
     when "PER_CBM_TON"

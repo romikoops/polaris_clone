@@ -79,6 +79,7 @@ exports[`shallow rendering 1`] = `
         handleNext={[Function]}
         icon=""
         iconClass=""
+        inverse={false}
         size=""
         text="Opt Out"
         theme={

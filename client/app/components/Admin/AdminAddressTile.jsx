@@ -154,8 +154,8 @@ export class AdminAddressTile extends Component {
       </div>
     )
     const pencilIcon = (<i
-      className="flex-none fa fa-edit clip"
-      style={{ background: '#BDBDBD', cursor: 'pointer' }}
+      className="flex-none fa fa-pencil clip"
+      style={{ background: '#BDBDBD', paddingRight: '1.7vw' }}
     />)
 
     return (
