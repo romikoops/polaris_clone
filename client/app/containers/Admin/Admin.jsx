@@ -105,7 +105,12 @@ class Admin extends Component {
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     const minHeightForFooter = window.innerHeight - 350
-    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
+    const footerStyle = {
+      minHeight: `${minHeightForFooter}px`,
+      position: 'relative',
+      paddingBottom: '230px'
+    }
+
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
         {loadingScreen}
@@ -253,7 +258,7 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <Footer theme={theme} tenant={tenant.data} />
+          <Footer theme={theme} tenant={tenant.data} isShop />
         </div>
       </div>
     )
