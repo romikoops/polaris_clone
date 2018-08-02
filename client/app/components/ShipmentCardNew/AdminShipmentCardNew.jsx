@@ -268,7 +268,7 @@ export class AdminShipmentCardNew extends Component {
         <div className={`layout-row flex-25 layout-align-space-between-center
             ${styles.sectionBottom} ${styles.separatorTop}`}
         >
-          <div className="layout-row flex-60 layout-align-start-center">
+          <div className="layout-row flex-75 layout-align-start-center">
             <div className="layout-row flex-15">
               <div className={`layout-row layout-align-center-center ${styles.green_icon}`} style={gradientStyle}>
                 <span className={`${styles.smallText}`}>
@@ -282,14 +282,14 @@ export class AdminShipmentCardNew extends Component {
                 className="fa fa-check-square clip"
                 style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
               />
-              <span> pickup</span>
+              <span> Pick-up</span>
             </span>
             <span className="flex-30">
               <i
                 className="fa fa-check-square clip"
                 style={shipment.delivery_address ? gradientFontStyle : deselectedStyle}
               />
-              <span> delivery</span>
+              <span> Delivery</span>
             </span>
           </div>
           <div className="layout-align-end-center">
