@@ -58,6 +58,7 @@ export class ChooseShipment extends Component {
     const directionButtons = ['export', 'import'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       const commercialAction = { import: 'Buying', export: 'Selling' }
+
       return (
         <div
           className={
