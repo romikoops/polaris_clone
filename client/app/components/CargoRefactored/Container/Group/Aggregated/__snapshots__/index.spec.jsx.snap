@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="panel open_panel flex-100 layout-row layout-wrap layout-align-start-center"
+  className="AGGREGATED panel open_panel flex-100 layout-row layout-wrap layout-align-start-center"
 >
   <div
     className="detailed_row_aggregated flex-100 layout-row layout-wrap layout-align-none-center"

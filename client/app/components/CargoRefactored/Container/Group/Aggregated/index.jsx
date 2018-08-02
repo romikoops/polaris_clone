@@ -1,50 +1,56 @@
 import React from 'react'
 import styles from '../CargoContainerGroup.scss'
 import PropTypes from '../../../../../prop-types'
+import { trim, WRAP_ROW, ALIGN_CENTER, ROW } from '../../../../../classNames'
+
+const CONTAINER = trim(`
+  AGGREGATED
+  ${styles.panel} 
+  ${styles.open_panel} 
+  ${WRAP_ROW(100)}
+  layout-align-start-center
+`)
+const THIRD_OF_ROW = 'flex-33 layout-row layout-align-space-around'
+const CENTERED_ROW = 'flex-none layout-row layout-align-center-center'
 
 export default function CargoContainerGroupAggregated ({ group }) {
+  const cargoType = group.payload_in_kg || group.weight
+
   return (
-    <div className={
-      `${styles.panel} ${styles.open_panel} flex-100 ` +
-      'layout-row layout-wrap layout-align-start-center'
-    }
-    >
-      {/* <div className={
-        `${styles.detailed_row} flex-100 layout-row layout-wrap layout-align-none-center`
-      }
+    <div className={CONTAINER}>
+      <div className={trim(`
+        ${styles.detailed_row_aggregated}
+        ${WRAP_ROW(100)}
+        layout-align-none-center
+      `)}
       >
-        <h4 className="flex-none"> Aggregate Values:</h4>
-      </div> */}
-      <div className={
-        `${styles.detailed_row_aggregated} flex-100 ` +
-        'layout-row layout-wrap layout-align-none-center'
-      }
-      >
-        <div className="flex-33 layout-row layout-align-space-around">
+        <div className={THIRD_OF_ROW}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{group.payload_in_kg || group.weight}</span> &nbsp;kg </p>
-            <p className="flex-none layout-row layout-align-center-center">Cargo Gross Weight</p>
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
+              <span className={styles.cargo_type}>{cargoType}</span> &nbsp;kg </p>
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>Cargo Gross Weight</p>
           </div>
         </div>
 
-        <div className="flex-33 layout-row layout-align-space-around">
+        <div className={THIRD_OF_ROW}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={CENTERED_ROW}>
               <span className={styles.cargo_type}>
                 {(+group.gross_weight)}
               </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
+            <p className={CENTERED_ROW}>Gross Weight</p>
           </div>
         </div>
-        <div className="flex-33 layout-row layout-align-space-around">
+
+        <div className={THIRD_OF_ROW}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={CENTERED_ROW}>
               <span className={styles.cargo_type}>
                 {+(group.tare_weight).toFixed(3)}
               </span>
               &nbsp;kg
             </p>
-            <p className="flex-none layout-row layout-align-center-center">Tare Weight</p>
+            <p className={CENTERED_ROW}>Tare Weight</p>
           </div>
         </div>
       </div>
