@@ -195,7 +195,7 @@ class Landing extends Component {
             </div>
           </div>
         </div>
-        <Footer theme={theme} tenant={tenant.data}/>
+        <Footer theme={theme} tenant={tenant.data} />
       </div>
     )
   }
