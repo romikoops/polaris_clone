@@ -6,18 +6,24 @@ import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../../../../helpers'
 
 export default function ContactSetterBodyNotifyeeContactsContactCard ({
-  theme, contactData, removeFunc
+  theme, contactData, removeFunc, showEditContact
 }) {
   const { contact } = contactData
   const iconStyle = {
     ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   }
 
-  const removeIcon = (
-    <i
-      className={`${styles.remove_icon} fa fa-trash`}
-      onClick={() => removeFunc()}
-    />
+  const icons = (
+    <div className={`flex layout-row ${styles.icons}`}>
+      <i
+        className={`${styles.remove_icon} pointy fa fa-trash`}
+        onClick={() => removeFunc()}
+      />
+      <i
+        className={`${styles.edit_icon} pointy fa fa-pencil`}
+        onClick={index => showEditContact('notifyee', index)}
+      />
+    </div>
   )
 
   return (
@@ -25,7 +31,7 @@ export default function ContactSetterBodyNotifyeeContactsContactCard ({
       key={v4()}
       className={`layout-row ${styles.contact_card}`}
     >
-      { removeIcon }
+      { icons }
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.user_icon} fa fa-user clip`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>
@@ -45,10 +51,12 @@ ContactSetterBodyNotifyeeContactsContactCard.propTypes = {
     location: PropTypes.object
   }).isRequired,
   theme: PropTypes.theme,
-  removeFunc: PropTypes.func
+  removeFunc: PropTypes.func,
+  showEditContact: PropTypes.func
 }
 
 ContactSetterBodyNotifyeeContactsContactCard.defaultProps = {
   theme: null,
+  showEditContact: null,
   removeFunc: null
 }

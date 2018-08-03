@@ -20,8 +20,31 @@ class ContactsController < ApplicationController
   def update_contact
     update_data = JSON.parse(params[:update])
     contact = Contact.find(params[:id])
+    loc = Location.find(update_data["locationId"])
     update_data.delete("id")
-    contact.update_attributes(update_data)
+    update_data.delete("locationId")
+
+    byebug
+    edited_contact_data = {}
+    edited_contact_location = {}
+    edited_contact_data[:first_name] = update_data["firstName"]
+    edited_contact_data[:last_name] = update_data["lastName"]
+    edited_contact_data[:company_name] = update_data["companyName"]
+    edited_contact_data[:phone] = update_data["phone"]
+    edited_contact_data[:email] = update_data["email"]
+    edited_contact_data[:alias] = true
+    edited_contact_data[:user_id] = update_data["userId"]
+
+    edited_contact_location[:street_number] = update_data["number"] || update_data["streetNumber"]
+    edited_contact_location[:street] = update_data["street"]
+    edited_contact_location[:city] = update_data["city"]
+    edited_contact_location[:zip_code] = update_data["zipCode"]
+    edited_contact_location[:country] = Country.geo_find_by_name(update_data["country"])
+    byebug
+    loc.update_attributes(edited_contact_location)
+    edited_contact_data[:location_id] = loc.id
+    contact.update_attributes(edited_contact_data)
+    byebug
     contact.save!
     response_handler(contact)
   end
@@ -84,7 +107,7 @@ class ContactsController < ApplicationController
     ncd[:phone] = contact_data["phone"]
     ncd[:email] = contact_data["email"]
 
-    ncl[:street_number] = contact_data["number"]
+    ncl[:street_number] = contact_data["number"] || contact_data["streetNumber"]
     ncl[:street] = contact_data["street"]
     ncl[:city] = contact_data["city"]
     ncl[:zip_code] = contact_data["zipCode"]

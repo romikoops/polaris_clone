@@ -11,23 +11,6 @@ export class ContactSetter extends Component {
   constructor (props) {
     super(props)
 
-    this.newContactData = {
-      contact: {
-        companyName: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: ''
-      },
-      location: {
-        street: '',
-        number: '',
-        zipCode: '',
-        city: '',
-        country: '',
-        gecodedAddress: ''
-      }
-    }
     this.contactTypes = props.direction === 'export'
       ? ['shipper', 'consignee', 'notifyee']
       : ['consignee', 'shipper', 'notifyee']
@@ -41,6 +24,8 @@ export class ContactSetter extends Component {
       }
     }
     this.setContactForEdit = this.setContactForEdit.bind(this)
+    this.showAddressBook = this.showAddressBook.bind(this)
+    this.showEditContact = this.showEditContact.bind(this)
   }
 
   setContactForEdit (contactData) {
@@ -88,7 +73,10 @@ export class ContactSetter extends Component {
               contacts: this.availableContacts(contactType),
               setContact: (contactData) => {
                 this.props.setContact(contactData, contactType, index)
-                this.setState({ modal: null, showModal: false })
+                this.setState({
+                  modal: null,
+                  showModal: false
+                })
               }
             }}
             ShipmentContactFormProps={{
@@ -110,14 +98,14 @@ export class ContactSetter extends Component {
     this.setState({ modal, showModal: true })
   }
 
-  editProfile () {
-    const { contactData } = this.props
-    const { contact } = contactData
-    this.setState({
-      editBool: true,
-      editObj: contact
-    })
-  }
+  // editContact () {
+  //   const { contactData } = this.state
+  //   const { contact } = contactData
+  //   this.setState({
+  //     editBool: true,
+  //     editObj: contact
+  //   })
+  // }
 
   handleChange (ev) {
     const { contact, location } = ev.target
@@ -130,14 +118,33 @@ export class ContactSetter extends Component {
     })
   }
 
-  showEditContact (contactType, contact) {
+  showEditContact (contactType, index) {
+    const {
+      shipper, consignee, notifyees, contacts
+    } = this.props
+
+    let newSelectedContact
+    if (contactType === 'shipper') {
+      newSelectedContact = shipper
+    } else if (contactType === 'consignee') {
+      newSelectedContact = consignee
+    } else {
+      newSelectedContact = notifyees[index]
+    }
+    debugger // eslint-disable-line no-debugger
     const modal = (
       <Modal
         component={
           <ShipmentContactForm
+            showEdit
+            selectedContact={newSelectedContact}
             theme={this.props.theme}
+            contacts={contacts}
+            setContact={(contactData) => {
+              this.props.setContact(contactData, contactType, index)
+              this.setState({ modal: null, showModal: false })
+            }}
             contactType={contactType}
-            handleChange={e => this.handleChange(e)}
           />
         }
         verticalPadding="30px"
@@ -145,12 +152,13 @@ export class ContactSetter extends Component {
         parentToggle={() => this.toggleShowModal()}
       />
     )
-    this.setState({ modal, showModal: true, contact })
+
+    this.setState({ modal, showModal: true })
   }
 
   render () {
     const {
-      theme, shipper, consignee, notifyees, contacts
+      theme, shipper, consignee, notifyees
     } = this.props
     const { showModal, modal } = this.state
 
@@ -162,7 +170,7 @@ export class ContactSetter extends Component {
           'layout-row layout-wrap layout-align-center-start'
         }
       >
-        { showModal && modal}
+        {showModal && modal}
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div
             className={`${styles.wrapper_main_h1} flex-100`}
@@ -175,7 +183,6 @@ export class ContactSetter extends Component {
           <div
             className="flex-100 layout-row layout-align-center-center"
           >
-          {console.log(contacts)}
             <ContactSetterBody
               consignee={consignee}
               shipper={shipper}
@@ -183,13 +190,13 @@ export class ContactSetter extends Component {
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
-              handleClick={(contactData, index) => this.setContact(contactData, index)}
-              showEditContact={contactType => this.showEditContact(contactType)}
+              showEditContact={(contactType, index) => this.showEditContact(contactType, index)}
               showAddressBook={(contactType, index) => this.showAddressBook(contactType, index)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
             />
           </div>
+
           <hr className={`${styles.main_hr} ${styles.bottom_hr}`} />
         </div>
       </div>

@@ -58,9 +58,13 @@ ShipmentContactsBoxMainContacts.propTypes = {
     location: PropTypes.object
   }).isRequired,
   direction: PropTypes.string.isRequired,
-  showAddressBook: PropTypes.func.isRequired
+  showAddressBook: PropTypes.func.isRequired,
+  showEditContact: PropTypes.func,
+  handleClick: PropTypes.func
 }
 
 ShipmentContactsBoxMainContacts.defaultProps = {
-  theme: null
+  theme: null,
+  handleClick: null,
+  showEditContact: null
 }

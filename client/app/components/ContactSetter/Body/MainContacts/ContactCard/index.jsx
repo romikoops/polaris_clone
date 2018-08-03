@@ -99,11 +99,15 @@ ShipmentContactsBoxMainContactsContactCard.propTypes = {
   }).isRequired,
   theme: PropTypes.theme,
   contactType: PropTypes.string,
-  showAddressBook: PropTypes.func
+  showAddressBook: PropTypes.func,
+  showEditContact: PropTypes.func,
+  handleClick: PropTypes.func
 }
 
 ShipmentContactsBoxMainContactsContactCard.defaultProps = {
   theme: null,
   contactType: '',
-  showAddressBook: null
+  showAddressBook: null,
+  handleClick: null,
+  showEditContact: null
 }
