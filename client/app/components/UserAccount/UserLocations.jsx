@@ -177,7 +177,7 @@ export class UserLocations extends Component {
     }
 
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-space-between-center">{activeView}</div>
+      <div className="layout-row flex-100 layout-wrap layout-margin">{activeView}</div>
     )
   }
 }
