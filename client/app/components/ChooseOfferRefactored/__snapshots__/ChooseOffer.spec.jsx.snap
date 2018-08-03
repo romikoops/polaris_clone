@@ -1,0 +1,838 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-start layout-wrap"
+  style={
+    Object {
+      "marginBottom": "166px",
+      "marginTop": "62px",
+    }
+  }
+>
+  <FlashMessages
+    messages={
+      Array [
+        "FOO_MESSAGE",
+        "BAR_MESSAGE",
+      ]
+    }
+  />
+  <div
+    className="flex-none content_width layout-row layout-wrap"
+  >
+    <div
+      className="flex-20 layout-row layout-wrap"
+    >
+      <RouteFilterBox
+        availableMotKeys={
+          Object {
+            "ocean": true,
+          }
+        }
+        departureDate={0}
+        durationFilter={40}
+        moT={
+          Object {
+            "air": true,
+            "ocean": true,
+            "rail": true,
+            "truck": true,
+          }
+        }
+        pickup={false}
+        setDepartureDate={[Function]}
+        setDurationFilter={[Function]}
+        setMoT={[Function]}
+        shipment={
+          Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-75 offset-5 layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-left"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+            <p
+              className="flex-none no_m"
+            >
+              Show earlier departures
+            </p>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none no_m"
+            >
+              Show later departures
+            </p>
+            <i
+              className="flex-none fa fa-angle-double-right"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-between-center route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="This is the closest departure to the specified date"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <NamedSelect
+              className="flex-100"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "EUR",
+                    "value": "EUR",
+                  },
+                  Object {
+                    "label": "AUD",
+                    "value": "AUD",
+                  },
+                  Object {
+                    "label": "BGN",
+                    "value": "BGN",
+                  },
+                  Object {
+                    "label": "BRL",
+                    "value": "BRL",
+                  },
+                  Object {
+                    "label": "CAD",
+                    "value": "CAD",
+                  },
+                  Object {
+                    "label": "CHF",
+                    "value": "CHF",
+                  },
+                  Object {
+                    "label": "CNY",
+                    "value": "CNY",
+                  },
+                  Object {
+                    "label": "CZK",
+                    "value": "CZK",
+                  },
+                  Object {
+                    "label": "DKK",
+                    "value": "DKK",
+                  },
+                  Object {
+                    "label": "GBP",
+                    "value": "GBP",
+                  },
+                  Object {
+                    "label": "HKD",
+                    "value": "HKD",
+                  },
+                  Object {
+                    "label": "HRK",
+                    "value": "HRK",
+                  },
+                  Object {
+                    "label": "HUF",
+                    "value": "HUF",
+                  },
+                  Object {
+                    "label": "IDR",
+                    "value": "IDR",
+                  },
+                  Object {
+                    "label": "ILS",
+                    "value": "ILS",
+                  },
+                  Object {
+                    "label": "INR",
+                    "value": "INR",
+                  },
+                  Object {
+                    "label": "JPY",
+                    "value": "JPY",
+                  },
+                  Object {
+                    "label": "KRW",
+                    "value": "KRW",
+                  },
+                  Object {
+                    "label": "MXN",
+                    "value": "MXN",
+                  },
+                  Object {
+                    "label": "MYR",
+                    "value": "MYR",
+                  },
+                  Object {
+                    "label": "NOK",
+                    "value": "NOK",
+                  },
+                  Object {
+                    "label": "NZD",
+                    "value": "NZD",
+                  },
+                  Object {
+                    "label": "PHP",
+                    "value": "PHP",
+                  },
+                  Object {
+                    "label": "PLN",
+                    "value": "PLN",
+                  },
+                  Object {
+                    "label": "RON",
+                    "value": "RON",
+                  },
+                  Object {
+                    "label": "RUB",
+                    "value": "RUB",
+                  },
+                  Object {
+                    "label": "SEK",
+                    "value": "SEK",
+                  },
+                  Object {
+                    "label": "SGD",
+                    "value": "SGD",
+                  },
+                  Object {
+                    "label": "THB",
+                    "value": "THB",
+                  },
+                  Object {
+                    "label": "TRY",
+                    "value": "TRY",
+                  },
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  },
+                  Object {
+                    "label": "ZAR",
+                    "value": "ZAR",
+                  },
+                ]
+              }
+              placeholder="Select Currency"
+            />
+          </div>
+        </div>
+        <RouteResult
+          fees={
+            Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            }
+          }
+          key="RANDOM_KEY_0"
+          loadType="OCEAN_LOAD_TYPE"
+          pickup={false}
+          schedule={
+            Object {
+              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+              "mode_of_transport": "ocean",
+            }
+          }
+          selectResult={[Function]}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+          truckingTime={55}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Alternative departures"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-33 layout-row layout-align-space-around-center"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              More
+            </p>
+            <div
+              className="flex-5"
+            />
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="content_width_booking flex-none layout-row layout-align-start-center"
+    >
+      <RoundButton
+        active={false}
+        back={true}
+        disabled={false}
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-angle0-left"
+        inverse={false}
+        size=""
+        text="Back to dashboard"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shipmentData is falsy 1`] = `""`;
+
+exports[`shipmentData.schedules is falsy 1`] = `""`;
+
+exports[`state.selectedMoT.ocean is false 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-start layout-wrap"
+  style={
+    Object {
+      "marginBottom": "166px",
+      "marginTop": "62px",
+    }
+  }
+>
+  <FlashMessages
+    messages={
+      Array [
+        "FOO_MESSAGE",
+        "BAR_MESSAGE",
+      ]
+    }
+  />
+  <div
+    className="flex-none content_width layout-row layout-wrap"
+  >
+    <div
+      className="flex-20 layout-row layout-wrap"
+    >
+      <RouteFilterBox
+        availableMotKeys={
+          Object {
+            "ocean": true,
+          }
+        }
+        departureDate={0}
+        durationFilter={40}
+        moT={
+          Object {
+            "air": true,
+            "ocean": false,
+            "rail": true,
+            "truck": true,
+          }
+        }
+        pickup={false}
+        setDepartureDate={[Function]}
+        setDurationFilter={[Function]}
+        setMoT={[Function]}
+        shipment={
+          Object {
+            "cargo_notes": "FOO_CARGO_NOTES",
+            "eori": 1234,
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "incoterm_text": "FOO_INCOTERM_TEXT",
+            "load_type": "OCEAN_LOAD_TYPE",
+            "notes": "FOO_NOTES",
+            "schedules_charges": Object {
+              "AIR_HUB_ROUTE_KEY": Object {
+                "total": 200,
+              },
+              "OCEAN_HUB_ROUTE_KEY": Object {
+                "total": 40,
+              },
+              "RAIL_HUB_ROUTE_KEY": Object {
+                "total": 125,
+              },
+              "TRUCK_HUB_ROUTE_KEY": Object {
+                "total": 75,
+              },
+            },
+            "selected_offer": Object {
+              "cargo": Object {},
+              "total": Object {
+                "value": 77,
+              },
+            },
+            "total_goods_value": Object {
+              "currency": "USD",
+              "value": 15,
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-75 offset-5 layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-left"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+            <p
+              className="flex-none no_m"
+            >
+              Show earlier departures
+            </p>
+          </div>
+          <div
+            className="flex-none layout-row layout-align-space-around-center pointy"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none no_m"
+            >
+              Show later departures
+            </p>
+            <i
+              className="flex-none fa fa-angle-double-right"
+              style={
+                Object {
+                  "margin": "0 5px",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-between-center route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="This is the closest departure to the specified date"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <NamedSelect
+              className="flex-100"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "EUR",
+                    "value": "EUR",
+                  },
+                  Object {
+                    "label": "AUD",
+                    "value": "AUD",
+                  },
+                  Object {
+                    "label": "BGN",
+                    "value": "BGN",
+                  },
+                  Object {
+                    "label": "BRL",
+                    "value": "BRL",
+                  },
+                  Object {
+                    "label": "CAD",
+                    "value": "CAD",
+                  },
+                  Object {
+                    "label": "CHF",
+                    "value": "CHF",
+                  },
+                  Object {
+                    "label": "CNY",
+                    "value": "CNY",
+                  },
+                  Object {
+                    "label": "CZK",
+                    "value": "CZK",
+                  },
+                  Object {
+                    "label": "DKK",
+                    "value": "DKK",
+                  },
+                  Object {
+                    "label": "GBP",
+                    "value": "GBP",
+                  },
+                  Object {
+                    "label": "HKD",
+                    "value": "HKD",
+                  },
+                  Object {
+                    "label": "HRK",
+                    "value": "HRK",
+                  },
+                  Object {
+                    "label": "HUF",
+                    "value": "HUF",
+                  },
+                  Object {
+                    "label": "IDR",
+                    "value": "IDR",
+                  },
+                  Object {
+                    "label": "ILS",
+                    "value": "ILS",
+                  },
+                  Object {
+                    "label": "INR",
+                    "value": "INR",
+                  },
+                  Object {
+                    "label": "JPY",
+                    "value": "JPY",
+                  },
+                  Object {
+                    "label": "KRW",
+                    "value": "KRW",
+                  },
+                  Object {
+                    "label": "MXN",
+                    "value": "MXN",
+                  },
+                  Object {
+                    "label": "MYR",
+                    "value": "MYR",
+                  },
+                  Object {
+                    "label": "NOK",
+                    "value": "NOK",
+                  },
+                  Object {
+                    "label": "NZD",
+                    "value": "NZD",
+                  },
+                  Object {
+                    "label": "PHP",
+                    "value": "PHP",
+                  },
+                  Object {
+                    "label": "PLN",
+                    "value": "PLN",
+                  },
+                  Object {
+                    "label": "RON",
+                    "value": "RON",
+                  },
+                  Object {
+                    "label": "RUB",
+                    "value": "RUB",
+                  },
+                  Object {
+                    "label": "SEK",
+                    "value": "SEK",
+                  },
+                  Object {
+                    "label": "SGD",
+                    "value": "SGD",
+                  },
+                  Object {
+                    "label": "THB",
+                    "value": "THB",
+                  },
+                  Object {
+                    "label": "TRY",
+                    "value": "TRY",
+                  },
+                  Object {
+                    "label": "USD",
+                    "value": "USD",
+                  },
+                  Object {
+                    "label": "ZAR",
+                    "value": "ZAR",
+                  },
+                ]
+              }
+              placeholder="Select Currency"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Alternative departures"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-33 layout-row layout-align-space-around-center"
+            onClick={[Function]}
+          >
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              More
+            </p>
+            <div
+              className="flex-5"
+            />
+            <i
+              className="flex-none fa fa-angle-double-down"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="content_width_booking flex-none layout-row layout-align-start-center"
+    >
+      <RoundButton
+        active={false}
+        back={true}
+        disabled={false}
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-angle0-left"
+        inverse={false}
+        size=""
+        text="Back to dashboard"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
