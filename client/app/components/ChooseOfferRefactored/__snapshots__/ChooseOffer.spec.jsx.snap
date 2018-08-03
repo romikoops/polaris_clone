@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-center-center"
+  className="CHOOSE_OFFER flex-100 layout-row layout-wrap layout-align-center-center"
   style={
     Object {
       "marginBottom": "166px",
@@ -448,7 +448,7 @@ exports[`shipmentData.schedules is falsy 1`] = `""`;
 
 exports[`state.selectedMoT.ocean is false 1`] = `
 <div
-  className="flex-100 layout-row layout-align-center-start layout-wrap"
+  className="CHOOSE_OFFER flex-100 layout-row layout-wrap layout-align-center-center"
   style={
     Object {
       "marginBottom": "166px",
@@ -545,7 +545,7 @@ exports[`state.selectedMoT.ocean is false 1`] = `
       />
     </div>
     <div
-      className="flex-75 offset-5 layout-row layout-wrap"
+      className="flex-75 layout-row layout-wrap offset-5"
     >
       <div
         className="flex-100 layout-row layout-wrap"

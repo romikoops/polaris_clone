@@ -13,6 +13,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 import { trim, ROW, WRAP_ROW, ALIGN_CENTER } from '../../classNames'
 
+const CONTAINER = `CHOOSE_OFFER ${WRAP_ROW(100)} ${ALIGN_CENTER}`
 const POINTY = 'flex-none layout-row layout-align-space-around-center pointy'
 const ANGLE_LEFT_ICON = 'flex-none fa fa-angle-double-left'
 const ANGLE_RIGHT_ICON = 'flex-none fa fa-angle-double-right'
@@ -295,7 +296,7 @@ export class ChooseOffer extends Component {
 
     return (
       <div
-        className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}
+        className={CONTAINER}
         style={{ marginTop: '62px', marginBottom: '166px' }}
       >
         {flash}
