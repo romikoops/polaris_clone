@@ -156,7 +156,7 @@ export class AdminShipmentCard extends Component {
             <span className="flex-30">Cargo item</span>
             <span className={`flex-30 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
               <i className={`fa fa-check-square ${styles.darkgreen}`} />
-              <span> Pickup</span>
+              <span> Pick-up</span>
             </span>
             <span className="flex-30">
               <i className={`fa fa-check-square ${styles.grey}`} />
