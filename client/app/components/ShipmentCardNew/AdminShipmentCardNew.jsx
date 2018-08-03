@@ -11,7 +11,8 @@ import {
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  formattedPriceValue
+  formattedPriceValue,
+  splitName
 } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 
@@ -130,6 +131,11 @@ export class AdminShipmentCardNew extends Component {
       </div>
     ) : ''
 
+ 
+
+    const destinationHubObj = splitName(shipment.destination_hub.name)
+    const originHubObj = splitName(shipment.origin_hub.name)
+
     return (
       <div
         key={v4()}
@@ -157,9 +163,12 @@ export class AdminShipmentCardNew extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className="layout-align-center-center flex-100">
-                    <div className={`flex-100 layout-align-center-center ${styles.hub_name}`}>
-                      <p className="layout-align-center-center flex-100">{shipment.origin_hub.name}</p>
+                  <div className={`layout-align-center-center flex-45 ${styles.hub_box}`}>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
+                      <p>{originHubObj.name}</p>
+                    </div>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_type} ${styles.smallText}`}>
+                      <p>{originHubObj.hubType}</p>
                     </div>
                   </div>
                   <div className="layout-column flex-100">
@@ -179,10 +188,15 @@ export class AdminShipmentCardNew extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
-                    <p>{shipment.destination_hub.name}</p>
+                  <div className={`layout-align-center-center flex-45 ${styles.hub_box}`}>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
+                      <p>{destinationHubObj.name}</p>
+                    </div>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_type} ${styles.smallText}`}>
+                      <p>{destinationHubObj.hubType}</p>
+                    </div>
                   </div>
-                  <div className="layout-column flex-100">
+                  <div className={`layout-column flex-55 ${styles.hub_image}`}>
                     <span className="flex-100" style={bg2} />
                   </div>
                 </div>
