@@ -2,13 +2,13 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-45 layout-row"
+  className="CONTACT flex-45 layout-row"
 >
   <div
     className="flex-10 layout-column layout-align-start-center"
   >
     <i
-      className=" icon fa fa-envelope-open-o flex-none"
+      className="icon fa fa-envelope-open-o flex-none"
       style={Object {}}
     />
   </div>
@@ -52,7 +52,7 @@ exports[`shallow render 1`] = `
         </p>
       </div>
       <div
-        className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
       >
         <p
           className="contact_text address_buffer flex-100 center"
@@ -60,7 +60,7 @@ exports[`shallow render 1`] = `
           Address
         </p>
         <address
-          className=" address flex-100 center"
+          className="address flex-100 center"
         >
            
           <br />

@@ -21,9 +21,9 @@ module.exports = function (wallaby) {
     },
     testFramework: 'jest',
     workers: {
-      initial: 2,
-      regular: 3
+      initial: 3,
+      regular: 1
     },
-    debug: true
+    debug: false
   }
 }
