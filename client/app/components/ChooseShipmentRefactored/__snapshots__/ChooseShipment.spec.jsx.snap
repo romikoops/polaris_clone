@@ -2,13 +2,13 @@
 
 exports[`messages.length === 0 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="CHOOSE_SHIPMENT card_link_row flex-100 layout-row layout-align-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none layout-row layout-wrap content_width layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+      className="flex-100 layout-row layout-wrap layout-align-space-around-center"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -188,7 +188,7 @@ exports[`messages.length === 0 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="CHOOSE_SHIPMENT card_link_row flex-100 layout-row layout-align-center"
 >
   <FlashMessages
     messages={
@@ -199,10 +199,10 @@ exports[`shallow render 1`] = `
     }
   />
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none layout-row layout-wrap content_width layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+      className="flex-100 layout-row layout-wrap layout-align-space-around-center"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -382,7 +382,7 @@ exports[`shallow render 1`] = `
 
 exports[`state.direction && state.loadType 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="CHOOSE_SHIPMENT card_link_row flex-100 layout-row layout-align-center"
 >
   <FlashMessages
     messages={
@@ -393,10 +393,10 @@ exports[`state.direction && state.loadType 1`] = `
     }
   />
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none layout-row layout-wrap content_width layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+      className="flex-100 layout-row layout-wrap layout-align-space-around-center"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -459,7 +459,7 @@ exports[`state.direction && state.loadType 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section "
+      className="flex-100 layout-row layout-wrap section"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -580,7 +580,7 @@ exports[`state.direction && state.loadType 1`] = `
 
 exports[`state.direction === export 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="CHOOSE_SHIPMENT card_link_row flex-100 layout-row layout-align-center"
 >
   <FlashMessages
     messages={
@@ -591,10 +591,10 @@ exports[`state.direction === export 1`] = `
     }
   />
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none layout-row layout-wrap content_width layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+      className="flex-100 layout-row layout-wrap layout-align-space-around-center"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -657,7 +657,7 @@ exports[`state.direction === export 1`] = `
       </div>
     </div>
     <div
-      className="flex-100 layout-row layout-wrap section "
+      className="flex-100 layout-row layout-wrap section"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
@@ -778,7 +778,7 @@ exports[`state.direction === export 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="card_link_row layout-row flex-100 layout-align-center"
+  className="CHOOSE_SHIPMENT card_link_row flex-100 layout-row layout-align-center"
 >
   <FlashMessages
     messages={
@@ -789,10 +789,10 @@ exports[`theme is falsy 1`] = `
     }
   />
   <div
-    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+    className="flex-none layout-row layout-wrap content_width layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+      className="flex-100 layout-row layout-wrap layout-align-space-around-center"
     >
       <div
         className="flex-100 layout-row layout-align-start-center"
