@@ -125,11 +125,6 @@ export class AdminShipmentCardNew extends Component {
         <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
       </div>
     ) : ''
-    const openButtons = shipment.status === 'confirmed' || shipment.status === 'in_progress' ? (
-      <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
-        <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleFinished()} />
-      </div>
-    ) : ''
 
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
@@ -145,7 +140,6 @@ export class AdminShipmentCardNew extends Component {
         {confimPrompt}
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
         {requestedButtons}
-        {openButtons}
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
           <span className={`flex-100 ${styles.ref_row_card}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
@@ -265,7 +259,7 @@ export class AdminShipmentCardNew extends Component {
             </div>
           </div>
         ) : (
-          <div className={`layout-row flex-100 layout-align-start-stretch
+          <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
           >
             <div className="flex-100 layout-row"><b>Arrived on:</b>
