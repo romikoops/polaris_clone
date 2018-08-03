@@ -46,7 +46,7 @@ afterEach(() => {
   Date = originalDate
 })
 
-test('shallow render', () => {
+test.only('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
 })
 
