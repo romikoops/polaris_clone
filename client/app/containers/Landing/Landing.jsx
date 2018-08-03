@@ -72,10 +72,6 @@ class Landing extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const textStyle2 =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.secondary, theme.colors.primary)
-        : { color: 'black' }
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
     const loginModal = (
       <Modal
@@ -131,7 +127,7 @@ class Landing extends Component {
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
-                  <i className="fa fa-edit" aria-hidden="true" style={textStyle2} />
+                  <i className="fa fa-edit" aria-hidden="true" style={textStyle1} />
                   <h3> Real Time Quotes </h3>
                 </div>
                 <div
@@ -143,7 +139,7 @@ class Landing extends Component {
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
-                  <i className="fa fa-clock-o" aria-hidden="true" style={textStyle2} />
+                  <i className="fa fa-clock-o" aria-hidden="true" style={textStyle1} />
                   <h3>Updates in Real Time </h3>
                 </div>
               </div>
