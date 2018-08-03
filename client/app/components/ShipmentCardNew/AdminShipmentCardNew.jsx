@@ -131,8 +131,6 @@ export class AdminShipmentCardNew extends Component {
       </div>
     ) : ''
 
- 
-
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
 
