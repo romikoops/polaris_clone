@@ -113,7 +113,6 @@ export class BookingDetails extends Component {
     if (type === 'notifyee') {
       const { notifyees } = this.state
       notifyees[index] = contactData
-
       return this.setState({ notifyees })
     }
     this.setState({ [type]: contactData })
@@ -390,7 +389,7 @@ export class BookingDetails extends Component {
         <div className={trim(`
               ${defaults.content_width}
               content-width
-              ${ROW('none')} 
+              ${ROW('none')}
               ${ALIGN_START_CENTER}
             `)}
         >

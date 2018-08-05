@@ -21,7 +21,7 @@ export default function ContactSetterBodyNotifyeeContactsContactCard ({
       />
       <i
         className={`${styles.edit_icon} pointy fa fa-pencil`}
-        onClick={index => showEditContact('notifyee', index)}
+        onClick={() => showEditContact()}
       />
     </div>
   )

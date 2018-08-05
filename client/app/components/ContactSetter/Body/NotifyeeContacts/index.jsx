@@ -13,7 +13,7 @@ export default function ContactSetterBodyNotifyeeContacts ({
         theme={theme}
         contactData={notifyee}
         removeFunc={() => removeFunc(i)}
-        showEditContact={showEditContact}
+        showEditContact={() => showEditContact('notifyee', i)}
       />
     </div>
   ))

@@ -23,14 +23,8 @@ export class ContactSetter extends Component {
         location: {}
       }
     }
-    this.setContactForEdit = this.setContactForEdit.bind(this)
     this.showAddressBook = this.showAddressBook.bind(this)
     this.showEditContact = this.showEditContact.bind(this)
-  }
-
-  setContactForEdit (contactData) {
-    this.setState({ contactData, showModal: true })
-    debugger // eslint-disable-line no-debugger
   }
 
   autofillContact (contactData) {
@@ -95,27 +89,8 @@ export class ContactSetter extends Component {
         parentToggle={() => this.toggleShowModal()}
       />
     )
+    debugger // eslint-disable-line no-debugger
     this.setState({ modal, showModal: true })
-  }
-
-  // editContact () {
-  //   const { contactData } = this.state
-  //   const { contact } = contactData
-  //   this.setState({
-  //     editBool: true,
-  //     editObj: contact
-  //   })
-  // }
-
-  handleChange (ev) {
-    const { contact, location } = ev.target
-    this.setState({
-      contactData: {
-        ...this.state.contactData,
-        contact,
-        location
-      }
-    })
   }
 
   showEditContact (contactType, index) {
@@ -131,7 +106,7 @@ export class ContactSetter extends Component {
     } else {
       newSelectedContact = notifyees[index]
     }
-    debugger // eslint-disable-line no-debugger
+
     const modal = (
       <Modal
         component={
@@ -152,7 +127,7 @@ export class ContactSetter extends Component {
         parentToggle={() => this.toggleShowModal()}
       />
     )
-
+    debugger // eslint-disable-line no-debugger
     this.setState({ modal, showModal: true })
   }
 

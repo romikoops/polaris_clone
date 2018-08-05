@@ -171,7 +171,7 @@ export class ShipmentContactForm extends Component {
     const setContactBtn = (
       <RoundButton
         text={
-          `${contactType === 'notifyee' ? 'Add' : 'Set'} ` +
+          `${contactType === 'notifyee' && !showEdit ? 'Add' : 'Set'} ` +
           `${nameToDisplay(contactType)}`
         }
         theme={theme}
