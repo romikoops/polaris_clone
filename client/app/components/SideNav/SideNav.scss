@@ -8,12 +8,36 @@
     &.collapsed {
       opacity: 0;
       visibility: hidden;
-      background: rgb(250, 250, 250);
+      background: white;
+      position: relative;
       border-left: 1px solid rgb(200, 200, 200);
-      width: 134px;
-      box-shadow: 1px 1px 1px rgba(black, 0.25);
+      min-width: 134px !important;
+      padding-left: 20px;
+      box-shadow: 0 0 2px rgba(black, 0.15);
       border-radius: 0 2px 2px 0;
       transition: all 0.3s ease-in-out;
+      &.collapsed:after, &.collapsed:before {
+        right: 100%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+      }
+
+      &.collapsed:after {
+        border-color: rgba(136, 183, 213, 0);
+        border-width: 30px;
+        margin-top: -30px;
+      }
+      &.collapsed:before {
+        border-color: rgba(194, 225, 245, 0);
+        border-right-color: white;
+        border-width: 9px;
+        margin-top: -10px;
+      }
     }
   }
   .icon_box {
@@ -44,7 +68,7 @@
     cursor: pointer;
   }
   .tooltip {
-    max-width: 200px;
+    min-width: 200px;
   }
 
 }

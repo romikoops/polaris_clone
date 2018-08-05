@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactTooltip from 'react-tooltip'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
 import { connect } from 'react-redux'
@@ -25,13 +24,6 @@ class SideNav extends Component {
         url: '/account/dashboard',
         target: 'dashboard'
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-ship',
-      //   text: 'Avail. Routes',
-      //   url: '/chooseroute/chooseroute',
-      //   target: 'chooseRoutes'
-      // },
       {
         key: v4(),
         icon: 'fa-ship',
@@ -95,14 +87,6 @@ class SideNav extends Component {
         target: 'schedules',
         tooltip: menuTip.schedules
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-truck',
-      //   text: 'Trucking',
-      //   url: '/admin/trucking',
-      //   target: 'trucking',
-      //   tooltip: menuTip.trucking
-      // },
       {
         key: v4(),
         icon: 'fa-users',
@@ -119,14 +103,6 @@ class SideNav extends Component {
         target: 'routes',
         tooltip: menuTip.routes
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-magic',
-      //   text: 'Set Up',
-      //   url: '/admin/wizard',
-      //   target: 'wizard',
-      //   tooltip: menuTip.setup
-      // },
       {
         key: v4(),
         icon: 'fa-money',
@@ -264,7 +240,7 @@ class SideNav extends Component {
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
   render () {
-    const { theme, user, expand } = this.props
+    const { theme, user } = this.props
 
     const isAdmin = (user.role && user.role.name === 'admin') ||
     (user.role && user.role.name === 'super_admin') ||
@@ -292,6 +268,8 @@ class SideNav extends Component {
             onMouseLeave={() => this.setLinkVisibility(false, i)}
           >
             <div
+              data-for={toolId}
+              data-tip={isAdmin ? li.text : ''}
               className={`flex-none layout-row-layout-align-center-center ${styles.icon_box}`}
               onMouseEnter={() => this.setLinkVisibility(true, i)}
             >
@@ -302,18 +280,12 @@ class SideNav extends Component {
                 `flex-none layout-row-layout-align-center-center ${styles.link_text} ` +
                 `${this.state.linkTextClass}`
               }
-              data-for={toolId}
-              data-tip={isAdmin ? li.tooltip : ''}
+
               style={this.state.linkVisibility[i] ? { opacity: 1, visibility: 'visible' } : {}}
             >
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>
           </div>
-          {isAdmin && (expand || this.state.linkVisibility[i]) ? (
-            <ReactTooltip className={styles.tooltip} id={toolId} effect="solid" />
-          ) : (
-            ''
-          )}
         </div>
       )
     })
