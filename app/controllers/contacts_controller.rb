@@ -22,6 +22,7 @@ class ContactsController < ApplicationController
     contact = Contact.find(params[:id])
     loc = Location.find(update_data["locationId"])
     update_data.delete("id")
+    update_data.delete("userId")
     update_data.delete("locationId")
 
     edited_contact_data = {}
@@ -31,8 +32,6 @@ class ContactsController < ApplicationController
     edited_contact_data[:company_name] = update_data["companyName"]
     edited_contact_data[:phone] = update_data["phone"]
     edited_contact_data[:email] = update_data["email"]
-    edited_contact_data[:alias] = true
-    edited_contact_data[:user_id] = update_data["userId"]
 
     edited_contact_location[:street_number] = update_data["number"] || update_data["streetNumber"]
     edited_contact_location[:street] = update_data["street"]
@@ -42,6 +41,7 @@ class ContactsController < ApplicationController
 
     loc.update_attributes(edited_contact_location)
     edited_contact_data[:location_id] = loc.id
+    edited_contact_data[:user_id] = current_user.id
     contact.update_attributes(edited_contact_data)
     contact.save!
     response_handler(contact)

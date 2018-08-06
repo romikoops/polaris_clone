@@ -304,7 +304,7 @@ export class BookingDetails extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, currencies, user, tenant
+      theme, shipmentData, shipmentDispatch, currencies, user, tenant, userDispatch
     } = this.props
     if (!shipmentData) return ''
 
@@ -337,6 +337,7 @@ export class BookingDetails extends Component {
         shipper={shipper}
         theme={theme}
         userLocations={userLocations}
+        userDispatch={userDispatch}
       />
     )
 

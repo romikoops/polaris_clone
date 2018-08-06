@@ -120,37 +120,26 @@ export class ShipmentContactForm extends Component {
     this.setState({ setContactAttempted: false })
   }
   editSubmit (contactData) {
+    const { userDispatch } = this.props
+
     this.setState(prevState => ({
+      ...prevState.contactData,
       contactData: {
-        ...prevState.contactData.contact,
-        ...prevState.contactData.location,
         contact: contactData.contact,
         location: contactData.location
       }
     }))
 
     const editedContact = {
-      ...this.state.contactData.contact,
-      number: this.state.contactData.location.number,
-      street: this.state.contactData.location.street,
-      city: this.state.contactData.location.city,
-      zipCode: this.state.contactData.location.zipCode,
-      country: this.state.contactData.location.country,
-      locationId: this.state.contactData.location.id
+      ...contactData.contact,
+      ...contactData.location,
+      streetNumber: parseInt(contactData.location.streetNumber, 10),
+      id: this.state.contactData.contact.id,
+      locationId: this.state.contactData.location.id,
+      userId: this.state.contactData.contact.userId
     }
 
-    const formData = new FormData()
-    formData.append('update', JSON.stringify(editedContact))
-    const requestOptions = {
-      method: 'POST',
-      headers: authHeader(),
-      body: formData
-    }
-    fetch(`${BASE_URL}/contacts/update_contact/${editedContact.id}`, requestOptions)
-      .then(
-        () => console.log('saved'),
-        error => console.log(error)
-      )
+    userDispatch.updateContact(editedContact)
 
     this.props.setContact(contactData)
     this.contactForm.reset()
@@ -231,7 +220,10 @@ ShipmentContactForm.propTypes = {
   setContact: PropTypes.func,
   contactType: PropTypes.string,
   showEdit: PropTypes.bool,
-  selectedContact: PropTypes.objectOf(PropTypes.any)
+  selectedContact: PropTypes.objectOf(PropTypes.any),
+  userDispatch: PropTypes.shape({
+    updateContact: PropTypes.func
+  }).isRequired
 }
 
 ShipmentContactForm.defaultProps = {

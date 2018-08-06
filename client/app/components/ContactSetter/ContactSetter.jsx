@@ -94,7 +94,7 @@ export class ContactSetter extends Component {
 
   showEditContact (contactType, index) {
     const {
-      shipper, consignee, notifyees, contacts
+      shipper, consignee, notifyees, contacts, userDispatch
     } = this.props
 
     let newSelectedContact
@@ -105,7 +105,6 @@ export class ContactSetter extends Component {
     } else {
       newSelectedContact = notifyees[index]
     }
-
     const modal = (
       <Modal
         component={
@@ -114,6 +113,7 @@ export class ContactSetter extends Component {
             selectedContact={newSelectedContact}
             theme={this.props.theme}
             contacts={contacts}
+            userDispatch={userDispatch}
             setContact={(contactData) => {
               this.props.setContact(contactData, contactType, index)
               this.setState({ modal: null, showModal: false })
@@ -187,6 +187,7 @@ ContactSetter.propTypes = {
   theme: PropTypes.theme,
   finishBookingAttempted: PropTypes.bool,
   setContact: PropTypes.func.isRequired,
+  userDispatch: PropTypes.shape.isRequired,
   removeNotifyee: PropTypes.func.isRequired
 }
 ContactSetter.defaultProps = {

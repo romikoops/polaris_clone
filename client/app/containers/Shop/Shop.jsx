@@ -18,6 +18,7 @@ import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
+import { userActions } from '../../actions'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -165,8 +166,10 @@ class Shop extends Component {
       tenant,
       user,
       shipmentDispatch,
+      userDispatch,
       bookingSummaryDispatch,
       currencies,
+      contactData,
       dashboard
     } = this.props
     const { fakeLoading, stageTracker } = this.state
@@ -275,7 +278,9 @@ class Shop extends Component {
                 messages={error ? error.stage4 : []}
                 tenant={tenant}
                 user={user}
+                contactData={contactData}
                 shipmentDispatch={shipmentDispatch}
+                userDispatch={userDispatch}
                 hideRegistration={this.hideRegistration}
                 reusedShipment={reusedShipment}
               />
@@ -341,7 +346,10 @@ Shop.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string
   }).isRequired,
-
+  contactData: PropTypes.shape({
+    contact: PropTypes.contact,
+    location: PropTypes.location
+  }).isRequired,
   shipmentDispatch: PropTypes.shape({
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
@@ -349,6 +357,9 @@ Shop.propTypes = {
   }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({
     update: PropTypes.func
+  }).isRequired,
+  userDispatch: PropTypes.shape({
+    updateContact: PropTypes.func
   }).isRequired
 }
 
@@ -369,6 +380,9 @@ function mapStateToProps (state) {
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
+  const {
+    contactData
+  } = users
   const { currencies } = app
   const { loading } = bookingData
 
@@ -381,6 +395,7 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loading,
+    contactData,
     currencies
   }
 }
@@ -388,6 +403,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
+    userDispatch: bindActionCreators(userActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }
