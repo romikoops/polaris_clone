@@ -2,10 +2,10 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout-row flex-100 layout-wrap layout-align-space-between-center"
+  className="layout-row flex-100 layout-wrap layout-margin"
 >
   <div
-    className="pointy flex-30 flex-md-45 margin_bottom"
+    className="pointy flex-30 flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding"
     key="addLocationButton"
     onClick={[Function]}
   >
@@ -29,7 +29,7 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-30 flex-md-45 margin_bottom"
+    className="flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch loc_info"
     key="RANDOM_KEY_0"
   >
     <div
@@ -96,20 +96,18 @@ exports[`shallow render 1`] = `
             className="flex-100"
           >
             22456
-             
           </p>
           <p
             className="flex-100"
           >
             Germany
-             
           </p>
         </div>
       </div>
     </div>
   </div>
   <div
-    className="flex-30 flex-md-45 margin_bottom"
+    className="flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch loc_info"
     key="RANDOM_KEY_1"
   >
     <div
@@ -189,13 +187,11 @@ exports[`shallow render 1`] = `
             className="flex-100"
           >
             22456
-             
           </p>
           <p
             className="flex-100"
           >
             Germany
-             
           </p>
         </div>
       </div>

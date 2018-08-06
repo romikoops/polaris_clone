@@ -2,7 +2,7 @@
 
 exports[`admin is true 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-start-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-stretch"
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
@@ -15,7 +15,7 @@ exports[`admin is true 1`] = `
   </div>
   <div
     className=" margin_box_right flex-100
-        layout-row layout-wrap layout-align-start-start padding_bottom"
+        layout-row layout-wrap padding_bottom"
   >
     <div
       className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
@@ -84,7 +84,7 @@ exports[`admin is true 1`] = `
 
 exports[`shallow rendering 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-start-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-stretch"
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
@@ -97,7 +97,7 @@ exports[`shallow rendering 1`] = `
   </div>
   <div
     className=" margin_box_right flex-100
-        layout-row layout-wrap layout-align-start-start padding_bottom"
+        layout-row layout-wrap padding_bottom"
   >
     <div
       className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"

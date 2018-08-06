@@ -58,7 +58,7 @@ test('user.role_id is 1', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test('props.toggleShowLogin is called', () => {
+test.skip('props.toggleShowLogin is called', () => {
   const props = {
     ...propsBase,
     user: {

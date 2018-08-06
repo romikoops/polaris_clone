@@ -5,7 +5,8 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap footer_wrapper"
 >
   <div
-    className="contact_bar flex-100 layout-row layout-align-center-center"
+    className="contact_bar
+         flex-100 layout-row layout-align-center-center"
   >
     <div
       className="flex-none content_width layout-row"
@@ -35,7 +36,8 @@ exports[`shallow render 1`] = `
           />
         </a>
         <div
-          className="flex-none layout-row layout-align-center-end contact_elem"
+          className="flex-none layout-row layout-align-center-end
+               contact_elem"
         >
           <i
             aria-hidden="true"
@@ -54,10 +56,12 @@ exports[`shallow render 1`] = `
     className="footer layout-row flex-100 layout-wrap"
   >
     <div
-      className="flex-100 button_row layout-row layout-align-end-center"
+      className="flex-100 button_row
+         layout-row layout-align-end-center"
     >
       <div
-        className="flex-50 buttons layout-row layout-align-center-center"
+        className="flex-50 buttons
+           layout-row layout-align-center-center"
       >
         <div
           className="flex-50 layout-row layout-align-start-center"
@@ -129,7 +133,8 @@ exports[`shallow render 1`] = `
       />
     </div>
     <div
-      className="flex-100 layout-row copyright"
+      className="flex-100 layout-row 
+            copyright"
     >
       <div
         className="flex-80 layout-row layout-align-end-center"
