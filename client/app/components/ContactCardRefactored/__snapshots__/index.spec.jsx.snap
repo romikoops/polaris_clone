@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="CONTACT_CARD flex-100 layout-row contact_card"
+  onClick={[Function]}
+>
+  <div
+    className="overlay"
+  />
+  <div
+    className="flex layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-60 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-user-circle-o flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <p
+            className="flex contact_header"
+          >
+            John
+             
+            Doe
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-40 layout-row layout-wrap layout-align-start-center contact_details"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-envelope flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <p
+            className="flex-none"
+          >
+             
+            foo@bar.baz
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center"
+    >
+      <div
+        className="flex-60 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-building-o flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <p
+            className="flex-80 contact_header"
+          >
+            <Truncate
+              ellipsis="…"
+              lines={1}
+              trimWhitespace={true}
+            >
+               
+               
+            </Truncate>
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-40 layout-row layout-wrap layout-align-start-center contact_details"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <i
+            className="fa fa-phone flex-none clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                "padding": "3px 0",
+                "width": "28px",
+              }
+            }
+          />
+          <p
+            className="flex-none"
+          >
+             
+            6345789
+             
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <i
+        className="fa fa-globe flex-none clip"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            "padding": "3px 0",
+            "width": "28px",
+          }
+        }
+      />
+      <p
+        className="flex-100"
+      />
+    </div>
+  </div>
+</div>
+`;
