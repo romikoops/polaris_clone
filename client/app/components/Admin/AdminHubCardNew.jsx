@@ -40,7 +40,7 @@ export class AdminHubCardNew extends Component {
         <div className="layout-padding flex-100 layout-align-start-center greyBg">
           <span><b>Hubs</b></span>
         </div>
-        <div className={`layout-wrap layout-row flex-100 layout-align-space-between-stretch ${styles.scrolling}`}>
+        <div className={`layout-wrap layout-row flex-100 ${styles.scrolling}`}>
           {listHubs(hubs, adminDispatch, theme)}
         </div>
       </div>

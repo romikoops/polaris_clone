@@ -160,12 +160,12 @@ export class AdminAddressTile extends Component {
 
     return (
       <div
-        className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-start"
+        className="tile_padding  margin_bottom flex-20 layout-row layout-wrap layout-align-start-stretch"
       >
         <div
           className={`${
             userStyles['location-box']
-          } flex layout-row layout-wrap layout-align-start-start`}
+          } flex layout-row layout-wrap layout-align-start-stretch`}
         >
           <div
             className={` flex-100 layout-row layout-align-space-between-center  ${

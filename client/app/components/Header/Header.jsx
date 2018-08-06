@@ -48,7 +48,7 @@ class Header extends Component {
     document.removeEventListener('scroll', this.checkIsTop)
   }
   checkIsTop () {
-    const isTop = window.pageYOffset < 10
+    const isTop = window.pageYOffset < 130
     if (isTop !== this.state.isTop) {
       this.setState({ isTop })
     }
@@ -75,7 +75,8 @@ class Header extends Component {
       req,
       scrollable,
       noMessages,
-      component
+      component,
+      toggleShowLogin
       // adminDispatch
     } = this.props
     const { isTop } = this.state
@@ -102,14 +103,6 @@ class Header extends Component {
       }
     ]
 
-    const dropDown = (
-      <NavDropdown
-        dropDownText={dropDownText}
-        linkOptions={accountLinks}
-        invert={isTop && invert}
-      />
-    )
-
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
     const mail = (
       <div
@@ -135,6 +128,16 @@ class Header extends Component {
       logoStyle = styles.logo
     }
 
+    const dropDown = (
+      <NavDropdown
+        dropDownText={dropDownText}
+        linkOptions={accountLinks}
+        invert={isTop && invert}
+        user={user}
+        toggleShowLogin={toggleShowLogin}
+      />
+    )
+
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -142,7 +145,6 @@ class Header extends Component {
       </div>
     )
 
-    const rightCorner = user && user.first_name && !user.guest ? dropDowns : ''
     const loginModal = (
       <Modal
         component={
@@ -182,7 +184,7 @@ class Header extends Component {
           </div>
           {component}
           <div className="flex layout-row layout-align-end-center">
-            {rightCorner}
+            {dropDowns}
             {
               (
                 this.state.showLogin ||
@@ -216,6 +218,7 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
+  toggleShowLogin: PropTypes.func,
   noMessages: PropTypes.bool,
   component: PropTypes.node
 }
@@ -232,6 +235,7 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   req: null,
+  toggleShowLogin: null,
   scrollable: false,
   noMessages: false,
   component: null

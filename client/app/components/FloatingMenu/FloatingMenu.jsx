@@ -36,7 +36,7 @@ class FloatingMenu extends Component {
         if (!this.state.expand) {
           this.setState({
             overflowOverwrite: { overflow: 'visible' },
-            collapsePromptHrWidthOverwrite: { width: '50px' },
+            collapsePromptHrWidthOverwrite: { width: '55px' },
             collapsePromptOverwriteP: { opacity: '0' }
           })
         }
