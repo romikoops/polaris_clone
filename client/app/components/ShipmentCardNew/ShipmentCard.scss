@@ -54,6 +54,23 @@
       hyphens: auto;
       padding-left: 18px;
       padding-right: 18px;
+      margin-bottom: -10px;
+    }
+    .hub_type {
+      hyphens: auto;
+      font-weight: normal;
+      padding-left: 18px;
+      padding-right: 18px;
+      background-color: white;
+      padding-bottom: 2px;
+    }
+    .hub_image {
+      z-index: 99;
+      position: relative;
+    }
+    .hub_box {
+      z-index: 100;
+      overflow: visible;
     }
     p {
       margin-top: 8px;
@@ -96,6 +113,7 @@
   }
   .section {
     padding: 20px 0px;
+    min-height: 150px;
     b {
       margin-bottom: 7px;
     }

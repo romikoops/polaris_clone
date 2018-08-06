@@ -145,7 +145,7 @@ export class AdminShipmentCard extends Component {
         <div className={`layout-row flex-25 layout-align-space-between-center
             ${styles.sectionBottom} ${styles.separatorTop}`}
         >
-          <div className="layout-row flex-60 layout-align-start-center">
+          <div className="layout-row flex-75 layout-align-start-center">
             <div className="layout-row flex-15">
               <div className={`layout-row layout-align-center-center ${styles.greenIcon}`}>
                 <span className={`${styles.smallText}`}>
@@ -156,11 +156,11 @@ export class AdminShipmentCard extends Component {
             <span className="flex-30">Cargo item</span>
             <span className={`flex-30 ${shipment.planned_pickup_date ? '' : styles.noDisplay}`}>
               <i className={`fa fa-check-square ${styles.darkgreen}`} />
-              <span> pickup</span>
+              <span> Pick-up</span>
             </span>
             <span className="flex-30">
               <i className={`fa fa-check-square ${styles.grey}`} />
-              <span> delivery</span>
+              <span> Delivery</span>
             </span>
           </div>
           <div className="layout-align-end-center">

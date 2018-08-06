@@ -410,10 +410,10 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: '#427FAF',
-          secondary: '#FF9B0A',
-          brightPrimary: '#539ED7',
-          brightSecondary: '#FFAC36'
+          primary: '#FF9B0A',
+          secondary: '#427FAF',
+          brightPrimary: '#FFAC36',
+          brightSecondary: '#539ED7'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png',
@@ -1727,7 +1727,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -1814,7 +1814,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -1901,7 +1901,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
