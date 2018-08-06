@@ -82,7 +82,7 @@ export default function SquareButton ({
   const contentStyle = browserType() === 'IE' ? styles.ie_content : styles.content
   return (
     <div
-      className={`flex-none ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
+      className={`flex-none layout-row layout-align-center-center layout-align-lg-start-center ${sizeClass} ${borderClass} ${wrapperSizeClass}`}
       style={borderGradient}
     >
       <button

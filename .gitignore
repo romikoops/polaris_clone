@@ -94,3 +94,6 @@ typings/
 .DS_Store
 db/.DS_Store
 db/dummydata/.DS_Store
+
+# Ignore Excel lock files
+*~*.xls*

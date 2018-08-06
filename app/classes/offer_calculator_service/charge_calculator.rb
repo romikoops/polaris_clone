@@ -105,7 +105,7 @@ module OfferCalculatorService
       charge_category = ChargeCategory.from_code("cargo")
       parent_charge = create_parent_charge(charge_category)
       cargo_unit_array = @shipment.aggregated_cargo ? [@shipment.aggregated_cargo] : @shipment.cargo_units
-      
+
       if @user.tenant.scope["consolidate_cargo"] && cargo_unit_array.first.is_a?(CargoItem)
         cargo_unit_array = consolidate_cargo(cargo_unit_array, @schedule.mode_of_transport)
       end
@@ -116,12 +116,11 @@ module OfferCalculatorService
           @user,
           total_units,
           @shipment.planned_pickup_date,
-          @schedule.mode_of_transport
-        )
+          @schedule.mode_of_transport)
         next if charge_result.nil?
 
-        cargo_unit_model = cargo_unit.class.to_s == 'Hash' ? 'CargoItem' : cargo_unit.class.to_s
-        
+        cargo_unit_model = cargo_unit.class.to_s == "Hash" ? "CargoItem" : cargo_unit.class.to_s
+
         children_charge_category = ChargeCategory.find_or_create_by(
           name:          cargo_unit_model.humanize,
           code:          cargo_unit_model.underscore,
@@ -177,15 +176,15 @@ module OfferCalculatorService
 
     def consolidate_cargo(cargo_array, mot)
       cargo = {
-        id: 'ids',
-        dimension_x: 0,
-        dimension_y: 0,
-        dimension_z: 0,
-        volume: 0,
-        payload_in_kg: 0,
-        cargo_class: '',
+        id:                "ids",
+        dimension_x:       0,
+        dimension_y:       0,
+        dimension_z:       0,
+        volume:            0,
+        payload_in_kg:     0,
+        cargo_class:       "",
         chargeable_weight: 0,
-        num_of_items: 0
+        num_of_items:      0
       }
       cargo_array.each do |cargo_unit|
         cargo[:id] += "-#{cargo_unit.id}"
@@ -195,10 +194,10 @@ module OfferCalculatorService
         cargo[:volume] += (cargo_unit.volume * cargo_unit.quantity)
         cargo[:payload_in_kg] += (cargo_unit.payload_in_kg * cargo_unit.quantity)
         cargo[:cargo_class] = cargo_unit.cargo_class
-        cargo[:chargeable_weight] += (cargo_unit.calc_chargeable_weight(mot)  * cargo_unit.quantity)
+        cargo[:chargeable_weight] += (cargo_unit.calc_chargeable_weight(mot) * cargo_unit.quantity)
         cargo[:num_of_items] += cargo_unit.quantity
       end
-      return [cargo]
+      [cargo]
     end
   end
 end
