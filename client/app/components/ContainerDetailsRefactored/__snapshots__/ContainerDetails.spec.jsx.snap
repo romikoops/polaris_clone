@@ -2,7 +2,7 @@
 
 exports[`props.viewHSCodes is true 1`] = `
 <div
-  className=" info layout-row flex-100 layout-wrap layout-align-center"
+  className="CONTAINER_DETAILS info flex-100 layout-row layout-wrap layout-align-center"
 >
   <div
     className="flex-100 layout-row"
@@ -138,7 +138,7 @@ exports[`shallow render 1`] = `
 
 exports[`state.viewer is true 1`] = `
 <div
-  className=" info layout-row flex-100 layout-wrap layout-align-center"
+  className="CONTAINER_DETAILS info flex-100 layout-row layout-wrap layout-align-center"
 >
   <div
     className="flex-100 layout-row"

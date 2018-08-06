@@ -17,7 +17,7 @@ const propsBase = {
   viewHSCodes: false
 }
 
-test.only('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<ContainerDetails {...propsBase} />)).toMatchSnapshot()
 })
 
