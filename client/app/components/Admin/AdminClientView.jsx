@@ -343,7 +343,7 @@ export class AdminClientView extends Component {
               <span><b>Locations</b></span>
             </div>
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-space-between-start margin_bottom">
+          <div className="layout-row flex-100 layout-wrap layout-align-space-between-stretch margin_bottom">
             {locationArr}
           </div>
         </div>

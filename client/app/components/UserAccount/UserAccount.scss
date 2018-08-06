@@ -74,9 +74,9 @@
   }
 
   .new-address {
-    cursor: pointer;
     border: 2px dashed #c7c7c7;
     box-shadow: none;
+    width: 100%;
 
     div {
       h3 {
@@ -180,6 +180,9 @@
   .loc_map{
     position: relative;
   }
+  .loc_info {
+    height: 220px;
+  }
   .overlay_auto {
     position: absolute;
     z-index: 25;
@@ -195,7 +198,7 @@
     right: 0;
   }
   .location_address {
-      padding: 15px;
+      padding: 25px 15px 15px 15px;
     i {
       font-size: 25px;
     }
