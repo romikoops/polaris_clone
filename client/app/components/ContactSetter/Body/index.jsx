@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from '../../../prop-types'
-// import styles from './Body.scss'
 import defs from '../../../styles/default_classes.scss'
 import ShipmentContactsBoxMainContacts from './MainContacts'
 import ShipmentContactsBoxNotifyeeContacts from './NotifyeeContacts'
@@ -104,12 +103,10 @@ ContactSetterBody.propTypes = {
   showEditContact: PropTypes.func,
   direction: PropTypes.string.isRequired,
   showAddressBook: PropTypes.func.isRequired
-  // finishBookingAttempted: PropTypes.bool
 }
 
 ContactSetterBody.defaultProps = {
   theme: null,
   showEditContact: null,
   notifyees: []
-  // finishBookingAttempted: false
 }

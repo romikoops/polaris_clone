@@ -139,8 +139,6 @@ export class ShipmentContactForm extends Component {
       locationId: this.state.contactData.location.id
     }
 
-    console.log(editedContact)
-    console.log(this.state.contactData)
     const formData = new FormData()
     formData.append('update', JSON.stringify(editedContact))
     const requestOptions = {

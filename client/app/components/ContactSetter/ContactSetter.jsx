@@ -89,7 +89,6 @@ export class ContactSetter extends Component {
         parentToggle={() => this.toggleShowModal()}
       />
     )
-    debugger // eslint-disable-line no-debugger
     this.setState({ modal, showModal: true })
   }
 
@@ -127,7 +126,6 @@ export class ContactSetter extends Component {
         parentToggle={() => this.toggleShowModal()}
       />
     )
-    debugger // eslint-disable-line no-debugger
     this.setState({ modal, showModal: true })
   }
 

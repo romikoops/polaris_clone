@@ -24,7 +24,6 @@ class ContactsController < ApplicationController
     update_data.delete("id")
     update_data.delete("locationId")
 
-    byebug
     edited_contact_data = {}
     edited_contact_location = {}
     edited_contact_data[:first_name] = update_data["firstName"]
@@ -40,11 +39,10 @@ class ContactsController < ApplicationController
     edited_contact_location[:city] = update_data["city"]
     edited_contact_location[:zip_code] = update_data["zipCode"]
     edited_contact_location[:country] = Country.geo_find_by_name(update_data["country"])
-    byebug
+
     loc.update_attributes(edited_contact_location)
     edited_contact_data[:location_id] = loc.id
     contact.update_attributes(edited_contact_data)
-    byebug
     contact.save!
     response_handler(contact)
   end
