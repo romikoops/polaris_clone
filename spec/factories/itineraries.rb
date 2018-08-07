@@ -11,8 +11,11 @@ FactoryBot.define do
     association :tenant
 
     after(:build) do |itinerary|
-      2.times { itinerary.stops << create(:stop, itinerary: itinerary) }
+      # awesome_print itinerary.tenant.scope.deep_symbolize_keys
+      2.times do
+        itinerary.stops << create(:stop, itinerary: itinerary,
+        hub: create(:hub, tenant: itinerary.tenant, nexus: create(:nexus, tenant: itinerary.tenant)))
+      end
     end
   end
-
 end

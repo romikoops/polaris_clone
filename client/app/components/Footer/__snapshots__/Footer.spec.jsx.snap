@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap"
+  className="flex-100 layout-row layout-wrap footer_wrapper"
 >
   <div
     className="contact_bar flex-100 layout-row layout-align-center-center"

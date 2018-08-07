@@ -73,7 +73,7 @@ export class AdminRouteList extends Component {
 
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.container}`}>
-        <div className={`layout-padding layout-align-start-center ${styles.greyBg}`}>
+        <div className="layout-padding layout-align-start-center greyBg">
           <span><b>Routes</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list}`}>

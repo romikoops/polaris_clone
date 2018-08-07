@@ -2,10 +2,10 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout-row flex-100 layout-wrap"
+  className="layout-row flex-100 layout-wrap layout-align-space-between-center"
 >
   <div
-    className="pointy flex-33"
+    className="pointy flex-30 flex-md-45 margin_bottom"
     key="addLocationButton"
     onClick={[Function]}
   >
@@ -29,27 +29,98 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-33"
+    className="flex-30 flex-md-45 margin_bottom"
     key="RANDOM_KEY_0"
   >
     <div
-      className="location-box"
+      className="location-box flex-100 layout-column"
     >
       <div
-        className="header"
+        className="header layout-row layout-align-end-center"
+      >
+        <i
+          className="fa fa-star clip icon_primary"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-pencil"
+          />
+        </span>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-trash icon_trash"
+          />
+        </span>
+      </div>
+      <div
+        className="layout-row flex-100 layout-align-center-start location_address"
+      >
+        <i
+          className="fa fa-map-marker clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
+        <div
+          className="content layout-row layout-wrap layout-align-start-start"
+        >
+          <p
+            className="flex-100"
+          >
+            579
+             
+            FOO_STREET
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            <strong>
+              FOO_CITY
+            </strong>
+          </p>
+          <p
+            className="flex-100"
+          >
+            22456
+             
+          </p>
+          <p
+            className="flex-100"
+          >
+            Germany
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-30 flex-md-45 margin_bottom"
+    key="RANDOM_KEY_1"
+  >
+    <div
+      className="location-box flex-100 layout-column"
+    >
+      <div
+        className="header layout-row layout-align-end-center"
       >
         <div
           className="layout-row layout-wrap"
         >
-          <div
-            className="layout-row flex-80"
-          >
-            <h3
-              className="other"
-            >
-              Other
-            </h3>
-          </div>
           <div
             className="layout-row flex-20 layout-align-end"
           >
@@ -57,129 +128,75 @@ exports[`shallow render 1`] = `
               className="makePrimary pointy"
               onClick={[Function]}
             >
-              Set as primary
+              <i
+                className="fa fa-star-o clip"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+                  }
+                }
+              />
             </div>
           </div>
         </div>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-pencil"
+          />
+        </span>
+        <span
+          className="emulate_link"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-trash icon_trash"
+          />
+        </span>
       </div>
       <div
-        className="content layout-row layout-wrap layout-align-start-start"
+        className="layout-row flex-100 layout-align-center-start location_address"
       >
-        <p
-          className="flex-100"
-        >
-          579
-           
-          FOO_STREET
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          FOO_CITY
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          22456
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          Germany
-           
-        </p>
-      </div>
-      <div
-        className="footer"
-      >
+        <i
+          className="fa fa-map-marker clip"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+            }
+          }
+        />
         <div
-          className="layout-row layout-align-center-center"
+          className="content layout-row layout-wrap layout-align-start-start"
         >
-          <span
-            className="emulate_link"
-            onClick={[Function]}
+          <p
+            className="flex-100"
           >
-            Edit
-          </span>
-            |  
-          <span
-            className="emulate_link"
-            onClick={[Function]}
+            579
+             
+            FOO_STREET
+             
+          </p>
+          <p
+            className="flex-100"
           >
-            Delete
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    className="flex-33"
-    key="RANDOM_KEY_1"
-  >
-    <div
-      className="location-box"
-    >
-      <div
-        className="header"
-      >
-        <h3
-          className="standard"
-        >
-          Primary
-        </h3>
-      </div>
-      <div
-        className="content layout-row layout-wrap layout-align-start-start"
-      >
-        <p
-          className="flex-100"
-        >
-          579
-           
-          FOO_STREET
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          FOO_CITY
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          22456
-           
-        </p>
-        <p
-          className="flex-100"
-        >
-          Germany
-           
-        </p>
-      </div>
-      <div
-        className="footer"
-      >
-        <div
-          className="layout-row layout-align-center-center"
-        >
-          <span
-            className="emulate_link"
-            onClick={[Function]}
+            <strong>
+              FOO_CITY
+            </strong>
+          </p>
+          <p
+            className="flex-100"
           >
-            Edit
-          </span>
-            |  
-          <span
-            className="emulate_link"
-            onClick={[Function]}
+            22456
+             
+          </p>
+          <p
+            className="flex-100"
           >
-            Delete
-          </span>
+            Germany
+             
+          </p>
         </div>
       </div>
     </div>

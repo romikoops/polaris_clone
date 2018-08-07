@@ -52,7 +52,7 @@ module PricingTools
     return {} if charge.nil?
     totals = { "total" => {} }
 
-    charge.fees.each do |k, fee|
+    charge&.fees&.each do |k, fee|
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"]
       totals[k]["value"] += fee_value(fee, cargo_hash)

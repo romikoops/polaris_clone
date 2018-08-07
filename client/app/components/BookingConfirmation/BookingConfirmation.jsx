@@ -28,7 +28,7 @@ import {
   ALIGN_END,
   ALIGN_START,
   ALIGN_START_CENTER,
-  COLUMN_15,
+  COLUMN,
   ROW,
   WRAP_ROW
 } from '../../classNames'
@@ -800,7 +800,7 @@ function getNotifyeesJSX ({ notifyees, textStyle }) {
 
   const notifyeesJSX = notifyees.map(notifyee => (
     <div key={v4()} className={ROW(40)}>
-      <div className={`${COLUMN_15} ${ALIGN_START_CENTER}`}>
+      <div className={`${COLUMN(15)} ${ALIGN_START_CENTER}`}>
         <i
           className={`${styles.icon} fa fa-envelope-open-o flex-none`}
           style={textStyle}

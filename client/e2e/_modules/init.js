@@ -1,8 +1,7 @@
-import open from 'open'
 import path from 'path'
-import { existsSync, unlinkSync } from 'fs'
+import { existsSync, unlinkSync, writeFileSync } from 'fs'
+import { log } from '../_modules/log'
 
-import looksSame from '../_vendor/looks-same'
 import { delay } from './delay'
 import { initPuppeteer } from '../_vendor/init-puppeteer'
 import { isDocker } from '../_modules/isDocker'
@@ -12,66 +11,22 @@ const STEPS_SCREEN_DIR = path.resolve(__dirname, '../_screens')
 const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
-function log (input) {
+async function delayAndNotify (label) {
+  // log(`__${label}__DELAY_START______`, 'success')
+  await delay(1500)
+  // log(`__${label}__DELAY_END________`, 'success')
+}
+
+function waitNotificator (selector, type) {
+  log({ selector, type }, 'SELECTOR')
+}
+
+function logFn (input) {
   if (input._type === 'log' && !input._text.startsWith('%')) {
     console.log(input._text)
   } else if (input._type === 'error') {
     console.error(input._text)
   }
-}
-
-function compareImages (label, compareLabel, toleranceInput) {
-  return new Promise((resolve) => {
-    const tolerance = toleranceInput === undefined ? 0 : toleranceInput
-    const base = `${SCREEN_DIR}/${label}.png`
-    const compareTo = `${SCREEN_DIR}/${compareLabel}.png`
-    const diff = `${SCREEN_DIR}/${label}.diff.png`
-
-    looksSame(
-      base,
-      compareTo,
-      { tolerance },
-      (err, numberOfDiffPixels) => {
-        if (err !== null) {
-          throw err
-        }
-
-        if (numberOfDiffPixels === 0) {
-          console.log(`(i) '${label}' successful visual regression testing`)
-
-          return resolve(true)
-        }
-
-        /**
-         * `false` indicates images with different size, so we skip the creation of diff image
-         */
-        if (numberOfDiffPixels === false) {
-          return resolve(false)
-        }
-        console.log(`'${label}' has ${numberOfDiffPixels} pixels difference in visual regression testing`)
-        console.log(`Building a diff image. It will take some time, please be patient!`)
-
-        if (existsSync(diff)) {
-          unlinkSync(diff)
-        }
-
-        looksSame.createDiff({
-          reference: base,
-          current: compareTo,
-          diff,
-          highlightColor: '#ff00ff',
-          strict: false
-        }, (diffErr) => {
-          if (diffErr === null) {
-            open(diff)
-
-            return resolve(false)
-          }
-          throw diffErr
-        })
-      }
-    )
-  })
 }
 
 export default async function init (options) {
@@ -91,7 +46,7 @@ export default async function init (options) {
   }
 
   if (options.log !== false) {
-    page.on('console', log)
+    page.on('console', logFn)
   }
 
   const getHandle$ = async (selector) => {
@@ -147,18 +102,14 @@ export default async function init (options) {
     return result
   }
 
-  const count = (selector) => {
-    mark('count', selector)
-
-    return $$(selector, els => els.length)
-  }
+  const count = selector => $$(selector, els => els.length)
 
   const waitFor = async (selectorInput, countInput = 1) => {
+    waitNotificator(selectorInput, 'waitFor')
+    console.time('waitFor')
     const { selector, count: countValue } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, count: countInput }
-
-    mark('waitFor', selector, countValue)
 
     let counter = 50
     let counted = await count(selector)
@@ -168,15 +119,21 @@ export default async function init (options) {
       await delay(DELAY)
       counted = await count(selector)
     }
+    console.timeEnd('waitFor')
+    await delayAndNotify('waitFor')
 
     return counted >= countValue
   }
 
   const waitForSelectors = async (...selectors) => {
-    mark('waitForSelectors', `[${selectors.toString()}]`)
+    waitNotificator(selectors, 'waitForSelectors')
+    console.time(`waitForSelectors`)
 
     const promised = selectors.map(singleSelector => waitFor(singleSelector))
     const result = await Promise.all(promised)
+
+    console.timeEnd('waitForSelectors')
+    await delayAndNotify('waitForSelectors')
 
     return !result.includes(false)
   }
@@ -185,7 +142,8 @@ export default async function init (options) {
    * It waits 20 seconds for selector with specified index contains specified text
    */
   const waitForText = async (input) => {
-    mark('waitForText', input.selector)
+    waitNotificator(input, 'waitForText')
+    console.time('waitForText')
 
     const waitIndex = input.index === undefined ? 0 : input.index
     let counter = 50
@@ -206,19 +164,15 @@ export default async function init (options) {
       )
       found = texts[waitIndex].includes(input.text)
     }
+    console.timeEnd('waitForText')
+    delayAndNotify('waitForText')
 
     return found
   }
 
-  const url = () => {
-    mark('url')
-
-    return page.evaluate(() => window.location.href)
-  }
+  const url = () => page.evaluate(() => window.location.href)
 
   const focus = async (selector) => {
-    mark('focus', selector)
-
     const handle = await getHandle$(selector)
     if (handle === false) {
       return false
@@ -229,18 +183,12 @@ export default async function init (options) {
     return true
   }
 
-  const exists = (selector) => {
-    mark('exists', selector)
-
-    return $$(selector, els => els.length > 0)
-  }
+  const exists = selector => $$(selector, els => els.length > 0)
 
   const click = async (selectorInput, indexInput) => {
     const { selector, index } = typeof selectorInput === 'object'
       ? selectorInput
       : { selector: selectorInput, index: indexInput }
-
-    mark('click', selector, index)
 
     if (index === undefined) {
       const handle = await getHandle$(selector)
@@ -257,8 +205,6 @@ export default async function init (options) {
   }
 
   const clickWithText = async (selector, text) => {
-    mark('clickWithText', selector, text)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -288,8 +234,6 @@ export default async function init (options) {
   }
 
   const clickWithPartialText = async (selector, text) => {
-    mark('clickWithPartialText', selector, text)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -319,25 +263,26 @@ export default async function init (options) {
   }
 
   const waitAndClick = async (input) => {
-    mark('waitAndClick', input)
+    waitNotificator(input, 'waitAndClick')
+    console.time('waitAndClick')
 
     if (await waitFor(input.selector, input.index + 1) === false) {
+      log('`waitFor` returns `false`', 'error')
+
       return false
     }
+    console.timeEnd('waitAndClick')
+    await delayAndNotify('waitAndClick')
 
     return click(input.selector, input.index)
   }
 
   const fill = async (selector, text) => {
-    mark('fill', selector, text)
-
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
   }
 
   const setInput = async (selector, newValue) => {
-    mark('setInput', selector, newValue)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -348,8 +293,6 @@ export default async function init (options) {
   }
 
   const inputWithTab = async (tabCount, text) => {
-    mark('inputWithTab', tabCount, text)
-
     for (const _ of Array(tabCount).fill('')) {
       await page.keyboard.press('Tab')
       await delay(DELAY)
@@ -367,8 +310,6 @@ export default async function init (options) {
     const arrowToPress = arrowToPressInput === undefined
       ? 'ArrowDown'
       : `Arrow${arrowToPressInput}`
-
-    mark('selectWithTab', tabCount, arrowToPress)
 
     for (const _ of Array(tabCount).fill('')) {
       await page.keyboard.press('Tab')
@@ -388,8 +329,6 @@ export default async function init (options) {
   }
 
   const selectFirstAvailableDay = async (selector) => {
-    mark('selectFirstAvailableDay', selector)
-
     if (await exists(selector) === false) {
       return false
     }
@@ -397,52 +336,92 @@ export default async function init (options) {
     await $(selector, el => el.click())
     await delay(DELAY)
 
+    const selectFirstAvailableDayFn = () => {
+      const els = Array.from(document.querySelectorAll('.DayPicker-Day'))
+      const filtered = els.filter(x => x.classList.length === 1)
+
+      if (filtered.length === 0) {
+        return false
+      }
+      filtered[0].click()
+
+      return true
+    }
+
     return page.evaluate(selectFirstAvailableDayFn)
   }
 
-  const takeScreenshot = async (label, screenDirectoryFlag) => {
-    const screenDirectory = screenDirectoryFlag
+  const takeScreenshot = async (label, options = {}) => {
+    const screenDirectory = options.screenDirectoryFlag
       ? STEPS_SCREEN_DIR
       : SCREEN_DIR
 
-    const screenshotPath = `${screenDirectory}/${label}.png`
+    const fileExtension = options.fullQuality
+      ? 'png'
+      : 'jpeg'
+
+    const screenshotPath = `${screenDirectory}/${label}.${fileExtension}`
+    const screenshotOptionsBase = {
+      fullPage: true,
+      type: fileExtension,
+      path: screenshotPath
+    }
+    const screenshotOptions = options.fullQuality
+      ? screenshotOptionsBase
+      : { ...screenshotOptionsBase, quality: 50 }
 
     if (existsSync(screenshotPath)) {
       unlinkSync(screenshotPath)
     }
-    await page.screenshot({
-      fullPage: true,
-      path: screenshotPath
-    })
+    await page.screenshot(screenshotOptions)
 
     return screenshotPath
   }
-  const saveStep = async (label) => {
-    if (!isDocker()) {
+
+  let saveStepCounter = -1
+  let labelHolder
+  let labelPairHolder
+
+  const logLabelPair = (labelX, labelY) => {
+    saveStepCounter++
+    labelHolder = labelY
+    if (labelX === undefined) {
+      labelPairHolder = `${saveStepCounter} | ${labelY}`
+      console.time(labelPairHolder)
+
       return
     }
-    await takeScreenshot(label, true)
+    console.timeEnd(labelPairHolder)
+    labelPairHolder = `${saveStepCounter} | ${labelX} ==> ${labelY}`
+    console.time(labelPairHolder)
+  }
+  const saveStep = async (label) => {
+    logLabelPair(labelHolder, label)
+    if (!isDocker() || process.env.SKIP_SAVE_STEP === 'true') {
+      return
+    }
+    log(`${label} screenshot start`, 'info')
+    console.time(`${label}.screenshot`)
+    await takeScreenshot(
+      `${saveStepCounter}__${label}`,
+      { screenDirectoryFlag: true }
+    )
+    console.timeEnd(`${label}.screenshot`)
   }
 
-  const shouldMatchScreenshot = async (label, tolerance, resetFlag) => {
+  const shouldMatchScreenshot = async (label, tolerance) => {
     await delay(2 * DELAY)
     const filePath = `${SCREEN_DIR}/${label}.png`
 
     if (!existsSync(filePath)) {
-      await takeScreenshot(label)
+      await takeScreenshot(label, { fullQuality: true })
       /**
        * As there is no screenshot to compare
        * we save the screen and return true
        */
+      log('Base image of visual regression testing is saved', 'info')
 
-      return true
-    }
-
-    if (resetFlag === true) {
-      unlinkSync(filePath)
-      await takeScreenshot(label)
-
-      return true
+      return log('You need to run the test once again to generate the second image', 'info')
     }
     const compareLabel = `${label}.to.compare`
     const compareFilePath = `${SCREEN_DIR}/${compareLabel}.png`
@@ -450,9 +429,40 @@ export default async function init (options) {
     if (existsSync(compareFilePath)) {
       unlinkSync(compareFilePath)
     }
-    await takeScreenshot(compareLabel)
+    await takeScreenshot(compareLabel, { fullQuality: true })
+    log('Second image of visual regression testing is saved', 'info')
 
-    return compareImages(label, compareLabel, tolerance)
+    const shortMessage = `Run 'node compare ${label}'`
+    const longMessage = `Run 'node compare ${label} ${tolerance}'`
+
+    return tolerance === undefined
+      ? log(shortMessage, 'success')
+      : log(longMessage, 'success')
+  }
+
+  const shouldMatchHTML = async (label) => {
+    const baseFilePath = `${STEPS_SCREEN_DIR}/${label}.html`
+    const toCompareFilePath = `${STEPS_SCREEN_DIR}/${label}.to.compare.html`
+    const isCompareBranch = existsSync(baseFilePath)
+    const html = await page.content()
+
+    if (!isCompareBranch) {
+      writeFileSync(baseFilePath, html)
+
+      return log(`Base html file with label '${label}' created`, 'success')
+    }
+
+    if (existsSync(toCompareFilePath)) {
+      unlinkSync(toCompareFilePath)
+    }
+    const command = `node htmlCompare ${label}`
+    log(`Run command \`${command}\``, 'success')
+    writeFileSync(toCompareFilePath, html)
+  }
+
+  const compare = async (label) => {
+    await shouldMatchScreenshot(label)
+    await shouldMatchHTML(label)
   }
 
   const onError = () => {
@@ -470,6 +480,7 @@ export default async function init (options) {
     clickWithPartialText,
     clickWithText,
     count,
+    compare,
     exists,
     fill,
     focus,
@@ -480,6 +491,7 @@ export default async function init (options) {
     selectFirstAvailableDay,
     selectWithTab,
     setInput,
+    shouldMatchHTML,
     shouldMatchScreenshot,
     stop,
     pressTabAndType,
@@ -512,16 +524,4 @@ function clickWhichSelector (els, i) {
 
 function setInputFn (el, newValue) {
   el.value = newValue
-}
-
-function selectFirstAvailableDayFn () {
-  const els = Array.from(document.querySelectorAll('.DayPicker-Day'))
-  const filtered = els.filter(x => x.classList.length === 1)
-
-  if (filtered.length === 0) {
-    return false
-  }
-  filtered[0].click()
-
-  return true
 }

@@ -30,7 +30,6 @@
 # Ignore files built by 'npm run build'
 /client/dist/*
 
-
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
@@ -90,11 +89,11 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-client/.node-env
 # /config/database.yml
 .idea
 .DS_Store
 db/.DS_Store
 db/dummydata/.DS_Store
+
+# Ignore Excel lock files
+*~*.xls*

@@ -61,16 +61,16 @@ export class ShipmentOverviewCard extends Component {
       noTitle
     } = this.props
     const titleBox = (<div
-      className={`${adminStyles.greyBg} layout-padding flex-100 layout-align-start-center`}
+      className="greyBg layout-padding flex-100 layout-align-start-center"
     >
       <span><b>Requested Shipments</b></span>
     </div>)
 
     return (
-      <div className="layout-wrap flex-100 layout-row layout-align-start-start">
+      <div className="layout-wrap flex-100 layout-row layout-align-start-stretch">
         { !noTitle ? titleBox : ''}
         <div className={` ${adminStyles.margin_box_right} flex-100
-        layout-row layout-wrap layout-align-start-start padding_bottom`}
+        layout-row layout-wrap padding_bottom`}
         >
           {this.listShipments(shipments)}
         </div>
