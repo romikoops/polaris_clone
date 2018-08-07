@@ -19,8 +19,8 @@ export class AdminHubsIndex extends Component {
     this.state = {
       searchFilters: {
         hubType: {
-          air: true,
-          ocean: true
+          // air: true,
+          // ocean: true
         },
         status: {
           active: true,
@@ -36,6 +36,26 @@ export class AdminHubsIndex extends Component {
     this.handlePage = this.handlePage.bind(this)
     this.prevPage = this.prevPage.bind(this)
     this.handleInput = this.handleInput.bind(this)
+  }
+  componentDidMount () {
+    if (this.props.scope) {
+      this.setHubTypes(this.props.scope)
+    }
+  }
+  setHubTypes (scope) {
+    const newTypeObj = {}
+    Object.keys(scope.modes_of_transport).forEach((mot) => {
+      const boolSum = Object.values(scope.modes_of_transport[mot]).reduce((a, b) => a + b, 0)
+      if (boolSum > 0) {
+        newTypeObj[mot] = true
+      }
+    })
+    this.setState(prevState => ({
+      searchFilters: {
+        ...prevState.searchFilters,
+        hubType: newTypeObj
+      }
+    }), () => console.log(this.state.searchFilters.hubType))
   }
   toggleExpander (key) {
     this.setState({
@@ -184,7 +204,9 @@ export class AdminHubsIndex extends Component {
       return ''
     }
     const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
-      const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
+      const typeNames = {
+        ocean: 'Port', air: 'Airport', rail: 'Railyard', truck: 'Depot'
+      }
 
       return (
         <div
@@ -467,7 +489,8 @@ AdminHubsIndex.propTypes = {
     uploadHubs: PropTypes.func
   }).isRequired,
   getHubsFromPage: PropTypes.func,
-  searchHubsFromPage: PropTypes.func
+  searchHubsFromPage: PropTypes.func,
+  scope: PropTypes.objectOf(PropTypes.any)
 }
 
 AdminHubsIndex.defaultProps = {
@@ -476,7 +499,8 @@ AdminHubsIndex.defaultProps = {
   numHubPages: 1,
   countries: [],
   getHubsFromPage: null,
-  searchHubsFromPage: null
+  searchHubsFromPage: null,
+  scope: {}
 }
 
 export default AdminHubsIndex
