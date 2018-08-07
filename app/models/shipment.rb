@@ -42,8 +42,8 @@ class Shipment < ApplicationRecord
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-  belongs_to :origin_nexus, class_name: "Location", optional: true
-  belongs_to :destination_nexus, class_name: "Location", optional: true
+  belongs_to :origin_nexus, class_name: "Nexus", optional: true
+  belongs_to :destination_nexus, class_name: "Nexus", optional: true
   belongs_to :origin_hub, class_name: "Hub", optional: true
   belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true

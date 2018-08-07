@@ -20,5 +20,6 @@ COPY ./ /e2e
 WORKDIR /e2e
 
 ENV PUPPETEER_HEADLESS true
+ENV E2E_DOCKER true
 RUN yarn --verbose --no-progress
 RUN ls -al

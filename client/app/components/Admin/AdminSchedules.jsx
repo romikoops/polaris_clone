@@ -184,10 +184,11 @@ class AdminSchedules extends Component {
         content={(
           <div className="flex-100 layout-row layout-wrap layout-align-center-start">
             <CollapsingBar
+              showArrow
               collapsed={!expander.upload}
               theme={theme}
               handleCollapser={() => this.toggleExpander('upload')}
-              headingText="Upload Data"
+              text="Upload Data"
               faClass="fa fa-cloud-upload"
               content={(
                 <div>
@@ -247,10 +248,11 @@ class AdminSchedules extends Component {
               )}
             />
             <CollapsingBar
+              showArrow
               collapsed={!expander.download}
               theme={theme}
               handleCollapser={() => this.toggleExpander('download')}
-              headingText="Download Data"
+              text="Download Data"
               faClass="fa fa-cloud-download"
               content={(
                 <div>

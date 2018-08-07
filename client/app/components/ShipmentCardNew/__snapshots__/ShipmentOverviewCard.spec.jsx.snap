@@ -2,10 +2,10 @@
 
 exports[`admin is true 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-space-between-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-start"
 >
   <div
-    className="layout-padding flex-100 layout-align-start-center  greyBg"
+    className="greyBg layout-padding flex-100 layout-align-start-center"
   >
     <span>
       <b>
@@ -14,65 +14,80 @@ exports[`admin is true 1`] = `
     </span>
   </div>
   <div
-    className="margin_box_right margin_bottom flex-100 layout-row"
+    className=" margin_box_right flex-100
+        layout-row layout-wrap layout-align-start-start padding_bottom"
   >
-    <AlternativeGreyBox
-      content={
-        <AdminShipmentCardNew
-          dispatches={
-            Object {
-              "foo": [Function],
+    <div
+      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+    >
+      <AlternativeGreyBox
+        content={
+          <AdminShipmentCardNew
+            dispatches={
+              Object {
+                "foo": [Function],
+              }
             }
-          }
-          hubs={
-            Object {
-              "foo": Object {
-                "location": Object {
-                  "city": "FOO_CITY",
-                  "country": "Germany",
-                  "id": 246,
-                  "primary": true,
-                  "street": "FOO_STREET",
-                  "street_number": 579,
-                  "zip_code": "22456",
+            hubs={
+              Object {
+                "foo": Object {
+                  "location": Object {
+                    "city": "FOO_CITY",
+                    "country": "Germany",
+                    "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+                    "id": 246,
+                    "primary": true,
+                    "street": "FOO_STREET",
+                    "streetNumber": 579,
+                    "street_number": 579,
+                    "zipCode": "22456",
+                    "zip_code": "22456",
+                  },
+                  "name": "FOO_HUB_NAME",
                 },
-                "name": "FOO_HUB_NAME",
-              },
+              }
             }
-          }
-          shipment={
-            Object {
-              "clientName": "FOO_CLIENT_NAME",
-              "id": 654,
-              "imc_reference": "FOO_IMC_REFERENCE",
-              "planned_etd": 789,
-              "schedule_set": Array [],
-              "status": "FOO_STATUS",
+            shipment={
+              Object {
+                "clientName": "FOO_CLIENT_NAME",
+                "destination_hub": Object {
+                  "name": "FOO_DESTINATION_HUB",
+                },
+                "id": 654,
+                "imc_reference": "FOO_IMC_REFERENCE",
+                "origin_hub": Object {
+                  "name": "FOO_ORIGIN_HUB",
+                },
+                "planned_etd": 789,
+                "schedule_set": Array [],
+                "status": "FOO_STATUS",
+              }
             }
-          }
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-        />
-      }
-      contentClassName="layout-row flex-100"
-      wrapperClassName="layout-row flex-50 flex-md-100 flex-sm-100 flex-xs-100 layout-align-center-center"
-    />
+          />
+        }
+        contentClassName="layout-row flex-100"
+        titleAction={false}
+        wrapperClassName="layout-row flex layout-align-center-center"
+      />
+    </div>
   </div>
 </div>
 `;
 
 exports[`shallow rendering 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-space-between-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-start"
 >
   <div
-    className="layout-padding flex-100 layout-align-start-center  greyBg"
+    className="greyBg layout-padding flex-100 layout-align-start-center"
   >
     <span>
       <b>
@@ -81,31 +96,52 @@ exports[`shallow rendering 1`] = `
     </span>
   </div>
   <div
-    className="margin_box_right margin_bottom flex-100 layout-row"
+    className=" margin_box_right flex-100
+        layout-row layout-wrap layout-align-start-start padding_bottom"
   >
-    <AlternativeGreyBox
-      content={
-        <UserShipmentCard
-          dispatches={
-            Object {
-              "foo": [Function],
+    <div
+      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+    >
+      <AlternativeGreyBox
+        content={
+          <UserShipmentCard
+            dispatches={
+              Object {
+                "foo": [Function],
+              }
             }
-          }
-          shipment={
-            Object {
-              "clientName": "FOO_CLIENT_NAME",
-              "id": 654,
-              "imc_reference": "FOO_IMC_REFERENCE",
-              "planned_etd": 789,
-              "schedule_set": Array [],
-              "status": "FOO_STATUS",
+            hubs={Object {}}
+            shipment={
+              Object {
+                "clientName": "FOO_CLIENT_NAME",
+                "destination_hub": Object {
+                  "name": "FOO_DESTINATION_HUB",
+                },
+                "id": 654,
+                "imc_reference": "FOO_IMC_REFERENCE",
+                "origin_hub": Object {
+                  "name": "FOO_ORIGIN_HUB",
+                },
+                "planned_etd": 789,
+                "schedule_set": Array [],
+                "status": "FOO_STATUS",
+              }
             }
-          }
-        />
-      }
-      contentClassName="layout-row flex-100"
-      wrapperClassName="layout-row flex-50 flex-md-100 flex-sm-100 flex-xs-100 layout-align-center-center"
-    />
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        }
+        contentClassName="layout-row flex-100"
+        titleAction={false}
+        wrapperClassName="layout-row flex layout-align-center-center"
+      />
+    </div>
   </div>
 </div>
 `;

@@ -28,7 +28,7 @@ import {
   ALIGN_END,
   ALIGN_START,
   ALIGN_START_CENTER,
-  COLUMN_15,
+  COLUMN,
   ROW,
   WRAP_ROW
 } from '../../classNames'
@@ -81,7 +81,7 @@ export function calcFareTotals (feeHash) {
   const total = feeHash.total && +feeHash.total.value
 
   return Object.keys(feeHash).reduce((sum, k) => (
-    feeHash[k] && ['customs', 'insurance']
+    feeHash[k] && ['customs', 'insurance', 'addons']
       .includes(k) && feeHash[k].total ? sum - feeHash[k].total.value : sum
   ), total).toFixed(2)
 }
@@ -99,6 +99,12 @@ export function calcExtraTotals (feeHash) {
     feeHash.insurance.total &&
     feeHash.insurance.total.value) {
     res1 += parseFloat(feeHash.insurance.total.value)
+  }
+  if (feeHash &&
+    feeHash.addons &&
+    feeHash.addons.customs_export_paper &&
+    feeHash.addons.customs_export_paper.value) {
+    res1 += parseFloat(feeHash.addons.customs_export_paper.value)
   }
 
   return res1.toFixed(2)
@@ -297,7 +303,7 @@ export class BookingConfirmation extends Component {
                   <p className="flex-100 letter_3">
                     {expectedTime}
                   </p>
-                  <p className="flex-90 offset-10 margin_5">
+                  <p className="flex-90 offset-10  center">
                     {plannedTime}
                   </p>
                 </div>
@@ -307,7 +313,7 @@ export class BookingConfirmation extends Component {
               <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
                   <p className="flex-100 letter_3"> Expected Time of Arrival:</p>
-                  <p className="flex-90 offset-10 margin_5">{arrivalTime}</p>
+                  <p className="flex-90 offset-10  center">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
               </div>
@@ -794,7 +800,7 @@ function getNotifyeesJSX ({ notifyees, textStyle }) {
 
   const notifyeesJSX = notifyees.map(notifyee => (
     <div key={v4()} className={ROW(40)}>
-      <div className={`${COLUMN_15} ${ALIGN_START_CENTER}`}>
+      <div className={`${COLUMN(15)} ${ALIGN_START_CENTER}`}>
         <i
           className={`${styles.icon} fa fa-envelope-open-o flex-none`}
           style={textStyle}
@@ -861,12 +867,12 @@ function getTerms ({ theme, terms }) {
 
 function getLocationsDestination ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_START}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
       <address className="flex-none">
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-        ,
-        {`${locations.destination.city}`},
-        {`${locations.destination.zip_code}`},
+        , <br />
+        {`${locations.destination.city}`}, <br />
+        {`${locations.destination.zip_code}`}, <br />
         {`${locations.destination.country}`}
       </address>
     </div>
@@ -877,11 +883,11 @@ function getLocationsDestination ({ shipment, locations }) {
 
 function getLocationsOrigin ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_START}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
       <address className="flex-none">
-        {`${locations.origin.street_number} ${locations.origin.street}`},
-        {`${locations.origin.city}`},
-        {`${locations.origin.zip_code}`},
+        {`${locations.origin.street_number} ${locations.origin.street}`},<br />
+        {`${locations.origin.city}`}, <br />
+        {`${locations.origin.zip_code}`}, <br />
         {`${locations.origin.country}`}
       </address>
     </div>

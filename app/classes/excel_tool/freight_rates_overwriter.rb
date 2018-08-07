@@ -46,6 +46,9 @@ module ExcelTool
 
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
+      if aux_data[pricing_key][:stops_in_order].length != 2
+        # byebug
+      end
       if aux_data[pricing_key][:stops_in_order].length > 0
         itinerary.stops << aux_data[pricing_key][:stops_in_order]
         itinerary.save!
@@ -162,12 +165,12 @@ module ExcelTool
         }
     end
 
-    def find_nexus(string)
-      nexus = Location.find_by(name: string, location_type: "nexus")
+    def find_nexus(string, tenant_id)
+      nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
       if nexus
         return nexus
       else
-        nexus = Location.where("name ILIKE ? AND location_type = ?", string, "nexus").first
+        nexus = Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
       end
     end
 
@@ -177,12 +180,13 @@ module ExcelTool
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 
-      aux_data[pricing_key][:customer] = User.find(row[:customer_id]) if row[:customer_id]
+      aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
-      aux_data[pricing_key][:origin] ||= find_nexus(row[:origin])
-      aux_data[pricing_key][:destination] ||= find_nexus(row[:destination])
+      aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
+      aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
         puts row
+        byebug
       end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids

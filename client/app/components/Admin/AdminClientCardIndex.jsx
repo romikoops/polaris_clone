@@ -63,6 +63,7 @@ function listClients (clients, theme) {
           title=""
           subtitle=""
           component={clientCard}
+          noMargin
         />
       </div>
     )
@@ -83,7 +84,7 @@ export class AdminClientCardIndex extends Component {
 
     return (
       <div className={`layout-column flex-100 layout-align-start-stretch ${styles.listComponent}`}>
-        <div className={`layout-padding layout-align-start-center ${styles.greyBg}`}>
+        <div className="layout-padding layout-align-start-center greyBg">
           <span><b>Clients</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list} ${styles.scrolling}`}>

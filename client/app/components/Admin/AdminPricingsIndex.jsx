@@ -136,7 +136,7 @@ export class AdminPricingsIndex extends Component {
     </Tab>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
 
         <Tabs
           wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"

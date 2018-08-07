@@ -15,11 +15,12 @@ import {
   moment,
   chargeGlossary
 } from '../../../constants'
-import { gradientGenerator, gradientTextGenerator, gradientBorderGenerator } from '../../../helpers'
+import { gradientGenerator, gradientTextGenerator, gradientBorderGenerator, filters } from '../../../helpers'
 import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import GradientBorder from '../../GradientBorder'
+import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -59,6 +60,7 @@ export class AdminPricingDedicated extends Component {
       selectedClients: {}
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
@@ -345,8 +347,14 @@ export class AdminPricingDedicated extends Component {
       }
     })
   }
+  handleSearchChange (event) {
+    const { value } = event.target
+    this.setState({
+      clientSearch: value
+    })
+  }
   savePricings () {
-    const { adminDispatch } = this.props
+    const { adminDispatch, closePricingView } = this.props
     const { editor, selectedClients } = this.state
     const activeClients = []
     Object.keys(selectedClients).forEach((ck) => {
@@ -361,6 +369,7 @@ export class AdminPricingDedicated extends Component {
       delete editor.data[fk].expiration_date
     })
     adminDispatch.assignDedicatedPricings(editor, activeClients)
+    closePricingView()
   }
   renderCargoClassButtons () {
     const { selectedCargoClass, charges } = this.state
@@ -389,14 +398,17 @@ export class AdminPricingDedicated extends Component {
   }
 
   render () {
-    const { theme, title, clients } = this.props
+    const {
+      theme, clients, backBtn
+    } = this.props
 
     const {
       selectOptions,
       charges,
       selectedCargoClass,
       setUsers,
-      selectedClients
+      selectedClients,
+      clientSearch
     } = this.state
 
     if (!charges || (charges && !charges[0])) {
@@ -452,26 +464,34 @@ export class AdminPricingDedicated extends Component {
         theme && theme.colors
           ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
           : { background: 'black' }
-
+    const filteredClients = filters.handleSearchChange(
+      clientSearch,
+      ['first_name', 'last_name', 'company_name', 'phone', 'email'],
+      clients
+    )
     const setPricingView = (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
-          <div className="flex-30 layout-row layout-align-start-center">
-            <p className={`flex-none ${styles2.text}`} >{title || 'Fees & Charges' }</p>
-          </div>
+        <div className="flex-5 layout-row pointy" onClick={backBtn}>
+          <span className="hover_text">{'< Back'}</span>
         </div>
-        <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+        <div className="flex-100 layout-row">
+          <h2>Define dedicated charges</h2>
+        </div>
+        <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.edit_wrapper}`}>
           <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
             {this.renderCargoClassButtons()}
           </div>
           <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.fee_row_container}`}>
             {feeRows}
           </div>
-          <div className={`flex-100 layout-row layout-align-end-center layout-wrap ${styles.fee_row_container}`}>
+        </div>
+        <div className={`flex-100 layout-row layout-align-end-center layout-wrap ${styles.fee_row_container}`}>
+          <div className="flex-33 layout-row">
             <RoundButton
+              inverse
               theme={theme}
               handleNext={() => this.assignUsers()}
-              text="Assign Users"
+              text="Next >"
               size="small"
               active
             />
@@ -479,40 +499,67 @@ export class AdminPricingDedicated extends Component {
         </div>
       </div>
     )
-    const userTiles = clients.map(c => (
+    const userTiles = filteredClients.slice(0, 7).map(c => (
       <div className={`flex-100 flex-sm-50 flex-md-33 flex-gt-md-20 layout-row ${styles2.assign_user_tile}`}>
-        <GradientBorder
-          wrapperClassName="flex pointy"
-          gradient={gradientBorderStyle}
-          className="layout-row flex-100 "
-          content={(
-            <div className={`flex layout-row layout-align-start-center ${styles2.assign_user_tile_inner}`}>
-              <div
-                onClick={() => this.assignUser(c.id)}
-                className="flex layout-row layout-align-start-center"
-              >
-                <i className="flex-none fa fa-user clip" style={gradientStyle} />
-                <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
+        {selectedClients[c.id] ? (
+          <GradientBorder
+            wrapperClassName={`flex pointy ${styles2.margin_fixes}`}
+            gradient={gradientBorderStyle}
+            className="layout-row flex-100"
+            content={(
+              <div className={`flex layout-row layout-align-start-center ${styles2.assign_user_tile_inner}`}>
+                <div
+                  onClick={() => this.assignUser(c.id)}
+                  className="flex layout-row layout-align-start-center"
+                >
+                  <i className="flex-none fa fa-user clip" style={gradientStyle} />
+                  <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
+                </div>
+                <div className={`flex-none layout-row layout-align-center-center ${styles2.assigned_checkmark}`}>
+                  <i className="fa fa-check flex-none clip" style={gradientStyle} />
+                </div>
               </div>
-              <div className={`flex-none layout-row layout-align-center-center ${styles2.assigned_checkmark}`}>
-                { selectedClients[c.id] ? <i className="fa fa-check flex-none" /> : '' }
+            )}
+          />
+        ) : (
+          <AlternativeGreyBox
+            wrapperClassName="flex pointy"
+            contentClassName="layout-row flex-100"
+            content={(
+              <div className={`flex layout-row layout-align-start-center ${styles2.assign_user_tile_inner}`}>
+                <div
+                  onClick={() => this.assignUser(c.id)}
+                  className="flex layout-row layout-align-start-center"
+                >
+                  <i className="flex-none fa fa-user" style={{ color: '#BDBDBD' }} />
+                  <p className="flex-100">{`${c.first_name} ${c.last_name}`}</p>
+                </div>
               </div>
-            </div>
-          )}
-        />
+            )}
+          />
+        )}
       </div>
     ))
     const setUserView = (
       <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles2.header_bar_grey}`}>
-          <div className="flex-30 layout-row layout-align-start-center">
-            <p className={`flex-none ${styles2.text}`} >Assign Users</p>
+        <div className="flex-5 layout-row pointy" onClick={() => this.assignUsers()}>
+          <span className="hover_text">{'< Back'}</span>
+        </div>
+        <div className="flex-100 layout-row layout-align-space-between-center">
+          <h2>Choose users</h2>
+          <div className="input_box_full flex-40 layout-row layout-align-end-center">
+            <input
+              type="text"
+              name="search"
+              placeholder="Search clients"
+              onChange={this.handleSearchChange}
+            />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+        <div className={`flex-100 layout-row layout-align-start-start layout-wrap layout-padding ${styles2.users_wrapper}`}>
           {userTiles}
         </div>
-        <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+        <div className="flex-100 layout-row layout-align-center-center layout-wrap">
           <RoundButton
             theme={theme}
             handleNext={() => this.savePricings()}
@@ -536,12 +583,13 @@ AdminPricingDedicated.propTypes = {
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.arrayOf(PropTypes.any),
   clients: PropTypes.arrayOf(PropTypes.user).isRequired,
-  title: PropTypes.string
+  backBtn: PropTypes.func,
+  closePricingView: PropTypes.func.isRequired
 }
 AdminPricingDedicated.defaultProps = {
   theme: {},
   charges: [],
-  title: ''
+  backBtn: null
 }
 
 export default AdminPricingDedicated

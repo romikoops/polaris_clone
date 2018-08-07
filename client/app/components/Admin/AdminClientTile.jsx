@@ -43,7 +43,8 @@ export class AdminClientTile extends Component {
       deleteable,
       showTooltip,
       tooltip,
-      flexClasses
+      flexClasses,
+      handleCollapser
     } = this.props
     const { showDelete } = this.state
     if (!client) {
@@ -55,7 +56,8 @@ export class AdminClientTile extends Component {
         : { color: 'black' }
     const content = (
       <div
-        className={`${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center`}
+        className={`
+        ${styles.margin} flex-80 layout-row layout-wrap layout-align-center-center`}
         onClick={this.clickEv}
       >
         <div
@@ -77,7 +79,9 @@ export class AdminClientTile extends Component {
           <i className="flex-none fa fa-envelope clip" style={gradientStyle} />
           <p className="flex-90">Email</p>
         </div>
-        <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
+        <div
+          className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}
+        >
           <p className="flex-90 flex-offset-10">{client.email}</p>
         </div>
         <div
@@ -89,7 +93,9 @@ export class AdminClientTile extends Component {
           <p className="flex-90">Company</p>
         </div>
         <div
-          className={`flex-100 layout-row layout-align-start-center-center ${styles.client_text}`}
+          className={`
+            flex-100 layout-row layout-align-start-center-center ${styles.client_text}
+          `}
         >
           <p className="flex-90 flex-offset-10">{client.company_name}</p>
         </div>
@@ -138,13 +144,16 @@ export class AdminClientTile extends Component {
     const tooltipId = v4()
 
     return (
-      <div className={`layout-row layout-align-center-center margin_bottom ${styles.tile_wrapper} ${flexClasses}`}>
+      <div
+        className={`layout-row layout-align-center-center margin_bottom tile_padding ${styles.tile_wrapper} ${flexClasses}`}
+        onClick={handleCollapser}
+      >
         <GradientBorder
           wrapperClassName={`flex ${styles.client_card}  layout-row pointy`}
           gradient={gradientBorderStyle}
           className="layout-column flex-100"
           content={(
-            <div className="layout-column flex-100">
+            <div className="layout-column flex-100" onClick={handleCollapser}>
               {deleteable && !showDelete ? (
                 <div
                   className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`}
@@ -190,7 +199,8 @@ AdminClientTile.propTypes = {
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
   flexClasses: PropTypes.string,
-  showTooltip: PropTypes.bool
+  showTooltip: PropTypes.bool,
+  handleCollapser: PropTypes.func
 }
 AdminClientTile.defaultProps = {
   theme: null,
@@ -201,7 +211,8 @@ AdminClientTile.defaultProps = {
   navFn: null,
   deleteFn: null,
   target: '',
-  flexClasses: 'flex-30 flex-md-45'
+  flexClasses: 'flex-33 flex-xs-50 flex-md-50 flex-lg-33',
+  handleCollapser: null
 }
 
 export default AdminClientTile

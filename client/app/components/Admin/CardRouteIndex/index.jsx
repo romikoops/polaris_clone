@@ -15,7 +15,6 @@ export default class CardRoutesIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      itineraries: props.itineraries,
       expander: {},
       searchTexts: {},
       page: 1,
@@ -63,38 +62,38 @@ export default class CardRoutesIndex extends Component {
     })
   }
   generateCards (mot, limit) {
-    const { itineraries, page, numPerPage } = this.state
-    const { hubs, theme } = this.props
+    const { page, numPerPage } = this.state
+    const { itineraries, hubs, theme } = this.props
     let itinerariesArr = []
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
-    if (itineraries && itineraries.length > 0) {
-      itinerariesArr = this.updateSearch(itineraries, mot)
-        .slice(sliceStartIndex, sliceEndIndex)
-        .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => (
-          <CardRoutes
-            key={v4()}
-            hubs={hubs}
-            itinerary={rt}
-            theme={theme}
-            handleClick={this.handleClick}
-          />
-        ))
-    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
-      itinerariesArr = this.updateSearch(itineraries, mot)
-        .slice(sliceStartIndex, sliceEndIndex)
-        .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => (
-          <CardRoutes
-            key={v4()}
-            hubs={hubs}
-            itinerary={rt}
-            theme={theme}
-            handleClick={this.handleClick}
-          />
-        ))
-    }
+    // if (itineraries && itineraries.length > 0) {
+    //   itinerariesArr = this.updateSearch(itineraries, mot)
+    //     .slice(sliceStartIndex, sliceEndIndex)
+    //     .filter(itinerary => itinerary.mode_of_transport === mot)
+    //     .map((rt, i) => (
+    //       <CardRoutes
+    //         key={v4()}
+    //         hubs={hubs}
+    //         itinerary={rt}
+    //         theme={theme}
+    //         handleClick={this.handleClick}
+    //       />
+    //     ))
+    // } else if (this.props.itineraries && this.props.itineraries.length > 0) {
+    itinerariesArr = this.updateSearch(itineraries, mot)
+      .slice(sliceStartIndex, sliceEndIndex)
+      .filter(itinerary => itinerary.mode_of_transport === mot)
+      .map((rt, i) => (
+        <CardRoutes
+          key={v4()}
+          hubs={hubs}
+          itinerary={rt}
+          theme={theme}
+          handleClick={this.handleClick}
+        />
+      ))
+    // }
     if (itinerariesArr.length < 1) {
       itinerariesArr.push(<h3 className="flex-none">No routes to display</h3>)
     }

@@ -49,7 +49,8 @@ module ExcelTool
           import_charges: "IMPORT_CHARGES",
           export_charges: "EXPORT_CHARGES",
           pre_carriage: "PRE_CARRIAGE",
-          on_carriage: "ON_CARRIAGE"
+          on_carriage: "ON_CARRIAGE",
+          alternative_names: "ALTERNATIVE_NAMES"
         )
       end
 
@@ -76,23 +77,21 @@ module ExcelTool
       end
       
       def _nexus
-        Location.find_by(
-          name: hub_row[:hub_name],
-          location_type: "nexus",
-          country: country
+        Nexus.find_by(
+          name:             hub_row[:hub_name],
+          country:          country,
+          tenant_id:        @user.tenant_id
         )
       end
 
       def _nexus_create
-        Location.create!(
+        Nexus.create!(
           name:             hub_row[:hub_name],
-          location_type:    "nexus",
           latitude:         hub_row[:latitude],
           longitude:        hub_row[:longitude],
           photo:            hub_row[:photo],
           country:          country,
-          city:             hub_row[:hub_name],
-          geocoded_address: hub_row[:geocoded_address]
+          tenant_id:        @user.tenant_id
         )
       end
 
@@ -106,6 +105,14 @@ module ExcelTool
           geocoded_address: hub_row[:geocoded_address],
           location_type: nil
         )
+      end
+
+      def find_alternative_country_names(name)
+        results = AlternativeName.where("model = ? AND name ILIKE ?", "Country", "%#{name}%")
+        if !results.empty?
+          class_name = results.first.model.constantize
+          country = class_name.find(results.first.model_id)
+        end
       end
 
       def hub
@@ -130,6 +137,18 @@ module ExcelTool
           photo:            hub_row[:photo],
           mandatory_charge: @mandatory_charge
         )
+      end
+
+      def create_alternative_names
+        if hub_row[:alternative_names]
+          if hub_row[:alternative_names].include?(',')
+            hub_row[:alternative_names].split(',').each do |str|
+              AlternativeName.find_or_create_by!(model: 'Hub', model_id: @hub.id, name: str)
+            end
+          else
+            AlternativeName.find_or_create_by!(model: 'Hub', model_id: @hub.id, name: hub_row[:alternative_names])
+          end
+        end
       end
 
       def create_nexus_hub
@@ -173,8 +192,21 @@ module ExcelTool
       end
 
       def country_by_code(name)
-        code = geoplace.select{ |geo| geo.name == name }&.first&.code
-        Country.find_by(code: code)
+        if name.include?('Korea')
+          name = "Korea (Republic of)"
+        end
+        tmp_country = Country.find_by_name(name)
+        if !tmp_country
+          code = geoplace.select{ |geo| geo.name == name }&.first&.code
+          tmp_country = Country.find_by(code: code)
+        end
+        if !tmp_country
+          tmp_country = Country.where("name ILIKE ?", "%#{name}%").first
+        end
+        if !tmp_country
+          tmp_country = find_alternative_country_names(name)
+        end
+        tmp_country
       end
       def overwrite_hubs
 
@@ -184,6 +216,7 @@ module ExcelTool
           @country = country_by_code(hub_row[:country])
           @mandatory_charge = MandatoryCharge.find_by(mandatory_charge_values)
           @mandatory_charge ||= default_mandatory_charge
+          
           @nexus = _nexus
           @nexus ||= _nexus_create
 
@@ -192,7 +225,7 @@ module ExcelTool
           update_or_create_hub
           results[:nexuses] << nexus
           stats[:nexuses][:number_updated] += 1
-
+          create_alternative_names
           hub.generate_hub_code!(user.tenant_id) unless hub.hub_code
           hub
         end

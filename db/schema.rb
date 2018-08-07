@@ -10,17 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180718075838) do
+ActiveRecord::Schema.define(version: 20180726093353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "addons", force: :cascade do |t|
+    t.string "title"
+    t.jsonb "text", default: [], array: true
+    t.integer "tenant_id"
+    t.string "read_more"
+    t.string "accept_text"
+    t.string "decline_text"
+    t.string "additional_info_text"
+    t.string "cargo_class"
+    t.integer "hub_id"
+    t.integer "counterpart_hub_id"
+    t.string "mode_of_transport"
+    t.integer "tenant_vehicle_id"
+    t.string "direction"
+    t.string "addon_type"
+    t.jsonb "fees"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "aggregated_cargos", force: :cascade do |t|
     t.decimal "weight"
     t.decimal "volume"
     t.decimal "chargeable_weight"
     t.integer "shipment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "alternative_names", force: :cascade do |t|
+    t.string "model"
+    t.string "model_id"
+    t.string "name"
+    t.string "locale"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -310,6 +339,7 @@ ActiveRecord::Schema.define(version: 20180718075838) do
     t.integer "counterpart_hub_id"
     t.string "direction"
     t.jsonb "fees"
+    t.boolean "dangerous", default: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -382,6 +412,17 @@ ActiveRecord::Schema.define(version: 20180718075838) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nexuses", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "photo"
+    t.integer "country_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -700,6 +741,7 @@ ActiveRecord::Schema.define(version: 20180718075838) do
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
     t.integer "optin_status_id"
+    t.string "external_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

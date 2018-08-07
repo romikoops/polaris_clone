@@ -170,6 +170,22 @@ export default function admin (state = {}, action) {
 
       return errHubs
     }
+    case adminConstants.GET_ALL_HUBS_REQUEST:
+      return state
+    case adminConstants.GET_ALL_HUBS_SUCCESS:
+      return {
+        ...state,
+        allHubs: action.payload.data.hubs,
+        loading: false
+      }
+    case adminConstants.GET_ALL_HUBS_FAILURE: {
+      const errHubs = merge({}, state, {
+        error: { hubs: action.error },
+        loading: false
+      })
+
+      return errHubs
+    }
     case adminConstants.GET_HUB_REQUEST: {
       const reqHub = merge({}, state, {
         loading: true
@@ -588,27 +604,24 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.GET_PRICINGS_REQUEST: {
-      const reqPric = merge({}, state, {
+      return {
+        ...state,
         loading: true
-      })
-
-      return reqPric
+      }
     }
     case adminConstants.GET_PRICINGS_SUCCESS: {
-      const succPric = merge({}, state, {
+      return {
+        ...state,
         pricingData: action.payload.data,
         loading: false
-      })
-
-      return succPric
+      }
     }
     case adminConstants.GET_PRICING_FAILURE: {
-      const errPric = merge({}, state, {
+      return {
+        ...state,
         error: { pricings: action.error },
         loading: false
-      })
-
-      return errPric
+      }
     }
 
     case adminConstants.DELETE_PRICING_REQUEST: {
@@ -669,13 +682,13 @@ export default function admin (state = {}, action) {
     case adminConstants.ASSIGN_DEDICATED_PRICING_SUCCESS: {
       const { userPricings } = state.itineraryPricings
 
-      userPricings.push(action.payload)
+      const newPricing = [...userPricings, ...action.payload]
 
       return {
         ...state,
         itineraryPricings: {
           ...state.itineraryPricings,
-          userPricings
+          userPricings: newPricing
         }
       }
     }

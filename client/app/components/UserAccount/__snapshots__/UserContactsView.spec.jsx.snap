@@ -20,8 +20,13 @@ exports[`props.contactData.location is falsy 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
+        inverse={false}
         size="small"
         text="Back"
         theme={
@@ -75,8 +80,6 @@ exports[`props.contactData.location is falsy 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -117,8 +120,13 @@ exports[`props.loading is true 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
+        inverse={false}
         size="small"
         text="Back"
         theme={
@@ -172,8 +180,6 @@ exports[`props.loading is true 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -239,8 +245,13 @@ exports[`shallow render 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
+        inverse={false}
         size="small"
         text="Back"
         theme={
@@ -294,8 +305,6 @@ exports[`shallow render 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -361,8 +370,13 @@ exports[`state.editBool is true 1`] = `
     >
       <RoundButton
         active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
         handleNext={[Function]}
+        icon=""
         iconClass="fa-chevron-left"
+        inverse={false}
         size="small"
         text="Back"
         theme={
@@ -419,8 +433,6 @@ exports[`state.editBool is true 1`] = `
           Object {
             "clientName": "",
             "companyName": "",
-            "destinationHub": "",
-            "originHub": "",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",

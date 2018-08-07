@@ -412,7 +412,13 @@ export class ShipmentDetails extends Component {
 
   updateAirMaxDimensionsTooltips (value, divRef, suffixName) {
     const { maxDimensions } = this.props.shipmentData
-    if (!maxDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) return
+    const { availableMotsForRoute } = this.state
+    if (
+      !maxDimensions.air ||
+      (availableMotsForRoute.length && availableMotsForRoute.every(mot => mot === 'air'))
+    ) {
+      return
+    }
 
     if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => { ReactTooltip.show(divRef) }, 500)
@@ -423,7 +429,11 @@ export class ShipmentDetails extends Component {
 
   updatedExcessChargeableWeightText (cargoItems) {
     const { maxAggregateDimensions } = this.props.shipmentData
-    if (!maxAggregateDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) {
+    const { availableMotsForRoute } = this.state
+    if (
+      !maxAggregateDimensions.air ||
+      (availableMotsForRoute.length && availableMotsForRoute.every(mot => mot === 'air'))
+    ) {
       return ''
     }
 

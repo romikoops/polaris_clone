@@ -142,6 +142,13 @@ class Admin::HubsController < Admin::AdminBaseController
     response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 12)
   end
 
+  def all_hubs
+    processed_hubs = current_user.tenant.hubs.map do |hub|
+      { data: hub, location: hub.location.to_custom_hash }
+    end
+    response_handler(hubs: processed_hubs)
+  end
+
   private
 
   def for_create
@@ -166,7 +173,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def nexus
-    Location.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", "nexus")
+    Nexus.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", current_user.tenant_id)
   end
 
   def new_mandatory_charge

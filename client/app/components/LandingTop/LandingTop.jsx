@@ -11,6 +11,7 @@ const StyledTop = styled.div`
     url(${props => props.bg});
   height: 100vh;
   background-size: cover;
+  background-attachment: fixed;
   background-position: center;
   padding-bottom: 120px;
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.7);
@@ -31,7 +32,7 @@ export class LandingTop extends Component {
   }
   render () {
     const {
-      theme, user, tenant, bookNow, t
+      theme, user, tenant, bookNow, t, toggleShowLogin
     } = this.props
     const myAccount = (
       <div className="flex">
@@ -60,9 +61,7 @@ export class LandingTop extends Component {
         <SquareButton text={t('landing:477ecc3d-75a2-4973-b9dc-809def131df7')} theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
-
     const loginLink = <a onClick={this.props.toggleShowLogin}>Log In / Register</a>
-
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -75,7 +74,7 @@ export class LandingTop extends Component {
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
           <div className="flex-100 layout-row">
-            <Header user={user} theme={theme} scrollable invert noMessages />
+            <Header user={user} theme={theme} toggleShowLogin={toggleShowLogin} scrollable invert noMessages />
           </div>
           <div className="flex-50 layout-row layout-align-center layout-wrap">
             <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>

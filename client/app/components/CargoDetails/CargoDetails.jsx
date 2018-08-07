@@ -13,6 +13,7 @@ import FormsyInput from '../FormsyInput/FormsyInput'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
+import CustomsExportPaper from '../Addons/CustomsExportPaper'
 
 export class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs) {
@@ -28,6 +29,7 @@ export class CargoDetails extends Component {
       if (newTotal === 0 && customs.import.unknown && customs.export.unknown) {
         return 'Price subject to local regulations'
       }
+
       return `${newTotal.toFixed(2)} ${customs.total.total.currency}`
     }
     if (customsData[target].bool) {
@@ -36,12 +38,14 @@ export class CargoDetails extends Component {
         if (fee && !fee.unknown && fee.total.value) {
           return `${parseFloat(fee.total.value).toFixed(2)} ${fee.total.currency}`
         }
+
         return 'Price subject to local regulations'
       }
     }
     if (customsData[target].unknown) {
       return 'Price subject to local regulations'
     }
+
     return '0 EUR'
   }
   constructor (props) {
@@ -57,6 +61,7 @@ export class CargoDetails extends Component {
     this.fileFn = this.fileFn.bind(this)
     this.deleteDoc = this.deleteDoc.bind(this)
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
+    this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
   }
   toggleInsurance (bool) {
     this.setState({ insuranceView: bool })
@@ -64,6 +69,9 @@ export class CargoDetails extends Component {
   }
   toggleCustoms (bool) {
     this.setState({ customsView: bool })
+  }
+  toggleCustomAddon (target) {
+    this.props.toggleCustomAddon(target)
   }
   toggleSpecificCustoms (target) {
     const { setCustomsFee, customsData, shipmentData } = this.props
@@ -116,6 +124,7 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
+
         return customs.fee + diff * customs.extra
       }
     } else {
@@ -135,10 +144,12 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
+
         return customs.fee + diff * customs.extra
       }
     }
     const converted = converter(customs.fee, customs.currency, currencies).toFixed(2)
+
     return converted
   }
   handleChange (event) {
@@ -172,7 +183,7 @@ export class CargoDetails extends Component {
     const { totalGoodsCurrency } = this.state
     const { scope } = tenant.data
     const {
-      dangerousGoods, documents, shipment, customs
+      dangerousGoods, documents, shipment, customs, addons
     } = shipmentData
     const insuranceBox = (
       <div
@@ -614,7 +625,7 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        {scope.has_customs || scope.has_insurance ? (
+        {scope.has_customs || scope.has_insurance || scope.customs_export_paper ? (
           <div
             className={
               `${styles.insurance_customs_sec} flex-100 ` +
@@ -723,7 +734,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none" style={{ marginRight: '5px' }}>
-                            {`Yes, I want ${tenant.data.name} to handle my customs`}
+                            {`Yes, I want ${tenant.data.name} to handle my customs clearance`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -759,6 +770,21 @@ export class CargoDetails extends Component {
             ) : (
               ''
             )}
+            {scope.customs_export_paper
+              ? <div className="flex-100 layout-row layout-align-center padd_top">
+                <div
+                  className={`flex-none ${
+                    defaults.content_width
+                  } layout-row layout-wrap section_padding`}
+                >
+                  <CustomsExportPaper
+                    addon={addons.customs_export_paper}
+                    tenant={tenant}
+                    toggleCustomAddon={this.toggleCustomAddon}
+                  />
+                </div>
+              </div>
+              : ''}
           </div>
         ) : (
           ''
@@ -795,7 +821,7 @@ CargoDetails.propTypes = {
   hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
-  // handleHsTextChange: PropTypes.func,
+  toggleCustomAddon: PropTypes.func,
   // customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
@@ -808,7 +834,7 @@ CargoDetails.defaultProps = {
   tenant: null,
   finishBookingAttempted: false,
   hsTexts: {},
-  // handleHsTextChange: null,
+  toggleCustomAddon: null,
   // customsCredit: false,
   eori: '',
   notes: '',

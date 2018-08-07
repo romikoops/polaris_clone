@@ -27,8 +27,12 @@ export const tenant = {
     id: 123,
     scope: {
       modes_of_transport: {
-        FOO_MODE_TRANSPORT: {},
-        BAR_MODE_TRANSPORT: {}
+        ocean: {
+          OCEAN_LOAD_TYPE: true
+        },
+        air: {},
+        truck: {},
+        rail: {}
       }
     },
     theme,
@@ -43,14 +47,20 @@ export const req = {
 }
 
 const schedulesInShipmentData = [
-  { hub_route_key: 'FOO_HUB_ROUTE_KEY', mode_of_transport: 'FOO_MODE_TRANSPORT' },
-  { hub_route_key: 'BAR_HUB_ROUTE_KEY', mode_of_transport: 'BAR_MODE_TRANSPORT' }
+  { hub_route_key: 'OCEAN_HUB_ROUTE_KEY', mode_of_transport: 'ocean' },
+  { hub_route_key: 'AIR_HUB_ROUTE_KEY', mode_of_transport: 'air' },
+  { hub_route_key: 'TRUCK_HUB_ROUTE_KEY', mode_of_transport: 'truck' },
+  { hub_route_key: 'RAIL_HUB_ROUTE_KEY', mode_of_transport: 'rail' }
 ]
 
 export const shipmentInShipmentData = {
+  load_type: 'OCEAN_LOAD_TYPE',
+  selected_offer: { cargo: {}, total: { value: 77 } },
   schedules_charges: {
-    FOO_HUB_ROUTE_KEY: { total: 7 },
-    BAR_HUB_ROUTE_KEY: { total: 25 }
+    OCEAN_HUB_ROUTE_KEY: { total: 40 },
+    AIR_HUB_ROUTE_KEY: { total: 200 },
+    TRUCK_HUB_ROUTE_KEY: { total: 75 },
+    RAIL_HUB_ROUTE_KEY: { total: 125 }
   },
   total_goods_value: {
     value: 15,
@@ -107,6 +117,8 @@ export const shipments = {
 }
 
 export const shipment = {
+  origin_hub: { name: 'FOO_ORIGIN_HUB' },
+  destination_hub: { name: 'FOO_DESTINATION_HUB' },
   id: 654,
   status: 'FOO_STATUS',
   clientName: 'FOO_CLIENT_NAME',
@@ -119,9 +131,12 @@ export const location = {
   primary: true,
   id: 246,
   street_number: 579,
+  streetNumber: 579,
+  geocodedAddress: 'FOO_GEOCODED_ADDRESS',
   street: 'FOO_STREET',
   city: 'FOO_CITY',
   zip_code: '22456',
+  zipCode: '22456',
   country: 'Germany'
 }
 

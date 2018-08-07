@@ -16,7 +16,7 @@ function profileIconJSX (src, hide) {
 }
 
 export function NavDropdown ({
-  linkOptions, dropDownText, invert
+  linkOptions, dropDownText, invert, user, toggleShowLogin
 }) {
   const whiteProfileIconJSX = profileIconJSX(iconColorer('white'), !invert) || ''
   const blackProfileIconJSX = profileIconJSX(iconColorer('black'), invert) || ''
@@ -34,28 +34,40 @@ export function NavDropdown ({
         </a>
       )
     }
+
     return <div onClick={op.select}>{op.key}</div>
   })
+
   return (
     <div className={`${styles.dropdown}`}>
-      <div className={`${styles.dropbtn} layout-row layout-align-center-center`}>
-        <div className={styles.wrapper_profile_icon}>
-          {whiteProfileIconJSX}
-          {blackProfileIconJSX}
+      {user && user.first_name && !user.guest ? (
+        <div className="layout-row layout-align-center-center">
+          <div className={`${styles.dropbtn} layout-row layout-align-center-center`}>
+            <div className={styles.wrapper_profile_icon}>
+              {whiteProfileIconJSX}
+              {blackProfileIconJSX}
+            </div>
+            {dropDownText ? <span className="flex-none">{dropDownText}</span> : ''}
+            <i
+              className={`flex-none fa fa-caret-down ${defaults.spacing_sm_left}`}
+              aria-hidden="true"
+            />
+          </div>
+          <div className={`${styles.dropdowncontent}`}>{links}</div>
         </div>
-        {dropDownText ? <span className="flex-none">{dropDownText}</span> : ''}
-        <i
-          className={`flex-none fa fa-caret-down ${defaults.spacing_sm_left}`}
-          aria-hidden="true"
-        />
-      </div>
-      <div className={`${styles.dropdowncontent}`}>{links}</div>
+      ) : (
+        <div className={`pointy layout-row layout-align-center-center ${styles.dropbtn}`}>
+          <a onClick={toggleShowLogin}>Log In / Register</a>
+        </div>
+      )}
     </div>
   )
 }
 
 NavDropdown.propTypes = {
   dropDownText: PropTypes.string,
+  user: PropTypes.user,
+  toggleShowLogin: PropTypes.func,
   linkOptions: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string,
     fontAwesomeIcon: PropTypes.string
@@ -65,7 +77,9 @@ NavDropdown.propTypes = {
 
 NavDropdown.defaultProps = {
   dropDownText: PropTypes.string,
-  invert: false
+  invert: false,
+  user: null,
+  toggleShowLogin: null
 }
 
 export default NavDropdown

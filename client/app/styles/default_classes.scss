@@ -51,7 +51,7 @@
   }
 
   .pointy {
-    cursor: pointer;
+    cursor: pointer !important;
   }
 
   .emulate_link {
@@ -81,6 +81,9 @@
   .relative {
     position: relative;
   }
+  .absolute {
+    position: absolute;
+  }
   .extra_padding {
     padding-left: 70px;
     padding-right: 70px;
@@ -100,6 +103,15 @@
     }
     @media screen and (max-width: 420px) {
       padding-left: 25px !important;
+    }
+  }
+  .extra_padding_right_sm {
+    padding-right: 25px !important;
+    @media screen and (max-width: 768px) {
+      padding-right: 15px !important;
+    }
+    @media screen and (max-width: 420px) {
+      padding-right: 10px !important;
     }
   }
   .content_width {
@@ -263,14 +275,22 @@
   .input_box_full input {
     height: 34px;
     width: 100%;
-    border: 1px solid #F2F2F2;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    border: 0;
+    border-bottom: 1px solid #4F4F4F;
+    background-color: transparent;
+    // box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
-    &:focus {
-      outline: none;
+    // &:focus {
+    //   outline: none;
+    // }
+  }
+  .hover_text {
+    color: #BDBDBD !important;
+    &:hover {
+      color: #4F4F4F !important;
     }
   }
+
   .input_box_full textarea {
     width: 100%;
     border: 1px solid #F2F2F2;
@@ -306,7 +326,30 @@
     padding-right: 25px;
   }
   .card_margin_right{
-    margin-right: 25px;
+    > * {
+      margin-right: 25px;
+      &:last-child {
+        margin-right: 0 !important;
+      }
+    }
+  }
+  .greyBg {
+    background-color: #E0E0E0;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+  }
+  .slider_container {
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 250px;
+
+  }
+  .slider_inner {
+    margin-right: 15px;
+    position: relative;
+    width: max-content;
+    min-width: 100%;
   }
   .margin_bottom {
      margin-bottom: 25px;
@@ -318,5 +361,12 @@
   //  }
   .tab_size {
     min-height: 560px;
+  }
+  .tile_padding {
+    padding: 10px;
+  }
+
+  .text-break {
+    overflow-wrap: break-word;
   }
 }

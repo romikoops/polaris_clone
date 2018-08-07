@@ -7,6 +7,7 @@ import { AdminShipmentCardNew } from './AdminShipmentCardNew'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
+    // eslint-disable-next-line
     counter++
 
     return `RANDOM_KEY_${counter}`
@@ -18,7 +19,9 @@ jest.mock('../../helpers', () => ({
   gradientGenerator: x => x,
   gradientTextGenerator: x => x,
   gradientBorderGenerator: x => x,
-  switchIcon: x => x
+  switchIcon: x => x,
+  formattedPriceValue: () => 1034,
+  totalPrice: () => ({ currency: 'CNY' })
 }))
 jest.mock('moment', () => {
   const format = () => 19

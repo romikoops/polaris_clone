@@ -16,6 +16,7 @@ subdomains.each do |sub|
   HubTrucking.where(trucking_pricing_id: tps.ids).delete_all
   tenant.trucking_pricings.delete_all
   tenant.hubs.destroy_all
+  tenant.nexuses.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/easyshipping/easyshipping__hubs.xlsx")

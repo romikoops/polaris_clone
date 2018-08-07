@@ -25,7 +25,7 @@ class ChargeBreakdown < ApplicationRecord
   end
 
   scope :selected, -> {
-    joins(:shipment).where("charge_breakdowns.trip_id = shipments.trip_id").first
+    joins("INNER JOIN shipments ON charge_breakdowns.trip_id = shipments.trip_id").first
   }
 
   def charge(charge_category)

@@ -286,7 +286,9 @@ export class ShipmentLocationBox extends Component {
   }
 
   setMarker (location, name, target) {
-    const { markers, map } = this.state
+    const {
+      markers, map, directionsDisplay, directionsService
+    } = this.state
     const { theme } = this.props
     const newMarkers = []
     if (markers[target].title !== undefined) {
@@ -336,8 +338,6 @@ export class ShipmentLocationBox extends Component {
       map.fitBounds(bounds, { top: 20 })
     }
     if (this.state.speciality === 'truck' && markers.origin.title && markers.destination.title) {
-      const directionsService = new this.props.gMaps.DirectionsService()
-      const directionsDisplay = new this.props.gMaps.DirectionsRenderer({ suppressMarkers: true })
       directionsDisplay.setMap(map)
       const request = {
         origin: markers.origin.getPosition(),
@@ -391,7 +391,17 @@ export class ShipmentLocationBox extends Component {
     }
 
     const map = new this.props.gMaps.Map(document.getElementById('map'), mapsOptions)
-    this.setState({ map })
+    let directionsDisplay = false
+    let directionsService = false
+    if (this.state.speciality === 'truck') {
+      directionsService = new this.props.gMaps.DirectionsService()
+      directionsDisplay = new this.props.gMaps.DirectionsRenderer({ suppressMarkers: true })
+    }
+    this.setState({
+      map,
+      directionsService,
+      directionsDisplay
+    })
 
     if (this.props.has_pre_carriage) {
       this.initAutocomplete(map, 'origin')

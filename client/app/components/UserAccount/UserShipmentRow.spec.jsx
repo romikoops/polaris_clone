@@ -18,6 +18,11 @@ jest.mock('uuid', () => {
 
   return { v4 }
 })
+jest.mock('../../helpers', () => ({
+  formattedPriceValue: () => 109,
+  totalPrice: x => ({ currency: 'CNY' })
+}))
+
 jest.mock('../../constants', () => {
   const moment = input => ({
     format: () => input,

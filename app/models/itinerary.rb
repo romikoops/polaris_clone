@@ -281,8 +281,8 @@ class Itinerary < ApplicationRecord
 
   def generate_map_data
     routes.each do |route_data|
-      route_data[:tenant_id] = itinerary.tenant_id
-      itinerary.map_data.find_or_create_by!(route_data)
+      route_data[:tenant_id] = self.tenant_id
+      self.map_data.find_or_create_by!(route_data)
     end
   end
 
@@ -375,7 +375,7 @@ class Itinerary < ApplicationRecord
             hub: {
               include: {
                 nexus:    { only: %i[id name] },
-                location: { only: %i[longitude latitude] }
+                location: { only: %i[longitude latitude geocoded_address] }
               },
               only:    %i[id name]
             }

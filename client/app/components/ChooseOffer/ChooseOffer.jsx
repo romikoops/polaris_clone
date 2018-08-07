@@ -166,22 +166,24 @@ export class ChooseOffer extends Component {
     noMotKeys.forEach((key) => {
       altRoutes.push(...scheduleObj[key])
     })
-    const focusRoutestoRender = focusRoutes.map(s => (
-      <RouteResult
-        key={v4()}
-        selectResult={this.chooseResult}
-        theme={this.props.theme}
-        originHubs={originHubs}
-        destinationHubs={destinationHubs}
-        fees={shipment.schedules_charges}
-        schedule={s}
-        user={user}
-        pickup={shipment.has_pre_carriage}
-        loadType={shipment.load_type}
-        pickupDate={shipment.planned_pickup_date}
-        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-      />
-    ))
+    const focusRoutestoRender = focusRoutes
+      .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
+      .map(s => (
+        <RouteResult
+          key={v4()}
+          selectResult={this.chooseResult}
+          theme={this.props.theme}
+          originHubs={originHubs}
+          destinationHubs={destinationHubs}
+          fees={shipment.schedules_charges}
+          schedule={s}
+          user={user}
+          pickup={shipment.has_pre_carriage}
+          loadType={shipment.load_type}
+          pickupDate={shipment.planned_pickup_date}
+          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+        />
+      ))
     const closestRoutestoRender = closestRoutes.map(s => (
       <RouteResult
         key={v4()}

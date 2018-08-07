@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { theme, identity, location } from '../../mocks'
 
 jest.mock('formsy-react', () => {
-  // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line
   const Formsy = ({ children }) => <div>{children}</div>
 
   return {
@@ -11,7 +11,7 @@ jest.mock('formsy-react', () => {
   }
 })
 jest.mock('../../hocs/GmapsWrapper', () => {
-  // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line
   const GmapsWrapper = ({ children }) => <div>{children}</div>
 
   return {
@@ -19,7 +19,7 @@ jest.mock('../../hocs/GmapsWrapper', () => {
   }
 })
 jest.mock('../Maps/PlaceSearch', () => {
-  // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line
   const PlaceSearch = ({ children }) => <div>{children}</div>
 
   return {
@@ -27,22 +27,15 @@ jest.mock('../Maps/PlaceSearch', () => {
   }
 })
 jest.mock('../FormsyInput/FormsyInput', () => {
-  // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line
   const FormsyInput = props => <input {...props} />
 
   return {
     default: FormsyInput
   }
 })
-jest.mock('../RoundButton/RoundButton', () => {
-  // eslint-disable-next-line react/prop-types
-  const RoundButton = ({ children }) => <button>{children}</button>
 
-  return {
-    RoundButton
-  }
-})
-// eslint-disable-next-line import/first
+// eslint-disable-next-line
 import { ShipmentContactForm } from './ShipmentContactForm'
 
 const propsBase = {

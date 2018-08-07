@@ -325,7 +325,8 @@ class AdminSchedulesRoute extends Component {
                   collapsed={!expander.upload}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('upload')}
-                  headingText="Upload Data"
+                  showArrow
+                  text="Upload Data"
                   faClass="fa fa-cloud-upload"
                   content={(
                     <div>
@@ -351,7 +352,8 @@ class AdminSchedulesRoute extends Component {
                   collapsed={!expander.download}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('download')}
-                  headingText="Download Data"
+                  showArrow
+                  text="Download Data"
                   faClass="fa fa-cloud-download"
                   content={(
                     <div>
@@ -374,7 +376,8 @@ class AdminSchedulesRoute extends Component {
                   collapsed={!expander.new}
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('new')}
-                  headingText="Create New Hub"
+                  showArrow
+                  text="Create New Hub"
                   faClass="fa fa-plus-circle"
                   content={(
                     <div

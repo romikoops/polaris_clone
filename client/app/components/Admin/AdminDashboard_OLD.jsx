@@ -101,7 +101,6 @@ export class AdminDashboard extends Component {
     }
     const filteredClients = clients ? clients.filter(x => !x.guest) : []
     const schedArr = []
-    debugger // eslint-disable-line
     const mergedOpenShipments =
       shipments && shipments.open
         ? shipments.open

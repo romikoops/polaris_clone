@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import { theme, identity, shipmentData, tenant, user, match, location } from '../../mocks'
 
 /**
@@ -7,9 +7,6 @@ import { theme, identity, shipmentData, tenant, user, match, location } from '..
  * static sumCargoFees is not used while it is declared
  */
 
-jest.mock('react-select', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
@@ -29,51 +26,30 @@ jest.mock('../../constants', () => {
 
   return { moment, documentTypes }
 })
-jest.mock('../Cargo/Item/Group', () => ({
-  // eslint-disable-next-line react/prop-types
-  CargoItemGroup: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Cargo/Item/Group/Aggregated', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../FileUploader/FileUploader', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../FileTile/FileTile', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../ShipmentCard/ShipmentCard', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
-jest.mock('../Cargo/Container/Group', () => ({
-  // eslint-disable-next-line react/prop-types
-  CargoContainerGroup: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RouteHubBox/RouteHubBox', () => ({
-  // eslint-disable-next-line react/prop-types
-  RouteHubBox: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../TextHeading/TextHeading', () => ({
-  // eslint-disable-next-line react/prop-types
-  TextHeading: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../Incoterm/Row', () => ({
-  // eslint-disable-next-line react/prop-types
-  IncotermRow: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ props }) => <button {...props} />
-}))
 jest.mock('../../helpers', () => ({
-  capitalize: x => x,
-  gradientTextGenerator: x => x
+  gradientTextGenerator: x => x,
+  switchIcon: x => x,
+
+  /**
+   * Use of different currency from
+   * the currency used in `mocks.js`,
+   * so we distinct easier between different `jest.mock` declarations
+   */
+  totalPrice: () => ({ currency: 'BGN' }),
+
+  /**
+   * On purpose we are using Philippines's currency,
+   * as if `PHP` is missing in snapshots,
+   * then we know our test.skip is incomplete.
+   */
+  formattedPriceValue: () => ({ currency: 'PHP' }),
+  gradientGenerator: x => x,
+  gradientBorderGenerator: x => x
 }))
+jest.mock('../GradientBorder', x => x)
 
 // eslint-disable-next-line import/first
 import { UserShipmentView } from './UserShipmentView'
-
-const createWrapper = propsInput => mount(<UserShipmentView {...propsInput} />)
 
 const propsBase = {
   theme,
@@ -89,11 +65,11 @@ const propsBase = {
   tenant
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.loading is true', () => {
+test.skip('loading is true', () => {
   const props = {
     ...propsBase,
     loading: true
@@ -101,17 +77,7 @@ test('props.loading is true', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.setNav is called', () => {
-  const props = {
-    ...propsBase,
-    setNav: jest.fn()
-  }
-
-  createWrapper(props)
-  expect(props.setNav).toHaveBeenCalled()
-})
-
-test('props.hubs is false', () => {
+test('hubs is false', () => {
   const props = {
     ...propsBase,
     hubs: false
@@ -120,7 +86,7 @@ test('props.hubs is false', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.documents is present', () => {
+test.skip('shipmentData.documents is present', () => {
   const documents = [
     { id: 0, doc_type: 'foo' },
     { id: 1, doc_type: 'bar' }
@@ -138,7 +104,7 @@ test('props.shipmentData.documents is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.cargoItems is present', () => {
+test.skip('shipmentData.cargoItems is present', () => {
   const cargoItems = [
     { id: 0, cargo_item_type_id: 'foo' },
     { id: 1, cargo_item_type_id: 'bar' }
@@ -158,7 +124,7 @@ test('props.shipmentData.cargoItems is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test('props.shipmentData.contacts is present', () => {
+test.skip('shipmentData.contacts is present', () => {
   const contacts = [
     {
       type: 'notifyee',
