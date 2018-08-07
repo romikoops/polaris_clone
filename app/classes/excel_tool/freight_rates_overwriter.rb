@@ -148,7 +148,7 @@ module ExcelTool
     def set_pricing_key(row)
       @pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}\
       _#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}\
-      _#{row[:mot]}_#{row[:vehicle]}"
+      _#{row[:mot]}_#{row[:vehicle]}_#{row[:customer_id]}"
     end
 
     def set_cargo_type(row)
