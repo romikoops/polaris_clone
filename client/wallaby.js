@@ -1,10 +1,10 @@
 module.exports = function (wallaby) {
   return {
     files: [
-      'jest.init.js',
-      'package.json',
+      { pattern: 'jest.init.js', load: false, instrument: false },
+      { pattern: 'package.json', load: false, instrument: false },
+      { pattern: 'app/components/**/*.snap', load: false, instrument: false },
       'app/**/*.js?(x)',
-      'app/components/**/*.snap',
       '!app/components/**/*.spec.jsx'
     ],
     tests: [
@@ -21,9 +21,16 @@ module.exports = function (wallaby) {
     },
     testFramework: 'jest',
     workers: {
-      initial: 3,
-      regular: 7
+      reload: true,
+      initial: 4,
+      regular: 1
     },
+    delays: {
+      run: 5000
+    },
+    ignoreFileLoadingDependencyTracking: true,
+    slowTestThreshold: 2000,
+    maxConsoleMessagesPerTest: 6000,
     debug: true
   }
 }
