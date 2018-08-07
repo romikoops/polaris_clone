@@ -23,14 +23,14 @@ module.exports = function (wallaby) {
     workers: {
       reload: true,
       initial: 4,
-      regular: 1
+      regular: 2
     },
     delays: {
-      run: 5000
+      run: 1000
     },
     ignoreFileLoadingDependencyTracking: true,
-    slowTestThreshold: 2000,
-    maxConsoleMessagesPerTest: 6000,
+    slowTestThreshold: 1000,
+    maxConsoleMessagesPerTest: 5,
     debug: true
   }
 }

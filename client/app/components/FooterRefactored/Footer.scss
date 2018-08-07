@@ -1,0 +1,60 @@
+ :local {
+    .footer {
+      min-height: 167px;
+      background: #5E5E5E;
+    }
+    .button_row {
+      height: 80%;
+    }
+    .buttons div a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+    }
+    .buttons p{
+      color: white;
+    }
+    .copyright {
+      height: 34px;
+      color: white;
+      border-top: 1px solid #979797;
+      font-size: 14px;
+    }
+    .contact_bar {
+      border-top: rgb(206, 203, 203) 1px solid;
+      background-color: lightgrey;
+      height: 65px;
+      padding: 10px 0;
+      i {
+        margin-right: 15px;
+      }
+      img {
+        width: 55px;
+        // width: 110px;
+      }
+    }
+    .contact_elem {
+      margin-left: 50px;
+      padding-bottom: 10px;
+    }
+    a.contact_elem:-webkit-any-link {
+      color: black !important;
+      text-decoration: none !important;
+    }
+    .powered_by_logo {
+      width: 120px;
+      height: auto;
+    }
+    .footer_wrapper {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+    .footer_shop {
+      min-height: 84px;
+      background: #5E5E5E;
+    }
+    .copyright_shop {
+      color: white;
+    }
+  }
