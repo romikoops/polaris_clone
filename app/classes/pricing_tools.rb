@@ -148,6 +148,7 @@ module PricingTools
   end
 
   def determine_container_price(container, schedule, user, _quantity, shipment_date, mot)
+    byebug
     transport_category_id = transport_category(container, schedule).id
     pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
     return if pricing.nil?

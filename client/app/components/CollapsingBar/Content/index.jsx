@@ -28,8 +28,9 @@ export default class CollapsingContent extends React.PureComponent {
     const { collapsed, content, minHeight } = this.props
     const { firstRender } = this.state
     if (!collapsed) {
-      debugger // eslint-disable-line
+      // debugger // eslint-disable-line
     }
+
     return (
       <div
         className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel}`}
@@ -38,12 +39,13 @@ export default class CollapsingContent extends React.PureComponent {
           maxHeight: this.state.panelHeight,
           transition: `max-height ${Math.log(1 + this.state.panelHeight) / 10}s linear`
         }}
-        ref={(div) => { this.panel = div }}
       >
-        <div className={
-          `${styles.inner_wrapper} flex-100 ` +
+        <div
+          className={
+            `${styles.inner_wrapper} flex-100 ` +
           'layout-row layout-wrap layout-align-start-start'
-        }
+          }
+          ref={(div) => { this.panel = div }}
         >
           { content }
         </div>

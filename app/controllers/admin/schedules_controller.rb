@@ -87,9 +87,10 @@ class Admin::SchedulesController < Admin::AdminBaseController
   private
 
   def initialize_variables
-    @train_schedules = mot_schedule("train")
+    @train_schedules = mot_schedule("rail")
     @ocean_schedules = mot_schedule("ocean")
     @air_schedules = mot_schedule("air")
+    @truck_schedules = mot_schedule("truck")
   end
 
   def mot_schedule(mot)
@@ -113,7 +114,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def vehicle
-    @vehicle ||= TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
+    @vehicle ||= TenantVehicle.find(params[:vehicleTypeId]).id
   end
   
   def itin_weekly_schedules
