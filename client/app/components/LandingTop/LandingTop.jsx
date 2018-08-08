@@ -37,7 +37,7 @@ export class LandingTop extends Component {
     const myAccount = (
       <div className="flex">
         <SquareButton
-          text={t('common:99d2520b-b53a-460a-8d6e-c3faec10df6d')}
+          text={t('common:accountTitle')}
           theme={theme}
           handleNext={() => this.toAccount()}
           size="small"
@@ -48,7 +48,7 @@ export class LandingTop extends Component {
     const toAdmin = (
       <div className="flex">
         <SquareButton
-          text={t('landing:e05007dd-2948-4ef3-8da9-2d37f3d19ee1')}
+          text={t('landing:adminDashboard')}
           theme={theme}
           handleNext={() => this.toAdmin()}
           size="small"
@@ -58,7 +58,7 @@ export class LandingTop extends Component {
     )
     const findRates = (
       <div className="flex">
-        <SquareButton text={t('landing:477ecc3d-75a2-4973-b9dc-809def131df7')} theme={theme} handleNext={bookNow} size="small" active />
+        <SquareButton text={t('landing:callToAction')} theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
     const loginLink = <a onClick={this.props.toggleShowLogin}>Log In / Register</a>
@@ -69,7 +69,18 @@ export class LandingTop extends Component {
 
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : t('landing:b17fb13b-8a4b-4a41-9bcf-02c3b3b9db82')
+    const welcomeTextTail = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
+
+    const description = () => {
+      const head = t('landing:descriptionHead')
+      const middle = t('landing:descriptionMiddle')
+      const tail = t('landing:descriptionTail')
+      
+      return (<React.Fragment>
+        {head}<b>{middle}</b>{tail}
+      </React.Fragment>)
+    }
+
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -85,17 +96,16 @@ export class LandingTop extends Component {
                   className={`flex-none ${styles.tenant_logo_landing}`}
                 />
                 <h2 className="flex-none">
-                  <b>Welcome to the </b> <br />
+                  <b>{t('landing:welcomeTextHead')} </b> <br />
                   <i> {tenant.data.name} </i> <b> <br />
-                    {welcomeText}</b>
+                    {welcomeTextTail}</b>
                 </h2>
                 <div className={styles.wrapper_hr}>
                   <hr />
                 </div>
                 <div className={styles.wrapper_h3}>
                   <h3 className="flex-none">
-                    Enjoy the most advanced and easy to use <b>booking system</b> in the market.
-                    Finally, shipping is as simple as it should be.
+                    {description()}
                   </h3>
                 </div>
               </div>

@@ -1,15 +1,15 @@
 {
-  "translations": {
+  "data": {
     "en": {
       "common": {
         "test": "1234",
-        "99d2520b-b53a-460a-8d6e-c3faec10df6d": "My Account"
+        "accountTitle": "My Account"
       },
       "landing": {
         "test": "1234",
         "3171ef011df6409d9098c714975d38f4": "Welcome to ItsMyCargo",
         "620e43ffc16c42119819d576be3b1b34": "Introducing Online Freight Booking Services",
-        "0a3ca67413e04252822ed1b086bb8d8f": "Instant Booking",
+        "instantIconText": "Instant Booking",
         "fb2d8c49293d414fb423e8c6ee9f7245": "Real Time Quotes",
         "648402947f2944aaa7b271e63741b629": "Full Transparency",
         "769a4253e6b94bff9286a5efd923eea6": "Updates in Real Time",
@@ -23,10 +23,14 @@
         "1c9ebacc-aa2d-497b-90b0-69109be211d4": "Introducing Online Freight Booking Services",
         "4876725c-6641-4049-8177-eeed1b3c441e": "Introducing Online Freight Booking Services",
         "29e3ee70-7a66-4b54-91aa-0cfe599a6173": "Admin Dashboard",
-        "e05007dd-2948-4ef3-8da9-2d37f3d19ee1": "Admin Dashboard",
+        "adminDashboard": "Admin Dashboard",
         "094ae8a8-c7b3-49bc-b4b7-8bf3fef33d7b": "powered by",
-        "477ecc3d-75a2-4973-b9dc-809def131df7": "Find Rates",
-        "b17fb13b-8a4b-4a41-9bcf-02c3b3b9db82": "shop for online freight"
+        "callToAction": "Find Rates",
+        "welcomeTextHead": "Welcome to the",
+        "welcomeTextTail": "shop for online freight",
+        "descriptionHead": "Enjoy the most advanced and easy to use ",
+        "descriptionMiddle": "booking system",
+        "descriptionTail": " in the market.\nFinally, shipping is as simple as it should be."
       }
     }
   }

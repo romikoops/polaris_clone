@@ -123,7 +123,7 @@ class Landing extends Component {
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-bolt" aria-hidden="true" style={textStyle1} />
-                  <h3> {t('landing:0a3ca67413e04252822ed1b086bb8d8f')} </h3>
+                  <h3> {t('landing:instantIconText')} </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
