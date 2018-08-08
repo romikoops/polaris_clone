@@ -19,7 +19,6 @@ export default function AddressBook ({
         />
       </div>
     ))
-
   contactCards.unshift((
     <div className="flex-50" style={{ padding: '15px' }}>
       <AddressBookAddContactButton addContact={addContact} />

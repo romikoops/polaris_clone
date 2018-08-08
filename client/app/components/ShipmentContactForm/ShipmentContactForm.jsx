@@ -120,7 +120,7 @@ export class ShipmentContactForm extends Component {
     this.setState({ setContactAttempted: false })
   }
   editSubmit (contactData) {
-    const { userDispatch } = this.props
+    const { shipmentDispatch } = this.props
 
     this.setState(prevState => ({
       ...prevState.contactData,
@@ -139,7 +139,7 @@ export class ShipmentContactForm extends Component {
       userId: this.state.contactData.contact.userId
     }
 
-    userDispatch.updateContact(editedContact)
+    shipmentDispatch.updateContact(editedContact)
 
     this.props.setContact(contactData)
     this.contactForm.reset()
@@ -221,7 +221,7 @@ ShipmentContactForm.propTypes = {
   contactType: PropTypes.string,
   showEdit: PropTypes.bool,
   selectedContact: PropTypes.objectOf(PropTypes.any),
-  userDispatch: PropTypes.shape({
+  shipmentDispatch: PropTypes.shape({
     updateContact: PropTypes.func
   }).isRequired
 }

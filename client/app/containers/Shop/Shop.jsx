@@ -18,7 +18,6 @@ import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
-import { userActions } from '../../actions'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -166,16 +165,14 @@ class Shop extends Component {
       tenant,
       user,
       shipmentDispatch,
-      userDispatch,
       bookingSummaryDispatch,
       currencies,
-      contactData,
       dashboard
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
-      request, response, error, reusedShipment, originalSelectedDay
+      request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
@@ -251,6 +248,7 @@ class Shop extends Component {
               chooseOffer={this.chooseOffer}
               theme={theme}
               tenant={tenant}
+              contacts={contacts}
               shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}
@@ -278,9 +276,8 @@ class Shop extends Component {
                 messages={error ? error.stage4 : []}
                 tenant={tenant}
                 user={user}
-                contactData={contactData}
+                contacts={contacts}
                 shipmentDispatch={shipmentDispatch}
-                userDispatch={userDispatch}
                 hideRegistration={this.hideRegistration}
                 reusedShipment={reusedShipment}
               />
@@ -333,6 +330,7 @@ Shop.propTypes = {
   bookingData: PropTypes.shape({
     request: PropTypes.object,
     response: PropTypes.object,
+    contacts: PropTypes.arrayOf(PropTypes.contact),
     error: PropTypes.object
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
@@ -351,15 +349,13 @@ Shop.propTypes = {
     location: PropTypes.location
   }).isRequired,
   shipmentDispatch: PropTypes.shape({
+    updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({
     update: PropTypes.func
-  }).isRequired,
-  userDispatch: PropTypes.shape({
-    updateContact: PropTypes.func
   }).isRequired
 }
 
@@ -380,9 +376,6 @@ function mapStateToProps (state) {
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
-  const {
-    contactData
-  } = users
   const { currencies } = app
   const { loading } = bookingData
 
@@ -395,7 +388,6 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loading,
-    contactData,
     currencies
   }
 }
@@ -403,7 +395,6 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    userDispatch: bindActionCreators(userActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }

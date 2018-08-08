@@ -304,12 +304,11 @@ export class BookingDetails extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, currencies, user, tenant, userDispatch
+      theme, shipmentData, shipmentDispatch, currencies, user, tenant, contacts
     } = this.props
     if (!shipmentData) return ''
 
     const {
-      contacts,
       hubs,
       locations,
       shipment,
@@ -337,7 +336,7 @@ export class BookingDetails extends Component {
         shipper={shipper}
         theme={theme}
         userLocations={userLocations}
-        userDispatch={userDispatch}
+        shipmentDispatch={shipmentDispatch}
       />
     )
 
@@ -414,6 +413,7 @@ export class BookingDetails extends Component {
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           {ContactSetterComponent}
         </div>
+        {console.log(contacts)}
 
         <Formsy
           className="flex-100"

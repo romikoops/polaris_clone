@@ -39,12 +39,8 @@ export class ContactSetter extends Component {
 
   availableContacts (contactType) {
     const {
-      userLocations, shipper, consignee, notifyees
+      shipper, consignee, notifyees, contacts
     } = this.props
-    let { contacts } = this.props
-    if (contactType === this.contactTypes[0]) {
-      contacts = [...userLocations, ...contacts]
-    }
 
     return contacts.filter(contactData => (
       shipper !== contactData &&
@@ -94,7 +90,7 @@ export class ContactSetter extends Component {
 
   showEditContact (contactType, index) {
     const {
-      shipper, consignee, notifyees, contacts, userDispatch
+      shipper, consignee, notifyees, contacts, shipmentDispatch
     } = this.props
 
     let newSelectedContact
@@ -113,7 +109,7 @@ export class ContactSetter extends Component {
             selectedContact={newSelectedContact}
             theme={this.props.theme}
             contacts={contacts}
-            userDispatch={userDispatch}
+            shipmentDispatch={shipmentDispatch}
             setContact={(contactData) => {
               this.props.setContact(contactData, contactType, index)
               this.setState({ modal: null, showModal: false })
@@ -179,7 +175,6 @@ export class ContactSetter extends Component {
 
 ContactSetter.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
-  userLocations: PropTypes.arrayOf(PropTypes.any),
   shipper: PropTypes.objectOf(PropTypes.any),
   consignee: PropTypes.objectOf(PropTypes.any),
   notifyees: PropTypes.arrayOf(PropTypes.any),
@@ -187,11 +182,10 @@ ContactSetter.propTypes = {
   theme: PropTypes.theme,
   finishBookingAttempted: PropTypes.bool,
   setContact: PropTypes.func.isRequired,
-  userDispatch: PropTypes.shape.isRequired,
+  shipmentDispatch: PropTypes.shape.isRequired,
   removeNotifyee: PropTypes.func.isRequired
 }
 ContactSetter.defaultProps = {
-  userLocations: [],
   shipper: {},
   consignee: {},
   notifyees: [],
