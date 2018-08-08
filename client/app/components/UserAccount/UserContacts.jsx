@@ -66,6 +66,7 @@ class UserContacts extends Component {
     const { contacts } = this.props
 
     this.setState({ submitAttempted: true })
+    debugger // eslint-disable-line no-debugger
 
     let shouldDispatch = true
 
@@ -169,7 +170,7 @@ class UserContacts extends Component {
             value={newContact.phone}
             name="phone"
             placeholder="Phone"
-            onChange={this.handleFormChange}
+            // onChange={this.handleFormChange}
           />
           <FormsyInput
             className={styles.input_street}
