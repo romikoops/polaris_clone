@@ -17,8 +17,8 @@ i18n
     ns: ['landing', 'common'],
     debug: true,
     backend: {
-      // loadPath: 'https://localhost:3000/translations/{{lng}}/{{ns}}.json',
-      loadPath: 'https://translations.itsmycargo.com/{{lng}}/{{ns}}.json',
+      loadPath: 'https://localhost:3004/translations/{{lng}}/{{ns}}.json',
+      // loadPath: 'https://translations.itsmycargo.com/{{lng}}/{{ns}}.json',
       // init: {
       //   mode: 'cors',
       //   // credentials: 'same-origin',

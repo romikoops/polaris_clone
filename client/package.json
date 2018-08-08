@@ -16,7 +16,8 @@
     "eslint-file": "eslint",
     "deploy": "npm run build && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'",
     "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'",
-    "precommit": "node ./.hooks/pre-commit"
+    "precommit": "node ./.hooks/pre-commit",
+    "json": "json-server --watch translations/all.json --port 3004"
   },
   "keywords": [
     "es6",
