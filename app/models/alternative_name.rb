@@ -1,0 +1,2 @@
+class AlternativeName < ApplicationRecord
+end

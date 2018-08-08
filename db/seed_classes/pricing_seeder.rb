@@ -17,12 +17,10 @@ class PricingSeeder
           file_name = File.basename(file_path, ".xlsx")
           subdomain, sheet_type, other_info = *file_name.split("__")
           
-          if %(hubs freight_rates local_charges).include?(sheet_type)
+          if %w(hubs freight_rates local_charges).include?(sheet_type)
             obj[sheet_type] = { 'xlsx' => File.open(file_path) }
           end
         end
-        
-
 
       seed_hubs(request_hash["hubs"], shipper)
       seed_freight_rates(request_hash["freight_rates"], shipper)

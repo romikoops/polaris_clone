@@ -25,7 +25,7 @@ export default async function login (puppeteer) {
   /**
    * There are several buttons
    */
-  expect(await count(BUTTONS)).toBeGreaterThan(4)
+  expect(await count(BUTTONS)).toBeGreaterThan(1)
 
   /**
    * Click on home login link

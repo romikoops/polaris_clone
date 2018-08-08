@@ -6,6 +6,7 @@ import { v4 } from 'uuid'
 import styled, { keyframes } from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './Loading.scss'
+import { gradientTextGenerator } from '../../helpers'
 import { appActions } from '../../actions'
 
 class Loading extends Component {
@@ -21,25 +22,10 @@ class Loading extends Component {
   }
   render () {
     const { theme } = this.props
-    const logo = theme && theme.logoLarge ? theme.logoLarge : ''
-    const kfLogo = keyframes` 
-                0%, 100% {
-                  -webkit-transform: rotateY(0deg);
-                  -o-transform: rotateY(0deg);
-                  -moz-transform: rotateY(0deg);
-                  -ms-transform: rotateY(0deg);
-                  transform: rotateY(0deg);
-                  content:url(${logo});
-                }
-                50% {
-                  -webkit-transform: rotateY(360deg);
-                  -o-transform: rotateY(360deg);
-                  -moz-transform: rotateY(360deg);
-                  -ms-transform: rotateY(360deg);
-                  transform: rotateY(360deg);
-                  content:url('https://assets.itsmycargo.com/assets/logos/logo_box.png');
-                }
-        `
+    const textStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: '#E0E0E0' }
     const kfDot = keyframes`
                 0%, 100% {
                   height: 10px;
@@ -52,20 +38,7 @@ class Loading extends Component {
                   background: ${theme && theme.colors ? theme.colors.secondary : 'black'};
                 }
         `
-
-    const FlipLogo = styled.img`
-            -webkit-animation: ${kfLogo} 10s linear infinite;
-            animation: ${kfLogo} 10s linear infinite;
-            height: 150px;
-            width: 150px;
-            -webkit-box-flex: 0;
-            -webkit-flex: 0 0 auto;
-            flex: 0 0 auto;
-            box-sizing: border-box;
-        `
     const AnimDot = styled.div`
-            -webkit-animation: ${kfDot} 2s linear infinite;
-            -webkit-animation-delay: ${props => (props.delay ? `${props.delay}s` : 0)};
             animation: ${kfDot} 2s linear infinite;
             animation-delay: ${props => (props.delay ? `${props.delay}s` : 0)};
             background-color: theme && theme.colors ? theme.colors.primary : 'darkslategrey';
@@ -83,19 +56,42 @@ class Loading extends Component {
     }
 
     return (
-      <div
-        className={`layout-row layout-align-center-center ${styles.loader_box}`}
-      >
-        <div
-          className={`layout-column layout-align-center-center ${
-            styles.loader
-          }`}
+      <div className={`layout-row layout-align-center-center ${styles.loader_box}`}>
+        <div className={`${styles.cube} ${styles.preload}`}>
+          {/* <div
+          className={`layout-row layout-align-center-center ${styles.loader_box}`}
         >
-          <FlipLogo />
-          <div className={`flex-none layout-row layout-align-space-between-center ${styles.dot_row}`}>
-            {dots}
-          </div>
+          <div
+            className={`layout-column layout-align-center-center ${
+              styles.loader
+              }`}
+          >
+            <FlipLogo />
+            <div className={`flex-none layout-row layout-align-space-between-center ${styles.dot_row}`}>
+              {dots}
+            </div>
 
+          </div>
+        </div> */}
+          <div className={`${styles.cube_face} ${styles.cube_face_front}`}>
+            <i className="fa fa-plane clip" style={textStyle} />
+          </div>
+          <div className={`${styles.cube_face} ${styles.cube_face_back}`}>
+            <i className="fa fa-anchor clip" style={textStyle} />
+          </div>
+          <div className={`${styles.cube_face} ${styles.cube_face_left}`}>
+            <i className="fa fa-truck clip" style={textStyle} />
+          </div>
+          <div className={`${styles.cube_face} ${styles.cube_face_right}`}>
+            <i className="fa fa-truck clip" style={textStyle} />
+          </div>
+          <div className={`${styles.cube_face} ${styles.cube_face_bottom}`}>
+            <i className="fa fa-anchor clip" style={textStyle} />
+
+          </div>
+          <div className={`${styles.cube_face} ${styles.cube_face_top}`}>
+            <i className="fa fa-plane clip" style={textStyle} />
+          </div>
         </div>
       </div>
     )

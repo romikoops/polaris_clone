@@ -252,9 +252,9 @@ export class AdminPricingRouteView extends Component {
         </div>
 
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center buffer_10"
+          className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
         >
-          <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+          <div className="layout-padding flex-100 layout-align-start-center greyBg">
             <span><b>Dedicated Pricings</b></span>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>

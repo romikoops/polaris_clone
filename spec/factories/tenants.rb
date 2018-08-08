@@ -19,6 +19,8 @@ FactoryBot.define do
             cargo_item: true
           }
         },
+        consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,

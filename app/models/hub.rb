@@ -5,6 +5,7 @@ class Hub < ApplicationRecord
   belongs_to :nexus
   belongs_to :location
 
+  has_many :addons
   has_many :stops,    dependent: :destroy
   has_many :layovers, through: :stops
   has_many :hub_truckings

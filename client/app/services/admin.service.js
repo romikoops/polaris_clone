@@ -32,6 +32,15 @@ function getHubs (page, hubType, countryId, status) {
   return fetch(`${BASE_URL}/admin/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
+function getAllHubs () {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/hubs/all/processed`, requestOptions)
+    .then(handleResponse)
+}
 
 function searchHubs (text, page, hubType, countryId, status) {
   const requestOptions = {
@@ -626,7 +635,8 @@ export const adminService = {
   editCustomsFees,
   updateHubMandatoryCharges,
   assignDedicatedPricings,
-  searchHubs
+  searchHubs,
+  getAllHubs
 }
 
 export default adminService

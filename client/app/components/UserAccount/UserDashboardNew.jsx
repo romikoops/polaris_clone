@@ -61,7 +61,7 @@ export class UserDashboardNew extends Component {
     return (
       <div
         className={
-          `layout-row flex-100 layout-wrap layout-align-start-center ${styles.container}`
+          `layout-row flex-100 layout-wrap layout-align-start-center extra_padding ${styles.container}`
         }
       >
         <div

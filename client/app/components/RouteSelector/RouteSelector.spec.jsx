@@ -26,3 +26,11 @@ const createShallow = propsInput => shallow(<RouteSelector {...propsInput} />)
 test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
+
+test('routes is falsy', () => {
+  const props = {
+    ...propsBase,
+    routes: null
+  }
+  expect(createShallow(props)).toMatchSnapshot()
+})

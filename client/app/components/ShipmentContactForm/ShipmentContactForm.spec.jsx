@@ -34,14 +34,7 @@ jest.mock('../FormsyInput/FormsyInput', () => {
     default: FormsyInput
   }
 })
-jest.mock('../RoundButton/RoundButton', () => {
-  // eslint-disable-next-line react/prop-types
-  const RoundButton = ({ children }) => <button>{children}</button>
 
-  return {
-    RoundButton
-  }
-})
 // eslint-disable-next-line import/first
 import { ShipmentContactForm } from './ShipmentContactForm'
 

@@ -8,15 +8,15 @@ class ShipmentsController < ApplicationController
 
   def index
     @shipper = current_user
-    requested_shipments = Shipment.where(
+    requested_shipments = @shipper.shipments.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
     )
-    open_shipments = Shipment.where(
+    open_shipments = @shipper.shipments.where(
       status:    %w[in_progress confirmed],
       tenant_id: current_user.tenant_id
     )
-    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
+    finished_shipments = @shipper.shipments.where(status: "finished", tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
     @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
     @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}

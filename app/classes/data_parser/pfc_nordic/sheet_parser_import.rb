@@ -137,7 +137,8 @@ module DataParser
               counterpart_hub_name: @counterpart_hub_name,
               load_type: load_type,
               mot: @hub_type,
-              service_level: service_level
+              service_level: service_level,
+              transit_time: hash[:transit_time].gsub!(' days', '')
             }
           }
         end

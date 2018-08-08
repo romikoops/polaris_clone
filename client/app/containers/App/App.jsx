@@ -66,7 +66,7 @@ class App extends Component {
     const { theme } = tenant.data
 
     return (
-      <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
+      <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         <CookieConsentBar
           user={user}
           theme={theme}
