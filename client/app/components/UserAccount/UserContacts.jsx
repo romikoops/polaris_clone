@@ -1,32 +1,42 @@
 import React, { Component } from 'react'
+import Formsy from 'formsy-react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
+import FormsyInput from '../FormsyInput/FormsyInput'
 import PropTypes from '../../prop-types'
 import { UserContactsIndex, UserContactsView } from './'
 import styles from './UserAccount.scss'
 // import {v4} from 'uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
-import { gradientTextGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  areEqual
+} from '../../helpers'
 
 class UserContacts extends Component {
   constructor (props) {
     super(props)
     this.state = {
       newContactBool: false,
-      newContact: {}
+      newContact: {},
+      submitAttempted: false
     }
     this.viewContact = this.viewContact.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
     this.toggleNewContact = this.toggleNewContact.bind(this)
-    this.handleFormChange = this.handleFormChange.bind(this)
-    this.saveNewContact = this.saveNewContact.bind(this)
+    // this.handleFormChange = this.handleFormChange.bind(this)
+    // this.saveNewContact = this.saveNewContact.bind(this)
+    this.handleValidSubmit = this.handleValidSubmit.bind(this)
+    this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
   }
+
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+
   viewContact (contact) {
     const { userDispatch } = this.props
     userDispatch.getContact(contact.id, true)
@@ -43,27 +53,50 @@ class UserContacts extends Component {
   toggleNewContact () {
     this.setState({ newContactBool: !this.state.newContactBool })
   }
-  handleFormChange (event) {
-    const { name, value } = event.target
-    this.setState({
-      newContact: {
-        ...this.state.newContact,
-        [name]: value
-      }
+  // handleFormChange (event) {
+  //   const { name, value } = event.target
+  //   this.setState({
+  //     newContact: {
+  //       ...this.state.newContact,
+  //       [name]: value
+  //     }
+  //   })
+  // }
+  handleValidSubmit (contact, reset, invalidate) {
+    const { contacts } = this.props
+
+    this.setState({ submitAttempted: true })
+
+    let shouldDispatch = true
+
+    contacts.forEach((_contact) => {
+      if (!areEqual(_contact, contact)) return
+
+      shouldDispatch = false
+
+      invalidate((
+        Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'test' }), {})
+      ))
     })
-  }
-  saveNewContact () {
-    const { newContact } = this.state
+
+    if (!shouldDispatch) return
+
     const { userDispatch } = this.props
-    userDispatch.newContact(newContact)
+    userDispatch.newContact(contact)
     this.toggleNewContact()
   }
 
+  handleInvalidSubmit () {
+    console.log(this)
+    // this.disableSubmitButton()
+  }
+
   render () {
-    const { newContact, newContactBool } = this.state
+    const { newContact, newContactBool, submitAttempted } = this.state
     const {
       theme, contacts, hubs, contactData, userDispatch, loading
     } = this.props
+
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -80,10 +113,12 @@ class UserContacts extends Component {
           }`}
           onClick={this.toggleNewContact}
         />
-        <div
+        <Formsy
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
             styles.new_contact_content
           }`}
+          onValidSubmit={this.handleValidSubmit}
+          onInvalidSubmit={this.handleInvalidSubmit}
         >
           <div
             className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
@@ -91,80 +126,90 @@ class UserContacts extends Component {
             <i className="fa fa-user flex-none" style={textStyle} />
             <p className="flex-none">New Contact</p>
           </div>
-          <input
+          <FormsyInput
             className={styles.input_100}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.companyName}
             name="companyName"
             placeholder="Company Name"
-            onChange={this.handleFormChange}
+            // onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_50}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.firstName}
             name="firstName"
             placeholder="First Name"
-            onChange={this.handleFormChange}
+            // onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_50}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.lastName}
             name="lastName"
             placeholder="Last Name"
-            onChange={this.handleFormChange}
+            // onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_50}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.email}
             name="email"
             placeholder="Email"
-            onChange={this.handleFormChange}
+            // onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_50}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.phone}
             name="phone"
             placeholder="Phone"
             onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_street}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.street}
             name="street"
             placeholder="Street"
             onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_no}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.number}
             name="number"
             placeholder="Number"
             onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_zip}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.zipCode}
             name="zipCode"
             placeholder="Postal Code"
             onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_cc}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.city}
             name="city"
             placeholder="City"
             onChange={this.handleFormChange}
           />
-          <input
+          <FormsyInput
             className={styles.input_cc}
+            submitAttempted={submitAttempted}
             type="text"
             value={newContact.country}
             name="country"
@@ -177,11 +222,10 @@ class UserContacts extends Component {
               size="small"
               active
               text="Save"
-              handleNext={this.saveNewContact}
               iconClass="fa-floppy-o"
             />
           </div>
-        </div>
+        </Formsy>
       </div>
     )
 
@@ -274,5 +318,6 @@ function mapDispatchToProps (dispatch) {
     userDispatch: bindActionCreators(userActions, dispatch)
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContacts)
