@@ -66,12 +66,24 @@ class UserContacts extends Component {
     const { contacts } = this.props
 
     this.setState({ submitAttempted: true })
-    debugger // eslint-disable-line no-debugger
 
     let shouldDispatch = true
 
     contacts.forEach((_contact) => {
-      if (!areEqual(_contact, contact)) return
+      const contactWithLocation = {
+        firstName: _contact.first_name,
+        lastName: _contact.last_name,
+        phone: _contact.phone,
+        email: _contact.email,
+        number: _contact.location.street_number,
+        street: _contact.location.street,
+        city: _contact.location.city,
+        zipCode: _contact.location.zip_code,
+        country: _contact.location.country.name
+      }
+      debugger // eslint-disable-line no-debugger
+
+      if (!areEqual(contactWithLocation, contact)) return
 
       shouldDispatch = false
 
