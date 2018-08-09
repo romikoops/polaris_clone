@@ -20,7 +20,7 @@ import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import GradientBorder from '../../GradientBorder'
-import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
+import GreyBox from '../../GreyBox/GreyBox'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -522,7 +522,7 @@ export class AdminPricingDedicated extends Component {
             )}
           />
         ) : (
-          <AlternativeGreyBox
+          <GreyBox
             wrapperClassName="flex pointy"
             contentClassName="layout-row flex-100"
             content={(

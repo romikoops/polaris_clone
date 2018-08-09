@@ -1424,10 +1424,10 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: '#270C77',
-          secondary: '#4FAACA',
-          brightPrimary: '#270C77',
-          brightSecondary:  '#4FAACA'
+          primary: '#4FAACA',
+          secondary: '#270C77',
+          brightPrimary: '#4FAACA',
+          brightSecondary:  '#270C77'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',

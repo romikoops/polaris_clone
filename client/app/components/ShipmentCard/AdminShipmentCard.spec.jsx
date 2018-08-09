@@ -2,7 +2,7 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment, identity, theme, hub } from '../../mocks'
 
-import { AdminShipmentCardNew } from './AdminShipmentCardNew'
+import { AdminShipmentCard } from './AdminShipmentCard'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -43,5 +43,5 @@ const propsBase = {
 }
 
 test('shallow rendering', () => {
-  expect(shallow(<AdminShipmentCardNew {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<AdminShipmentCard {...propsBase} />)).toMatchSnapshot()
 })

@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import PropTypes from '../../../prop-types'
-import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
+import GreyBox from '../../GreyBox/GreyBox'
 
 export default function ContactDetailsRow ({
   contacts,
@@ -146,7 +146,7 @@ export default function ContactDetailsRow ({
   return (
     <div className={`layout-row flex-100 layout-wrap margin_bottom ${adminStyles.margin_box_right}`}>
       {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
-        <AlternativeGreyBox
+        <GreyBox
           title="Account Holder"
           wrapperClassName="layout-row flex-100"
           contentClassName="layout-row layout-wrap flex-100"
@@ -155,7 +155,7 @@ export default function ContactDetailsRow ({
         />
       </div> : '' }
       <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
-        <AlternativeGreyBox
+        <GreyBox
           title="Shipper"
           titleAction={isAccountHolder === 'shipper' ? actionButton : false}
           wrapperClassName="layout-row flex-100"
@@ -165,7 +165,7 @@ export default function ContactDetailsRow ({
         />
       </div>
       <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
-        <AlternativeGreyBox
+        <GreyBox
           title="Consignee"
           wrapperClassName="layout-row flex-100"
           titleAction={isAccountHolder === 'consignee' ? actionButton : false}
@@ -175,7 +175,7 @@ export default function ContactDetailsRow ({
         />
       </div>
       <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center-start ">
-        <AlternativeGreyBox
+        <GreyBox
           title="Notifyees"
           wrapperClassName="layout-row flex-100 height_100"
           contentClassName="layout-row layout-wrap flex-100"

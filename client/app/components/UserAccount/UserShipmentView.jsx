@@ -24,7 +24,7 @@ import DocumentsForm from '../Documents/Form'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from '../Admin/AdminShipmentView/ShipmentOverviewShowCard'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
 
@@ -813,14 +813,14 @@ export class UserShipmentView extends Component {
               theme={theme}
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <AlternativeGreyBox
+                <GreyBox
                   title="Cargo Details"
                   wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
                   contentClassName="layout-column flex"
                   content={cargoView}
                 />
 
-                <AlternativeGreyBox
+                <GreyBox
                   wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
                   contentClassName="layout-row flex-100"
@@ -927,7 +927,7 @@ export class UserShipmentView extends Component {
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
 
-                <AlternativeGreyBox
+                <GreyBox
                   title="Documents"
                   wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
                   contentClassName="layout-row layout-wrap flex"

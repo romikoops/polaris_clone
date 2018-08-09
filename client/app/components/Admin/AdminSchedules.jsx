@@ -8,7 +8,7 @@ import styles from './Admin.scss'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import DocumentsDownloader from '../Documents/Downloader'
-import { filters, capitalize, switchIcon, gradientTextGenerator } from '../../helpers'
+import { filters, capitalize } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
@@ -172,12 +172,6 @@ class AdminSchedules extends Component {
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
 
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
-    const mapIcon = <i className="fa fa-map clip flex-none" style={gradientFontStyle} />
-
     const sideMenuNodes = [
       (<SideOptionsBox
         header="Data manager"
@@ -274,7 +268,7 @@ class AdminSchedules extends Component {
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
-      icon={switchIcon(mot, gradientFontStyle)}
+      mot={mot}
     >
       <CardRoutesIndex
         itineraries={itineraries}
@@ -291,7 +285,7 @@ class AdminSchedules extends Component {
     motTabs.push(<Tab
       tabTitle="Map"
       theme={theme}
-      icon={mapIcon}
+      icon="fa fa-map flex-none"
     >
       <div className="flex-100 layout-row layout-align-center-start header_buffer">
         <WorldMap
@@ -305,7 +299,7 @@ class AdminSchedules extends Component {
     const listView = (
       <div className="flex-100 layout-row layout-align-center-start header_buffer">
         <Tabs
-          wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
         >
           {motTabs}
 

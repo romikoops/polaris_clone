@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { GreyBox as GBox } from '../GreyBox/GreyBox'
-import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
-import { AdminHubCardNew } from './AdminHubCardNew'
+import GreyBox from '../GreyBox/GreyBox'
+import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import { AdminHubCard } from './AdminHubCard'
 import { AdminClientCardIndex } from './AdminClientCardIndex'
 import { AdminRouteList } from './AdminRouteList'
 import { WorldMap } from './DashboardMap/WorldMap'
 import { gradientTextGenerator } from '../../helpers'
-// import { TextHeading } from '../TextHeading/TextHeading'
-import styles from './AdminDashboardNew.scss'
-// import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
+import styles from './AdminDashboard.scss'
 
-export class AdminDashboardNew extends Component {
+export class AdminDashboard extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = clients[shipment.user_id]
@@ -96,7 +94,7 @@ export class AdminDashboardNew extends Component {
         : { color: 'black' }
 
     const preparedRequestedShipments = shipments.requested ? shipments.requested
-      .map(s => AdminDashboardNew.prepShipment(s, clientHash, hubHash)) : []
+      .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
     const mapComponent = (
       <div className="layout-row flex-100 layout-align-space-between-stretch layout-wrap">
@@ -154,13 +152,13 @@ export class AdminDashboardNew extends Component {
           <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
           <div className={`flex-85 ${styles.separator}`} />
         </div>
-        <GBox
+        <GreyBox
           flex={100}
           component={mapComponent}
         />
         <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
           <div className="flex-gt-md-60 flex-100">
-            <AdminHubCardNew
+            <AdminHubCard
               hubs={hubHash}
               adminDispatch={adminDispatch}
               theme={theme}
@@ -186,7 +184,7 @@ export class AdminDashboardNew extends Component {
   }
 }
 
-AdminDashboardNew.propTypes = {
+AdminDashboard.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
@@ -209,7 +207,7 @@ AdminDashboardNew.propTypes = {
   }).isRequired
 }
 
-AdminDashboardNew.defaultProps = {
+AdminDashboard.defaultProps = {
   theme: null,
   user: {},
   dashData: null,
@@ -219,4 +217,4 @@ AdminDashboardNew.defaultProps = {
   hubHash: {}
 }
 
-export default AdminDashboardNew
+export default AdminDashboard

@@ -24,7 +24,7 @@ import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
 import DocumentsDownloader from '../../components/Documents/Downloader'
 import { cargoClassOptions } from '../../constants'
-import { GreyBox as GBox } from '../GreyBox/GreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
@@ -250,7 +250,7 @@ export class AdminTruckingView extends Component {
 
           return (
             <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center">
-              <GBox
+              <GreyBox
                 padding
                 component={(
                   <div
