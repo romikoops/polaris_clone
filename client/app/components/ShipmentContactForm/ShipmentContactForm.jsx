@@ -3,9 +3,12 @@ import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { nameToDisplay } from '../../helpers'
+import { nameToDisplay, authHeader } from '../../helpers'
+import { BASE_URL } from '../../constants'
 import AddressDetailsSection from './AddressDetailsSection'
 import CompanyDetailsSection from './CompanyDetailsSection'
+
+const { fetch, FormData } = window
 
 export class ShipmentContactForm extends Component {
   static mapInputs (inputs) {
@@ -18,6 +21,7 @@ export class ShipmentContactForm extends Component {
         contact[k] = inputs[k]
       }
     })
+
     return { location, contact }
   }
   constructor (props) {
@@ -26,13 +30,23 @@ export class ShipmentContactForm extends Component {
       contactData: { contact: {}, location: {} },
       setContactAttempted: false
     }
-    this.handleFormChange = this.handleFormChange.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.editSubmit = this.editSubmit.bind(this)
   }
 
-  handleFormChange (event) {
-    this.props.handleChange(event)
+  componentWillMount () {
+    const { showEdit, selectedContact } = this.props
+    if (showEdit) {
+      this.setState({
+        contactData: selectedContact
+      })
+    }
+  }
+  componentWillUnmount () {
+    this.setState({
+      contactData: { contact: {}, location: {} }
+    })
   }
   handlePlaceChange (place) {
     const newLocation = {
@@ -75,21 +89,76 @@ export class ShipmentContactForm extends Component {
   }
   handleSubmit (contactData) {
     this.props.setContact(contactData)
+
+    const newContact = {
+      firstName: contactData.contact.firstName,
+      lastName: contactData.contact.lastName,
+      companyName: contactData.contact.companyName,
+      phone: contactData.contact.phone,
+      email: contactData.contact.email,
+      number: contactData.location.number,
+      street: contactData.location.street,
+      city: contactData.location.city,
+      zipCode: contactData.location.zipCode,
+      country: contactData.location.country
+    }
+
+    const formData = new FormData()
+    formData.append('new_contact', JSON.stringify(newContact))
+    const requestOptions = {
+      method: 'POST',
+      headers: authHeader(),
+      body: formData
+    }
+    fetch(`${BASE_URL}/contacts`, requestOptions)
+      .then(
+        () => console.log('saved'),
+        error => console.log(error)
+      )
+
     this.contactForm.reset()
     this.setState({ setContactAttempted: false })
   }
+  editSubmit (contactData) {
+    const { shipmentDispatch } = this.props
+
+    this.setState(prevState => ({
+      ...prevState.contactData,
+      contactData: {
+        contact: contactData.contact,
+        location: contactData.location
+      }
+    }))
+
+    const editedContact = {
+      ...contactData.contact,
+      ...contactData.location,
+      streetNumber: parseInt(contactData.location.streetNumber, 10),
+      id: this.state.contactData.contact.id,
+      locationId: this.state.contactData.location.id,
+      userId: this.state.contactData.contact.userId
+    }
+
+    shipmentDispatch.updateContact(editedContact)
+
+    this.props.setContact(contactData)
+    this.contactForm.reset()
+    this.setState({ setContactAttempted: false })
+  }
+
   handleInvalidSubmit () {
     this.setState({ setContactAttempted: true })
   }
 
   render () {
-    const { theme, contactType } = this.props
-    const { contactData } = this.state
+    const {
+      theme, contactType, showEdit
+    } = this.props
 
     const setContactBtn = (
       <RoundButton
         text={
-          `${contactType === 'notifyee' ? 'Add' : 'Set'} ` +
+          `${contactType === 'notifyee' && !showEdit ? 'Add' : 'Set'} ` +
           `${nameToDisplay(contactType)}`
         }
         theme={theme}
@@ -101,7 +170,7 @@ export class ShipmentContactForm extends Component {
     const addressDetailsSection = (
       <AddressDetailsSection
         theme={theme}
-        contactData={contactData}
+        contactData={this.state.contactData}
         handlePlaceChange={place => this.handlePlaceChange(place)}
         setContactAttempted={this.state.setContactAttempted}
         setContactBtn={setContactBtn}
@@ -112,9 +181,10 @@ export class ShipmentContactForm extends Component {
       <div
         className="flex-100 layout-row layout-align-center-center"
       >
-        { setContactBtn }
+        {setContactBtn}
       </div>
     )
+
     return (
       <div className={
         `${styles.wrapper_form} flex-100 ` +
@@ -124,7 +194,7 @@ export class ShipmentContactForm extends Component {
         <Formsy
           className="flex-100 layout-row layout-wrap layout-align-start-start"
           name="form"
-          onValidSubmit={this.handleSubmit}
+          onValidSubmit={showEdit ? this.editSubmit : this.handleSubmit}
           onInvalidSubmit={this.handleInvalidSubmit}
           mapping={ShipmentContactForm.mapInputs}
           ref={(c) => { this.contactForm = c }}
@@ -133,12 +203,12 @@ export class ShipmentContactForm extends Component {
           <div className={`flex${contactType === 'notifyee' ? '-100' : ''} layout-row`}>
             <CompanyDetailsSection
               theme={theme}
-              contactData={contactData}
+              showEdit={showEdit}
+              contactData={this.state.contactData}
               setContactAttempted={this.state.setContactAttempted}
             />
           </div>
-
-          { contactType === 'notifyee' ? setContactBtnWrapper : addressDetailsSection }
+          {contactType === 'notifyee' ? setContactBtnWrapper : addressDetailsSection}
         </Formsy>
       </div>
     )
@@ -148,15 +218,20 @@ export class ShipmentContactForm extends Component {
 ShipmentContactForm.propTypes = {
   theme: PropTypes.theme,
   setContact: PropTypes.func,
-  handleChange: PropTypes.func,
-  contactType: PropTypes.string
+  contactType: PropTypes.string,
+  showEdit: PropTypes.bool,
+  selectedContact: PropTypes.objectOf(PropTypes.any),
+  shipmentDispatch: PropTypes.shape({
+    updateContact: PropTypes.func
+  }).isRequired
 }
 
 ShipmentContactForm.defaultProps = {
   theme: null,
-  handleChange: null,
   setContact: null,
-  contactType: ''
+  contactType: '',
+  selectedContact: {},
+  showEdit: false
 }
 
 export default ShipmentContactForm
