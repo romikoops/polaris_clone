@@ -8,11 +8,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'vcr', '~>2.8.0'
-
-# Use Dotenv for managing ENV variables
-gem 'dotenv-rails', groups: [:development, :test]
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.6'
 # Use sqlite3 as the database for Active Record
@@ -108,6 +103,8 @@ gem 'googleauth'
 # New email gem
 gem 'mjml-rails'
 
+gem 'pry-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -119,12 +116,25 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'ruby-debug-ide'
+
+  # Code Style checks
+  gem 'pronto', '~> 0.9.5'
+  gem 'pronto-rubocop'
+  gem 'pronto-brakeman'
+  gem 'pronto-eslint_npm'
+  gem 'pronto-fasterer'
+  gem 'pronto-flay'
+  gem 'pronto-jshint'
+  gem 'pronto-rails_best_practices'
+  gem 'pronto-rails_schema'
+  # gem 'pronto-stylelint'
 end
 
 group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'timecop'
+  gem 'vcr', '~>2.8.0'
   gem 'webmock'
 end
 
