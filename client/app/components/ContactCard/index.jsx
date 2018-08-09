@@ -13,6 +13,16 @@ export default function ContactCard ({
     width: '28px',
     padding: '3px 0'
   }
+  const fullAddress = (
+    <p className="flex-100" style={{ margin: 0 }}>
+      {location.street ? `${location.street}, ` : ''}
+      {location.streetNumber ? `${location.streetNumber}, ` : ''}
+      {location.zipCode ? `${location.zipCode}, ` : ''}
+      {location.city ? `${location.city}` : ''}
+      {location.country ? ', ' : ''}
+      {location.country ? `${location.country}, ` : ''}
+    </p>
+  )
 
   return (
     <div
@@ -62,7 +72,7 @@ export default function ContactCard ({
         <div className="flex-100 layout-row layout-align-start-center">
           <i className="fa fa-globe flex-none clip" style={iconStyle} />
           <p className="flex-100">
-            {(location && location.geocodedAddress) || location.fullAddress}
+            {(location && location.geocodedAddress) || fullAddress}
           </p>
         </div>
       </div>

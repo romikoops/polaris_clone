@@ -172,7 +172,7 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
-      request, response, error, reusedShipment, originalSelectedDay
+      request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
@@ -248,6 +248,7 @@ class Shop extends Component {
               chooseOffer={this.chooseOffer}
               theme={theme}
               tenant={tenant}
+              contacts={contacts}
               shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}
@@ -275,6 +276,7 @@ class Shop extends Component {
                 messages={error ? error.stage4 : []}
                 tenant={tenant}
                 user={user}
+                contacts={contacts}
                 shipmentDispatch={shipmentDispatch}
                 hideRegistration={this.hideRegistration}
                 reusedShipment={reusedShipment}
@@ -328,6 +330,7 @@ Shop.propTypes = {
   bookingData: PropTypes.shape({
     request: PropTypes.object,
     response: PropTypes.object,
+    contacts: PropTypes.arrayOf(PropTypes.contact),
     error: PropTypes.object
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
@@ -341,8 +344,12 @@ Shop.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string
   }).isRequired,
-
+  contactData: PropTypes.shape({
+    contact: PropTypes.contact,
+    location: PropTypes.location
+  }).isRequired,
   shipmentDispatch: PropTypes.shape({
+    updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
     setShipmentContacts: PropTypes.func
