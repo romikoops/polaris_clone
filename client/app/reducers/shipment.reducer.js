@@ -138,8 +138,10 @@ export default function shipment (state = {}, action) {
         loading: false
       }
     case shipmentConstants.CHOOSE_OFFER_REQUEST:
+
       return {
         ...state,
+        contacts: state.response.stage3.contacts,
         request: {
           ...state.request,
           stage3: action.shipmentData
@@ -149,6 +151,7 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
+        contacts: state.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData
@@ -349,6 +352,48 @@ export default function shipment (state = {}, action) {
           ...state.error,
           stage1: [action.error]
         }
+      }
+
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS: {
+      const contactData = action.payload
+
+      const { contacts } = state
+
+      const idx = contacts.findIndex(contact => contact.contact.id === contactData.id)
+      contacts[idx] = {
+        contact: {
+          firstName: contactData.firstName,
+          lastName: contactData.lastName,
+          companyName: contactData.companyName,
+          userId: contactData.userId,
+          id: contactData.id,
+          email: contactData.email,
+          alias: contactData.alias,
+          phone: contactData.phone,
+          locationId: contactData.locationId
+        },
+        location: {
+          country: contactData.country,
+          city: contactData.city,
+          zipCode: contactData.zipCode,
+          street: contactData.street,
+          streetNumber: contactData.streetNumber,
+          geocodedAddress: contactData.geocodedAddress
+        }
+      }
+
+      return {
+        ...state,
+        contacts
+      }
+    }
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { hubs: action.error }
       }
     default:
       return state
