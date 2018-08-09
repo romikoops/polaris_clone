@@ -70,26 +70,28 @@ class UserContacts extends Component {
     let shouldDispatch = true
 
     contacts.forEach((_contact) => {
+      // debugger // eslint-disable-line no-debugger
       const contactWithLocation = {
+        city: _contact.location && _contact.location.city,
+        companyName: _contact.company_name,
+        country: _contact.location && _contact.location.country && _contact.location.country.name,
+        email: _contact.email,
         firstName: _contact.first_name,
         lastName: _contact.last_name,
+        number: _contact.location && _contact.location.street_number,
         phone: _contact.phone,
-        email: _contact.email,
-        number: _contact.location.street_number,
-        street: _contact.location.street,
-        city: _contact.location.city,
-        zipCode: _contact.location.zip_code,
-        country: _contact.location.country.name
+        street: _contact.location && _contact.location.street,
+        zipCode: _contact.location && _contact.location.zip_code
       }
-      debugger // eslint-disable-line no-debugger
+      // debugger // eslint-disable-line no-debugger
 
-      if (!areEqual(contactWithLocation, contact)) return
+      if (areEqual(contactWithLocation, contact)) {
+        shouldDispatch = false
 
-      shouldDispatch = false
-
-      invalidate((
-        Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'test' }), {})
-      ))
+        invalidate((
+          Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'test' }), {})
+        ))
+      }
     })
 
     if (!shouldDispatch) return
