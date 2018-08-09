@@ -51,6 +51,7 @@ module ExcelTool
           last_name:  @client_row[:last_name],
           tenant_id: @user.tenant_id,
           email:  @client_row[:email],
+          company_name:  @client_row[:company_name],
           phone:  @client_row[:phone],
           vat_number:  @client_row[:vat_number],
           external_id:  @client_row[:external_id]
@@ -63,6 +64,7 @@ module ExcelTool
           last_name:  @client_row[:last_name],
           tenant_id: @user.tenant_id,
           email:  @client_row[:email],
+          company_name:  @client_row[:company_name],
           phone:  @client_row[:phone],
           vat_number:  @client_row[:vat_number],
           external_id:  @client_row[:external_id]
@@ -75,6 +77,7 @@ module ExcelTool
           last_name:  @client_row[:last_name],
           tenant_id: @user.tenant_id,
           email:  @client_row[:email],
+          company_name:  @client_row[:company_name],
           phone:  @client_row[:phone],
           vat_number:  @client_row[:vat_number],
           password: @client_row[:password],

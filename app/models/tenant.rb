@@ -40,6 +40,7 @@ class Tenant < ApplicationRecord
   has_many :conversations
   has_many :max_dimensions_bundles
   has_many :map_data
+  has_many :agencies
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
