@@ -89,7 +89,7 @@ class UserContacts extends Component {
         shouldDispatch = false
 
         invalidate((
-          Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'test' }), {})
+          Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'Contact already exists.' }), {})
         ))
       }
     })
@@ -112,10 +112,17 @@ class UserContacts extends Component {
       theme, contacts, hubs, contactData, userDispatch, loading
     } = this.props
 
+    const errorStyle = {
+      position: 'absolute',
+      left: '7px',
+      fontSize: '12px',
+      bottom: '-2px'
+    }
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
+
     const newContactBox = (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -142,16 +149,9 @@ class UserContacts extends Component {
             <p className="flex-none">New Contact</p>
           </div>
           <FormsyInput
-            className={styles.input_100}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.companyName}
-            name="companyName"
-            placeholder="Company Name"
-            // onChange={this.handleFormChange}
-          />
-          <FormsyInput
-            className={styles.input_50}
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.firstName}
@@ -160,7 +160,9 @@ class UserContacts extends Component {
             // onChange={this.handleFormChange}
           />
           <FormsyInput
-            className={styles.input_50}
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.lastName}
@@ -169,7 +171,20 @@ class UserContacts extends Component {
             // onChange={this.handleFormChange}
           />
           <FormsyInput
-            className={styles.input_50}
+            wrapperClassName={styles.input_100}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
+            submitAttempted={submitAttempted}
+            type="text"
+            value={newContact.companyName}
+            name="companyName"
+            placeholder="Company Name"
+            // onChange={this.handleFormChange}
+          />
+          <FormsyInput
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.email}
@@ -178,7 +193,9 @@ class UserContacts extends Component {
             // onChange={this.handleFormChange}
           />
           <FormsyInput
-            className={styles.input_50}
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.phone}
@@ -187,49 +204,59 @@ class UserContacts extends Component {
             // onChange={this.handleFormChange}
           />
           <FormsyInput
-            className={styles.input_street}
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.street}
             name="street"
             placeholder="Street"
-            onChange={this.handleFormChange}
+            /* onChange={this.handleFormChange} */
           />
           <FormsyInput
-            className={styles.input_no}
+            wrapperClassName={styles.input_50}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.number}
             name="number"
-            placeholder="Number"
-            onChange={this.handleFormChange}
+            placeholder="Street Number"
+            /* onChange={this.handleFormChange} */
           />
           <FormsyInput
-            className={styles.input_zip}
+            wrapperClassName={styles.input_33}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.zipCode}
             name="zipCode"
             placeholder="Postal Code"
-            onChange={this.handleFormChange}
+            /* onChange={this.handleFormChange} */
           />
           <FormsyInput
-            className={styles.input_cc}
+            wrapperClassName={styles.input_33}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.city}
             name="city"
             placeholder="City"
-            onChange={this.handleFormChange}
+            /* onChange={this.handleFormChange} */
           />
           <FormsyInput
-            className={styles.input_cc}
+            wrapperClassName={styles.input_33}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
             type="text"
             value={newContact.country}
             name="country"
             placeholder="Country"
-            onChange={this.handleFormChange}
+            /* onChange={this.handleFormChange} */
           />
           <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
             <RoundButton
