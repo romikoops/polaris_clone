@@ -2,44 +2,34 @@ import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
-// import Select from 'react-select'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
-// import styled from 'styled-components'
-import PropTypes from '../../prop-types'
-import GmapsLoader from '../../hocs/GmapsLoader'
-import styles from './ShipmentDetails.scss'
-import errorStyles from '../../styles/errors.scss'
-import defaults from '../../styles/default_classes.scss'
-import { moment } from '../../constants'
-import '../../styles/day-picker-custom.css'
-import { RoundButton } from '../RoundButton/RoundButton'
-import { Tooltip } from '../Tooltip/Tooltip'
-import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
-import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
-import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
-import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
-import { IncotermRow } from '../Incoterm/Row'
-import { IncotermBox } from '../Incoterm/Box'
-import { camelize, isEmpty, chargeableWeight } from '../../helpers'
-import { Checkbox } from '../Checkbox/Checkbox'
-import NotesRow from '../Notes/Row'
-import '../../styles/select-css-custom.css'
-import getModals from './getModals'
-import toggleCSS from './toggleCSS'
+import PropTypes from '../../../../prop-types'
+import GmapsLoader from '../../../../hocs/GmapsLoader'
+import styles from '../../../ShipmentDetails/ShipmentDetails.scss'
+import defaults from '../../../../styles/default_classes.scss'
+import '../../../../styles/day-picker-custom.css'
+import { RoundButton } from '../../../RoundButton/RoundButton'
+import { LocationDetails } from './LocationDetails'
+import { ShipmentContainers } from '../../../ShipmentContainers/ShipmentContainers'
+import { ShipmentCargoItems } from '../../../ShipmentCargoItems/ShipmentCargoItems'
+import ShipmentAggregatedCargo from '../../../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
+import { FlashMessages } from '../../../FlashMessages/FlashMessages'
+import { camelize, isEmpty, chargeableWeight } from '../../../../helpers'
+import { Checkbox } from '../../../Checkbox/Checkbox'
+import '../../../../styles/select-css-custom.css'
+import getModals from '../../../ShipmentDetails/getModals'
+import toggleCSS from '../../../ShipmentDetails/toggleCSS'
 import getOffersBtnIsActive, {
   noDangerousGoodsCondition,
   stackableGoodsCondition
-} from './getOffersBtnIsActive'
-import formatCargoItemTypes from './formatCargoItemTypes'
-import addressFieldsAreValid from './addressFieldsAreValid'
+} from '../../../ShipmentDetails/getOffersBtnIsActive'
+import formatCargoItemTypes from '../../../ShipmentDetails/formatCargoItemTypes'
+import addressFieldsAreValid from '../../../ShipmentDetails/addressFieldsAreValid'
 import calcAvailableMotsForRoute,
-{ shouldUpdateAvailableMotsForRoute } from './calcAvailableMotsForRoute'
-import getRequests from '../ShipmentLocationBox/getRequests'
-import reuseShipments from '../../helpers/reuseShipment'
+{ shouldUpdateAvailableMotsForRoute } from '../../../ShipmentDetails/calcAvailableMotsForRoute'
+import getRequests from '../../../ShipmentLocationBox/getRequests'
+import reuseShipments from '../../../../helpers/reuseShipment'
 
-export class ShipmentDetails extends Component {
+export class Details extends Component {
   static scrollTo (target) {
     Scroll.scroller.scrollTo(target, {
       duration: 800,
@@ -161,9 +151,9 @@ export class ShipmentDetails extends Component {
     } else if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
       this.loadPrevReq(prevRequest.shipment)
     }
-    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
-      this.presetMandatoryCarriage()
-    }
+    // if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+    //   this.presetMandatoryCarriage()
+    // }
 
     setStage(2)
   }
@@ -255,7 +245,7 @@ export class ShipmentDetails extends Component {
     this.setState({ noteIds })
   }
   setTargetAddress (target, address) {
-    this.setState({ [target]: address })
+    this.setState({ [target]: address }, () => this.shouldProceedToCargo())
   }
 
   setAggregatedCargo (bool) {
@@ -557,20 +547,20 @@ export class ShipmentDetails extends Component {
       this.state.addressFormsHaveErrors
     ) {
       this.incrementNextStageAttemps()
-      ShipmentDetails.scrollTo('map')
+      Details.scrollTo('map')
 
       return
     }
     if (!selectedDay) {
       this.incrementNextStageAttemps()
-      ShipmentDetails.scrollTo('dayPicker')
+      Details.scrollTo('dayPicker')
 
       return
     }
 
     if (!incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
       this.incrementNextStageAttemps()
-      ShipmentDetails.scrollTo('incoterms')
+      Details.scrollTo('incoterms')
 
       return
     }
@@ -580,11 +570,11 @@ export class ShipmentDetails extends Component {
     } else {
       const { shipment } = this.state
       const loadType = camelize(shipment.load_type)
-      const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+      const errorIdx = Details.errorsAt(this.state[`${loadType}sErrors`])
 
       if (errorIdx > -1) {
         this.incrementNextStageAttemps()
-        ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+        Details.scrollTo(`${errorIdx}-${loadType}`)
 
         return
       }
@@ -613,10 +603,10 @@ export class ShipmentDetails extends Component {
     const carriage = target.replace('has_', '')
 
     // Break out of function, in case the change should not apply, based on the tenant scope.
-    const { scope } = this.props.tenant.data
-    const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
-    const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
-    if (!changeShouldApply) return
+    // const { scope } = this.props.tenant.data
+    // const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
+    // const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
+    // if (!changeShouldApply) return
 
     this.setState({ [target]: value }, () => this.updateIncoterms())
 
@@ -689,10 +679,18 @@ export class ShipmentDetails extends Component {
   updateFilteredRouteIndexes (filteredRouteIndexes) {
     this.setState({ filteredRouteIndexes })
   }
+  shouldProceedToCargo () {
+    const { origin, destination } = this.state
+    debugger // eslint-disable-line
+    if ((origin.nexus_id || origin.street_address) &&
+    (destination.nexus_id || destination.street_address)) {
+      this.props.setStep(3)
+    }
+  }
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration
+      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration, step
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
@@ -750,7 +748,7 @@ export class ShipmentDetails extends Component {
         theme={theme}
         setTargetAddress={this.setTargetAddress}
         allNexuses={shipmentData.allNexuses}
-        component={ShipmentLocationBox}
+        component={LocationDetails}
         handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
         has_on_carriage={this.state.has_on_carriage}
         has_pre_carriage={this.state.has_pre_carriage}
@@ -773,89 +771,8 @@ export class ShipmentDetails extends Component {
         hideMap={this.props.hideMap}
       />
     )
-    const formattedSelectedDay = this.state.selectedDay
-      ? moment(this.state.selectedDay).format('DD/MM/YYYY')
-      : ''
+
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format())
-      },
-      month: new Date(
-        moment()
-          .add(7, 'days')
-          .format('YYYY'),
-        moment()
-          .add(7, 'days')
-          .format('M') - 1
-      ),
-      name: 'dayPicker'
-    }
-    const dayPickerToolip = this.state.has_pre_carriage
-      ? 'planned_pickup_date'
-      : 'planned_dropoff_date'
-    const dayPickerText = this.state.has_pre_carriage
-      ? 'Cargo Ready Date'
-      : 'Available at appointed terminal'
-
-    const nextStageAttempt = this.state.nextStageAttempts > 0
-    const showDayPickerError = nextStageAttempt && !this.state.selectedDay
-    const showIncotermError = nextStageAttempt && !this.state.incoterm
-
-    const dayPickerSection = (
-      <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
-        <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-          <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text={dayPickerText} size={3} />
-            </div>
-            <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
-          </div>
-          <div
-            name="dayPicker"
-            className={
-              `flex-none layout-row ${styles.dpb} ` +
-              `${showDayPickerError ? styles.with_errors : ''}`
-            }
-          >
-            <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
-              <i className="flex-none fa fa-calendar" />
-            </div>
-            <DayPickerInput
-              name="dayPicker"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-              value={formattedSelectedDay}
-              onDayChange={this.handleDayChange}
-              dayPickerProps={dayPickerProps}
-            />
-            <span className={errorStyles.error_message}>
-              {showDayPickerError ? 'Must not be blank' : ''}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex-50 layout-row layout-wrap layout-align-end-center">
-          <IncotermBox
-            theme={theme}
-            preCarriage={this.state.has_pre_carriage}
-            onCarriage={this.state.has_on_carriage}
-            tenantScope={scope}
-            incoterm={this.state.incoterm}
-            setIncoTerm={this.setIncoTerm}
-            errorStyles={errorStyles}
-            direction={shipmentData.shipment.direction}
-            showIncotermError={showIncotermError}
-            nextStageAttempt={this.state.nextStageAttempts > 0}
-            firstStep
-          />
-        </div>
-      </div>
-    )
-    const { notes } = shipmentData
-    const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
 
     const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
 
@@ -869,73 +786,47 @@ export class ShipmentDetails extends Component {
           Object.keys(modals)
             .filter(modalName => modals[modalName].show)
             .map(modalName => modals[modalName].jsx)}
-        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${
-            styles.note_box
-          }`}
-        >
-          <div className="flex-none content_width_booking layout-row layout-align-start-center">
-            <NotesRow notes={notes} theme={theme} />
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.date_sec
-          } layout-row flex-100 layout-wrap layout-align-center-center`}
-        >
-          {dayPickerSection}
-        </div>
-        <div className="flex-100 layout-row layout-align-center-center">
-          <div className="flex-none content_width_booking layout-row layout-align-center-center">
-            <IncotermRow
-              theme={theme}
-              preCarriage={this.state.has_pre_carriage}
-              onCarriage={this.state.has_on_carriage}
-              originFees={this.state.has_pre_carriage}
-              destinationFees={this.state.has_on_carriage}
-              tenant={tenant}
-            />
-          </div>
-        </div>
-        <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          {shipmentData.shipment.load_type === 'cargo_item' && (
-            <div className="content_width_booking layout-row layout-wrap layout-align-center">
-              <div
-                className={
-                  `${styles.toggle_aggregated_sec} ` +
+        { step === 2 ? <div className="layout-row flex-100 layout-wrap">{mapBox}</div> : '' }
+        { step === 3
+          ? <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
+            {shipmentData.shipment.load_type === 'cargo_item' && (
+              <div className="content_width_booking layout-row layout-wrap layout-align-center">
+                <div
+                  className={
+                    `${styles.toggle_aggregated_sec} ` +
                   'flex-50 layout-row layout-align-space-around-center'
-                }
-              >
-                <h3
-                  className={this.state.aggregated ? 'pointy' : ''}
-                  style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
-                  onClick={() => this.setAggregatedCargo(false)}
+                  }
                 >
+                  <h3
+                    className={this.state.aggregated ? 'pointy' : ''}
+                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                    onClick={() => this.setAggregatedCargo(false)}
+                  >
                   Cargo Units
-                </h3>
-                <Toggle
-                  className="flex-none aggregated_cargo"
-                  id="aggregated_cargo"
-                  name="aggregated_cargo"
-                  checked={this.state.aggregated}
-                  onChange={() => this.toggleAggregatedCargo()}
-                />
-                <h3
-                  className={this.state.aggregated ? '' : 'pointy'}
-                  style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
-                  onClick={() => this.setAggregatedCargo(true)}
-                >
+                  </h3>
+                  <Toggle
+                    className="flex-none aggregated_cargo"
+                    id="aggregated_cargo"
+                    name="aggregated_cargo"
+                    checked={this.state.aggregated}
+                    onChange={() => this.toggleAggregatedCargo()}
+                  />
+                  <h3
+                    className={this.state.aggregated ? '' : 'pointy'}
+                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                    onClick={() => this.setAggregatedCargo(true)}
+                  >
                   Total Dimensions
-                </h3>
+                  </h3>
+                </div>
               </div>
+            )}
+            <div className="flex-100 layout-row layout-align-center-center">
+              {cargoDetails}
             </div>
-          )}
-          <div className="flex-100 layout-row layout-align-center-center">
-            {cargoDetails}
           </div>
-        </div>
-        <div
+          : '' }
+        { step === 4 ? <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
             'layout-wrap layout-align-center-center'
@@ -1037,7 +928,7 @@ export class ShipmentDetails extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> : '' }
         {user &&
           !user.guest && (
           <div
@@ -1075,11 +966,12 @@ export class ShipmentDetails extends Component {
   }
 }
 
-ShipmentDetails.propTypes = {
+Details.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   getOffers: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   setStage: PropTypes.func.isRequired,
+  setStep: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
@@ -1097,10 +989,11 @@ ShipmentDetails.propTypes = {
   user: PropTypes.user.isRequired,
   showRegistration: PropTypes.bool,
   hideMap: PropTypes.bool,
-  hideRegistration: PropTypes.func
+  hideRegistration: PropTypes.func,
+  step: PropTypes.number.isRequired
 }
 
-ShipmentDetails.defaultProps = {
+Details.defaultProps = {
   prevRequest: null,
   messages: [],
   reusedShipment: null,
@@ -1109,4 +1002,4 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default ShipmentDetails
+export default Details

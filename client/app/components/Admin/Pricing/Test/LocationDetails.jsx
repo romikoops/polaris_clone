@@ -2,24 +2,24 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
 import styled from 'styled-components'
-import PropTypes from '../../prop-types'
-import '../../styles/react-toggle.scss'
-import '../../styles/select-css-custom.css'
-import styles from './ShipmentLocationBox.scss'
-import errorStyles from '../../styles/errors.scss'
+import PropTypes from '../../../../prop-types'
+import '../../../../styles/react-toggle.scss'
+import '../../../../styles/select-css-custom.css'
+import styles from '../../../ShipmentLocationBox/ShipmentLocationBox.scss'
+import testStyles from './index.scss'
+import errorStyles from '../../../../styles/errors.scss'
 // import defaults from '../../styles/default_classes.scss'
-import { colorSVG, determineSpecialism } from '../../helpers'
-import { mapStyling } from '../../constants/map.constants'
+import { colorSVG, determineSpecialism } from '../../../../helpers'
+import { mapStyling } from '../../../../constants/map.constants'
 // import { Modal } from '../Modal/Modal'
 // import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
 // import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize } from '../../helpers/stringTools'
-import addressFromPlace from './addressFromPlace'
-import getRequests from './getRequests'
-import routeFilters from './routeFilters'
-import routeHelpers from './routeHelpers'
-import TruckingTooltip from './TruckingTooltip'
-import TruckingDetails from '../TruckingDetails/TruckingDetails'
+import { capitalize } from '../../../../helpers/stringTools'
+import addressFromPlace from '../../../ShipmentLocationBox/addressFromPlace'
+import getRequests from '../../../ShipmentLocationBox/getRequests'
+import routeFilters from '../../../ShipmentLocationBox/routeFilters'
+import routeHelpers from '../../../ShipmentLocationBox/routeHelpers'
+import TruckingDetails from '../../../TruckingDetails/TruckingDetails'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -53,7 +53,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-export class ShipmentLocationBox extends Component {
+export class LocationDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -889,7 +889,12 @@ export class ShipmentLocationBox extends Component {
 
   render () {
     const {
-      scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking
+      // scope,
+      shipmentData,
+      nextStageAttempts,
+      origin,
+      destination,
+      selectedTrucking
     } = this.props
 
     let originOptions = []
@@ -943,21 +948,10 @@ export class ShipmentLocationBox extends Component {
         </span>
       </div>
     )
-    let toggleLogic =
-      this.props.has_pre_carriage && this.state.showOriginFields ? styles.visible : ''
     const originFields = (
       <div
-        className={`flex-100 layout-row layout-wrap ${styles.address_form_wrapper} ${toggleLogic}`}
+        className="flex-100 layout-row layout-wrap "
       >
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${styles.btn_address_form} ${
-            this.props.has_pre_carriage ? '' : styles.hidden
-          }`}
-          onClick={() => this.changeAddressFormVisibility('origin')}
-        >
-          <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
-        </div>
         <div
           className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}
         >
@@ -1069,22 +1063,11 @@ export class ShipmentLocationBox extends Component {
       </div>
     )
 
-    toggleLogic =
-      this.props.has_on_carriage && this.state.showDestinationFields ? styles.visible : ''
     const destFields = (
       <div
-        className={`flex-100 layout-row layout-wrap ${styles.address_form_wrapper} ${toggleLogic}`}
+        className="flex-100 layout-row layout-wrap"
       >
-        <div
-          className={`flex-100 layout-row layout-align-center-center ${styles.btn_address_form} ${
-            this.props.has_on_carriage ? '' : styles.hidden
-          }`}
-          onClick={() => this.changeAddressFormVisibility('destination')}
-        >
-          <i className={`${styles.down} flex-none fa fa-angle-double-down`} />
-          <i className={`${styles.up} flex-none fa fa-angle-double-up`} />
-        </div>
-        <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap layout-align-center`}>
+        <div className={`${styles.address_form} flex-100 layout-row layout-wrap layout-align-center`}>
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
@@ -1240,28 +1223,21 @@ export class ShipmentLocationBox extends Component {
       loadType === 'container' && (this.props.has_on_carriage || this.props.has_pre_carriage)
         ? styles.with_truck_types : ''
     const mapStyle = {
-      width: '100%',
-      height: '600px',
+      height: '6px',
+      display: 'none',
       borderRadius: '3px',
       boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
-    }
-    if (this.props.hideMap) {
-      // Object.assign(mapStyle, {
-      //   display: 'none'
-      // })
-      mapStyle.display = 'none'
     }
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div
-          className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`}
+          className={`layout-row flex-100 layout-wrap layout-align-center-start ${testStyles.address_bar}`}
         >
-          <div className={`${styles.map_container} layout-row flex-none layout-align-start-start`}>
+          <div className="layout-row flex-100 layout-align-start-start layout-wrap">
             <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.input_box
-              } ${truckTypesStyle} ${errorClass}`}
+              className={`flex-100 layout-row layout-wrap layout-align-center-start 
+               ${truckTypesStyle} ${errorClass}`}
             >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                 { speciality !== 'truck'
@@ -1272,13 +1248,13 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    {/* <TruckingTooltip
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> */}
 
                     <Toggle
                       className="flex-none"
@@ -1295,7 +1271,6 @@ export class ShipmentLocationBox extends Component {
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
-                  {originFields}
                 </div>
               </div>
 
@@ -1316,13 +1291,13 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                     }
                   >
-                    <TruckingTooltip
+                    {/* <TruckingTooltip
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
                       direction={shipment.direction}
                       scope={scope}
-                    />
+                    /> */}
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                     Delivery
@@ -1339,6 +1314,29 @@ export class ShipmentLocationBox extends Component {
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
+                </div>
+              </div>
+            </div>
+            <div
+              className={`flex-100 layout-row layout-wrap layout-align-center-start 
+               ${truckTypesStyle} ${errorClass}`}
+            >
+              <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
+                  {originFields}
+                </div>
+              </div>
+
+              <div
+                className="flex-5 layout-row layout-align-center-center"
+
+                style={{ height: '60px' }}
+              >
+                <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
+              </div>
+
+              <div className="flex-45 layout-row layout-wrap layout-align-end-start">
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {destFields}
                 </div>
               </div>
@@ -1354,7 +1352,7 @@ export class ShipmentLocationBox extends Component {
   }
 }
 
-ShipmentLocationBox.propTypes = {
+LocationDetails.propTypes = {
   nextStageAttempts: PropTypes.integer,
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
@@ -1388,11 +1386,10 @@ ShipmentLocationBox.propTypes = {
   }),
   scope: PropTypes.scope.isRequired,
   filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
-  updateFilteredRouteIndexes: PropTypes.func.isRequired,
-  hideMap: PropTypes.bool
+  updateFilteredRouteIndexes: PropTypes.func.isRequired
 }
 
-ShipmentLocationBox.defaultProps = {
+LocationDetails.defaultProps = {
   nextStageAttempts: 0,
   theme: null,
   selectedTrucking: {},
@@ -1403,8 +1400,7 @@ ShipmentLocationBox.defaultProps = {
   has_on_carriage: true,
   has_pre_carriage: true,
   handleTruckingDetailsChange: null,
-  reusedShipment: null,
-  hideMap: false
+  reusedShipment: null
 }
 
-export default ShipmentLocationBox
+export default LocationDetails

@@ -8,7 +8,7 @@ import { alertActions, userActions, appActions } from './'
 // const subdomainKey = getSubdomain()
 // const cookieKey = `${subdomainKey}_user`
 // const userData = JSON.parse(window.localStorage.getItem(cookieKey))
-function newShipment (type) {
+function newShipment (type, redirect) {
   function request (shipmentData) {
     return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
   }
@@ -26,7 +26,9 @@ function newShipment (type) {
         const shipmentData = resp.data
         dispatch(alertActions.success('Fetching New Shipment successful'))
         dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+        }
       },
       (error) => {
         error.then((data) => {

@@ -64,7 +64,7 @@ class Shop extends Component {
 
   getShipment (loadType) {
     const { shipmentDispatch } = this.props
-    shipmentDispatch.newShipment(loadType)
+    shipmentDispatch.newShipment(loadType, true)
   }
 
   setShipmentContacts (data) {
