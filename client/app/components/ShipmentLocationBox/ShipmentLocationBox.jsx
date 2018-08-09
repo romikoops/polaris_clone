@@ -680,6 +680,7 @@ export class ShipmentLocationBox extends Component {
     if (!prevRequest.shipment) {
       return
     }
+    //
     const { shipment } = prevRequest
     const newState = {}
     if (!this.props.has_pre_carriage) {
@@ -815,8 +816,8 @@ export class ShipmentLocationBox extends Component {
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
-
       let indexes = filteredRouteIndexes.slice()
+
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -828,7 +829,6 @@ export class ShipmentLocationBox extends Component {
           targetTrucking, `${target}Hub`
         )
       }
-
       let newFilteredRouteIndexes = routeFilters.scopeIndexes(
         filteredRouteIndexes,
         indexes
@@ -847,7 +847,8 @@ export class ShipmentLocationBox extends Component {
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []
-      newFilteredRouteIndexes.forEach((idx) => {
+
+      indexes.forEach((idx) => {
         const route = routes[idx]
         newFilteredRoutes.push(route)
         if (counterpartNexusIds.includes(route[counterpart].nexusId)) return
@@ -913,7 +914,7 @@ export class ShipmentLocationBox extends Component {
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
-
+    //
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">

@@ -268,7 +268,9 @@ export class ShipmentDetails extends Component {
         filteredRouteIndexes
       } = prevState
       const { routes } = this.props.shipmentData
-
+      if (!routes) {
+        return { filteredRouteIndexes }
+      }
       if (filteredRouteIndexes.length === 0) {
         return { filteredRouteIndexes: routes.map((_, i) => i) }
       }
@@ -300,6 +302,7 @@ export class ShipmentDetails extends Component {
     const newContainerErrors = obj.containers_attributes.map(cia => ({
       payload_in_kg: false
     }))
+    this.getInitalFilteredRouteIndexes()
 
     this.setState({
       cargoItems: obj.cargo_items_attributes,
@@ -335,7 +338,7 @@ export class ShipmentDetails extends Component {
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
       selectedDay: obj.shipment.has_pre_carriage
-        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_dropp_off_date,
+        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_drop_off_date,
       origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
       destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
       has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
@@ -744,7 +747,8 @@ export class ShipmentDetails extends Component {
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
-
+    console.log('filteredRouteIndexes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(filteredRouteIndexes)
     const mapBox = (
       <GmapsLoader
         theme={theme}
@@ -772,6 +776,9 @@ export class ShipmentDetails extends Component {
         reusedShipment={this.props.reusedShipment}
       />
     )
+    if (shipmentData.routes.length > 0) {
+      // debugger // eslint-disable-line
+    }
     const formattedSelectedDay = this.state.selectedDay
       ? moment(this.state.selectedDay).format('DD/MM/YYYY')
       : ''

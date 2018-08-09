@@ -3,15 +3,38 @@ function selectFromLookupTable (lookupTablesForRoutes, targetIds, target) {
   const results = []
   targetIds.forEach((targetId) => {
     const lookup = lookupTablesForRoutes[target][targetId]
+    if (!lookup) {
+      debugger // eslint-disable-line
+    }
     lookup.forEach((ri) => {
       if (!results.includes(ri)) {
         results.push(ri)
       }
     })
   })
+  // if (target === 'origin') {
+  //   debugger // eslint-disable-line
+  // }
 
   return results
 }
+
+// function selectOptionIndexes (lookupTablesForRoutes, targetIds, target) {
+//   const results = []
+//   targetIds.forEach((targetId) => {
+//     const lookup = lookupTablesForRoutes[target][targetId]
+//     lookup.forEach((ri) => {
+//       if (!results.includes(ri)) {
+//         results.push(ri)
+//       }
+//     })
+//   })
+//   if (results.length === 1) {
+//     debugger // eslint-disable-line
+//   }
+
+//   return results
+// }
 
 function scopeIndexes (prevIndexes, indexes) {
   const indexSet = new Set(indexes)
