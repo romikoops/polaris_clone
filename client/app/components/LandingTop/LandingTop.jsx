@@ -75,7 +75,7 @@ export class LandingTop extends Component {
       const head = t('landing:descriptionHead')
       const middle = t('landing:descriptionMiddle')
       const tail = t('landing:descriptionTail')
-      
+
       return (<React.Fragment>
         {head}<b>{middle}</b>{tail}
       </React.Fragment>)
@@ -121,7 +121,7 @@ export class LandingTop extends Component {
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className="flex-none layout-row layout-align-start-center">
-                  <h4 className="flex-none">{t('landing:094ae8a8-c7b3-49bc-b4b7-8bf3fef33d7b')}</h4>
+                  <h4 className="flex-none">{t('landing:poweredBy')}</h4>
                   <div className="flex-5" />
                   <img
                     src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
