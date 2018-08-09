@@ -9,10 +9,19 @@ exports[`shallow render 1`] = `
     }
   }
 >
-  <i
-    className="edit_icon fa fa-pencil-square-o"
-    onClick={[Function]}
-  />
+  <div
+    className="flex layout-row"
+    onClick={null}
+  >
+    <i
+      className="plus_icon fa fa-plus"
+      onClick={[Function]}
+    />
+    <i
+      className="edit_icon fa fa-pencil"
+      onClick={[Function]}
+    />
+  </div>
   <div
     className="flex-100 layout-row layout-align-start-start"
   >

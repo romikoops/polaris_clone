@@ -88,11 +88,15 @@ exports[`shallow render 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
-      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
       shipper={Object {}}
       theme={
         Object {
@@ -102,7 +106,6 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      userLocations={Array []}
     />
   </div>
   <Formsy
@@ -410,14 +413,17 @@ exports[`theme is falsy 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
-      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
       shipper={Object {}}
       theme={null}
-      userLocations={Array []}
     />
   </div>
   <Formsy

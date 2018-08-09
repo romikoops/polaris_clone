@@ -139,7 +139,16 @@ exports[`shallow render 1`] = `
       />
       <p
         className="flex-100"
-      />
+      >
+        <p
+          className="flex-100"
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        />
+      </p>
     </div>
   </div>
 </div>
