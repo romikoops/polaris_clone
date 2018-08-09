@@ -215,12 +215,13 @@
   .new_contact_content {
     width: 650px;
     height: 435px;
-    position: relative;
+    position: fixed;
+    top: 208px;
     z-index: 85;
     border-radius: 5px;
     background: #ffffff;
     padding: 15px;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
     padding: 2px 25px;
