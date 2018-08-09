@@ -15,7 +15,6 @@ export default function CollapsingHeading ({
   showArrow,
   headerWrapClasses
 }) {
-  // debugger // eslint-disable-line
   return (
     <div
       style={{ background: '#E0E0E0', color: '#4F4F4F' }}

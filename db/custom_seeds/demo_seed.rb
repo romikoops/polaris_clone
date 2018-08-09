@@ -3,12 +3,16 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(speedtrans)
+subdomains = %w(gateway)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
+  tenant.users.shipper.where.not(id: shipper.id).destroy_all
+  tenant.users.agent.destroy_all
+  tenant.users.agency_manager.destroy_all
+  tenant.agencies.destroy_all
   # shipment = shipper.shipments.where(status: 'requested').first
   # conf_shipment = shipper.shipments.where(status: 'confirmed').first
   # ShippingTools.tenant_notification_email(shipper, shipment)
@@ -25,10 +29,10 @@ subdomains.each do |sub|
 #   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
 #   req = { 'xlsx' => hubs }
 #   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
-  Addon.destroy_all
-  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
-  req = { 'xlsx' => hubs }
-  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
+  # Addon.destroy_all
+  agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
+  req = { 'xlsx' => agents }
+  ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
 # Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
 
   

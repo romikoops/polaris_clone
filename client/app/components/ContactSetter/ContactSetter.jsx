@@ -5,40 +5,26 @@ import defs from '../../styles/default_classes.scss'
 import { Modal } from '../Modal/Modal'
 import ContactSetterBody from './Body'
 import ContactSetterNewContactWrapper from './NewContactWrapper'
+import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 
 export class ContactSetter extends Component {
   constructor (props) {
     super(props)
 
-    this.newContactData = {
-      contact: {
-        companyName: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: ''
-      },
-      location: {
-        street: '',
-        number: '',
-        zipCode: '',
-        city: '',
-        country: '',
-        gecodedAddress: ''
-      }
-    }
     this.contactTypes = props.direction === 'export'
       ? ['shipper', 'consignee', 'notifyee']
       : ['consignee', 'shipper', 'notifyee']
 
     this.state = {
       modal: '',
-      showModal: false
+      showModal: false,
+      contactData: {
+        contact: {},
+        location: {}
+      }
     }
-  }
-
-  setContactForEdit (contactData) {
-    this.setState({ contactData, showModal: true })
+    this.showAddressBook = this.showAddressBook.bind(this)
+    this.showEditContact = this.showEditContact.bind(this)
   }
 
   autofillContact (contactData) {
@@ -53,12 +39,9 @@ export class ContactSetter extends Component {
 
   availableContacts (contactType) {
     const {
-      userLocations, shipper, consignee, notifyees
+      shipper, consignee, notifyees, contacts
     } = this.props
-    let { contacts } = this.props
-    if (contactType === this.contactTypes[0]) {
-      contacts = [...userLocations, ...contacts]
-    }
+
     return contacts.filter(contactData => (
       shipper !== contactData &&
       consignee !== contactData &&
@@ -80,7 +63,10 @@ export class ContactSetter extends Component {
               contacts: this.availableContacts(contactType),
               setContact: (contactData) => {
                 this.props.setContact(contactData, contactType, index)
-                this.setState({ modal: null, showModal: false })
+                this.setState({
+                  modal: null,
+                  showModal: false
+                })
               }
             }}
             ShipmentContactFormProps={{
@@ -90,6 +76,43 @@ export class ContactSetter extends Component {
                 this.props.setContact(contactData, contactType, index)
                 this.setState({ modal: null, showModal: false })
               }
+            }}
+            contactType={contactType}
+          />
+        }
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleShowModal()}
+      />
+    )
+    this.setState({ modal, showModal: true })
+  }
+
+  showEditContact (contactType, index) {
+    const {
+      shipper, consignee, notifyees, contacts, shipmentDispatch
+    } = this.props
+
+    let newSelectedContact
+    if (contactType === 'shipper') {
+      newSelectedContact = shipper
+    } else if (contactType === 'consignee') {
+      newSelectedContact = consignee
+    } else {
+      newSelectedContact = notifyees[index]
+    }
+    const modal = (
+      <Modal
+        component={
+          <ShipmentContactForm
+            showEdit
+            selectedContact={newSelectedContact}
+            theme={this.props.theme}
+            contacts={contacts}
+            shipmentDispatch={shipmentDispatch}
+            setContact={(contactData) => {
+              this.props.setContact(contactData, contactType, index)
+              this.setState({ modal: null, showModal: false })
             }}
             contactType={contactType}
           />
@@ -116,16 +139,19 @@ export class ContactSetter extends Component {
           'layout-row layout-wrap layout-align-center-start'
         }
       >
-        { showModal && modal}
+        {showModal && modal}
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div
             className={`${styles.wrapper_main_h1} flex-100`}
             onClick={null}
           >
+
             <h1> Set Contact Details</h1>
             <hr className={styles.main_hr} />
           </div>
-          <div className="flex-100 layout-row layout-align-center-center">
+          <div
+            className="flex-100 layout-row layout-align-center-center"
+          >
             <ContactSetterBody
               consignee={consignee}
               shipper={shipper}
@@ -133,11 +159,13 @@ export class ContactSetter extends Component {
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
+              showEditContact={(contactType, index) => this.showEditContact(contactType, index)}
               showAddressBook={(contactType, index) => this.showAddressBook(contactType, index)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
             />
           </div>
+
           <hr className={`${styles.main_hr} ${styles.bottom_hr}`} />
         </div>
       </div>
@@ -147,7 +175,6 @@ export class ContactSetter extends Component {
 
 ContactSetter.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
-  userLocations: PropTypes.arrayOf(PropTypes.any),
   shipper: PropTypes.objectOf(PropTypes.any),
   consignee: PropTypes.objectOf(PropTypes.any),
   notifyees: PropTypes.arrayOf(PropTypes.any),
@@ -155,10 +182,10 @@ ContactSetter.propTypes = {
   theme: PropTypes.theme,
   finishBookingAttempted: PropTypes.bool,
   setContact: PropTypes.func.isRequired,
+  shipmentDispatch: PropTypes.shape.isRequired,
   removeNotifyee: PropTypes.func.isRequired
 }
 ContactSetter.defaultProps = {
-  userLocations: [],
   shipper: {},
   consignee: {},
   notifyees: [],

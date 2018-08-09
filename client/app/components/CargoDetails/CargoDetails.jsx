@@ -770,7 +770,7 @@ export class CargoDetails extends Component {
             ) : (
               ''
             )}
-            {scope.customs_export_paper
+            {scope.customs_export_paper && addons.customs_export_paper
               ? <div className="flex-100 layout-row layout-align-center padd_top">
                 <div
                   className={`flex-none ${
