@@ -102,7 +102,7 @@ class UserContacts extends Component {
   }
 
   handleInvalidSubmit () {
-    if (!this.state.submitAttempted) this.setState({ submitAttempted: true }) 
+    if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
 
   render () {
