@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Formsy from 'formsy-react'
+import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
@@ -43,6 +44,7 @@ class AdminClients extends Component {
         password: true,
         password_confirmation: true
       },
+      email: '',
       newClientAttempt: false
     }
     this.toggleNewClient = this.toggleNewClient.bind(this)
@@ -145,6 +147,47 @@ class AdminClients extends Component {
       fontSize: '12px',
       bottom: '10px'
     }
+    const mailCheckCallback = suggestion => (
+      <div className="relative width_100">
+        <FormsyInput
+          wrapperClassName={styles.input_100}
+          className={styles.input}
+          errorMessageStyles={errorStyle}
+          type="text"
+          value={this.state.email}
+          name="email"
+          placeholder="Email *"
+          onChange={(e) => {
+            this.setState({ email: e.target.value })
+          }}
+          submitAttempted={this.state.newClientAttempt}
+          validations={{
+            minLength: 2,
+            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+          }}
+          validationErrors={{
+            isDefaultRequiredValue: 'Must not be blank',
+            minLength: 'Must be at least two characters long',
+            matchRegexp: 'Invalid email'
+          }}
+          required
+        />
+        {suggestion &&
+            <div style={errorStyle}>
+              Did you mean&nbsp;
+              <span
+                className="emulate_link blue_link"
+                onClick={(e) => {
+                  this.setState({ email: suggestion.full })
+                }}
+              >
+                {suggestion.full}
+              </span>?
+            </div>
+        }
+      </div>
+    )
+
     const newClientBox = (
       <Formsy
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -182,23 +225,6 @@ class AdminClients extends Component {
             </div>
           </div>
           <FormsyInput
-            wrapperClassName={styles.input_100}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            type="text"
-            value={newClient.companyName}
-            name="companyName"
-            placeholder="Company Name *"
-            onChange={this.handleFormChange}
-            submitAttempted={this.state.newClientAttempt}
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <FormsyInput
             wrapperClassName={styles.input_50}
             className={styles.input}
             errorMessageStyles={errorStyle}
@@ -232,29 +258,11 @@ class AdminClients extends Component {
             }}
             required
           />
+          <MailCheck email={this.state.email}>
+            {mailCheckCallback}
+          </MailCheck>
           <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            type="text"
-            value={newClient.email}
-            name="email"
-            placeholder="Email *"
-            onChange={this.handleFormChange}
-            submitAttempted={this.state.newClientAttempt}
-            validations={{
-              minLength: 2,
-              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-            }}
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long',
-              matchRegexp: 'Invalid email'
-            }}
-            required
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_50}
+            wrapperClassName={styles.input_33}
             className={styles.input}
             errorMessageStyles={errorStyle}
             type="text"
@@ -271,13 +279,13 @@ class AdminClients extends Component {
             required
           />
           <FormsyInput
-            wrapperClassName={styles.input_street}
+            wrapperClassName={styles.input_60}
             className={styles.input}
             errorMessageStyles={errorStyle}
             type="text"
-            value={newClient.street}
-            name="street"
-            placeholder="Street"
+            value={newClient.companyName}
+            name="companyName"
+            placeholder="Company Name *"
             onChange={this.handleFormChange}
             submitAttempted={this.state.newClientAttempt}
             validations="minLength:2"
@@ -302,7 +310,22 @@ class AdminClients extends Component {
               isDefaultRequiredValue: 'Must not be blank',
               minLength: 'Must be at least one character long'
             }}
-            required
+          />
+          <FormsyInput
+            wrapperClassName={styles.input_street}
+            className={styles.input}
+            errorMessageStyles={errorStyle}
+            type="text"
+            value={newClient.street}
+            name="street"
+            placeholder="Street"
+            onChange={this.handleFormChange}
+            submitAttempted={this.state.newClientAttempt}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_zip}
@@ -319,7 +342,6 @@ class AdminClients extends Component {
               isDefaultRequiredValue: 'Must not be blank',
               minLength: 'Must be at least two characters long'
             }}
-            required
           />
           <FormsyInput
             wrapperClassName={styles.input_cc}
@@ -336,7 +358,6 @@ class AdminClients extends Component {
               isDefaultRequiredValue: 'Must not be blank',
               minLength: 'Must be at least two characters long'
             }}
-            required
           />
           <FormsyInput
             wrapperClassName={styles.input_cc}
@@ -353,7 +374,6 @@ class AdminClients extends Component {
               isDefaultRequiredValue: 'Must not be blank',
               minLength: 'Must be at least two characters long'
             }}
-            required
           />
 
           <div className="flex-100 layout-row">
