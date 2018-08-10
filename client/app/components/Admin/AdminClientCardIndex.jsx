@@ -45,10 +45,11 @@ function listClients (clients, theme) {
     return (
       <div className={`${styles.listelement}`}>
         <GreyBox
+          isBox
           padding
           title=""
           subtitle=""
-          component={clientCard}
+          content={clientCard}
           noMargin
         />
       </div>

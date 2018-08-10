@@ -1,16 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import adminStyles from '../Admin/Admin.scss'
+import styles from './GreyBox.scss'
 
 function GreyBox ({
   title,
   content,
   wrapperClassName,
   contentClassName,
-  titleAction
+  titleAction,
+  flex,
+  isBox,
+  flexGtLg,
+  flexMd,
+  padding,
+  fullWidth
 }) {
   return (
-    <div className={`${adminStyles.border_box} ${wrapperClassName}`}>
+    <div className={`${adminStyles.border_box} ${wrapperClassName} 
+      ${flex === 0 ? 'flex' : (`flex-${flex}`)}
+      ${flexGtLg === 0 ? '' : (`flex-gt-lg-${flexGtLg}`)}
+      ${flexMd === 0 ? '' : (`flex-md-${flexMd}`)}
+      ${padding ? styles.boxpadding : ''}
+      ${isBox ? 'layout-row flex-sm-100 flex-xs-100 layout-align-center-center' : ''} 
+      ${fullWidth ? styles.fullWidth : ''}`}
+    >
       <div className={contentClassName}>
         {title || titleAction ? (
           <div className={`layout-align-space-between-center flex layout-row ${adminStyles.title_grey}`}>
@@ -28,6 +42,12 @@ function GreyBox ({
 }
 
 GreyBox.propTypes = {
+  flex: PropTypes.number,
+  flexGtLg: PropTypes.number,
+  flexMd: PropTypes.number,
+  fullWidth: PropTypes.bool,
+  isBox: PropTypes.bool,
+  padding: PropTypes.bool,
   title: PropTypes.string.isRequired,
   content: PropTypes.node,
   titleAction: PropTypes.node,
@@ -36,6 +56,12 @@ GreyBox.propTypes = {
 }
 
 GreyBox.defaultProps = {
+  flex: 0,
+  flexGtLg: 0,
+  flexMd: 0,
+  fullWidth: false,
+  isBox: false,
+  padding: false,
   wrapperClassName: '',
   contentClassName: '',
   content: [''],

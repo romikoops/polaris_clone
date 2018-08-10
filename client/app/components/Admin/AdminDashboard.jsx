@@ -93,7 +93,7 @@ export class AdminDashboard extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
 
-    const preparedRequestedShipments = shipments.requested ? shipments.requested
+    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, 4)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
     const mapComponent = (
@@ -138,6 +138,7 @@ export class AdminDashboard extends Component {
         <div className="layout-padding flex-100 layout-align-start-center greyBg">
           <span><b>Requested Shipments</b></span>
         </div>
+        {console.log(preparedRequestedShipments)}
         <ShipmentOverviewCard
           admin
           noTitle
@@ -152,10 +153,12 @@ export class AdminDashboard extends Component {
           <span className="flex-15" onClick={() => this.handleViewShipments()}><u><b>See more shipments</b></u></span>
           <div className={`flex-85 ${styles.separator}`} />
         </div>
-        <GreyBox
-          flex={100}
-          component={mapComponent}
-        />
+        <div className="margin_bottom flex-100">
+          <GreyBox
+            flex={100}
+            content={mapComponent}
+          />
+        </div>
         <div className="layout-row layout-wrap flex-100 layout-align-space-between-stretch">
           <div className="flex-gt-md-60 flex-100">
             <AdminHubCard

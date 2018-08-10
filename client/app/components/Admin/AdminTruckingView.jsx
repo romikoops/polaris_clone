@@ -251,6 +251,7 @@ export class AdminTruckingView extends Component {
           return (
             <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center">
               <GreyBox
+                isBox
                 padding
                 component={(
                   <div

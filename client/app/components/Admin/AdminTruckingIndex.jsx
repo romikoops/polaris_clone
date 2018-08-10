@@ -170,7 +170,7 @@ export class AdminTruckingIndex extends Component {
 
     return (
       <div className="flex-100 layout-row layout-align-space-between-start">
-        <div className={`${styles.component_view} flex-80 flex-sm-100 flex-xs-100 flex-md-70 layout-row layout-align-start-start`}>
+        <div className="layout-row flex-80 flex-sm-100">
           <AdminSearchableHubs
             theme={theme}
             hubs={results}

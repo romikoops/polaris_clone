@@ -270,7 +270,7 @@ export class AdminHubsIndex extends Component {
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="layout-row flex-80 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
-              <div className="layout-row flex-95 layout-wrap" style={{ minHeight: '450px' }}>
+              <div className="layout-row flex-95 layout-wrap card_margin_right" style={{ minHeight: '450px' }}>
                 {hubsArr}
               </div>
 

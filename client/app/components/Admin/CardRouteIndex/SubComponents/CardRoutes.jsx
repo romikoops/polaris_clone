@@ -32,7 +32,7 @@ class CardRoutes extends Component {
         onClick={disabled ? onDisabledClick : () => handleClick(itinerary.id)}
       >
         <div
-          className={`${styles.card_route_pricing} ${disabledClass} flex`}
+          className={`${styles.card_route_pricing} ${disabledClass} margin_bottom flex`}
 
         >
           <div className={styles.top_routes}>

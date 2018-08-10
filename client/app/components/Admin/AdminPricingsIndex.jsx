@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router'
 import { AdminPriceCreator } from './'
-// import { AdminSearchableClients } from './AdminSearchables'
-// import FileUploader from '../../components/FileUploader/FileUploader'
-// import DocumentsDownloader from '../../components/Documents/Downloader'
-// import { adminPricing as priceTip } from '../../constants'
 import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
@@ -131,7 +127,7 @@ export class AdminPricingsIndex extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
         <Tabs
-          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+          wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
         >
           {motTabs}
 

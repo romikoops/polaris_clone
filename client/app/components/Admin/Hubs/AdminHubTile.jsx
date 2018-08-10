@@ -73,7 +73,7 @@ export class AdminHubTile extends Component {
 
     return (
       <GradientBorder
-        wrapperClassName={`flex-30 ${styles.hub_card} ${styles[hub.data.hub_status]} layout-align-end-stretch layout-row layout-wrap pointy`}
+        wrapperClassName={`flex-30 ${styles.hub_card} ${styles[hub.data.hub_status]} margin_bottom layout-align-end-stretch layout-row layout-wrap pointy`}
         gradient={gradientBorderStyle}
         className="layout-column flex-100"
         data-for={tooltipId}
