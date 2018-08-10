@@ -102,8 +102,7 @@ class UserContacts extends Component {
   }
 
   handleInvalidSubmit () {
-    console.log(this)
-    // this.disableSubmitButton()
+    if (!this.state.submitAttempted) this.setState({ submitAttempted: true }) 
   }
 
   render () {
@@ -157,7 +156,12 @@ class UserContacts extends Component {
             value={newContact.firstName}
             name="firstName"
             placeholder="First Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -168,7 +172,12 @@ class UserContacts extends Component {
             value={newContact.lastName}
             name="lastName"
             placeholder="Last Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
           <FormsyInput
             wrapperClassName={styles.input_100}
@@ -179,7 +188,11 @@ class UserContacts extends Component {
             value={newContact.companyName}
             name="companyName"
             placeholder="Company Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -189,8 +202,17 @@ class UserContacts extends Component {
             type="text"
             value={newContact.email}
             name="email"
-            placeholder="Email"
-            // onChange={this.handleFormChange}
+            placeholder="email"
+            validations={{
+              minLength: 2,
+              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+            }}
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long',
+              matchRegexp: 'Invalid email'
+            }}
+            required
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -201,7 +223,12 @@ class UserContacts extends Component {
             value={newContact.phone}
             name="phone"
             placeholder="Phone"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -212,7 +239,11 @@ class UserContacts extends Component {
             value={newContact.street}
             name="street"
             placeholder="Street"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -223,7 +254,11 @@ class UserContacts extends Component {
             value={newContact.number}
             name="number"
             placeholder="Street Number"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:1"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least one character long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -234,7 +269,11 @@ class UserContacts extends Component {
             value={newContact.zipCode}
             name="zipCode"
             placeholder="Postal Code"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -245,7 +284,11 @@ class UserContacts extends Component {
             value={newContact.city}
             name="city"
             placeholder="City"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -256,7 +299,11 @@ class UserContacts extends Component {
             value={newContact.country}
             name="country"
             placeholder="Country"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:4"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least four characters long'
+            }}
           />
           <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
             <RoundButton
