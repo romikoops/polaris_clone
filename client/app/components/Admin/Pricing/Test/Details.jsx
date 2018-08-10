@@ -28,6 +28,7 @@ import calcAvailableMotsForRoute,
 { shouldUpdateAvailableMotsForRoute } from '../../../ShipmentDetails/calcAvailableMotsForRoute'
 import getRequests from '../../../ShipmentLocationBox/getRequests'
 import reuseShipments from '../../../../helpers/reuseShipment'
+import { moment } from '../../../../constants'
 
 export class Details extends Component {
   static scrollTo (target) {
@@ -537,7 +538,7 @@ export class Details extends Component {
 
   handleNextStage () {
     const {
-      origin, destination, selectedDay, incoterm
+      origin, destination, incoterm
     } = this.state
     if (
       (!origin.nexus_id && !this.state.has_pre_carriage) ||
@@ -551,12 +552,7 @@ export class Details extends Component {
 
       return
     }
-    if (!selectedDay) {
-      this.incrementNextStageAttemps()
-      Details.scrollTo('dayPicker')
-
-      return
-    }
+    const selectedDay = moment().add(7, 'days')
 
     if (!incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
       this.incrementNextStageAttemps()
@@ -581,6 +577,7 @@ export class Details extends Component {
     }
 
     const shipment = {
+      isQuote: true,
       id: this.state.shipment.id,
       origin,
       destination,
@@ -681,7 +678,6 @@ export class Details extends Component {
   }
   shouldProceedToCargo () {
     const { origin, destination } = this.state
-    debugger // eslint-disable-line
     if ((origin.nexus_id || origin.street_address) &&
     (destination.nexus_id || destination.street_address)) {
       this.props.setStep(3)
@@ -823,6 +819,13 @@ export class Details extends Component {
             )}
             <div className="flex-100 layout-row layout-align-center-center">
               {cargoDetails}
+            </div>
+            <div className="flex-100 layout-row layout-align-center-center">
+              <RoundButton
+                text="Get Prices"
+                handleNext={this.handleNextStage}
+                theme={theme}
+              />
             </div>
           </div>
           : '' }
