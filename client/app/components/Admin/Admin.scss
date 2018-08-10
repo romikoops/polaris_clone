@@ -154,7 +154,8 @@
   .new_contact_content {
     width: 650px;
     height: 550px;
-    position: relative;
+    position: fixed;
+    top: 125px;
     z-index: 85;
     border-radius: 5px;
     background: #ffffff;
