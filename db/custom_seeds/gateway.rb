@@ -18,12 +18,17 @@ subdomains.each do |sub|
   tenant.hubs.destroy_all
   tenant.nexuses.destroy_all
   tenant.users.shipper.where.not(id: shipper.id).destroy_all
+  tenant.users.agent.destroy_all
+  tenant.users.agency_manager.destroy_all
+  tenant.agencies.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/gateway/gateway__clients.xlsx")
-  req = { 'xlsx' => hubs }
-  ExcelTool::ClientsOverwriter.new(params: req, _user: shipper).perform
-
+  # hubs = File.open("#{Rails.root}/db/dummydata/gateway/gateway__clients.xlsx")
+  # req = { 'xlsx' => hubs }
+  # ExcelTool::ClientsOverwriter.new(params: req, _user: shipper).perform
+  agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
+  req = { 'xlsx' => agents }
+  ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
   hubs = File.open("#{Rails.root}/db/dummydata/gateway/gateway__hubs.xlsx")
   req = { 'xlsx' => hubs }
   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform

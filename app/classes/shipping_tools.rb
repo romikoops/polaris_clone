@@ -25,9 +25,16 @@ module ShippingTools
       # TBD - Create custom errors (ApplicationError)
       shipment.save!
     end
-
-    itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-      Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+    if tenant.scope["quotation_tool"]
+      user_pricing_id = current_user.agency.agency_manager_id
+      byebug
+      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+        Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+      end
+    else
+      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+      end
     end
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(

@@ -343,7 +343,6 @@ export class AdminShipmentView extends Component {
     if (!shipmentData || !hubs || !clients) {
       return <h1>NO DATA</h1>
     }
-    // debugger // eslint-disable-line
     const {
       contacts,
       shipment,

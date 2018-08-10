@@ -214,13 +214,14 @@
   }
   .new_contact_content {
     width: 650px;
-    height: 400px;
-    position: relative;
+    height: 435px;
+    position: fixed;
+    top: 208px;
     z-index: 85;
     border-radius: 5px;
     background: #ffffff;
     padding: 15px;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
     padding: 2px 25px;
@@ -238,43 +239,24 @@
     text-align: center;
   }
   .input {
-    margin: 5px;
+    margin: 5px 5px 15px;
     height: 36.91px;
+    width: 80%;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
-  .input_50 {
-    @extend .input;
-    // width: 250px;
-    width: calc(48% - 20px);
-  }
   .input_100 {
-    @extend .input;
-    // width: 5 20px;
-    width: calc(100% - 20px);
+    width: 100%;
   }
-  .input_zip {
-    @extend .input;
-    // width: 141px;
-    width: calc(28% - 20px);
+  .input_50 {
+    width: 50%;
   }
-  .input_cc{
-    @extend .input;
-    // width: 174px;
-    width: calc(33% - 20px);
+  .input_33{
+    width: 33%;
   }
-  .input_no {
-    @extend .input;
-    // width: 115px;
-    width: calc(18% - 20px);
-  }
-  .input_street {
-    @extend .input;
-    // width: 385px;
-    width: calc(78% - 20px);
-  }
+
   .contact_header, .contact_header p {
     color: #212121;
     // font-family: ".SF NS Display";

@@ -86,7 +86,7 @@ export default function getInputs (
             <ValidatedInput
               wrapperClassName="flex-60"
               name={`${i}-payload_in_kg`}
-              value={cargoItem.payload_in_kg}
+              value={cargoItem.payload_in_kg || ''}
               type="number"
               onChange={handleDelta}
               firstRenderInputs={firstRenderInputs}
@@ -219,6 +219,9 @@ export default function getInputs (
         className={`flex-90 layout-row ${styles.input_box}`}
         data-tip={heightDataTip}
         ref={(div) => { heightRef = div }}
+        data-event="disable"
+        onMouseEnter={() => ReactTooltip.show(heightRef)}
+        onFocus={() => ReactTooltip.show(heightRef)}
         onBlur={() => ReactTooltip.hide(heightRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
@@ -229,7 +232,7 @@ export default function getInputs (
             <ValidatedInput
               wrapperClassName="flex-55"
               name={`${i}-dimension_z`}
-              value={cargoItem.dimension_z}
+              value={cargoItem.dimension_z || ''}
               type="number"
               min="0"
               step="any"
@@ -284,6 +287,9 @@ export default function getInputs (
         className={`flex-90 layout-row ${styles.input_box}`}
         data-tip={lengthDataTip}
         ref={(div) => { lengthRef = div }}
+        data-event="disable"
+        onMouseEnter={() => ReactTooltip.show(lengthRef)}
+        onFocus={() => ReactTooltip.show(lengthRef)}
         onBlur={() => ReactTooltip.hide(lengthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
@@ -295,7 +301,7 @@ export default function getInputs (
             <ValidatedInput
               wrapperClassName="flex-55"
               name={`${i}-dimension_x`}
-              value={cargoItem.dimension_x}
+              value={cargoItem.dimension_x || ''}
               type="number"
               min="0"
               step="any"
@@ -350,8 +356,11 @@ export default function getInputs (
       <ReactTooltip effect="solid" />
       <div
         className={`flex-90 layout-row ${styles.input_box}`}
-        data-tip={widthDataTip}
         ref={(div) => { widthRef = div }}
+        data-tip={widthDataTip}
+        data-event="disable"
+        onMouseEnter={() => ReactTooltip.show(widthRef)}
+        onFocus={() => ReactTooltip.show(widthRef)}
         onBlur={() => ReactTooltip.hide(widthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
@@ -362,7 +371,7 @@ export default function getInputs (
             <ValidatedInput
               wrapperClassName="flex-55"
               name={`${i}-dimension_y`}
-              value={cargoItem.dimension_y}
+              value={cargoItem.dimension_y || ''}
               type="number"
               min="0"
               step="any"

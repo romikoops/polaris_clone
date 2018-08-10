@@ -16,6 +16,7 @@ function handleResponse (response) {
 
 function getStoredShipment () {
   const storedShipment = JSON.parse(localStorage.getItem('shipment'))
+
   return storedShipment || {}
 }
 
@@ -44,6 +45,7 @@ function newShipment (details) {
     body: JSON.stringify({ details })
   }
   const url = `${BASE_URL}/create_shipment`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -54,6 +56,7 @@ function getOffers (data) {
     body: JSON.stringify(data)
   }
   const url = `${BASE_URL}/shipments/${data.shipment.id}/get_offers`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -64,6 +67,7 @@ function chooseOffer (data) {
     body: JSON.stringify(data)
   }
   const url = `${BASE_URL}/shipments/${data.id}/choose_offer`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -74,6 +78,7 @@ function setShipmentContacts (data) {
     body: JSON.stringify(data)
   }
   const url = `${BASE_URL}/shipments/${data.shipment.id}/update_shipment`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 function requestShipment (id) {
@@ -82,6 +87,7 @@ function requestShipment (id) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
   const url = `${BASE_URL}/shipments/${id}/request_shipment`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 function getNotes (noteIds) {
@@ -91,6 +97,7 @@ function getNotes (noteIds) {
     body: JSON.stringify(noteIds)
   }
   const url = `${BASE_URL}/notes/fetch`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -114,6 +121,7 @@ function updateCurrency (currency) {
     body: JSON.stringify({ currency })
   }
   const url = `${BASE_URL}/currencies/set`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -122,11 +130,25 @@ function deleteDocument (documentId) {
     method: 'GET',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/documents/delete/${documentId}`, requestOptions).then(handleResponse)
+}
+
+function updateContact (data) {
+  const formData = new FormData()
+  formData.append('update', JSON.stringify(data))
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+    body: formData
+  }
+
+  return fetch(`${BASE_URL}/contacts/update_contact/${data.id}`, requestOptions).then(handleResponse)
 }
 
 export const shipmentService = {
   newShipment,
+  updateContact,
   getAll,
   getShipment,
   chooseOffer,

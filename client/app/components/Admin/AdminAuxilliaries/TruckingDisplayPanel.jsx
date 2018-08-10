@@ -533,7 +533,6 @@ export class TruckingDisplayPanel extends Component {
             <div
               className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
             >
-              {console.log(modKey)}
               <img src={TRUCKING_ICONS[modKey]} alt="Group_5" border="0" />
               <p className="flex no_m">{`${capitalize(modKey)} Ranges`}:</p>
               {editable ? saveClose : startEdit}
