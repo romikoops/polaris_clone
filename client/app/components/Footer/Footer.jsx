@@ -90,15 +90,18 @@ export function Footer ({ theme, tenant, isShop }) {
         </div>
         <div className={`flex-100 layout-align-center ${styles.button_row}`}>
           <div className={`flex-100 ${styles.button_row}
-          layout-row layout-align-center-center ${styles.lower_footer}`}
+          layout-row layout-align-space-between-center ${styles.lower_footer}`}
           >
-            <div className={`flex-50 ${styles.buttons}
+            <div className="flex-20" />
+            <div className={`flex-60 ${styles.buttons}
             layout-row layout-align-center-center`}
             >
-              <div className="flex-65 layout-row layout-align-end-center">
+              <div className="flex-45 layout-row layout-align-end-center">
                 <div className="flex-5" />
                 <p className="flex-none">Powered by</p>
                 <div className="flex-5" />
+              </div>
+              <div className="flex-55 layout-row layout-align-start-center">
                 <img
                   src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                   alt=""
@@ -107,8 +110,8 @@ export function Footer ({ theme, tenant, isShop }) {
               </div>
             </div>
             { isShop
-              ? <div className={`flex-20 layout-row layout-align-end ${styles.copyright_shop}`}>
-                <p className="flex-none">
+              ? <div className={`flex-20 layout-row layout-align-center ${styles.copyright_shop}`}>
+                <p className="flex-80">
                     Copyright © {moment().format('YYYY')} {tenantName}
                 </p>
               </div>
