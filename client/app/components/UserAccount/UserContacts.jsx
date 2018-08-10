@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Formsy from 'formsy-react'
+import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
@@ -15,13 +16,21 @@ import {
   areEqual
 } from '../../helpers'
 
+const errorStyle = {
+  position: 'absolute',
+  left: '8px',
+  fontSize: '12px',
+  bottom: '-2px'
+}
+
 class UserContacts extends Component {
   constructor (props) {
     super(props)
     this.state = {
       newContactBool: false,
       newContact: {},
-      submitAttempted: false
+      submitAttempted: false,
+      email: ''
     }
     this.viewContact = this.viewContact.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
@@ -111,12 +120,47 @@ class UserContacts extends Component {
       theme, contacts, hubs, contactData, userDispatch, loading
     } = this.props
 
-    const errorStyle = {
-      position: 'absolute',
-      left: '7px',
-      fontSize: '12px',
-      bottom: '-2px'
-    }
+    const mailCheckCallback = suggestion => (
+      <div className="relative width_100">
+        <FormsyInput
+          wrapperClassName={styles.input_100}
+          className={styles.input}
+          errorMessageStyles={errorStyle}
+          submitAttempted={submitAttempted}
+          type="text"
+          value={this.state.email}
+          onChange={(e) => {
+            this.setState({ email: e.target.value })
+          }}
+          name="email"
+          placeholder="email"
+          validations={{
+            minLength: 2,
+            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+          }}
+          validationErrors={{
+            isDefaultRequiredValue: 'Must not be blank',
+            minLength: 'Must be at least two characters long',
+            matchRegexp: 'Invalid email'
+          }}
+          required
+        />
+        {suggestion &&
+            <div style={errorStyle}>
+              Did you mean&nbsp;
+              <span
+                className="emulate_link blue_link"
+                onClick={(e) => {
+                  this.setState({ email: suggestion.full })
+                }}
+              >
+                {suggestion.full}
+              </span>?
+            </div>
+        }
+      </div>
+    )
+
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -180,7 +224,7 @@ class UserContacts extends Component {
             required
           />
           <FormsyInput
-            wrapperClassName={styles.input_100}
+            wrapperClassName={styles.input_60}
             className={styles.input}
             errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
@@ -195,27 +239,7 @@ class UserContacts extends Component {
             }}
           />
           <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.email}
-            name="email"
-            placeholder="email"
-            validations={{
-              minLength: 2,
-              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-            }}
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long',
-              matchRegexp: 'Invalid email'
-            }}
-            required
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_50}
+            wrapperClassName={styles.input_33}
             className={styles.input}
             errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
@@ -230,6 +254,9 @@ class UserContacts extends Component {
             }}
             required
           />
+          <MailCheck email={this.state.email}>
+            {mailCheckCallback}
+          </MailCheck>
           <FormsyInput
             wrapperClassName={styles.input_50}
             className={styles.input}
