@@ -148,7 +148,7 @@ module ExcelTool
     def set_pricing_key(row)
       @pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}\
       _#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}\
-      _#{row[:mot]}_#{row[:vehicle]}"
+      _#{row[:mot]}_#{row[:vehicle]}_#{row[:customer_id]}"
     end
 
     def set_cargo_type(row)
@@ -186,7 +186,7 @@ module ExcelTool
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
       if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
         puts row
-        byebug
+        
       end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids

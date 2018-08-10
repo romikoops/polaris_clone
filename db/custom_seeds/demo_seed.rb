@@ -3,12 +3,16 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(speedtrans)
+subdomains = %w(gateway)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
   shipper = tenant.users.shipper.first
+  tenant.users.shipper.where.not(id: shipper.id).destroy_all
+  tenant.users.agent.destroy_all
+  tenant.users.agency_manager.destroy_all
+  tenant.agencies.destroy_all
   # shipment = shipper.shipments.where(status: 'requested').first
   # conf_shipment = shipper.shipments.where(status: 'confirmed').first
   # ShippingTools.tenant_notification_email(shipper, shipment)
@@ -25,18 +29,11 @@ subdomains.each do |sub|
 #   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
 #   req = { 'xlsx' => hubs }
 #   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
-<<<<<<< HEAD
-Translator::TranslationSetter.new(
-    text: 'Introducing Online Freight Booking Services',
-    lang: 'en',
-    section: 'landing').perform
-=======
-  Addon.destroy_all
-  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
-  req = { 'xlsx' => hubs }
-  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
+  # Addon.destroy_all
+  agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
+  req = { 'xlsx' => agents }
+  ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
 # Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
->>>>>>> 452a163016f161a5a22e40b0e8dd873af9a280fc
 
   
 
@@ -54,15 +51,6 @@ Translator::TranslationSetter.new(
   #   hub_type: 'ocean',
   #   direction: 'import').perform
 
-<<<<<<< HEAD
-#   res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
-#     tenant: tenant,
-#     counterpart_hub: 'Copenhagen Port',
-#     direction: 'import',
-#     cargo_class: 'lcl').perform
-
-#   path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
-=======
   # res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
   #   tenant: tenant,
   #   counterpart_hub: 'Copenhagen Port',
@@ -70,7 +58,6 @@ Translator::TranslationSetter.new(
   #   cargo_class: 'lcl').perform
 
   # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
->>>>>>> 452a163016f161a5a22e40b0e8dd873af9a280fc
   
   # ex_data = DataParser::PfcNordic::SheetParserExport.new(
   #   path: path,

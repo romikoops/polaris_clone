@@ -19,8 +19,13 @@ class OfferCalculator
     @trucking_data      = @trucking_data_builder.perform(@hubs)
     @routes             = @route_finder.perform(@hubs)
     @routes             = @route_filter.perform(@routes)
-    @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
-    @detailed_schedules = @detailed_schedules_builder.perform(@schedules, @trucking_data, @user)
+    if @user.tenant.scope["quotation_tool"]
+      @route_objs          = @quote_route_builder.perform(@routes)
+      @detailed_schedules = @detailed_quote_builder.perform(@route_objs, @trucking_data, @user)
+    else
+      @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
+      @detailed_schedules = @detailed_schedules_builder.perform(@schedules, @trucking_data, @user)
+    end
   end
 
   private
@@ -32,7 +37,9 @@ class OfferCalculator
     @route_finder               = RouteFinder.new(@shipment)
     @route_filter               = RouteFilter.new(@shipment)
     @schedule_finder            = ScheduleFinder.new(@shipment)
+    @quote_route_builder            = QuoteRouteBuilder.new(@shipment)
     @detailed_schedules_builder = DetailedSchedulesBuilder.new(@shipment)
+    @detailed_quote_builder = DetailedQuoteBuilder.new(@shipment)
   end
 
   def update_shipment

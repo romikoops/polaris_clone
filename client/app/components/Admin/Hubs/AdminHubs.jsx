@@ -79,7 +79,8 @@ class AdminHubs extends Component {
       adminDispatch,
       document,
       documentDispatch,
-      numHubPages
+      numHubPages,
+      tenant
     } = this.props
 
     const uploadStatus = document.viewer ? (
@@ -91,6 +92,7 @@ class AdminHubs extends Component {
     ) : (
       ''
     )
+    const scope = tenant && tenant.data ? tenant.data.scope : {}
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -113,6 +115,7 @@ class AdminHubs extends Component {
                 {...props}
                 toggleNewHub={this.toggleNewHub}
                 viewHub={this.viewHub}
+                scope={scope}
                 numHubPages={numHubPages}
                 documentDispatch={documentDispatch}
                 getHubsFromPage={this.getHubsFromPage}
@@ -147,6 +150,7 @@ AdminHubs.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   dispatch: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
+  tenant: PropTypes.tenant,
   loading: PropTypes.bool,
   countries: PropTypes.arrayOf(PropTypes.any),
   numHubPages: PropTypes.number,
@@ -169,6 +173,7 @@ AdminHubs.defaultProps = {
   loading: false,
   hub: null,
   hubHash: null,
+  tenant: {},
   countries: [],
   numHubPages: 1
 }
