@@ -76,9 +76,11 @@ export class LandingTop extends Component {
       const middle = t('landing:descriptionMiddle')
       const tail = t('landing:descriptionTail')
 
-      return (<React.Fragment>
-        {head}<b>{middle}</b>{tail}
-      </React.Fragment>)
+      return (
+        <React.Fragment>
+          {head}<b>{middle}</b>{tail}
+        </React.Fragment>
+      )
     }
 
     return (

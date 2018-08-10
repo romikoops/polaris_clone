@@ -1,7 +1,9 @@
 {
     "en": {
       "common": {
-        "accountTitle": "My Account"
+        "accountTitle": "My Account",
+        "availableDestinations": "Available Destinations",
+        "newContact": "NEW CONTACT"
       },
       "landing": {
         "title": "Introducing Online Freight Booking Services",
