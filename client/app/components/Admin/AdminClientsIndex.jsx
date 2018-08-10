@@ -195,6 +195,12 @@ class AdminClientsIndex extends Component {
         </div>
       </div>
     )
+    // const sideBoxStyle = {
+    //   position: 'absolute',
+    //   top: '120px',
+    //   right: '0px',
+    //   backgroundColor: 'white'
+    // }
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
