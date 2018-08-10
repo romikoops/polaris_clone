@@ -6,9 +6,7 @@ class Admin::ClientsController < Admin::AdminBaseController
   def index
     shipper_role = Role.find_by_name("shipper")
     manager_role = Role.find_by_name("sub_admin")
-    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json).map do |client|
-      client.as_json(include: { location: { include: { country: { only: :name} }, except: %i(created_at updated_at country_id) } }, except: %i(created_at updated_at location_id))
-    end
+    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false).map(&:for_admin_json)
 
     managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
     response_handler(clients: clients, managers: managers)
