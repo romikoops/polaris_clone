@@ -341,6 +341,16 @@ function assignDedicatedPricings (pricing, clientIds) {
   return fetch(`${BASE_URL}/admin/pricings/assign_dedicated`, requestOptions)
     .then(handleResponse)
 }
+function getPricingsTest (data) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data })
+  }
+
+  return fetch(`${BASE_URL}/admin/pricings/test/${data.itineraryId}`, requestOptions)
+    .then(handleResponse)
+}
 
 function updateServiceCharge (id, data) {
   const requestOptions = {
@@ -636,7 +646,8 @@ export const adminService = {
   updateHubMandatoryCharges,
   assignDedicatedPricings,
   searchHubs,
-  getAllHubs
+  getAllHubs,
+  getPricingsTest
 }
 
 export default adminService

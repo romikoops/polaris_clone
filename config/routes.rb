@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       get  'route_pricings/:id',  to: 'pricings#route'
       post 'pricings/download', to: 'pricings#download_pricings'
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/test', to: 'pricings#test'
       post 'pricings/train_and_ocean_pricings/process_csv',
         to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
 

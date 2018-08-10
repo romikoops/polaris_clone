@@ -4,10 +4,11 @@ import { withRouter } from 'react-router-dom'
 import React, { Component } from 'react'
 import PropTypes from '../../../../prop-types'
 import styles from '../../../../containers/Shop/Shop.scss'
-import { shipmentActions } from '../../../../actions/shipment.actions'
-import bookingSummaryActions from '../../../../actions/bookingSummary.actions'
+import { adminActions } from '../../../../actions/shipment.actions'
 import stageActions from '../../../../containers/Shop/stageActions'
-import { Details } from './Details'
+import CargoItemInputs from './CargoItemInputs'
+import ContainerInputs from './ContainerInputs'
+import { RoundButton } from '../../../RoundButton/RoundButton'
 
 class AdminPricingTest extends Component {
   static statusRequested (props) {
@@ -27,27 +28,16 @@ class AdminPricingTest extends Component {
       stageTracker: {},
       loadType: '',
       direction: '',
-      // shopType: 'Booking',
-      // fakeLoading: false,
-      // showRegistration: false,
+      cargoUnits: [{}],
+      charges: {
+        has_pre_carriage: false,
+        has_on_carriage: false
+      },
       step: 1
     }
     this.selectLoadType = this.selectLoadType.bind(this)
-    this.selectShipmentStage = this.selectShipmentStage.bind(this)
-    props.bookingSummaryDispatch.update()
-  }
-  componentWillReceiveProps (nextProps) {
-    // if (AdminPricingTest.statusRequested(nextProps) && !AdminPricingTest.statusRequested(this.props)) {
-    //   this.setState({ fakeLoading: true })
-    //   setTimeout(() => this.setState({ fakeLoading: false }), 3000)
-    // }
   }
 
-  shouldComponentUpdate (nextProps) {
-    const { loggingIn, registering, loading } = nextProps
-
-    return loading || !(loggingIn || registering)
-  }
   setDirection (direction) {
     this.setState({ direction }, () => this.shouldGetShipment())
   }
@@ -58,16 +48,41 @@ class AdminPricingTest extends Component {
     this.setState({ step })
   }
 
-  getShipment (loadType) {
-    const { shipmentDispatch } = this.props
-    shipmentDispatch.newShipment(loadType, false)
-    this.setState({ step: 2 })
+  getPrices () {
+    const {
+      loadType,
+      direction,
+      cargoUnits,
+      charges
+    } = this.state
+    const { adminDispatch, itinerary } = this.props
+    const { has_pre_carriage, has_on_carriage } = charges // eslint-disable-line
+    const request = {
+      load_type: loadType,
+      direction,
+      cargo_units: cargoUnits,
+      has_pre_carriage,
+      has_on_carriage,
+      itineraryId: itinerary.id
+    }
+    adminDispatch.getPricingsTest(request)
+
   }
+
   shouldGetShipment () {
     const { direction, loadType } = this.state
     if (direction !== '' && loadType !== '') {
-      this.getShipment({ loadType, direction })
+      this.setStep(2)
     }
+  }
+  handleCargoChange (e, index) {
+    const { name, value } = e.target
+    this.setState((prevState) => {
+      const { cargoUnits } = prevState
+      cargoUnits[index][name] = value
+
+      return { cargoUnits }
+    })
   }
 
   selectLoadType (loadType) {
@@ -78,9 +93,21 @@ class AdminPricingTest extends Component {
     this.setState({ stageTracker: { stage } })
   }
 
-  toggleShowMessages () {
-    this.setState({
-      showMessages: !this.state.showMessages
+  toggleCharges (target) {
+    const adjTarget = target === 'export' ? 'has_pre_carriage' : 'has_on_carriage'
+    this.setState(prevState => ({
+      charges: {
+        ...prevState.charges,
+        [adjTarget]: !prevState.charges[adjTarget]
+      }
+    }))
+  }
+  addCargo () {
+    this.setState((prevState) => {
+      const { cargoUnits } = prevState
+      cargoUnits.push({})
+
+      return { cargoUnits }
     })
   }
 
@@ -94,7 +121,7 @@ class AdminPricingTest extends Component {
       dashboard
     } = this.props
     const {
-      stageTracker, step, direction, loadType
+      stageTracker, step, direction, loadType, cargoUnits
     } = this.state
     const {
       theme
@@ -110,6 +137,9 @@ class AdminPricingTest extends Component {
     }
 
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
+    const cargoInputs = loadType === 'container'
+      ? cargoUnits.map((cu, i) => <CargoItemInputs cargoItem={cu} handleChange={e => this.handleCargoChange(e, i)} index={i} />)
+      : cargoUnits.map((cu, i) => <ContainerInputs cargoItem={cu} handleChange={e => this.handleCargoChange(e, i)} index={i} />)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
@@ -154,26 +184,67 @@ class AdminPricingTest extends Component {
         </div>
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-start"
-          style={step >= 2 ? {} : { display: 'none' }}
+          style={step === 2 ? {} : { display: 'none' }}
         >
-          <Details
-            {...this.props}
-            tenant={tenant}
-            user={user}
-            dashboard={dashboard}
-            shipmentData={shipmentData}
-            step={step}
-            setStep={e => this.setStep(e)}
-            prevRequest={request && request.stage2 ? request.stage2 : {}}
-            req={request && request.stage1 ? request.stage1 : {}}
-            getOffers={data => shipmentDispatch.getOffers(data, false)}
-            setStage={this.selectShipmentStage}
-            messages={error ? error.stage2 : []}
-            shipmentDispatch={shipmentDispatch}
-            bookingSummaryDispatch={bookingSummaryDispatch}
-            reusedShipment={reusedShipment}
-            hideMap
-          />
+          {cargoInputs}
+          <div className="flex-100 layout-row layout-align-end-center">
+            <RoundButton
+              size="small"
+              handleNext={() => this.addCargo()}
+              theme={theme}
+              text="Add Cargo"
+              active
+            />
+          </div>
+          <div className="flex-100 layout-row layout-align-end-center">
+            <RoundButton
+              size="small"
+              handleNext={() => this.setStep(3)}
+              theme={theme}
+              text="Next"
+              active
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-center-start"
+          style={step === 3 ? {} : { display: 'none' }}
+        >
+          {cargoInputs}
+          <div className="flex-100 layout-row layout-align-end-center">
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div
+                className="flex-45 layout-row layout-align-center-center"
+                onClick={() => this.toggleCharges('export')}
+                style={direction === 'export' ? selectedStyle : {}}
+              >
+                <p className="flex-none">Export</p>
+              </div>
+              <div
+                className="flex-45 layout-row layout-align-center-center"
+                onClick={() => this.toggleCharges('import')}
+                style={direction === 'import' ? selectedStyle : {}}
+              >
+                <p className="flex-none">Import</p>
+              </div>
+
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-end-center">
+            <RoundButton
+              size="small"
+              handleNext={() => this.getPrices()}
+              theme={theme}
+              text="Get Prices"
+              active
+            />
+          </div>
+          </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-center-start"
+          style={step === 4 ? {} : { display: 'none' }}
+        >
+
         </div>
         <div className={styles.pusher_bottom} />
       </div>
@@ -186,76 +257,41 @@ AdminPricingTest.propTypes = {
   tenant: PropTypes.object,
   theme: PropTypes.theme,
   user: PropTypes.user,
-  loading: PropTypes.bool,
-  bookingData: PropTypes.shape({
-    request: PropTypes.object,
-    response: PropTypes.object,
-    contacts: PropTypes.arrayOf(PropTypes.contact),
-    error: PropTypes.object
-  }).isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  nexusDispatch: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  currencies: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  dashboard: PropTypes.any,
-
-  history: PropTypes.history.isRequired,
-  match: PropTypes.shape({
-    url: PropTypes.string
-  }).isRequired,
-  contactData: PropTypes.shape({
-    contact: PropTypes.contact,
-    location: PropTypes.location
-  }).isRequired,
-  shipmentDispatch: PropTypes.shape({
-    updateContact: PropTypes.func,
-    newShipment: PropTypes.func,
-    getOffers: PropTypes.func,
-    setShipmentContacts: PropTypes.func
-  }).isRequired,
-  bookingSummaryDispatch: PropTypes.shape({
-    update: PropTypes.func
+  adminDispatch: PropTypes.shape({
+    getPricingsTest: PropTypes.func
   }).isRequired
 }
 
 AdminPricingTest.defaultProps = {
   theme: null,
-  loading: false,
   tenant: null,
-  user: null,
-  nexusDispatch: null,
-  currencies: null,
-  dashboard: null
+  user: null
 }
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, bookingData, app
+    authentication, tenant, admin, app
   } = state
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
   const { currencies } = app
-  const { loading } = bookingData
+  const { itineraryPricings } = admin
 
   return {
     user,
-    users,
+    itineraryPricings,
     tenant,
     loggedIn,
-    bookingData,
     loggingIn,
     registering,
-    loading,
     currencies
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminPricingTest))

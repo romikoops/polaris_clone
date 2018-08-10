@@ -3,6 +3,7 @@
 class Itinerary < ApplicationRecord
   extend ItineraryTools
   include ItineraryTools
+  include PriceCheckerService
 
   belongs_to :tenant
   has_many :stops,     dependent: :destroy
@@ -150,6 +151,11 @@ class Itinerary < ApplicationRecord
     end
 
     schedules
+  end
+
+  def test_pricings(data, user)
+   results = PriceCheckerService::PriceChecker.new(user: user, shipment_data: data, itinerary: self.id).perform
+   results.map{|charge| {quote: charge.deconstruct_tree_into_schedule_charge, itinerary: self.as_options_json} }
   end
 
   def self.ids_dedicated(user=nil)

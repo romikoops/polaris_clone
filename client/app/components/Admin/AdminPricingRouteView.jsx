@@ -304,7 +304,7 @@ export class AdminPricingRouteView extends Component {
             />
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" >
-            <AdminPricingTest />
+            <AdminPricingTest itinerary={itinerary} />
           </div>
 
         </div>
