@@ -140,7 +140,7 @@ class Admin::PricingsController < Admin::AdminBaseController
   def test
     itinerary = Itinerary.find(params[:id])
     results = itinerary.test_pricings(params[:data], current_user)
-    byebug
+    
   end
 
   private

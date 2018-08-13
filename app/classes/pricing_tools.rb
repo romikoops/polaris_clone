@@ -49,6 +49,7 @@ module PricingTools
     lt = load_type == "cargo_item" || load_type == "lcl" ? "lcl" : cargos[0].size_class
     charge = hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: counterpart_hub_id)
     charge = charge || hub.local_charges.find_by(direction: direction, load_type: lt, mode_of_transport: mot, tenant_vehicle_id: tenant_vehicle_id, counterpart_hub_id: nil)
+    
     return {} if charge.nil?
     totals = { "total" => {} }
 
@@ -119,7 +120,9 @@ module PricingTools
   end
 
   def determine_cargo_item_price(cargo, schedule, user, _quantity, shipment_date, mot)
-    transport_category_id = transport_category(cargo, schedule).id
+    transport_category = transport_category(cargo, schedule)
+    return nil if transport_category.nil?
+    transport_category_id = transport_category.id
     pricing = get_user_price(schedule.trip.itinerary.id, transport_category_id, user, shipment_date)
     
     return nil if pricing.nil?

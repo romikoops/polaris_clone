@@ -29,7 +29,7 @@ module PriceCheckerService
         calc_cargo_charges
         @grand_total_charge.update_quote_price!(@itinerary.tenant_id)
         @grand_total_charge.save
-        @grand_total_charge
+        {quote: @grand_total_charge, service_level: @schedule.trip.tenant_vehicle}
       end
     end
 
@@ -66,7 +66,6 @@ module PriceCheckerService
 
     def calc_local_charges
       cargo_units = @cargo_units
-
       if @shipment_data[:has_pre_carriage] || @origin_hub.mandatory_charge.export_charges
         local_charges_data = determine_local_charges(
           @origin_hub,
@@ -75,9 +74,10 @@ module PriceCheckerService
           "export",
           @itinerary.mode_of_transport,
           @schedule.trip.tenant_vehicle_id,
-          @destination_hub_id,
+          @destination_hub.id,
           @user
         )
+        
         unless local_charges_data.empty?
           create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("export"))
         end
@@ -91,7 +91,7 @@ module PriceCheckerService
           "import",
           @itinerary.mode_of_transport,
           @schedule.trip.tenant_vehicle_id,
-          @origin_hub_id,
+          @origin_hub.id,
           @user
         )
 
