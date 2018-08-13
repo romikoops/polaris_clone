@@ -19,7 +19,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       requested: requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
       open:      open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
       finished:  finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
-      # documents: documents,
       pages: {
         open: params[:open_page],
         finished: params[:finished_page],
@@ -302,37 +301,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
   end
 
-  # def search
-  #   # @filterrific = initialize_filterrific(
-  #   #   Student,
-  #   #   params[:filterrific],
-  #   #   select_options: {
-  #   #     sorted_by: Student.options_for_sorted_by,
-  #   #     with_country_id: Country.options_for_select
-  #   #   },
-  #   #   persistence_id: 'shared_key',
-  #   #   default_filter_params: {},
-  #   #   available_filters: [:sorted_by, :with_country_id],
-  #   #   sanitize_params: true
-  #   # ) or return
-  #   # @students = @filterrific.find.page(params[:page])
-
-  #   # if params[:hub_status]
-  #   #   query[:hub_status] = params[:hub_status].split(',')
-  #   # end
-  #   # if params[:country_ids]
-  #   #   hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(',').map(&:to_i))
-  #   # else
-  #   #   hubs = Hub.where(query).order('name ASC')
-  #   # end
-  #   # hub_results = hubs.where("name ILIKE ?", "%#{params[:text]}%")
-
-  #   # paginated_hub_hashes = hub_results.paginate(page: params[:page]).map do |hub|
-  #   #   { data: hub, location: hub.location.to_custom_hash }
-  #   # end
-  #   # response_handler(hubs: paginated_hub_hashes, num_pages: (hubs.count / 12.0).ceil)
-  # end
-
   def contacts
     @contacts ||= []
   end
@@ -352,16 +320,6 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def finished_shipments
     @finished_shipments ||= tenant_shipment.finished
   end
-
-  
-
-  # def search_open_shipments
-  #   @open_shipments ||= tenant_shipment.paginate(page: params[:open_page]).open.map(&:with_address_options_json)
-  # end
-
-  # def search_finished_shipments
-  #   @finished_shipments ||= tenant_shipment.finished.paginate(page: params[:finished_page]).map(&:with_address_options_json)
-  # end
 
   def documents
     @documents ||= {
