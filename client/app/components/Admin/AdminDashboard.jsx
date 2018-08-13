@@ -51,7 +51,7 @@ export class AdminDashboard extends Component {
 
   handleViewShipments () {
     const { adminDispatch } = this.props
-    adminDispatch.getShipments(true)
+    adminDispatch.getShipments(1, 1, 1, true)
   }
   handleShipmentAction (id, action) {
     const { adminDispatch } = this.props

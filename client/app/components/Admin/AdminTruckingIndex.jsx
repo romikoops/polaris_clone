@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
-import { AdminSearchableHubs } from './AdminSearchables'
-import styles from './Admin.scss'
-import { Checkbox } from '../Checkbox/Checkbox'
-import SideOptionsBox from './SideOptions/SideOptionsBox'
-import CollapsingBar from '../CollapsingBar/CollapsingBar'
-import { capitalize, filters } from '../../helpers'
+import { filters } from '../../helpers'
+import AdminHubsComp from './Hubs/AdminHubsComp' // eslint-disable-line
 
 export class AdminTruckingIndex extends Component {
   constructor (props) {
@@ -113,136 +109,17 @@ export class AdminTruckingIndex extends Component {
   }
   render () {
     const {
-      theme, viewTrucking, truckingNexuses, adminDispatch
+      viewTrucking
     } = this.props
-    const { searchResults, searchFilters, expander } = this.state
-    if (!truckingNexuses) {
-      return ''
-    }
-    const typeFilters = Object.keys(searchFilters.hubType).map((htk) => {
-      const typeNames = { ocean: 'Port', air: 'Airport', rails: 'Railyard' }
-
-      return (
-        <div
-          className={`
-            ${styles.action_section}
-            flex-100 layout-row layout-align-center-center layout-wrap
-          `}
-        >
-          <p className="flex-70">{typeNames[htk]}</p>
-          <Checkbox
-            onChange={() => this.toggleFilterValue('hubType', htk)}
-            checked={searchFilters.hubType[htk]}
-            theme={theme}
-          />
-        </div>
-      )
-    })
-    const statusFilters = Object.keys(searchFilters.status).map(sk => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{capitalize(sk)}</p>
-        <Checkbox
-          onChange={() => this.toggleFilterValue('status', sk)}
-          checked={searchFilters.status[sk]}
-          theme={theme}
-        />
-      </div>
-    ))
-    const countryFilters = Object.keys(searchFilters.countries).map(country => (
-      <div
-        className={`${
-          styles.action_section
-        } flex-100 layout-row layout-align-center-center layout-wrap`}
-      >
-        <p className="flex-70">{capitalize(country)}</p>
-        <Checkbox
-          onChange={() => this.toggleFilterValue('countries', country)}
-          checked={searchFilters.countries[country]}
-          theme={theme}
-        />
-      </div>
-    ))
-    const results = this.applyFilters(searchResults)
 
     return (
       <div className="flex-100 layout-row layout-align-space-between-start">
-        <div className="layout-row flex-80 flex-sm-100">
-          <AdminSearchableHubs
-            theme={theme}
-            hubs={results}
-            adminDispatch={adminDispatch}
-            sideScroll={false}
-            handleClick={viewTrucking}
-            hideFilters
-            title=" "
-            seeAll={false}
-            icon="fa-info-circle"
-          />
-        </div>
-        <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
-          <div className={`${styles.filter_panel} flex layout-row layout-align-end-end`}>
-            <SideOptionsBox
-              header="Filters"
-              content={
-                <div>
-                  <div
-                    className="flex-100 layout-row layout-wrap layout-align-center-start input_box_full"
-                  >
-                    <input
-                      type="text"
-                      className="flex-100"
-                      value={searchFilters.query}
-                      placeholder="Search"
-                      onChange={e => this.handleSearchQuery(e)}
-                    />
-                  </div>
-                  <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.hubType}
-                      theme={theme}
-                      handleCollapser={() => this.toggleExpander('hubType')}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text="Hub Type"
-                      faClass="fa fa-ship"
-                      content={typeFilters}
-                    />
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.status}
-                      theme={theme}
-                      handleCollapser={() => this.toggleExpander('status')}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text="Status"
-                      faClass="fa fa-star-half-o"
-                      content={statusFilters}
-                    />
-                    <CollapsingBar
-                      showArrow
-                      collapsed={!expander.countries}
-                      theme={theme}
-                      handleCollapser={() => this.toggleExpander('countries')}
-                      styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
-                      text="Country"
-                      faClass="fa fa-flag"
-                      content={countryFilters}
-                    />
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        </div>
+        <AdminHubsComp handleClick={viewTrucking} />
       </div>
     )
   }
 }
 AdminTruckingIndex.propTypes = {
-  theme: PropTypes.theme,
   viewTrucking: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   hubs: PropTypes.arrayOf(PropTypes.hub),
@@ -255,7 +132,6 @@ AdminTruckingIndex.propTypes = {
 }
 
 AdminTruckingIndex.defaultProps = {
-  theme: null,
   loading: false,
   truckingNexuses: [],
   hubs: []

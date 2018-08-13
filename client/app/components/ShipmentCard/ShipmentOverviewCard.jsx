@@ -41,7 +41,7 @@ export class ShipmentOverviewCard extends Component {
       return (
         <div
           className="margin_bottom flex-100 flex-lg-50
-          flex-gt-lg-33 layout-row card_padding"
+          flex-gt-lg-33 layout-row card_padding card_lineup"
         >
           <GreyBox
             wrapperClassName="layout-row flex layout-align-center-center"

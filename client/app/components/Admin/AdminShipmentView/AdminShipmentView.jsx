@@ -20,7 +20,8 @@ import {
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  formattedPriceValue
+  formattedPriceValue,
+  checkPreCarriage
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import Tabs from '../../Tabs/Tabs'
@@ -632,11 +633,10 @@ export class AdminShipmentView extends Component {
                     <div className="layout-row flex-100 layout-align-start-center">
                       <div className="flex-40 layout-row layout-align-start-center">
                         <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">Pick-up</h4>
+                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment).type}</h4>
                       </div>
                       <div className="flex-40 layout-row layout-align-start-center">
-                        <p>{shipment.pickup_address ? moment(shipment.planned_pickup_date)
-                          .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                        <p>{shipment.pickup_address ? moment(checkPreCarriage(shipment).date)
                           .format('DD/MM/YYYY') : ''}</p>
                       </div>
                     </div>
@@ -710,7 +710,7 @@ export class AdminShipmentView extends Component {
                           <div className="layout-row flex-100">
                             <div className="flex-none layout-row">
                               <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                              <p>Pickup</p>
+                              <p>Pick-up</p>
                             </div>
                             {feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
                               <p>

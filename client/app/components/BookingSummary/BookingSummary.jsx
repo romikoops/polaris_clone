@@ -70,7 +70,7 @@ function BookingSummary (props) {
                 (
                   (cities.destination && trucking.on_carriage.truck_type) ||
                   (nexuses.destination && !trucking.on_carriage.truck_type)
-                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
+                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} Delivery`
               }
             </p>
           </div>

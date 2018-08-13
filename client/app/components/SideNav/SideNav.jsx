@@ -168,7 +168,7 @@ class SideNav extends Component {
         adminDispatch.getTrucking(true)
         break
       case 'shipments':
-        adminDispatch.getShipments(true)
+        adminDispatch.getShipments(1, 1, 1, true)
         break
       case 'clients':
         adminDispatch.getClients(true)

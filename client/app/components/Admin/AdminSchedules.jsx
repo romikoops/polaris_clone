@@ -271,7 +271,7 @@ class AdminSchedules extends Component {
       mot={mot}
     >
       <CardRoutesIndex
-        itineraries={itineraries}
+        itineraries={itineraries.filter(itin => itin.mode_of_transport === mot)}
         theme={theme}
         scope={scope}
         mot={mot}

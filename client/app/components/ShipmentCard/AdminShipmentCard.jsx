@@ -227,10 +227,10 @@ export class AdminShipmentCard extends Component {
 
         {shipment.status !== 'finished' ? (
           <div className={`layout-row flex-40 layout-align-start-stretch
-            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
+            ${styles.lowerSections} ${styles.separatorTop} ${styles.smallText}`}
           >
             <div className="layout-column flex-20">
-              <span className="flex-100"><b>Pickup Date</b><br />
+              <span className="flex-100"><b>Pick-up Date</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(plannedDate).format('DD/MM/YYYY')}
                 </span>
@@ -260,7 +260,7 @@ export class AdminShipmentCard extends Component {
           </div>
         ) : (
           <div className={`layout-row flex-40 layout-align-start-stretch
-            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
+            ${styles.lowerSections} ${styles.separatorTop} ${styles.smallText}`}
           >
             <div className="flex-100 layout-row"><b>Arrived on:</b>
               <span className={`${styles.grey}`}>
@@ -272,7 +272,7 @@ export class AdminShipmentCard extends Component {
         )}
 
         <div className={`layout-row flex-25 layout-align-space-between-center
-            ${styles.sectionBottom} ${styles.separatorTop}`}
+            ${styles.lowerSections} ${styles.separatorTop}`}
         >
           <div className="layout-row flex-75 layout-align-start-center">
             <div className="layout-row flex-15">
@@ -298,8 +298,8 @@ export class AdminShipmentCard extends Component {
               <span> Delivery</span>
             </span>
           </div>
-          <div className="layout-align-end-center">
-            <span className={`${styles.bigText}`}>
+          <div className="layout-align-end-end">
+            <span className={`${styles.bigText} ${styles.price_style}`}>
               <span> {totalPrice(shipment).currency} </span>
               <span>
                 {formattedPriceValue(totalPrice(shipment).value)}

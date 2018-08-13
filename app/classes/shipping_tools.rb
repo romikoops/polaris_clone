@@ -27,7 +27,6 @@ module ShippingTools
     end
     if tenant.scope["quotation_tool"]
       user_pricing_id = current_user.agency.agency_manager_id
-      byebug
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
         Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
       end

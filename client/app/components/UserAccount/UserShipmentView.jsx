@@ -16,7 +16,8 @@ import {
   gradientGenerator,
   gradientBorderGenerator,
   formattedPriceValue,
-  totalPrice
+  totalPrice,
+  checkPreCarriage
 } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
@@ -309,7 +310,7 @@ export class UserShipmentView extends Component {
       ''
     )
     const reuseShipment = (
-      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.header_margin_buffer}  ${styles.reuse_shipment_box}`}>
+      <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
         <p className="layout-align-center-center layout-row">Reuse Shipment </p>
       </div>
     )
@@ -485,7 +486,6 @@ export class UserShipmentView extends Component {
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
                 <div className="layout-row flex-100 margin_bottom">
-
                   <GradientBorder
                     wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
                     gradient={gradientBorderStyle}
@@ -531,11 +531,10 @@ export class UserShipmentView extends Component {
                     <div className="layout-row flex-100 layout-align-start-center">
                       <div className="flex-40 layout-row layout-align-start-center">
                         <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">Pick-up</h4>
+                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment).type}</h4>
                       </div>
                       <div className="flex-40 layout-row layout-align-start-center">
-                        <p>{moment(shipment.planned_pickup_date)
-                          .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                        <p>{moment(checkPreCarriage(shipment).date)
                           .format('DD/MM/YYYY') }</p>
                       </div>
                     </div>
@@ -795,7 +794,7 @@ export class UserShipmentView extends Component {
               tabTitle="Contacts"
               theme={theme}
             >
-              <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
+              <div className="flex-100 layout-row layout-wrap layout-align-center-center padding_top">
                 <ContactDetailsRow
                   contacts={contacts}
                   style={selectedStyle}

@@ -7,7 +7,7 @@ import { AdminShipmentCard } from './AdminShipmentCard'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }

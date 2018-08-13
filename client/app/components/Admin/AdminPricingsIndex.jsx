@@ -89,7 +89,7 @@ export class AdminPricingsIndex extends Component {
       icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardPricingIndex
-        itineraries={detailedItineraries}
+        itineraries={detailedItineraries.filter(itin => itin.mode_of_transport === mot)}
         theme={theme}
         scope={scope}
         mot={mot}
