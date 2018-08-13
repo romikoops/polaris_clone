@@ -1,5 +1,6 @@
 import React from 'react'
 import Truncate from 'react-truncate'
+import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './BlogPostHighlights.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -50,9 +51,10 @@ export function BlogPostHighlights ({ theme }) {
     }
     const dbp = (
       <div
-      // eslint-disable-next-line react/no-array-index-key
-        key={i}
-        className={CONTAINER}
+        key={v4()}
+        className={trim(`
+          ${styles.blog_post}
+          layout-column`)}
       >
         <div
           className={trim(`

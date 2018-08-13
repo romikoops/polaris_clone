@@ -10,7 +10,7 @@ import { theme, identity, shipmentData, tenant, user, match, location } from '..
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }

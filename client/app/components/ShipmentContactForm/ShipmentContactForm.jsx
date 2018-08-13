@@ -35,19 +35,6 @@ export class ShipmentContactForm extends Component {
     this.editSubmit = this.editSubmit.bind(this)
   }
 
-  componentWillMount () {
-    const { showEdit, selectedContact } = this.props
-    if (showEdit) {
-      this.setState({
-        contactData: selectedContact
-      })
-    }
-  }
-  componentWillUnmount () {
-    this.setState({
-      contactData: { contact: {}, location: {} }
-    })
-  }
   handlePlaceChange (place) {
     const newLocation = {
       streetNumber: '',
@@ -122,26 +109,25 @@ export class ShipmentContactForm extends Component {
   editSubmit (contactData) {
     const { shipmentDispatch } = this.props
 
-    this.setState(prevState => ({
-      ...prevState.contactData,
-      contactData: {
-        contact: contactData.contact,
-        location: contactData.location
-      }
-    }))
-
     const editedContact = {
       ...contactData.contact,
       ...contactData.location,
-      streetNumber: parseInt(contactData.location.streetNumber, 10),
-      id: this.state.contactData.contact.id,
-      locationId: this.state.contactData.location.id,
-      userId: this.state.contactData.contact.userId
+      id: this.props.selectedContact.contact.id,
+      locationId: this.props.selectedContact.location.id
     }
 
     shipmentDispatch.updateContact(editedContact)
+    this.props.setContact({
+      contact: {
+        ...contactData.contact,
+        id: this.props.selectedContact.contact.id,
+        locationId: this.props.selectedContact.location.id
+      },
+      location: {
+        ...contactData.location
+      }
+    })
 
-    this.props.setContact(contactData)
     this.contactForm.reset()
     this.setState({ setContactAttempted: false })
   }
@@ -170,7 +156,7 @@ export class ShipmentContactForm extends Component {
     const addressDetailsSection = (
       <AddressDetailsSection
         theme={theme}
-        contactData={this.state.contactData}
+        contactData={this.props.selectedContact}
         handlePlaceChange={place => this.handlePlaceChange(place)}
         setContactAttempted={this.state.setContactAttempted}
         setContactBtn={setContactBtn}
@@ -204,7 +190,7 @@ export class ShipmentContactForm extends Component {
             <CompanyDetailsSection
               theme={theme}
               showEdit={showEdit}
-              contactData={this.state.contactData}
+              contactData={this.props.selectedContact}
               setContactAttempted={this.state.setContactAttempted}
             />
           </div>

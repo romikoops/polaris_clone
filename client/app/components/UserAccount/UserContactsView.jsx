@@ -7,7 +7,7 @@ import styles from './UserAccount.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { AdminSearchableShipments } from '../Admin/AdminSearchables'
 import { gradientTextGenerator } from '../../helpers'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 
 const EditProfileBox = ({
   user, handleChange, onSave, close, style, theme
@@ -292,7 +292,7 @@ export class UserContactsView extends Component {
           </div>
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom">
-          <AlternativeGreyBox
+          <GreyBox
             wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
             contentClassName="layout-row flex"
             content={(

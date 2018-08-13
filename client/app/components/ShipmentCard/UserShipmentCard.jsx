@@ -3,8 +3,7 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
 import styles from './ShipmentCard.scss'
-import adminStyles from '../Admin/Admin.scss'
-import AdminPromptConfirm from '../Admin/Prompt/Confirm'
+import GradientBorder from '../GradientBorder'
 import {
   gradientTextGenerator,
   gradientGenerator,
@@ -14,54 +13,15 @@ import {
   formattedPriceValue,
   splitName
 } from '../../helpers'
-import GradientBorder from '../GradientBorder'
 
-export class AdminShipmentCardNew extends Component {
+export class UserShipmentCard extends Component {
   constructor (props) {
     super(props)
 
-    this.state = {
-      confirm: false
-    }
-    this.selectShipment = this.selectShipment.bind(this)
-  }
-  handleDeny () {
-    const { shipment, dispatches } = this.props
-    dispatches.confirmShipment(shipment.id, 'decline')
+    this.state = {}
   }
 
-  handleAccept () {
-    const { shipment, dispatches } = this.props
-    dispatches.confirmShipment(shipment.id, 'accept')
-  }
-
-  handleIgnore () {
-    const { shipment, dispatches } = this.props
-    dispatches.confirmShipment(shipment.id, 'ignore')
-    this.closeConfirm()
-  }
-
-  handleEdit () {
-    const { shipment, dispatches } = this.props
-    dispatches.getShipment(shipment.id, true)
-  }
   handleView () {
-    const { shipment, dispatches } = this.props
-    dispatches.getShipment(shipment.id, true)
-  }
-  handleFinished () {
-    const { shipment, dispatches } = this.props
-    dispatches.confirmShipment(shipment.id, 'finished')
-  }
-  confirmDelete () {
-    this.setState({
-      confirm: true
-    })
-  }
-  closeConfirm () {
-    this.setState({ confirm: false })
-  }
-  selectShipment () {
     const { shipment, dispatches } = this.props
     dispatches.getShipment(shipment.id, true)
   }
@@ -103,29 +63,6 @@ export class AdminShipmentCardNew extends Component {
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
 
-    const { confirm } = this.state
-    const confimPrompt = confirm ? (
-      <AdminPromptConfirm
-        theme={theme}
-        heading="Are you sure?"
-        text={`This will reject the requested shipment ${shipment.imc_reference}.
-        This shipment can be still be recovered after being ignored`}
-        confirm={() => this.handleIgnore()}
-        deny={() => this.closeConfirm()}
-      />
-    ) : (
-      ''
-    )
-    const plannedDate =
-    shipment.has_pre_carriage ? shipment.planned_pickup_date : shipment.planned_origin_drop_off_date
-    const requestedButtons = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
-      <div className={`layout-row layout-align-space-around-center ${styles.topRight}`}>
-        <i className={`fa fa-check pointy ${styles.check}`} onClick={() => this.handleAccept()} />
-        <i className={`fa fa-edit pointy ${styles.edit}`} onClick={() => this.handleEdit()} />
-        <i className={`fa fa-trash pointy ${styles.trash}`} onClick={() => this.confirmDelete()} />
-      </div>
-    ) : ''
-
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
 
@@ -137,9 +74,7 @@ export class AdminShipmentCardNew extends Component {
           ${styles.container} ${styles.relative}`
         }
       >
-        {confimPrompt}
-        <div className={adminStyles.card_link} onClick={() => this.handleView()} />
-        {requestedButtons}
+        <div className={styles.card_link} onClick={() => this.handleView()} />
         <div className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center">
           <span className={`flex-100 ${styles.ref_row_card}`}>Ref: <b>{shipment.imc_reference}</b></span>
         </div>
@@ -218,61 +153,52 @@ export class AdminShipmentCardNew extends Component {
             <div className={`layout-row flex-50 layout-align-end-end ${styles.smallText}`}>
               <span className="flex-80"><b>Booking placed at</b><br />
                 <span className={`${styles.grey}`}>
-                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}
+                  {moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}
                 </span>
               </span>
             </div>
           </div>
         </div>
-
-        {shipment.status !== 'finished' ? (
-          <div className={`layout-row flex-40 layout-align-start-stretch
-            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
-          >
-            <div className="layout-column flex-20">
-              <span className="flex-100"><b>Pickup Date</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(plannedDate).format('DD/MM/YYYY')}
-                </span>
+        <div className={`layout-row flex-40 layout-align-start-stretch
+            ${styles.lowerSections} ${styles.separatorTop} ${styles.smallText}`}
+        >
+          <div className="layout-column flex-20">
+            <span className="flex-100"><b>{ shipment.has_pre_carriage ? 'Pick-up Date' : 'Drop Off Date'}</b><br />
+              <span className={`${styles.grey}`}>
+                {
+                  shipment.has_pre_carriage
+                    ? moment(shipment.planned_pickup_date)
+                      .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                      .format('DD/MM/YYYY')
+                    : moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')
+                }
               </span>
-            </div>
-            <div className="layout-column flex-20">
-              <span className="flex-100"><b>ETD</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_etd).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="layout-column flex-20">
-              <span className="flex-100"><b>ETA</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_eta).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="layout-column flex-40">
-              <span className="flex-100"><b>Estimated Transit Time</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days
-                </span>
-              </span>
-            </div>
+            </span>
           </div>
-        ) : (
-          <div className={`layout-row flex-40 layout-align-start-stretch
-            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
-          >
-            <div className="flex-100 layout-row"><b>Arrived on:</b>
+          <div className="layout-column flex-20">
+            <span className="flex-100"><b>ETD</b><br />
+              <span className={`${styles.grey}`}>
+                {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+              </span>
+            </span>
+          </div>
+          <div className="layout-column flex-20">
+            <span className="flex-100"><b>ETA</b><br />
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
-            </div>
-            {/* <hr className="flex-60 layout-row" /> */}
+            </span>
           </div>
-        )}
-
+          <div className="layout-column flex-40">
+            <span className="flex-100"><b>Estimated Transit Time</b><br />
+              <span className={`${styles.grey}`}>
+                {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days
+              </span>
+            </span>
+          </div>
+        </div>
         <div className={`layout-row flex-25 layout-align-space-between-center
-            ${styles.sectionBottom} ${styles.separatorTop}`}
+            ${styles.lowerSections} ${styles.separatorTop}`}
         >
           <div className="layout-row flex-75 layout-align-start-center">
             <div className="layout-row flex-15">
@@ -288,7 +214,7 @@ export class AdminShipmentCardNew extends Component {
                 className="fa fa-check-square clip"
                 style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
               />
-              <span> Pick-up</span>
+              <span>  Pick-up</span>
             </span>
             <span className="flex-30">
               <i
@@ -298,9 +224,9 @@ export class AdminShipmentCardNew extends Component {
               <span> Delivery</span>
             </span>
           </div>
-          <div className="layout-align-end-center">
-            <span className={`${styles.bigText}`}>
-              <span> {totalPrice(shipment).currency} </span>
+          <div className="layout-align-end-end">
+            <span className={`${styles.bigText} ${styles.price_style}`}>
+              <span>{totalPrice(shipment).currency} </span>
               <span>
                 {formattedPriceValue(totalPrice(shipment).value)}
               </span>
@@ -312,17 +238,18 @@ export class AdminShipmentCardNew extends Component {
   }
 }
 
-AdminShipmentCardNew.propTypes = {
+UserShipmentCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
-  dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
+  dispatches: PropTypes.objectOf(PropTypes.func),
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
-AdminShipmentCardNew.defaultProps = {
+UserShipmentCard.defaultProps = {
   shipment: {},
+  dispatches: {},
   theme: {},
   hubs: {}
 }
 
-export default AdminShipmentCardNew
+export default UserShipmentCard

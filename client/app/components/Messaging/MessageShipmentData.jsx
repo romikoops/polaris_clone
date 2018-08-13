@@ -102,7 +102,7 @@ export class MessageShipmentData extends Component {
             <div className="flex-50 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
-                  Pickup Date
+                  Pick-up Date
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-center">

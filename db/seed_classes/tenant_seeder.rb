@@ -1439,10 +1439,10 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: '#270C77',
-          secondary: '#4FAACA',
-          brightPrimary: '#270C77',
-          brightSecondary:  '#4FAACA'
+          primary: '#4FAACA',
+          secondary: '#270C77',
+          brightPrimary: '#4FAACA',
+          brightSecondary:  '#270C77'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',
@@ -1459,13 +1459,11 @@ class TenantSeeder
       },
       emails: {
         sales: {
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com',
           general: 'mkuester@speedtrans.com'
         },
         support: {
           general: 'mkuester@speedtrans.com',
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com'
         }
       },
@@ -1531,12 +1529,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'
+            export: 'optional'
           }
         }
       },

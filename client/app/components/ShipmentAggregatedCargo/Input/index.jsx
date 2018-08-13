@@ -3,7 +3,7 @@ import PropTypes from '../../../prop-types'
 import { ValidatedInput } from '../../ValidatedInput/ValidatedInput'
 
 export default function ShipmentAggregatedCargoInput ({
-  value, name, handleDelta, nextStageAttempt
+  value, name, handleDelta, nextStageAttempt, maxValue
 }) {
   return (
     <ValidatedInput
@@ -21,11 +21,13 @@ export default function ShipmentAggregatedCargoInput ({
         bottom: '-14px'
       }}
       validations={{
-        nonNegative: (values, _value) => _value > 0
+        nonNegative: (values, _value) => _value > 0,
+        maxValue: (values, _value) => _value < maxValue
       }}
       validationErrors={{
         isDefaultRequiredValue: 'Must be greater than 0',
-        nonNegative: 'Must be greater than 0'
+        nonNegative: 'Must be greater than 0',
+        maxValue: `Must be less than ${maxValue}`
       }}
       required
     />
@@ -36,7 +38,8 @@ ShipmentAggregatedCargoInput.propTypes = {
   value: PropTypes.number,
   name: PropTypes.string,
   handleDelta: PropTypes.func.isRequired,
-  nextStageAttempt: PropTypes.bool
+  nextStageAttempt: PropTypes.bool,
+  maxValue: PropTypes.number.isRequired
 }
 
 ShipmentAggregatedCargoInput.defaultProps = {
