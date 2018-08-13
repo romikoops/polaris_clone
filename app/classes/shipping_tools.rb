@@ -92,6 +92,7 @@ module ShippingTools
     contact = current_user.contacts.find_or_create_by(
       contact_params(resource, contact_location.id)  # NOT CORRECT: .merge(alias: shipment.export?)
     )
+    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
     shipper = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
@@ -112,6 +113,7 @@ module ShippingTools
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []
+
     charge_breakdown = shipment.charge_breakdowns.selected
     existing_insurance_charge = charge_breakdown.charge('insurance')
     if existing_insurance_charge

@@ -13,7 +13,7 @@ class Contact < ApplicationRecord
   validates :email,        presence: true, length: { minimum: 3 }
 
   # validates uniqueness for each user
-  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email),
+  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email location_id),
                                     message: "Contact must be unique to add." }
 
   # Filterrific configuration
