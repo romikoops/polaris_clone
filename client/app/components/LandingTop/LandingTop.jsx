@@ -10,6 +10,7 @@ const StyledTop = styled.div`
     url(${props => props.bg});
   height: 100vh;
   background-size: cover;
+  background-attachment: fixed;
   background-position: center;
   padding-bottom: 120px;
   box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.7);
@@ -30,7 +31,7 @@ export class LandingTop extends Component {
   }
   render () {
     const {
-      theme, user, tenant, bookNow
+      theme, user, tenant, bookNow, toggleShowLogin
     } = this.props
     const myAccount = (
       <div className="flex">
@@ -55,13 +56,10 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="flex">
+      <div className="flex layout-row flex-md-100">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
-
-    const loginLink = <a onClick={this.props.toggleShowLogin}>Log In / Register</a>
-
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -70,11 +68,12 @@ export class LandingTop extends Component {
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
+
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
           <div className="flex-100 layout-row">
-            <Header user={user} theme={theme} scrollable invert noMessages />
+            <Header user={user} theme={theme} isLanding toggleShowLogin={toggleShowLogin} scrollable invert noMessages />
           </div>
           <div className="flex-50 layout-row layout-align-center layout-wrap">
             <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
@@ -98,26 +97,27 @@ export class LandingTop extends Component {
                     Finally, shipping is as simple as it should be.
                   </h3>
                 </div>
-              </div>
-              <div
-                className={
-                  `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
-                }
-              >
-                {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
-                {(!user || user.guest) && loginLink}
-                {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                {user && user.role && user.role.name === 'admin' && toAdmin}
-              </div>
-              <div className={`flex-70 ${styles.banner_text}`}>
-                <div className="flex-none layout-row layout-align-start-center">
-                  <h4 className="flex-none">powered by</h4>
-                  <div className="flex-5" />
-                  <img
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                    alt=""
-                    className={`flex-none ${styles.powered_by_logo}`}
-                  />
+                <div
+                  className={
+                    `layout-row layout-md-column layout-sm-column layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
+                  }
+                >
+                  {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
+                  {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
+                  {user && user.role && user.role.name === 'admin' && toAdmin}
+                  <div className={`flex layout-row flex-md-100 ${styles.banner_text}`}>
+                    <div className="flex-none layout-row layout-align-start-center">
+                      <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                      <div className="flex-5" />
+                      <a href="https://www.itsmycargo.com/" target="_blank">
+                        <img
+                          src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                          alt=""
+                          className={`flex-none pointy ${styles.powered_by_logo}`}
+                        />
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

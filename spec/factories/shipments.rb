@@ -3,8 +3,8 @@
 FactoryBot.define do
   factory :shipment do
     association :user
-    association :origin_nexus, factory: :location
-    association :destination_nexus, factory: :location
+    association :origin_nexus, factory: :nexus
+    association :destination_nexus, factory: :nexus
     association :trip
     load_type 'container'
     before(:create) do |shipment|

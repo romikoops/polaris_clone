@@ -5,16 +5,13 @@ import { theme, identity, user } from '../../mocks'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
 
   return { v4 }
 })
-jest.mock('react-select', () =>
-  // eslint-disable-next-line react/prop-types
-  ({ children }) => <div>{children}</div>)
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x
 }))
@@ -29,10 +26,7 @@ jest.mock('../Admin', () => ({
   // eslint-disable-next-line react/prop-types
   AdminClientTile: ({ children }) => <div>{children}</div>
 }))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ children }) => <button>{children}</button>
-}))
+
 // eslint-disable-next-line import/first
 import { UserProfile } from './UserProfile'
 

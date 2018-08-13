@@ -7,7 +7,7 @@ jest.mock('isomorphic-fetch', () =>
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
@@ -49,4 +49,11 @@ test('square is true', () => {
     square: true
   }
   expect(shallow(<FileUploader {...props} />)).toMatchSnapshot()
+})
+
+test.skip('state.error is true', () => {
+  const wrapper = shallow(<FileUploader {...propsBase} />)
+  wrapper.setState({ error: true })
+
+  expect(wrapper).toMatchSnapshot()
 })

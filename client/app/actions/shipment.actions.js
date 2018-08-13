@@ -18,6 +18,7 @@ function newShipment (type) {
   function failure (error) {
     return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(type))
     shipmentService.newShipment(type).then(
@@ -43,6 +44,7 @@ function reuseShipment (shipment) {
     loadType: shipment.shipment.load_type,
     direction: shipment.shipment.direction
   }
+
   return (dispatch) => {
     dispatch(request(shipment))
     dispatch(newShipment(newShipmentRequest))
@@ -65,6 +67,7 @@ function getOffers (data, redirect) {
   function failure (error) {
     return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(data))
     shipmentService.getOffers(data).then(
@@ -104,6 +107,7 @@ function getOffersForNewDate (data, redirect) {
   function failure (error) {
     return { type: shipmentConstants.GET_NEW_DATE_OFFERS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(data))
     shipmentService.getOffers(data).then(
@@ -144,6 +148,7 @@ function chooseOffer (data) {
   function failure (error) {
     return { type: shipmentConstants.CHOOSE_OFFER_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(data))
 
@@ -178,6 +183,7 @@ function setShipmentContacts (data) {
   function failure (error) {
     return { type: shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(data))
 
@@ -211,6 +217,7 @@ function requestShipment (id) {
   function failure (error) {
     return { type: shipmentConstants.REQUEST_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request(id))
 
@@ -239,6 +246,7 @@ function getAll () {
   function failure (error) {
     return { type: shipmentConstants.GETALL_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -258,6 +266,7 @@ function getShipments () {
   function failure (error) {
     return { type: shipmentConstants.GETALL_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -277,6 +286,7 @@ function getShipment (id) {
   function failure (error) {
     return { type: shipmentConstants.GET_SHIPMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -298,6 +308,7 @@ function _delete (id) {
   function failure (newId, error) {
     return { type: shipmentConstants.DELETE_FAILURE, id: newId, error }
   }
+
   return (dispatch) => {
     dispatch(request(id))
     shipmentService.delete(id).then(
@@ -325,8 +336,10 @@ function fetchShipment (id) {
       error
     }
   }
+
   return (dispatch) => {
     dispatch(request(id))
+
     return window
       .fetch(`http://localhost:3000/shipments/${id}`)
       .then(response => response.json())
@@ -350,6 +363,7 @@ function shouldFetchShipment (state, id) {
   if (shipment.isFetching) {
     return false
   }
+
   return shipment.didInvalidate
 }
 function fetchShipmentIfNeeded (id) {
@@ -380,6 +394,7 @@ function uploadDocument (doc, type, url) {
   function failure (error) {
     return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -406,6 +421,7 @@ function deleteDocument (id) {
   function failure (error) {
     return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -432,6 +448,7 @@ function getNotes (noteIds) {
   function failure (error) {
     return { type: shipmentConstants.SHIPMENT_GET_NOTES_FAILURE, error }
   }
+
   return (dispatch) => {
     dispatch(request())
 
@@ -455,6 +472,33 @@ function updateCurrency (currency, req) {
     //   dispatch(getOffers(req, false))
     //   dispatch(alertActions.success('Updating Currency successful'))
     // }, 500)
+  }
+}
+
+function updateContact (req) {
+  function request () {
+    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST }
+  }
+  function success (contactData) {
+    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS, payload: contactData.data }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.updateContact(req).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Contact successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
   }
 }
 
@@ -502,6 +546,7 @@ export const shipmentActions = {
   updateCurrency,
   logOut,
   getOffersForNewDate,
+  updateContact,
   delete: _delete
 }
 

@@ -66,6 +66,7 @@ export function BlogPostHighlights ({ theme }) {
     )
     postArray.push(dbp)
   })
+
   return (
     <div
       className={`flex-100 layout-row layout-wrap layout-align-center-center ${

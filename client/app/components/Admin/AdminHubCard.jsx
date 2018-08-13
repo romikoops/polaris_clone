@@ -1,28 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './AdminHubCard.scss'
-import { gradientBorderGenerator } from '../../helpers'
-import GradientBorder from '../GradientBorder'
+import { AdminHubCardContent } from './AdminHubCardContent'
+import styles from './AdminHubCards.scss'
 
-function stationType (transportMode) {
-  let type
+function listHubs (hubs, adminDispatch, theme) {
+  return Object.keys(hubs).length > 0 ? Object.keys(hubs).map((hubKey) => {
+    const HubCard = (
+      <div
+        className={`flex-25 flex-gt-lg-15 ${styles.hub}`}
+        onClick={() => adminDispatch.getHub(hubKey, true)}
+      >
+        <AdminHubCardContent
+          hub={hubs[hubKey]}
+          theme={theme}
+        />
+      </div>
+    )
 
-  switch (transportMode) {
-    case 'ocean':
-      type = 'Port'
-      break
-    case 'air':
-      type = 'Airport'
-      break
-    case 'train':
-      type = 'Station'
-      break
-    default:
-      type = ''
-      break
-  }
-
-  return type
+    return HubCard
+  }) : (<span className={`${styles.hub}`}>No hubs available</span>)
 }
 
 export class AdminHubCard extends Component {
@@ -34,58 +30,33 @@ export class AdminHubCard extends Component {
 
   render () {
     const {
-      hub, theme
+      hubs,
+      adminDispatch,
+      theme
     } = this.props
 
-    const gradientBorderStyle =
-      theme && theme.colors
-        ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
-        : { background: 'black' }
-
-    const bg =
-      hub.data && hub.data.photo
-        ? { backgroundImage: `url(${hub.data.photo})` }
-        : {
-          backgroundImage:
-            'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'
-        }
-
     return (
-      <div
-        className={
-          `layout-row layout-align-start-stretch
-          ${styles.container} ${styles.relative}`
-        }
-      >
-        <GradientBorder
-          wrapperClassName={`layout-column flex-100 ${styles.city}`}
-          gradient={gradientBorderStyle}
-          className="layout-column flex-100"
-          content={(
-            <div className="layout-column flex-100">
-              <div className="layout-column layout-padding flex-50 layout-align-center-start">
-                <p>{hub ? hub.location.city : ''}<br />
-                  {hub ? stationType(hub.data.hub_type) : ''}
-                </p>
-              </div>
-              <div className="layout-column flex-50">
-                <span className="flex-100" style={bg} />
-              </div>
-            </div>
-          )}
-        />
+      <div className={`layout-wrap layout-row flex-100 layout-align-space-between-stretch ${styles.container}`}>
+        <div className="layout-padding flex-100 layout-align-start-center greyBg">
+          <span><b>Hubs</b></span>
+        </div>
+        <div className={`layout-wrap layout-row flex-100 ${styles.scrolling}`}>
+          {listHubs(hubs, adminDispatch, theme)}
+        </div>
       </div>
     )
   }
 }
 
 AdminHubCard.propTypes = {
-  hub: PropTypes.hub,
+  adminDispatch: PropTypes.objectOf(PropTypes.func),
+  hubs: PropTypes.objectOf(PropTypes.hub),
   theme: PropTypes.theme
 }
 
 AdminHubCard.defaultProps = {
-  hub: {},
+  hubs: {},
+  adminDispatch: {},
   theme: null
 }
 

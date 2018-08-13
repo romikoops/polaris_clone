@@ -17,13 +17,35 @@ class ContactsController < ApplicationController
     response_handler(contact: contact, shipments: shipments, location: location)
   end
 
-  def update_contact
+  def update
     update_data = JSON.parse(params[:update])
+    
     contact = Contact.find(params[:id])
+    loc = contact.location || Location.new
     update_data.delete("id")
-    contact.update_attributes(update_data)
+    update_data.delete("userId")
+    update_data.delete("locationId")
+
+    edited_contact_data = {}
+    edited_contact_location = {}
+    edited_contact_data[:first_name] = update_data["firstName"]
+    edited_contact_data[:last_name] = update_data["lastName"]
+    edited_contact_data[:company_name] = update_data["companyName"]
+    edited_contact_data[:phone] = update_data["phone"]
+    edited_contact_data[:email] = update_data["email"]
+
+    edited_contact_location[:street_number] = update_data["number"] || update_data["streetNumber"]
+    edited_contact_location[:street] = update_data["street"]
+    edited_contact_location[:city] = update_data["city"]
+    edited_contact_location[:zip_code] = update_data["zipCode"]
+    edited_contact_location[:country] = Country.geo_find_by_name(update_data["country"])
+
+    loc.update_attributes(edited_contact_location)
+    edited_contact_data[:location_id] = loc.id
+    edited_contact_data[:user_id] = current_user.id
+    contact.update_attributes(edited_contact_data)
     contact.save!
-    response_handler(contact)
+    response_handler(contact.as_options_json)
   end
 
   def update_contact_address
@@ -84,7 +106,7 @@ class ContactsController < ApplicationController
     ncd[:phone] = contact_data["phone"]
     ncd[:email] = contact_data["email"]
 
-    ncl[:street_number] = contact_data["number"]
+    ncl[:street_number] = contact_data["number"] || contact_data["streetNumber"]
     ncl[:street] = contact_data["street"]
     ncl[:city] = contact_data["city"]
     ncl[:zip_code] = contact_data["zipCode"]

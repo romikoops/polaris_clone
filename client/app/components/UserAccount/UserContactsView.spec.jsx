@@ -12,7 +12,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
@@ -27,10 +27,7 @@ jest.mock('../Admin/AdminSearchables', () => ({
   // eslint-disable-next-line react/prop-types
   AdminSearchableShipments: ({ children }) => <div>{children}</div>
 }))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ props }) => <button {...props} />
-}))
+
 // eslint-disable-next-line import/first
 import { UserContactsView } from './UserContactsView'
 

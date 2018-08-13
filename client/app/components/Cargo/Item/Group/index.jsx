@@ -7,7 +7,7 @@ import PropTypes from '../../../../prop-types'
 // import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoItemGroupAggregated from './Aggregated'
 import { LOAD_TYPES, LOAD_SIZES, cargoGlossary } from '../../../../constants'
-import { gradientTextGenerator } from '../../../../helpers'
+import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 
 export class CargoItemGroup extends Component {
   constructor (props) {
@@ -88,7 +88,7 @@ export class CargoItemGroup extends Component {
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
+              <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>&nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
           </div>
         </div>
@@ -97,9 +97,9 @@ export class CargoItemGroup extends Component {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
-                {(group.items[0].dimension_y *
+                {numberSpacing((group.items[0].dimension_y *
                 group.items[0].dimension_x *
-                group.items[0].dimension_z / 1000000).toFixed(2)}
+                group.items[0].dimension_z / 1000000), 2)}
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">Volume</p>
@@ -107,7 +107,7 @@ export class CargoItemGroup extends Component {
         </div>
         { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].chargeable_weight).toFixed(2)}</span> &nbsp;kg</p>
+            <p className="flex-none layout-row layout-align-center-center"><span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span> &nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
         </div> : '' }

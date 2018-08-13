@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 // import styles from './NavSidebar.scss';
 // import Style from 'style-it';
-import { AdminNavItem } from '../../components/Admin/AdminNavItem'
+import { AdminNavItem } from '../Admin/AdminNavItem'
 
 export function NavSidebar ({
   navLinkInfo,

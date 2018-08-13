@@ -48,7 +48,7 @@ class Header extends Component {
     document.removeEventListener('scroll', this.checkIsTop)
   }
   checkIsTop () {
-    const isTop = window.pageYOffset < 10
+    const isTop = window.pageYOffset < 130
     if (isTop !== this.state.isTop) {
       this.setState({ isTop })
     }
@@ -75,8 +75,10 @@ class Header extends Component {
       req,
       scrollable,
       noMessages,
-      component
-      // adminDispatch
+      component,
+      toggleShowLogin,
+      // adminDispatch,
+      isLanding
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -101,14 +103,6 @@ class Header extends Component {
         key: 'signOut'
       }
     ]
-
-    const dropDown = (
-      <NavDropdown
-        dropDownText={dropDownText}
-        linkOptions={accountLinks}
-        invert={isTop && invert}
-      />
-    )
 
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
     const mail = (
@@ -135,6 +129,17 @@ class Header extends Component {
       logoStyle = styles.logo
     }
 
+    const dropDown = (
+      <NavDropdown
+        dropDownText={dropDownText}
+        linkOptions={accountLinks}
+        invert={isTop && invert}
+        user={user}
+        isLanding={isLanding}
+        toggleShowLogin={toggleShowLogin}
+      />
+    )
+
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -142,7 +147,6 @@ class Header extends Component {
       </div>
     )
 
-    const rightCorner = user && user.first_name && !user.guest ? dropDowns : ''
     const loginModal = (
       <Modal
         component={
@@ -182,7 +186,7 @@ class Header extends Component {
           </div>
           {component}
           <div className="flex layout-row layout-align-end-center">
-            {rightCorner}
+            {dropDowns}
             {
               (
                 this.state.showLogin ||
@@ -205,6 +209,7 @@ Header.propTypes = {
   user: PropTypes.user,
   registering: PropTypes.bool,
   loggingIn: PropTypes.bool,
+  isLanding: PropTypes.bool,
   invert: PropTypes.bool,
   loginAttempt: PropTypes.bool,
   messageDispatch: PropTypes.shape({
@@ -216,6 +221,7 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
+  toggleShowLogin: PropTypes.func,
   noMessages: PropTypes.bool,
   component: PropTypes.node
 }
@@ -225,6 +231,7 @@ Header.defaultProps = {
   theme: null,
   user: null,
   registering: false,
+  isLanding: false,
   loggingIn: false,
   invert: false,
   loginAttempt: false,
@@ -232,6 +239,7 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   req: null,
+  toggleShowLogin: null,
   scrollable: false,
   noMessages: false,
   component: null
@@ -246,6 +254,7 @@ function mapStateToProps (state) {
   } = authentication
   const { unread, messages } = messaging
   const { currencies } = app
+
   return {
     user,
     tenant,

@@ -34,6 +34,33 @@ function getHubs (redirect, page, hubType, country, status) {
     )
   }
 }
+function getAllHubs () {
+  function request (hubData) {
+    return { type: adminConstants.GET_ALL_HUBS_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.GET_ALL_HUBS_SUCCESS, payload: hubData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_ALL_HUBS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.getAllHubs().then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function searchHubs (text, page, hubType, country, status) {
   function request (hubData) {
     return { type: adminConstants.GET_HUBS_REQUEST, payload: hubData }
@@ -49,6 +76,33 @@ function searchHubs (text, page, hubType, country, status) {
     dispatch(request())
 
     adminService.searchHubs(text, page, hubType, country, status).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function searchShipments (text, target, page) {
+  function request (hubData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS, payload: hubData }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.searchShipments(text, target, page).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
@@ -524,7 +578,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (redirect) {
+function getShipments (requestedPage, openPage, finishedPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -538,13 +592,41 @@ function getShipments (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments().then(
+    adminService.getShipments(requestedPage, openPage, finishedPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/shipments'))
         }
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function deltaShipmentsPage (target, page) {
+  function request (shipmentData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
+  }
+  function success (shipmentData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS, payload: shipmentData }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deltaShipmentsPage(target, page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Shipments successful'))
+        dispatch(success(data))
       },
       (error) => {
         // ;
@@ -1640,7 +1722,10 @@ export const adminActions = {
   editCustomsFees,
   updateHubMandatoryCharges,
   assignDedicatedPricings,
-  searchHubs
+  searchHubs,
+  getAllHubs,
+  searchShipments,
+  deltaShipmentsPage
 }
 
 export default adminActions

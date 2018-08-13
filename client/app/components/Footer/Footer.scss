@@ -1,11 +1,4 @@
  :local {
-    .footer {
-      min-height: 167px;
-      background: #5E5E5E;
-    }
-    .button_row {
-      height: 80%;
-    }
     .buttons div a {
       text-decoration: none;
       color: white;
@@ -42,12 +35,28 @@
       text-decoration: none !important;
     }
     .powered_by_logo {
-      width: 120px;
+      width: 100px;
       height: auto;
     }
     .footer_wrapper {
       position: absolute;
       bottom: 0;
       width: 100%;
+    }
+    .footer_shop {
+      min-height: 100px;
+      min-width: 950px;
+      background: #5E5E5E;
+    }
+    .copyright_shop {
+      color: white;
+    }
+    .upper_footer {
+      background: #5E5E5E;
+      height: 50px;
+    }
+    .lower_footer {
+      background: #323D63;
+      height: 50px;
     }
   }

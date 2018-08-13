@@ -41,7 +41,9 @@ class User < ApplicationRecord
   has_many :user_managers
   has_many :pricings
 
-  %i(admin shipper super_admin sub_admin).each do |role_name|
+  belongs_to :agency, optional: true
+
+  %i(admin shipper super_admin sub_admin agent agency_manager).each do |role_name|
     scope role_name, -> { joins(:role).where("roles.name": role_name) }
   end
 

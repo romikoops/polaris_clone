@@ -15,6 +15,7 @@ subdomains.each do |sub|
   tenant.trucking_pricings.delete_all
   HubTrucking.where(hub_id: tenant.hubs).delete_all
   tenant.hubs.destroy_all
+  Addon.destroy_all
   # #   # # # # #Overwrite hubs from excel sheet
   puts '# Overwrite hubs from excel sheet'
   hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__hubs.xlsx")
@@ -32,14 +33,19 @@ subdomains.each do |sub|
   req = { 'xlsx' => local_charges }
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
-
+  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx")
   req = { 'xlsx' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
-
+  
+  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
   # admin_sea = tenant.users.new(
   #   role: Role.find_by_name('admin'),
 

@@ -8,22 +8,52 @@ class ShipmentsController < ApplicationController
 
   def index
     @shipper = current_user
-    requested_shipments = Shipment.where(
+    requested_shipments = @shipper.shipments.where(
       status:    %w[requested requested_by_unconfirmed_account],
       tenant_id: current_user.tenant_id
     )
-    open_shipments = Shipment.where(
+    open_shipments = @shipper.shipments.where(
       status:    %w[in_progress confirmed],
       tenant_id: current_user.tenant_id
     )
-    finished_shipments = Shipment.where(status: "finished", tenant_id: current_user.tenant_id)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
-    @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
+    finished_shipments = @shipper.shipments.where(status: "finished", tenant_id: current_user.tenant_id)
+    r_shipments = requested_shipments
+    o_shipments = open_shipments
+    f_shipments = finished_shipments
+    num_pages = {
+      finished: (f_shipments.count / 6.0).ceil,
+      requested: (r_shipments.count / 6.0).ceil,
+      open: (o_shipments.count / 6.0).ceil
+    }
+    
     response_handler(
-      requested: @requested_shipments,
-      open:      @open_shipments,
-      finished:  @finished_shipments
+      requested: requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
+      open:      open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
+      finished:  finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
+      pages: {
+        open: params[:open_page],
+        finished: params[:finished_page],
+        requested: params[:requested_page]
+      },
+      num_shipment_pages: num_pages
+    )
+  end
+
+  def delta_page_handler
+    case params[:target]
+    when "requested"
+      shipment_association = current_user.shipments.requested
+    when "open"
+      shipment_association = current_user.shipments.open
+    when "finished"
+      shipment_association = current_user.shipments.finished
+    end
+    shipments = shipment_association.paginate(page: params[:page]).map(&:with_address_options_json)
+    response_handler(
+      shipments: shipments,
+      num_shipment_pages: (shipment_association.count / 6.0).ceil,
+      target: params[:target],
+      page: params[:page]
     )
   end
 
@@ -33,7 +63,38 @@ class ShipmentsController < ApplicationController
     tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
   end
 
+  def search_shipments
+    filterific_params = {
+      user_search: params[:query]
+    }
+    filters = [
+      :user_search
+    ]
+    case params[:target]
+    when "requested"
+      shipment_association = current_user.shipments.requested
+    when "open"
+      shipment_association = current_user.shipments.open
+    when "finished"
+      shipment_association = current_user.shipments.finished
+    end
 
+    filterrific = initialize_filterrific(
+      shipment_association,
+      filterific_params,
+      available_filters: filters,
+      sanitize_params: true
+    ) or return
+    shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
+    
+    response_handler(
+      shipments: shipments,
+      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
+      target: params[:target],
+      page: params[:page]
+    )
+
+  end
 
   # Uploads document and returns Document item
   def upload_document

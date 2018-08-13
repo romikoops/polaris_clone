@@ -8,41 +8,22 @@ jest.mock('../../helpers', () => ({
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
 
   return { v4 }
 })
-jest.mock('./UserMergedShipHeaders', () => ({
-  // eslint-disable-next-line react/prop-types
-  UserMergedShipHeaders: ({ children }) => <div>{children}</div>
-}))
-jest.mock('./UserMergedShipment', () => ({
-  // eslint-disable-next-line react/prop-types
-  UserMergedShipment: ({ children }) => <div>{children}</div>
-}))
 jest.mock('./index.jsx', () => ({
   // eslint-disable-next-line react/prop-types
   UserLocations: ({ children }) => <div>{children}</div>
-}))
-jest.mock('../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: ({ props }) => <button {...props} />
-}))
-jest.mock('../TextHeading/TextHeading', () => ({
-  // eslint-disable-next-line react/prop-types
-  TextHeading: ({ children }) => <div>{children}</div>
 }))
 jest.mock('../Admin/AdminSearchables', () => ({
   // eslint-disable-next-line react/prop-types
   AdminSearchableClients: ({ children }) => <div>{children}</div>
 }))
-jest.mock('../Carousel/Carousel', () => ({
-  // eslint-disable-next-line react/prop-types
-  Carousel: ({ children }) => <div>{children}</div>
-}))
+
 // eslint-disable-next-line import/first
 import { UserDashboard } from './UserDashboard'
 

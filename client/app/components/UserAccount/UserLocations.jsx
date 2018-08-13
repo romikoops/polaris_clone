@@ -10,7 +10,7 @@ import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient) => [
   <div
     key="addLocationButton"
-    className={`${defaults.pointy} flex-30 flex-md-45 margin_bottom`}
+    className={`${defaults.pointy} flex-30 flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
     onClick={() => toggleActiveView('editLocation')}
   >
     <div
@@ -28,7 +28,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
     </div>
   </div>,
   locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
-    <div key={v4()} className="flex-30 flex-md-45 margin_bottom">
+    <div key={v4()} className={`flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}>
       <div className={`${styles['location-box']} flex-100 layout-column`}>
         <div className={`${styles.header} layout-row layout-align-end-center`}>
           {op.user.primary ? (
@@ -60,10 +60,18 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
         <div className={`layout-row flex-100 layout-align-center-start ${styles.location_address}`}>
           <i className="fa fa-map-marker clip" style={gradient} />
           <div className={`${styles.content} layout-row layout-wrap layout-align-start-start`}>
-            <p className="flex-100">{op.location.street_number} {op.location.street} </p>
-            <p className="flex-100"><strong>{op.location.city}</strong></p>
-            <p className="flex-100">{op.location.zip_code} </p>
-            <p className="flex-100">{op.location.country} </p>
+            {op && op.location.street_number && op.location.street ? (
+              <p className="flex-100">{op.location.street_number} {op.location.street} </p>
+            ) : ''}
+            {op.location.city ? (
+              <p className="flex-100"><strong>{op.location.city}</strong></p>
+            ) : ''}
+            {op.location.zip_code ? (
+              <p className="flex-100">{op.location.zip_code}</p>
+            ) : ''}
+            {op.location.country ? (
+              <p className="flex-100">{op.location.country}</p>
+            ) : ''}
           </div>
         </div>
       </div>
@@ -177,7 +185,7 @@ export class UserLocations extends Component {
     }
 
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-space-between-center">{activeView}</div>
+      <div className="layout-row flex-100 layout-wrap layout-margin">{activeView}</div>
     )
   }
 }

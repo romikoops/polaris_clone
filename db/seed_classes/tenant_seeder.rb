@@ -176,7 +176,9 @@ class TenantSeeder
           about: 'https://freightservices.greencarrier.com/about-us/',
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
@@ -292,7 +294,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -380,7 +384,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -407,10 +413,10 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: '#427FAF',
-          secondary: '#FF9B0A',
-          brightPrimary: '#539ED7',
-          brightSecondary: '#FFAC36'
+          primary: '#FF9B0A',
+          secondary: '#427FAF',
+          brightPrimary: '#FFAC36',
+          brightSecondary: '#539ED7'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png',
@@ -456,7 +462,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -529,7 +537,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -605,7 +615,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -679,7 +691,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -751,7 +765,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -823,7 +839,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -898,7 +916,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -989,7 +1009,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1082,7 +1104,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1179,7 +1203,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1274,7 +1300,9 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1367,7 +1395,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1409,10 +1439,10 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: '#270C77',
-          secondary: '#4FAACA',
-          brightPrimary: '#270C77',
-          brightSecondary:  '#4FAACA'
+          primary: '#4FAACA',
+          secondary: '#270C77',
+          brightPrimary: '#4FAACA',
+          brightSecondary:  '#270C77'
         },
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/speedtrans/speedtranslogo.png',
@@ -1429,13 +1459,11 @@ class TenantSeeder
       },
       emails: {
         sales: {
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com',
           general: 'mkuester@speedtrans.com'
         },
         support: {
           general: 'mkuester@speedtrans.com',
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com'
         }
       },
@@ -1484,14 +1512,16 @@ class TenantSeeder
           about: 'http://www.speedtrans.com/ueberuns.php',
           legal: 'http://www.speedtrans.com/impressum.php'
         },
+        quotation_tool: false,
         consolidate_cargo: true,
+        customs_export_paper: true,
         fixed_currency: true,
         dangerous_goods: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
-        has_insurance: true,
-        has_customs: true,
+        has_insurance: false,
+        has_customs: false,
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1499,12 +1529,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'
+            export: 'optional'
           }
         }
       },
@@ -1600,7 +1630,9 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         dangerous_goods: false,
         detailed_billing: false,
@@ -1690,7 +1722,9 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         detailed_billing: false,
         incoterm_info_level: 'text',
@@ -1709,7 +1743,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -1776,7 +1810,9 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
+        quotation_tool: false,
         consolidate_cargo: false,
+        customs_export_paper: false,
         fixed_currency: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
@@ -1795,7 +1831,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -1811,6 +1847,100 @@ class TenantSeeder
           "Drum",
           "Skid",
           "Barrel"
+        ]
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#e10f21",
+          secondary: "#1d1d1b",
+          brightPrimary: "#ffffff",
+          brightSecondary: "#9d9d9c"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
+        background: "https://assets.itsmycargo.com/assets/logos/air_bg_1.jpg"
+      },
+      addresses: {
+        components: [],
+        main:"Niendorfer Str. 170, 22848 Norderstedt, Germany"
+      },
+      phones:{
+        main:"+49 (0)40 85 40 68-0",
+        support: "+49 (0)40 85 40 68-0"
+      },
+      emails: {
+        sales: {
+          general: "cglitscher@gatewaycargo.de"
+        },
+        support: {
+          general: "cglitscher@gatewaycargo.de"
+        }
+      },
+      subdomain: "gateway",
+      name: "Gateway Cargo Systems GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: false,
+            cargo_item: true
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: true,
+        detailed_billing: false,
+        quotation_tool: true,
+        consolidate_cargo: false,
+        customs_export_paper: false,
+        fixed_currency: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: false,
+        has_customs: false,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Gateway Cargo Systems GmbH is to discuss the validity of the presented prices with the product owners."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'
+          }
+        }
+      },
+      # The following data is not a attribute of the Tenant model
+      # only being used for seeding purposes
+      other_data: {
+        cargo_item_types: [
+          "Pallet",
+          "Carton",
+          "Crate",
+          "Bottle",
+          "Stack",
+          "Drum",
+          "Skid",
+          "Barrel"
+        ],
+        incoterms: %w[
+          EXW
+          FCA
+          FOB
+          FAS
         ]
       }
     }

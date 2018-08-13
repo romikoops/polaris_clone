@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
-import { AdminDashboardNew, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
+import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
@@ -23,8 +23,7 @@ import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
-// eslint-disable-next-line import/no-named-as-default
-import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
+import { AdminCurrencyCenter } from '../../components/Admin/Currency/Center'
 import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
@@ -92,7 +91,8 @@ class Admin extends Component {
       clients,
       dashboard,
       loading,
-      itinerarySchedules
+      itinerarySchedules,
+      allHubs
     } = adminData
 
     const hubHash = {}
@@ -104,7 +104,12 @@ class Admin extends Component {
     const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     const minHeightForFooter = window.innerHeight - 350
-    const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
+    const footerStyle = {
+      minHeight: `${minHeightForFooter}px`,
+      position: 'relative',
+      paddingBottom: '230px'
+    }
+
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
         {loadingScreen}
@@ -125,7 +130,7 @@ class Admin extends Component {
                   exact
                   path="/admin/dashboard"
                   render={props => (
-                    <AdminDashboardNew
+                    <AdminDashboard
                       user={user}
                       theme={theme}
                       {...props}
@@ -234,7 +239,7 @@ class Admin extends Component {
                 <Route
                   path="/admin/routes"
                   render={props => (
-                    <AdminRoutes theme={theme} {...props} hubHash={hubHash} clients={clients} />
+                    <AdminRoutes theme={theme} {...props} hubHash={hubHash} clients={clients} allHubs={allHubs} loading={loading} />
                   )}
                 />
                 <Route
@@ -252,7 +257,7 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <Footer theme={theme} tenant={tenant.data} />
+          <Footer theme={theme} tenant={tenant.data} isShop />
         </div>
       </div>
     )

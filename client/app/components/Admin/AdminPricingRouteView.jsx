@@ -5,7 +5,7 @@ import { AdminClientTile, AdminPriceEditor } from './'
 import styles from './Admin.scss'
 import shipmentStyles from './AdminShipments.scss'
 import AdminPromptConfirm from './Prompt/Confirm'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import {
   history,
   gradientBorderGenerator,
@@ -252,16 +252,16 @@ export class AdminPricingRouteView extends Component {
         </div>
 
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center buffer_10"
+          className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
         >
-          <div className={`layout-padding flex-100 layout-align-start-center ${styles.greyBg}`}>
+          <div className="layout-padding flex-100 layout-align-start-center greyBg">
             <span><b>Dedicated Pricings</b></span>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? { display: 'none' } : {}}>
             <div className="layout-row flex-100 layout-align-start-center slider_container">
               <div className="flex-100 layout-row layout-align-start-start card_margin_right slider_inner">
                 <div className={`flex-20 layout-row ${styles.set_button_height} tile_padding pointy`} onClick={() => this.addNewPricings()}>
-                  <AlternativeGreyBox
+                  <GreyBox
                     wrapperClassName="layout-row flex-100"
                     contentClassName="layout-column flex layout-align-center-center"
                     content={(

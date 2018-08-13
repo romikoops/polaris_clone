@@ -16,7 +16,7 @@ export default class CardRoutesIndex extends Component {
     super(props)
     this.state = {
       expander: {},
-      searchTexts: {},
+      searchText: '',
       page: 1,
       numPerPage: 12
     }
@@ -81,9 +81,9 @@ export default class CardRoutesIndex extends Component {
     //       />
     //     ))
     // } else if (this.props.itineraries && this.props.itineraries.length > 0) {
-    itinerariesArr = this.updateSearch(itineraries, mot)
+    itinerariesArr = this.updateSearch(itineraries)
       .slice(sliceStartIndex, sliceEndIndex)
-      .filter(itinerary => itinerary.mode_of_transport === mot)
+      // .filter(itinerary => itinerary.mode_of_transport === mot)
       .map((rt, i) => (
         <CardRoutes
           key={v4()}
@@ -101,21 +101,18 @@ export default class CardRoutesIndex extends Component {
     return itinerariesArr
   }
 
-  updateSearch (array, mot) {
-    const { searchTexts } = this.state
-
-    return filters.handleSearchChange(searchTexts[mot], ['name'], array)
+  updateSearch (array) {
+    const { searchText } = this.state
+    return filters.handleSearchChange(searchText, ['name'], array)
   }
-  handlePricingSearch (event, target) {
+  handlePricingSearch (event) {
+    const { itineraries } = this.props
     this.setState(
       {
-        searchTexts: {
-          ...this.state.searchTexts,
-          [target]: event.target.value
-        },
+        searchText: event.target.value,
         page: 1
       },
-      this.updateSearch()
+      () => this.updateSearch(itineraries)
     )
   }
   deltaPage (val) {
@@ -128,7 +125,7 @@ export default class CardRoutesIndex extends Component {
   }
 
   render () {
-    const { searchTexts, page, numPages } = this.state
+    const { searchText, page, numPages } = this.state
     const {
       limit, scope, toggleNew, mot, newText, sideMenuNodes
     } = this.props
@@ -183,7 +180,7 @@ export default class CardRoutesIndex extends Component {
           <div className="hide-sm hide-xs flex-100">
             <PricingSearchBar
               onChange={(e, t) => this.handlePricingSearch(e, t)}
-              value={searchTexts[mot]}
+              value={searchText}
               target={mot}
             />
             {sideMenuNodes}

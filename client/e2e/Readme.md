@@ -1,5 +1,12 @@
 # End-to-end tests
 
+## Scripts
+
+- `dev` - will save steps screenshots and will display additional logging
+- `dev:headless` - same as `dev` but with enabled headless mode
+- `dev:fast` - will save steps screenshots
+- `dev:all` - will save steps screenshots in headless mode
+
 ## How to run e2e tests with Docker
 
 1. Build with `docker build -t e2e .` or `yarn build`

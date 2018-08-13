@@ -235,8 +235,6 @@ export class ShipmentDetails extends Component {
   }
 
   setIncoTerm (opt) {
-    // this.handleCarriageChange('has_on_carriage', opt.onCarriage)
-    // this.handleCarriageChange('has_pre_carriage', opt.preCarriage)
     this.setState({
       incoterm: opt.value.id
     })
@@ -268,7 +266,9 @@ export class ShipmentDetails extends Component {
         filteredRouteIndexes
       } = prevState
       const { routes } = this.props.shipmentData
-
+      if (!routes) {
+        return { filteredRouteIndexes }
+      }
       if (filteredRouteIndexes.length === 0) {
         return { filteredRouteIndexes: routes.map((_, i) => i) }
       }
@@ -300,6 +300,7 @@ export class ShipmentDetails extends Component {
     const newContainerErrors = obj.containers_attributes.map(cia => ({
       payload_in_kg: false
     }))
+    this.getInitalFilteredRouteIndexes()
 
     this.setState({
       cargoItems: obj.cargo_items_attributes,
@@ -335,7 +336,7 @@ export class ShipmentDetails extends Component {
       cargoItemsErrors: newCargoItemsErrors,
       containersErrors: newContainerErrors,
       selectedDay: obj.shipment.has_pre_carriage
-        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_dropp_off_date,
+        ? obj.shipment.planned_pickup_date : obj.shipment.planned_origin_drop_off_date,
       origin: reuseShipments.reuseLocation(obj.shipment, 'origin'),
       destination: reuseShipments.reuseLocation(obj.shipment, 'destination'),
       has_on_carriage: !!obj.shipment.trucking.on_carriage.truck_type,
@@ -412,7 +413,13 @@ export class ShipmentDetails extends Component {
 
   updateAirMaxDimensionsTooltips (value, divRef, suffixName) {
     const { maxDimensions } = this.props.shipmentData
-    if (!maxDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) return
+    const { availableMotsForRoute } = this.state
+    if (
+      !maxDimensions.air ||
+      (availableMotsForRoute.length && availableMotsForRoute.every(mot => mot === 'air'))
+    ) {
+      return
+    }
 
     if (+value > +maxDimensions.air[camelize(suffixName)]) {
       setTimeout(() => { ReactTooltip.show(divRef) }, 500)
@@ -423,7 +430,11 @@ export class ShipmentDetails extends Component {
 
   updatedExcessChargeableWeightText (cargoItems) {
     const { maxAggregateDimensions } = this.props.shipmentData
-    if (!maxAggregateDimensions.air || this.state.availableMotsForRoute.every(mot => mot === 'air')) {
+    const { availableMotsForRoute } = this.state
+    if (
+      !maxAggregateDimensions.air ||
+      (availableMotsForRoute.length && availableMotsForRoute.every(mot => mot === 'air'))
+    ) {
       return ''
     }
 
@@ -734,7 +745,6 @@ export class ShipmentDetails extends Component {
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
-
     const mapBox = (
       <GmapsLoader
         theme={theme}
@@ -762,6 +772,7 @@ export class ShipmentDetails extends Component {
         reusedShipment={this.props.reusedShipment}
       />
     )
+
     const formattedSelectedDay = this.state.selectedDay
       ? moment(this.state.selectedDay).format('DD/MM/YYYY')
       : ''

@@ -150,7 +150,6 @@ export class ChooseOffer extends Component {
     mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
       scheduleObj[mk].sort((a, b) => Math.abs(moment(depDay).diff(a.closing_date)) - Math.abs(moment(depDay).diff(b.closing_date)))
-      // debugger // eslint-disable-line
       // scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {

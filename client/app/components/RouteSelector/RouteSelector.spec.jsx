@@ -5,7 +5,7 @@ import { theme, route, identity } from '../../mocks'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
@@ -25,4 +25,12 @@ const createShallow = propsInput => shallow(<RouteSelector {...propsInput} />)
 
 test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
+})
+
+test('routes is falsy', () => {
+  const props = {
+    ...propsBase,
+    routes: null
+  }
+  expect(createShallow(props)).toMatchSnapshot()
 })

@@ -306,14 +306,6 @@ export class EditLocation extends Component {
           className="layout-row flex-100"
           onClick={() => this.props.toggleActiveView('allLocations')}
         />
-
-        {/* <input
-                    name="abc"
-                    onChange={this.handleInputChange}
-                    className={`${styles.input}`}
-                    type="string"
-                    placeholder="Geocoded address"
-                /> */}
         <div className="flex-100 layout-row layout-align-end-center">
           <div
             className="flex-none layout-row layout-align-center-center"
@@ -329,7 +321,7 @@ export class EditLocation extends Component {
           {autoInput}
           <div id="map" className={styles.loc_map} style={mapStyle} />
         </div>
-        <div className="flex-30 offset-5 layout-column layout-align-center-end">
+        <div className="flex-30 offset-5 layout-row layout-wrap layout-align-center-end">
           {originFields}
           <RoundButton
             active

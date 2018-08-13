@@ -81,6 +81,9 @@
   .relative {
     position: relative;
   }
+  .absolute {
+    position: absolute;
+  }
   .extra_padding {
     padding-left: 70px;
     padding-right: 70px;
@@ -325,10 +328,15 @@
   .card_margin_right{
     > * {
       margin-right: 25px;
-      &:last-child {
-        margin-right: 0 !important;
-      }
+      // &:last-child {
+      //   margin-right: 0 !important;
+      // }
     }
+  }
+  .greyBg {
+    background-color: #E0E0E0;
+    margin-bottom: 20px;
+    padding: 12px 18px;
   }
   .slider_container {
     position: relative;
@@ -357,4 +365,13 @@
   .tile_padding {
     padding: 10px;
   }
+
+  .text-break {
+    overflow-wrap: break-word;
+  }
+
+  .card_lineup {
+    margin-left: -8px;
+    margin-right: 8px;
+  } 
 }

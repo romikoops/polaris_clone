@@ -11,13 +11,18 @@ import { theme, identity, shipment } from '../../mocks'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
 
   return { v4 }
 })
+jest.mock('../../helpers', () => ({
+  formattedPriceValue: () => 109,
+  totalPrice: x => ({ currency: 'CNY' })
+}))
+
 jest.mock('../../constants', () => {
   const moment = input => ({
     format: () => input,

@@ -18,6 +18,8 @@ import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
+import { Modal } from '../../components/Modal/Modal'
+import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -37,7 +39,8 @@ class Shop extends Component {
       stageTracker: {},
       shopType: 'Booking',
       fakeLoading: false,
-      showRegistration: false
+      showRegistration: false,
+      showLogin: false
     }
     this.selectLoadType = this.selectLoadType.bind(this)
     this.chooseOffer = this.chooseOffer.bind(this)
@@ -80,6 +83,12 @@ class Shop extends Component {
     this.setState({ stageTracker: { stage } })
   }
 
+  toggleShowLogin () {
+    this.setState(prevState => ({
+      showLogin: !prevState.showLogin
+    }))
+  }
+
   selectShipmentStageAndGo (stage) {
     const { history, bookingData } = this.props
     const activeId = bookingData.activeShipment
@@ -92,10 +101,10 @@ class Shop extends Component {
   }
 
   toggleShowRegistration (req) {
-    this.setState({
-      showRegistration: !this.state.showRegistration,
+    this.setState(prevState => ({
+      showRegistration: !prevState.showRegistration,
       req
-    })
+    }))
   }
 
   hideRegistration () {
@@ -167,16 +176,36 @@ class Shop extends Component {
       shipmentDispatch,
       bookingSummaryDispatch,
       currencies,
-      dashboard
+      dashboard,
+      noRedirect
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
-      request, response, error, reusedShipment, originalSelectedDay
+      request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req, showRegistration } = this.state
+
+    const loginModal = (
+      <Modal
+        component={
+          <LoginRegistrationWrapper
+            LoginPageProps={{
+              theme,
+              noRedirect,
+              handleClick: () => this.toggleShowLogin()
+            }}
+            RegistrationPageProps={{ theme, tenant, noRedirect }}
+            initialCompName="LoginPage"
+          />
+        }
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleShowLogin()}
+      />
+    )
 
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
@@ -184,12 +213,15 @@ class Shop extends Component {
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
         {loadingScreen}
+        {this.state.showLogin ? loginModal : ''}
         <Header
+          toggleShowLogin={() => this.toggleShowLogin()}
           theme={this.props.theme}
           component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
+          noMessages
           scrollable
         />
 
@@ -248,6 +280,7 @@ class Shop extends Component {
               chooseOffer={this.chooseOffer}
               theme={theme}
               tenant={tenant}
+              contacts={contacts}
               shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}
@@ -275,6 +308,7 @@ class Shop extends Component {
                 messages={error ? error.stage4 : []}
                 tenant={tenant}
                 user={user}
+                contacts={contacts}
                 shipmentDispatch={shipmentDispatch}
                 hideRegistration={this.hideRegistration}
                 reusedShipment={reusedShipment}
@@ -325,9 +359,11 @@ Shop.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   loading: PropTypes.bool,
+  noRedirect: PropTypes.bool,
   bookingData: PropTypes.shape({
     request: PropTypes.object,
     response: PropTypes.object,
+    contacts: PropTypes.arrayOf(PropTypes.contact),
     error: PropTypes.object
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
@@ -341,8 +377,12 @@ Shop.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string
   }).isRequired,
-
+  contactData: PropTypes.shape({
+    contact: PropTypes.contact,
+    location: PropTypes.location
+  }).isRequired,
   shipmentDispatch: PropTypes.shape({
+    updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
     setShipmentContacts: PropTypes.func
@@ -355,6 +395,7 @@ Shop.propTypes = {
 Shop.defaultProps = {
   theme: null,
   loading: false,
+  noRedirect: true,
   tenant: null,
   user: null,
   nexusDispatch: null,

@@ -8,7 +8,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { gradientTextGenerator, totalPriceString, totalPrice } from '../../helpers'
+import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
@@ -28,7 +28,7 @@ import {
   ALIGN_END,
   ALIGN_START,
   ALIGN_START_CENTER,
-  COLUMN_15,
+  COLUMN,
   ROW,
   WRAP_ROW
 } from '../../classNames'
@@ -81,7 +81,7 @@ export function calcFareTotals (feeHash) {
   const total = feeHash.total && +feeHash.total.value
 
   return Object.keys(feeHash).reduce((sum, k) => (
-    feeHash[k] && ['customs', 'insurance']
+    feeHash[k] && ['customs', 'insurance', 'addons']
       .includes(k) && feeHash[k].total ? sum - feeHash[k].total.value : sum
   ), total).toFixed(2)
 }
@@ -99,6 +99,12 @@ export function calcExtraTotals (feeHash) {
     feeHash.insurance.total &&
     feeHash.insurance.total.value) {
     res1 += parseFloat(feeHash.insurance.total.value)
+  }
+  if (feeHash &&
+    feeHash.addons &&
+    feeHash.addons.customs_export_paper &&
+    feeHash.addons.customs_export_paper.value) {
+    res1 += parseFloat(feeHash.addons.customs_export_paper.value)
   }
 
   return res1.toFixed(2)
@@ -193,7 +199,6 @@ export class BookingConfirmation extends Component {
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle })
     const feeHash = shipment.selected_offer
-
     const acceptedBtn = (
       <div className={BUTTON}>
         <RoundButton
@@ -349,8 +354,8 @@ export class BookingConfirmation extends Component {
                   theme={theme}
                   preCarriage={shipment.has_pre_carriage}
                   onCarriage={shipment.has_on_carriage}
-                  originFees={shipment.has_pre_carriage}
-                  destinationFees={shipment.has_on_carriage}
+                  originFees={shipment.selected_offer.export}
+                  destinationFees={shipment.selected_offer.import}
                   feeHash={feeHash}
                   tenant={{ data: tenant }}
                 />
@@ -794,7 +799,7 @@ function getNotifyeesJSX ({ notifyees, textStyle }) {
 
   const notifyeesJSX = notifyees.map(notifyee => (
     <div key={v4()} className={ROW(40)}>
-      <div className={`${COLUMN_15} ${ALIGN_START_CENTER}`}>
+      <div className={`${COLUMN(15)} ${ALIGN_START_CENTER}`}>
         <i
           className={`${styles.icon} fa fa-envelope-open-o flex-none`}
           style={textStyle}
@@ -914,7 +919,7 @@ function TotalGoodsValue (shipment) {
       </p>
       <p className="flex-100 no_m">{`${
         shipment.total_goods_value.currency
-      } ${parseFloat(shipment.total_goods_value.value).toFixed(2)}`}</p>
+      } ${numberSpacing(shipment.total_goods_value.value, 2)}`}</p>
     </div>
   ) : (
     ''

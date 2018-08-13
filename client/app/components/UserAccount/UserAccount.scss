@@ -74,9 +74,9 @@
   }
 
   .new-address {
-    cursor: pointer;
     border: 2px dashed #c7c7c7;
     box-shadow: none;
+    width: 100%;
 
     div {
       h3 {
@@ -125,14 +125,6 @@
   .currency_box {
     border-left: 2px solid #E0E0E0;
   }
-  .greyBg {
-    background-color: lightgrey;
-    margin-bottom: 20px;
-    padding: 12px 18px;
-    b {
-      margin: 15px auto;
-    }
-  }
   .currency_grey {
     p {
       padding: 8px 16px;
@@ -160,9 +152,15 @@
     margin-bottom: 15px;
   }
   .content_details {
-    padding: 18px;
+    padding: 18px 18px 18px 4vw;
   }
   .edit_icon {
+    cursor: pointer;
+  }
+  .profile_edit_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     cursor: pointer;
   }
   .save {
@@ -182,6 +180,9 @@
   .loc_map{
     position: relative;
   }
+  .loc_info {
+    height: 220px;
+  }
   .overlay_auto {
     position: absolute;
     z-index: 25;
@@ -197,7 +198,7 @@
     right: 0;
   }
   .location_address {
-      padding: 15px;
+      padding: 25px 15px 15px 15px;
     i {
       font-size: 25px;
     }
@@ -213,13 +214,14 @@
   }
   .new_contact_content {
     width: 650px;
-    height: 400px;
-    position: relative;
+    height: 435px;
+    position: fixed;
+    top: 208px;
     z-index: 85;
     border-radius: 5px;
     background: #ffffff;
     padding: 15px;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
     padding: 2px 25px;
@@ -237,43 +239,27 @@
     text-align: center;
   }
   .input {
-    margin: 5px;
+    margin: 5px 5px 15px;
     height: 36.91px;
+    width: 80%;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
-  .input_50 {
-    @extend .input;
-    // width: 250px;
-    width: calc(48% - 20px);
-  }
   .input_100 {
-    @extend .input;
-    // width: 5 20px;
-    width: calc(100% - 20px);
+    width: 100%;
   }
-  .input_zip {
-    @extend .input;
-    // width: 141px;
-    width: calc(28% - 20px);
+  .input_50 {
+    width: 50%;
   }
-  .input_cc{
-    @extend .input;
-    // width: 174px;
-    width: calc(33% - 20px);
+  .input_33 {
+    width: 33%;
   }
-  .input_no {
-    @extend .input;
-    // width: 115px;
-    width: calc(18% - 20px);
+  .input_60 {
+    width: 66%;
   }
-  .input_street {
-    @extend .input;
-    // width: 385px;
-    width: calc(78% - 20px);
-  }
+
   .contact_header, .contact_header p {
     color: #212121;
     // font-family: ".SF NS Display";
@@ -296,7 +282,7 @@
     -webkit-text-fill-color: transparent !important;
   }
   .username_title {
-    padding-left: 2vw;
+    padding: 2vw;
     h1 {
       font-size: 35px;
       margin: 0 !important;
@@ -425,5 +411,9 @@
   }
   .tile_padding {
     padding: 10px;
+  }
+
+  .location_spacing {
+    margin-left: 10px;
   }
 }

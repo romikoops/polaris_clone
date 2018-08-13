@@ -138,6 +138,7 @@ export default function shipment (state = {}, action) {
         loading: false
       }
     case shipmentConstants.CHOOSE_OFFER_REQUEST:
+
       return {
         ...state,
         request: {
@@ -149,6 +150,7 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
+        contacts: action.shipmentData.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData
@@ -349,6 +351,47 @@ export default function shipment (state = {}, action) {
           ...state.error,
           stage1: [action.error]
         }
+      }
+
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS: {
+      const contactData = action.payload
+
+      const { contacts } = state
+      const idx = contacts.findIndex(contact => contact.contact.id === contactData.id)
+      contacts[idx] = {
+        contact: {
+          firstName: contactData.first_name,
+          lastName: contactData.last_name,
+          companyName: contactData.company_name,
+          userId: contactData.user_id,
+          id: contactData.id,
+          email: contactData.email,
+          alias: contactData.alias,
+          phone: contactData.phone,
+          locationId: contactData.location_id
+        },
+        location: {
+          country: contactData.location.country.name,
+          city: contactData.location.city,
+          zipCode: contactData.location.zip_code,
+          street: contactData.location.street,
+          streetNumber: contactData.location.street_number,
+          geocodedAddress: contactData.location.geocoded_address
+        }
+      }
+
+      return {
+        ...state,
+        contacts
+      }
+    }
+    case shipmentConstants.SHIPMENT_UPDATE_CONTACT_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: { hubs: action.error }
       }
     default:
       return state

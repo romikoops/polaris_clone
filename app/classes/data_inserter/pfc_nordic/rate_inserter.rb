@@ -106,6 +106,19 @@ module DataInserter
           end
         end
 
+        def generate_trips
+          transit_time = @rate[:data][:transit_time] ? @rate[:data][:transit_time].to_i : 30
+          @itinerary.generate_weekly_schedules(
+            @itinerary.stops.order(:index),
+            [transit_time],
+            DateTime.now,
+            DateTime.now + 8.weeks,
+            [2, 5],
+            @tenant_vehicle.id,
+            4
+          )
+        end
+
         def hub_type_name
           @hub_type_name ||= {
             "ocean" => "Port",
@@ -152,6 +165,7 @@ module DataInserter
             
             find_or_create_itinerary
             find_transport_category
+            generate_trips
             create_pricings
           end
         end

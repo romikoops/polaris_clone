@@ -1,5 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`routes is falsy 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-start selector"
+>
+  No Routes Found
+</div>
+`;
+
 exports[`shallow rendering 1`] = `
 <div
   className="flex-100 layout-row layout-align-center-start selector"

@@ -40,6 +40,7 @@ class Tenant < ApplicationRecord
   has_many :conversations
   has_many :max_dimensions_bundles
   has_many :map_data
+  has_many :agencies
 
   validates :scope, presence: true, scope: true
   validates :emails, presence: true, emails: true
@@ -111,12 +112,6 @@ class Tenant < ApplicationRecord
   end
 
   def mot_scope_attributes(mot)
-    # applies the following conversion in order to get the attributes which find the MotScope:
-    #
-    #               mot                        --->          mot_scope_attributes
-    #
-    # { air: { container: true, ... }, ...}    --->    { "air_container" => true, ... }
-
     mot.reduce({}) do |h, (k, v)|
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end

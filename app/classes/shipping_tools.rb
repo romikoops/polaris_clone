@@ -25,9 +25,15 @@ module ShippingTools
       # TBD - Create custom errors (ApplicationError)
       shipment.save!
     end
-
-    itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-      Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+    if tenant.scope["quotation_tool"]
+      user_pricing_id = current_user.agency.agency_manager_id
+      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+        Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+      end
+    else
+      itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
+        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+      end
     end
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
@@ -85,6 +91,7 @@ module ShippingTools
     contact = current_user.contacts.find_or_create_by(
       contact_params(resource, contact_location.id)  # NOT CORRECT: .merge(alias: shipment.export?)
     )
+    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
     shipper = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
@@ -105,6 +112,7 @@ module ShippingTools
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []
+
     charge_breakdown = shipment.charge_breakdowns.selected
     existing_insurance_charge = charge_breakdown.charge('insurance')
     if existing_insurance_charge
@@ -160,7 +168,31 @@ module ShippingTools
           parent:                   @customs_charge
         )
       end
+      
       @customs_charge.update_price!
+    end
+    if shipment_data[:addons][:customs_export_paper]
+      @addons_charge = Charge.create(
+        children_charge_category: ChargeCategory.from_code("addons"),
+        charge_category:          ChargeCategory.grand_total,
+        charge_breakdown:         charge_breakdown,
+        price:                    Price.create(
+          currency: shipment_data[:addons][:customs_export_paper][:currency],
+          value: shipment_data[:addons][:customs_export_paper][:value]
+                                  ),
+        parent:                   charge_breakdown.charge('grand_total')
+      )
+      @customs_export_paper = Charge.create(
+        children_charge_category: ChargeCategory.from_code("customs_export_paper"),
+        charge_category:          ChargeCategory.grand_total,
+        charge_breakdown:         charge_breakdown,
+        price:                    Price.create(
+                                    currency: shipment_data[:addons][:customs_export_paper][:currency],
+                                    value: shipment_data[:addons][:customs_export_paper][:value]
+                                  ),
+        parent:                   @addons_charge
+      )
+      @addons_charge.update_price!
     end
     charge_breakdown.charge('grand_total').update_price!
     shipment.customs_credit = shipment_data[:customsCredit]
@@ -368,6 +400,8 @@ module ShippingTools
       shipment.trip.tenant_vehicle_id,
       shipment.origin_hub_id
     )
+    addons = Addon.prepare_addons(@origin_hub, @destination_hub, cargoKey, shipment.trip.tenant_vehicle_id, shipment.mode_of_transport, cargos, current_user)
+   
     import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
     export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
     total_fees = { total: { value: 0, currency: current_user.currency } }
@@ -401,6 +435,7 @@ module ShippingTools
       containers:     containers,
       cargoItems:     cargo_items,
       customs:        customs_fee,
+      addons:         addons,
       locations:      {
         origin:      origin.try(:to_custom_hash),
         destination: destination.try(:to_custom_hash)

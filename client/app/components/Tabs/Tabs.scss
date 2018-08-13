@@ -42,6 +42,12 @@
   }
   .content {
     z-index: 1;
+    a {
+      padding-bottom: 10px;
+    }
+    i {
+      padding-right: 12px;
+    }
   }
   a.active {
     font-weight: bold;

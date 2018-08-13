@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import ReactTooltip from 'react-tooltip'
 import PropTypes from 'prop-types'
+import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -25,13 +25,6 @@ class SideNav extends Component {
         url: '/account/dashboard',
         target: 'dashboard'
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-ship',
-      //   text: 'Avail. Routes',
-      //   url: '/chooseroute/chooseroute',
-      //   target: 'chooseRoutes'
-      // },
       {
         key: v4(),
         icon: 'fa-ship',
@@ -95,14 +88,6 @@ class SideNav extends Component {
         target: 'schedules',
         tooltip: menuTip.schedules
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-truck',
-      //   text: 'Trucking',
-      //   url: '/admin/trucking',
-      //   target: 'trucking',
-      //   tooltip: menuTip.trucking
-      // },
       {
         key: v4(),
         icon: 'fa-users',
@@ -119,14 +104,6 @@ class SideNav extends Component {
         target: 'routes',
         tooltip: menuTip.routes
       },
-      // {
-      //   key: v4(),
-      //   icon: 'fa-magic',
-      //   text: 'Set Up',
-      //   url: '/admin/wizard',
-      //   target: 'wizard',
-      //   tooltip: menuTip.setup
-      // },
       {
         key: v4(),
         icon: 'fa-money',
@@ -191,7 +168,7 @@ class SideNav extends Component {
         adminDispatch.getTrucking(true)
         break
       case 'shipments':
-        adminDispatch.getShipments(true)
+        adminDispatch.getShipments(1, 1, 1, true)
         break
       case 'clients':
         adminDispatch.getClients(true)
@@ -228,7 +205,7 @@ class SideNav extends Component {
       //   this.toggleModal()
       //   break
       case 'shipments':
-        userDispatch.getShipments(true)
+        userDispatch.getShipments(1, 1, 1, true)
         break
       case 'contacts':
         userDispatch.goTo('/account/contacts')

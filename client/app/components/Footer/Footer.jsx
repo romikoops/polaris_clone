@@ -4,7 +4,7 @@ import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 
-export function Footer ({ theme, tenant }) {
+export function Footer ({ theme, tenant, isShop }) {
   const primaryColor = {
     color: theme && theme.colors ? theme.colors.primary : 'black'
   }
@@ -19,47 +19,46 @@ export function Footer ({ theme, tenant }) {
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact'
   }
+
   return (
-    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper}`}>
-      <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
-        <div className={`flex-none ${defs.content_width} layout-row`}>
-          <div className="flex-50 layout-row layout-align-start-center">
-            <img src={logo} />
-          </div>
-          <div className="flex-50 layout-row layout-align-end-end">
-            <a
-              className={`flex-none layout-row layout-align-center-center pointy ${
-                styles.contact_elem
-              }`}
-              href={`mailto:${supportEmail}`}
-            >
-              <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
-              {supportEmail}
-            </a>
-            <div className={`flex-none layout-row layout-align-center-end ${styles.contact_elem}`}>
-              <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
-              {supportNumber}
+    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper}`} >
+      {isShop
+        ? <div />
+        : <div className={`${styles.contact_bar}
+         flex-100 layout-row layout-align-center-center`}
+        >
+          <div className={`flex-none ${defs.content_width} layout-row`}>
+            <div className="flex-50 layout-row layout-align-start-center">
+              <img src={logo} />
+            </div>
+            <div className="flex-50 layout-row layout-align-end-end">
+              <a
+                className={`flex-none layout-row layout-align-center-center pointy ${
+                  styles.contact_elem
+                }`}
+                href={`mailto:${supportEmail}`}
+              >
+                <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
+                {supportEmail}
+              </a>
+              <div className={`flex-none layout-row layout-align-center-end
+               ${styles.contact_elem}`}
+              >
+                <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
+                {supportNumber}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className={`${styles.footer} layout-row flex-100 layout-wrap`}>
-        <div className={`flex-100 ${styles.button_row} layout-row layout-align-end-center`}>
-          <div className={`flex-50 ${styles.buttons} layout-row layout-align-center-center`}>
-            <div className="flex-50 layout-row layout-align-start-center">
-              <div className="flex-5" />
-              <p className="flex-none">powered by</p>
-              <div className="flex-5" />
-              <img
-                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                alt=""
-                className={`flex-none ${styles.powered_by_logo}`}
-              />
-            </div>
-          </div>
-          <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
+      }
+      <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
+        <div className="flex-100 layout-align-center">
+          <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-center-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href={links && links.about ? links.about : defaultLinks.about}>
+              <a
+                target="_blank"
+                href={links && links.about ? links.about : defaultLinks.about}
+              >
                 About Us
               </a>
             </div>
@@ -80,20 +79,45 @@ export function Footer ({ theme, tenant }) {
               </a>
             </div>
             <div className="flex-25 layout-row layout-align-center-center">
-              <a target="_blank" href={links && links.legal ? links.legal : defaultLinks.legal}>
+              <a
+                target="_blank"
+                href={links && links.legal ? links.legal : defaultLinks.legal}
+              >
                 Legal
               </a>
             </div>
           </div>
-          <div className="flex-20" />
         </div>
-        <div className={`flex-100 layout-row ${styles.copyright}`}>
-          <div className="flex-80 layout-row layout-align-end-center">
-            <p className="flex-none">
-              Copyright © {moment().format('YYYY')} {tenantName}
-            </p>
+        <div className="flex-100 layout-align-center">
+          <div className={`flex-100
+          layout-row layout-align-space-between-center ${styles.lower_footer}`}
+          >
+            <div className="flex-20" />
+            <div className={`flex-60 ${styles.buttons}
+            layout-row layout-align-center-center`}
+            >
+              <div className="flex-45 layout-row layout-align-end-center">
+                <div className="flex-5" />
+                <p className="flex-none">Powered by</p>
+                <div className="flex-5" />
+              </div>
+              <div className="flex-55 layout-row layout-align-start-center">
+                <img
+                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                  alt=""
+                  className={`flex-none ${styles.powered_by_logo}`}
+                />
+              </div>
+            </div>
+            { isShop
+              ? <div className={`flex-20 layout-row layout-align-center ${styles.copyright_shop}`}>
+                <p className="flex-80">
+                    Copyright © {moment().format('YYYY')} {tenantName}
+                </p>
+              </div>
+              : <div className="flex-20" />
+            }
           </div>
-          <div className="flex-20" />
         </div>
       </div>
     </div>
@@ -102,12 +126,14 @@ export function Footer ({ theme, tenant }) {
 
 Footer.propTypes = {
   theme: PropTypes.theme,
-  tenant: PropTypes.tenant
+  tenant: PropTypes.tenant,
+  isShop: PropTypes.bool
 }
 
 Footer.defaultProps = {
   theme: {},
-  tenant: {}
+  tenant: {},
+  isShop: false
 }
 
 export default Footer

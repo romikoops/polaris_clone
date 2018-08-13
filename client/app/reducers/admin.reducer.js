@@ -170,6 +170,22 @@ export default function admin (state = {}, action) {
 
       return errHubs
     }
+    case adminConstants.GET_ALL_HUBS_REQUEST:
+      return state
+    case adminConstants.GET_ALL_HUBS_SUCCESS:
+      return {
+        ...state,
+        allHubs: action.payload.data.hubs,
+        loading: false
+      }
+    case adminConstants.GET_ALL_HUBS_FAILURE: {
+      const errHubs = merge({}, state, {
+        error: { hubs: action.error },
+        loading: false
+      })
+
+      return errHubs
+    }
     case adminConstants.GET_HUB_REQUEST: {
       const reqHub = merge({}, state, {
         loading: true
@@ -258,6 +274,41 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.ADMIN_GET_SHIPMENTS_FAILURE: {
+      const errShips = merge({}, state, {
+        error: { shipments: action.error },
+        loading: false
+      })
+
+      return errShips
+    }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST: {
+      return state
+    }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS:
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            ...state.dashboard.shipments,
+            [action.payload.data.target]: action.payload.data.shipments
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          [action.payload.data.target]: action.payload.data.shipments,
+          num_shipment_pages: {
+            ...state.shipments.num_shipment_pages,
+            [action.payload.data.target]: action.payload.data.num_shipment_pages, // eslint-disable-line
+          },
+          pages: {
+            ...state.shipments.pages,
+            [action.payload.data.target]: action.payload.data.page
+          }
+        },
+        loading: false
+      }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE: {
       const errShips = merge({}, state, {
         error: { shipments: action.error },
         loading: false
@@ -588,27 +639,24 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.GET_PRICINGS_REQUEST: {
-      const reqPric = merge({}, state, {
+      return {
+        ...state,
         loading: true
-      })
-
-      return reqPric
+      }
     }
     case adminConstants.GET_PRICINGS_SUCCESS: {
-      const succPric = merge({}, state, {
+      return {
+        ...state,
         pricingData: action.payload.data,
         loading: false
-      })
-
-      return succPric
+      }
     }
     case adminConstants.GET_PRICING_FAILURE: {
-      const errPric = merge({}, state, {
+      return {
+        ...state,
         error: { pricings: action.error },
         loading: false
-      })
-
-      return errPric
+      }
     }
 
     case adminConstants.DELETE_PRICING_REQUEST: {

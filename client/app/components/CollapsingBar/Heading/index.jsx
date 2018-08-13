@@ -15,11 +15,10 @@ export default function CollapsingHeading ({
   showArrow,
   headerWrapClasses
 }) {
-  // debugger // eslint-disable-line
   return (
     <div
       style={{ background: '#E0E0E0', color: '#4F4F4F' }}
-      className={`${styles.heading} flex-100 layout-row layout-align-space-between-center`}
+      className={`${styles.heading} pointy flex-100 layout-row layout-align-space-between-center`}
       onClick={handleCollapser}
     >
       {text ? (

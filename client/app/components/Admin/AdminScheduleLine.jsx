@@ -116,7 +116,7 @@ export class AdminScheduleLine extends Component {
                   className={styles.date_title}
                   style={gradientFontStyle}
                 >
-                                    Pickup Date
+                                    Pick-up Date
                 </h4>
               </div>
               <div className="flex-100 layout-row">

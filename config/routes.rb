@@ -18,7 +18,8 @@ Rails.application.routes.draw do
           get 'email_action'
         end
       end
-
+      get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
+      get 'search/shipments/:target', to: 'shipments#search_shipments'
       resources :trucking, only: %i[index create show]
       post 'trucking/trucking_zip_pricings',  to: 'trucking#overwrite_zip_trucking'
       post 'trucking/trucking_city_pricings', to: 'trucking#overwrite_city_trucking'
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
       resources :hubs, only: %i[index show create update] do
         patch 'set_status'
       end
+      get  'hubs/all/processed', to: 'hubs#all_hubs'
       post 'hubs/:id/update_mandatory_charges', to: 'hubs#update_mandatory_charges'
       post 'hubs/:hub_id/delete', to: 'hubs#delete'
       post 'hubs/:hub_id/image', to: 'hubs#update_image'
@@ -46,6 +48,7 @@ Rails.application.routes.draw do
       get  'route_pricings/:id',  to: 'pricings#route'
       post 'pricings/download', to: 'pricings#download_pricings'
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/test/:id', to: 'pricings#test'
       post 'pricings/train_and_ocean_pricings/process_csv',
         to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
 
@@ -110,7 +113,8 @@ Rails.application.routes.draw do
       post 'opt_out/:target', to: 'users#opt_out'
     end
     post 'notes/fetch', to: 'notes#get_notes'
-
+    get 'search/shipments/:target', to: 'shipments#search_shipments'
+    get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
     post 'create_shipment', controller: 'shipments/booking_process', action: 'create_shipment'
     resources :shipments, only: %i[index show] do
       get 'test_email'
@@ -129,7 +133,6 @@ Rails.application.routes.draw do
     get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
-    post 'contacts/update_contact/:id', to: 'contacts#update_contact'
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
 
     post 'contacts/new_alias', to: 'contacts#new_alias'
