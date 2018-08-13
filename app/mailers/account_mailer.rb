@@ -8,6 +8,7 @@ class AccountMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, opts={})
     tenant = record.tenant
+    @primary_color = tenant.theme.dig("colors", "primary")
 
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
@@ -24,6 +25,7 @@ class AccountMailer < Devise::Mailer
 
   def reset_password_instructions(record, token, opts={})
     tenant = record.tenant
+    @primary_color = tenant.theme.dig("colors", "primary")
 
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
