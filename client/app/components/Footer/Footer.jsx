@@ -52,7 +52,7 @@ export function Footer ({ theme, tenant, isShop }) {
         </div>
       }
       <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
-        <div className={`flex-100 layout-align-center ${styles.button_row}`}>
+        <div className="flex-100 layout-align-center">
           <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-center-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
               <a
@@ -88,8 +88,8 @@ export function Footer ({ theme, tenant, isShop }) {
             </div>
           </div>
         </div>
-        <div className={`flex-100 layout-align-center ${styles.button_row}`}>
-          <div className={`flex-100 ${styles.button_row}
+        <div className="flex-100 layout-align-center">
+          <div className={`flex-100
           layout-row layout-align-space-between-center ${styles.lower_footer}`}
           >
             <div className="flex-20" />
