@@ -847,7 +847,7 @@ export class ShipmentLocationBox extends Component {
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []
-      newFilteredRouteIndexes.forEach((idx) => {
+      indexes.forEach((idx) => {
         const route = routes[idx]
         newFilteredRoutes.push(route)
         if (counterpartNexusIds.includes(route[counterpart].nexusId)) return
