@@ -277,7 +277,7 @@ class AdminSchedules extends Component {
       icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardRoutesIndex
-        itineraries={itineraries}
+        itineraries={itineraries.filter(itin => itin.mode_of_transport === mot)}
         theme={theme}
         scope={scope}
         mot={mot}

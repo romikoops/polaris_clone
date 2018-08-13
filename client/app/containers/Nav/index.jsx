@@ -122,6 +122,15 @@ class NavBar extends Component {
               {`${routeName}`}
             </div>
           )
+        } else if (categories[2] === 'trucking') {
+          return (
+            <div
+              className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
+            >
+              {' '}
+              {`${admin.truckingDetail.hub ? admin.truckingDetail.hub.name : ''}`}
+            </div>
+          )
         }
         const clientName =
           admin.clientPricings && admin.clientPricings.client

@@ -18,7 +18,8 @@ Rails.application.routes.draw do
           get 'email_action'
         end
       end
-
+      get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
+      get 'search/shipments/requested', to: 'shipments#search_requested_shipments'
       resources :trucking, only: %i[index create show]
       post 'trucking/trucking_zip_pricings',  to: 'trucking#overwrite_zip_trucking'
       post 'trucking/trucking_city_pricings', to: 'trucking#overwrite_city_trucking'

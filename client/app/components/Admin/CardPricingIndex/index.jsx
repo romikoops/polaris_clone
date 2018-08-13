@@ -19,9 +19,8 @@ export default class CardPricingIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      itineraries: props.itineraries,
       expander: {},
-      searchTexts: {},
+      searchText: '',
       page: 1,
       numPerPage: 9
     }
@@ -62,39 +61,23 @@ export default class CardPricingIndex extends Component {
       }
     })
   }
-  generateCardPricings (mot, limit) {
-    const { itineraries, page, numPerPage } = this.state
-    const { hubs, theme } = this.props
+  generateCardPricings (mot) {
+    const { page, numPerPage } = this.state
+    const { hubs, theme, itineraries } = this.props
     let itinerariesArr = []
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
-    if (itineraries && itineraries.length > 0) {
-      itinerariesArr = this.updateSearch(itineraries, mot)
-        .slice(sliceStartIndex, sliceEndIndex)
-        .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => (
-          <CardRoutesPricing
-            key={v4()}
-            hubs={hubs}
-            itinerary={rt}
-            theme={theme}
-            handleClick={this.handleClick}
-          />
-        ))
-    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
-      itinerariesArr = this.updateSearch(itineraries, mot)
-        .slice(sliceStartIndex, sliceEndIndex)
-        .filter(itinerary => itinerary.mode_of_transport === mot)
-        .map((rt, i) => (
-          <CardRoutesPricing
-            key={v4()}
-            hubs={hubs}
-            itinerary={rt}
-            theme={theme}
-            handleClick={this.handleClick}
-          />
-        ))
-    }
+    itinerariesArr = this.updateSearch(itineraries)
+      .slice(sliceStartIndex, sliceEndIndex)
+      .map((rt, i) => (
+        <CardRoutesPricing
+          key={v4()}
+          hubs={hubs}
+          itinerary={rt}
+          theme={theme}
+          handleClick={this.handleClick}
+        />
+      ))
 
     return itinerariesArr
   }
@@ -102,21 +85,19 @@ export default class CardPricingIndex extends Component {
     const { documentDispatch } = this.props
     documentDispatch.uploadPricings(file, 'lcl', false)
   }
-  updateSearch (array, mot) {
-    const { searchTexts } = this.state
+  updateSearch (array) {
+    const { searchText } = this.state
 
-    return filters.handleSearchChange(searchTexts[mot], ['name'], array)
+    return filters.handleSearchChange(searchText, ['name'], array)
   }
-  handlePricingSearch (event, target) {
+  handlePricingSearch (event) {
+    const { itineraries } = this.props
     this.setState(
       {
-        searchTexts: {
-          ...this.state.searchTexts,
-          [target]: event.target.value
-        },
+        searchText: event.target.value,
         page: 1
       },
-      this.updateSearch()
+      () => this.updateSearch(itineraries)
     )
   }
   deltaPage (val) {
@@ -129,11 +110,12 @@ export default class CardPricingIndex extends Component {
   }
 
   render () {
-    const { searchTexts, page, numPages } = this.state
+    const { searchText, page, numPages } = this.state
     const {
       theme, limit, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
+
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
 
@@ -183,7 +165,7 @@ export default class CardPricingIndex extends Component {
           <div className="hide-sm hide-xs">
             <PricingSearchBar
               onChange={(e, t) => this.handlePricingSearch(e, t)}
-              value={searchTexts[mot]}
+              value={searchText}
               target={mot}
             />
             <SideOptionsBox

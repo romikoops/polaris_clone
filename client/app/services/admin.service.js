@@ -64,6 +64,18 @@ function searchHubs (text, page, hubType, countryId, status) {
   return fetch(`${BASE_URL}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
+function searchShipments (text, target, page) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+
+  query += `query=${text}&page=${page || 1}`
+
+  return fetch(`${BASE_URL}/admin/search/shipments/${target}?${query}`, requestOptions)
+    .then(handleResponse)
+}
 
 function getItineraries () {
   const requestOptions = {
@@ -187,13 +199,26 @@ function getServiceCharges () {
 
   return fetch(`${BASE_URL}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments () {
+function getShipments (requestedPage, openPage, finishedPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  let query = ''
+  query += `open_page=${openPage || 1}`
+  query += `&requested_page=${requestedPage || 1}`
+  query += `&finished_page=${finishedPage || 1}`
 
-  return fetch(`${BASE_URL}/admin/shipments`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/shipments?${query}`, requestOptions).then(handleResponse)
+}
+function deltaShipmentsPage (target, page) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const query = `page=${page || 1}&target=${target}`
+
+  return fetch(`${BASE_URL}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
 
 function getDashboard () {
@@ -636,7 +661,9 @@ export const adminService = {
   updateHubMandatoryCharges,
   assignDedicatedPricings,
   searchHubs,
-  getAllHubs
+  getAllHubs,
+  searchShipments,
+  deltaShipmentsPage
 }
 
 export default adminService

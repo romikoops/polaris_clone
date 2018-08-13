@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
-import { adminActions } from '../../actions'
+import { adminActions, appActions } from '../../actions'
 import { history } from '../../helpers'
 
 class AdminTrucking extends Component {
@@ -38,7 +38,7 @@ class AdminTrucking extends Component {
 
   render () {
     const {
-      theme, adminDispatch, trucking, loading, truckingDetail, hubs
+      theme, adminDispatch, trucking, loading, truckingDetail, hubs, appDispatch
     } = this.props
     if (!trucking) {
       return ''
@@ -58,6 +58,7 @@ class AdminTrucking extends Component {
                 {...props}
                 hubs={hubs}
                 adminDispatch={adminDispatch}
+                appDispatch={appDispatch}
                 loading={loading}
                 viewTrucking={this.viewTrucking}
               />
@@ -110,7 +111,8 @@ AdminTrucking.propTypes = {
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool,
-  truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object })
+  truckingDetail: PropTypes.shape({ truckingHub: PropTypes.object, pricing: PropTypes.object }),
+  appDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 AdminTrucking.defaultProps = {
@@ -140,7 +142,8 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    appDispatch: bindActionCreators(appActions, dispatch)
   }
 }
 
