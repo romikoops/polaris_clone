@@ -39,6 +39,7 @@ export class LoginRegistrationWrapper extends Component {
       navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true
         ? `${styles.ie_11} layout-row layout-align-space-between`
         : 'layout-row layout-align-space-between'
+
     return (
       <div style={{ color: 'black' }}>
         <div>
