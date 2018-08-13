@@ -79,7 +79,6 @@ class UserContacts extends Component {
     let shouldDispatch = true
 
     contacts.forEach((_contact) => {
-      // debugger // eslint-disable-line no-debugger
       const contactWithLocation = {
         city: _contact.location && _contact.location.city,
         companyName: _contact.company_name,
@@ -92,7 +91,6 @@ class UserContacts extends Component {
         street: _contact.location && _contact.location.street,
         zipCode: _contact.location && _contact.location.zip_code
       }
-      // debugger // eslint-disable-line no-debugger
 
       if (areEqual(contactWithLocation, contact)) {
         shouldDispatch = false

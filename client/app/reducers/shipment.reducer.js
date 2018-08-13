@@ -141,7 +141,6 @@ export default function shipment (state = {}, action) {
 
       return {
         ...state,
-        contacts: state.response.stage3.contacts,
         request: {
           ...state.request,
           stage3: action.shipmentData
@@ -151,7 +150,7 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
-        contacts: state.contacts,
+        contacts: action.shipmentData.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData
@@ -360,27 +359,26 @@ export default function shipment (state = {}, action) {
       const contactData = action.payload
 
       const { contacts } = state
-
       const idx = contacts.findIndex(contact => contact.contact.id === contactData.id)
       contacts[idx] = {
         contact: {
-          firstName: contactData.firstName,
-          lastName: contactData.lastName,
-          companyName: contactData.companyName,
-          userId: contactData.userId,
+          firstName: contactData.first_name,
+          lastName: contactData.last_name,
+          companyName: contactData.company_name,
+          userId: contactData.user_id,
           id: contactData.id,
           email: contactData.email,
           alias: contactData.alias,
           phone: contactData.phone,
-          locationId: contactData.locationId
+          locationId: contactData.location_id
         },
         location: {
-          country: contactData.country,
-          city: contactData.city,
-          zipCode: contactData.zipCode,
-          street: contactData.street,
-          streetNumber: contactData.streetNumber,
-          geocodedAddress: contactData.geocodedAddress
+          country: contactData.location.country.name,
+          city: contactData.location.city,
+          zipCode: contactData.location.zip_code,
+          street: contactData.location.street,
+          streetNumber: contactData.location.street_number,
+          geocodedAddress: contactData.location.geocoded_address
         }
       }
 

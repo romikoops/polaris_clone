@@ -459,7 +459,7 @@ export class CargoDetails extends Component {
                         value={totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
-                        onChange={this.handleChange}
+                        onBlur={this.handleChange}
                         submitAttempted={finishBookingAttempted}
                         validations={{ nonNegative: (values, value) => value > 0 }}
                         validationErrors={{
@@ -505,7 +505,7 @@ export class CargoDetails extends Component {
                       type="textarea"
                       name="cargoNotes"
                       value={this.props.cargoNotes}
-                      onChange={this.handleChange}
+                      onBlur={this.handleChange}
                       submitAttempted={finishBookingAttempted}
                       validationErrors={{
                         isDefaultRequiredValue: 'Must not be empty'
@@ -526,14 +526,18 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                    <textarea
-                      className={styles.textarea_incoterm}
+                    <FormsyTextarea
+                      className={`flex-100 ${styles.cargo_text_area} `}
+                      wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                      errorMessageStyles={{
+                        fontSize: '13px',
+                        bottom: '-17px'
+                      }}
+                      type="textarea"
                       name="incotermText"
-                      id=""
-                      cols="30"
-                      rows="6"
                       value={this.props.incotermText}
-                      onChange={this.props.handleChange}
+                      onBlur={this.handleChange}
+                      submitAttempted={finishBookingAttempted}
                     />
                   </div>
                 </div>
@@ -594,14 +598,18 @@ export class CargoDetails extends Component {
                       </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                      <textarea
-                        className={styles.textarea_margin}
+                      <FormsyTextarea
+                        className={`flex-100 ${styles.cargo_text_area} `}
+                        wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                        errorMessageStyles={{
+                          fontSize: '13px',
+                          bottom: '-17px'
+                        }}
+                        type="textarea"
                         name="notes"
-                        id=""
-                        cols="30"
-                        rows="6"
                         value={this.props.notes}
-                        onChange={this.props.handleChange}
+                        onBlur={this.handleChange}
+                        submitAttempted={finishBookingAttempted}
                       />
                     </div>
                   </div>

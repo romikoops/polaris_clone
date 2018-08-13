@@ -13,7 +13,7 @@ class Contact < ApplicationRecord
   validates :email,        presence: true, length: { minimum: 3 }
 
   # validates uniqueness for each user
-  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email),
+  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email location_id),
                                     message: "Contact must be unique to add." }
 
   # Filterrific configuration
@@ -74,6 +74,22 @@ class Contact < ApplicationRecord
   # Instance methods
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      include: {
+        location: {
+          include: {
+            country: { only: :name }
+          },
+          except:  %i(created_at updated_at country_id)
+        }
+      },
+      except:  %i(created_at updated_at location_id)
+    )
+
+    as_json(new_options)
   end
 
   def full_name_and_company

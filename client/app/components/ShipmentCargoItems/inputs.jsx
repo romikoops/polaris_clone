@@ -4,7 +4,7 @@ import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { switchIcon, chargeableWeight, volume } from '../../helpers'
+import { switchIcon, chargeableWeight, volume, numberSpacing } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -125,7 +125,7 @@ export default function getInputs (
 
       <div className="flex">
         <p className={styles.input_label}>
-          { volume(cargoItem) }
+          { numberSpacing(volume(cargoItem), 3) }
           <span>m</span>
           <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
         </p>
@@ -171,7 +171,7 @@ export default function getInputs (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value}`}>
-          { chargeableWeight(cargoItem, mot) } kg
+          { numberSpacing(chargeableWeight(cargoItem, mot), 1) } kg
         </p>
       </div>
     )

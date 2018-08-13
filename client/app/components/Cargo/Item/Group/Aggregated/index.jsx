@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from '../CargoItemGroup.scss'
 import PropTypes from '../../../../../prop-types'
+import { numberSpacing } from '../../../../../helpers'
 
 export default function CargoItemGroupAggregated ({ group }) {
   return (
@@ -31,7 +32,7 @@ export default function CargoItemGroupAggregated ({ group }) {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span className={styles.cargo_type}>
-                {(+group.volume).toFixed(3)}
+                {numberSpacing(+group.volume, 3)}
               </span> &nbsp;m<sup>3</sup>
             </p>
             <p className="flex-none layout-row layout-align-center-center">Volume</p>
@@ -41,7 +42,7 @@ export default function CargoItemGroupAggregated ({ group }) {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span className={styles.cargo_type}>
-                {!group.size_class ? +(group.chargeable_weight).toFixed(3) : ''}
+                {!group.size_class ? numberSpacing(group.chargeable_weight, 2) : ''}
               </span>
               &nbsp;kg
             </p>

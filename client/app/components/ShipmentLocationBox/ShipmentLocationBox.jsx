@@ -842,7 +842,6 @@ export class ShipmentLocationBox extends Component {
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []
-
       indexes.forEach((idx) => {
         const route = routes[idx]
         newFilteredRoutes.push(route)
@@ -969,6 +968,20 @@ export class ShipmentLocationBox extends Component {
           >
             <p className="flex-none">Enter Pick-up Address</p>
           </div>
+
+          <input
+            name="origin-street"
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !origin.street ? styles.with_errors : ''}`
+            }
+            type="string"
+            onChange={this.handleAddressChange}
+            onFocus={this.handleAddressFormFocus}
+            onBlur={this.handleAddressFormFocus}
+            value={origin.street}
+            placeholder="Street"
+          />
           <input
             id="not-auto"
             name="origin-number"
@@ -982,19 +995,6 @@ export class ShipmentLocationBox extends Component {
             onBlur={this.handleAddressFormFocus}
             value={origin.number}
             placeholder="Number"
-          />
-          <input
-            name="origin-street"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.street ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={origin.street}
-            placeholder="Street"
           />
           <input
             name="origin-zipCode"
@@ -1093,6 +1093,19 @@ export class ShipmentLocationBox extends Component {
           >
             <p className="flex-none">Enter Delivery Address</p>
           </div>
+
+          <input
+            name="destination-street"
+            className={
+              `flex-90 ${styles.input} ` +
+              `${nextStageAttempts > 0 && !destination.street ? styles.with_errors : ''}`
+            }
+            onChange={this.handleAddressChange}
+            onFocus={this.handleAddressFormFocus}
+            onBlur={this.handleAddressFormFocus}
+            value={destination.street}
+            placeholder="Street"
+          />
           <input
             name="destination-number"
             className={
@@ -1105,18 +1118,6 @@ export class ShipmentLocationBox extends Component {
             onBlur={this.handleAddressFormFocus}
             value={destination.number}
             placeholder="Number"
-          />
-          <input
-            name="destination-street"
-            className={
-              `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.street ? styles.with_errors : ''}`
-            }
-            onChange={this.handleAddressChange}
-            onFocus={this.handleAddressFormFocus}
-            onBlur={this.handleAddressFormFocus}
-            value={destination.street}
-            placeholder="Street"
           />
           <input
             name="destination-zipCode"

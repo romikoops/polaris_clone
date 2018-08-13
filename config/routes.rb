@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       get  'route_pricings/:id',  to: 'pricings#route'
       post 'pricings/download', to: 'pricings#download_pricings'
       post 'pricings/update/:id', to: 'pricings#update_price'
+      post 'pricings/test/:id', to: 'pricings#test'
       post 'pricings/train_and_ocean_pricings/process_csv',
         to: 'pricings#overwrite_main_carriage', as: :main_carriage_pricings_overwrite
 
@@ -131,7 +132,6 @@ Rails.application.routes.draw do
     get 'countries', to: 'countries#index'
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
-    post 'contacts/update_contact/:id', to: 'contacts#update_contact'
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
 
     post 'contacts/new_alias', to: 'contacts#new_alias'
