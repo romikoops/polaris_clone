@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import AlternativeGreyBox from './AlternativeGreyBox'
+import GreyBox from './GreyBox'
 
 const propsBase = {
   title: 'FOO_TITLE',
@@ -10,7 +10,7 @@ const propsBase = {
 }
 
 test('shallow render', () => {
-  expect(shallow(<AlternativeGreyBox {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<GreyBox {...propsBase} />)).toMatchSnapshot()
 })
 
 test('title is falsy', () => {
@@ -18,5 +18,5 @@ test('title is falsy', () => {
     ...propsBase,
     title: ''
   }
-  expect(shallow(<AlternativeGreyBox {...props} />)).toMatchSnapshot()
+  expect(shallow(<GreyBox {...props} />)).toMatchSnapshot()
 })

@@ -496,9 +496,6 @@
     opacity: 0;
     z-index: -1;
   }
-  // .component_view {
-  //   padding: 10px;
-  // }
   .hub_form {
     width: 800px;
     height: 750px;
@@ -932,6 +929,27 @@
       font-weight: bold;
      }
    }
+   .title_shipment_grey {
+    background: #E0E0E0;
+    color: #212121;
+    height: 38px;
+    p:first-child {
+      padding-left: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 18px;
+      span {
+        font-weight: bold;
+      }
+    }
+    p:last-child {
+      padding-right: 15px;
+      margin-top: 0;
+      margin-bottom: 0;
+      font-size: 12px;
+      text-align: left;
+    }
+  }
    .title_grey_with_button {
     background: #E0E0E0;
     color: #212121;

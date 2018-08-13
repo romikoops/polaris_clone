@@ -4,7 +4,7 @@ import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
-import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
+import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
 

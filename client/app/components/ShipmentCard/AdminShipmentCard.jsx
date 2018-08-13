@@ -16,7 +16,7 @@ import {
 } from '../../helpers'
 import GradientBorder from '../GradientBorder'
 
-export class AdminShipmentCardNew extends Component {
+export class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
 
@@ -312,17 +312,17 @@ export class AdminShipmentCardNew extends Component {
   }
 }
 
-AdminShipmentCardNew.propTypes = {
+AdminShipmentCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
   hubs: PropTypes.objectOf(PropTypes.hub)
 }
 
-AdminShipmentCardNew.defaultProps = {
+AdminShipmentCard.defaultProps = {
   shipment: {},
   theme: {},
   hubs: {}
 }
 
-export default AdminShipmentCardNew
+export default AdminShipmentCard

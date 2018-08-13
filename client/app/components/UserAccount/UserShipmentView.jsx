@@ -25,7 +25,7 @@ import DocumentsForm from '../Documents/Form'
 import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from '../Admin/AdminShipmentView/ShipmentOverviewShowCard'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
 
@@ -466,16 +466,10 @@ export class UserShipmentView extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-          <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
-            <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
-            <hr className="layout-row flex-md-40 flex-55" />
-            <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
-          </div>
-        </div>
-        <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
-          <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
-            <p className="layout-align-start-center layout-row">Shipment</p>
+        <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch margin_bottom`}>
+          <div className={`layout-row flex layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
+            <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
+            <p className="layout-row flex-md-30 flex-25 layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
           </div>
           {reuseShipment}
           {statusRequested}
@@ -484,16 +478,14 @@ export class UserShipmentView extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
           <Tabs
-            wrapperTabs="layout-row flex-100"
+            wrapperTabs="layout-row flex-100 margin_bottom"
           >
             <Tab
               tabTitle="Overview"
               theme={theme}
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-
                 <div className="layout-row flex-100 margin_bottom">
-
                   <GradientBorder
                     wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
                     gradient={gradientBorderStyle}
@@ -816,14 +808,14 @@ export class UserShipmentView extends Component {
               theme={theme}
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <AlternativeGreyBox
+                <GreyBox
                   title="Cargo Details"
                   wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right}`}
                   contentClassName="layout-column flex"
                   content={cargoView}
                 />
 
-                <AlternativeGreyBox
+                <GreyBox
                   wrapperClassName={`layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           ${styles.no_border_top} margin_bottom ${adminStyles.no_margin_box_right}`}
                   contentClassName="layout-row flex-100"
@@ -930,7 +922,7 @@ export class UserShipmentView extends Component {
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
 
-                <AlternativeGreyBox
+                <GreyBox
                   title="Documents"
                   wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
                   contentClassName="layout-row layout-wrap flex"

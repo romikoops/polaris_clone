@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import { UserShipmentCard } from './UserShipmentCard'
-import { AdminShipmentCardNew } from './AdminShipmentCardNew'
+import { AdminShipmentCard } from './AdminShipmentCard'
 import styles from './ShipmentOverviewCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 
@@ -24,7 +24,7 @@ export class ShipmentOverviewCard extends Component {
 
     return shipments.length > 0 ? shipments.map((shipment) => {
       const ShipCard = this.state.admin ? (
-        <AdminShipmentCardNew
+        <AdminShipmentCard
           shipment={shipment}
           dispatches={dispatches}
           theme={theme}
@@ -43,7 +43,7 @@ export class ShipmentOverviewCard extends Component {
           className="margin_bottom flex-100 flex-lg-50
           flex-gt-lg-33 layout-row card_padding card_lineup"
         >
-          <AlternativeGreyBox
+          <GreyBox
             wrapperClassName="layout-row flex layout-align-center-center"
             contentClassName="layout-row flex-100"
             content={ShipCard}
