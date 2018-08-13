@@ -14,7 +14,7 @@ class AccountMailer < Devise::Mailer
 
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
     redirect_url = base_url(tenant) + "account"
-    @confirmation_url = "https://api.itsmycargo.com/subdomain/#{tenant.subdomain}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
+    @confirmation_url = "#{base_server_url}subdomain/#{tenant.subdomain}/auth/confirmation?confirmation_token=#{token}&redirect_url=#{redirect_url}"
     
     @links = tenant.email_links ? tenant.email_links["confirmation_instructions"] : []
 
@@ -38,6 +38,14 @@ class AccountMailer < Devise::Mailer
   end
 
   private
+
+  def base_server_url
+    case Rails.env
+    when "production"  then "https://api.itsmycargo.com/"
+    when "development" then "http://localhost:3000/"
+    when "test"        then "http://localhost:3000/"
+    end
+  end
 
   def base_url(tenant)
     case Rails.env
