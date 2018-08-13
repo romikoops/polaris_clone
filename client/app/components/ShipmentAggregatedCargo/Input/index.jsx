@@ -27,7 +27,7 @@ export default function ShipmentAggregatedCargoInput ({
       validationErrors={{
         isDefaultRequiredValue: 'Must be greater than 0',
         nonNegative: 'Must be greater than 0',
-        maxValue: `Must be less that ${maxValue}`
+        maxValue: `Must be less than ${maxValue}`
       }}
       required
     />
