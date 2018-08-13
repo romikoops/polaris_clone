@@ -61,7 +61,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     )
   end
 
-  def search_requested_shipments
+  def search_shipments
     filterific_params = {
       user_search: params[:query]
     }
@@ -78,7 +78,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     response_handler(
       shipments: shipments,
       num_shipment_pages: (filterrific.find.count / 6.0).ceil,
-      target: 'requested',
+      target: params[:target],
       page: params[:page]
     )
 

@@ -71,7 +71,7 @@ export class AdminHubsComp extends Component {
         ...prevState.searchFilters,
         hubType: newTypeObj
       }
-    }), () => console.log(this.state.searchFilters.hubType))
+    }))
   }
   searchHubsFromPage (text, page, hubType, country, status) {
     const { adminDispatch } = this.props
@@ -134,9 +134,6 @@ export class AdminHubsComp extends Component {
       searchFilters.countries.map(selection => selection.value)
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-
-    // const setPage = !hubFilterKeys && !countryKeys && !statusFilterKeys ?
-      //   prevState.page : prevState.page + (1 * direction)
     this.setState((prevState) => {
       this.getHubsFromPage(prevState.page, hubFilterKeys, countryKeys, statusFilterKeys)
 

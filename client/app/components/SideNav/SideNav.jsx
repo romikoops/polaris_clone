@@ -205,7 +205,7 @@ class SideNav extends Component {
       //   this.toggleModal()
       //   break
       case 'shipments':
-        userDispatch.getShipments(true)
+        userDispatch.getShipments(1, 1, 1, true)
         break
       case 'contacts':
         userDispatch.goTo('/account/contacts')

@@ -58,6 +58,34 @@ function _delete (id) {
   }
 }
 
+function searchShipments (text, target, page) {
+  function request (hubData) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_SUCCESS, payload: hubData }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.searchShipments(text, target, page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function getLocations (user, redirect) {
   function request () {
     return { type: userConstants.GETLOCATIONS_REQUEST }
@@ -176,7 +204,7 @@ function makePrimary (userId, locationId, redirect) {
   }
 }
 
-function getShipments (redirect) {
+function getShipments (requestedPage, openPage, finishedPage, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -190,13 +218,40 @@ function getShipments (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getShipments().then(
+    userService.getShipments(requestedPage, openPage, finishedPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push('/account/shipments'))
         }
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
+function deltaShipmentsPage (target, page) {
+  function request (shipmentData) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
+  }
+  function success (shipmentData) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_SUCCESS, payload: shipmentData }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.deltaShipmentsPage(target, page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -653,7 +708,9 @@ export const userActions = {
   logOut,
   editUserLocation,
   optOut,
-  reuseShipment
+  reuseShipment,
+  searchShipments,
+  deltaShipmentsPage
 
 }
 
