@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         end
       end
       get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
-      get 'search/shipments/requested', to: 'shipments#search_requested_shipments'
+      get 'search/shipments/:target', to: 'shipments#search_shipments'
       resources :trucking, only: %i[index create show]
       post 'trucking/trucking_zip_pricings',  to: 'trucking#overwrite_zip_trucking'
       post 'trucking/trucking_city_pricings', to: 'trucking#overwrite_city_trucking'
@@ -113,7 +113,8 @@ Rails.application.routes.draw do
       post 'opt_out/:target', to: 'users#opt_out'
     end
     post 'notes/fetch', to: 'notes#get_notes'
-
+    get 'search/shipments/:target', to: 'shipments#search_shipments'
+    get 'shipments/pages/delta_page_handler', to: 'shipments#delta_page_handler'
     post 'create_shipment', controller: 'shipments/booking_process', action: 'create_shipment'
     resources :shipments, only: %i[index show] do
       get 'test_email'

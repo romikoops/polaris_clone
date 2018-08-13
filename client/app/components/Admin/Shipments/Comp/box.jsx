@@ -46,7 +46,6 @@ export class AdminShipmentsBox extends Component {
       numPages,
       shipments
     } = this.props
-
     return (
       <div
         className={`layout-row flex-100
@@ -79,9 +78,9 @@ export class AdminShipmentsBox extends Component {
           <div
             className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
                     `}
-            onClick={page > 1 ? prevPage : null}
+            onClick={parseInt(page, 10) > 1 ? prevPage : null}
           >
             {/* style={page === 1 ? { display: 'none' } : {}} */}
             <i className="fa fa-chevron-left" />
@@ -92,9 +91,9 @@ export class AdminShipmentsBox extends Component {
           <div
             className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${parseInt(page, 10) < numPages ? '' : styles.disabled}
                     `}
-            onClick={page < numPages ? nextPage : null}
+            onClick={parseInt(page, 10) < numPages ? nextPage : null}
           >
             <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <i className="fa fa-chevron-right" />

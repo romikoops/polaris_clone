@@ -33,6 +33,19 @@ function destroyLocation (userId, locationId) {
   return fetch(`${BASE_URL}/users/${userId}/locations/${locationId}`, requestOptions).then(handleResponse)
 }
 
+function searchShipments (text, target, page) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+
+  query += `query=${text}&page=${page || 1}`
+
+  return fetch(`${BASE_URL}/search/shipments/${target}?${query}`, requestOptions)
+    .then(handleResponse)
+}
+
 function makePrimary (userId, locationId) {
   const requestOptions = {
     method: 'PATCH',
@@ -51,17 +64,9 @@ function optOut (userId, target) {
   return fetch(`${BASE_URL}/users/${userId}/opt_out/${target}`, requestOptions).then(handleResponse)
 }
 
-function getShipments () {
-  const requestOptions = {
-    method: 'GET',
-    headers: authHeader()
-  }
-
-  return fetch(`${BASE_URL}/shipments`, requestOptions).then(handleResponse)
-}
-
 function getStoredUser () {
   const sortedUser = JSON.parse(window.localStorage.getItem(cookieKey))
+
   return sortedUser || {}
 }
 
@@ -91,6 +96,7 @@ function editUserLocation (userId, data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(
     `${BASE_URL}/users/${userId}/locations/${data.id}/edit`,
     requestOptions
@@ -173,6 +179,7 @@ function updateContact (data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/contacts/update_contact/${data.id}`, requestOptions).then(handleResponse)
 }
 
@@ -184,6 +191,7 @@ function newUserLocation (userId, data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/users/${userId}/locations`, requestOptions).then(handleResponse)
 }
 
@@ -195,6 +203,7 @@ function newContact (data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/contacts`, requestOptions).then(handleResponse)
 }
 
@@ -206,7 +215,31 @@ function newAlias (data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/contacts/new_alias`, requestOptions).then(handleResponse)
+}
+
+function getShipments (requestedPage, openPage, finishedPage) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+  query += `open_page=${openPage || 1}`
+  query += `&requested_page=${requestedPage || 1}`
+  query += `&finished_page=${finishedPage || 1}`
+
+  return fetch(`${BASE_URL}/shipments?${query}`, requestOptions).then(handleResponse)
+}
+
+function deltaShipmentsPage (target, page) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  const query = `page=${page || 1}&target=${target}`
+
+  return fetch(`${BASE_URL}/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
 
 function deleteAlias (aliasId) {
@@ -214,6 +247,7 @@ function deleteAlias (aliasId) {
     method: 'POST',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/contacts/delete_alias/${aliasId}`, requestOptions).then(handleResponse)
 }
 
@@ -222,6 +256,7 @@ function deleteContactAddress (addressId) {
     method: 'POST',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/contacts/delete_contact_address/${addressId}`, requestOptions).then(handleResponse)
 }
 
@@ -233,6 +268,7 @@ function saveAddressEdit (data) {
     headers: authHeader(),
     body: formData
   }
+
   return fetch(`${BASE_URL}/contacts/update_contact_address/${data.id}`, requestOptions).then(handleResponse)
 }
 function reuseShipment (id) {
@@ -240,6 +276,7 @@ function reuseShipment (id) {
     method: 'GET',
     headers: authHeader()
   }
+
   return fetch(`${BASE_URL}/shipments/${id}/reuse_booking_data`, requestOptions).then(handleResponse)
 }
 
@@ -267,6 +304,8 @@ export const userService = {
   editUserLocation,
   delete: _delete,
   optOut,
-  reuseShipment
+  reuseShipment,
+  searchShipments,
+  deltaShipmentsPage
 }
 export default userService
