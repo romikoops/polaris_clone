@@ -483,8 +483,6 @@ export class ShipmentLocationBox extends Component {
     this.infowindow.close()
     this.marker.setVisible(false)
     if (!place.geometry) {
-      console.error(`No details available for input: '${place.name}'`)
-
       return
     }
 
@@ -501,7 +499,6 @@ export class ShipmentLocationBox extends Component {
   }
   filterTruckTypesByHub (truckTypeObject) {
     this.setState({ truckTypeObject })
-    console.log(truckTypeObject)
   }
 
   updateAddressFieldsErrors (target) {
@@ -552,7 +549,6 @@ export class ShipmentLocationBox extends Component {
 
   scopeNexusOptions (nexusIds, hubIds, target) {
     getRequests.nexuses(nexusIds, hubIds, target, this.props.routeIds, (data) => {
-      console.log(Object.values(data)[0])
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
@@ -680,6 +676,7 @@ export class ShipmentLocationBox extends Component {
     if (!prevRequest.shipment) {
       return
     }
+    //
     const { shipment } = prevRequest
     const newState = {}
     if (!this.props.has_pre_carriage) {
@@ -805,7 +802,6 @@ export class ShipmentLocationBox extends Component {
   }
 
   prepForSelect (target) {
-    console.log('target')
     this.setState((prevState) => {
       const {
         truckingHubs, oSelect, dSelect
@@ -815,8 +811,8 @@ export class ShipmentLocationBox extends Component {
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
-
       let indexes = filteredRouteIndexes.slice()
+
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -828,7 +824,6 @@ export class ShipmentLocationBox extends Component {
           targetTrucking, `${target}Hub`
         )
       }
-
       let newFilteredRouteIndexes = routeFilters.scopeIndexes(
         filteredRouteIndexes,
         indexes
@@ -913,7 +908,7 @@ export class ShipmentLocationBox extends Component {
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
-
+    //
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">

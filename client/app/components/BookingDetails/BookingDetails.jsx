@@ -193,7 +193,7 @@ export class BookingDetails extends Component {
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const parsed = parseFloat(shipmentData.shipment.selected_offer.total.value, 10)
     const iVal = (gVal * 1.1 + parsed) * 0.0017
     if (bool) {
       return this.setState({ insurance: { bool, val: iVal } })
@@ -231,7 +231,7 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
-    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const parsed = parseFloat(shipmentData.shipment.selected_offer.total.value, 10)
 
     return parsed + customs.val + insurance.val
   }
