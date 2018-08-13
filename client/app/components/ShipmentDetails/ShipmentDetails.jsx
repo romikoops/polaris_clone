@@ -235,8 +235,6 @@ export class ShipmentDetails extends Component {
   }
 
   setIncoTerm (opt) {
-    // this.handleCarriageChange('has_on_carriage', opt.onCarriage)
-    // this.handleCarriageChange('has_pre_carriage', opt.preCarriage)
     this.setState({
       incoterm: opt.value.id
     })
@@ -747,8 +745,6 @@ export class ShipmentDetails extends Component {
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
-    console.log('filteredRouteIndexes !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    console.log(filteredRouteIndexes)
     const mapBox = (
       <GmapsLoader
         theme={theme}
@@ -776,9 +772,7 @@ export class ShipmentDetails extends Component {
         reusedShipment={this.props.reusedShipment}
       />
     )
-    if (shipmentData.routes.length > 0) {
-      // debugger // eslint-disable-line
-    }
+
     const formattedSelectedDay = this.state.selectedDay
       ? moment(this.state.selectedDay).format('DD/MM/YYYY')
       : ''

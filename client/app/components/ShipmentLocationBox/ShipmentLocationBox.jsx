@@ -483,8 +483,6 @@ export class ShipmentLocationBox extends Component {
     this.infowindow.close()
     this.marker.setVisible(false)
     if (!place.geometry) {
-      console.error(`No details available for input: '${place.name}'`)
-
       return
     }
 
@@ -501,7 +499,6 @@ export class ShipmentLocationBox extends Component {
   }
   filterTruckTypesByHub (truckTypeObject) {
     this.setState({ truckTypeObject })
-    console.log(truckTypeObject)
   }
 
   updateAddressFieldsErrors (target) {
@@ -552,7 +549,6 @@ export class ShipmentLocationBox extends Component {
 
   scopeNexusOptions (nexusIds, hubIds, target) {
     getRequests.nexuses(nexusIds, hubIds, target, this.props.routeIds, (data) => {
-      console.log(Object.values(data)[0])
       if (Object.values(data)[0].length > 0) {
         this.setState(data)
       } else {
@@ -806,7 +802,6 @@ export class ShipmentLocationBox extends Component {
   }
 
   prepForSelect (target) {
-    console.log('target')
     this.setState((prevState) => {
       const {
         truckingHubs, oSelect, dSelect
