@@ -138,7 +138,6 @@ export class AdminDashboard extends Component {
         <div className="layout-padding flex-100 layout-align-start-center greyBg">
           <span><b>Requested Shipments</b></span>
         </div>
-        {console.log(preparedRequestedShipments)}
         <ShipmentOverviewCard
           admin
           noTitle
