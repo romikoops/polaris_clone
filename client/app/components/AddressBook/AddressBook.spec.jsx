@@ -5,7 +5,7 @@ import { contact, theme, identity } from '../../mocks'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }

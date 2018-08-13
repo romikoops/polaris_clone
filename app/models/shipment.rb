@@ -61,12 +61,25 @@ class Shipment < ApplicationRecord
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
     end
   end
-
+  self.per_page = 6
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
   accepts_nested_attributes_for :contacts, allow_destroy: true
   accepts_nested_attributes_for :documents, allow_destroy: true
-
+  filterrific(
+    default_filter_params: { sorted_by: 'booking_placed_at_desc' },
+    available_filters: [
+      :user_name,
+      :company_name,
+      :reference_number,
+      :sorted_by,
+      :user_search,
+      :requested,
+      :open,
+      :finished,
+      :for_tenant
+    ]
+  )
   # Scopes
   scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
   scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
@@ -76,13 +89,45 @@ class Shipment < ApplicationRecord
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
 
+  scope :user_name, lambda { |query| 
+    user_ids = User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%").ids
+    where(user_id: user_ids)
+  }
+
+  scope :company_name, lambda { |query|
+    user_ids = User.where("company_name ILIKE ? ", "%#{query}%").ids
+    where(user_id: user_ids)
+  }
+
+  scope :reference_number, lambda { |query|
+    where("imc_reference ILIKE ? ", "%#{query}%")
+  }
+
+  scope :hub_names, lambda { |query|
+    hub_ids = Hub.where("name ILIKE ?", "%#{query}%").ids
+    where("origin_hub_id IN (?) OR destination_hub_id IN (?)", hub_ids, hub_ids)
+  }
+
+  scope :for_tenant, lambda { |query|
+    tenant = Tenant.find_by_subdomain
+    tenant.shipments
+  }
+
+  scope :user_search, lambda { |query|
+    user_name(query).or(Shipment.company_name(query)).or(Shipment.reference_number(query))
+      .or(Shipment.hub_names(query))
+  }
+
+
+
   # STATUSES.each do |status|
   #   scope status, -> { where(status: status) }
   # end
-
+ 
   %i(ocean air rail).each do |mot|
     scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
   end
+  
 
   # Class methods
 

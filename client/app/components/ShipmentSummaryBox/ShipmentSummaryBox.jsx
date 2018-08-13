@@ -71,7 +71,7 @@ export class ShipmentSummaryBox extends Component {
       layout-wrap layout-row layout-align-space-between-center"
       >
         <div className="flex-100 layout-row">
-          <TextHeading theme={theme} size={4} text="Pickup Address :" />
+          <TextHeading theme={theme} size={4} text="Pick-up Address :" />
         </div>
         <address className="flex-100 layout-row layout-wrap">
           {locations.origin.street_number} {locations.origin.street} <br />
@@ -148,7 +148,7 @@ export class ShipmentSummaryBox extends Component {
           <div className="flex-100 layout-row layout-align-start-center">
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="Pickup Date :" />
+                <TextHeading theme={theme} size={4} text="Pick-up Date :" />
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>

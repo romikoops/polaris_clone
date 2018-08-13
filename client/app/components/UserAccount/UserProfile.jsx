@@ -10,7 +10,7 @@ import '../../styles/select-css-custom.css'
 import { gradientTextGenerator } from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import {
   OptOutCookies,
   OptOutTenant,
@@ -512,7 +512,7 @@ export class UserProfile extends Component {
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
         >
           <div className="flex-100 layout-row layout-align-space-between-stretch">
-            <AlternativeGreyBox
+            <GreyBox
               wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
               contentClassName="layout-row flex"
               content={(
@@ -569,7 +569,7 @@ export class UserProfile extends Component {
                 </div>
               )}
             />
-            <AlternativeGreyBox
+            <GreyBox
               title="GDPR - Your Data"
               wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
               contentClassName="layout-column flex"

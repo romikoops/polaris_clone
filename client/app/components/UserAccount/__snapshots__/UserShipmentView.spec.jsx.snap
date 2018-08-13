@@ -357,13 +357,13 @@ exports[`loading is true 1`] = `
     contacts={Array []}
     style="#333"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={Array []}
     contentClassName="layout-column flex"
     title="Cargo Details"
     wrapperClassName="layout-row flex-100 no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="layout-column flex-100"
@@ -473,7 +473,7 @@ exports[`loading is true 1`] = `
     wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -962,13 +962,13 @@ exports[`shallow render 1`] = `
     contacts={Array []}
     style="#333"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={Array []}
     contentClassName="layout-column flex"
     title="Cargo Details"
     wrapperClassName="layout-row flex-100 no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="layout-column flex-100"
@@ -1078,7 +1078,7 @@ exports[`shallow render 1`] = `
     wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -1567,7 +1567,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
     contacts={Array []}
     style="#333"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       Array [
         <CargoItemGroup
@@ -1632,7 +1632,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
     title="Cargo Details"
     wrapperClassName="layout-row flex-100 no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="layout-column flex-100"
@@ -1742,7 +1742,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
     wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -2279,13 +2279,13 @@ exports[`shipmentData.contacts is present 1`] = `
     }
     style="#333"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={Array []}
     contentClassName="layout-column flex"
     title="Cargo Details"
     wrapperClassName="layout-row flex-100 no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="layout-column flex-100"
@@ -2395,7 +2395,7 @@ exports[`shipmentData.contacts is present 1`] = `
     wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -2884,13 +2884,13 @@ exports[`shipmentData.documents is present 1`] = `
     contacts={Array []}
     style="#333"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={Array []}
     contentClassName="layout-column flex"
     title="Cargo Details"
     wrapperClassName="layout-row flex-100 no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="layout-column flex-100"
@@ -3000,7 +3000,7 @@ exports[`shipmentData.documents is present 1`] = `
     wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
   />
-  <AlternativeGreyBox
+  <GreyBox
     content={
       <div
         className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"

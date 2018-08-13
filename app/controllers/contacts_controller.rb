@@ -17,10 +17,11 @@ class ContactsController < ApplicationController
     response_handler(contact: contact, shipments: shipments, location: location)
   end
 
-  def update_contact
+  def update
     update_data = JSON.parse(params[:update])
+    
     contact = Contact.find(params[:id])
-    loc = Location.find(update_data["locationId"])
+    loc = contact.location || Location.new
     update_data.delete("id")
     update_data.delete("userId")
     update_data.delete("locationId")
@@ -44,7 +45,7 @@ class ContactsController < ApplicationController
     edited_contact_data[:user_id] = current_user.id
     contact.update_attributes(edited_contact_data)
     contact.save!
-    response_handler(contact)
+    response_handler(contact.as_options_json)
   end
 
   def update_contact_address

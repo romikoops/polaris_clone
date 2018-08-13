@@ -1,13 +1,15 @@
 import { camelize } from './stringTools'
 
-export const isEmpty = obj =>
+export const isEmpty = obj => (
   Object.keys(obj).every(k => !Object.prototype.hasOwnProperty.call(obj, k))
+)
 
 export const camelizeKeys = (obj) => {
   const newObj = {}
   Object.keys(obj).forEach((k) => {
     newObj[camelize(k)] = obj[k]
   })
+
   return newObj
 }
 
@@ -19,5 +21,14 @@ export const deepCamelizeKeys = (obj) => {
     newObj[camelize(k)] = deepCamelizeKeys(obj[k])
     console.log(newObj)
   })
+
   return newObj
+}
+
+export function areEqual (obj1, obj2) {
+  if (typeof obj1 === 'object' && typeof obj2 === 'object') {
+    return Object.keys(obj1).length === Object.keys(obj2).length && Object.keys(obj1).every(key => obj1[key] === obj2[key])
+  }
+
+  return null
 }

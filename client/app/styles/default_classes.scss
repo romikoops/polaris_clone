@@ -328,9 +328,9 @@
   .card_margin_right{
     > * {
       margin-right: 25px;
-      &:last-child {
-        margin-right: 0 !important;
-      }
+      // &:last-child {
+      //   margin-right: 0 !important;
+      // }
     }
   }
   .greyBg {
@@ -369,4 +369,9 @@
   .text-break {
     overflow-wrap: break-word;
   }
+
+  .card_lineup {
+    margin-left: -8px;
+    margin-right: 8px;
+  } 
 }

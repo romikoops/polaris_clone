@@ -113,12 +113,12 @@
   }
   .section {
     padding: 20px 0px;
-    min-height: 150px;
+    // min-height: 150px;
     b {
       margin-bottom: 7px;
     }
   }
-  .sectionBottom {
+  .lowerSections {
     padding: 20px 0px 0px;
   }
   .separatorTop {
@@ -170,5 +170,9 @@
     height: 100%;
     width: 100%;
     cursor: pointer;
+  }
+
+  .price_style {
+    overflow-wrap: normal;
   }
 }

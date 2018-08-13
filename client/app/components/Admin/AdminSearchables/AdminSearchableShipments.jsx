@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
-import { ShipmentOverviewCard } from '../../ShipmentCardNew/ShipmentOverviewCard'
+import { ShipmentOverviewCard } from '../../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminSearchableShipments extends Component {
   constructor (props) {

@@ -7,6 +7,7 @@ export default function ShipmentAggregatedCargo ({
   theme, aggregatedCargo, handleDelta, nextStageAttempt
 }) {
   const sharedProps = { handleDelta, nextStageAttempt }
+
   return (
     <div
       className="layout-row layout-wrap layout-align-center content_width_booking"
@@ -19,6 +20,7 @@ export default function ShipmentAggregatedCargo ({
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.volume}
           name="volume"
+          maxValue={15}
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">
@@ -32,6 +34,7 @@ export default function ShipmentAggregatedCargo ({
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.weight}
           name="weight"
+          maxValue={35000}
           {...sharedProps}
         />
         <div className="flex-10 layout-row layout-align-center-center">

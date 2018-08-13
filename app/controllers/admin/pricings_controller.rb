@@ -9,16 +9,13 @@ class Admin::PricingsController < Admin::AdminBaseController
     @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    pricings = Pricing.where(tenant_id: current_user.tenant_id).order(updated_at: :desc)
     detailed_itineraries = itineraries.map(&:as_pricing_json)
-    @pricings = pricings.map(&:as_json)
-    last_updated = pricings.first ? pricings.first.updated_at : DateTime.now
+    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
     response_handler(
       itineraries: itineraries,
       detailedItineraries: detailed_itineraries,
       tenant_pricings: @tenant_pricings,
-      pricings: @pricings,
       transportCategories: @transports,
       lastUpdate: last_updated)
   end

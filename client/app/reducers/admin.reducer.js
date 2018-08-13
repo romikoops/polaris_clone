@@ -281,6 +281,41 @@ export default function admin (state = {}, action) {
 
       return errShips
     }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST: {
+      return state
+    }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS:
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            ...state.dashboard.shipments,
+            [action.payload.data.target]: action.payload.data.shipments
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          [action.payload.data.target]: action.payload.data.shipments,
+          num_shipment_pages: {
+            ...state.shipments.num_shipment_pages,
+            [action.payload.data.target]: action.payload.data.num_shipment_pages, // eslint-disable-line
+          },
+          pages: {
+            ...state.shipments.pages,
+            [action.payload.data.target]: action.payload.data.page
+          }
+        },
+        loading: false
+      }
+    case adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE: {
+      const errShips = merge({}, state, {
+        error: { shipments: action.error },
+        loading: false
+      })
+
+      return errShips
+    }
 
     case adminConstants.GET_DASH_SHIPMENTS_REQUEST:
       return merge({}, state, {

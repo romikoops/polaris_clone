@@ -134,7 +134,7 @@ export function IncotermRow ({
       <div
         className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
       >
-        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pickup</p>
+        <p className={`flex-none no_m ${preCarriageTextStyle}`}>Pick-up</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? preCarriageFeesValue : ''}
     </div>

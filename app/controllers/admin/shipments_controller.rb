@@ -6,11 +6,43 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   include NotificationTools
 
   def index
+    r_shipments = requested_shipments
+    o_shipments = open_shipments
+    f_shipments = finished_shipments
+    num_pages = {
+      finished: (f_shipments.count / 6.0).ceil,
+      requested: (r_shipments.count / 6.0).ceil,
+      open: (o_shipments.count / 6.0).ceil
+    }
+    
     response_handler(
-      requested: requested_shipments,
-      open:      open_shipments,
-      finished:  finished_shipments,
-      documents: documents
+      requested: requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
+      open:      open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
+      finished:  finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
+      pages: {
+        open: params[:open_page],
+        finished: params[:finished_page],
+        requested: params[:requested_page]
+      },
+      num_shipment_pages: num_pages
+    )
+  end
+
+  def delta_page_handler
+    case params[:target]
+    when "requested"
+      shipment_association = tenant_shipment.requested
+    when "open"
+      shipment_association = tenant_shipment.open
+    when "finished"
+      shipment_association = tenant_shipment.finished
+    end
+    shipments = shipment_association.paginate(page: params[:page]).map(&:with_address_options_json)
+    response_handler(
+      shipments: shipments,
+      num_shipment_pages: (shipment_association.count / 6.0).ceil,
+      target: params[:target],
+      page: params[:page]
     )
   end
 
@@ -27,6 +59,36 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       cargoItemTypes:  cargo_item_types,
       accountHolder:   @shipment.user
     )
+  end
+
+  def search_shipments
+    filterific_params = {
+      user_search: params[:query]
+    }
+    case params[:target]
+    when "requested"
+      shipment_association = requested_shipments
+    when "open"
+      shipment_association = open_shipments
+    when "finished"
+      shipment_association = finished_shipments
+    end
+    filterrific = initialize_filterrific(
+      shipment_association,
+      filterific_params,
+      available_filters: [
+        :user_search
+      ],
+      sanitize_params: true
+    ) or return
+    shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
+    response_handler(
+      shipments: shipments,
+      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
+      target: params[:target],
+      page: params[:page]
+    )
+
   end
 
   def edit_price
@@ -255,15 +317,15 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def requested_shipments
-    @requested_shipments ||= tenant_shipment.requested.map(&:with_address_options_json)
+    @requested_shipments ||= tenant_shipment.requested
   end
 
   def open_shipments
-    @open_shipments ||= tenant_shipment.open.map(&:with_address_options_json)
+    @open_shipments ||= tenant_shipment.open
   end
 
   def finished_shipments
-    @finished_shipments ||= tenant_shipment.finished.map(&:with_address_options_json)
+    @finished_shipments ||= tenant_shipment.finished
   end
 
   def documents

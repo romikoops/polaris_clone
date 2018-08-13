@@ -477,12 +477,12 @@ function updateCurrency (currency, req) {
   }
 }
 
-function updateContact (data) {
-  function request (contactData) {
-    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST, payload: contactData }
+function updateContact (req) {
+  function request () {
+    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_REQUEST }
   }
   function success (contactData) {
-    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS, payload: contactData }
+    return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_SUCCESS, payload: contactData.data }
   }
   function failure (error) {
     return { type: shipmentConstants.SHIPMENT_UPDATE_CONTACT_FAILURE, error }
@@ -491,8 +491,8 @@ function updateContact (data) {
   return (dispatch) => {
     dispatch(request())
 
-    shipmentService.updateContact(data).then(
-      () => {
+    shipmentService.updateContact(req).then(
+      (data) => {
         dispatch(alertActions.success('Fetching Contact successful'))
         dispatch(success(data))
       },
