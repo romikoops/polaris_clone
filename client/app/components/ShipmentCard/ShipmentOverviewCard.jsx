@@ -44,7 +44,7 @@ export class ShipmentOverviewCard extends Component {
           flex-gt-lg-33 layout-row card_padding card_lineup"
         >
           <GreyBox
-            wrapperClassName="layout-row flex layout-align-center-center"
+            wrapperClassName="layout-row"
             contentClassName="layout-row flex-100"
             content={ShipCard}
           />
