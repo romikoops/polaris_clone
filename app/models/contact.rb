@@ -9,8 +9,8 @@ class Contact < ApplicationRecord
   # validates :company_name, presence: true, length: { in: 2..50 }
   validates :first_name,   presence: true, length: { in: 2..50 }
   validates :last_name,    presence: true, length: { in: 2..50 }
-  validates :phone,        presence: true, length: { in: 4..22 }
-  validates :email,        presence: true, length: { in: 8..50 }
+  validates :phone,        presence: true, length: { minimum: 3 }
+  validates :email,        presence: true, length: { minimum: 3 }
 
   # validates uniqueness for each user
   validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email),

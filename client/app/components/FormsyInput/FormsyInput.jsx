@@ -58,7 +58,7 @@ class FormsyInput extends Component {
 
 FormsyInput.propTypes = {
   name: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   type: PropTypes.string.isRequired,
   isValid: PropTypes.func.isRequired,
@@ -84,7 +84,8 @@ FormsyInput.defaultProps = {
   onBlur: null,
   errorMessageStyles: {},
   onChange: null,
-  wrapperClassName: null
+  wrapperClassName: '',
+  className: ''
 }
 
 export default withFormsy(FormsyInput)

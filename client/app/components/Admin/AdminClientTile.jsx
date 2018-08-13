@@ -211,7 +211,7 @@ AdminClientTile.defaultProps = {
   navFn: null,
   deleteFn: null,
   target: '',
-  flexClasses: 'flex-33 flex-xs-50 flex-md-50 flex-lg-33',
+  flexClasses: 'flex-xs-100 flex-sm-50 flex-md-50 flex-lg-33',
   handleCollapser: null
 }
 
