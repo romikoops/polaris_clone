@@ -65,12 +65,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     filterific_params = {
       user_search: params[:query]
     }
+    case params[:target]
+    when "requested"
+      shipment_association = requested_shipments
+    when "open"
+      shipment_association = open_shipments
+    when "finished"
+      shipment_association = finished_shipments
+    end
     filterrific = initialize_filterrific(
-      Shipment,
+      shipment_association,
       filterific_params,
       available_filters: [
-        :user_search,
-        :requested
+        :user_search
       ],
       sanitize_params: true
     ) or return

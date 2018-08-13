@@ -67,16 +67,26 @@ class ShipmentsController < ApplicationController
     filterific_params = {
       user_search: params[:query]
     }
+    filters = [
+      :user_search
+    ]
+    case params[:target]
+    when "requested"
+      shipment_association = current_user.shipments.requested
+    when "open"
+      shipment_association = current_user.shipments.open
+    when "finished"
+      shipment_association = current_user.shipments.finished
+    end
+
     filterrific = initialize_filterrific(
-      Shipment,
+      shipment_association,
       filterific_params,
-      available_filters: [
-        :user_search,
-        :requested
-      ],
+      available_filters: filters,
       sanitize_params: true
     ) or return
     shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
+    
     response_handler(
       shipments: shipments,
       num_shipment_pages: (filterrific.find.count / 6.0).ceil,

@@ -118,6 +118,8 @@ class Shipment < ApplicationRecord
       .or(Shipment.hub_names(query))
   }
 
+
+
   # STATUSES.each do |status|
   #   scope status, -> { where(status: status) }
   # end
