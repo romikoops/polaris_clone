@@ -20,7 +20,7 @@ function locationForDisplay (location) {
 }
 
 export default function ShipmentContactsBoxMainContactsContactCard ({
-  contactData, theme, contactType, showAddressBook
+  contactData, theme, contactType, showAddressBook, showEditContact, handleClick
 }) {
   const { contact, location } = contactData
   const iconStyle = {
@@ -29,18 +29,24 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
 
   const borderStyles = theme ? { borderColor: theme.colors.secondary } : {}
 
-  const editIcon = (
-    <i
-      className={`${styles.edit_icon} fa fa-pencil-square-o`}
-      onClick={() => showAddressBook(contactType)}
-    />
+  const icons = (
+    <div className="flex layout-row" onClick={handleClick}>
+      <i
+        className={`${styles.plus_icon} fa fa-plus`}
+        onClick={() => showAddressBook(contactType)}
+      />
+      <i
+        className={`${styles.edit_icon} fa fa-pencil`}
+        onClick={() => showEditContact(contactType)}
+      />
+    </div>
   )
 
   const { addressDetails } = locationForDisplay(location)
 
   return (
     <div className={`flex-100 layout-row layout-wrap ${styles.contact_card}`} style={borderStyles}>
-      {editIcon}
+      {icons}
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />
         <h3 className={`${styles.contact_name}`}>
@@ -93,11 +99,15 @@ ShipmentContactsBoxMainContactsContactCard.propTypes = {
   }).isRequired,
   theme: PropTypes.theme,
   contactType: PropTypes.string,
-  showAddressBook: PropTypes.func
+  showAddressBook: PropTypes.func,
+  showEditContact: PropTypes.func,
+  handleClick: PropTypes.func
 }
 
 ShipmentContactsBoxMainContactsContactCard.defaultProps = {
   theme: null,
   contactType: '',
-  showAddressBook: null
+  showAddressBook: null,
+  handleClick: null,
+  showEditContact: null
 }

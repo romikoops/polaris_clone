@@ -54,7 +54,8 @@ export class CardLink extends Component {
           flex-none 
           layout-row 
           layout-align-center-end
-        `)}>
+        `)}
+        >
           <h3 className="flex-none">Coming Soon</h3>
         </div>
       )
@@ -88,9 +89,9 @@ export class CardLink extends Component {
       >
         {inActive()}
 
-        <div 
-          style={imgStyles} 
-          className={`${styles.card_img} flex-85`} 
+        <div
+          style={imgStyles}
+          className={`${styles.card_img} flex-85`}
         />
 
         <div
