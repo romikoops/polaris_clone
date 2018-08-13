@@ -76,6 +76,22 @@ class Contact < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      include: {
+        location: {
+          include: {
+            country: { only: :name }
+          },
+          except:  %i(created_at updated_at country_id)
+        }
+      },
+      except:  %i(created_at updated_at location_id)
+    )
+
+    as_json(new_options)
+  end
+
   def full_name_and_company
     "#{first_name} #{last_name}, #{company_name}"
   end

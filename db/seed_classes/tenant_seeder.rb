@@ -1459,13 +1459,11 @@ class TenantSeeder
       },
       emails: {
         sales: {
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com',
           general: 'mkuester@speedtrans.com'
         },
         support: {
           general: 'mkuester@speedtrans.com',
-          air: 'mkuester@speedtrans.com',
           ocean: 'mkuester@speedtrans.com'
         }
       },
@@ -1531,12 +1529,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'
+            export: 'optional'
           }
         }
       },

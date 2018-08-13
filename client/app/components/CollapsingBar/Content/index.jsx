@@ -27,9 +27,7 @@ export default class CollapsingContent extends React.PureComponent {
   render () {
     const { collapsed, content, minHeight } = this.props
     const { firstRender } = this.state
-    if (!collapsed) {
-      debugger // eslint-disable-line
-    }
+
     return (
       <div
         className={`${collapsed && !firstRender ? styles.collapsed : ''} ${styles.main_panel}`}

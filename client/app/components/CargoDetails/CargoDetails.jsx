@@ -459,7 +459,7 @@ export class CargoDetails extends Component {
                         value={totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
-                        onChange={this.handleChange}
+                        onBlur={this.handleChange}
                         submitAttempted={finishBookingAttempted}
                         validations={{ nonNegative: (values, value) => value > 0 }}
                         validationErrors={{
@@ -505,7 +505,7 @@ export class CargoDetails extends Component {
                       type="textarea"
                       name="cargoNotes"
                       value={this.props.cargoNotes}
-                      onChange={this.handleChange}
+                      onBlur={this.handleChange}
                       submitAttempted={finishBookingAttempted}
                       validationErrors={{
                         isDefaultRequiredValue: 'Must not be empty'

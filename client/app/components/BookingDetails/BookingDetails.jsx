@@ -413,7 +413,6 @@ export class BookingDetails extends Component {
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           {ContactSetterComponent}
         </div>
-        {console.log(contacts)}
 
         <Formsy
           className="flex-100"
