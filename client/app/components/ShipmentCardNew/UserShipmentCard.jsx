@@ -10,7 +10,8 @@ import {
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  formattedPriceValue
+  formattedPriceValue,
+  splitName
 } from '../../helpers'
 
 export class UserShipmentCard extends Component {
@@ -62,6 +63,9 @@ export class UserShipmentCard extends Component {
             'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
 
+    const destinationHubObj = splitName(shipment.destination_hub.name)
+    const originHubObj = splitName(shipment.origin_hub.name)
+
     return (
       <div
         key={v4()}
@@ -86,9 +90,12 @@ export class UserShipmentCard extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className="layout-align-center-center flex-100">
-                    <div className={`flex-100 layout-align-center-center ${styles.hub_name}`}>
-                      <p className="layout-align-center-center flex-100">{shipment.origin_hub.name}</p>
+                  <div className={`layout-align-center-center flex-45 ${styles.hub_box}`}>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
+                      <p>{originHubObj.name}</p>
+                    </div>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_type} ${styles.smallText}`}>
+                      <p>{originHubObj.hubType}</p>
                     </div>
                   </div>
                   <div className="layout-column flex-100">
@@ -108,10 +115,15 @@ export class UserShipmentCard extends Component {
               className="layout-column flex-100"
               content={(
                 <div className="layout-column flex-100">
-                  <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
-                    <p>{shipment.destination_hub.name}</p>
+                  <div className={`layout-align-center-center flex-45 ${styles.hub_box}`}>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_name}`}>
+                      <p>{destinationHubObj.name}</p>
+                    </div>
+                    <div className={`flex-100 layout-align-center-start ${styles.hub_type} ${styles.smallText}`}>
+                      <p>{destinationHubObj.hubType}</p>
+                    </div>
                   </div>
-                  <div className="layout-column flex-100">
+                  <div className={`layout-column flex-55 ${styles.hub_image}`}>
                     <span className="flex-100" style={bg2} />
                   </div>
                 </div>
@@ -148,10 +160,10 @@ export class UserShipmentCard extends Component {
           </div>
         </div>
         <div className={`layout-row flex-40 layout-align-start-stretch
-            ${styles.section} ${styles.separatorTop} ${styles.smallText}`}
+            ${styles.lowerSections} ${styles.separatorTop} ${styles.smallText}`}
         >
           <div className="layout-column flex-20">
-            <span className="flex-100"><b>{ shipment.has_pre_carriage ? 'Pickup Date' : 'Drop Off Date'}</b><br />
+            <span className="flex-100"><b>{ shipment.has_pre_carriage ? 'Pick-up Date' : 'Drop Off Date'}</b><br />
               <span className={`${styles.grey}`}>
                 {
                   shipment.has_pre_carriage
@@ -186,7 +198,7 @@ export class UserShipmentCard extends Component {
           </div>
         </div>
         <div className={`layout-row flex-25 layout-align-space-between-center
-            ${styles.sectionBottom} ${styles.separatorTop}`}
+            ${styles.lowerSections} ${styles.separatorTop}`}
         >
           <div className="layout-row flex-75 layout-align-start-center">
             <div className="layout-row flex-15">
@@ -202,7 +214,7 @@ export class UserShipmentCard extends Component {
                 className="fa fa-check-square clip"
                 style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
               />
-              <span>  Pickup</span>
+              <span>  Pick-up</span>
             </span>
             <span className="flex-30">
               <i
@@ -212,8 +224,8 @@ export class UserShipmentCard extends Component {
               <span> Delivery</span>
             </span>
           </div>
-          <div className="layout-align-end-center">
-            <span className={`${styles.bigText}`}>
+          <div className="layout-align-end-end">
+            <span className={`${styles.bigText} ${styles.price_style}`}>
               <span>{totalPrice(shipment).currency} </span>
               <span>
                 {formattedPriceValue(totalPrice(shipment).value)}

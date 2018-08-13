@@ -14,17 +14,25 @@
 		i.user_icon {
 			margin-right: 12px;
 			padding: 0 2px;
-		}
-		i.remove_icon {
-			position: absolute;
-			right: 30px;
-			font-size: 30px;
-			opacity: 0.3;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			&:hover {
-				opacity: 0.5;
-			}
-		}
+    }
+    .icons {
+      i {
+        position: absolute;
+        font-size: 22px;
+        opacity: 0.3;
+        transition: all 0.3s ease;
+        &:hover {
+          opacity: 0.5;
+        }
+      }
+      i.remove_icon {
+
+        right: 30px;
+
+      }
+      i.edit_icon {
+        right: 70px;
+      }
+    }
 	}
 }

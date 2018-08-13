@@ -154,7 +154,8 @@
   .new_contact_content {
     width: 650px;
     height: 550px;
-    position: relative;
+    position: fixed;
+    top: 125px;
     z-index: 85;
     border-radius: 5px;
     background: #ffffff;
@@ -525,6 +526,7 @@
     height: 36.91px;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
+    width: 80%;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
@@ -539,32 +541,32 @@
     }
   }
   .input_50 {
-    @extend .input;
     // width: 250px;
     width: calc(48% - 20px);
   }
   .input_100 {
-    @extend .input;
     // width: 5 20px;
     width: calc(100% - 20px);
   }
+  .input_60 {
+    width: 60%;
+  }
+  .input_33 {
+    width: 33%;
+  }
   .input_zip {
-    @extend .input;
     // width: 141px;
     width: calc(28% - 20px);
   }
   .input_cc{
-    @extend .input;
     // width: 174px;
     width: calc(33% - 20px);
   }
   .input_no {
-    @extend .input;
     // width: 115px;
     width: calc(18% - 20px);
   }
   .input_street {
-    @extend .input;
     // width: 385px;
     width: calc(78% - 20px);
   }
@@ -1005,6 +1007,9 @@
   }
   .header_margin_buffer{
     margin: 0 15px;
+  }
+  .shipment_view_margin_buffer {
+    margin-left: 15px;
   }
   .content_details {
     padding-left: 25px;

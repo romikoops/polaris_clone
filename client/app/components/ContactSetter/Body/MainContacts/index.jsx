@@ -7,14 +7,14 @@ import ShipmentContactsBoxContactSectionContactCard from './ContactCard'
 import ShipmentContactsBoxContactSectionPlaceholderCard from './PlaceholderCard'
 
 export default function ShipmentContactsBoxMainContacts ({
-  theme, shipper, consignee, direction, showAddressBook
+  theme, shipper, consignee, direction, showAddressBook, showEditContact, handleClick
 }) {
   const textStyle = theme
     ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     : { color: 'black' }
 
   let props = {
-    contactData: shipper, contactType: 'shipper', theme, showAddressBook
+    contactData: shipper, contactType: 'shipper', theme, showAddressBook, showEditContact, handleClick
   }
   const shipperCard = shipper.contact
     ? <ShipmentContactsBoxContactSectionContactCard {...props} />
@@ -58,9 +58,13 @@ ShipmentContactsBoxMainContacts.propTypes = {
     location: PropTypes.object
   }).isRequired,
   direction: PropTypes.string.isRequired,
-  showAddressBook: PropTypes.func.isRequired
+  showAddressBook: PropTypes.func.isRequired,
+  showEditContact: PropTypes.func,
+  handleClick: PropTypes.func
 }
 
 ShipmentContactsBoxMainContacts.defaultProps = {
-  theme: null
+  theme: null,
+  handleClick: null,
+  showEditContact: null
 }

@@ -113,7 +113,6 @@ export class BookingDetails extends Component {
     if (type === 'notifyee') {
       const { notifyees } = this.state
       notifyees[index] = contactData
-
       return this.setState({ notifyees })
     }
     this.setState({ [type]: contactData })
@@ -305,12 +304,11 @@ export class BookingDetails extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, currencies, user, tenant
+      theme, shipmentData, shipmentDispatch, currencies, user, tenant, contacts
     } = this.props
     if (!shipmentData) return ''
 
     const {
-      contacts,
       hubs,
       locations,
       shipment,
@@ -338,6 +336,7 @@ export class BookingDetails extends Component {
         shipper={shipper}
         theme={theme}
         userLocations={userLocations}
+        shipmentDispatch={shipmentDispatch}
       />
     )
 
@@ -390,7 +389,7 @@ export class BookingDetails extends Component {
         <div className={trim(`
               ${defaults.content_width}
               content-width
-              ${ROW('none')} 
+              ${ROW('none')}
               ${ALIGN_START_CENTER}
             `)}
         >
@@ -414,6 +413,7 @@ export class BookingDetails extends Component {
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           {ContactSetterComponent}
         </div>
+        {console.log(contacts)}
 
         <Formsy
           className="flex-100"

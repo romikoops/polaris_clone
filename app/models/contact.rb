@@ -9,15 +9,19 @@ class Contact < ApplicationRecord
   # validates :company_name, presence: true, length: { in: 2..50 }
   validates :first_name,   presence: true, length: { in: 2..50 }
   validates :last_name,    presence: true, length: { in: 2..50 }
-  validates :phone,        presence: true, length: { in: 4..22 }
-  validates :email,        presence: true, length: { in: 8..50 }
+  validates :phone,        presence: true, length: { minimum: 3 }
+  validates :email,        presence: true, length: { minimum: 3 }
+
+  # validates uniqueness for each user
+  validates :user_id, uniqueness: { scope:   %i(first_name last_name phone email),
+                                    message: "Contact must be unique to add." }
 
   # Filterrific configuration
   filterrific default_filter_params: { sorted_by: "created_at_asc" },
-              available_filters:     %w[
+              available_filters:     %w(
                 sorted_by
                 search_query
-              ]
+              )
 
   self.per_page = 12 # default for will_paginate
 

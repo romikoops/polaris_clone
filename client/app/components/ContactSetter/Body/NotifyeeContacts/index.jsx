@@ -5,7 +5,7 @@ import ContactSetterBodyNotifyeeContactsAddContactButton from './AddContactButto
 import PropTypes from '../../../../prop-types'
 
 export default function ContactSetterBodyNotifyeeContacts ({
-  theme, notifyees, showAddressBook, removeFunc
+  theme, notifyees, showAddressBook, removeFunc, showEditContact
 }) {
   const notifyeeContacts = notifyees.map((notifyee, i) => (
     <div className={`flex-40 ${i % 2 === 0 ? 'offset-5' : ''}`} style={{ marginBottom: '20px' }}>
@@ -13,6 +13,7 @@ export default function ContactSetterBodyNotifyeeContacts ({
         theme={theme}
         contactData={notifyee}
         removeFunc={() => removeFunc(i)}
+        showEditContact={() => showEditContact('notifyee', i)}
       />
     </div>
   ))
@@ -50,9 +51,11 @@ ContactSetterBodyNotifyeeContacts.propTypes = {
     location: PropTypes.object
   })).isRequired,
   showAddressBook: PropTypes.func.isRequired,
-  removeFunc: PropTypes.func.isRequired
+  removeFunc: PropTypes.func.isRequired,
+  showEditContact: PropTypes.func
 }
 
 ContactSetterBodyNotifyeeContacts.defaultProps = {
-  theme: null
+  theme: null,
+  showEditContact: null
 }

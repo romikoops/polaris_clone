@@ -20,7 +20,8 @@ import {
   gradientBorderGenerator,
   switchIcon,
   totalPrice,
-  formattedPriceValue
+  formattedPriceValue,
+  checkPreCarriage
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import Tabs from '../../Tabs/Tabs'
@@ -342,7 +343,6 @@ export class AdminShipmentView extends Component {
     if (!shipmentData || !hubs || !clients) {
       return <h1>NO DATA</h1>
     }
-    // debugger // eslint-disable-line
     const {
       contacts,
       shipment,
@@ -552,6 +552,11 @@ export class AdminShipmentView extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
+          <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
+          <hr className="layout-row flex-md-40 flex-55" />
+          <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
+        </div>
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch`}>
           <div className={`layout-row flex layout-align-start-center ${adminStyles.title_grey}`}>
             <p className="layout-align-start-center layout-row">Shipment</p>
@@ -577,11 +582,6 @@ export class AdminShipmentView extends Component {
               theme={theme}
             >
               <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-                <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.ref_row}`}>
-                  <p className="layout-row flex-md-30 flex-20">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
-                  <hr className="layout-row flex-md-40 flex-55" />
-                  <p className="layout-row flex-md-30 flex-25 layout-align-end-center"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
-                </div>
                 <div className="layout-row flex-100 margin_bottom">
 
                   <GradientBorder
@@ -637,11 +637,10 @@ export class AdminShipmentView extends Component {
                     <div className="layout-row flex-100 layout-align-start-center">
                       <div className="flex-40 layout-row layout-align-start-center">
                         <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">Pick-up</h4>
+                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment).type}</h4>
                       </div>
                       <div className="flex-40 layout-row layout-align-start-center">
-                        <p>{moment(shipment.planned_pickup_date)
-                          .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
+                        <p>{moment(checkPreCarriage(shipment).date)
                           .format('DD/MM/YYYY') }</p>
                       </div>
                     </div>
@@ -715,7 +714,7 @@ export class AdminShipmentView extends Component {
                           <div className="layout-row flex-100">
                             <div className="flex-none layout-row">
                               <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                              <p>Pickup</p>
+                              <p>Pick-up</p>
                             </div>
                             {feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
                               <p>

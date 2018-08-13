@@ -5,39 +5,62 @@ class Addon < ApplicationRecord
   extend PricingTools
 
   def self.prepare_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, cargos, user)
-    addons = determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot)
+    addons = determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, user)
     condensed_addons = condense_addons(addons, cargos, user, mot)
   end
   private
-  def self.determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot)
+  def self.determine_addons(origin_hub, destination_hub, cargo_class, tenant_vehicle_id, mot, user)
     counterpart_origin_addons = origin_hub.addons.where(
       cargo_class: cargo_class,
       counterpart_hub_id: destination_hub.id,
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
-      direction: 'export'
+      direction: 'export',
+      tenant_id: user.tenant_id
     )
     origin_addons = !counterpart_origin_addons.empty? ? counterpart_origin_addons : origin_hub.addons.where(
       cargo_class: cargo_class,
       counterpart_hub_id: nil,
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
-      direction: 'export'
+      direction: 'export',
+      tenant_id: user.tenant_id
     )
+    if origin_addons.empty?
+      origin_addons = origin_hub.addons.where(
+        cargo_class: cargo_class,
+        counterpart_hub_id: nil,
+        mode_of_transport: mot,
+        direction: 'export',
+        tenant_id: user.tenant_id
+      )
+    end
     counterpart_destination_addons = destination_hub.addons.where(
       cargo_class: cargo_class,
       counterpart_hub_id: origin_hub.id,
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
-      direction: 'import'
+      direction: 'import',
+      tenant_id: user.tenant_id
     )
     destination_addons = !counterpart_destination_addons.empty? ? counterpart_destination_addons : destination_hub.addons.where(
       cargo_class: cargo_class,
       counterpart_hub_id: nil,
       tenant_vehicle_id: tenant_vehicle_id,
       mode_of_transport: mot,
-      direction: 'import'
+      direction: 'import',
+      tenant_id: user.tenant_id
     )
+    if destination_addons.empty?
+      destination_addons = destination_hub.addons.where(
+        cargo_class: cargo_class,
+        counterpart_hub_id: nil,
+        mode_of_transport: mot,
+        direction: 'import',
+        tenant_id: user.tenant_id
+      )
+    end
+    
     return {destination: destination_addons, origin: origin_addons}
     
   end

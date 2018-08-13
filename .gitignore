@@ -21,6 +21,7 @@
 
 # Ignore ENV variable files
 .env
+/client/.node-env
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
