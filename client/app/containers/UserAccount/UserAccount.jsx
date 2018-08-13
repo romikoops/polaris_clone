@@ -328,7 +328,7 @@ class UserAccount extends Component {
               </Switch>
             </div>
           </div>
-          <Footer isShop />
+          <Footer isShop tenant={tenant} />
         </div>
       </div>
     )

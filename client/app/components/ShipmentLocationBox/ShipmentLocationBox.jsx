@@ -967,7 +967,7 @@ export class ShipmentLocationBox extends Component {
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
-            <p className="flex-none">Enter Pickup Address</p>
+            <p className="flex-none">Enter Pick-up Address</p>
           </div>
           <input
             id="not-auto"
@@ -1282,7 +1282,7 @@ export class ShipmentLocationBox extends Component {
                     Pickup
                     </label>
                     {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Pickup:</p></div> }
+                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Pick-up:</p></div> }
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}

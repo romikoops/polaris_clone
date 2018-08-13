@@ -227,7 +227,7 @@ export class AdminShipmentRow extends Component {
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title}>
-                  {shipment.has_pre_carriage ? 'Pickup Date' : 'Closing Date'}
+                  {shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date'}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
