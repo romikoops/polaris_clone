@@ -52,7 +52,7 @@ function BookingSummary (props) {
     const originFlag = cities.origin && trucking.pre_carriage.truck_type
     const nexusesFlag = nexuses.origin && !trucking.pre_carriage.truck_type
     const ok = originFlag || nexusesFlag
-    const text = ok && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+    const text = ok && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} Pick-up`
 
     return <p className={truckingWrapper}>{text}</p>
   }
@@ -61,7 +61,7 @@ function BookingSummary (props) {
     const originFlag = cities.destination && trucking.on_carriage.truck_type
     const nexusesFlag = nexuses.destination && !trucking.on_carriage.truck_type
     const ok = originFlag || nexusesFlag
-    const text = ok && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
+    const text = ok && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} Delivery`
 
     return <p className={truckingWrapper}>{text}</p>
   }

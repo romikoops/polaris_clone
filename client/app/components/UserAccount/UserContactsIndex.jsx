@@ -8,9 +8,16 @@ import SideOptionsBox from '../Admin/SideOptions/SideOptionsBox'
 export function UserContactsIndex ({
   theme, contacts, viewContact, toggleNewContact, newContactBox
 }) {
+  const sideBoxStyle = {
+    position: 'fixed',
+    top: '160px',
+    right: '0px',
+    backgroundColor: 'white'
+  }
+
   return (
     <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
-      <div className="flex-75 layout-row layout-align-start-start">
+      <div className="flex-75 flex-sm-95 flex-xs-95 layout-row layout-align-start-start">
         <AdminSearchableClients
           theme={theme}
           hideFilters
@@ -19,14 +26,14 @@ export function UserContactsIndex ({
           seeAll={false}
           placeholder="Search Contacts"
         />
+        {newContactBox}
       </div>
-      <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
+      <div className="layout-column flex-20 flex-md-15 flex-sm-10 show-gt-xs hide-xs layout-align-end-end" style={sideBoxStyle}>
         <SideOptionsBox
           header="Data Manager"
-          flexOptions="layout-column flex-20 flex-md-30"
+          flexOptions="layout-column flex-20 flex-md-15 flex-sm-10"
           content={
             <div className="layout-row flex layout-align-center-center">
-              {newContactBox}
               <div className="flex-none layout-row layout-align-center-center">
                 <RoundButton
                   theme={theme}

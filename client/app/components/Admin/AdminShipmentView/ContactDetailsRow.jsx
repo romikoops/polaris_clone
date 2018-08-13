@@ -145,7 +145,7 @@ export default function ContactDetailsRow ({
 
   return (
     <div className={`layout-row flex-100 layout-wrap margin_bottom ${adminStyles.margin_box_right}`}>
-      {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
+      {isAccountHolder === '' ? <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right`}>
         <AlternativeGreyBox
           title="Account Holder"
           wrapperClassName="layout-row flex-100"
@@ -154,7 +154,7 @@ export default function ContactDetailsRow ({
           showTitle
         />
       </div> : '' }
-      <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
+      <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right`}>
         <AlternativeGreyBox
           title="Shipper"
           titleAction={isAccountHolder === 'shipper' ? actionButton : false}
@@ -164,7 +164,7 @@ export default function ContactDetailsRow ({
           showTitle
         />
       </div>
-      <div className={`flex-100 ${flexSize} layout-row layout-align-center-start card_padding_right`}>
+      <div className={`flex-100 ${flexSize} layout-row layout-align-center card_padding_right`}>
         <AlternativeGreyBox
           title="Consignee"
           wrapperClassName="layout-row flex-100"
@@ -174,7 +174,7 @@ export default function ContactDetailsRow ({
           showTitle
         />
       </div>
-      <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center-start ">
+      <div className="flex-100 flex-gt-sm-20 layout-row layout-align-center">
         <AlternativeGreyBox
           title="Notifyees"
           wrapperClassName="layout-row flex-100 height_100"
