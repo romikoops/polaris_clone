@@ -1,0 +1,6 @@
+<%= render "account_layout",
+    greeting_text: "Thank you for registering a new account in the #{@resource.tenant.name} Online Shop (powered by ItsMyCargo). ",
+    message_details: "You can confirm your account email by clicking the button above:",
+    activate_link: true,
+    primary_color: @primary_color
+%>
