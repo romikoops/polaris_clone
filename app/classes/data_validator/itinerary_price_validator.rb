@@ -4,13 +4,15 @@ module DataValidator
 
     def post_initialize(args)
       itinerary_ids = @tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id).for_load_type('cargo_item').empty?
+        Pricing.where(itinerary_id: id).for_load_type( args[:load_type]).empty?
       end
       @itineraries = @tenant.itineraries.where(id: itinerary_ids)
       @user = @user ||= tenant.users.shipper.first
-      @dummy_data = {
-        has_pre_carriage: false,
-        has_on_carriage: false,
+      @dummy_data = args[:load_type] == 'cargo_item' ? {
+        has_pre_carriage: args[:has_pre_carriage],
+        has_on_carriage: args[:has_on_carriage],
+        export: args[:export],
+        import: args[:import],
         cargo_units: [
           {
             dimension_x: 120,
@@ -21,10 +23,27 @@ module DataValidator
           }
         ],
         load_type: 'cargo_item'
+      } : 
+      {
+        has_pre_carriage: args[:has_pre_carriage],
+        has_on_carriage: args[:has_on_carriage],
+        export: args[:export],
+        import: args[:import],
+        cargo_units: [
+          {
+            size_class: 'fcl_20',
+            payload_in_kg: 10000,
+            dimension_z: 120,
+            payload_in_kg: 1000
+          }
+        ],
+        load_type: 'container'
       }
       default_expected_values = {
-        export: true,
-        import: false,
+        has_pre_carriage: args[:has_pre_carriage],
+        has_on_carriage: args[:has_on_carriage],
+        export: args[:export],
+        import: args[:import],
         cargo: true
       }
       @expected_values = args[:expected_values] || default_expected_values

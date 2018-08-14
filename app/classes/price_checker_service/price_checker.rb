@@ -66,7 +66,7 @@ module PriceCheckerService
 
     def calc_local_charges
       cargo_units = @cargo_units
-      if @shipment_data[:has_pre_carriage] || @origin_hub.mandatory_charge.export_charges
+      if @shipment_data[:has_pre_carriage] || @shipment_data[:export] || @origin_hub.mandatory_charge.export_charges
         local_charges_data = determine_local_charges(
           @origin_hub,
           @shipment_data[:load_type],
@@ -83,7 +83,7 @@ module PriceCheckerService
         end
       end
 
-      if @shipment_data[:has_on_carriage] || @destination_hub.mandatory_charge.import_charges
+      if @shipment_data[:has_on_carriage] || @shipment_data[:import] || @destination_hub.mandatory_charge.import_charges
         local_charges_data = determine_local_charges(
           @destination_hub,
           @shipment_data[:load_type],
