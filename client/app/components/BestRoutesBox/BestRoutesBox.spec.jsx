@@ -13,7 +13,7 @@ jest.mock('../../constants', () => {
   return { moment }
 })
 // eslint-disable-next-line import/first
-import { BestRoutesBox } from './BestRoutesBox'
+import BestRoutesBox from './BestRoutesBox'
 
 const propsBase = {
   chooseResult: identity,

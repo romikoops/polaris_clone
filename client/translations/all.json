@@ -3,7 +3,9 @@
       "common": {
         "accountTitle": "My Account",
         "availableDestinations": "Available Destinations",
-        "newContact": "NEW CONTACT"
+        "newContact": "NEW CONTACT",
+        "fastestRoute": "Fastest route",
+        "cheapestRoute": "Cheapest Route"
       },
       "landing": {
         "title": "Introducing Online Freight Booking Services",
