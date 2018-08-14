@@ -7,8 +7,7 @@ exports[`shallow render 1`] = `
   onClick={[Function]}
 >
   <h3>
-    + 
-    NEW CONTACT
+    + NEW CONTACT
   </h3>
 </div>
 `;
