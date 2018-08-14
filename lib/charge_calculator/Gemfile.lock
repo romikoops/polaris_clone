@@ -1,7 +1,14 @@
+GIT
+  remote: git@gitlab.com:itsmycargo/rule-engine.git
+  revision: 1b68dd8c966f137bf1d7bbe19c72aef7405a031a
+  specs:
+    rule_engine (0.1.0)
+
 PATH
   remote: .
   specs:
     charge_calculator (0.1.0)
+      rule_engine
 
 GEM
   remote: https://rubygems.org/
@@ -36,6 +43,7 @@ DEPENDENCIES
   pry
   rake (~> 10.0)
   rspec (~> 3.0)
+  rule_engine!
 
 BUNDLED WITH
    1.16.1
