@@ -20,6 +20,7 @@ import {
   OptOutTenant,
   OptOutItsMyCargo
 } from '../OptOut'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 
 const { fetch } = window
 
@@ -79,7 +80,7 @@ const EditNameBox = () => (
 )
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme, handlePasswordChange
+  user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="layout-row flex-90" />
@@ -166,7 +167,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone
@@ -183,19 +184,30 @@ const EditProfileBox = ({
       </div>
     </div>
     <div
-      className={`flex-100 layout-row layout-align-start-start layout-wrap
-      ${styles.margin_top} margin_bottom`}
+      className={`flex-100 layout-row layout-align-center layout-wrap padding_top ${styles.form_group_submit_btn}`}
     >
-      <div className="flex-100 layout-row layout-align-start-start ">
+      <div className="flex-50 layout-row layout-align-start-center">
         <RoundButton
           theme={theme}
-          size="small"
+          size="medium"
           active
           text="Change my Password"
           handleNext={handlePasswordChange}
-          iconClass="fa-floppy-o"
         />
       </div>
+      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+        {passwordResetRequested &&
+        <LoadingSpinner
+          size="extra_small"
+        />}
+      </div>
+      { passwordResetSent && (
+        <div className="flex-100 layout-row layout-align-center-start padding_top">
+          <p>
+            Please check your email for a link to change your password.
+          </p>
+        </div>
+      )}
     </div>
   </div>
 )
@@ -207,7 +219,9 @@ EditProfileBox.propTypes = {
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
   style: PropTypes.objectOf(PropTypes.string),
-  handlePasswordChange: PropTypes.func.isRequired
+  handlePasswordChange: PropTypes.func.isRequired,
+  passwordResetSent: PropTypes.bool.isRequired,
+  passwordResetRequested: PropTypes.bool.isRequired
 }
 
 EditProfileBox.defaultProps = {
@@ -223,6 +237,8 @@ export class UserProfile extends Component {
       editObj: {},
       newAlias: {},
       newAliasBool: false,
+      passwordResetSent: false,
+      passwordResetRequested: false,
       currencySelect: {
         label: this.props.user ? this.props.user.currency : 'EUR',
         value: this.props.user ? this.props.user.currency : 'EUR'
@@ -288,23 +304,22 @@ export class UserProfile extends Component {
     this.setState({ optOut: false })
   }
   handlePasswordChange () {
-    const model = this.props.user.email
-
     const payload = {
-      ...model,
+      email: this.props.user.email,
       redirect_url: BASE_URL // TBD - + 'path_to_password_reset'
     }
-
     fetch(`${BASE_URL}/auth/password`, {
       method: 'POST',
       headers: { ...authHeader(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     }).then((promise) => {
-      promise.json().then((response) => {
-        // TBD - render some animation instead of reloading the page
-        window.location.replace('/')
-      })
+      promise.json().then((
+        this.setState({
+          passwordResetSent: true,
+          passwordResetRequested: false
+        })))
     })
+    this.setState({ passwordResetRequested: true })
   }
   generateModal (target) {
     const {
@@ -381,7 +396,7 @@ export class UserProfile extends Component {
       return ''
     }
     const {
-      editBool, editObj, newAliasBool, newAlias, optOut
+      editBool, editObj, newAliasBool, newAlias, optOut, passwordResetSent, passwordResetRequested
     } = this.state
     const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
@@ -536,6 +551,7 @@ export class UserProfile extends Component {
               user={editObj}
               handleChange={this.handleChange}
               handlePasswordChange={this.handlePasswordChange}
+              passwordResetSent={this.passwordResetSent}
             />
           ) : (
             <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
@@ -569,6 +585,8 @@ export class UserProfile extends Component {
                       handlePasswordChange={this.handlePasswordChange}
                       onSave={this.saveEdit}
                       close={this.closeEdit}
+                      passwordResetSent={passwordResetSent}
+                      passwordResetRequested={passwordResetRequested}
                     />
                   ) : (
                     <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
