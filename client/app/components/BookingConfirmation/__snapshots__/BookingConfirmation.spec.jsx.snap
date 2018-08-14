@@ -227,7 +227,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -1246,7 +1246,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -2322,7 +2322,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -3453,7 +3453,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -5497,7 +5497,7 @@ exports[`shallow render 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -6502,7 +6502,7 @@ exports[`with cargo items 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -7810,7 +7810,7 @@ exports[`with containers 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
