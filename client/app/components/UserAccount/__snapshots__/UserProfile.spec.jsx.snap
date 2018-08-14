@@ -2,7 +2,7 @@
 
 exports[`props.aliases is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
     className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
@@ -276,10 +276,10 @@ exports[`props.aliases is truthy 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -310,7 +310,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
-          flexClasses="flex-30 flex-md-45 flex-lg-45"
+          flexClasses="flex-45"
           theme={
             Object {
               "colors": Object {
@@ -328,7 +328,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
-          flexClasses="flex-30 flex-md-45 flex-lg-45"
+          flexClasses="flex-45"
           theme={
             Object {
               "colors": Object {
@@ -395,7 +395,7 @@ exports[`props.user is falsy 1`] = `""`;
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
     className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
@@ -669,10 +669,10 @@ exports[`shallow render 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -750,7 +750,7 @@ exports[`shallow render 1`] = `
 
 exports[`state.editBool is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
     className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
@@ -991,10 +991,10 @@ exports[`state.editBool is true 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >

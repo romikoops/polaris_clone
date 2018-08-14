@@ -2,7 +2,7 @@
 
 exports[`shallow rendering when props.size is full 1`] = `
 <div
-  className="flex-none full hide_border full_wrapper"
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center full hide_border full_wrapper"
   style={
     Object {
       "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -38,7 +38,7 @@ exports[`shallow rendering when props.size is full 1`] = `
 
 exports[`shallow rendering when props.size is large 1`] = `
 <div
-  className="flex-none large hide_border large_wrapper"
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center large hide_border large_wrapper"
   style={
     Object {
       "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -74,7 +74,7 @@ exports[`shallow rendering when props.size is large 1`] = `
 
 exports[`shallow rendering when props.size is small 1`] = `
 <div
-  className="flex-none small hide_border small_wrapper"
+  className="flex-none layout-row layout-align-center-center layout-align-lg-start-center small hide_border small_wrapper"
   style={
     Object {
       "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",

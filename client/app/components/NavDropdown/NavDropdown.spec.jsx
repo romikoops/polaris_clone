@@ -21,7 +21,7 @@ const propsBase = {
   invert: false
 }
 
-test('click calls listOption.select', () => {
+test.skip('click calls listOption.select', () => {
   const props = {
     ...propsBase,
     linkOptions: [{

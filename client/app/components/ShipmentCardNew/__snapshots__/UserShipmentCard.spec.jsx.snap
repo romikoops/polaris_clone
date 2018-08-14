@@ -262,7 +262,7 @@ exports[`shallow rendering 1`] = `
             sectionBottom separatorTop"
   >
     <div
-      className="layout-row flex-60 layout-align-start-center"
+      className="layout-row flex-75 layout-align-start-center"
     >
       <div
         className="layout-row flex-15"
@@ -312,7 +312,7 @@ exports[`shallow rendering 1`] = `
           }
         />
         <span>
-           pickup
+            Pickup
         </span>
       </span>
       <span
@@ -333,7 +333,7 @@ exports[`shallow rendering 1`] = `
           }
         />
         <span>
-           delivery
+           Delivery
         </span>
       </span>
     </div>

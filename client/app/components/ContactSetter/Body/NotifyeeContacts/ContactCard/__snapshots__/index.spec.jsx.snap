@@ -5,10 +5,18 @@ exports[`shallow render 1`] = `
   className="layout-row contact_card"
   key="RANDOM_KEY_0"
 >
-  <i
-    className="remove_icon fa fa-trash"
-    onClick={[Function]}
-  />
+  <div
+    className="flex layout-row icons"
+  >
+    <i
+      className="remove_icon pointy fa fa-trash"
+      onClick={[Function]}
+    />
+    <i
+      className="edit_icon pointy fa fa-pencil"
+      onClick={[Function]}
+    />
+  </div>
   <div
     className="flex-100 layout-row layout-align-start-start"
   >

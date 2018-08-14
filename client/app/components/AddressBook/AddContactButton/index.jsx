@@ -15,7 +15,7 @@ export function AddressBookAddContactButton ({
       onClick={addContact}
     >
       <h3>
-        + {t('common:newContact')}NEW CONTACT
+        + {t('common:newContact')}
       </h3>
     </div>
   )

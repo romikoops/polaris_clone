@@ -14,7 +14,9 @@ exports[`shallow render 1`] = `
       }
     }
   >
-    <AddressBookAddContactButton />
+    <AddressBookAddContactButton
+      t={[Function]}
+    />
   </div>
   <div
     className="flex-50"
