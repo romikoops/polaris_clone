@@ -7,15 +7,21 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { gradientTextGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  authHeader
+} from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
+import { BASE_URL } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
 import {
   OptOutCookies,
   OptOutTenant,
   OptOutItsMyCargo
 } from '../OptOut'
+
+const { fetch } = window
 
 const ProfileBox = ({ user, style, edit }) => (
   <div
@@ -73,7 +79,7 @@ const EditNameBox = () => (
 )
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme
+  user, handleChange, onSave, close, style, theme, handlePasswordChange
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="layout-row flex-90" />
@@ -176,6 +182,21 @@ const EditProfileBox = ({
         />
       </div>
     </div>
+    <div
+      className={`flex-100 layout-row layout-align-start-start layout-wrap
+      ${styles.margin_top} margin_bottom`}
+    >
+      <div className="flex-100 layout-row layout-align-start-start ">
+        <RoundButton
+          theme={theme}
+          size="small"
+          active
+          text="Change my Password"
+          handleNext={handlePasswordChange}
+          iconClass="fa-floppy-o"
+        />
+      </div>
+    </div>
   </div>
 )
 
@@ -185,7 +206,8 @@ EditProfileBox.propTypes = {
   handleChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
+  style: PropTypes.objectOf(PropTypes.string),
+  handlePasswordChange: PropTypes.func.isRequired
 }
 
 EditProfileBox.defaultProps = {
@@ -217,6 +239,7 @@ export class UserProfile extends Component {
     this.deleteAlias = this.deleteAlias.bind(this)
     this.setCurrency = this.setCurrency.bind(this)
     this.saveCurrency = this.saveCurrency.bind(this)
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
   componentDidMount () {
     this.props.setNav('profile')
@@ -263,6 +286,25 @@ export class UserProfile extends Component {
   }
   closeOptOutModal () {
     this.setState({ optOut: false })
+  }
+  handlePasswordChange () {
+    const model = this.props.user.email
+
+    const payload = {
+      ...model,
+      redirect_url: BASE_URL // TBD - + 'path_to_password_reset'
+    }
+
+    fetch(`${BASE_URL}/auth/password`, {
+      method: 'POST',
+      headers: { ...authHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then((promise) => {
+      promise.json().then((response) => {
+        // TBD - render some animation instead of reloading the page
+        window.location.replace('/')
+      })
+    })
   }
   generateModal (target) {
     const {
@@ -493,6 +535,7 @@ export class UserProfile extends Component {
             <EditNameBox
               user={editObj}
               handleChange={this.handleChange}
+              handlePasswordChange={this.handlePasswordChange}
             />
           ) : (
             <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
@@ -523,6 +566,7 @@ export class UserProfile extends Component {
                       style={textStyle}
                       theme={theme}
                       handleChange={this.handleChange}
+                      handlePasswordChange={this.handlePasswordChange}
                       onSave={this.saveEdit}
                       close={this.closeEdit}
                     />
