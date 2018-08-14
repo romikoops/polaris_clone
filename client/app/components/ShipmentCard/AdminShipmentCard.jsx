@@ -13,6 +13,17 @@ import {
   splitName
 } from '../../helpers'
 
+function loadIsComplete (confirmShipmentData, id, dispatches) {
+  return confirmShipmentData.accepted &&
+    id === confirmShipmentData.shipmentId &&
+    confirmShipmentData.action === 'accept'
+}
+function shouldRenderAnimation (confirmShipmentData, id, dispatches) {
+  return confirmShipmentData.requested &&
+    id === confirmShipmentData.shipmentId &&
+    confirmShipmentData.action === 'accept'
+}
+
 export class AdminShipmentCard extends Component {
   constructor (props) {
     super(props)
@@ -65,7 +76,8 @@ export class AdminShipmentCard extends Component {
   render () {
     const {
       shipment,
-      theme
+      theme,
+      confirmShipmentData
     } = this.props
 
     const gradientFontStyle =
@@ -105,19 +117,27 @@ export class AdminShipmentCard extends Component {
     const destinationHubObj = splitName(shipment.destination_hub.name)
     const originHubObj = splitName(shipment.origin_hub.name)
 
+    const loadingCheck = (
+      <div className={`${adminStyles.card_link} ${styles.loader_wrapper}`}>
+        <div className={`${styles.circle_loader} ${loadIsComplete(confirmShipmentData, shipment.id) ? styles.load_complete : ''}`}>
+          <div className={`${loadIsComplete(confirmShipmentData, shipment.id) ? styles.checkmark : ''} ${styles.draw}`} />
+        </div>
+      </div>
+    )
+
     return (
       <div
         key={v4()}
         className={
           `layout-column flex-100 layout-align-start-stretch
-          ${styles.container} ${styles.relative}`
+          ${styles.container}`
         }
       >
+        {shouldRenderAnimation(confirmShipmentData, shipment.id) && loadIsComplete(confirmShipmentData, shipment.id) ? loadingCheck : ''}
         <hr className={`flex-100 layout-row ${styles.hr_divider}`} />
         {confimPrompt}
         <div className={adminStyles.card_link} onClick={() => this.handleView()} />
 
-        {/* {requestedButtons} */}
         {requestedLinks}
 
         <div
@@ -222,7 +242,7 @@ export class AdminShipmentCard extends Component {
           <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
-            <div className="flex-100 layout-row"><b>Arrived on:</b>
+            <div className="flex-100 layout-row"><b>Arrived on:&nbsp;</b>
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
@@ -273,12 +293,14 @@ export class AdminShipmentCard extends Component {
 
 AdminShipmentCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme
 }
 
 AdminShipmentCard.defaultProps = {
   shipment: {},
+  confirmShipmentData: {},
   theme: {}
 }
 

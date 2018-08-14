@@ -3,6 +3,55 @@
     color: #4F4F4F;
     padding: 30px 35px;
     position: relative;
+    &:hover .topRight {
+      opacity: 1;
+    }
+  }
+  .loader_wrapper {
+    background: white;
+    opacity: 0.8;
+    z-index: 2;
+  }
+  .circle_loader {
+    top: 35%;
+    left: 40%;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-left-color: #6FCF97;
+    animation: loadspinner 1.2s infinite linear;
+    position: absolute;
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 50%;
+    width: 114px;
+    height: 114px;
+  }
+  .checkmark {
+    
+    &.draw:after {
+      animation-duration: 800ms;
+      animation-timing-function: ease;
+      animation-name: checkmark;
+      transform: scaleX(-1) rotate(135deg);
+    }
+    
+    &:after {
+      opacity: 1;
+      height: 57px;
+      width: 28.5px;
+      transform-origin: left top;
+      border-right: 3px solid #6FCF97;
+      border-top: 3px solid #6FCF97;
+      content: '';
+      left: 28.5px;
+      top: 57px;
+      position: absolute;
+    }
+  }
+  .load_complete {
+    -webkit-animation: none;
+    animation: none;
+    border-color: #6FCF97;
+    transition: border 500ms ease-out;
   }
   .hr_divider {
     border: none;
@@ -21,7 +70,7 @@
     right: 0px;
     height: 32px;
     width: 160px;
-    opacity: 0;
+    opacity: 0.2;
     font-size: 12px;
     transition: all 0.3s ease;
     .check:hover {
@@ -192,5 +241,37 @@
 
   .price_style {
     overflow-wrap: normal;
+  }
+
+  @keyframes iGCh-wwluhv9K4zoxP9IA {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes _3Z2kU0nRyeQdAddZHLQf1K {
+    0% {
+      height: 0;
+      width: 0;
+      opacity: 1;
+    }
+    20% {
+      height: 0;
+      width: 28.5px;
+      opacity: 1;
+    }
+    40% {
+      height: 57px;
+      width: 28.5px;
+      opacity: 1;
+    }
+    100% {
+      height: 57px;
+      width: 28.5px;
+      opacity: 1;
+    }
   }
 }
