@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
-import { AdminDashboardNew, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
+import { AdminDashboard, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
@@ -23,8 +23,7 @@ import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
-// eslint-disable-next-line import/no-named-as-default
-import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
+import { AdminCurrencyCenter } from '../../components/Admin/Currency/Center'
 import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
@@ -91,6 +90,7 @@ class Admin extends Component {
       shipments,
       clients,
       dashboard,
+      confirmShipmentData,
       loading,
       itinerarySchedules,
       allHubs
@@ -131,11 +131,12 @@ class Admin extends Component {
                   exact
                   path="/admin/dashboard"
                   render={props => (
-                    <AdminDashboardNew
+                    <AdminDashboard
                       user={user}
                       theme={theme}
                       {...props}
                       clients={clients}
+                      confirmShipmentData={confirmShipmentData}
                       shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}

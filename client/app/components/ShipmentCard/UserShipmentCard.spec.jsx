@@ -15,8 +15,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    // eslint-disable-next-line
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }

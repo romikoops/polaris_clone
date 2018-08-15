@@ -17,7 +17,7 @@ import {
   gradientBorderGenerator
 } from '../../../helpers'
 import MandatoryChargeBox from './MandatoryChargeBox'
-import AlternativeGreyBox from '../../GreyBox/AlternativeGreyBox'
+import GreyBox from '../../GreyBox/GreyBox'
 import ItineraryRow from '../Itineraries/ItineraryRow'
 import { AdminHubEdit } from './AdminHubEdit'
 import { SimpleMap as Map } from '../../Maps/SimpleMap'
@@ -419,7 +419,7 @@ export class AdminHubView extends Component {
           </div>
           <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
             <div className="flex-100 flex-gt-sm-33 layout-row layout-align-start-center">
-              <AlternativeGreyBox
+              <GreyBox
                 wrapperClassName="layout-row flex-100 layout-align-center-center"
                 contentClassName="layout-row flex-100 layout-wrap"
                 title="Mandatory Charges"
@@ -427,7 +427,7 @@ export class AdminHubView extends Component {
               />
             </div>
             <div className="flex-100 flex-gt-sm-60 layout-row layout-align-start-center">
-              <AlternativeGreyBox
+              <GreyBox
                 wrapperClassName="layout-row flex-100 layout-align-center-center"
                 contentClassName="layout-row flex-100 layout-wrap"
                 title="Itineraries"

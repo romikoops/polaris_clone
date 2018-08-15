@@ -18,6 +18,7 @@ import {
   ROW,
   WRAP_ROW
 } from '../../classNames'
+import { totalPrice } from '../../helpers'
 
 const CONTAINER = `BOOKING_DETAILS ${WRAP_ROW(100)} ${ALIGN_CENTER_START}`
 
@@ -193,7 +194,7 @@ export class BookingDetails extends Component {
   calcInsurance (val, bool) {
     const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
-    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const parsed = parseFloat(totalPrice(shipmentData.shipment).value, 10)
     const iVal = (gVal * 1.1 + parsed) * 0.0017
     if (bool) {
       return this.setState({ insurance: { bool, val: iVal } })
@@ -231,7 +232,7 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
-    const parsed = parseFloat(shipmentData.shipment.total_price.value, 10)
+    const parsed = parseFloat(totalPrice(shipmentData.shipment).value, 10)
 
     return parsed + customs.val + insurance.val
   }
@@ -413,7 +414,6 @@ export class BookingDetails extends Component {
         <div className={`${styles.wrapper_contact_setter} ${ROW(100)}`}>
           {ContactSetterComponent}
         </div>
-        {console.log(contacts)}
 
         <Formsy
           className="flex-100"

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Formsy from 'formsy-react'
+import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
@@ -15,13 +16,21 @@ import {
   areEqual
 } from '../../helpers'
 
+const errorStyle = {
+  position: 'absolute',
+  left: '8px',
+  fontSize: '12px',
+  bottom: '-2px'
+}
+
 class UserContacts extends Component {
   constructor (props) {
     super(props)
     this.state = {
       newContactBool: false,
       newContact: {},
-      submitAttempted: false
+      submitAttempted: false,
+      email: ''
     }
     this.viewContact = this.viewContact.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
@@ -70,7 +79,6 @@ class UserContacts extends Component {
     let shouldDispatch = true
 
     contacts.forEach((_contact) => {
-      // debugger // eslint-disable-line no-debugger
       const contactWithLocation = {
         city: _contact.location && _contact.location.city,
         companyName: _contact.company_name,
@@ -83,7 +91,6 @@ class UserContacts extends Component {
         street: _contact.location && _contact.location.street,
         zipCode: _contact.location && _contact.location.zip_code
       }
-      // debugger // eslint-disable-line no-debugger
 
       if (areEqual(contactWithLocation, contact)) {
         shouldDispatch = false
@@ -102,8 +109,7 @@ class UserContacts extends Component {
   }
 
   handleInvalidSubmit () {
-    console.log(this)
-    // this.disableSubmitButton()
+    if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
 
   render () {
@@ -112,12 +118,47 @@ class UserContacts extends Component {
       theme, contacts, hubs, contactData, userDispatch, loading
     } = this.props
 
-    const errorStyle = {
-      position: 'absolute',
-      left: '7px',
-      fontSize: '12px',
-      bottom: '-2px'
-    }
+    const mailCheckCallback = suggestion => (
+      <div className="relative width_100">
+        <FormsyInput
+          wrapperClassName={styles.input_100}
+          className={styles.input}
+          errorMessageStyles={errorStyle}
+          submitAttempted={submitAttempted}
+          type="text"
+          value={this.state.email}
+          onChange={(e) => {
+            this.setState({ email: e.target.value })
+          }}
+          name="email"
+          placeholder="email"
+          validations={{
+            minLength: 2,
+            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+          }}
+          validationErrors={{
+            isDefaultRequiredValue: 'Must not be blank',
+            minLength: 'Must be at least two characters long',
+            matchRegexp: 'Invalid email'
+          }}
+          required
+        />
+        {suggestion &&
+            <div style={errorStyle}>
+              Did you mean&nbsp;
+              <span
+                className="emulate_link blue_link"
+                onClick={(e) => {
+                  this.setState({ email: suggestion.full })
+                }}
+              >
+                {suggestion.full}
+              </span>?
+            </div>
+        }
+      </div>
+    )
+
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -157,7 +198,12 @@ class UserContacts extends Component {
             value={newContact.firstName}
             name="firstName"
             placeholder="First Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -168,10 +214,15 @@ class UserContacts extends Component {
             value={newContact.lastName}
             name="lastName"
             placeholder="Last Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
           <FormsyInput
-            wrapperClassName={styles.input_100}
+            wrapperClassName={styles.input_60}
             className={styles.input}
             errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
@@ -179,21 +230,14 @@ class UserContacts extends Component {
             value={newContact.companyName}
             name="companyName"
             placeholder="Company Name"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.email}
-            name="email"
-            placeholder="Email"
-            // onChange={this.handleFormChange}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_50}
+            wrapperClassName={styles.input_33}
             className={styles.input}
             errorMessageStyles={errorStyle}
             submitAttempted={submitAttempted}
@@ -201,8 +245,16 @@ class UserContacts extends Component {
             value={newContact.phone}
             name="phone"
             placeholder="Phone"
-            // onChange={this.handleFormChange}
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
+            required
           />
+          <MailCheck email={this.state.email}>
+            {mailCheckCallback}
+          </MailCheck>
           <FormsyInput
             wrapperClassName={styles.input_50}
             className={styles.input}
@@ -212,7 +264,11 @@ class UserContacts extends Component {
             value={newContact.street}
             name="street"
             placeholder="Street"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_50}
@@ -223,7 +279,11 @@ class UserContacts extends Component {
             value={newContact.number}
             name="number"
             placeholder="Street Number"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:1"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least one character long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -234,7 +294,11 @@ class UserContacts extends Component {
             value={newContact.zipCode}
             name="zipCode"
             placeholder="Postal Code"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -245,7 +309,11 @@ class UserContacts extends Component {
             value={newContact.city}
             name="city"
             placeholder="City"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:2"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least two characters long'
+            }}
           />
           <FormsyInput
             wrapperClassName={styles.input_33}
@@ -256,7 +324,11 @@ class UserContacts extends Component {
             value={newContact.country}
             name="country"
             placeholder="Country"
-            /* onChange={this.handleFormChange} */
+            validations="minLength:4"
+            validationErrors={{
+              isDefaultRequiredValue: 'Must not be blank',
+              minLength: 'Must be at least four characters long'
+            }}
           />
           <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
             <RoundButton

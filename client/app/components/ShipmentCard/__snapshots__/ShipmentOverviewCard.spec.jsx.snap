@@ -20,9 +20,9 @@ exports[`admin is true 1`] = `
     <div
       className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
     >
-      <AlternativeGreyBox
+      <GreyBox
         content={
-          <AdminShipmentCardNew
+          <AdminShipmentCard
             dispatches={
               Object {
                 "foo": [Function],
@@ -102,7 +102,7 @@ exports[`shallow rendering 1`] = `
     <div
       className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
     >
-      <AlternativeGreyBox
+      <GreyBox
         content={
           <UserShipmentCard
             dispatches={

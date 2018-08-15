@@ -377,7 +377,7 @@ class AdminSchedulesRoute extends Component {
                   theme={theme}
                   handleCollapser={() => this.toggleExpander('new')}
                   showArrow
-                  text="Create New Hub"
+                  text="Generate Schedules"
                   faClass="fa fa-plus-circle"
                   content={(
                     <div

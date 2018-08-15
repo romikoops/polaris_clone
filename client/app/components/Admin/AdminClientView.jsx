@@ -3,14 +3,14 @@ import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { AdminAddressTile } from './'
 import styles from './Admin.scss'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator, capitalizeCities } from '../../helpers'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { managerRoles, adminClientsTooltips as clientTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import AdminPromptConfirm from './Prompt/Confirm'
-import { ShipmentOverviewCard } from '../ShipmentCardNew/ShipmentOverviewCard'
+import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminClientView extends Component {
   static prepShipment (baseShipment, client) {
@@ -293,7 +293,7 @@ export class AdminClientView extends Component {
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
         >
           <div className="flex-100 layout-row layout-align-space-between-stretch">
-            <AlternativeGreyBox
+            <GreyBox
               wrapperClassName="flex-70 layout-row layout-align-start-center card_margin_right"
               contentClassName="layout-row flex"
               content={(
@@ -303,7 +303,7 @@ export class AdminClientView extends Component {
               )}
             />
             {relManagers.length !== 0 ? (
-              <AlternativeGreyBox
+              <GreyBox
                 title="Account Managers"
                 wrapperClassName="flex-30 layout-row layout-align-start-start"
                 contentClassName="layout-column flex"

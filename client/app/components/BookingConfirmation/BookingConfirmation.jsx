@@ -9,7 +9,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { gradientTextGenerator, totalPriceString, totalPrice } from '../../helpers'
+import { gradientTextGenerator, totalPriceString, totalPrice, numberSpacing } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
@@ -202,7 +202,6 @@ export class BookingConfirmation extends Component {
     })
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle, t })
     const feeHash = shipment.selected_offer
-
     const acceptedBtn = (
       <div className={BUTTON}>
         <RoundButton
@@ -358,8 +357,8 @@ export class BookingConfirmation extends Component {
                   theme={theme}
                   preCarriage={shipment.has_pre_carriage}
                   onCarriage={shipment.has_on_carriage}
-                  originFees={shipment.has_pre_carriage}
-                  destinationFees={shipment.has_on_carriage}
+                  originFees={shipment.selected_offer.export}
+                  destinationFees={shipment.selected_offer.import}
                   feeHash={feeHash}
                   tenant={{ data: tenant }}
                 />
@@ -924,7 +923,7 @@ function TotalGoodsValue (shipment, t) {
       </p>
       <p className="flex-100 no_m">{`${
         shipment.total_goods_value.currency
-      } ${parseFloat(shipment.total_goods_value.value).toFixed(2)}`}</p>
+      } ${numberSpacing(shipment.total_goods_value.value, 2)}`}</p>
     </div>
   ) : (
     ''

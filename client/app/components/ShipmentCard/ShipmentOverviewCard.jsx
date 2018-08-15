@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AlternativeGreyBox from '../GreyBox/AlternativeGreyBox'
+import GreyBox from '../GreyBox/GreyBox'
 import { UserShipmentCard } from './UserShipmentCard'
-import { AdminShipmentCardNew } from './AdminShipmentCardNew'
+import { AdminShipmentCard } from './AdminShipmentCard'
 import styles from './ShipmentOverviewCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 
@@ -19,14 +19,16 @@ export class ShipmentOverviewCard extends Component {
     const {
       dispatches,
       theme,
+      confirmShipmentData,
       hubs
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
       const ShipCard = this.state.admin ? (
-        <AdminShipmentCardNew
+        <AdminShipmentCard
           shipment={shipment}
           dispatches={dispatches}
+          confirmShipmentData={confirmShipmentData}
           theme={theme}
           hubs={hubs}
         />
@@ -40,11 +42,11 @@ export class ShipmentOverviewCard extends Component {
 
       return (
         <div
-          className="margin_bottom flex-100 flex-lg-50
-          flex-gt-lg-33 layout-row card_padding"
+          className="flex-100 flex-lg-50
+          flex-gt-lg-33 layout-row card_padding card_lineup"
         >
-          <AlternativeGreyBox
-            wrapperClassName="layout-row flex layout-align-center-center"
+          <GreyBox
+            wrapperClassName="layout-row"
             contentClassName="layout-row flex-100"
             content={ShipCard}
           />
@@ -85,6 +87,7 @@ ShipmentOverviewCard.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   hubs: PropTypes.objectOf(PropTypes.hub),
   noTitle: PropTypes.bool
 
@@ -95,6 +98,7 @@ ShipmentOverviewCard.defaultProps = {
   shipments: [],
   theme: null,
   hubs: {},
+  confirmShipmentData: {},
   noTitle: false
 }
 

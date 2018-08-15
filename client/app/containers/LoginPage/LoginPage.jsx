@@ -69,7 +69,7 @@ class LoginPage extends React.Component {
   }
 
   render () {
-    const { loggingIn, theme } = this.props
+    const { loggingIn, theme, handleClick } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
@@ -90,6 +90,7 @@ class LoginPage extends React.Component {
     )
     const ie11Positioning =
       navigator.userAgent.includes('MSIE') || document.documentMode ? styles.login_ie_11 : ''
+
     return (
       <Formsy
         className={`${styles.login_form} ${ie11Positioning}`}
@@ -130,7 +131,7 @@ class LoginPage extends React.Component {
           </a>
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton text="Sign In" theme={theme} active />
+          <RoundButton text="Sign In" theme={theme} active handleNext={handleClick} />
           <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
         </div>
       </Formsy>
@@ -140,6 +141,7 @@ class LoginPage extends React.Component {
 
 function mapStateToProps (state) {
   const { loggingIn, loginAttempt, user } = state.authentication
+
   return {
     loggingIn,
     loginAttempt,
@@ -149,6 +151,7 @@ function mapStateToProps (state) {
 
 LoginPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  handleClick: PropTypes.func,
   loggingIn: PropTypes.bool,
   theme: PropTypes.theme,
   loginAttempt: PropTypes.bool,
@@ -160,6 +163,7 @@ LoginPage.propTypes = {
 LoginPage.defaultProps = {
   loggingIn: false,
   theme: null,
+  handleClick: null,
   loginAttempt: false,
   noRedirect: false,
   req: null

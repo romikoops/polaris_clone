@@ -155,7 +155,7 @@ class AdminClientsIndex extends Component {
         handleClick={() => adminDispatch.getClient(u.id, true)}
         tooltip={clientTip}
         showTooltip
-        flexClasses="flex-30 flex-md-45 flex-gt-lg-15"
+        flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
       />))
     const openTiles = results
       .slice(sliceStartIndex, sliceEndIndex)
@@ -166,7 +166,7 @@ class AdminClientsIndex extends Component {
         handleClick={() => adminDispatch.getClient(u.id, true)}
         tooltip={clientTip}
         showTooltip
-        flexClasses="flex-30 flex-md-45 flex-gt-lg-15"
+        flexClasses="flex-30 flex-xs-100 flex-sm-50 flex-md-45 flex-gt-lg-15"
       />))
     const paginationRow = (
       <div className="flex-95 layout-row layout-align-center-center margin_bottom">
@@ -195,9 +195,15 @@ class AdminClientsIndex extends Component {
         </div>
       </div>
     )
+    const sideBoxStyle = {
+      position: 'fixed',
+      top: '120px',
+      right: '0px',
+      backgroundColor: 'white'
+    }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
         {/* {uploadStatus} */}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <Tabs
@@ -224,7 +230,7 @@ class AdminClientsIndex extends Component {
 
           </Tabs>
         </div>
-        <div className="layout-column flex-20 flex-md-30 hide-sm hide-xs layout-align-end-end">
+        <div className="layout-column flex-20 show-gt-sm hide-xs layout-align-end-end" style={sideBoxStyle}>
           <SideOptionsBox
             header="Filters"
             flexOptions="layout-column flex-20 flex-md-30"
@@ -244,6 +250,7 @@ class AdminClientsIndex extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                   <CollapsingBar
+                    showArrow
                     collapsed={!expander.companies}
                     theme={theme}
                     styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}

@@ -76,8 +76,9 @@ class Header extends Component {
       scrollable,
       noMessages,
       component,
-      toggleShowLogin
-      // adminDispatch
+      toggleShowLogin,
+      // adminDispatch,
+      isLanding
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -134,6 +135,7 @@ class Header extends Component {
         linkOptions={accountLinks}
         invert={isTop && invert}
         user={user}
+        isLanding={isLanding}
         toggleShowLogin={toggleShowLogin}
       />
     )
@@ -207,6 +209,7 @@ Header.propTypes = {
   user: PropTypes.user,
   registering: PropTypes.bool,
   loggingIn: PropTypes.bool,
+  isLanding: PropTypes.bool,
   invert: PropTypes.bool,
   loginAttempt: PropTypes.bool,
   messageDispatch: PropTypes.shape({
@@ -228,6 +231,7 @@ Header.defaultProps = {
   theme: null,
   user: null,
   registering: false,
+  isLanding: false,
   loggingIn: false,
   invert: false,
   loginAttempt: false,
@@ -250,6 +254,7 @@ function mapStateToProps (state) {
   } = authentication
   const { unread, messages } = messaging
   const { currencies } = app
+
   return {
     user,
     tenant,

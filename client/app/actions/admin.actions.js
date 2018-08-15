@@ -88,6 +88,33 @@ function searchHubs (text, page, hubType, country, status) {
     )
   }
 }
+function searchShipments (text, target, page) {
+  function request (hubData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS, payload: hubData }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.searchShipments(text, target, page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function getHub (id, redirect) {
   function request (hubData) {
@@ -551,7 +578,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (redirect) {
+function getShipments (requestedPage, openPage, finishedPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -565,13 +592,41 @@ function getShipments (redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments().then(
+    adminService.getShipments(requestedPage, openPage, finishedPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/shipments'))
         }
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function deltaShipmentsPage (target, page) {
+  function request (shipmentData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
+  }
+  function success (shipmentData) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_SUCCESS, payload: shipmentData }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deltaShipmentsPage(target, page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Shipments successful'))
+        dispatch(success(data))
       },
       (error) => {
         // ;
@@ -820,10 +875,10 @@ function autoGenSchedules (data) {
   }
 }
 function confirmShipment (id, action, redirect) {
-  function request (shipmentData) {
+  function request () {
     return {
       type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
-      payload: shipmentData
+      payload: { id, action }
     }
   }
   function successAccept (shipmentData) {
@@ -845,11 +900,11 @@ function confirmShipment (id, action, redirect) {
     }
   }
   function failure (error) {
-    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error }
+    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error, payload: { id } }
   }
 
   return (dispatch) => {
-    dispatch(request(id, action))
+    dispatch(request())
     adminService.confirmShipment(id, action).then(
       (resp) => {
         const shipmentData = resp.data
@@ -1668,7 +1723,9 @@ export const adminActions = {
   updateHubMandatoryCharges,
   assignDedicatedPricings,
   searchHubs,
-  getAllHubs
+  getAllHubs,
+  searchShipments,
+  deltaShipmentsPage
 }
 
 export default adminActions

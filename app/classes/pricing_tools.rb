@@ -283,7 +283,8 @@ module PricingTools
       (fee["value"] || fee["rate"]).to_d * cargo_hash[:quantity]
     when "PER_CBM"
       min = fee["min"] || 0
-      cbm = fee["value"].to_d * cargo_hash[:volume]
+      val = fee['value'] || fee['rate']
+      cbm = val.to_d * cargo_hash[:volume]
       [cbm, min].max
     when "PER_KG"
       val = fee["value"].to_d * cargo_hash[:weight]

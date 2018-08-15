@@ -5,8 +5,7 @@ import { theme } from '../../../../mocks'
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
-    // eslint-disable-next-line no-plusplus
-    counter++
+    counter += 1
 
     return `RANDOM_KEY_${counter}`
   }
