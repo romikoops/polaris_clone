@@ -145,7 +145,7 @@ export class AdminClientTile extends Component {
 
     return (
       <div
-        className={`layout-row layout-align-center-center margin_bottom tile_padding ${styles.tile_wrapper} ${flexClasses}`}
+        className={`layout-row layout-align-center-center tile_padding ${styles.tile_wrapper} ${flexClasses}`}
         onClick={handleCollapser}
       >
         <GradientBorder

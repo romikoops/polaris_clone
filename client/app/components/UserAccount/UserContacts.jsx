@@ -72,13 +72,13 @@ class UserContacts extends Component {
   //   })
   // }
   handleValidSubmit (contact, reset, invalidate) {
-    const { contacts } = this.props
+    const { contactsData } = this.props
 
     this.setState({ submitAttempted: true })
 
     let shouldDispatch = true
 
-    contacts.forEach((_contact) => {
+    contactsData.contacts.forEach((_contact) => {
       const contactWithLocation = {
         city: _contact.location && _contact.location.city,
         companyName: _contact.company_name,
@@ -115,7 +115,7 @@ class UserContacts extends Component {
   render () {
     const { newContact, newContactBool, submitAttempted } = this.state
     const {
-      theme, contacts, hubs, contactData, userDispatch, loading
+      theme, contactsData, hubs, contactData, userDispatch, loading, numPages
     } = this.props
 
     const mailCheckCallback = suggestion => (
@@ -356,8 +356,9 @@ class UserContacts extends Component {
                 newContactBox={newContactBool ? newContactBox : ''}
                 toggleNewContact={this.toggleNewContact}
                 handleClientAction={this.handleClientAction}
-                contacts={contacts}
+                contacts={contactsData.contacts}
                 hubs={hubs}
+                numPages={numPages}
                 userDispatch={userDispatch}
                 viewContact={this.viewContact}
                 {...props}
@@ -386,11 +387,13 @@ class UserContacts extends Component {
 }
 UserContacts.propTypes = {
   theme: PropTypes.theme,
+  numPages: PropTypes.number,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  contacts: PropTypes.arrayOf(PropTypes.object),
+  contactsData: PropTypes.objectOf(PropTypes.any),
   dispatch: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getContact: PropTypes.func,
+    goTo: PropTypes.func,
     confirmShipment: PropTypes.func
   }).isRequired,
   history: PropTypes.history.isRequired,
@@ -405,7 +408,8 @@ UserContacts.propTypes = {
 UserContacts.defaultProps = {
   theme: null,
   loading: false,
-  contacts: null,
+  contactsData: {},
+  numPages: 1,
   hubs: []
 }
 
@@ -415,14 +419,16 @@ function mapStateToProps (state) {
   const {
     contactData, dashboard, hubs, loading
   } = users
-  const { contacts } = dashboard
+  const { contactsData } = dashboard
+  const { num_contact_pages } = contactsData // eslint-disable-line
 
   return {
     user,
     tenant,
     loggedIn,
-    contacts,
+    contactsData,
     hubs,
+    numPages: num_contact_pages,
     contactData,
     loading
   }

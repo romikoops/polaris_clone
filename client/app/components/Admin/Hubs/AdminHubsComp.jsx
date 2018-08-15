@@ -6,7 +6,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { adminClicked as clickTip } from '../../../constants'
 import { Checkbox } from '../../Checkbox/Checkbox'
-import { capitalize, filters } from '../../../helpers'
+import { capitalize } from '../../../helpers'
 import { AdminHubTile } from './AdminHubTile'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
@@ -160,9 +160,6 @@ export class AdminHubsComp extends Component {
       searchFilters.countries.map(selection => selection.value)
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-
-    // const setPage = !hubFilterKeys && !countryKeys && !statusFilterKeys ?
-      //   prevState.page : prevState.page + (1 * direction)
     this.setState((prevState) => {
       this.searchHubsFromPage(value, 1, hubFilterKeys, countryKeys, statusFilterKeys)
 
@@ -170,39 +167,6 @@ export class AdminHubsComp extends Component {
     })
   }
 
-  applyFilters (array) {
-    const { searchFilters } = this.state
-
-    const hubFilterKeys =
-      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
-    const filter1 = array.filter(a => hubFilterKeys.includes(a.data.hub_type))
-
-    let filter2 = []
-    const countryKeys =
-      Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
-    if (countryKeys.length > 0) {
-      filter2 = filter1.filter(a => countryKeys.includes(a.location.country))
-    } else {
-      filter2 = filter1
-    }
-
-    const statusFilterKeys =
-      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-    const filter3 = filter2.filter(a => statusFilterKeys.includes(a.data.hub_status))
-
-    let filter4
-    if (searchFilters.query && searchFilters.query !== '') {
-      filter4 = filters.handleSearchChange(
-        searchFilters.query,
-        ['data.name', 'data.hub_type', 'location.country'],
-        filter3
-      )
-    } else {
-      filter4 = filter3
-    }
-
-    return filter4
-  }
   render () {
     const { searchFilters, expander } = this.state
     const {
