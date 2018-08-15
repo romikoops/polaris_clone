@@ -852,7 +852,7 @@ export class ShipmentLocationBox extends Component {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
-      const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+      const truckingBoolean = !newFilteredRouteIndexes.every(i => routes[i][counterpart].truckTypes.length > 0)
 
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
 
