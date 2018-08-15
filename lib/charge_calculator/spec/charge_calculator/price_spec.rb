@@ -5,9 +5,10 @@ require "spec_helper"
 RSpec.describe ChargeCalculator::Price do
   let(:price_attributes) do
     {
-      amount:   BigDecimal("100"),
-      currency: "EUR",
-      category: "Base"
+      amount:      BigDecimal("100"),
+      currency:    "EUR",
+      category:    "base",
+      description: "Base"
     }
   end
 
@@ -16,14 +17,16 @@ RSpec.describe ChargeCalculator::Price do
   let(:children_price_attributes) do
     [
       {
-        amount:   BigDecimal("80"),
-        currency: "EUR",
-        category: "BAS"
+        amount:      BigDecimal("80"),
+        currency:    "EUR",
+        category:    "BAS",
+        description: "BAS"
       },
       {
-        amount:   BigDecimal("20"),
-        currency: "EUR",
-        category: "HAS"
+        amount:      BigDecimal("20"),
+        currency:    "EUR",
+        category:    "HAS",
+        description: "HAS"
       }
     ]
   end
@@ -41,7 +44,8 @@ RSpec.describe ChargeCalculator::Price do
       expect(price).to be_a(described_class)
       expect(price.amount).to eq(BigDecimal("100"))
       expect(price.currency).to eq("EUR")
-      expect(price.category).to eq("Base")
+      expect(price.category).to eq("base")
+      expect(price.description).to eq("Base")
     end
   end
 
@@ -49,9 +53,10 @@ RSpec.describe ChargeCalculator::Price do
     context "single node" do
       it "calculates the correct hash" do
         expect(price.to_nested_hash).to eq(
-          amount:   BigDecimal("100"),
-          currency: "EUR",
-          category: "Base"
+          amount:      BigDecimal("100"),
+          currency:    "EUR",
+          category:    "base",
+          description: "Base"
         )
       end
     end
@@ -59,19 +64,22 @@ RSpec.describe ChargeCalculator::Price do
     context "2 level tree" do
       it "calculates the correct hash" do
         expect(price_with_children.to_nested_hash).to eq(
-          amount:   BigDecimal("100"),
-          currency: "EUR",
-          category: "Base",
-          children: [
+          amount:      BigDecimal("100"),
+          currency:    "EUR",
+          category:    "base",
+          description: "Base",
+          children:    [
             {
-              amount:   BigDecimal("80"),
-              currency: "EUR",
-              category: "BAS"
+              amount:      BigDecimal("80"),
+              currency:    "EUR",
+              category:    "BAS",
+              description: "BAS"
             },
             {
-              amount:   BigDecimal("20"),
-              currency: "EUR",
-              category: "HAS"
+              amount:      BigDecimal("20"),
+              currency:    "EUR",
+              category:    "HAS",
+              description: "HAS"
             }
           ]
         )

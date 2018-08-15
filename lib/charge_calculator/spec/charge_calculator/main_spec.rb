@@ -108,83 +108,96 @@ RSpec.describe ChargeCalculator::Main do
     }
   end
 
-  let(:main) { described_class.new(shipment_params: shipment_params, pricings: pricings) }
+  subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
 
   context "price" do
     it "calculates the correct price node tree" do
-      expect(main.price).to be_a ChargeCalculator::Price
-      expect(main.price.to_nested_hash).to eq(
-        amount:   nil,
-        currency: nil,
-        category: "Base",
-        children: [
+      expect(subject.price).to be_a ChargeCalculator::Price
+      expect(subject.price.to_nested_hash).to eq(
+        amount:      nil,
+        currency:    nil,
+        category:    "base",
+        description: "Base",
+        children:    [
           {
-            amount:   nil,
-            currency: nil,
-            category: "Hamburg - Gothenburg",
-            children: [
+            amount:      nil,
+            currency:    nil,
+            category:    "route",
+            description: "Hamburg - Gothenburg",
+            children:    [
               {
-                amount:   nil,
-                currency: nil,
-                category: "cargo_unit_1",
-                children: [
+                amount:      nil,
+                currency:    nil,
+                category:    "cargo_unit",
+                description: "cargo_unit_1",
+                children:    [
                   {
-                    amount:   BigDecimal("230.0") * BigDecimal("23.42") * 2,
-                    currency: "EUR",
-                    category: "BAS"
+                    amount:      BigDecimal("230.0") * BigDecimal("23.42") * 2,
+                    currency:    "EUR",
+                    category:    "BAS",
+                    description: "BAS"
                   },
                   {
-                    amount:   BigDecimal("230.0") * BigDecimal("20.0") * 2,
-                    currency: "EUR",
-                    category: "HAS"
+                    amount:      BigDecimal("230.0") * BigDecimal("20.0") * 2,
+                    currency:    "EUR",
+                    category:    "HAS",
+                    description: "HAS"
                   }
                 ]
               },
               {
-                amount:   nil,
-                currency: nil,
-                category: "cargo_unit_2",
-                children: [
+                amount:      nil,
+                currency:    nil,
+                category:    "cargo_unit",
+                description: "cargo_unit_2",
+                children:    [
                   {
-                    amount:   BigDecimal("140.0") * BigDecimal("25.78"),
-                    currency: "EUR",
-                    category: "BAS"
+                    amount:      BigDecimal("140.0") * BigDecimal("25.78"),
+                    currency:    "EUR",
+                    category:    "BAS",
+                    description: "BAS"
                   },
                   {
-                    amount:   BigDecimal("140.0") * BigDecimal("20.0"),
-                    currency: "EUR",
-                    category: "HAS"
+                    amount:      BigDecimal("140.0") * BigDecimal("20.0"),
+                    currency:    "EUR",
+                    category:    "HAS",
+                    description: "HAS"
                   }
                 ]
               }
             ]
           },
           {
-            amount:   nil,
-            currency: nil,
-            category: "Gothenburg - Shanghai",
-            children: [
+            amount:      nil,
+            currency:    nil,
+            category:    "route",
+            description: "Gothenburg - Shanghai",
+            children:    [
               {
-                amount:   nil,
-                currency: nil,
-                category: "cargo_unit_1",
-                children: [
+                amount:      nil,
+                currency:    nil,
+                category:    "cargo_unit",
+                description: "cargo_unit_1",
+                children:    [
                   {
-                    amount:   BigDecimal("230.0") * BigDecimal("33.58") * 2,
-                    currency: "EUR",
-                    category: "BAS"
+                    amount:      BigDecimal("230.0") * BigDecimal("33.58") * 2,
+                    currency:    "EUR",
+                    category:    "BAS",
+                    description: "BAS"
                   }
                 ]
               },
               {
-                amount:   nil,
-                currency: nil,
-                category: "cargo_unit_2",
-                children: [
+                amount:      nil,
+                currency:    nil,
+                category:    "cargo_unit",
+                description: "cargo_unit_2",
+                children:    [
                   {
-                    amount:   BigDecimal("140.0") * BigDecimal("49.25"),
-                    currency: "EUR",
-                    category: "BAS"
+                    amount:      BigDecimal("140.0") * BigDecimal("49.25"),
+                    currency:    "EUR",
+                    category:    "BAS",
+                    description: "BAS"
                   }
                 ]
               }

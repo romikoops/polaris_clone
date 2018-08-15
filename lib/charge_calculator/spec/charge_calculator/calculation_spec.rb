@@ -55,9 +55,10 @@ RSpec.describe ChargeCalculator::Calculation do
       it "Calculates the correct price" do
         expect(calculation.result).to eq(
           [{
-            amount:   BigDecimal("23.42") * BigDecimal("255.0") * 2,
-            currency: "EUR",
-            category: "BAS"
+            amount:      BigDecimal("23.42") * BigDecimal("255.0") * 2,
+            currency:    "EUR",
+            category:    "BAS",
+            description: "BAS"
           }]
         )
       end

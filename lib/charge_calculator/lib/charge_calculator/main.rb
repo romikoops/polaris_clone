@@ -27,13 +27,21 @@ module ChargeCalculator
             Price.new(price_attributes)
           end
 
-          Price.new(children: cargo_unit_prices, category: "cargo_unit_#{cargo_unit[:id]}")
+          Price.new(
+            children:    cargo_unit_prices,
+            category:    "cargo_unit",
+            description: "cargo_unit_#{cargo_unit[:id]}"
+          )
         end
 
-        Price.new(children: pricing_prices, category: pricing[:route])
+        Price.new(
+          children:    pricing_prices,
+          category:    "route",
+          description: pricing[:route]
+        )
       end
 
-      Price.new(children: prices, category: "Base")
+      Price.new(children: prices, category: "base", description: "Base")
     end
 
     def context(pricing, cargo_unit)

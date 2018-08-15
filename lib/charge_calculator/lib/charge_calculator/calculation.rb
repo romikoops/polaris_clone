@@ -25,7 +25,12 @@ module ChargeCalculator
         calculated_price = reducer.apply(calculated_prices(rate[:prices]))
         calculated_price = Reducers::Max.new.apply [calculated_price, BigDecimal(rate[:min_price])]
 
-        { amount: calculated_price, currency: rate[:currency], category: rate[:category] }
+        {
+          amount:      calculated_price,
+          currency:    rate[:currency],
+          category:    rate[:category],
+          description: rate[:category]
+        }
       end
     end
 
