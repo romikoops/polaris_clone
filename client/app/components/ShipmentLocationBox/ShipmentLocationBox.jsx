@@ -7,12 +7,8 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-// import defaults from '../../styles/default_classes.scss'
 import { colorSVG, determineSpecialism } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
-// import { Modal } from '../Modal/Modal'
-// import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
-// import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
@@ -1243,9 +1239,6 @@ export class ShipmentLocationBox extends Component {
       boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
     }
     if (this.props.hideMap) {
-      // Object.assign(mapStyle, {
-      //   display: 'none'
-      // })
       mapStyle.display = 'none'
     }
 
@@ -1356,7 +1349,6 @@ ShipmentLocationBox.propTypes = {
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
-  // user: PropTypes.user,
   setNotesIds: PropTypes.func,
   shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
@@ -1368,10 +1360,6 @@ ShipmentLocationBox.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
-  // shipmentDispatch: PropTypes.shape({
-  //   goTo: PropTypes.func,
-  //   getDashboard: PropTypes.func
-  // }).isRequired,
   selectedTrucking: PropTypes.objectOf(PropTypes.any),
   handleTruckingDetailsChange: PropTypes.func,
   origin: PropTypes.objectOf(PropTypes.any).isRequired,
