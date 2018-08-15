@@ -4,12 +4,12 @@ module PriceCheckerService
     include CurrencyTools
     include PricingTools
 
-    def initialize(args={})
-      @itinerary     = Itinerary.find(args[:itinerary])
+    def initialize(itinerary, shipment_data, user)
+      @itinerary     = Itinerary.find(itinerary)
       @origin_hub    = @itinerary.first_stop.hub 
       @destination_hub    = @itinerary.last_stop.hub 
-      @shipment_data = args[:shipment_data]
-      @user          = args[:user]
+      @shipment_data = shipment_data
+      @user          = user
       @trucking_data = {}
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
     end
@@ -172,7 +172,7 @@ module PriceCheckerService
     def create_charges_from_fees_data!(
       fees_data,
       children_charge_category,
-      charge_category=ChargeCategory.grand_total,
+      charge_category = ChargeCategory.grand_total,
       parent=@grand_total_charge
     )
       parent_charge = Charge.create(
@@ -197,7 +197,7 @@ module PriceCheckerService
     end
 
     def destroy_previous_charge_breakdown
-      ChargeBreakdown.find_by(shipment: @shipment_data, trip_id: @schedule.trip_id).try(:destroy)
+      ChargeBreakdown.find_by(shipment: @shipment_data, trip_id: @schedule.trip_id)&.destroy
     end
 
     def consolidate_cargo(cargo_array, mot)

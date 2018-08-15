@@ -10,8 +10,7 @@ class OfferCalculator
     @user     = user
     @shipment = shipment
     @delay    = params['delay']
-    @isQuote = params['shipment']['isQuote']
-    params['shipment'].delete('isQuote')
+    @isQuote = params['shipment'].delete('isQuote')
     instantiate_service_classes(params)
     update_shipment
   end

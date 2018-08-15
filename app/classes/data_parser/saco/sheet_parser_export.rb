@@ -46,11 +46,6 @@ module DataParser
           }
         end
 
-        def get_country(row_index)
-          # Look one row above current one for country name.
-          @sheet.row(row_index - 1).compact.first
-        end
-
         def split_and_capitalise(str)
           if str.upcase != str
             return str
@@ -77,9 +72,6 @@ module DataParser
             to_translate = "city: #{str}"
             translation = Translator::GoogleTranslator.new(origin_language: @input_language, target_language: 'en', text: to_translate).perform
             result = translation.text
-            # if str.downcase.include?('chattan')
-            #   byebug
-            # end
             string = result.gsub('city: ', '')
             puts string
           else
@@ -88,27 +80,27 @@ module DataParser
           string.split(', ').map{|s| split_and_capitalise(s)}
         end
       
-        def row_to_hash
+        def row_to_hash(row)
           {
-            ports_of_loading:     @row[:origins],
-            carrier:     @row[:carrier],
+            ports_of_loading:     row[:origins],
+            carrier:     row[:carrier],
             rates:     {
-              fcl_20: @row[:fcl_20_rate],
-              fcl_40: @row[:fcl_40_rate],
-              fcl_40_hq: @row[:fcl_40_hq_rate],
+              fcl_20: row[:fcl_20_rate],
+              fcl_40: row[:fcl_40_rate],
+              fcl_40_hq: row[:fcl_40_hq_rate],
             },
-            currency: @row[:currency],
+            currency: row[:currency],
             fees:      {
-              thc: @row[:thc],
-              isps: @row[:isps],
-              ebs: @row[:ebs]
+              thc: row[:thc],
+              isps: row[:isps],
+              ebs: row[:ebs]
             },
-            notes:    @row[:transshipments],
-            country:  @row[:country],
-            port_of_destination: @row[:destination],
-            effective_date: @row[:effective_date],
-            expiration_date: @row[:expiration_date],
-            transittime: @row[:transit_time]
+            notes:    row[:transshipments],
+            country:  row[:country],
+            port_of_destination: row[:destination],
+            effective_date: row[:effective_date],
+            expiration_date: row[:expiration_date],
+            transittime: row[:transit_time]
           }
         end
 
@@ -122,7 +114,7 @@ module DataParser
         end
 
        def determine_routes(hash)
-        
+
         itineraries = {}
         origins = hash[:ports_of_loading].split('/').map do |hub_code|
           
@@ -229,8 +221,9 @@ module DataParser
           check1 = Float(row[:fcl_20_rate]) rescue nil
           check2 = Float(row[:fcl_40_rate]) rescue nil
           check3 = Float(row[:fcl_40_hq_rate]) rescue nil
-          check4 = row[:country] || nil
-         return ![check1, check2, check3, check4].include?(nil)
+          check4 = row[:country]
+
+          [check1, check2, check3, check4].none?(nil)
 
         end
 
@@ -280,13 +273,11 @@ module DataParser
             @sheet_rows = parse_sheet_rows(@sheet)
             @sheet_rows.each_with_index do |_row, i|
               row_index = i + 1
-              
-              # "Hafen" is unique anchor that differentiates the data
-              # of the individual countries.
+
               next unless validate_row(row)
               @row = row
               
-              row_hash = row_to_hash
+              row_hash = row_to_hash(@row)
               
               while !row_hash[:destination].nil?
                 if row_hash[:port].nil?

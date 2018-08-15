@@ -154,7 +154,7 @@ class Itinerary < ApplicationRecord
   end
 
   def test_pricings(data, user)
-   results = PriceCheckerService::PriceChecker.new(user: user, shipment_data: data, itinerary: self.id).perform
+   results = PriceCheckerService::PriceChecker.new(self.id, data, user).perform
    results.map{|charge| {quote: charge[:quote].deconstruct_tree_into_schedule_charge, itinerary: self.as_options_json, service_level: charge[:service_level]} }
   end
 
