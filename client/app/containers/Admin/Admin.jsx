@@ -90,6 +90,7 @@ class Admin extends Component {
       shipments,
       clients,
       dashboard,
+      confirmShipmentData,
       loading,
       itinerarySchedules,
       allHubs
@@ -135,6 +136,7 @@ class Admin extends Component {
                       theme={theme}
                       {...props}
                       clients={clients}
+                      confirmShipmentData={confirmShipmentData}
                       shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}

@@ -901,10 +901,10 @@ function autoGenSchedules (data) {
   }
 }
 function confirmShipment (id, action, redirect) {
-  function request (shipmentData) {
+  function request () {
     return {
       type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
-      payload: shipmentData
+      payload: { id, action }
     }
   }
   function successAccept (shipmentData) {
@@ -926,11 +926,11 @@ function confirmShipment (id, action, redirect) {
     }
   }
   function failure (error) {
-    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error }
+    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error, payload: { id } }
   }
 
   return (dispatch) => {
-    dispatch(request(id, action))
+    dispatch(request())
     adminService.confirmShipment(id, action).then(
       (resp) => {
         const shipmentData = resp.data

@@ -115,6 +115,7 @@ export class ShipmentsCompAdmin extends Component {
       theme,
       hubs,
       shipments,
+      confirmShipmentData,
       clients,
       numShipmentsPages,
       hubHash,
@@ -147,6 +148,7 @@ export class ShipmentsCompAdmin extends Component {
               dispatches={adminDispatch}
               shipments={mergedReqShipments}
               theme={theme}
+              confirmShipmentData={confirmShipmentData}
               tooltip={adminTip.requested}
               page={pages.requested}
               numPages={numShipmentsPages.requested}
@@ -220,6 +222,7 @@ ShipmentsCompAdmin.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   shipments: PropTypes.objectOf(PropTypes.array),
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   clients: PropTypes.arrayOf(PropTypes.clients),
   numShipmentsPages: PropTypes.number,
   viewShipment: PropTypes.func.isRequired,
@@ -231,6 +234,7 @@ ShipmentsCompAdmin.defaultProps = {
   theme: null,
   hubs: [],
   shipments: {},
+  confirmShipmentData: {},
   clients: [],
   hubHash: {},
   adminDispatch: {},
@@ -244,7 +248,7 @@ function mapStateToProps (state) {
   const { theme } = tenant.data
   const { user, loggedIn } = authentication
   const {
-    clients, shipments
+    clients, shipments, confirmShipmentData
   } = admin
   const { num_shipment_pages } = shipments  // eslint-disable-line
 
@@ -253,6 +257,7 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     theme,
+    confirmShipmentData,
     shipments,
     numShipmentsPages: num_shipment_pages,
     clients,
