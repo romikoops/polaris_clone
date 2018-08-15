@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from 'prop-types'
 import styles from './AdminRouteList.scss'
-import { gradientGenerator, switchIcon } from '../../helpers'
+import { gradientTextGenerator, switchIcon } from '../../helpers'
 
 function listItineraries (itineraries, handleClick, hoverFn, theme) {
   const gradientStyle =
     theme && theme.colors
-      ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { background: '#E0E0E0' }
 
   return itineraries.length > 0 ? itineraries.map((itinerary) => {
@@ -22,33 +22,38 @@ function listItineraries (itineraries, handleClick, hoverFn, theme) {
 
     return (
       <div
-        className={`layout-row layout-padding layout-align-space-around-stretch
+        className={`layout-row layout-padding layout-align-space-around-stretch pointy
         ${styles.listelement}`}
         key={v4()}
         onClick={() => handleClick(itinerary)}
         onMouseEnter={() => hoverFn(itinerary.id)}
         onMouseLeave={() => hoverFn(itinerary.id)}
       >
-        <div className="layout-row flex-25 layout-align-center-center">
-          <div className={`layout-row layout-align-center-center ${styles.routeIcon}`} style={gradientStyle}>
-            {switchIcon(modeOfTransport)}
+        <div className="layout-row flex-10 layout-align-center-center">
+          <div className={`layout-row layout-align-center-center ${styles.routeIcon}`}>
+            {switchIcon(modeOfTransport, gradientStyle)}
           </div>
         </div>
-        <div className="layout-column flex-25 layout-align-center-start">
+        <div className="layout-column flex-30 layout-align-center-start">
           <span className="layout-padding">
             {firstStopName}<br />
-            {firstStopType}
+            <p>{firstStopType}</p>
           </span>
         </div>
-        <div className={`layout-row flex-25 layout-align-center-center ${styles.icon}`}>
-          <p className={`flex-none ${styles.stop_count}`}>
-            {stopCount > 0 ? `+ ${stopCount} stops` : 'direct'}
-          </p>
+        <div className={`layout-row flex-10 layout-align-center-center ${styles.icon}`}>
+          <b className={`flex-none ${styles.stop_count}`}>
+            {stopCount > 0 ? `+ ${stopCount} stops` : (
+              <div>
+                <i className="fa fa-chevron-right clip" style={gradientStyle} />
+                <i className="fa fa-chevron-right clip" style={gradientStyle} />
+              </div>
+            )}
+          </b>
         </div>
-        <div className="layout-column flex-25 layout-align-center-start">
+        <div className="layout-column flex-40 layout-align-center-start">
           <span className="layout-padding">
             {lastStopName}<br />
-            {lastStopType}
+            <p>{lastStopType}</p>
           </span>
         </div>
       </div>
