@@ -83,7 +83,8 @@ module ExcelTool
         service_level:   "SERVICE_LEVEL",
         destination:     "DESTINATION",
         base:            "BASE",
-        dangerous:       "DANGEROUS"
+        dangerous:       "DANGEROUS",
+        carrier:         "CARRIER"
       )
     end
 
@@ -119,16 +120,25 @@ module ExcelTool
     end
 
     def tenant_vehicle_id(row)
-      TenantVehicle.find_by(
-        tenant_id:         user.tenant_id,
-        mode_of_transport: row[:mot].downcase,
-        name:              row[:service_level]
-      ).try(:id)
+      if row[:carrier]
+        carrier = Carrier.find_or_create_by!(name: row[:carrier])
+        return carrier.tenant_vehicles.find_by(
+          tenant_id:         user.tenant_id,
+          mode_of_transport: row[:mot].downcase,
+          name:              row[:service_level]
+        ).try(:id)
+      else
+        return TenantVehicle.find_by(
+          tenant_id:         user.tenant_id,
+          mode_of_transport: row[:mot].downcase,
+          name:              row[:service_level]
+        ).try(:id)
+      end
     end
 
     def create_vehicle_from_name(row, name = nil)
       name ||= row[:service_level]
-      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id).id
+      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id, row[:carrier]).id
     end
 
     def build_hash(rows, hub_fees, customs, hub)
@@ -371,7 +381,7 @@ module ExcelTool
       end
     end
 
-    def pushable_charg(charge)
+    def pushable_charge(charge)
       
       {
         currency:   charge[:currency],
@@ -404,7 +414,7 @@ module ExcelTool
     def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
       existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]]
       if existing_charge && existing_charge[:range]
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << pushable_charg(charge)
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << pushable_charge(charge)
       else
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = expanded_charge(charge)
       end

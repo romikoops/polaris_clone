@@ -122,11 +122,12 @@ module DataParser
         end
 
        def determine_routes(hash)
+        
         itineraries = {}
         origins = hash[:ports_of_loading].split('/').map do |hub_code|
           
           hub_name = determine_hub_from_abbreviation(hub_code)
-          itineraries[hub_code] =  = "#{destination_port_name} - #{hub_name}"
+          itineraries[hub_code] = {name: "#{destination_port_name} - #{hub_name}", fees: {}, rates: {} }
         end
         itineraries
        end
@@ -171,16 +172,16 @@ module DataParser
           ['DE', 'NL', 'BE'].each_with_index do |code, ind|
             hub_abvs = hub_abbreviations_from_country(code)
             hub_abvs.each do |hub_code|
-              existing_fees[hub_code] = {} unless existing_fees[hub_code]
-              existing_fees[hub_code][fee_code] = rates[ind] || 0
+              existing_fees[hub_code][:fees] = {} unless existing_fees[hub_code][:fees]
+              existing_fees[hub_code][:fees][fee_code] = rates[ind] || 0
             end
           end
         else
           ['DE', 'NL', 'BE'].each_with_index do |code, ind|
             hub_abvs = hub_abbreviations_from_country(code)
             hub_abvs.each do |hub_code|
-              existing_fees[hub_code] = {} unless existing_fees[hub_code]
-              existing_fees[hub_code][fee_code] = str
+              existing_fees[hub_code][:fees] = {} unless existing_fees[hub_code][:fees]
+              existing_fees[hub_code][:fees][fee_code] = str
             end
           end
         end
@@ -232,6 +233,23 @@ module DataParser
          return ![check1, check2, check3, check4].include?(nil)
 
         end
+
+        def extract_names(str)
+          new_str = str.gsub('(Free-out)','')
+          alternative_names = new_str[/\(.*?\)/]
+          if alternative_names
+            new_str.gsub!(/\(.*?\)/, '')
+            alt_name = alternative_names.gsub('(','').gsub(')','')
+          end
+          if new_str.end_with?('  ')
+            new_str.slice!(-2)
+          elsif new_str.end_with?('  ')
+            new_str.slice!(-1)
+          end
+          return {name: new_str, alternative_name: alt_name}
+        end
+          
+
 
         def parse_sheet_rows(sheet)
           sheet.parse(
