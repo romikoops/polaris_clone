@@ -19,6 +19,7 @@ export class ShipmentOverviewCard extends Component {
     const {
       dispatches,
       theme,
+      confirmShipmentData,
       hubs
     } = this.props
 
@@ -27,6 +28,7 @@ export class ShipmentOverviewCard extends Component {
         <AdminShipmentCard
           shipment={shipment}
           dispatches={dispatches}
+          confirmShipmentData={confirmShipmentData}
           theme={theme}
           hubs={hubs}
         />
@@ -40,11 +42,11 @@ export class ShipmentOverviewCard extends Component {
 
       return (
         <div
-          className="margin_bottom flex-100 flex-lg-50
+          className="flex-100 flex-lg-50
           flex-gt-lg-33 layout-row card_padding card_lineup"
         >
           <GreyBox
-            wrapperClassName="layout-row flex layout-align-center-center"
+            wrapperClassName="layout-row"
             contentClassName="layout-row flex-100"
             content={ShipCard}
           />
@@ -85,6 +87,7 @@ ShipmentOverviewCard.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   hubs: PropTypes.objectOf(PropTypes.hub),
   noTitle: PropTypes.bool
 
@@ -95,6 +98,7 @@ ShipmentOverviewCard.defaultProps = {
   shipments: [],
   theme: null,
   hubs: {},
+  confirmShipmentData: {},
   noTitle: false
 }
 
