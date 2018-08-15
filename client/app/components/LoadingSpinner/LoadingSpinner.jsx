@@ -4,7 +4,7 @@ import PropTypes from '../../prop-types'
 
 export function LoadingSpinner ({ size }) {
   return (
-    <div id="floatingCirclesG" className={`${size}`}>
+    <div id="floatingCirclesG" className={size}>
       <div className="f_circleG" id="frotateG_01" />
       <div className="f_circleG" id="frotateG_02" />
       <div className="f_circleG" id="frotateG_03" />
