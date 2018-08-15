@@ -79,7 +79,18 @@ subdomains.each do |sub|
       password: 'schryver@admin',
       password_confirmation: 'schryver@admin',
       confirmed_at: DateTime.new(2017, 1, 20)
-    }
+    },
+     {
+      role: Role.find_by_name('shipper'),
+      company_name: 'REMA TIP TOP AG',
+      first_name: 'Admin',
+      last_name: 'Schryver',
+      phone: '+49 8121 707-10362',
+      email: "Doris.Wiechers@tiptop.de",
+      password: 'schryver@tiptop',
+      password_confirmation: 'schryver@tiptop',
+      confirmed_at: DateTime.new(2017, 1, 20)
+     }
   ]
 
   users.each do |user_data|
