@@ -4,7 +4,7 @@ module ChargeCalculator
   class Price
     attr_reader :amount, :currency, :category, :children
 
-    def initialize(amount:, currency:, category:, children: [])
+    def initialize(amount: nil, currency: nil, category: nil, children: [])
       @amount   = amount
       @currency = currency
       @category = category

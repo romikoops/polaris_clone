@@ -37,7 +37,7 @@ module ChargeCalculator
 
     def filtered_prices(prices)
       prices.select do |price|
-        RuleEngine.match(context: context, rule: price[:rule]).result
+        price[:rule].nil? || RuleEngine.match(context: context, rule: price[:rule]).result
       end
     end
   end
