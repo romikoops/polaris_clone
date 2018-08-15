@@ -108,7 +108,7 @@ CurrencySetTile.defaultProps = {
 
 }
 
-export class AdminCurrencyCenter extends Component {
+class AdminCurrencyCenter extends Component {
   constructor (props) {
     super(props)
     this.state = {
