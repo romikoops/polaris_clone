@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { translate } from 'react-i18next'
 import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
@@ -9,9 +8,8 @@ import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType, t
+    theme, totalWeight, totalVolume, cities, nexuses, trucking, modeOfTransport, loadType
   } = props
-
   const dashedLineStyles = {
     marginTop: '6px',
     height: '2px',
@@ -22,29 +20,10 @@ function BookingSummary (props) {
         : 'black',
     backgroundSize: '16px 2px, 100% 2px'
   }
-
+  // const modesOfTransport = Object.keys(scope.modes_of_transport)
+  //   .filter(mot => scope.modes_of_transport[mot])
+  // const icons = modesOfTransport.map(mot => switchIcon(mot))
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
-
-  const maybePickup = () => {
-    const okCities = cities.origin && trucking.pre_carriage.truck_type
-    const okNexuses = nexuses.origin && !trucking.pre_carriage.truck_type
-    const ok = okCities || okNexuses
-    if (!ok) return ''
-
-    return trucking.pre_carriage.truck_type
-      ? t('common:withPickup')
-      : t('common:withoutPickup')
-  }
-  const maybeDelivery = () => {
-    const okCities = cities.destination && trucking.on_carriage.truck_type
-    const okNexuses = nexuses.destination && !trucking.on_carriage.truck_type
-    const ok = okCities || okNexuses
-    if (!ok) return ''
-
-    return trucking.on_carriage.truck_type
-      ? t('common:withDelivery')
-      : t('common:withoutDelivery')
-  }
 
   return (
     <div className={`${styles.booking_summary} flex-50 layout-row`}>
@@ -61,10 +40,10 @@ function BookingSummary (props) {
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
           <div className="flex-50 layout-row layout-align-center-center">
-            <h4>{t('common:from')}</h4>
+            <h4>From</h4>
           </div>
           <div className="flex-50 layout-row layout-align-center-center">
-            <h4>{t('common:to')}</h4>
+            <h4>To</h4>
           </div>
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
@@ -75,7 +54,12 @@ function BookingSummary (props) {
               </Truncate>
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
-              { maybePickup() }
+              {
+                (
+                  (cities.origin && trucking.pre_carriage.truck_type) ||
+                  (nexuses.origin && !trucking.pre_carriage.truck_type)
+                ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+              }
             </p>
           </div>
           <div className={`flex-50 layout-row layout-align-center-center layout-wrap ${styles.header_hub}`}>
@@ -83,7 +67,12 @@ function BookingSummary (props) {
               {trucking.on_carriage.truck_type ? cities.destination : nexuses.destination}
             </h4>
             <p className={`${styles.trucking_elem} flex-none`}>
-              {maybeDelivery()}
+              {
+                (
+                  (cities.destination && trucking.on_carriage.truck_type) ||
+                  (nexuses.destination && !trucking.on_carriage.truck_type)
+                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} Delivery`
+              }
             </p>
           </div>
         </div>
@@ -155,4 +144,4 @@ function mapStateToProps (state) {
   return { ...bookingSummary, theme }
 }
 
-export default withRouter(connect(mapStateToProps)(translate('common')(BookingSummary)))
+export default withRouter(connect(mapStateToProps)(BookingSummary))
