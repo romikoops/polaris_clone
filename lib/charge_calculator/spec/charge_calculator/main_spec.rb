@@ -205,6 +205,8 @@ RSpec.describe ChargeCalculator::Main do
           }
         ]
       )
+
+      expect(subject.price.to_nested_hash.to_json).to match_json_schema("main/price")
     end
   end
 end

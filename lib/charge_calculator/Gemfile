@@ -8,3 +8,8 @@ gemspec
 gem "rule_engine", git: "git@gitlab.com:itsmycargo/rule-engine.git"
 
 gem 'pry'
+
+
+group :test do
+  gem "json-schema"
+end

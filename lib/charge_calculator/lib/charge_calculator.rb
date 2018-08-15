@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json-schema"
 require "charge_calculator/version"
 require "charge_calculator/reducers/base"
 require "charge_calculator/reducers/first"

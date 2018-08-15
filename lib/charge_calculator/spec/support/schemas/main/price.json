@@ -1,0 +1,81 @@
+{
+  "type": "object",
+  "required": ["amount", "currency", "category", "description", "children"],
+  "properties": {
+    "amount": {
+      "type": ["decimal", null]
+    },
+    "currency": {
+      "type": ["string", null]
+    },
+    "category": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["amount", "currency", "category", "description", "children"],
+        "properties": {
+          "amount": {
+            "type": ["decimal", null]
+          },
+          "currency": {
+            "type": ["string", null]
+          },    
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["amount", "currency", "category", "description", "children"],
+              "properties": {
+                "amount": {
+                  "type": ["decimal", null]
+                },
+                "currency": {
+                  "type": ["string", null]
+                },    
+                "category": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "children": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["amount", "currency", "category", "description"],
+                    "properties": {
+                      "amount": {
+                        "type": "decimal"
+                      },
+                      "currency": {
+                        "type": "string"
+                      },    
+                      "category": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }  
+                  }      
+                }      
+              }  
+            }
+          }      
+        }  
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 require "bundler/setup"
 require "charge_calculator"
 
+require "support/json_schema_matcher"
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
