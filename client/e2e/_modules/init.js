@@ -217,6 +217,7 @@ export default async function init (options) {
       selector
     )
     const index = texts.indexOf(text)
+    console.log(texts, text, index)
 
     if (index === -1) {
       return false
