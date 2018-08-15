@@ -8,7 +8,6 @@ import FormsyInput from '../FormsyInput/FormsyInput'
 import PropTypes from '../../prop-types'
 import { UserContactsIndex, UserContactsView } from './'
 import styles from './UserAccount.scss'
-// import {v4} from 'uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
 import {
@@ -36,10 +35,12 @@ class UserContacts extends Component {
     this.backToIndex = this.backToIndex.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
     this.toggleNewContact = this.toggleNewContact.bind(this)
-    // this.handleFormChange = this.handleFormChange.bind(this)
-    // this.saveNewContact = this.saveNewContact.bind(this)
+    this.viewContacts = this.viewContacts.bind(this)
     this.handleValidSubmit = this.handleValidSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
+  }
+  componentWillMount () {
+    this.viewContacts()
   }
 
   componentDidMount () {
@@ -62,15 +63,10 @@ class UserContacts extends Component {
   toggleNewContact () {
     this.setState({ newContactBool: !this.state.newContactBool })
   }
-  // handleFormChange (event) {
-  //   const { name, value } = event.target
-  //   this.setState({
-  //     newContact: {
-  //       ...this.state.newContact,
-  //       [name]: value
-  //     }
-  //   })
-  // }
+  viewContacts () {
+    const { userDispatch } = this.props
+    userDispatch.getContacts(true, 1)
+  }
   handleValidSubmit (contact, reset, invalidate) {
     const { contactsData } = this.props
 
@@ -115,7 +111,7 @@ class UserContacts extends Component {
   render () {
     const { newContact, newContactBool, submitAttempted } = this.state
     const {
-      theme, contactsData, hubs, contactData, userDispatch, loading, numPages
+      theme, hubs, contactData, contactsData, userDispatch, loading, numPages
     } = this.props
 
     const mailCheckCallback = suggestion => (
@@ -356,7 +352,7 @@ class UserContacts extends Component {
                 newContactBox={newContactBool ? newContactBox : ''}
                 toggleNewContact={this.toggleNewContact}
                 handleClientAction={this.handleClientAction}
-                contacts={contactsData.contacts}
+                contacts={contactsData}
                 hubs={hubs}
                 numPages={numPages}
                 userDispatch={userDispatch}
@@ -389,10 +385,11 @@ UserContacts.propTypes = {
   theme: PropTypes.theme,
   numPages: PropTypes.number,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  contactsData: PropTypes.objectOf(PropTypes.any),
+  contactsData: PropTypes.arrayOf(PropTypes.contact),
   dispatch: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getContact: PropTypes.func,
+    getContacts: PropTypes.func,
     goTo: PropTypes.func,
     confirmShipment: PropTypes.func
   }).isRequired,
@@ -408,7 +405,7 @@ UserContacts.propTypes = {
 UserContacts.defaultProps = {
   theme: null,
   loading: false,
-  contactsData: {},
+  contactsData: [],
   numPages: 1,
   hubs: []
 }
@@ -417,19 +414,18 @@ function mapStateToProps (state) {
   const { authentication, tenant, users } = state
   const { user, loggedIn } = authentication
   const {
-    contactData, dashboard, hubs, loading
+    contactData, contactsData, dashboard, hubs, loading
   } = users
-  const { contactsData } = dashboard
-  const { num_contact_pages } = contactsData // eslint-disable-line
+  const { num_contact_pages } = dashboard // eslint-disable-line
 
   return {
     user,
     tenant,
     loggedIn,
-    contactsData,
     hubs,
     numPages: num_contact_pages,
     contactData,
+    contactsData,
     loading
   }
 }

@@ -28,7 +28,7 @@ class Admin::HubsController < Admin::AdminBaseController
     paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
       { data: hub, location: hub.location.to_custom_hash }
     end
-    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 12)
+    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 9)
   end
 
   def permitted_params

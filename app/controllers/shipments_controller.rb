@@ -21,9 +21,9 @@ class ShipmentsController < ApplicationController
     o_shipments = open_shipments
     f_shipments = finished_shipments
     num_pages = {
-      finished: (f_shipments.count / 6.0).ceil,
-      requested: (r_shipments.count / 6.0).ceil,
-      open: (o_shipments.count / 6.0).ceil
+      finished: (f_shipments.count / 4.0).ceil,
+      requested: (r_shipments.count / 4.0).ceil,
+      open: (o_shipments.count / 4.0).ceil
     }
     
     response_handler(

@@ -445,6 +445,37 @@ function getContact (id, redirect) {
     )
   }
 }
+function getContacts (redirect, page) {
+  function request () {
+    return { type: userConstants.GET_CONTACTS_REQUEST }
+  }
+  function success (contactsData) {
+    return { type: userConstants.GET_CONTACTS_SUCCESS, payload: contactsData }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_CONTACTS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.getContacts(page).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Contacts successful'))
+        if (redirect) {
+          dispatch(push(`/account/contacts`))
+        }
+
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function updateContact (data, redirect) {
   function request (contactData) {
@@ -695,6 +726,7 @@ export const userActions = {
   goTo,
   getAll,
   getContact,
+  getContacts,
   goBack,
   updateContact,
   newUserLocation,

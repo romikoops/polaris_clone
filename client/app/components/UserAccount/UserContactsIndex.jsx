@@ -19,7 +19,7 @@ export class UserContactsIndex extends Component {
   }
   getContactsFromPage (page) {
     const { userDispatch } = this.props
-    userDispatch.goTo(`/account/contacts?page=${page || 1}`)
+    userDispatch.getContacts(true, page)
   }
 
   handlePage (direction) {

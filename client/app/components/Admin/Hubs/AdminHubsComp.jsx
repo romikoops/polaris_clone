@@ -28,7 +28,6 @@ export class AdminHubsComp extends Component {
         },
         countries: []
       },
-      expander: {},
       page: 1
     }
     this.nextPage = this.nextPage.bind(this)
@@ -80,15 +79,6 @@ export class AdminHubsComp extends Component {
   fetchCountries () {
     const { appDispatch } = this.props
     appDispatch.fetchCountries()
-  }
-
-  toggleExpander (key) {
-    this.setState({
-      expander: {
-        ...this.state.expander,
-        [key]: !this.state.expander[key]
-      }
-    })
   }
   toggleFilterValue (target, key) {
     this.setState({
@@ -168,9 +158,20 @@ export class AdminHubsComp extends Component {
   }
 
   render () {
-    const { searchFilters, expander } = this.state
+    const { searchFilters } = this.state
     const {
-      theme, actionNodes, hubs, countries, numHubPages, handleClick
+      theme,
+      actionNodes,
+      hubs,
+      countries,
+      numHubPages,
+      handleClick,
+      toggleExpanderHubType,
+      toggleExpanderStatus,
+      toggleExpanderCountries,
+      collapsedHubType,
+      collapsedStatus,
+      collapsedCountries
     } = this.props
 
     if (!this.props.hubs) {
@@ -296,28 +297,28 @@ export class AdminHubsComp extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                         <CollapsingBar
-                          collapsed={!expander.hubType}
+                          collapsed={collapsedHubType}
                           theme={theme}
-                          handleCollapser={() => this.toggleExpander('hubType')}
+                          handleCollapser={toggleExpanderHubType}
                           text="Hub Type"
                           faClass="fa fa-ship"
                           showArrow
                           content={typeFilters}
                         />
                         <CollapsingBar
-                          collapsed={!expander.status}
+                          collapsed={collapsedStatus}
                           theme={theme}
-                          handleCollapser={() => this.toggleExpander('status')}
+                          handleCollapser={toggleExpanderStatus}
                           text="Status"
                           faClass="fa fa-ship"
                           showArrow
                           content={statusFilters}
                         />
                         <CollapsingBar
-                          collapsed={!expander.countries}
+                          collapsed={collapsedCountries}
                           theme={theme}
                           minHeight="270px"
-                          handleCollapser={() => this.toggleExpander('countries')}
+                          handleCollapser={toggleExpanderCountries}
                           text="Country"
                           faClass="fa fa-flag"
                           showArrow
@@ -342,8 +343,14 @@ export class AdminHubsComp extends Component {
 
 AdminHubsComp.propTypes = {
   theme: PropTypes.theme,
+  toggleExpanderHubType: PropTypes.func,
+  toggleExpanderStatus: PropTypes.func,
+  toggleExpanderCountries: PropTypes.func,
+  collapsedHubType: PropTypes.objectOf(PropTypes.bool),
+  collapsedStatus: PropTypes.objectOf(PropTypes.bool),
+  collapsedCountries: PropTypes.objectOf(PropTypes.bool),
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  numHubPages: PropTypes.number,
+  numHubPages: PropTypes.number.isRequired,
   countries: PropTypes.arrayOf(PropTypes.any),
   actionNodes: PropTypes.arrayOf(PropTypes.node),
   handleClick: PropTypes.func,
@@ -361,7 +368,12 @@ AdminHubsComp.propTypes = {
 AdminHubsComp.defaultProps = {
   theme: null,
   hubs: [],
-  numHubPages: 1,
+  toggleExpanderHubType: null,
+  toggleExpanderStatus: null,
+  toggleExpanderCountries: null,
+  collapsedHubType: {},
+  collapsedStatus: {},
+  collapsedCountries: {},
   countries: [],
   actionNodes: [],
   handleClick: null,
