@@ -7,15 +7,22 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { gradientTextGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  authHeader
+} from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
+import { BASE_URL } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
 import {
   OptOutCookies,
   OptOutTenant,
   OptOutItsMyCargo
 } from '../OptOut'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
+
+const { fetch } = window
 
 const ProfileBox = ({ user, style, edit }) => (
   <div
@@ -73,7 +80,7 @@ const EditNameBox = () => (
 )
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme
+  user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="layout-row flex-90" />
@@ -160,7 +167,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone
@@ -176,6 +183,32 @@ const EditProfileBox = ({
         />
       </div>
     </div>
+    <div
+      className={`flex-100 layout-row layout-align-center layout-wrap padding_top ${styles.form_group_submit_btn}`}
+    >
+      <div className="flex-50 layout-row layout-align-start-center">
+        <RoundButton
+          theme={theme}
+          size="medium"
+          active
+          text="Change my Password"
+          handleNext={handlePasswordChange}
+        />
+      </div>
+      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+        {passwordResetRequested &&
+        <LoadingSpinner
+          size="extra_small"
+        />}
+      </div>
+      { passwordResetSent && (
+        <div className="flex-100 layout-row layout-align-center-start padding_top">
+          <p>
+            Please check your email for a link to change your password.
+          </p>
+        </div>
+      )}
+    </div>
   </div>
 )
 
@@ -185,7 +218,10 @@ EditProfileBox.propTypes = {
   handleChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
+  style: PropTypes.objectOf(PropTypes.string),
+  handlePasswordChange: PropTypes.func.isRequired,
+  passwordResetSent: PropTypes.bool.isRequired,
+  passwordResetRequested: PropTypes.bool.isRequired
 }
 
 EditProfileBox.defaultProps = {
@@ -201,6 +237,8 @@ export class UserProfile extends Component {
       editObj: {},
       newAlias: {},
       newAliasBool: false,
+      passwordResetSent: false,
+      passwordResetRequested: false,
       currencySelect: {
         label: this.props.user ? this.props.user.currency : 'EUR',
         value: this.props.user ? this.props.user.currency : 'EUR'
@@ -217,6 +255,7 @@ export class UserProfile extends Component {
     this.deleteAlias = this.deleteAlias.bind(this)
     this.setCurrency = this.setCurrency.bind(this)
     this.saveCurrency = this.saveCurrency.bind(this)
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
   componentDidMount () {
     this.props.setNav('profile')
@@ -263,6 +302,24 @@ export class UserProfile extends Component {
   }
   closeOptOutModal () {
     this.setState({ optOut: false })
+  }
+  handlePasswordChange () {
+    const payload = {
+      email: this.props.user.email,
+      redirect_url: ''
+    }
+    fetch(`${BASE_URL}/auth/password`, {
+      method: 'POST',
+      headers: { ...authHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then((promise) => {
+      promise.json().then((
+        this.setState({
+          passwordResetSent: true,
+          passwordResetRequested: false
+        })))
+    })
+    this.setState({ passwordResetRequested: true })
   }
   generateModal (target) {
     const {
@@ -339,7 +396,7 @@ export class UserProfile extends Component {
       return ''
     }
     const {
-      editBool, editObj, newAliasBool, newAlias, optOut
+      editBool, editObj, newAliasBool, newAlias, optOut, passwordResetSent, passwordResetRequested
     } = this.state
     const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
@@ -493,6 +550,8 @@ export class UserProfile extends Component {
             <EditNameBox
               user={editObj}
               handleChange={this.handleChange}
+              handlePasswordChange={this.handlePasswordChange}
+              passwordResetSent={this.passwordResetSent}
             />
           ) : (
             <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
@@ -523,8 +582,11 @@ export class UserProfile extends Component {
                       style={textStyle}
                       theme={theme}
                       handleChange={this.handleChange}
+                      handlePasswordChange={this.handlePasswordChange}
                       onSave={this.saveEdit}
                       close={this.closeEdit}
+                      passwordResetSent={passwordResetSent}
+                      passwordResetRequested={passwordResetRequested}
                     />
                   ) : (
                     <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
