@@ -7,6 +7,7 @@ require "charge_calculator/reducers/sum"
 require "charge_calculator/reducers/max"
 require "charge_calculator/reducers"
 require "charge_calculator/calculation"
+require "charge_calculator/price"
 
 module ChargeCalculator
 end
