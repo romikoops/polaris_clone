@@ -48,12 +48,6 @@ export class UserDashboard extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, locationId)
   }
-  // handleReqClick() {
-  //     this.seeAll('account/shipments');
-  // }
-  // handleOpClick() {
-  //    this.seeAll('account/shipments');
-  // }
   seeAll () {
     const { userDispatch, seeAll } = this.props
     if (seeAll) {
@@ -70,16 +64,12 @@ export class UserDashboard extends Component {
       return <h1>NO DATA</h1>
     }
     const { shipments, contacts, locations } = dashboard
-    // const mergedOpenShipments =
-    //   shipments && shipments.open
-    //     ? shipments.open
-    //       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-    //       .map(sh => UserDashboard.prepShipment(sh, user, hubs))
-    //     : false
+
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
           .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+          .slice(0, 4)
           .map(sh => UserDashboard.prepShipment(sh, user, hubs))
         : false
     const gradientFontStyle =

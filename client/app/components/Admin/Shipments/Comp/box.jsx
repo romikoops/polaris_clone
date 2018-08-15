@@ -44,8 +44,10 @@ export class AdminShipmentsBox extends Component {
       prevPage,
       handleSearchChange,
       numPages,
-      shipments
+      shipments,
+      confirmShipmentData
     } = this.props
+
     return (
       <div
         className={`layout-row flex-100
@@ -70,6 +72,7 @@ export class AdminShipmentsBox extends Component {
         <ShipmentOverviewCard
           dispatches={dispatches}
           noTitle
+          confirmShipmentData={confirmShipmentData}
           shipments={shipments}
           admin={!userView}
           theme={theme}
@@ -115,6 +118,7 @@ AdminShipmentsBox.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   userView: PropTypes.bool,
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   page: PropTypes.number,
   nextPage: PropTypes.func,
   prevPage: PropTypes.func,
@@ -126,6 +130,7 @@ AdminShipmentsBox.defaultProps = {
   handleClick: null,
   seeAll: null,
   theme: null,
+  confirmShipmentData: {},
   userView: false,
   page: 1,
   nextPage: null,
