@@ -23,7 +23,7 @@ import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
-import { AdminCurrencyCenter } from '../../components/Admin/Currency/Center'
+import AdminCurrencyCenter from '../../components/Admin/Currency/Center' // eslint-disable-line
 import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {

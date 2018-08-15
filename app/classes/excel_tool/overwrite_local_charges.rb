@@ -122,11 +122,7 @@ module ExcelTool
     def tenant_vehicle_id(row)
       if row[:carrier]
         carrier = Carrier.find_or_create_by!(name: row[:carrier])
-        return carrier.tenant_vehicles.find_by(
-          tenant_id:         user.tenant_id,
-          mode_of_transport: row[:mot].downcase,
-          name:              row[:service_level]
-        ).try(:id)
+        return carrier.get_tenant_vehicle(user.tenant_id, row[:mot].downcase, row[:service_level]).try(:id)
       else
         return TenantVehicle.find_by(
           tenant_id:         user.tenant_id,
@@ -157,9 +153,9 @@ module ExcelTool
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
         end
         if row[:service_level]
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row)
-          tenant_vehicle_id = tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"]
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row)
+          tenant_vehicle_id = tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"]
         else
           tenant_vehicle_id = "general"
         end
@@ -307,13 +303,14 @@ module ExcelTool
 
     def update_hashes(row, hub_fees, customs, tenant_vehicles, counterparts)
       charge = build_charge(row)
+      
         if row[:fee_code] != "CUST"
         hub_fees = local_charge_load_setter(
           hub_fees,
           charge,
           row[:load_type].downcase,
           row[:direction].downcase,
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
           row[:mot],
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
         )
@@ -323,7 +320,7 @@ module ExcelTool
           charge,
           row[:load_type].downcase,
           row[:direction].downcase,
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
           row[:mot],
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
         )
@@ -340,6 +337,7 @@ module ExcelTool
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k,
                 direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"],
                 counterpart_hub_id: v["counterpart_hub_id"], dangerous:false)
+                
               if lc
                 lc.update_attributes(v)
               else

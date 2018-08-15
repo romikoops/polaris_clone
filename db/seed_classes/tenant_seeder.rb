@@ -1954,6 +1954,7 @@ class TenantSeeder
         },
         logoLarge: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
         logoSmall: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_logo_dark.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/tenants/schryver/schryver_white.png",
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
@@ -1978,7 +1979,7 @@ class TenantSeeder
       scope: {
         modes_of_transport: {
           ocean: {
-            container: false,
+            container: true,
             cargo_item: true
           },
           rail: {

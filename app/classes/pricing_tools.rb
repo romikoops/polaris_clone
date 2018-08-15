@@ -6,6 +6,7 @@ module PricingTools
   def get_user_price(itinerary_id, transport_category_id, user, shipment_date)
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
+    # byebug
     return if pricing.nil?
 
     pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)
@@ -22,11 +23,13 @@ module PricingTools
   end
 
   def transport_category(cargo_unit, schedule)
+    # byebug
     schedule.trip.tenant_vehicle.vehicle.transport_categories.find_by(
       name:              "any",
       cargo_class:       cargo_unit.try(:size_class) || "lcl",
       mode_of_transport: schedule.mode_of_transport
     )
+    
   end
 
   def determine_local_charges(hub, load_type, cargos, direction, mot, tenant_vehicle_id, counterpart_hub_id, user)
@@ -60,7 +63,7 @@ module PricingTools
     end
     converted = sum_and_convert_cargo(totals, user.currency, user.tenant_id)
     totals["total"] = { value: converted, currency: user.currency }
-
+    # byebug
     totals
   end
 
