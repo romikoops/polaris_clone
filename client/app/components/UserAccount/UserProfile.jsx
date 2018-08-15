@@ -306,7 +306,7 @@ export class UserProfile extends Component {
   handlePasswordChange () {
     const payload = {
       email: this.props.user.email,
-      redirect_url: BASE_URL // TBD - + 'path_to_password_reset'
+      redirect_url: ''
     }
     fetch(`${BASE_URL}/auth/password`, {
       method: 'POST',
