@@ -45,17 +45,30 @@ module ChargeCalculator
     end
 
     def context(pricing, cargo_unit)
+      volume = volume(cargo_unit)
+
       {
         quantity:           cargo_unit[:quantity],
         payload:            BigDecimal(cargo_unit[:payload]),
-        chargeable_payload: chargeable_payload(pricing, cargo_unit),
-        dimensions:         cargo_unit[:dimensions]
+        chargeable_payload: chargeable_payload(pricing, cargo_unit, volume),
+        dimensions:         cargo_unit[:dimensions],
+        volume:             volume
       }
     end
 
-    def chargeable_payload(pricing, cargo_unit)
-      BigDecimal(cargo_unit[:payload]) *
-        BigDecimal(pricing.dig(:conversion_ratios, :weight_measure))
+    def chargeable_payload(pricing, cargo_unit, volume)
+      [
+        volume * BigDecimal(pricing.dig(:conversion_ratios, :weight_measure)),
+        BigDecimal(cargo_unit[:payload])
+      ].max
+    end
+
+    def volume(cargo_unit)
+      BigDecimal(cargo_unit[:volume] || volume_from_dimensions(cargo_unit[:dimensions]))
+    end
+
+    def volume_from_dimensions(dimensions)
+      dimensions.values.reduce(1) { |acc, v| acc * BigDecimal(v) } / 1_000_000
     end
   end
 end
