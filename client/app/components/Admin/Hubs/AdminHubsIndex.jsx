@@ -18,6 +18,14 @@ export class AdminHubsIndex extends Component {
       expander: {}
     }
   }
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
+  }
 
   render () {
     const { expander } = this.state

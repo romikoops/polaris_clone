@@ -33,12 +33,12 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def show
     itinerary = Itinerary.find(params[:id])
-    resp = { hubs: itinerary.hubs,
-      itinerary: itinerary,
-      hubItinerarys: itinerary.as_options_json,
-      schedules: itinerary.prep_schedules(10),
-      stops: itinerary.stops.order(:index),
-      notes: itinerary.notes }
+    resp = { hubs:          itinerary.hubs,
+             itinerary:     itinerary,
+             hubItinerarys: itinerary.as_options_json,
+             schedules:     itinerary.prep_schedules(10),
+             stops:         itinerary.stops.order(:index),
+             notes:         itinerary.notes }
     response_handler(resp)
   end
 
@@ -64,9 +64,9 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def find_or_create_itinerary_location(itinerary, location, index)
-    ItineraryLocation.find_or_create_by(itinerary: itinerary,
-      location: location,
-      position_in_hub_chain: (index + 1) / 2)
+    ItineraryLocation.find_or_create_by(itinerary:             itinerary,
+                                        location:              location,
+                                        position_in_hub_chain: (index + 1) / 2)
   end
 
   def hub_location(current_hub_type, el)
@@ -80,15 +80,15 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_params
     {
-      mode_of_transport: params['itinerary']["mot"],
-      name:              params['itinerary']["name"],
+      mode_of_transport: params["itinerary"]["mot"],
+      name:              params["itinerary"]["name"],
       tenant_id:         current_user.tenant_id
     }
   end
 
   def as_json_itineraries
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    itineraries.map { |itinerary| itinerary.as_options_json() }
+    itineraries.map(&:as_options_json)
   end
 
   def params_stops
@@ -116,9 +116,9 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_with_notes
     itinerary = Itinerary.find(params[:id])
-    itinerary.notes.create!(body: params[:notes][:body],
-      header: params[:notes][:header],
-      level: params[:notes][:level])
+    itinerary.notes.create!(body:   params[:notes][:body],
+                            header: params[:notes][:header],
+                            level:  params[:notes][:level])
   end
 
   def new_ids
@@ -134,6 +134,6 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def destroy_itins
-   Itinerary.where(id: kicked_itinerary_ids).destroy_all
+    Itinerary.where(id: kicked_itinerary_ids).destroy_all
   end
 end

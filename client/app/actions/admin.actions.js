@@ -372,6 +372,32 @@ function getPricings (redirect) {
     )
   }
 }
+function getPricingsTest (req) {
+  function request (prData) {
+    return { type: adminConstants.GET_PRICINGS_TEST_REQUEST, payload: prData }
+  }
+  function success (prData) {
+    return { type: adminConstants.GET_PRICINGS_TEST_SUCCESS, payload: prData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_PRICINGS_TEST_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+    dispatch(getTrucking())
+    adminService.getPricingsTest(req).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Prices successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function deletePricing (pricing) {
   function request (payload) {
     return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
@@ -875,10 +901,10 @@ function autoGenSchedules (data) {
   }
 }
 function confirmShipment (id, action, redirect) {
-  function request (shipmentData) {
+  function request () {
     return {
       type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
-      payload: shipmentData
+      payload: { id, action }
     }
   }
   function successAccept (shipmentData) {
@@ -900,11 +926,11 @@ function confirmShipment (id, action, redirect) {
     }
   }
   function failure (error) {
-    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error }
+    return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error, payload: { id } }
   }
 
   return (dispatch) => {
-    dispatch(request(id, action))
+    dispatch(request())
     adminService.confirmShipment(id, action).then(
       (resp) => {
         const shipmentData = resp.data
@@ -1724,6 +1750,7 @@ export const adminActions = {
   assignDedicatedPricings,
   searchHubs,
   getAllHubs,
+  getPricingsTest,
   searchShipments,
   deltaShipmentsPage
 }

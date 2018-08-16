@@ -360,7 +360,12 @@ export default function admin (state = {}, action) {
 
     case adminConstants.CONFIRM_SHIPMENT_REQUEST: {
       const reqConfShip = merge({}, state, {
-        loading: true
+        confirmShipmentData: {
+          shipmentId: action.payload.id,
+          requested: true,
+          action: action.payload.action
+        },
+        loading: false
       })
 
       return reqConfShip
@@ -405,8 +410,28 @@ export default function admin (state = {}, action) {
           ...state.shipment,
           shipment
         },
-        loading: false
+        loading: false,
+        confirmShipmentData: {
+          shipmentId: action.payload.id,
+          requested: false,
+          accepted: true,
+          action: action.payload.action
+        }
       }
+    }
+    case adminConstants.CONFIRM_SHIPMENT_FAILURE: {
+      const errConfShip = merge({}, state, {
+        error: { shipments: action.error },
+        loading: false,
+        confirmShipmentData: {
+          shipmentId: action.payload.id,
+          requested: false,
+          accepted: false,
+          action: action.payload.action
+        }
+      })
+
+      return errConfShip
     }
     case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
       const req =
@@ -451,19 +476,10 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
-    case adminConstants.CONFIRM_SHIPMENT_FAILURE: {
-      const errConfShip = merge({}, state, {
-        error: { shipments: action.error },
-        loading: false
-      })
-
-      return errConfShip
-    }
-
     case adminConstants.DENY_SHIPMENT_REQUEST:
       return {
         ...state,
-        loading: true
+        loading: false
       }
     case adminConstants.DENY_SHIPMENT_SUCCESS: {
       const denReq =
@@ -651,7 +667,30 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
-    case adminConstants.GET_PRICING_FAILURE: {
+    case adminConstants.GET_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_SUCCESS: {
+      return {
+        ...state,
+        itineraryPricings: {
+          ...state.itineraryPricings,
+          testResults: action.payload.data
+        },
+        loading: false
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_FAILURE: {
       return {
         ...state,
         error: { pricings: action.error },

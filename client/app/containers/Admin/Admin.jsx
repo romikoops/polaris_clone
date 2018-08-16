@@ -23,7 +23,7 @@ import NavBar from '../Nav'
 import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 import SuperAdminTenantCreator from '../SuperAdmin/Tenant/Creator'
 import { SuperAdminPrivateRoute } from '../../routes/index'
-import { AdminCurrencyCenter } from '../../components/Admin/Currency/Center'
+import AdminCurrencyCenter from '../../components/Admin/Currency/Center'
 import { adminHubs as hubsTip } from '../../constants'
 
 class Admin extends Component {
@@ -90,6 +90,7 @@ class Admin extends Component {
       shipments,
       clients,
       dashboard,
+      confirmShipmentData,
       loading,
       itinerarySchedules,
       allHubs
@@ -135,6 +136,7 @@ class Admin extends Component {
                       theme={theme}
                       {...props}
                       clients={clients}
+                      confirmShipmentData={confirmShipmentData}
                       shipments={shipments}
                       hubs={hubs}
                       hubHash={hubHash}
