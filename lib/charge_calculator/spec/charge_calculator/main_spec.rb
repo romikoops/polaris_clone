@@ -206,7 +206,28 @@ RSpec.describe ChargeCalculator::Main do
         ]
       )
 
-      expect(subject.price.to_nested_hash.to_json).to match_json_schema("main/price")
+      node_tree = subject.price.to_nested_hash
+      expect(node_tree.to_json).to match_json_schema("main/price")
+
+      expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
+        BigDecimal("230.0") * BigDecimal("23.42") * 2
+      )
+      expect(node_tree.dig(:children, 0, :children, 0, :children, 1, :amount)).to eq(
+        BigDecimal("230.0") * BigDecimal("20.0") * 2
+      )
+      expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
+        BigDecimal("140.0") * BigDecimal("25.78")
+      )
+      expect(node_tree.dig(:children, 0, :children, 1, :children, 1, :amount)).to eq(
+        BigDecimal("140.0") * BigDecimal("20.0")
+      )
+
+      expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
+        BigDecimal("230.0") * BigDecimal("33.58") * 2
+      )
+      expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
+        BigDecimal("140.0") * BigDecimal("49.25")
+      )
     end
   end
 end
