@@ -36,7 +36,7 @@ module ChargeCalculator
 
     def calculated_prices(prices)
       filtered_prices(prices).map do |price|
-        BigDecimal(context[price[:basis].to_sym]) * BigDecimal(price[:amount]) * BigDecimal(context.fetch(:quantity, 1))
+        context[price[:basis].to_sym] * BigDecimal(price[:amount]) * context.fetch(:quantity, 1)
       end
     end
 

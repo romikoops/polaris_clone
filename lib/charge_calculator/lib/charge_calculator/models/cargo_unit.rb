@@ -14,6 +14,10 @@ module ChargeCalculator
       data[key]
     end
 
+    def method_missing(method_name, *args, &block)
+      data[method_name.to_sym] || super
+    end
+
     private
 
     attr_reader :data

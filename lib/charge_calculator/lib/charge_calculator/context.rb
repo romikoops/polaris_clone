@@ -16,10 +16,10 @@ module ChargeCalculator
 
     def hash
       @hash ||= {
-        payload:            BigDecimal(cargo_unit[:payload]),
-        volume:             cargo_unit.volume,
-        dimensions:         cargo_unit[:dimensions],
-        quantity:           cargo_unit[:quantity],
+        payload:            BigDecimal(cargo_unit.payload),
+        volume:             BigDecimal(cargo_unit.volume),
+        dimensions:         dimensions,
+        quantity:           cargo_unit.quantity.to_i,
         chargeable_payload: chargeable_payload
       }
     end
@@ -36,6 +36,14 @@ module ChargeCalculator
           context[:payload],
           context[:volume] * BigDecimal(pricing.dig(:conversion_ratios, :weight_measure))
         ].max
+      end
+    end
+
+    def dimensions
+      lambda do |_context|
+        cargo_unit.dimensions.each_with_object({}) do |(name, value), obj|
+          obj[name] = BigDecimal(value)
+        end
       end
     end
 
