@@ -1,9 +1,9 @@
 example_id                                            | status | run_time        |
 ----------------------------------------------------- | ------ | --------------- |
-./spec/charge_calculator/calculation_spec.rb[1:1:1]   | passed | 0.00113 seconds |
-./spec/charge_calculator/calculation_spec.rb[1:1:2:1] | passed | 0.00051 seconds |
-./spec/charge_calculator/main_spec.rb[1:1:1]          | passed | 0.00712 seconds |
-./spec/charge_calculator/price_spec.rb[1:1:1]         | passed | 0.00011 seconds |
-./spec/charge_calculator/price_spec.rb[1:2:1:1]       | passed | 0.0001 seconds  |
-./spec/charge_calculator/price_spec.rb[1:2:2:1]       | passed | 0.0001 seconds  |
-./spec/charge_calculator_spec.rb[1:1]                 | passed | 0.00162 seconds |
+./spec/charge_calculator/calculation_spec.rb[1:1:1]   | passed | 0.00117 seconds |
+./spec/charge_calculator/calculation_spec.rb[1:1:2:1] | passed | 0.00053 seconds |
+./spec/charge_calculator/main_spec.rb[1:1:1]          | passed | 0.00804 seconds |
+./spec/charge_calculator/price_spec.rb[1:1:1]         | passed | 0.0001 seconds  |
+./spec/charge_calculator/price_spec.rb[1:2:1:1]       | passed | 0.00008 seconds |
+./spec/charge_calculator/price_spec.rb[1:2:2:1]       | passed | 0.00008 seconds |
+./spec/charge_calculator_spec.rb[1:1]                 | passed | 0.00058 seconds |

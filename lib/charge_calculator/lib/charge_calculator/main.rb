@@ -24,7 +24,7 @@ module ChargeCalculator
         pricing_prices = cargo_units.map do |cargo_unit|
           calculation = Calculation.new(
             rates:   pricing[:rates],
-            context: context(pricing, cargo_unit)
+            context: Context.new(pricing: pricing, cargo_unit: cargo_unit)
           )
 
           cargo_unit_prices = calculation.result.map do |price_attributes|
@@ -46,23 +46,6 @@ module ChargeCalculator
       end
 
       Price.new(children: prices, category: "base", description: "Base")
-    end
-
-    def context(pricing, cargo_unit)
-      {
-        quantity:           cargo_unit[:quantity],
-        payload:            BigDecimal(cargo_unit[:payload]),
-        chargeable_payload: chargeable_payload(pricing, cargo_unit),
-        dimensions:         cargo_unit[:dimensions],
-        volume:             cargo_unit.volume
-      }
-    end
-
-    def chargeable_payload(pricing, cargo_unit)
-      [
-        cargo_unit.volume * BigDecimal(pricing.dig(:conversion_ratios, :weight_measure)),
-        BigDecimal(cargo_unit[:payload])
-      ].max
     end
   end
 end
