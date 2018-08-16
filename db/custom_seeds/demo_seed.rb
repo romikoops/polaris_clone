@@ -8,7 +8,7 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
-  # shipper = tenant.users.shipper.first
+  shipper = tenant.users.shipper.first
   # tenant.users.shipper.where.not(id: shipper.id).destroy_all
   # tenant.users.agent.destroy_all
   # tenant.users.agency_manager.destroy_all
@@ -37,19 +37,16 @@ subdomains.each do |sub|
 
   
 
-  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  path = "#{Rails.root}/db/dummydata/saco/fcl_export_loader.xlsx"
   imp_data = DataParser::Saco::SheetParserExport.new(path: path,
     _user: shipper,
-    counterpart_hub_name: 'Copenhagen Port',
     hub_type: 'ocean',
-    cargo_class: 'lcl',
-    load_type: 'cargo_item').perform
-  # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
-  #   tenant: tenant,
-  #   counterpart_hub: 'Copenhagen Port',
-  #   _user: shipper,
-  #   hub_type: 'ocean',
-  #   direction: 'import').perform
+    load_type: 'container').perform
+  imp_hubs = DataInserter::Saco::HubInserter.new(data: imp_data,
+    tenant: tenant,
+    _user: shipper,
+    hub_type: 'ocean',
+    direction: 'export').perform
 
   # res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
   #   tenant: tenant,
