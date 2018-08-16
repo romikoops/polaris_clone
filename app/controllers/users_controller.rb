@@ -24,6 +24,11 @@ class UsersController < ApplicationController
     @finished_shipments = finished_shipments.map(&:with_address_options_json)
 
     @pricings = get_user_pricings(@shipper.id)
+    @contacts = @shipper.contacts.where(alias: false).map do |contact|
+      contact.as_json(
+        include: { location: { include: { country: { only: :name} },
+        except: %i(created_at updated_at country_id) } },
+        except: %i(created_at updated_at location_id))
     end
     @aliases = @shipper.contacts.where(alias: true)
     user_locs = @shipper.user_locations
@@ -38,6 +43,7 @@ class UsersController < ApplicationController
         finished:  @finished_shipments
       },
       pricings:          @pricings,
+      contacts:          @contacts,
       num_contact_pages: @shipper.contacts.count / 6,
       aliases:           @aliases,
       locations:         locations
