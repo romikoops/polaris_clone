@@ -5,7 +5,7 @@ class Schedule
 
   attr_accessor :id, :origin_hub_id, :destination_hub_id,
     :origin_hub_name, :destination_hub_name, :mode_of_transport,
-    :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id
+    :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id, :quote
 
   def origin_hub
     Hub.find origin_hub_id
