@@ -130,6 +130,7 @@ module DataParser
           return port_name
         else
           return "#{port_name} Port"
+        end
        end
 
       def determine_hub_from_abbreviation(abv)
@@ -145,7 +146,8 @@ module DataParser
         when 'WVN'
           return 'Wilhelmhaven Port'  
         when 'FXT'
-          return 'Felixstowe Port'  
+          return 'Felixstowe Port' 
+        end
       end
 
       def hub_abbreviations_from_country(country)
@@ -155,7 +157,8 @@ module DataParser
         when 'NL'
           return ['RTM']
         when 'BE'
-          return ['ANR'] 
+          return ['ANR']
+        end
       end
 
       def fees_with_slashes(existing_fees, fee_code, str)
@@ -289,11 +292,11 @@ module DataParser
                 row_index += 1
                 row_hash = row_to_hash(row_index, country)
               end
-            
-          end
           awesome_print row_hashes
           row_hashes
+          end
         end
+      end
     end
   end
 end
