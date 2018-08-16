@@ -10,6 +10,7 @@ class OfferCalculator
     @user     = user
     @shipment = shipment
     @delay    = params['delay']
+    @isQuote = params['shipment'].delete('isQuote')
     instantiate_service_classes(params)
     update_shipment
   end
@@ -19,8 +20,8 @@ class OfferCalculator
     @trucking_data      = @trucking_data_builder.perform(@hubs)
     @routes             = @route_finder.perform(@hubs)
     @routes             = @route_filter.perform(@routes)
-    if @user.tenant.scope["quotation_tool"]
-      @route_objs          = @quote_route_builder.perform(@routes)
+    if @user.tenant.scope["quotation_tool"] || @isQuote
+      @route_objs         = @quote_route_builder.perform(@routes)
       @detailed_schedules = @detailed_quote_builder.perform(@route_objs, @trucking_data, @user)
     else
       @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
@@ -37,9 +38,9 @@ class OfferCalculator
     @route_finder               = RouteFinder.new(@shipment)
     @route_filter               = RouteFilter.new(@shipment)
     @schedule_finder            = ScheduleFinder.new(@shipment)
-    @quote_route_builder            = QuoteRouteBuilder.new(@shipment)
+    @quote_route_builder        = QuoteRouteBuilder.new(@shipment)
     @detailed_schedules_builder = DetailedSchedulesBuilder.new(@shipment)
-    @detailed_quote_builder = DetailedQuoteBuilder.new(@shipment)
+    @detailed_quote_builder     = DetailedQuoteBuilder.new(@shipment)
   end
 
   def update_shipment

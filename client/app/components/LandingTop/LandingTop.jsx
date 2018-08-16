@@ -69,20 +69,8 @@ export class LandingTop extends Component {
 
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
-    const welcomeTextTail = theme && theme.welcome_text ? theme.welcome_text : t('landing:welcomeTextTail')
-
-    const description = () => {
-      const head = t('landing:descriptionHead')
-      const middle = t('landing:descriptionMiddle')
-      const tail = t('landing:descriptionTail')
-
-      return (
-        <React.Fragment>
-          {head}<b>{middle}</b>{tail}
-        </React.Fragment>
-      )
-    }
-
+    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
+    const loginLink = ''
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -116,14 +104,30 @@ export class LandingTop extends Component {
                   `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
                 }
               >
-                {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
+                {(
+                  (
+                    user &&
+                  user.role &&
+                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
+                  ) || !user) &&
+                  findRates}
                 {(!user || user.guest) && loginLink}
-                {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                {user && user.role && user.role.name === 'admin' && toAdmin}
+                {
+                  user &&
+                  !user.guest &&
+                  user.role &&
+                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
+                  myAccount
+                }
+                {
+                  user &&
+                  user.role &&
+                  ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) &&
+                  toAdmin}
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className="flex-none layout-row layout-align-start-center">
-                  <h4 className="flex-none">{t('landing:poweredBy')}</h4>
+                  <h4 className="flex-none">powered by</h4>
                   <div className="flex-5" />
                   <img
                     src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"

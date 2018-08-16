@@ -148,7 +148,7 @@ module ExcelTool
     def set_pricing_key(row)
       @pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}\
       _#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}\
-      _#{row[:mot]}_#{row[:vehicle]}_#{row[:customer_id]}"
+      _#{row[:mot]}_#{row[:vehicle]}_#{row[:carrier]}_#{row[:customer_id]}"
     end
 
     def set_cargo_type(row)
@@ -174,10 +174,28 @@ module ExcelTool
       end
     end
 
+    def tenant_vehicle(row)
+      if row[:carrier]
+        carrier = Carrier.find_or_create_by!(name: row[:carrier])
+        return carrier.tenant_vehicles.find_by(
+          tenant_id:         user.tenant_id,
+          mode_of_transport: row[:mot].downcase,
+          name:              row[:vehicle]
+        )
+      else
+        return TenantVehicle.find_by(
+          tenant_id:         user.tenant_id,
+          mode_of_transport: row[:mot].downcase,
+          name:              row[:service_level]
+        )
+      end
+    end
+
     def populate_aux_data(row)
       if aux_data[pricing_key][:tenant_vehicle].blank?
-        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot], tenant_id: tenant.id)
-        aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
+        vehicle = tenant_vehicle(row)
+        
+        aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
 
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
