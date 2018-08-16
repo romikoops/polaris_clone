@@ -19,8 +19,6 @@ export class AdminHubsComp extends Component {
     this.state = {
       searchFilters: {
         hubType: {
-          // air: true,
-          // ocean: true
         },
         status: {
           active: true,
@@ -28,7 +26,8 @@ export class AdminHubsComp extends Component {
         },
         countries: []
       },
-      page: 1
+      page: 1,
+      expander: {}
     }
     this.nextPage = this.nextPage.bind(this)
     this.handleFilters = this.handleFilters.bind(this)
@@ -80,6 +79,16 @@ export class AdminHubsComp extends Component {
     const { appDispatch } = this.props
     appDispatch.fetchCountries()
   }
+
+  toggleExpander (key) {
+    this.setState({
+      expander: {
+        ...this.state.expander,
+        [key]: !this.state.expander[key]
+      }
+    })
+  }
+
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -158,20 +167,14 @@ export class AdminHubsComp extends Component {
   }
 
   render () {
-    const { searchFilters } = this.state
+    const { searchFilters, expander } = this.state
     const {
       theme,
       actionNodes,
       hubs,
       countries,
       numHubPages,
-      handleClick,
-      toggleExpanderHubType,
-      toggleExpanderStatus,
-      toggleExpanderCountries,
-      collapsedHubType,
-      collapsedStatus,
-      collapsedCountries
+      handleClick
     } = this.props
 
     if (!this.props.hubs) {
@@ -256,7 +259,6 @@ export class AdminHubsComp extends Component {
                     `}
                   onClick={this.state.page > 1 ? this.prevPage : null}
                 >
-                  {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                   <i className="fa fa-chevron-left" />
                   <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
                 </div>
@@ -297,28 +299,28 @@ export class AdminHubsComp extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                         <CollapsingBar
-                          collapsed={collapsedHubType}
+                          collapsed={!expander.hubType}
                           theme={theme}
-                          handleCollapser={toggleExpanderHubType}
+                          handleCollapser={() => this.toggleExpander('hubType')}
                           text="Hub Type"
                           faClass="fa fa-ship"
                           showArrow
                           content={typeFilters}
                         />
                         <CollapsingBar
-                          collapsed={collapsedStatus}
+                          collapsed={!expander.status}
                           theme={theme}
-                          handleCollapser={toggleExpanderStatus}
+                          handleCollapser={() => this.toggleExpander('status')}
                           text="Status"
                           faClass="fa fa-ship"
                           showArrow
                           content={statusFilters}
                         />
                         <CollapsingBar
-                          collapsed={collapsedCountries}
+                          collapsed={!expander.countries}
                           theme={theme}
                           minHeight="270px"
-                          handleCollapser={toggleExpanderCountries}
+                          handleCollapser={() => this.toggleExpander('countries')}
                           text="Country"
                           faClass="fa fa-flag"
                           showArrow
@@ -343,12 +345,6 @@ export class AdminHubsComp extends Component {
 
 AdminHubsComp.propTypes = {
   theme: PropTypes.theme,
-  toggleExpanderHubType: PropTypes.func,
-  toggleExpanderStatus: PropTypes.func,
-  toggleExpanderCountries: PropTypes.func,
-  collapsedHubType: PropTypes.objectOf(PropTypes.bool),
-  collapsedStatus: PropTypes.objectOf(PropTypes.bool),
-  collapsedCountries: PropTypes.objectOf(PropTypes.bool),
   hubs: PropTypes.arrayOf(PropTypes.hub),
   numHubPages: PropTypes.number.isRequired,
   countries: PropTypes.arrayOf(PropTypes.any),
@@ -368,12 +364,6 @@ AdminHubsComp.propTypes = {
 AdminHubsComp.defaultProps = {
   theme: null,
   hubs: [],
-  toggleExpanderHubType: null,
-  toggleExpanderStatus: null,
-  toggleExpanderCountries: null,
-  collapsedHubType: {},
-  collapsedStatus: {},
-  collapsedCountries: {},
   countries: [],
   actionNodes: [],
   handleClick: null,

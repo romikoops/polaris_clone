@@ -168,12 +168,6 @@ export class AdminHubsIndex extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
         <AdminHubsComp
           actionNodes={actionNodes}
-          toggleExpanderHubType={() => this.toggleExpander('hubType')}
-          toggleExpanderStatus={() => this.toggleExpander('status')}
-          toggleExpanderCountries={() => this.toggleExpander('countries')}
-          collapsedHubType={!expander.hubType}
-          collapsedStatus={!expander.status}
-          collapsedCountries={!expander.countries}
           handleClick={viewHub}
         />
       </div>
