@@ -2,28 +2,26 @@
 
 module ChargeCalculator
   class CargoUnit
-    def initialize(args={})
-      args.each do |name, v|
-        instance_variable_set("@#{name}", v)
-      end
+    def initialize(data: {})
+      @data = data
     end
 
     def volume
-      @volume ||= volume_from_dimensions
+      @volume ||= data.fetch(:volume) { volume_from_dimensions }
     end
 
     def [](key)
-      instance_variable_get("@#{key}")
+      data[key]
     end
 
     private
+
+    attr_reader :data
 
     def volume_from_dimensions
       return nil if self[:dimensions].nil?
 
       self[:dimensions].values.reduce(1) { |acc, v| acc * BigDecimal(v) } / 1_000_000
     end
-
-    attr_reader :data
   end
 end

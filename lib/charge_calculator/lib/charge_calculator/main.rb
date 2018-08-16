@@ -7,7 +7,7 @@ module ChargeCalculator
       @pricings        = pricings
 
       @cargo_units = shipment_params[:cargo_units].map do |cargo_unit_hash|
-        CargoUnit.new(cargo_unit_hash)
+        CargoUnit.new(data: cargo_unit_hash)
       end
     end
 

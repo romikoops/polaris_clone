@@ -2,6 +2,9 @@
 
 module ChargeCalculator
   class Context
+    extend Forwardable
+    def_delegator :hash, :fetch
+
     def initialize(pricing:, cargo_unit:)
       @pricing    = pricing
       @cargo_unit = cargo_unit
@@ -19,10 +22,6 @@ module ChargeCalculator
         quantity:           cargo_unit[:quantity],
         chargeable_payload: chargeable_payload
       }
-    end
-
-    def fetch(key, default=nil, &block)
-      hash.fetch(key, default, &block)
     end
 
     def [](key)
