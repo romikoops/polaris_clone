@@ -8,7 +8,8 @@ require "charge_calculator/reducers/sum"
 require "charge_calculator/reducers/max"
 require "charge_calculator/reducers"
 require "charge_calculator/calculation"
-require "charge_calculator/price"
+require "charge_calculator/models/price"
+require "charge_calculator/models/cargo_unit"
 require "charge_calculator/main"
 
 module ChargeCalculator
