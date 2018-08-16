@@ -4,6 +4,7 @@ class Tenant < ApplicationRecord
   include ImageTools
   extend MongoTools
   include MongoTools
+  include DataValidator
   has_many :shipments
   has_many :routes
   has_many :hubs
@@ -67,6 +68,18 @@ class Tenant < ApplicationRecord
         update_item("hsCodes", { _id: datum["_id"] }, datum)
       end
     end
+  end
+
+  def test_pricings(load_type, expected_values, pickup, dropoff, import, export)
+    DataValidator::ItineraryPriceValidator.new(
+      load_type: load_type,
+      expected_values: expected_values,
+      tenant: self.id,
+      has_pre_carriage: pickup,
+      has_on_carriage: dropoff,
+      import: import,
+      export: export
+    ).perform
   end
 
   def mode_of_transport_in_scope?(mode_of_transport, load_type=nil)

@@ -307,6 +307,10 @@ class Shipment < ApplicationRecord
     charge_breakdowns.selected.to_nested_hash
   end
 
+  def view_offers(index)
+    awesome_print charge_breakdowns[index].to_nested_hash
+  end
+
   def as_options_json(options={})
     new_options = options.reverse_merge(
       methods: %i(selected_offer mode_of_transport),

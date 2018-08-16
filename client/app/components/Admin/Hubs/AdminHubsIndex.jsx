@@ -19,7 +19,6 @@ export class AdminHubsIndex extends Component {
     }
     // this.toggleExpander = this.toggleExpander.bind(this)
   }
-
   toggleExpander (key) {
     this.setState({
       expander: {

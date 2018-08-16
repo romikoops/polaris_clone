@@ -3,16 +3,16 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(gateway)
+subdomains = %w(saco)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
-  shipper = tenant.users.shipper.first
-  tenant.users.shipper.where.not(id: shipper.id).destroy_all
-  tenant.users.agent.destroy_all
-  tenant.users.agency_manager.destroy_all
-  tenant.agencies.destroy_all
+  # shipper = tenant.users.shipper.first
+  # tenant.users.shipper.where.not(id: shipper.id).destroy_all
+  # tenant.users.agent.destroy_all
+  # tenant.users.agency_manager.destroy_all
+  # tenant.agencies.destroy_all
   # shipment = shipper.shipments.where(status: 'requested').first
   # conf_shipment = shipper.shipments.where(status: 'confirmed').first
   # ShippingTools.tenant_notification_email(shipper, shipment)
@@ -30,20 +30,20 @@ subdomains.each do |sub|
 #   req = { 'xlsx' => hubs }
 #   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
   # Addon.destroy_all
-  agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
-  req = { 'xlsx' => agents }
-  ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
+  # agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
+  # req = { 'xlsx' => agents }
+  # ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
 # Translator::TranslationSetter.new(lang: 'en',section: 'landing', text: 'Introducing Online Freight Booking Services').perform
 
   
 
-  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
-  # imp_data = DataParser::PfcNordic::SheetParserImport.new(path: path,
-  #   _user: shipper,
-  #   counterpart_hub_name: 'Copenhagen Port',
-  #   hub_type: 'ocean',
-  #   cargo_class: 'lcl',
-  #   load_type: 'cargo_item').perform
+  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  imp_data = DataParser::Saco::SheetParserExport.new(path: path,
+    _user: shipper,
+    counterpart_hub_name: 'Copenhagen Port',
+    hub_type: 'ocean',
+    cargo_class: 'lcl',
+    load_type: 'cargo_item').perform
   # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
   #   tenant: tenant,
   #   counterpart_hub: 'Copenhagen Port',

@@ -243,12 +243,7 @@ module MultiTenantTools
     end
     upFile = open("blank.html")
     s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
-    # uploader.upload!
 
-    # if is_demo
-    #   seed_demo_site(tenant)
-    # end
     create_distribution(tenant[:subdomain])
   end
 
@@ -281,12 +276,7 @@ module MultiTenantTools
     end
     upFile = open("blank.html")
     s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
-    # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"])
-    # uploader.upload!
 
-    # if is_demo
-    #   seed_demo_site(tenant)
-    # end
     create_distribution(tenant[:subdomain])
   end
 
@@ -422,8 +412,7 @@ module MultiTenantTools
   end
 
   def seed_demo_site(subdomain, tld)
-    # tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
-    # tenant = Tenant.find_or_create_by!(tenant_data)
+
     tenant = Tenant.find_by_subdomain(subdomain)
     tenant.users.destroy_all
     admin = tenant.users.new(

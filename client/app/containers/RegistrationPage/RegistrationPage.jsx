@@ -211,7 +211,7 @@ class RegistrationPage extends React.Component {
             <div className="flex-100">
               <h3>Company Details</h3>
             </div>
-            <RegistrationFormGroup field="company_name" minLength="8" {...sharedProps} />
+            <RegistrationFormGroup field="company_name" minLength="4" {...sharedProps} />
             <RegistrationFormGroup field="VAT_number" minLength="5" {...sharedProps} />
             <div className={styles.pusher} />
             <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
