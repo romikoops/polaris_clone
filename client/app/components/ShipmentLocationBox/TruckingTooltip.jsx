@@ -4,19 +4,19 @@ import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
 import { capitalizeAndDashifyCamelCase } from '../../helpers'
 
-function showTootip (truckingOption, directionConstraint, hubName) {
-  return ['mandatory', 'disabled'].includes(directionConstraint) || (!truckingOption && hubName)
+function showTooltip (truckingOption, directionConstraint, hubName, truckingBoolean) {
+  return ['mandatory', 'disabled'].includes(directionConstraint) || (!truckingOption && hubName) || (truckingBoolean)
 }
 
 export default function TruckingTooltip ({
-  truckingOptions, carriage, hubName, direction, scope
+  truckingOptions, carriage, hubName, direction, scope, truckingBoolean
 }) {
   const directionConstraints = {
     onCarriage: scope.carriage_options.on_carriage[direction],
     preCarriage: scope.carriage_options.pre_carriage[direction]
   }
 
-  if (!showTootip(truckingOptions[carriage], directionConstraints[carriage], hubName)) return ''
+  if (!showTooltip(truckingOptions[carriage], directionConstraints[carriage], hubName, truckingBoolean)) return ''
 
   let dataTip
   const carriageText = capitalizeAndDashifyCamelCase(carriage)
@@ -26,6 +26,8 @@ export default function TruckingTooltip ({
     dataTip = `${carriageText} is mandatory for ${direction}`
   } else if (directionConstraints[carriage] === 'disabled') {
     dataTip = `${carriageText} is not offered for ${direction}`
+  } else if (truckingBoolean) {
+    dataTip = `${carriageText} is not available for any of these destinations.`
   }
 
   return (
@@ -44,7 +46,8 @@ TruckingTooltip.propTypes = {
   scope: PropTypes.scope.isRequired,
   carriage: PropTypes.string.isRequired,
   hubName: PropTypes.string,
-  direction: PropTypes.string
+  direction: PropTypes.string,
+  truckingBoolean: PropTypes.bool.isRequired
 }
 
 TruckingTooltip.defaultProps = {
