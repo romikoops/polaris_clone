@@ -1,8 +1,8 @@
 GIT
   remote: git@gitlab.com:itsmycargo/rule-engine.git
-  revision: 1b68dd8c966f137bf1d7bbe19c72aef7405a031a
+  revision: b13a37f4c032d5122b4c66601e29ab978a829ec4
   specs:
-    rule_engine (0.1.0)
+    rule_engine (0.2.0)
 
 PATH
   remote: .
