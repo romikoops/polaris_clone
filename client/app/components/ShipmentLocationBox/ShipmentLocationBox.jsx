@@ -122,7 +122,6 @@ export class ShipmentLocationBox extends Component {
     this.prepForSelect('origin')
     this.prepForSelect('destination')
   }
-
   componentDidMount () {
     this.initMap()
   }
@@ -800,6 +799,7 @@ export class ShipmentLocationBox extends Component {
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
+
       let indexes = filteredRouteIndexes.slice()
 
       if (targetLocation.label) {
@@ -841,12 +841,15 @@ export class ShipmentLocationBox extends Component {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
+      const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
 
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
 
       return {
         [`available${capitalize(counterpart)}Nexuses`]: selectOptions,
+        [`${counterpart}TruckingAvailable`]: truckingBoolean,
         [`${target}FieldsHaveErrors`]: fieldsHaveErrors
       }
     })
@@ -893,7 +896,9 @@ export class ShipmentLocationBox extends Component {
       availableDestinationNexuses,
       truckingOptions,
       speciality,
-      truckTypes
+      truckTypes,
+      originTruckingAvailable,
+      destinationTruckingAvailable
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
@@ -1263,6 +1268,7 @@ export class ShipmentLocationBox extends Component {
                     }
                   >
                     <TruckingTooltip
+                      truckingBoolean={originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
@@ -1307,6 +1313,7 @@ export class ShipmentLocationBox extends Component {
                     }
                   >
                     <TruckingTooltip
+                      truckingBoolean={destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
