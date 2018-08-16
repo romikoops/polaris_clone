@@ -295,7 +295,6 @@ export class AdminShipmentCard extends Component {
                 {formattedPriceValue(totalPrice(shipment).value)}
               </span>
             </span>
-            {console.log(navigator.appName)}
           </div>
         </div>
       </div>
