@@ -56,7 +56,8 @@ RSpec.describe ChargeCalculator::Price do
           amount:      BigDecimal("100"),
           currency:    "EUR",
           category:    "base",
-          description: "Base"
+          description: "Base",
+          children:    []
         )
       end
     end
@@ -73,13 +74,15 @@ RSpec.describe ChargeCalculator::Price do
               amount:      BigDecimal("80"),
               currency:    "EUR",
               category:    "BAS",
-              description: "BAS"
+              description: "BAS",
+              children:    []
             },
             {
               amount:      BigDecimal("20"),
               currency:    "EUR",
               category:    "HAS",
-              description: "HAS"
+              description: "HAS",
+              children:    []
             }
           ]
         )

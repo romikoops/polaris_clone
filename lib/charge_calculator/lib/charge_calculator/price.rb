@@ -22,8 +22,6 @@ module ChargeCalculator
     end
 
     def to_nested_hash
-      return to_h if children.empty?
-
       to_h.merge(children: children.map(&:to_nested_hash))
     end
   end
