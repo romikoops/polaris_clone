@@ -73,6 +73,7 @@ export class AdminDashboard extends Component {
       shipments,
       hubHash,
       dashData,
+      confirmShipmentData,
       adminDispatch,
       theme
     } = this.props
@@ -141,6 +142,7 @@ export class AdminDashboard extends Component {
         <ShipmentOverviewCard
           admin
           noTitle
+          confirmShipmentData={confirmShipmentData}
           handleSelect={this.handleClick}
           dispatches={adminDispatch}
           shipments={preparedRequestedShipments}
@@ -193,6 +195,7 @@ AdminDashboard.propTypes = {
   dashData: PropTypes.shape({
     schedules: PropTypes.array
   }),
+  confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   handleClick: PropTypes.func,
   clients: PropTypes.arrayOf(PropTypes.client),
   shipments: PropTypes.shape({
@@ -211,6 +214,7 @@ AdminDashboard.propTypes = {
 
 AdminDashboard.defaultProps = {
   theme: null,
+  confirmShipmentData: {},
   user: {},
   dashData: null,
   handleClick: null,

@@ -12,57 +12,10 @@
     </mj-text>
   </mj-column>
 </mj-section>
-<mj-section full-width="full-width" padding="0px">
-  <% if defined? reset_password_link %>
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-button background-color="<%=primary_color%>" color="white" href="<%= edit_user_password_url(@resource, reset_password_token: @token, redirect_url: @redirect_url) %>">
-        Change my password
-      </mj-button>
-    </mj-column>
-  <% end %>
-</mj-section>
-<mj-section full-width="full-width" padding="0px">
-  <% if defined? activate_link %>
-    <mj-column width="100%" padding="0 2.5%">
-      <mj-button background-color="<%=primary_color%>" color="white" href="<%= @confirmation_url %>">
-        Activate My Account
-      </mj-button>
-    </mj-column>
-  <% end %>
-</mj-section>
-<mj-section full-width="full-width" padding="0px">
-  <% if defined? unlock_link %>
-    <mj-column width="100%" padding="0 2.5%">
-      <p><%= link_to 'Unlock my account', unlock_url(@resource, unlock_token: @token) %></p>
-    </mj-column>
-  <% end %>
-</mj-section>
+
+<%= yield %>
 
 <mj-section full-width="full-width" padding="0px">
-  <% if defined? message_details %>
-    <mj-column width="100%" padding="0 2.5%">
-    <mj-text line-height="24px">
-       <p>
-          <%= message_details %>
-        </p>
-    </mj-text>
-  </mj-column>
-  <% end %>
-  
-  <% if defined? activate_link %>
-    <mj-column width="100%" padding="0 2.5%">
-      <% @links.each do |link_data| %>
-          <p>
-            <% text_chunks = link_data['text'].split(link_data['link_text']) %>
-            <% text_chunks.each do |text_chunk| %>
-              <%= text_chunk %>
-              <%= link_to link_data['link_text'], link_data['href'] unless text_chunk == text_chunks.last %>
-            <% end %>
-          </p>
-      <% end %>
-    </mj-column>
-  <% end %>
-
   <mj-column width="100%" padding="0 2.5%">
     <mj-text>
       <p>
