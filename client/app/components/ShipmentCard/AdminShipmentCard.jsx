@@ -33,17 +33,6 @@ export class AdminShipmentCard extends Component {
     }
     this.selectShipment = this.selectShipment.bind(this)
   }
-  // componentWillMount {
-  //   // const ua = window.navigator.userAgent
-  //   // const msie = ua.indexOf('MSIE ')
-
-  //   // if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-  //   //   window.alert(parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10))
-  //   // } else // If another browser, return 0
-  //   // {
-  //   //   window.alert('otherbrowser')
-  //   // }
-  // }
   handleDeny () {
     const { shipment, dispatches } = this.props
     dispatches.confirmShipment(shipment.id, 'decline')
