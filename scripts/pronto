@@ -4,4 +4,6 @@ TARGET_BRANCH=$(curl -s --header "PRIVATE-TOKEN:${PRONTO_GITLAB_API_PRIVATE_TOKE
 
 echo "Target Branch: ${TARGET_BRANCH:-dev}"
 
+(cd client/; npm install)
+
 pronto run -f gitlab -c origin/${TARGET_BRANCH:-dev}

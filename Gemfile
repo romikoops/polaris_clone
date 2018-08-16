@@ -116,18 +116,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'ruby-debug-ide'
-
-  # Code Style checks
-  gem 'pronto', '~> 0.9.5'
-  gem 'pronto-rubocop'
-  gem 'pronto-brakeman'
-  gem 'pronto-eslint_npm'
-  gem 'pronto-fasterer'
-  gem 'pronto-flay'
-  gem 'pronto-jshint'
-  gem 'pronto-rails_best_practices'
-  gem 'pronto-rails_schema'
-  # gem 'pronto-stylelint'
 end
 
 group :test do
