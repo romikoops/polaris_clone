@@ -15,9 +15,7 @@ class TruckingAvailabilityController < ApplicationController
       hub_ids << hub_id
 
       truck_type = trucking_pricing.truck_type
-      unless truck_type_object[hub_id].include?(truck_type)
-        truck_type_object[hub_id] << trucking_pricing.truck_type
-      end
+      truck_type_object[hub_id] << trucking_pricing.truck_type unless truck_type_object[hub_id].include?(truck_type)
     end
     nexus_ids = Hub.where(id: hub_ids).pluck(:nexus_id).uniq
 
@@ -41,7 +39,7 @@ class TruckingAvailabilityController < ApplicationController
       tenant_id: params[:tenant_id],
       load_type: params[:load_type],
       location:  Location.new(latitude: params[:lat], longitude: params[:lng]).reverse_geocode,
-      hub_ids: params[:hub_ids].split(",").map(&:to_i),
+      hub_ids:   params[:hub_ids].split(",").map(&:to_i),
       carriage:  params[:carriage]
     )
   end

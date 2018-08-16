@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Admin::SchedulesController < Admin::AdminBaseController
-  before_action :initialize_variables, only: [:index, :auto_generate_schedules]
+  before_action :initialize_variables, only: %i(index auto_generate_schedules)
   include ItineraryTools
-  # include ExcelTools
 
   def index
     map_data = current_user.tenant.map_data
     response_handler(
-      mapData: map_data,
+      mapData:     map_data,
       itineraries: itinerary_route_json
     )
   end
@@ -16,15 +15,15 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def show
     itinerary = Itinerary.find(params[:id])
     schedules = itinerary.trips.lastday_today.limit(100).order(:start_date)
-    response_handler(schedules: schedules, itinerary: itinerary.as_options_json())
+    response_handler(schedules: schedules, itinerary: itinerary.as_options_json)
   end
 
-  def auto_generate_schedules    
-    response_handler(air: @air_schedules,
-      train: @train_schedules,
-      ocean: @ocean_schedules,
-      itineraries: itineraries,
-      stats: itin_weekly_schedules)
+  def auto_generate_schedules
+    response_handler(air:         @air_schedules,
+                     train:       @train_schedules,
+                     ocean:       @ocean_schedules,
+                     itineraries: itineraries,
+                     stats:       itin_weekly_schedules)
   end
 
   def download_schedules
@@ -56,7 +55,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def overwrite_trains
     if params[:file]
-      req = { "xlsx" => params[:file]}
+      req = { "xlsx" => params[:file] }
       results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "rail", _user: current_user).perform
       response_handler(results)
     else
@@ -76,7 +75,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
 
   def overwrite_air
     if params[:file]
-      req = { "xlsx" => params[:file]}
+      req = { "xlsx" => params[:file] }
       results = ExcelTool::ScheduleOverwriter.new(params: req, mot: "air", _user: current_user).perform
       response_handler(results)
     else
@@ -104,9 +103,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   end
 
   def itinerary_route_json
-    Itinerary.where(tenant_id: current_user.tenant_id).map do |itinerary|
-      itinerary.as_options_json()
-    end
+    Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
   end
 
   def stops
@@ -116,7 +113,7 @@ class Admin::SchedulesController < Admin::AdminBaseController
   def vehicle
     @vehicle ||= TenantVehicle.find(params[:vehicleTypeId]).id
   end
-  
+
   def itin_weekly_schedules
     itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate],
       params[:endDate], params[:weekdays], vehicle, params[:closing_date].to_i)

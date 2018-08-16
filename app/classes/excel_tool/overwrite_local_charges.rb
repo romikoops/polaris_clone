@@ -83,7 +83,8 @@ module ExcelTool
         service_level:   "SERVICE_LEVEL",
         destination:     "DESTINATION",
         base:            "BASE",
-        dangerous:       "DANGEROUS"
+        dangerous:       "DANGEROUS",
+        carrier:         "CARRIER"
       )
     end
 
@@ -119,16 +120,21 @@ module ExcelTool
     end
 
     def tenant_vehicle_id(row)
-      TenantVehicle.find_by(
-        tenant_id:         user.tenant_id,
-        mode_of_transport: row[:mot].downcase,
-        name:              row[:service_level]
-      ).try(:id)
+      if row[:carrier]
+        carrier = Carrier.find_or_create_by!(name: row[:carrier])
+        return carrier.get_tenant_vehicle(user.tenant_id, row[:mot].downcase, row[:service_level]).try(:id)
+      else
+        return TenantVehicle.find_by(
+          tenant_id:         user.tenant_id,
+          mode_of_transport: row[:mot].downcase,
+          name:              row[:service_level]
+        ).try(:id)
+      end
     end
 
     def create_vehicle_from_name(row, name = nil)
       name ||= row[:service_level]
-      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id).id
+      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id, row[:carrier]).id
     end
 
     def build_hash(rows, hub_fees, customs, hub)
@@ -147,9 +153,9 @@ module ExcelTool
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
         end
         if row[:service_level]
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row)
-          tenant_vehicle_id = tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"]
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row)
+          tenant_vehicle_id = tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"]
         else
           tenant_vehicle_id = "general"
         end
@@ -297,13 +303,14 @@ module ExcelTool
 
     def update_hashes(row, hub_fees, customs, tenant_vehicles, counterparts)
       charge = build_charge(row)
+      
         if row[:fee_code] != "CUST"
         hub_fees = local_charge_load_setter(
           hub_fees,
           charge,
           row[:load_type].downcase,
           row[:direction].downcase,
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
           row[:mot],
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
         )
@@ -313,7 +320,7 @@ module ExcelTool
           charge,
           row[:load_type].downcase,
           row[:direction].downcase,
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
+          tenant_vehicles["#{row[:carrier]}-#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
           row[:mot],
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
         )
@@ -330,6 +337,7 @@ module ExcelTool
               lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k,
                 direction: direction_key, tenant_vehicle_id: v["tenant_vehicle_id"],
                 counterpart_hub_id: v["counterpart_hub_id"], dangerous:false)
+                
               if lc
                 lc.update_attributes(v)
               else
@@ -371,7 +379,7 @@ module ExcelTool
       end
     end
 
-    def pushable_charg(charge)
+    def pushable_charge(charge)
       
       {
         currency:   charge[:currency],
@@ -404,7 +412,7 @@ module ExcelTool
     def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
       existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]]
       if existing_charge && existing_charge[:range]
-        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << pushable_charg(charge)
+        all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << pushable_charge(charge)
       else
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]] = expanded_charge(charge)
       end
