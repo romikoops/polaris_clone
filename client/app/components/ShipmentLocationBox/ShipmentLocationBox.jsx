@@ -7,12 +7,8 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-// import defaults from '../../styles/default_classes.scss'
 import { colorSVG, determineSpecialism } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
-// import { Modal } from '../Modal/Modal'
-// import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
-// import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
@@ -20,13 +16,6 @@ import routeFilters from './routeFilters'
 import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
-
-const mapStyle = {
-  width: '100%',
-  height: '600px',
-  borderRadius: '3px',
-  boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
-}
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -1248,6 +1237,15 @@ export class ShipmentLocationBox extends Component {
     const truckTypesStyle =
       loadType === 'container' && (this.props.has_on_carriage || this.props.has_pre_carriage)
         ? styles.with_truck_types : ''
+    const mapStyle = {
+      width: '100%',
+      height: '600px',
+      borderRadius: '3px',
+      boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
+    }
+    if (this.props.hideMap) {
+      mapStyle.display = 'none'
+    }
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1358,7 +1356,6 @@ ShipmentLocationBox.propTypes = {
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
-  // user: PropTypes.user,
   setNotesIds: PropTypes.func,
   shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
@@ -1370,10 +1367,6 @@ ShipmentLocationBox.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
-  // shipmentDispatch: PropTypes.shape({
-  //   goTo: PropTypes.func,
-  //   getDashboard: PropTypes.func
-  // }).isRequired,
   selectedTrucking: PropTypes.objectOf(PropTypes.any),
   handleTruckingDetailsChange: PropTypes.func,
   origin: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -1387,7 +1380,8 @@ ShipmentLocationBox.propTypes = {
   }),
   scope: PropTypes.scope.isRequired,
   filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
-  updateFilteredRouteIndexes: PropTypes.func.isRequired
+  updateFilteredRouteIndexes: PropTypes.func.isRequired,
+  hideMap: PropTypes.bool
 }
 
 ShipmentLocationBox.defaultProps = {
@@ -1401,7 +1395,8 @@ ShipmentLocationBox.defaultProps = {
   has_on_carriage: true,
   has_pre_carriage: true,
   handleTruckingDetailsChange: null,
-  reusedShipment: null
+  reusedShipment: null,
+  hideMap: false
 }
 
 export default ShipmentLocationBox

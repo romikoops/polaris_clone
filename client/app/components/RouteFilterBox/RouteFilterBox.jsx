@@ -133,13 +133,12 @@ export class RouteFilterBox extends Component {
             </div>
           </div>
         </div>
-        { motCheckBoxes.length > 1 ? <div className={styles.mode_of_transport}>
+        <div className={styles.mode_of_transport}>
           <div>
             <TextHeading theme={theme} size={4} text="Mode of transport" />
           </div>
           {motCheckBoxes}
         </div>
-          : '' }
         <div>
           <p style={{ fontSize: '10px', marginTop: '0' }}>* Transit time (T/T) not guaranteed</p>
           <p style={{ fontSize: '10px', marginTop: '0' }}>** You will be invoiced in local currency based on the exchange rate valid at the time</p>

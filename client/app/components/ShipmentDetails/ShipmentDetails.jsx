@@ -770,6 +770,7 @@ export class ShipmentDetails extends Component {
         filteredRouteIndexes={filteredRouteIndexes}
         updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
         reusedShipment={this.props.reusedShipment}
+        hideMap={this.props.hideMap}
       />
     )
 
@@ -1096,6 +1097,7 @@ ShipmentDetails.propTypes = {
   tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired,
   showRegistration: PropTypes.bool,
+  hideMap: PropTypes.bool,
   hideRegistration: PropTypes.func
 }
 
@@ -1104,7 +1106,8 @@ ShipmentDetails.defaultProps = {
   messages: [],
   reusedShipment: null,
   showRegistration: false,
-  hideRegistration: null
+  hideRegistration: null,
+  hideMap: false
 }
 
 export default ShipmentDetails
