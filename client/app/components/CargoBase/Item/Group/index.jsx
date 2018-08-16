@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
+import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
-import styles from './CargoContainerGroup.scss'
+import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
-import CargoContainerGroupAggregated from './Aggregated'
-import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
-import { gradientTextGenerator } from '../../../../helpers'
+// import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
+import CargoItemGroupAggregated from './Aggregated'
+import { LOAD_TYPES, LOAD_SIZES, cargoGlossary } from '../../../../constants'
+import { gradientTextGenerator, numberSpacing } from '../../../../helpers'
 
-export class CargoContainerGroup extends Component {
+export class CargoItemGroup extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -33,19 +34,16 @@ export class CargoContainerGroup extends Component {
     this.setState({ unitView: !this.state.unitView })
   }
   render () {
-    const { unitView, collapsed } = this.state
     const {
-      group,
-      shipment,
-      theme,
-      t
+      group, shipment, theme
     } = this.props
-
     const gradientTextStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
-
+    const { unitView, collapsed } = this.state
+    const showTooltip = true
+    const tooltipId = v4()
     const unitArr = (
       <div
         key={v4()}
@@ -54,49 +52,65 @@ export class CargoContainerGroup extends Component {
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
         <div className="flex-10 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ fontSize: '10px' }}>
-            {t('cargo:singleItem')}
-          </p>
+          <p className="flex-none" style={{ fontSize: '10px' }}>Single Item</p>
         </div>
 
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
-          <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].weight_class}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:weightClass')}
-            </p>
-          </div>
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Length" src={LOAD_SIZES.length} alt="Group_5_4" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_x : ''}</span> cm</p>
         </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Height" src={LOAD_SIZES.height} alt="Group_5" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_z : ''}</span> cm</p>
+        </div>
+
+        <div className={`${styles.unit_data_cell} ${styles.side_border} flex-15 layout-row layout-align-center-center`}>
+          <img data-for={tooltipId} data-tip="Width" src={LOAD_SIZES.width} alt="Group_5_5" border="0" />
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
+          <p className="flex-none"><span>{group.items[0] ? group.items[0].dimension_y : ''}</span> cm</p>
+        </div>
+
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
-              <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:cargoGrossWeight')}
-            </p>
+              <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>&nbsp;kg</p>
+            <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
           </div>
         </div>
 
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+        <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
-                {(group.items[0].gross_weight)}
-              </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:grossWeight')}
+                {numberSpacing((group.items[0].dimension_y *
+                group.items[0].dimension_x *
+                group.items[0].dimension_z / 1000000), 2)}
+              </span> &nbsp;m<sup>3</sup>
             </p>
+            <p className="flex-none layout-row layout-align-center-center">Volume</p>
           </div>
         </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+        { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:tareWeight')}
-            </p>
+            <p className="flex-none layout-row layout-align-center-center"><span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span> &nbsp;kg</p>
+            <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
-        </div>
+        </div> : '' }
       </div>
     )
     // const unitStyle = unitView ? styles.open_panel : styles.closed_panel
@@ -109,12 +123,10 @@ export class CargoContainerGroup extends Component {
           styles.panel
         } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
       >
-        <CargoContainerGroupAggregated group={group} />
+        <CargoItemGroupAggregated group={group} />
       </div>
     )
-
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
-
     return (
       <div className={`${styles.info}`}>
         <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
@@ -152,19 +164,36 @@ export class CargoContainerGroup extends Component {
             {unitArr}
           </div>
         </div>
+        {/* {viewHSCodes ? (
+          <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
+            <i className="fa fa-eye clip flex-none" style={textStyle} />
+            <p className="offset-5 flex-none">View Hs Codes</p>
+          </div>
+        ) : (
+          ''
+        )}
+        {viewer ? (
+          <HsCodeViewer item={group} hsCodes={hsCodes} theme={theme} close={this.viewHsCodes} />
+        ) : (
+          ''
+        )}
+        {styleTagJSX} */}
       </div>
     )
   }
 }
-CargoContainerGroup.propTypes = {
+CargoItemGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
+  // viewHSCodes: PropTypes.bool,
+  // hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   shipment: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.theme
 }
 
-CargoContainerGroup.defaultProps = {
+CargoItemGroup.defaultProps = {
+  // viewHSCodes: false,
   shipment: {},
   theme: null
 }
 
-export default translate('cargo')(CargoContainerGroup)
+export default CargoItemGroup

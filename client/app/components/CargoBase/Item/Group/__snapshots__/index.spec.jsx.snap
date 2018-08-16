@@ -43,7 +43,7 @@ exports[`props.viewHSCodes is true 1`] = `
           <span
             className="cargo_type"
           >
-            Dry Goods
+            FOO_CATEGORY
           </span>
         </p>
         <p
@@ -59,11 +59,18 @@ exports[`props.viewHSCodes is true 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <CargoContainerGroupAggregated
+        <CargoItemGroupAggregated
           group={
             Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
               "items": Array [
                 Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
                   "gross_weight": 76,
                   "payload_in_kg": 56,
                   "tare_weight": 20,
@@ -71,9 +78,9 @@ exports[`props.viewHSCodes is true 1`] = `
               ],
               "quantity": "FOO_QUANTITY",
               "size_class": "dry_goods",
+              "volume": 5,
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -84,11 +91,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <i
         className=" fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        style="#333"
       />
     </div>
   </div>
@@ -100,7 +103,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_1"
+        key="RANDOM_KEY_3"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -117,26 +120,88 @@ exports[`props.viewHSCodes is true 1`] = `
           </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <div
-            className="layout-column"
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
           >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span />
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Weight Class
-            </p>
-          </div>
+            <span>
+              90
+            </span>
+             cm
+          </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_2"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_2"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -152,33 +217,12 @@ exports[`props.viewHSCodes is true 1`] = `
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Cargo Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
-        >
-          <div
-            className="layout-column"
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                76
-              </span>
-                kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
               Gross Weight
             </p>
           </div>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -187,14 +231,17 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                20
+                1.08
               </span>
-                kg
+                m
+              <sup>
+                3
+              </sup>
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Tare Weight
+              Volume
             </p>
           </div>
         </div>
@@ -247,7 +294,7 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            Dry Goods
+            FOO_CATEGORY
           </span>
         </p>
         <p
@@ -263,11 +310,18 @@ exports[`shallow render 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <CargoContainerGroupAggregated
+        <CargoItemGroupAggregated
           group={
             Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
               "items": Array [
                 Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
                   "gross_weight": 76,
                   "payload_in_kg": 56,
                   "tare_weight": 20,
@@ -275,9 +329,9 @@ exports[`shallow render 1`] = `
               ],
               "quantity": "FOO_QUANTITY",
               "size_class": "dry_goods",
+              "volume": 5,
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -288,11 +342,7 @@ exports[`shallow render 1`] = `
     >
       <i
         className=" fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        style="#333"
       />
     </div>
   </div>
@@ -304,7 +354,7 @@ exports[`shallow render 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_0"
+        key="RANDOM_KEY_1"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -321,26 +371,88 @@ exports[`shallow render 1`] = `
           </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <div
-            className="layout-column"
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
           >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span />
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Weight Class
-            </p>
-          </div>
+            <span>
+              90
+            </span>
+             cm
+          </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_0"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_0"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -356,33 +468,12 @@ exports[`shallow render 1`] = `
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Cargo Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
-        >
-          <div
-            className="layout-column"
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                76
-              </span>
-                kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
               Gross Weight
             </p>
           </div>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -391,14 +482,17 @@ exports[`shallow render 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                20
+                1.08
               </span>
-                kg
+                m
+              <sup>
+                3
+              </sup>
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Tare Weight
+              Volume
             </p>
           </div>
         </div>
@@ -451,7 +545,7 @@ exports[`state.unitView is true 1`] = `
           <span
             className="cargo_type"
           >
-            Dry Goods
+            FOO_CATEGORY
           </span>
         </p>
         <p
@@ -467,11 +561,18 @@ exports[`state.unitView is true 1`] = `
       <div
         className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <CargoContainerGroupAggregated
+        <CargoItemGroupAggregated
           group={
             Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
               "items": Array [
                 Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
                   "gross_weight": 76,
                   "payload_in_kg": 56,
                   "tare_weight": 20,
@@ -479,9 +580,9 @@ exports[`state.unitView is true 1`] = `
               ],
               "quantity": "FOO_QUANTITY",
               "size_class": "dry_goods",
+              "volume": 5,
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -492,11 +593,7 @@ exports[`state.unitView is true 1`] = `
     >
       <i
         className=" fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        style="#333"
       />
     </div>
   </div>
@@ -508,7 +605,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_3"
+        key="RANDOM_KEY_7"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -525,26 +622,88 @@ exports[`state.unitView is true 1`] = `
           </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <div
-            className="layout-column"
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
           >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span />
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Weight Class
-            </p>
-          </div>
+            <span>
+              90
+            </span>
+             cm
+          </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_6"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_6"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -560,33 +719,12 @@ exports[`state.unitView is true 1`] = `
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Cargo Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
-        >
-          <div
-            className="layout-column"
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                76
-              </span>
-                kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
               Gross Weight
             </p>
           </div>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -595,14 +733,17 @@ exports[`state.unitView is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                20
+                1.08
               </span>
-                kg
+                m
+              <sup>
+                3
+              </sup>
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Tare Weight
+              Volume
             </p>
           </div>
         </div>
@@ -655,7 +796,7 @@ exports[`state.viewer is true 1`] = `
           <span
             className="cargo_type"
           >
-            Dry Goods
+            FOO_CATEGORY
           </span>
         </p>
         <p
@@ -671,11 +812,18 @@ exports[`state.viewer is true 1`] = `
       <div
         className="open_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
       >
-        <CargoContainerGroupAggregated
+        <CargoItemGroupAggregated
           group={
             Object {
+              "cargoType": Object {
+                "category": "FOO_CATEGORY",
+              },
               "items": Array [
                 Object {
+                  "chargeable_weight": 80,
+                  "dimension_x": 90,
+                  "dimension_y": 100,
+                  "dimension_z": 120,
                   "gross_weight": 76,
                   "payload_in_kg": 56,
                   "tare_weight": 20,
@@ -683,9 +831,9 @@ exports[`state.viewer is true 1`] = `
               ],
               "quantity": "FOO_QUANTITY",
               "size_class": "dry_goods",
+              "volume": 5,
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -696,11 +844,7 @@ exports[`state.viewer is true 1`] = `
     >
       <i
         className=" fa fa-chevron-down clip pointy"
-        style={
-          Object {
-            "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-          }
-        }
+        style="#333"
       />
     </div>
   </div>
@@ -712,7 +856,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_5"
+        key="RANDOM_KEY_11"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -729,26 +873,88 @@ exports[`state.viewer is true 1`] = `
           </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
-          <div
-            className="layout-column"
+          <img
+            alt="Group_5_4"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Length"
+            src="https://image.ibb.co/cdRkSy/Group_5_4.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
           >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span />
-               kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              Weight Class
-            </p>
-          </div>
+            <span>
+              90
+            </span>
+             cm
+          </p>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Height"
+            src="https://image.ibb.co/f9QR0J/Group_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              120
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell side_border flex-15 layout-row layout-align-center-center"
+        >
+          <img
+            alt="Group_5_5"
+            border="0"
+            data-for="RANDOM_KEY_10"
+            data-tip="Width"
+            src="https://image.ibb.co/edttEd/Group_5_5.png"
+          />
+          <ReactTooltip
+            className="tooltip"
+            effect="solid"
+            id="RANDOM_KEY_10"
+            insecure={true}
+            resizeHide={true}
+            wrapper="div"
+          />
+          <p
+            className="flex-none"
+          >
+            <span>
+              100
+            </span>
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -764,33 +970,12 @@ exports[`state.viewer is true 1`] = `
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Cargo Gross Weight
-            </p>
-          </div>
-        </div>
-        <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
-        >
-          <div
-            className="layout-column"
-          >
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
-              <span>
-                76
-              </span>
-                kg
-            </p>
-            <p
-              className="flex-none layout-row layout-align-center-center"
-            >
               Gross Weight
             </p>
           </div>
         </div>
         <div
-          className="unit_data_cell flex layout-row layout-align-center-center"
+          className="unit_data_cell flex-15 layout-row layout-align-center-center"
         >
           <div
             className="layout-column"
@@ -799,14 +984,17 @@ exports[`state.viewer is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                20
+                1.08
               </span>
-                kg
+                m
+              <sup>
+                3
+              </sup>
             </p>
             <p
               className="flex-none layout-row layout-align-center-center"
             >
-              Tare Weight
+              Volume
             </p>
           </div>
         </div>

@@ -619,6 +619,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "foo": 1,
                 }
               }
+              t={[Function]}
             />
           </div>
         </div>
@@ -3559,7 +3560,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               className="flex-none layout-row content_width_booking layout-align-center-center"
             >
               <IncotermRow
-                destinationFees={true}
+                destinationFees={false}
                 feeHash={
                   Object {
                     "customs": Object {
@@ -7017,6 +7018,7 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7181,6 +7183,7 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8307,6 +8310,7 @@ exports[`with containers 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8447,6 +8451,7 @@ exports[`with containers 1`] = `
                   },
                 }
               }
+              t={[Function]}
               theme={
                 Object {
                   "colors": Object {

@@ -68,14 +68,14 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            7.00
+            7
           </span>
            kg
         </p>
         <p
           className="flex-none layout-row layout-align-center-center"
         >
-          Chargable Weight
+          Chargeable Weight
         </p>
       </div>
     </div>
@@ -156,7 +156,7 @@ exports[`size_class is truthy 1`] = `
         <p
           className="flex-none layout-row layout-align-center-center"
         >
-          Chargable Weight
+          Chargeable Weight
         </p>
       </div>
     </div>

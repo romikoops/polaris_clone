@@ -2,25 +2,6 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
 
-jest.mock('../../../../helpers', () => ({
-  gradientTextGenerator: x => x,
-  numberSpacing: (number, decimals) => {
-    if (!number) {
-      return ''
-    }
-    let num
-    if (typeof number === 'string') {
-      num = parseFloat(number)
-    } else {
-      num = number
-    }
-  
-    return num.toLocaleString('en', {
-      minimumFractionDigits: decimals || 0,
-      maximumFractionDigits: decimals || 0
-    })
-  }
-}))
 jest.mock('uuid', () => {
   let counter = -1
   const v4 = () => {
@@ -32,20 +13,12 @@ jest.mock('uuid', () => {
   return { v4 }
 })
 // eslint-disable-next-line
-import CargoItemGroup from './'
+import { CargoContainerGroup } from './'
 
 const group = {
   quantity: 'FOO_QUANTITY',
   size_class: 'dry_goods',
-  cargoType: {
-    category: 'FOO_CATEGORY'
-  },
-  volume: 5,
   items: [{
-    chargeable_weight: 80,
-    dimension_x: 90,
-    dimension_y: 100,
-    dimension_z: 120,
     payload_in_kg: 56,
     tare_weight: 20,
     gross_weight: 76
@@ -60,7 +33,7 @@ const propsBase = {
 }
 
 test('shallow render', () => {
-  expect(shallow(<CargoItemGroup {...propsBase} />)).toMatchSnapshot()
+  expect(shallow(<CargoContainerGroup {...propsBase} />)).toMatchSnapshot()
 })
 
 test('props.viewHSCodes is true', () => {
@@ -68,18 +41,18 @@ test('props.viewHSCodes is true', () => {
     ...propsBase,
     viewHSCodes: true
   }
-  expect(shallow(<CargoItemGroup {...props} />)).toMatchSnapshot()
+  expect(shallow(<CargoContainerGroup {...props} />)).toMatchSnapshot()
 })
 
 test('state.unitView is true', () => {
-  const wrapper = shallow(<CargoItemGroup {...propsBase} />)
+  const wrapper = shallow(<CargoContainerGroup {...propsBase} />)
   wrapper.setState({ unitView: true })
 
   expect(wrapper).toMatchSnapshot()
 })
 
 test('state.viewer is true', () => {
-  const wrapper = shallow(<CargoItemGroup {...propsBase} />)
+  const wrapper = shallow(<CargoContainerGroup {...propsBase} />)
   wrapper.setState({ viewer: true })
 
   expect(wrapper).toMatchSnapshot()

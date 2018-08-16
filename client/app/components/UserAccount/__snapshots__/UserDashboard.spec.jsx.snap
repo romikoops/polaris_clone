@@ -54,6 +54,7 @@ exports[`shallow render 1`] = `
     </div>
     <ShipmentOverviewCard
       admin={false}
+      confirmShipmentData={Object {}}
       dispatches={
         Object {
           "getShipment": [Function],

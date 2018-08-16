@@ -27,6 +27,16 @@
         "reviewBookingRequest": "Review Booking Request",
         "status": "Status"
       },
+      "cargo": {
+        "cargoGrossWeight": "Cargo Gross Weight",
+        "chargableWeight": "Chargable Weight",
+        "grossWeight": "Gross Weight",
+        "singleItem": "Single Item",
+        "tareWeight": "Tare Weight",
+        "type": "Cargo type",
+        "volume": "Volume",
+        "weightClass": "Weight Class"
+      },
       "bookconf": {
         "_component": "BookingConfirmation",
         "cargo":"Cargo Details",

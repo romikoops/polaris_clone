@@ -3,23 +3,7 @@ import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
 
 jest.mock('../../../../helpers', () => ({
-  gradientTextGenerator: x => x,
-  numberSpacing: (number, decimals) => {
-    if (!number) {
-      return ''
-    }
-    let num
-    if (typeof number === 'string') {
-      num = parseFloat(number)
-    } else {
-      num = number
-    }
-  
-    return num.toLocaleString('en', {
-      minimumFractionDigits: decimals || 0,
-      maximumFractionDigits: decimals || 0
-    })
-  }
+  gradientTextGenerator: x => x
 }))
 jest.mock('uuid', () => {
   let counter = -1
@@ -32,7 +16,7 @@ jest.mock('uuid', () => {
   return { v4 }
 })
 // eslint-disable-next-line
-import CargoItemGroup from './'
+import { CargoItemGroup } from './'
 
 const group = {
   quantity: 'FOO_QUANTITY',

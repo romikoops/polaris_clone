@@ -81,6 +81,7 @@ exports[`props.viewHSCodes is true 1`] = `
               "volume": 5,
             }
           }
+          t={[Function]}
         />
       </div>
     </div>
@@ -210,7 +211,7 @@ exports[`props.viewHSCodes is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56
+                56.0
               </span>
                kg
             </p>
@@ -332,6 +333,7 @@ exports[`shallow render 1`] = `
               "volume": 5,
             }
           }
+          t={[Function]}
         />
       </div>
     </div>
@@ -461,7 +463,7 @@ exports[`shallow render 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56
+                56.0
               </span>
                kg
             </p>
@@ -583,6 +585,7 @@ exports[`state.unitView is true 1`] = `
               "volume": 5,
             }
           }
+          t={[Function]}
         />
       </div>
     </div>
@@ -712,7 +715,7 @@ exports[`state.unitView is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56
+                56.0
               </span>
                kg
             </p>
@@ -834,6 +837,7 @@ exports[`state.viewer is true 1`] = `
               "volume": 5,
             }
           }
+          t={[Function]}
         />
       </div>
     </div>
@@ -963,7 +967,7 @@ exports[`state.viewer is true 1`] = `
               className="flex-none layout-row layout-align-center-center"
             >
               <span>
-                56
+                56.0
               </span>
                kg
             </p>
