@@ -104,6 +104,7 @@ export class ContactSetter extends Component {
     }
     const modal = (
       <Modal
+        flexOptions="flex-80"
         component={
           <ShipmentContactForm
             showEdit

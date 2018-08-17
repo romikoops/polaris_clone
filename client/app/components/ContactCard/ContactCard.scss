@@ -12,8 +12,11 @@
     font-size: 14px;
     line-height: 16px;
   }
+  .info_wrapper {
+    padding-top: 12px;
+  }
   .contact_card {
-    height: 113px !important;
+    min-height: 113px;
     margin: 5px;
     background-color: #F2F2F2;
     padding: 15px;
