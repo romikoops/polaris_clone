@@ -7,6 +7,14 @@ module OfferCalculatorService
       super(shipment)
     end
 
+    def clear_previous_itinerary
+      return if @shipment.itinerary.nil?
+
+      @shipment.itinerary = nil
+      @shipment.trip      = nil
+      @shipment.save
+    end
+
     def update_nexuses
       @shipment.origin_nexus_id      = @params[:shipment][:origin][:nexus_id]
       @shipment.destination_nexus_id = @params[:shipment][:destination][:nexus_id]
