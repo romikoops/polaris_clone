@@ -36,8 +36,8 @@ module Imcr
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_imc_platform_session'
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        # origins '*'
-        origins 'http://localhost:8080', 'localhost:8080', 'localhost:3001', 'http://localhost:3001', /https:\/\/(.*?)\.itsmycargo\.com/
+        origins '*'
+        # origins 'http://localhost:8080', 'localhost:8080', 'localhost:3001', 'http://localhost:3001', /https:\/\/(.*?)\.itsmycargo\.com/
         resource '*', headers: :any, expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'], methods: %i[get post patch put delete options]
       end
     end
