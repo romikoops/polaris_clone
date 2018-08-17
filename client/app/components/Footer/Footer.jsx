@@ -21,7 +21,7 @@ export function Footer ({ theme, tenant, isShop }) {
   }
 
   return (
-    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper}`} >
+    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper} layout-align-start`} >
       {isShop
         ? <div />
         : <div className={`${styles.contact_bar}
