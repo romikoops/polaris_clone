@@ -795,8 +795,7 @@ export class AdminShipmentView extends Component {
                                     : parseFloat(feeHash.export.total.value).toFixed(2)}
                                 </p>
                               </div>
-                                : ''}
-                                
+                                : ''}                             
                             </div>
                           </div>
                         </div>
