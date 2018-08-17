@@ -52,6 +52,7 @@ export class AdminHubsIndex extends Component {
 
     const actionNodes = [<SideOptionsBox
       header="Data manager"
+      flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
           <CollapsingBar
