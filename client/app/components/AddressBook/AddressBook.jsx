@@ -11,7 +11,7 @@ export default function AddressBook ({
   const contactCards =
     contacts &&
     contacts.map(contact => (
-      <div key={v4()} className="flex-50" style={{ padding: '15px' }}>
+      <div key={v4()} className="flex-50 layout-row layout-align-start-stretch" style={{ padding: '15px' }}>
         <ContactCard
           contactData={contact}
           theme={theme}
@@ -20,7 +20,7 @@ export default function AddressBook ({
       </div>
     ))
   contactCards.unshift((
-    <div className="flex-50" style={{ padding: '15px' }}>
+    <div className="flex-50 layout-row layout-align-start-stretch" style={{ padding: '15px' }}>
       <AddressBookAddContactButton addContact={addContact} />
     </div>
   ))
