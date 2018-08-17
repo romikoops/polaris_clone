@@ -252,7 +252,7 @@ class SideNav extends Component {
     const textStyle =
         theme && theme.colors
           ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-          : 'black'
+          : { color: 'black' }
 
     const navLinks = links.map((li, i) => {
       const toolId = v4()
