@@ -56,7 +56,7 @@ export const gradientBorderGenerator = (colour1, colour2, direction = '-90deg') 
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
     return { backgroundImage: `-moz-linear-gradient(${direction}, ${colour1},${colour2})` }
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-    return { color: 'black' }
+    return { backgroundImage: `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%)` }
   }
 
   return { backgroundImage: `-webkit-linear-gradient(${direction}, ${colour1}, ${colour2})` }

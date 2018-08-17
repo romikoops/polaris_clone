@@ -16,21 +16,21 @@
 		margin-bottom: 20px;
 	}
 	.header_hub {
-		position: relative;
-		.map_marker {
-			position: absolute;
-			left: -18px;
-			top: -1px;
-		}
-		.flag {
-			position: absolute;
-			left: -23px;
-			top: -1px;
-		}
+    margin-right: 10px;
+    margin-left: 10px;
+	// 	.map_marker {
+	// 		position: absolute;
+	// 		left: -18px;
+	// 		top: -1px;
+	// 	}
+		// .flag {
+		// 	position: absolute;
+		// 	left: -23px;
+		// 	top: -1px;
+		// }
 	}
 	.connection_graphics {
-		margin: -41px 27px 0 10px;
-		width: 110px;
+		max-width: 85px;
 	}
 
 	h4.date_title {

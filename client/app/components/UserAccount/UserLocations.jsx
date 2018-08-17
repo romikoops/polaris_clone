@@ -34,7 +34,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
           {op.user.primary ? (
             <i className={`fa fa-star clip ${styles.icon_primary}`} style={gradient} />
           ) : (
-            <div className="layout-row flex-20">
+            <div className={`layout-row ${styles.icon_primary}`}>
               <div className="layout-row">
                 <div
                   className={`${styles.makePrimary} pointy`}
