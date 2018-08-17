@@ -56,7 +56,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="flex layout-row flex-md-100">
+      <div className="flex layout-row flex-100">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
@@ -69,6 +69,7 @@ export class LandingTop extends Component {
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
     const loginLink = ''
+
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">

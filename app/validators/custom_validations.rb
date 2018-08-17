@@ -17,13 +17,13 @@ module CustomValidations
         numericality: {
           greater_than_or_equal_to: 0,
           less_than_or_equal_to: -> obj {
-            mode_of_transport ||= obj.shipment.itinerary.mode_of_transport
-            obj.tenant.max_dimensions.dig(mode_of_transport.to_sym, dimension)
+            mot = mode_of_transport || obj.shipment.itinerary.try(:mode_of_transport)
+            obj.tenant.max_dimensions.dig(mot.to_sym, dimension)
           }
         },
         if: -> obj {
-          mode_of_transport ||= obj.shipment.itinerary.try(:mode_of_transport)
-          mode_of_transport && obj.tenant.max_dimensions.dig(mode_of_transport.to_sym, dimension)
+          mot = mode_of_transport || obj.shipment.itinerary.try(:mode_of_transport)
+          mot && obj.tenant.max_dimensions.dig(mot.to_sym, dimension)
         }
     end
     klass
