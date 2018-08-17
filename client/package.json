@@ -15,9 +15,7 @@
     "eslint:watch": "esw -w --report-unused-disable-directives --cache --ext .js --ext .jsx --ext .json",
     "eslint-file": "eslint",
     "deploy": "npm run build && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'",
-    "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'",
-    "precommit": "node ./.hooks/pre-commit",
-    "json": "json-server --watch translations/all.json --port 3004 --static ./i18n"
+    "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'"
   },
   "keywords": [
     "es6",
@@ -25,7 +23,8 @@
     "redux"
   ],
   "author": "ItsMyCargo Gmbh",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.39",
     "babel-preset-minify": "^0.4.3",
