@@ -42,7 +42,8 @@ FactoryBot.define do
             import: 'optional',
             export: 'mandatory'
           }
-        }
+        },
+        quotation_tool: true
       }
     end
 
@@ -56,7 +57,7 @@ FactoryBot.define do
         }
       }
     end
-    
+
     trait :with_mot_emails do
       emails do
         {
