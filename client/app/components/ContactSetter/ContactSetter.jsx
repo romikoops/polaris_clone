@@ -72,6 +72,7 @@ export class ContactSetter extends Component {
             ShipmentContactFormProps={{
               contactType,
               theme: this.props.theme,
+              selectedContact: { contact: {}, location: {} },
               setContact: (contactData) => {
                 this.props.setContact(contactData, contactType, index)
                 this.setState({ modal: null, showModal: false })
