@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe ChargeCalculator::Price do
+RSpec.describe ChargeCalculator::Models::Price do
   let(:price_attributes) do
     {
       amount:      BigDecimal("100"),

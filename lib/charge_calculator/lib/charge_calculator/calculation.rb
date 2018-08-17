@@ -17,7 +17,7 @@ module ChargeCalculator
 
     def prices
       result.map do |price_attributes|
-        Price.new(price_attributes)
+        Models::Price.new(price_attributes)
       end
     end
 

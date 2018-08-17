@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe ChargeCalculator::CargoUnit do
+RSpec.describe ChargeCalculator::Models::CargoUnit do
   subject { described_class.new(data: { payload: "100.0" }) }
 
   context "method_missing" do

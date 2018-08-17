@@ -29,7 +29,6 @@ RSpec.describe ChargeCalculator::Main do
     }
   end
 
-
   context "Dummy test cases" do
     let(:rates_weight_steps_1) do
       [
@@ -174,7 +173,7 @@ RSpec.describe ChargeCalculator::Main do
 
         context "price" do
           it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Price
+            expect(subject.price).to be_a ChargeCalculator::Models::Price
 
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
@@ -236,7 +235,7 @@ RSpec.describe ChargeCalculator::Main do
 
         context "price" do
           it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Price
+            expect(subject.price).to be_a ChargeCalculator::Models::Price
 
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
@@ -287,7 +286,7 @@ RSpec.describe ChargeCalculator::Main do
 
         context "price" do
           it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Price
+            expect(subject.price).to be_a ChargeCalculator::Models::Price
 
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
@@ -484,7 +483,7 @@ RSpec.describe ChargeCalculator::Main do
 
       context "price" do
         it "calculates the correct price node tree" do
-          expect(subject.price).to be_a ChargeCalculator::Price
+          expect(subject.price).to be_a ChargeCalculator::Models::Price
 
           node_tree = subject.price.to_nested_hash
           expect(node_tree.to_json).to match_json_schema("main/price")
