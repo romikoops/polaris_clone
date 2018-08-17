@@ -11,11 +11,11 @@ module ChargeCalculator
     end
 
     def method_missing(method_name, *args, &block)
-      data[method_name.to_sym] || super
+      data.has_key?(method_name.to_sym) ? data[method_name.to_sym] : super
     end
 
     def respond_to_missing?(method_name, *args, &block)
-      data[method_name.to_sym] || super
+      data.has_key?(method_name.to_sym) || super
     end
 
     private
