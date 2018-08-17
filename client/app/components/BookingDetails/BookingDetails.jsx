@@ -377,7 +377,7 @@ export class BookingDetails extends Component {
         <div className={`${defaults.content_width} ${WRAP_ROW('none')} ${ALIGN_START_CENTER}`}>
           <div className={`${ROW(50)} ${ALIGN_START_CENTER}`} />
           <div className={`${ROW(50)} ${ALIGN_END_CENTER}`}>
-            <div className="flex-none layout-row">
+            <div className="flex-50 layout-align-end-center layout-row">
               <RoundButton theme={theme} text="Review Booking Request" active />
             </div>
           </div>
