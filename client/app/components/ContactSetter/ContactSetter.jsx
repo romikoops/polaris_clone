@@ -72,6 +72,7 @@ export class ContactSetter extends Component {
             ShipmentContactFormProps={{
               contactType,
               theme: this.props.theme,
+              selectedContact: { contact: {}, location: {} },
               setContact: (contactData) => {
                 this.props.setContact(contactData, contactType, index)
                 this.setState({ modal: null, showModal: false })
@@ -101,9 +102,9 @@ export class ContactSetter extends Component {
     } else {
       newSelectedContact = notifyees[index]
     }
-
     const modal = (
       <Modal
+        flexOptions="flex-80"
         component={
           <ShipmentContactForm
             showEdit

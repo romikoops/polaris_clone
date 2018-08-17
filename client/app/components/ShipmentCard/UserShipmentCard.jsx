@@ -46,7 +46,7 @@ export class UserShipmentCard extends Component {
       <div
         key={v4()}
         className={
-          `layout-column flex-100 layout-align-start-stretch
+          `flex-100 layout-align-start-stretch
           ${styles.container}`
         }
       >
@@ -78,7 +78,7 @@ export class UserShipmentCard extends Component {
           className={`layout-row flex-100 layout-align-space-between-stretch ${styles.middle_top_box}`}
         >
           <div className="layout-row flex-35 layout-align-center-center">
-            <div className="layout-column flex-100">
+            <div className=" flex-100">
               <b className={styles.ref_row_card}>Ref:&nbsp;{shipment.imc_reference}</b>
               <p>Placed at&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
             </div>
@@ -87,7 +87,7 @@ export class UserShipmentCard extends Component {
           <hr />
 
           <div className="layout-row flex-60">
-            <div className="layout-column flex-100">
+            <div className=" flex-100">
               <div className="layout-row flex-50 layout-align-start-center">
                 <div className="flex-10 layout-row layout-align-center-center">
                   <i className="fa fa-user clip" style={gradientFontStyle} />
@@ -113,28 +113,28 @@ export class UserShipmentCard extends Component {
           <div className={`layout-row flex-100 layout-align-start-center
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
-            <div className="layout-column flex-20 layout-align-center-start">
+            <div className=" flex-20 layout-align-center-start">
               <span className="flex-100"><b>Pick-up Date</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(plannedDate).format('DD/MM/YYYY')}
                 </span>
               </span>
             </div>
-            <div className="layout-column flex-20 layout-align-center-start">
+            <div className=" flex-20 layout-align-center-start">
               <span className="flex-100"><b>ETD</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(shipment.planned_etd).format('DD/MM/YYYY')}
                 </span>
               </span>
             </div>
-            <div className="layout-column flex-20 layout-align-center-start">
+            <div className=" flex-20 layout-align-center-start">
               <span className="flex-100"><b>ETA</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(shipment.planned_eta).format('DD/MM/YYYY')}
                 </span>
               </span>
             </div>
-            <div className={`layout-column flex-40 layout-align-start-end ${styles.carriages}`}>
+            <div className={` flex-40 layout-align-start-end ${styles.carriages}`}>
               <div className="layout-row layout-align-start-start">
                 <i
                   className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
@@ -163,7 +163,7 @@ export class UserShipmentCard extends Component {
           </div>
         )}
 
-        <div className={`layout-row flex-25 layout-align-space-between-center
+        <div className={`layout-row flex-100 layout-align-space-between-center
             ${styles.bottom_box}`}
         >
           <div className="layout-row flex-65 layout-align-start-center">

@@ -7,12 +7,8 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-// import defaults from '../../styles/default_classes.scss'
 import { colorSVG, determineSpecialism } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
-// import { Modal } from '../Modal/Modal'
-// import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
-// import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
@@ -20,13 +16,6 @@ import routeFilters from './routeFilters'
 import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
-
-const mapStyle = {
-  width: '100%',
-  height: '600px',
-  borderRadius: '3px',
-  boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
-}
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -133,7 +122,6 @@ export class ShipmentLocationBox extends Component {
     this.prepForSelect('origin')
     this.prepForSelect('destination')
   }
-
   componentDidMount () {
     this.initMap()
   }
@@ -811,6 +799,7 @@ export class ShipmentLocationBox extends Component {
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
+
       let indexes = filteredRouteIndexes.slice()
 
       if (targetLocation.label) {
@@ -852,12 +841,15 @@ export class ShipmentLocationBox extends Component {
         selectOptions.push(routeHelpers.routeOption(route[counterpart]))
       })
 
+      const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
+
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
 
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
 
       return {
         [`available${capitalize(counterpart)}Nexuses`]: selectOptions,
+        [`${counterpart}TruckingAvailable`]: truckingBoolean,
         [`${target}FieldsHaveErrors`]: fieldsHaveErrors
       }
     })
@@ -904,7 +896,9 @@ export class ShipmentLocationBox extends Component {
       availableDestinationNexuses,
       truckingOptions,
       speciality,
-      truckTypes
+      truckTypes,
+      originTruckingAvailable,
+      destinationTruckingAvailable
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
@@ -1243,6 +1237,15 @@ export class ShipmentLocationBox extends Component {
     const truckTypesStyle =
       loadType === 'container' && (this.props.has_on_carriage || this.props.has_pre_carriage)
         ? styles.with_truck_types : ''
+    const mapStyle = {
+      width: '100%',
+      height: '600px',
+      borderRadius: '3px',
+      boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
+    }
+    if (this.props.hideMap) {
+      mapStyle.display = 'none'
+    }
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1265,6 +1268,7 @@ export class ShipmentLocationBox extends Component {
                     }
                   >
                     <TruckingTooltip
+                      truckingBoolean={originTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="preCarriage"
                       hubName={this.state.oSelect.label}
@@ -1309,6 +1313,7 @@ export class ShipmentLocationBox extends Component {
                     }
                   >
                     <TruckingTooltip
+                      truckingBoolean={destinationTruckingAvailable}
                       truckingOptions={truckingOptions}
                       carriage="onCarriage"
                       hubName={this.state.dSelect.label}
@@ -1351,7 +1356,6 @@ ShipmentLocationBox.propTypes = {
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
-  // user: PropTypes.user,
   setNotesIds: PropTypes.func,
   shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
@@ -1363,10 +1367,6 @@ ShipmentLocationBox.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
-  // shipmentDispatch: PropTypes.shape({
-  //   goTo: PropTypes.func,
-  //   getDashboard: PropTypes.func
-  // }).isRequired,
   selectedTrucking: PropTypes.objectOf(PropTypes.any),
   handleTruckingDetailsChange: PropTypes.func,
   origin: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -1380,7 +1380,8 @@ ShipmentLocationBox.propTypes = {
   }),
   scope: PropTypes.scope.isRequired,
   filteredRouteIndexes: PropTypes.arrayOf(PropTypes.number).isRequired,
-  updateFilteredRouteIndexes: PropTypes.func.isRequired
+  updateFilteredRouteIndexes: PropTypes.func.isRequired,
+  hideMap: PropTypes.bool
 }
 
 ShipmentLocationBox.defaultProps = {
@@ -1394,7 +1395,8 @@ ShipmentLocationBox.defaultProps = {
   has_on_carriage: true,
   has_pre_carriage: true,
   handleTruckingDetailsChange: null,
-  reusedShipment: null
+  reusedShipment: null,
+  hideMap: false
 }
 
 export default ShipmentLocationBox

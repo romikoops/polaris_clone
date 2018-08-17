@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import { adminActions, userActions } from '../../actions'
 import { adminMenutooltip as menuTip } from '../../constants'
 import styles from './SideNav.scss'
+import { gradientTextGenerator } from '../../helpers'
 
 class SideNav extends Component {
   constructor (props) {
@@ -248,12 +249,11 @@ class SideNav extends Component {
     (user.role && user.role.name === 'sub_admin')
     const links = isAdmin ? this.adminLinks : this.userLinks
 
-    const textStyle = {
-      background:
+    const textStyle =
         theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
+          ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+          : { color: 'black' }
+
     const navLinks = links.map((li, i) => {
       const toolId = v4()
 

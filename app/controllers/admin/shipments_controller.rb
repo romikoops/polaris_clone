@@ -10,18 +10,18 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     o_shipments = open_shipments
     f_shipments = finished_shipments
     num_pages = {
-      finished: (f_shipments.count / 6.0).ceil,
+      finished:  (f_shipments.count / 6.0).ceil,
       requested: (r_shipments.count / 6.0).ceil,
-      open: (o_shipments.count / 6.0).ceil
+      open:      (o_shipments.count / 6.0).ceil
     }
-    
+
     response_handler(
-      requested: requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
-      open:      open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
-      finished:  finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
-      pages: {
-        open: params[:open_page],
-        finished: params[:finished_page],
+      requested:          requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
+      open:               open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
+      finished:           finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
+      pages:              {
+        open:      params[:open_page],
+        finished:  params[:finished_page],
         requested: params[:requested_page]
       },
       num_shipment_pages: num_pages
@@ -39,10 +39,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     end
     shipments = shipment_association.paginate(page: params[:page]).map(&:with_address_options_json)
     response_handler(
-      shipments: shipments,
+      shipments:          shipments,
       num_shipment_pages: (shipment_association.count / 6.0).ceil,
-      target: params[:target],
-      page: params[:page]
+      target:             params[:target],
+      page:               params[:page]
     )
   end
 
@@ -73,22 +73,21 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when "finished"
       shipment_association = finished_shipments
     end
-    filterrific = initialize_filterrific(
+    (filterrific = initialize_filterrific(
       shipment_association,
       filterific_params,
       available_filters: [
         :user_search
       ],
-      sanitize_params: true
-    ) or return
+      sanitize_params:   true
+    )) || return
     shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
     response_handler(
-      shipments: shipments,
+      shipments:          shipments,
       num_shipment_pages: (filterrific.find.count / 6.0).ceil,
-      target: params[:target],
-      page: params[:page]
+      target:             params[:target],
+      page:               params[:page]
     )
-
   end
 
   def edit_price
@@ -272,11 +271,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def populate_contacts
     @shipment_contacts = @shipment.shipment_contacts
     @shipment_contacts.each do |sc|
-      if sc.contact
-        contacts.push(contact:  sc.contact,
+      next unless sc.contact
+      contacts.push(contact:  sc.contact,
                     type:     sc.contact_type,
                     location: sc.contact.location)
-      end
     end
   end
 
