@@ -1,11 +1,13 @@
 example_id                                                | status | run_time        |
 --------------------------------------------------------- | ------ | --------------- |
-./spec/charge_calculator/calculation_spec.rb[1:1:1]       | passed | 0.00112 seconds |
-./spec/charge_calculator/calculation_spec.rb[1:1:2:1]     | passed | 0.00055 seconds |
-./spec/charge_calculator/main_spec.rb[1:1:1:1:1]          | passed | 0.00847 seconds |
-./spec/charge_calculator/models/cargo_unit_spec.rb[1:1:1] | passed | 0.00007 seconds |
+./spec/charge_calculator/calculation_spec.rb[1:1:1]       | passed | 0.00114 seconds |
+./spec/charge_calculator/calculation_spec.rb[1:1:2:1]     | passed | 0.00052 seconds |
+./spec/charge_calculator/main_spec.rb[1:1:1:1:1]          | passed | 0.00846 seconds |
+./spec/charge_calculator/main_spec.rb[1:1:2:1:1]          | passed | 0.00396 seconds |
+./spec/charge_calculator/main_spec.rb[1:2:1:1:1]          | passed | 0.00307 seconds |
+./spec/charge_calculator/models/cargo_unit_spec.rb[1:1:1] | passed | 0.0001 seconds  |
 ./spec/charge_calculator/models/cargo_unit_spec.rb[1:1:2] | passed | 0.00102 seconds |
-./spec/charge_calculator/models/price_spec.rb[1:1:1]      | passed | 0.00012 seconds |
+./spec/charge_calculator/models/price_spec.rb[1:1:1]      | passed | 0.00025 seconds |
 ./spec/charge_calculator/models/price_spec.rb[1:2:1:1]    | passed | 0.00008 seconds |
-./spec/charge_calculator/models/price_spec.rb[1:2:2:1]    | passed | 0.00011 seconds |
-./spec/charge_calculator_spec.rb[1:1]                     | passed | 0.00053 seconds |
+./spec/charge_calculator/models/price_spec.rb[1:2:2:1]    | passed | 0.0001 seconds  |
+./spec/charge_calculator_spec.rb[1:1]                     | passed | 0.00095 seconds |

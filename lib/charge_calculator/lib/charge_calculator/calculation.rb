@@ -15,6 +15,12 @@ module ChargeCalculator
       @result ||= perform
     end
 
+    def prices
+      result.map do |price_attributes|
+        Price.new(price_attributes)
+      end
+    end
+
     private
 
     attr_reader :context, :rates
