@@ -42,11 +42,6 @@ const propsBase = {
   hubs: { foo: hub }
 }
 
-<<<<<<< HEAD:client/app/components/ShipmentCardNew/AdminShipmentCardNew.spec.jsx
-test.skip('shallow rendering', () => {
-  expect(shallow(<AdminShipmentCardNew {...propsBase} />)).toMatchSnapshot()
-=======
 test('shallow rendering', () => {
   expect(shallow(<AdminShipmentCard {...propsBase} />)).toMatchSnapshot()
->>>>>>> 451fc811dc2fd8b819b9b155b26590b18e2e58cd:client/app/components/ShipmentCard/AdminShipmentCard.spec.jsx
 })
