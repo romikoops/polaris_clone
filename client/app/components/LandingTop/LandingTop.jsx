@@ -56,7 +56,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="flex layout-row flex-md-100">
+      <div className="flex layout-row flex-100">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
@@ -97,16 +97,14 @@ export class LandingTop extends Component {
                     Finally, shipping is as simple as it should be.
                   </h3>
                 </div>
-                <div
-                  className={
-                    `layout-row layout-md-column layout-sm-column layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
-                  }
-                >
-                  {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
-                  {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                  {user && user.role && user.role.name === 'admin' && toAdmin}
+                <div className="layout-row layout-align-start-start flex-100">
+                  <div className={`layout-md-column layout-sm-column ${styles.wrapper_btns} flex-md-100 flex-75 `}>
+                    {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
+                    {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
+                    {user && user.role && user.role.name === 'admin' && toAdmin}
+                  </div>
                   <div className={`flex layout-row flex-md-100 ${styles.banner_text}`}>
-                    <div className="flex-none layout-row layout-align-start-center">
+                    <div className="flex-none layout-row layout-align-center-center">
                       <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                       <div className="flex-5" />
                       <a href="https://www.itsmycargo.com/" target="_blank">
