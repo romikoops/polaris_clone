@@ -102,7 +102,6 @@ export class ContactSetter extends Component {
     } else {
       newSelectedContact = notifyees[index]
     }
-
     const modal = (
       <Modal
         component={

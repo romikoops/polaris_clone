@@ -1,0 +1,1 @@
+eslint_executable: 'client/node_modules/.bin/eslint'

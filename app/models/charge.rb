@@ -8,7 +8,7 @@ class Charge < ApplicationRecord
   belongs_to :charge_category
   belongs_to :children_charge_category,
     foreign_key: "children_charge_category_id", class_name: "ChargeCategory"
-  belongs_to :charge_breakdown
+  belongs_to :charge_breakdown, optional: true
   belongs_to :parent, class_name: "Charge", optional: true
   has_many :children, foreign_key: "parent_id", class_name: "Charge", dependent: :destroy
   before_validation :set_detail_level, on: :create
@@ -60,6 +60,17 @@ class Charge < ApplicationRecord
   end
 
   def update_price!
+    rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
+    price.value = children.reduce(0) do |sum, charge|
+      price = charge.price
+      delta = price.value.nil? ? 0 : price.value / rates[price.currency].to_d
+      sum + delta
+    end
+  
+    price.save!
+  end
+
+  def update_quote_price!(tenant_id)
     rates = get_rates(price.currency, tenant_id).today.merge(price.currency => 1.0)
     price.value = children.reduce(0) do |sum, charge|
       price = charge.price
