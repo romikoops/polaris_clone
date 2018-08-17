@@ -7,12 +7,16 @@ import { theme, shipmentData, identity } from '../../mocks'
  * `totalGoodsValue: PropTypes.number.isRequired,` is wrong
  */
 
+ /**
+  * TODO: low test coverage
+  */
+
 jest.mock('../../helpers', () => ({
   // eslint-disable-next-line react/prop-types
   converter: x => x
 }))
 // eslint-disable-next-line import/first
-import { CargoDetails } from './CargoDetails'
+import CargoDetails from './CargoDetails'
 
 const editedShipmentData = {
   ...shipmentData,

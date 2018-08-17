@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
@@ -16,7 +15,7 @@ import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
 import CustomsExportPaper from '../Addons/CustomsExportPaper'
 
 export class CargoDetails extends Component {
-  static displayCustomsFee (customsData, target, customs, t) {
+  static displayCustomsFee (customsData, target, customs) {
     if (target === 'total') {
       let newTotal = 0
 
@@ -27,7 +26,7 @@ export class CargoDetails extends Component {
         newTotal += parseFloat(customs.export.total.value)
       }
       if (newTotal === 0 && customs.import.unknown && customs.export.unknown) {
-        return t('cargo:priceLocalRegulations')
+        return 'Price subject to local regulations'
       }
 
       return `${newTotal.toFixed(2)} ${customs.total.total.currency}`
@@ -39,11 +38,11 @@ export class CargoDetails extends Component {
           return `${parseFloat(fee.total.value).toFixed(2)} ${fee.total.currency}`
         }
 
-        return t('cargo:priceLocalRegulations')
+        return 'Price subject to local regulations'
       }
     }
     if (customsData[target].unknown) {
-      return t('cargo:priceLocalRegulations')
+      return 'Price subject to local regulations'
     }
 
     return '0 EUR'
@@ -86,7 +85,9 @@ export class CargoDetails extends Component {
         currency: customs[target].unknown ? 'EUR' : customs[target].total.currency
       }
 
+    // if (customsData && customsData[target].val && customsData[target].val !== converted) {
     setCustomsFee(target, resp)
+    // }
   }
   deleteDoc (doc) {
     const { shipmentDispatch } = this.props
@@ -163,29 +164,26 @@ export class CargoDetails extends Component {
     window.open(url, '_blank')
   }
   render () {
-    const { totalGoodsCurrency } = this.state
     const {
-      customsData,
-      eori,
-      finishBookingAttempted,
       shipmentData,
-      t,
-      tenant,
       theme,
-      totalGoodsValue
+      // insurance,
+      // hsCodes,
+      // hsTexts,
+      // handleHsTextChange,
+      // setHsCode,
+      // deleteCode,
+      totalGoodsValue,
+      customsData,
+      finishBookingAttempted,
+      tenant,
+      eori
     } = this.props
-
+    const { totalGoodsCurrency } = this.state
     const { scope } = tenant.data
     const {
-      addons,
-      customs,
-      dangerousGoods,
-      documents,
-      shipment
+      dangerousGoods, documents, shipment, customs, addons
     } = shipmentData
-
-    const insuranceBoxText = `${t('cargo:insuranceHead')} ${tenant.data.name} ${t('cargo:insuranceTail')}`
-
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
@@ -196,24 +194,31 @@ export class CargoDetails extends Component {
           <p className="flex-90">
             <strong>
               {' '}
-              {t('cargo:costEffective')}
+              A cost effective and simple way to cover for physical loss or damage to goods in
+              transit.
             </strong>
           </p>
           <p className="flex-90">
-            {insuranceBoxText}
+            {`Please contact your local ${tenant.data.name} office for more info.`}
           </p>
         </div>
+        {/* <div className={` ${styles.prices} flex-20
+          layout-row layout-wrap layout-align-start-start`}>
+          <div
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
+          >
+            <p className="flex-none end">Insurance Price</p>
+            <h6 className="flex-none end">
+              {' '}
+              {insurance.val.toFixed(2)} {user.currency}
+            </h6>
+          </div>
+        </div> */}
       </div>
     )
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
-    const textComp = (
-      <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>
-        ({t('cargo:ifApplicable')})
-      </b>
-    )
-
-    const handleText = `${t('cargo:handleHead')} ${tenant.data.name} ${t('cargo:handleTail')}:`
+    const textComp = <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>(if applicable)</b>
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap ${styles.customs_box}  ${styles.box_content} ${
@@ -224,18 +229,22 @@ export class CargoDetails extends Component {
           <p className="flex-90">
             <strong>
               {' '}
-              {t('cargo:conditionFirst')}
+              When you ship goods from outside the European Union (EU), you may be charged customs
+              duty and/or VAT. You can either handle the customs on your own, or have Greencarrier
+              handle it for you.
             </strong>
           </p>
           <p className="flex-90">
-            {t('cargo:conditionSecond')}
+            To cover our costs when we present your goods to the customs authorities – and pay any
+            customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
+            depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap">
             <div
               className="flex-100 layout-row layout-align-start-center"
               style={{ height: '36px' }}
             >
-              <p className="flex-none"> {handleText}</p>
+              <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
             <div
               className="flex-100 layout-row layout-align-start-center layout-wrap"
@@ -298,7 +307,7 @@ export class CargoDetails extends Component {
                     name="eori"
                     value={eori}
                     onChange={this.handleChange}
-                    placeholder={t('cargo:typeEORI')}
+                    placeholder="Type in EORI number"
                   />
                 </div>
               </div>
@@ -312,14 +321,14 @@ export class CargoDetails extends Component {
             <p className="flex-none">Import</p>
             <h6 className="flex-none center">
               {' '}
-              {CargoDetails.displayCustomsFee(customsData, 'import', customs, t)}
+              {CargoDetails.displayCustomsFee(customsData, 'import', customs)}
             </h6>
           </div>
           <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}>
             <p className="flex-none">Export</p>
             <h6 className="flex-none center">
               {' '}
-              {CargoDetails.displayCustomsFee(customsData, 'export', customs, t)}
+              {CargoDetails.displayCustomsFee(customsData, 'export', customs)}
             </h6>
           </div>
 
@@ -327,14 +336,12 @@ export class CargoDetails extends Component {
             <p className="flex-none">Total</p>
             <h6 className="flex-none center">
               {' '}
-              {CargoDetails.displayCustomsFee(customsData, 'total', customs, t)}
+              {CargoDetails.displayCustomsFee(customsData, 'total', customs)}
             </h6>
           </div>
         </div>
       </div>
     )
-
-    const noCustomsText = `${t('cargo:noCustomsHead')} ${tenant.data.name} ${t('cargo:noCustomsTail')}`
 
     const noCustomsBox = (
       <div
@@ -345,31 +352,54 @@ export class CargoDetails extends Component {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-100">
             <b>
-              {noCustomsText}
+              {`A customs declaration is mandatory to pass a national border when exporting or
+              importing. If you choose to handle the customs clearance on your own, ${
+      tenant.data.name
+      }
+              will need a copy of the customs declaration.`}
             </b>
           </p>
           <p className="flex-100">
             <b>
-              {t('cargo:euRules')}
+              When you ship goods from outside the European Union (EU), you may be charged customs
+              duty and/or VAT according to local regulations.
             </b>
           </p>
         </div>
+        {/* <div className="flex-33 no_max layout-row layout-align-start-center">
+          <div className="flex-90 layout-row layout-wrap">
+            <div className="flex-100">
+              <TextHeading theme={theme} size={3} text="Customs Declaration" />
+            </div>
+            <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
+              <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
+                <div className="flex-100 layout-row">
+                  <DocumentsForm
+                    theme={theme}
+                    type="customs_declaration"
+                    dispatchFn={this.fileFn}
+                    text="Customs decl."
+                    doc={documents.customs_declaration}
+                    isRequired
+                    deleteFn={this.deleteDoc}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
         <div className="flex-33 no_max layout-row layout-align-end-center">
           {this.props.totalGoodsValue.value > 20000 ? (
             <div className="flex-90 layout-row layout-wrap">
               <div className="flex-100">
-                <TextHeading
-                  theme={theme}
-                  size={3}
-                  text={t('cargo:customsValue')}
-                />
+                <TextHeading theme={theme} size={3} text="Customs Value Declaration" />
               </div>
               <div className="flex-100 layout-row layout-wrap" name="customs_value_declaration">
                 <div className="flex-100 layout-row">
                   <DocumentsForm
                     theme={theme}
                     type="customs_value_declaration"
-                    text={t('cargo:customsValueShort')}
+                    text="Customs Val. Decl."
                     dispatchFn={this.fileFn}
                     doc={documents.customs_declaration}
                     isRequired
@@ -385,11 +415,6 @@ export class CargoDetails extends Component {
       </div>
     )
 
-    const quoteInsurance = `${t('cargo:quoteInsuranceHead')} ${tenant.data.name} ${t('cargo:quoteInsuranceTail')}`
-    const quoteInsuranceNegative = `${t('cargo:quoteInsuranceNoHead')} ${tenant.data.name} ${t('cargo:quoteInsuranceNoTail')}`
-    const clearance = `${t('cargo:clearanceHead')} ${tenant.data.name} ${t('cargo:clearanceTail')}`
-    const clearanceNegative = `${t('cargo:clearanceNoHead')} ${tenant.data.name} ${t('cargo:clearanceNoTail')}`
-
     return (
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
@@ -397,20 +422,12 @@ export class CargoDetails extends Component {
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-45 layout-align-start-center layout-row">
                 <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={2}
-                    text={t('cargo:cargoDetails')}
-                  />
+                  <TextHeading theme={theme} size={2} text="Cargo Details" />
                 </div>
               </div>
               <div className="flex-45 layout-align-start-center layout-row">
                 <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={2}
-                    text={t('cargo:shipmentDocuments')}
-                  />
+                  <TextHeading theme={theme} size={2} text="Shipment Documents " />
                 </div>
                 <div className="flex-none" style={{ marginLeft: '10px' }}>
                   <p className="flex-none">( if available )</p>
@@ -421,11 +438,7 @@ export class CargoDetails extends Component {
               <div className="flex-100">
                 {' '}
                 <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={3}
-                    text={t('cargo:totalValue')}
-                  />
+                  <TextHeading theme={theme} size={3} text="Total value of goods" />
                 </div>
               </div>
               <div
@@ -449,8 +462,8 @@ export class CargoDetails extends Component {
                         submitAttempted={finishBookingAttempted}
                         validations={{ nonNegative: (values, value) => value > 0 }}
                         validationErrors={{
-                          nonNegative: t('common:greaterZero'),
-                          isDefaultRequiredValue: t('common:greaterZero')
+                          nonNegative: 'Must be greater than 0',
+                          isDefaultRequiredValue: 'Must be greater than 0'
                         }}
                         required
                       />
@@ -470,14 +483,17 @@ export class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={3}
-                        text={t('cargo:descriptionGoods')}
-                      />
+                      <TextHeading theme={theme} size={3} text="Description of goods" />
                     </div>
                   </div>
                   <div className="flex-100">
+                    {/* <textarea
+                      className={styles.cargo_text_area}
+                      rows="6"
+                      name="cargoNotes"
+                      value={this.props.cargoNotes}
+                      onChange={this.handleChange}
+                    /> */}
                     <FormsyTextarea
                       className={`flex-100 ${styles.cargo_text_area} `}
                       wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
@@ -491,7 +507,7 @@ export class CargoDetails extends Component {
                       onBlur={this.handleChange}
                       submitAttempted={finishBookingAttempted}
                       validationErrors={{
-                        isDefaultRequiredValue: t('common:nonEmpty')
+                        isDefaultRequiredValue: 'Must not be empty'
                       }}
                       required
                     />
@@ -501,6 +517,7 @@ export class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
                       {' '}
+                      {/* <TextHeading theme={theme} size={4} text="" /> */}
                       <h4 className="no_m flex-100">Incoterms</h4>
                       <p className="flex-90">
                         2010 by the International Chamber of Commerce (ICC) (Optional)
@@ -534,7 +551,7 @@ export class CargoDetails extends Component {
                       theme={theme}
                       type="packing_sheet"
                       dispatchFn={this.fileFn}
-                      text={t('common:packingSheet')}
+                      text="Packing Sheet"
                       doc={documents.packing_sheet}
                       isRequired
                       deleteFn={this.deleteDoc}
@@ -562,7 +579,7 @@ export class CargoDetails extends Component {
                         theme={theme}
                         type="dangerous_goods"
                         dispatchFn={this.fileFn}
-                        text={t('common:dangerousGoods')}
+                        text="Dangerous Goods"
                         doc={documents.dangerous_goods}
                         deleteFn={this.deleteDoc}
                       />
@@ -576,11 +593,7 @@ export class CargoDetails extends Component {
                     <div className="flex-100">
                       <div className={`flex-none ${styles.f_header}`}>
                         {' '}
-                        <TextHeading
-                          theme={theme}
-                          size={3}
-                          text={t('cargo:notesOptional')}
-                        />
+                        <TextHeading theme={theme} size={3} text="Notes (Optional)" />
                       </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -608,7 +621,7 @@ export class CargoDetails extends Component {
                         theme={theme}
                         type="miscellaneous"
                         dispatchFn={this.fileFn}
-                        text={t('common:miscellaneous')}
+                        text="Miscellaneous"
                         documents={documents.miscellaneous}
                         deleteFn={this.deleteDoc}
                       />
@@ -635,11 +648,7 @@ export class CargoDetails extends Component {
                 >
                   <div className="flex-100 layout-row layout-align-space-between-start">
                     <div className="flex-none layout-row layout-align-space-around-center">
-                      <TextHeading
-                        theme={theme}
-                        size={2}
-                        text={t('common:insurance')}
-                      />
+                      <TextHeading theme={theme} size={2} text="Insurance" />
                     </div>
 
                     <div
@@ -648,7 +657,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-wrap layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none layout-align-start-center">
-                            {quoteInsurance}
+                            {`Yes, I want ${tenant.data.name} to quote insurance for my cargo`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -662,7 +671,9 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none" style={{ marginRight: '5px' }}>
-                            {quoteInsuranceNegative}
+                            {`No, I do not want ${
+                              tenant.data.name
+                            } to quote insurance for my cargo`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -680,7 +691,8 @@ export class CargoDetails extends Component {
                   <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-100">
                       <b>
-                        {t('cargo:cargoInsurance')}
+                        Cargo Insurance provides cover on all risk terms for physical loss or damage
+                        to cargo during transport by land, sea or air.
                       </b>
                     </p>
                   </div>
@@ -688,7 +700,8 @@ export class CargoDetails extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                       <p className="flex-100">
                         <b>
-                          {t('cargo:effectiveInsurance')}
+                          Insurance is a cost effective and simple way to cover for physical loss or
+                          damage to goods in transit.
                         </b>
                       </p>
                     </div>
@@ -701,7 +714,7 @@ export class CargoDetails extends Component {
                       className="flex-none layout-row layout-align-center-center"
                       onClick={() => this.insuranceReadMore()}
                     >
-                      <p className="flex-none pointy">{t('common:readMore')}</p>
+                      <p className="flex-none pointy">Read more...</p>
                       <i className="flex-none offset-5 fa fa-external-link" />
                     </div>
                   </div>
@@ -719,11 +732,7 @@ export class CargoDetails extends Component {
                 >
                   <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
                     <div className="flex-none layout-row layout-align-space-around-center">
-                      <TextHeading
-                        theme={theme}
-                        size={2}
-                        text={t('cargo:customsHandling')}
-                      />
+                      <TextHeading theme={theme} size={2} text="Customs Handling" />
                     </div>
 
                     <div
@@ -732,7 +741,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none" style={{ marginRight: '5px' }}>
-                            {clearance}
+                            {`Yes, I want ${tenant.data.name} to handle my customs clearance`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -746,7 +755,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none" style={{ marginRight: '5px' }}>
-                            {clearanceNegative}
+                            {`No, I do not want ${tenant.data.name} to handle my customs`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -791,13 +800,13 @@ export class CargoDetails extends Component {
     )
   }
 }
-
 CargoDetails.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleInsurance: PropTypes.func.isRequired,
+  // toggleCustomsCredit: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,
   insurance: PropTypes.shape({
@@ -820,6 +829,7 @@ CargoDetails.propTypes = {
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
   toggleCustomAddon: PropTypes.func,
+  // customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
   notes: PropTypes.string,
@@ -832,9 +842,10 @@ CargoDetails.defaultProps = {
   finishBookingAttempted: false,
   hsTexts: {},
   toggleCustomAddon: null,
+  // customsCredit: false,
   eori: '',
   notes: '',
   incotermText: ''
 }
 
-export default translate(['common', 'cargo'])(CargoDetails)
+export default CargoDetails

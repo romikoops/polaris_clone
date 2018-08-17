@@ -118,7 +118,7 @@ exports[`shallow render 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -326,7 +326,7 @@ exports[`shallow render 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -367,14 +367,25 @@ exports[`shallow render 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -473,14 +484,25 @@ exports[`shallow render 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -635,7 +657,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -843,7 +865,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -884,14 +906,25 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -1019,14 +1052,25 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -1181,7 +1225,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -1389,7 +1433,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -1430,14 +1474,25 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -1536,14 +1591,25 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -1866,7 +1932,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -2074,7 +2140,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -2115,14 +2181,25 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -2221,14 +2298,25 @@ exports[`totalGoodsValue.value > 20000 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
