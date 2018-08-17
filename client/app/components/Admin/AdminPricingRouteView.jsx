@@ -16,7 +16,7 @@ import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import { AdminPricingDedicated } from './Pricing/Dedicated'
 import { AdminPricingBox } from './Pricing/Box'
-import AdminPricingTest from './Pricing/Test'
+// import AdminPricingTest from './Pricing/Test'
 import CollapsingContent from '../CollapsingBar/Content'
 
 export class AdminPricingRouteView extends Component {

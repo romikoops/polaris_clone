@@ -1,7 +1,6 @@
 import React from 'react'
 import Proptypes from '../../../prop-types'
 import styles from './CollapsingHeading.scss'
-import { TextHeading } from '../../TextHeading/TextHeading'
 
 export default function CollapsingHeading ({
   text,
@@ -24,7 +23,7 @@ export default function CollapsingHeading ({
       {text ? (
         <div className="layout-row flex layout-align-start-center">
           <i className={faClass} />
-          <TextHeading theme={theme} color="white" size={3} text={text} />
+          <h3 className={`flex ${styles.collapsed_heading}`}>{text}</h3>
         </div>
       ) : (
         <div

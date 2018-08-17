@@ -4,7 +4,9 @@ import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 
-export function Footer ({ theme, tenant, isShop }) {
+export function Footer ({
+  theme, tenant, isShop, width
+}) {
   const primaryColor = {
     color: theme && theme.colors ? theme.colors.primary : 'black'
   }
@@ -19,9 +21,14 @@ export function Footer ({ theme, tenant, isShop }) {
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact'
   }
+  const widthStyle = width ? { width } : {}
 
   return (
-    <div className={`flex-100 layout-row layout-wrap ${styles.footer_wrapper} layout-align-start`} >
+    <div
+      className={`flex-100 layout-row 
+      layout-wrap ${styles.footer_wrapper} layout-align-start`}
+      style={widthStyle}
+    >
       {isShop
         ? <div />
         : <div className={`${styles.contact_bar}
@@ -127,13 +134,15 @@ export function Footer ({ theme, tenant, isShop }) {
 Footer.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
-  isShop: PropTypes.bool
+  isShop: PropTypes.bool,
+  width: PropTypes.number
 }
 
 Footer.defaultProps = {
   theme: {},
   tenant: {},
-  isShop: false
+  isShop: false,
+  width: null
 }
 
 export default Footer
