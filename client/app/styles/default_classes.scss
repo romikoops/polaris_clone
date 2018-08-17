@@ -91,6 +91,10 @@
       padding-left: 30px;
       padding-right: 30px;
     }
+    @media screen and (max-width: 1024px) {
+      padding-left: 45px;
+      padding-right: 45px;
+    }
     @media screen and (max-width: 420px) {
       padding-left: 15px;
       padding-right: 15px;
@@ -376,5 +380,11 @@
   .card_lineup {
     margin-left: -8px;
     margin-right: 8px;
-  } 
+  }
+  .hide_overflow {
+    overflow: hidden;
+  }
+  .card_margin_bottom {
+    margin-bottom: 10px;
+  }
 }

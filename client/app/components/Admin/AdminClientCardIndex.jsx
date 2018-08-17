@@ -45,9 +45,9 @@ function listClients (clients, theme) {
     return (
       <div className={`${styles.listelement}`}>
         <GreyBox
-          padding
+          // padding
           content={clientCard}
-          noMargin
+          wrapperClassName="card_margin_bottom"
         />
       </div>
     )
