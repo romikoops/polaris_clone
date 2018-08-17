@@ -322,83 +322,6 @@ export class UserShipmentView extends Component {
     ) : (
       ''
     )
-    // const accountHolderBox = accountHolder ? (
-    //   <div className="flex-50 layout-row">
-    //     <div className="flex-15 layout-column layout-align-start-center">
-    //       <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
-    //     </div>
-    //     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-    //       <div className="flex-100">
-    //         <TextHeading theme={theme} size={3} text="Account Holder" />
-    //       </div>
-    //       <p className={`${styles.address} flex-100`}>
-    //         {accountHolder.first_name} {accountHolder.last_name} <br />
-    //         {accountHolder.email} {accountHolder.phone} <br />
-    //       </p>
-    //     </div>
-    //   </div>
-    // ) : (
-    //   ''
-    // )
-    // if (contacts) {
-    //   contacts.forEach((n) => {
-    //     if (n.type === 'notifyee') {
-    //       nArray.push(<div key={v4()} className="flex-33 layout-row">
-    //         <div className="flex-15 layout-column layout-align-start-center">
-    //           <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
-    //         </div>
-    //         <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-    //           <div className="flex-100">
-    //             <TextHeading theme={theme} size={3} text="Notifyee" />
-    //           </div>
-    //           <p className={` ${styles.address} flex-100`}>
-    //             {n.contact.first_name} {n.contact.last_name} <br />
-    //           </p>
-    //         </div>
-    //       </div>)
-    //     }
-    //     if (n.type === 'shipper') {
-    //       shipperContact = (
-    //         <div className="flex-33 layout-row">
-    //           <div className="flex-15 layout-column layout-align-start-center">
-    //             <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
-    //           </div>
-    //           <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-    //             <div className="flex-100">
-    //               <TextHeading theme={theme} size={3} text="Shipper" />
-    //             </div>
-    //             <p className={`${styles.address} flex-100`}>
-    //               {n.contact.first_name} {n.contact.last_name} <br />
-    //               {n.location.street} {n.location.street_number} <br />
-    //               {n.location.zip_code} {n.location.city} <br />
-    //               {n.location.country}
-    //             </p>
-    //           </div>
-    //         </div>
-    //       )
-    //     }
-    //     if (n.type === 'consignee') {
-    //       consigneeContact = (
-    //         <div className="flex-33 layout-row">
-    //           <div className="flex-15 layout-column layout-align-start-center">
-    //             <i className={`${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
-    //           </div>
-    //           <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-    //             <div className="flex-100">
-    //               <TextHeading theme={theme} size={3} text="Receiver" />
-    //             </div>
-    //             <p className={`${styles.address} flex-100`}>
-    //               {n.contact.first_name} {n.contact.last_name} <br />
-    //               {n.location.street} {n.location.street_number} <br />
-    //               {n.location.zip_code} {n.location.city} <br />
-    //               {n.location.country}
-    //             </p>
-    //           </div>
-    //         </div>
-    //       )
-    //     }
-    //   })
-    // }
     let cargoView = ''
 
     if (containers) {
@@ -469,7 +392,7 @@ export class UserShipmentView extends Component {
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch margin_bottom`}>
           <div className={`layout-row flex layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
             <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
-            <p className="layout-row flex-md-30 flex-25 layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
+            <p className="layout-row layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
           </div>
           {reuseShipment}
           {statusRequested}
@@ -527,69 +450,50 @@ export class UserShipmentView extends Component {
                 </div>
 
                 <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-                  <div className="layout-column flex-60 layout-align-center-stretch">
+                  <div className="flex-60 layout-align-center-stretch">
                     <div className="layout-row flex-100 layout-align-start-center">
-                      <div className="flex-40 layout-row layout-align-start-center">
+                      <div className="flex-100 layout-row layout-align-start-center">
                         <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment).type}</h4>
-                      </div>
-                      <div className="flex-40 layout-row layout-align-start-center">
-                        <p>{moment(checkPreCarriage(shipment).date)
-                          .format('DD/MM/YYYY') }</p>
+                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
+                          {shipment.pickup_address
+                            ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
+                              .format('DD/MM/YYYY')}`
+                            : ''}
+                        </h4>
                       </div>
                     </div>
                     {shipment.pickup_address ? (
-                      <div className="flex-100 layout-row">
-                        <div className="flex-5 layout-row" />
-                        <hr className="flex-35 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
-                        <div className="flex-60 layout-row" />
+                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
+                        <p>{shipment.pickup_address.street} &nbsp;
+                          {shipment.pickup_address.street_number},&nbsp;
+                          <strong>{shipment.pickup_address.city},&nbsp;
+                            {shipment.pickup_address.country.name} </strong>
+                        </p>
                       </div>
-                    ) : (
-                      ''
-                    )}
-                    <div className="flex-100 layout-row">
-                      <div className="flex-5 layout-row" />
-                      {shipment.pickup_address ? (
-                        <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                          {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                          <p>{shipment.pickup_address.street} &nbsp;
-                            {shipment.pickup_address.street_number},&nbsp;
-                            <strong>{shipment.pickup_address.city},&nbsp;
-                              {shipment.pickup_address.country.name} </strong>
-                          </p>
-                        </div>
-                      ) : ''}
-                    </div>
+                    ) : ''}
                   </div>
 
-                  <div className="layout-column flex-40 layout-align-center-stretch">
+                  <div className="flex-40 layout-align-center-stretch">
                     <div className="layout-row flex-100 layout-align-start-center">
                       <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-95 layout-row">Delivery</h4>
+                      <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
+                        {shipment.delivery_address
+                          ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
+                            .format('DD/MM/YYYY')}`
+                          : ''}
+                      </h4>
                     </div>
                     {shipment.delivery_address ? (
-                      <div className="flex-100 layout-row">
-                        <div className="flex-5 layout-row" />
-                        <hr className="flex-60 layout-row" style={{ border: '1px solid #E0E0E0', width: '100%' }} />
-                        <div className="flex-30 layout-row" />
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                    <div className="flex-100 layout-row">
-                      <div className="flex-5 layout-row" />
-                      {shipment.delivery_address ? (
-                        <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                          {/* <i className={`fa fa-map-marker clip ${styles.markerIcon}`} style={selectedStyle} /> */}
-                          <p>{shipment.delivery_address.street}&nbsp;
-                            {shipment.delivery_address.street_number},&nbsp;
-                            <strong>{shipment.delivery_address.city},&nbsp;
-                              {shipment.delivery_address.country.name} </strong>
+                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
+                        <p>{shipment.delivery_address.street}&nbsp;
+                          {shipment.delivery_address.street_number},&nbsp;
+                          <strong>{shipment.delivery_address.city},&nbsp;
+                            {shipment.delivery_address.country.name} </strong>
 
-                          </p>
-                        </div>
-                      ) : ''}
-                    </div>
+                        </p>
+                      </div>
+                    ) : ''}
+
                   </div>
                 </div>
               </div>
@@ -604,7 +508,7 @@ export class UserShipmentView extends Component {
                     <div className="layout-column flex-100">
                       <h3>Freight, Duties & Carriage:</h3>
                       <div className="layout-wrap layout-row flex">
-                        <div className="layout-column flex-45 margin_bottom">
+                        <div className="flex-45 margin_bottom">
                           <div className="layout-row flex-100">
                             <div className="flex-none layout-row">
                               <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
@@ -622,7 +526,7 @@ export class UserShipmentView extends Component {
                               : '' }
                           </div>
                         </div>
-                        <div className="layout-column flex-offset-10 flex-45 margin_bottom">
+                        <div className="flex-offset-10 flex-45 margin_bottom">
                           <div className="layout-row flex-100">
                             <div className="flex-none layout-row">
                               <i
@@ -644,7 +548,7 @@ export class UserShipmentView extends Component {
 
                           </div>
                         </div>
-                        <div className="layout-column flex-45 margin_bottom">
+                        <div className="flex-45 margin_bottom">
                           <div className="layout-row flex-100">
                             <div className="layout-row flex-none">
                               <i
@@ -669,7 +573,7 @@ export class UserShipmentView extends Component {
                           </div>
                         </div>
                         <div
-                          className="layout-column flex-offset-10 flex-45 margin_bottom"
+                          className="flex-offset-10 flex-45 margin_bottom"
                         >
                           <div className="layout-row flex-100">
                             <div className="layout-row flex-none">
@@ -694,7 +598,7 @@ export class UserShipmentView extends Component {
                               : ''}
                           </div>
                         </div>
-                        <div className="layout-column flex-45 margin_bottom">
+                        <div className="flex-45 margin_bottom">
                           <div className="layout-row flex-100">
                             <div className="layout-row flex-none">
                               <i
@@ -720,11 +624,11 @@ export class UserShipmentView extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className={`flex-30 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
-                    <div className="layout-column flex-80">
+                  <div className={`flex-25 layout-row flex-sm-100 flex-xs-100 ${styles.additional_services} ${styles.services_box} ${styles.border_right}`}>
+                    <div className="flex-80">
                       <h3>Additional Services</h3>
                       <div className="">
-                        <div className="layout-column flex-100 margin_bottom">
+                        <div className="flex-100 margin_bottom">
                           <div className="layout-row flex-100">
                             <div className="layout-row flex-none">
                               <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
@@ -771,17 +675,16 @@ export class UserShipmentView extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className="layout-row layout-padding flex-20 layout-align-center-start" />
                   </div>
-                  <div className={`flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
+                  <div className={`flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding ${styles.services_box}`}>
                     <div className="layout-column flex-100">
                       <div className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100">
-                        <div className="layout-align-center-center layout-row flex">
-                          <span style={gradientStyle} className={`layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
+                        <div className="layout-align-start-center layout-row flex">
+                          <span style={gradientStyle} className={`layout-align-center-center layout-row flex-none ${styles.quantity_square}`}>x&nbsp;{cargoCount}</span>
                           <p className="layout-align-sm-end-center layout-align-xs-end-center">{UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}</p>
                         </div>
                       </div>
-                      <h2 className="layout-align-end-center layout-row flex">
+                      <h2 className="layout-align-start-center layout-row flex">
                         {formattedPriceValue(totalPrice(shipment).value)} {totalPrice(shipment).currency}
                       </h2>
                     </div>
@@ -879,14 +782,14 @@ export class UserShipmentView extends Component {
                         <div className={`${styles.border_bottom} flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap`}>
                           {shipment.cargo_notes ? (
                             <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-20 layout-row">Description of Goods:</span>
+                              <span className="flex-30 layout-row">Description of Goods:</span>
                               <p className="flex-80 layout-padding layout-row">
                                 {shipment.cargo_notes}
                               </p>
                             </div>
                           ) : (
                             <div className="flex-100 layout-row layout-align-start-center">
-                              <span className="flex-20 layout-row">Description of Goods:</span>
+                              <span className="flex-30 layout-row">Description of Goods:</span>
                               <p className="flex-80 layout-padding layout-row">
                         -
                               </p>
@@ -924,8 +827,8 @@ export class UserShipmentView extends Component {
 
                 <GreyBox
                   title="Documents"
-                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} ${adminStyles.margin_bottom}`}
-                  contentClassName="layout-row layout-wrap flex"
+                  wrapperClassName={`layout-row flex-100 ${adminStyles.no_margin_box_right} margin_bottom`}
+                  contentClassName={`layout-row layout-wrap flex ${styles.min_height}`}
                   content={(
                     <div className={`flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center ${adminStyles.padding_left}`}>
                       <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
