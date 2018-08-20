@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = function (wallaby) {
   return {
     files: [
@@ -28,11 +29,12 @@ module.exports = function (wallaby) {
       regular: 2
     },
     delays: {
-      run: 2000
+      run: 1000
     },
     ignoreFileLoadingDependencyTracking: true,
-    slowTestThreshold: 1000,
-    maxConsoleMessagesPerTest: 5,
+    slowTestThreshold: 500,
+    maxConsoleMessagesPerTest: 500,
     debug: true
   }
 }
+/* eslint-enable */
