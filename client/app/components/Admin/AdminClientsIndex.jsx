@@ -199,7 +199,7 @@ class AdminClientsIndex extends Component {
       position: 'fixed',
       top: '120px',
       right: '0px',
-      backgroundColor: 'white'
+      minWidth: '200px'
     }
 
     return (
@@ -230,10 +230,10 @@ class AdminClientsIndex extends Component {
 
           </Tabs>
         </div>
-        <div className="layout-column flex-20 show-gt-sm hide-xs layout-align-end-end" style={sideBoxStyle}>
+        <div className="layout-column flex-20 show-gt-sm hide-xs" style={sideBoxStyle}>
           <SideOptionsBox
             header="Filters"
-            flexOptions="layout-column flex-20 flex-md-30"
+            flexOptions="layout-column flex-auto"
             content={
               <div>
 
@@ -265,49 +265,9 @@ class AdminClientsIndex extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions={`layout-column flex-20 flex-md-30 ${styles.margin_bottom}`}
+            flexOptions="layout-column flex-auto"
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                {/* <CollapsingBar
-                  collapsed={!expander.upload}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('upload')}
-                  text="Upload Data"
-                  faClass="fa fa-cloud-upload"
-                  content={(
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-align-center-center layout-wrap`}
-                    >
-                      <p className="flex-none">Upload Clients Sheet</p>
-                      <FileUploader
-                        theme={theme}
-                        url={hubUrl}
-                        type="xlsx"
-                        text="Client .xlsx"
-                        tooltip={clientTip.upload}
-                      />
-                    </div>
-                  )}
-                />
-                <CollapsingBar
-                  collapsed={!expander.download}
-                  theme={theme}
-                  handleCollapser={() => this.toggleExpander('download')}
-                  text="Download Data"
-                  faClass="fa fa-cloud-download"
-                  content={(
-                    <div
-                      className={`${
-                        styles.action_section
-                      } flex-100 layout-row layout-wrap layout-align-center-center`}
-                    >
-                      <p className="flex-100 center">Download Clients Sheet</p>
-                      <DocumentsDownloader theme={theme} target="clients" />
-                    </div>
-                  )}
-                /> */}
                 <CollapsingBar
                   showArrow
                   collapsed={!expander.new}
@@ -320,7 +280,7 @@ class AdminClientsIndex extends Component {
                     <div
                       className={`${
                         styles.action_section
-                      } flex-100 layout-row layout-wrap layout-align-center-center`}
+                      } flex-100 layout-row layout-wrap`}
                     >
                       {newButton}
                     </div>
