@@ -19,7 +19,6 @@ export class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs, t) {
     if (target === 'total') {
       let newTotal = 0
-
       if (customsData.import.bool && !customs.import.unknown) {
         newTotal += parseFloat(customs.import.total.value)
       }
@@ -35,6 +34,7 @@ export class CargoDetails extends Component {
     if (customsData[target].bool) {
       if (customs) {
         const fee = customs[target]
+
         if (fee && !fee.unknown && fee.total.value) {
           return `${parseFloat(fee.total.value).toFixed(2)} ${fee.total.currency}`
         }
@@ -51,16 +51,19 @@ export class CargoDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      insuranceView: null,
       customsView: null,
-      totalGoodsCurrency: { value: 'EUR', label: 'EUR' }
+      insuranceView: null,
+      totalGoodsCurrency: {
+        label: 'EUR',
+        value: 'EUR'
+      }
     }
 
+    this.calcCustomsFee = this.calcCustomsFee.bind(this)
+    this.deleteDoc = this.deleteDoc.bind(this)
+    this.fileFn = this.fileFn.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
-    this.fileFn = this.fileFn.bind(this)
-    this.deleteDoc = this.deleteDoc.bind(this)
-    this.calcCustomsFee = this.calcCustomsFee.bind(this)
     this.toggleCustomAddon = this.toggleCustomAddon.bind(this)
   }
   toggleInsurance (bool) {
