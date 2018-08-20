@@ -8,7 +8,6 @@ import FormsyInput from '../FormsyInput/FormsyInput'
 import PropTypes from '../../prop-types'
 import { UserContactsIndex, UserContactsView } from './'
 import styles from './UserAccount.scss'
-// import {v4} from 'uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
 import {
@@ -36,10 +35,12 @@ class UserContacts extends Component {
     this.backToIndex = this.backToIndex.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
     this.toggleNewContact = this.toggleNewContact.bind(this)
-    // this.handleFormChange = this.handleFormChange.bind(this)
-    // this.saveNewContact = this.saveNewContact.bind(this)
+    this.viewContacts = this.viewContacts.bind(this)
     this.handleValidSubmit = this.handleValidSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
+  }
+  componentWillMount () {
+    this.viewContacts()
   }
 
   componentDidMount () {
@@ -62,23 +63,18 @@ class UserContacts extends Component {
   toggleNewContact () {
     this.setState({ newContactBool: !this.state.newContactBool })
   }
-  // handleFormChange (event) {
-  //   const { name, value } = event.target
-  //   this.setState({
-  //     newContact: {
-  //       ...this.state.newContact,
-  //       [name]: value
-  //     }
-  //   })
-  // }
+  viewContacts () {
+    const { userDispatch } = this.props
+    userDispatch.getContacts(true, 1)
+  }
   handleValidSubmit (contact, reset, invalidate) {
-    const { contacts } = this.props
+    const { contactsData } = this.props
 
     this.setState({ submitAttempted: true })
 
     let shouldDispatch = true
-
-    contacts.forEach((_contact) => {
+    
+    contactsData.forEach((_contact) => {
       const contactWithLocation = {
         city: _contact.location && _contact.location.city,
         companyName: _contact.company_name,
@@ -115,7 +111,7 @@ class UserContacts extends Component {
   render () {
     const { newContact, newContactBool, submitAttempted } = this.state
     const {
-      theme, contacts, hubs, contactData, userDispatch, loading
+      theme, hubs, contactData, contactsData, userDispatch, loading, numPages
     } = this.props
 
     const mailCheckCallback = suggestion => (
@@ -356,8 +352,9 @@ class UserContacts extends Component {
                 newContactBox={newContactBool ? newContactBox : ''}
                 toggleNewContact={this.toggleNewContact}
                 handleClientAction={this.handleClientAction}
-                contacts={contacts}
+                contacts={contactsData}
                 hubs={hubs}
+                numPages={numPages}
                 userDispatch={userDispatch}
                 viewContact={this.viewContact}
                 {...props}
@@ -386,11 +383,14 @@ class UserContacts extends Component {
 }
 UserContacts.propTypes = {
   theme: PropTypes.theme,
+  numPages: PropTypes.number,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  contacts: PropTypes.arrayOf(PropTypes.object),
+  contactsData: PropTypes.arrayOf(PropTypes.contact),
   dispatch: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getContact: PropTypes.func,
+    getContacts: PropTypes.func,
+    goTo: PropTypes.func,
     confirmShipment: PropTypes.func
   }).isRequired,
   history: PropTypes.history.isRequired,
@@ -405,7 +405,8 @@ UserContacts.propTypes = {
 UserContacts.defaultProps = {
   theme: null,
   loading: false,
-  contacts: null,
+  contactsData: [],
+  numPages: 1,
   hubs: []
 }
 
@@ -413,17 +414,18 @@ function mapStateToProps (state) {
   const { authentication, tenant, users } = state
   const { user, loggedIn } = authentication
   const {
-    contactData, dashboard, hubs, loading
+    contactData, contactsData, dashboard, hubs, loading
   } = users
-  const { contacts } = dashboard
+  const { num_contact_pages } = dashboard // eslint-disable-line
 
   return {
     user,
     tenant,
     loggedIn,
-    contacts,
     hubs,
+    numPages: num_contact_pages,
     contactData,
+    contactsData,
     loading
   }
 }

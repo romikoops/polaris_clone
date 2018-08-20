@@ -269,6 +269,31 @@ export default function users (state = initialState, action) {
       return errContact
     }
 
+    case userConstants.GET_CONTACTS_REQUEST: {
+      // const reqContact = merge({}, state, {
+      //   loading: true
+      // })
+
+      return state
+    }
+    case userConstants.GET_CONTACTS_SUCCESS: {
+      const cData = action.payload.data.contacts
+      return {
+        ...state,
+        contactsData: cData,
+        num_contact_pages: state.dashboard.num_contact_pages,
+        loading: false
+      }
+    }
+    case userConstants.GET_CONTACTS_FAILURE: {
+      const errContact = merge({}, state, {
+        loading: false,
+        error: { contact: action.error }
+      })
+
+      return errContact
+    }
+
     case userConstants.NEW_CONTACT_REQUEST: {
       const reqNewContact = merge({}, state, {
         loading: true
@@ -480,7 +505,7 @@ export default function users (state = initialState, action) {
           [action.payload.data.target]: action.payload.data.shipments,
           num_shipment_pages: {
             ...state.shipments.num_shipment_pages,
-              [action.payload.data.target]: action.payload.data.num_shipment_pages, // eslint-disable-line
+            [action.payload.data.target]: action.payload.data.num_shipment_pages, // eslint-disable-line
           },
           pages: {
             ...state.shipments.pages,

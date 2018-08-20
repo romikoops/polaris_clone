@@ -28,7 +28,10 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
     </div>
   </div>,
   locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
-    <div key={v4()} className={`flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}>
+    <div
+      key={v4()}
+      className={`flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
+    >
       <div className={`${styles['location-box']} flex-100 layout-column`}>
         <div className={`${styles.header} layout-row layout-align-end-center`}>
           {op.user.primary ? (
@@ -59,7 +62,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
         </div>
         <div className={`layout-row flex-100 ${styles.location_address}`}>
           <i className="flex-10 fa fa-map-marker clip" style={gradient} />
-          <div className={`${styles.content} flex-90 layout-row layout-wrap layout-align-space-between`}>
+          <div className={`${styles.content} flex layout-wrap layout-align-space-between`}>
             {op && op.location.street_number && op.location.street ? (
               <p className="flex-100">{op.location.street_number} {op.location.street} </p>
             ) : ''}

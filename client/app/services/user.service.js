@@ -140,6 +140,15 @@ function getDashboard (userId) {
   return fetch(`${BASE_URL}/users/${userId}/home`, requestOptions).then(handleResponse)
 }
 
+function getContacts (page) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/contacts?page=${page || 1}`, requestOptions).then(handleResponse)
+}
+
 function deleteDocument (documentId) {
   const requestOptions = {
     method: 'GET',
@@ -295,6 +304,7 @@ export const userService = {
   getById,
   getStoredUser,
   getContact,
+  getContacts,
   updateContact,
   newContact,
   newAlias,

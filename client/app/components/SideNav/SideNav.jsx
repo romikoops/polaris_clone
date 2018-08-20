@@ -202,14 +202,11 @@ class SideNav extends Component {
       case 'pricing':
         userDispatch.getPricings(user.id, true)
         break
-      // case 'chooseRoutes':
-      //   this.toggleModal()
-      //   break
       case 'shipments':
         userDispatch.getShipments(1, 1, 1, true)
         break
       case 'contacts':
-        userDispatch.goTo('/account/contacts')
+        userDispatch.getContacts(true, 1)
         break
       case 'dashboard':
         userDispatch.getDashboard(user.id, true)

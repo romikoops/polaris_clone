@@ -350,7 +350,8 @@ export const rateBasises = [
   { value: 'PER_CBM', label: 'Per cbm' },
   { value: 'PER_TON', label: 'Per ton' },
   { value: 'PERCENTAGE', label: 'Percentage' },
-  { value: 'PER_BILL', label: 'Per Bill of Lading' }
+  { value: 'PER_BILL', label: 'Per Bill of Lading' },
+  { value: 'PER_KG_RANGE', label: 'Per Kilogram Range' }
 ]
 export const truckingRateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
@@ -626,6 +627,11 @@ export const rateBasisSchema = {
     rate: 5,
     extra: 5,
     rate_basis: 'PER_BILL'
+  },
+  PER_KG_RANGE: {
+    currency: 'EUR',
+    rate_basis: 'PER_KG_RANGE',
+    range: []
   }
 }
 export const fclPricingSchema = {
