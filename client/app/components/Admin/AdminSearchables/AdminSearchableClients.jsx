@@ -91,7 +91,7 @@ export class AdminSearchableClients extends Component {
     }
 
     return (
-      <div className={`layout-row flex-100 layout-wrap ${styles.searchable}`}>
+      <div className={`layout-row flex-95 layout-wrap ${styles.searchable}`}>
         {title ? (
           <div className="flex-100 layout-row layout-align-space-between-center">
             <div
