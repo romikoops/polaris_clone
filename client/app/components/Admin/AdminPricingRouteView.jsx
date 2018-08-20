@@ -16,7 +16,7 @@ import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import { AdminPricingDedicated } from './Pricing/Dedicated'
 import { AdminPricingBox } from './Pricing/Box'
-import AdminPricingTest from './Pricing/Test'
+// import AdminPricingTest from './Pricing/Test'
 import CollapsingContent from '../CollapsingBar/Content'
 
 export class AdminPricingRouteView extends Component {
@@ -304,7 +304,7 @@ export class AdminPricingRouteView extends Component {
             />
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" >
-            <AdminPricingTest itinerary={itinerary} />
+            {/* <AdminPricingTest itinerary={itinerary} /> */}
           </div>
 
         </div>

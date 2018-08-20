@@ -35,7 +35,7 @@ export class AdminHubsIndex extends Component {
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
     const newButton = (
-      <div className="flex-none layout-row">
+      <div className="flex-100 layout-row">
         <RoundButton
           theme={theme}
           size="small"
@@ -52,6 +52,7 @@ export class AdminHubsIndex extends Component {
 
     const actionNodes = [<SideOptionsBox
       header="Data manager"
+      flexOptions="flex"
       content={(
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
           <CollapsingBar
