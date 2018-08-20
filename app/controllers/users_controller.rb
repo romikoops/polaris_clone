@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
     user_locs = @shipper.user_locations
     locations = user_locs.map do |ul|
-      { user: ul, location: ul.location }
+      { user: ul, location: ul.location.to_custom_hash }
     end
 
     resp = {

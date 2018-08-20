@@ -35,7 +35,7 @@ class UserLocationsController < ApplicationController
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push(user: ul, location: ul.location)
+      resp.push(user: ul, location: ul.location.to_custom_hash)
     end
     response_handler(resp)
   end
@@ -44,13 +44,14 @@ class UserLocationsController < ApplicationController
     user = User.find(params[:user_id])
     location_data = JSON.parse(params[:edit_location])
     location_data.delete("id")
+    location_data["country"] = Country.geo_find_by_name(location_data["country"])
     user_loc = Location.find(params[:location_id])
     user_loc.update_attributes(location_data)
     user_loc.save!
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push(user: ul, location: ul.location)
+      resp.push(user: ul, location: ul.location.to_custom_hash)
     end
     response_handler(resp)
   end

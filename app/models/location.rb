@@ -150,7 +150,7 @@ class Location < ApplicationRecord
     locations = user.locations
     locations.map do |loc|
       prim = { primary: loc.is_primary_for?(user) }
-      loc.attributes.merge(prim)
+      loc.to_custom_hash.merge(prim)
     end
   end
 
