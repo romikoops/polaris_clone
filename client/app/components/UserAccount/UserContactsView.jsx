@@ -94,7 +94,7 @@ const EditProfileBox = ({
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
+      <div className="flex-50 layout-row layout-align-center-center button_padding">
         <RoundButton
           theme={theme}
           handleNext={close}
@@ -103,7 +103,7 @@ const EditProfileBox = ({
           iconClass="fa-times"
         />
       </div>
-      <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
+      <div className="flex-50 layout-row layout-align-center-center button_padding">
         <RoundButton
           theme={theme}
           handleNext={onSave}
