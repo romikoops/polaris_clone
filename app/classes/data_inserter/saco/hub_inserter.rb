@@ -61,6 +61,22 @@ module DataInserter
           return @mandatory_charge
         end
 
+        def find_or_create_origin(data)
+          data[:itineraries].each do |itinerary_hash|
+            @origin = @user.tenant.hubs.find_by(itinerary_hash[:origin])
+            @origin ||= @user.tenant.hubs.find_or_create_by(
+              name: "#{@existing_hub_data[:name].strip} #{hub_type_name[@hub_type]}",
+              latitude: @existing_hub_data[:latitude],
+              longitude: @existing_hub_data[:longitude],
+              location: @existing_hub_data[:location],
+              nexus: @existing_hub_data[:nexus],
+              hub_type: @hub_type,
+              hub_code: @existing_hub_data[:code],
+              mandatory_charge: mandatory_charge
+            )
+          end
+        end
+
         def find_or_create_hub
           return if !@existing_hub_data
           mandatory_charge = default_mandatory_charge
@@ -83,7 +99,7 @@ module DataInserter
             @hub.mandatory_charge = mandatory_charge
             @hub.save!
           end
-          awesome_print @hub.mandatory_charge
+
           @hubs << {hub: @hub, data: @hub_data}
         end
 
@@ -103,7 +119,7 @@ module DataInserter
           
           return if @checked_hubs.include?(name)
           port_location = Location.geocoded_location("#{name}, #{country_name}")
-          puts port_location.city
+
           port_nexus = Nexus.from_short_name("#{name} ,#{country_name}", @user.tenant_id)
           country = Country.find_by_name(country_name)
           if country.nil?

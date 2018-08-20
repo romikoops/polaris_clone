@@ -122,16 +122,15 @@ class Nexus < ApplicationRecord
 
   def self.from_short_name(input, tenant_id)
     city, country_name = *input.split(" ,")
-    puts input
+
     country = Country.geo_find_by_name(country_name)
-    awesome_print country
+
     location = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
     return location unless location.nil?
 
     temp_location = Location.new(geocoded_address: input)
     temp_location.geocode
     temp_location.reverse_geocode
-    awesome_print temp_location.country
     nexus = Nexus.find_by(name: city, country: country, tenant_id: tenant_id)
     return nexus unless nexus.nil?
     if country.nil? && temp_location.country.nil?

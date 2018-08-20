@@ -113,10 +113,10 @@ module DataParser
         end
       end
 
-      def determine_routes(hash)
+      def determine_routes(hash, port_name)
         itineraries = {}
         return nil unless hash[:ports_of_loading]
-        destination = destination_port_name
+        destination = destination_port_name(port_name)
         origins = hash[:ports_of_loading].delete(' ').split("/").map do |hub_code|
           hub_name = determine_hub_from_abbreviation(hub_code)
           itineraries[hub_code] = { 
@@ -128,8 +128,7 @@ module DataParser
         itineraries
       end
 
-      def destination_port_name
-        port_name = @row[:destination]
+      def destination_port_name(port_name)
         if port_name.downcase.end_with?(" port")
           return port_name
         else
@@ -152,6 +151,10 @@ module DataParser
         when "FXT"
           "Felixstowe Port"
         end
+      end
+
+      def return_country_for_origin
+
       end
 
       def hub_abbreviations_from_country(_country)
@@ -198,10 +201,13 @@ module DataParser
           }
         end
         names_obj = extract_names(hash[:destination])
+        # if names_obj[:name] == 'Cabinda'
+        #   byebug
+        # end
         {
           rate: rates,
           data: {
-            itineraries:       determine_routes(hash),
+            itineraries:       determine_routes(hash, names_obj[:name]),
             code:              hash[:code],
             port:              names_obj[:name],
             alternative_names: names_obj[:alternative_names],
@@ -235,17 +241,43 @@ module DataParser
         [check1, check2, check3, check4, check5].none?(nil)
       end
 
+      def parse_alternative_names(str)
+        if str.include?('/')
+          return str.split('/').map{|char| char.delete("(").delete(")")}
+        elsif str.include?(',')
+          return str.split(',').map{|char| char.delete("(").delete(")")}
+        else
+          return str.delete("(").delete(")")
+        end
+      end
+
       def extract_names(str)
         new_str = str.gsub("(Free-out)", "")
-        alternative_names = new_str[/\(.*?\)/]
+        alternative_names_str = new_str[/\(.*?\)/]
+        new_str.sub!(/\(.*?\)/, "")
+        if !alternative_names_str && new_str.include?(',')
+          names = new_str.split(',')
+          new_str = names.shift()
+          alternative_names = names
+        elsif alternative_names_str
+          alternative_names = parse_alternative_names(alternative_names_str)
+        end
         if alternative_names
-          new_str.gsub!(/\(.*?\)/, "")
-          alt_name = alternative_names.delete("(").delete(")")
+         
+          alt_name = alternative_names
         end
         if new_str.end_with?("  ")
-          new_str.slice!(-2)
-        elsif new_str.end_with?("  ")
+          new_str.slice!(-2, 2)
+        elsif new_str.end_with?(" ")
           new_str.slice!(-1)
+        end
+        if new_str.starts_with?("  ")
+          new_str.slice!(0,1)
+        elsif new_str.starts_with?(" ")
+          new_str.slice!(0)
+        end
+        if new_str.include?("(")
+          byebug
         end
         { name: new_str, alternative_names: alt_name }
       end

@@ -70,6 +70,9 @@ module DataInserter
               tenant: @tenant
             )
           create_stops(itinerary_hash)
+          if @itinerary.stops.length < 2
+            # byebug
+          end
           @itinerary.save!
         end
 
@@ -127,7 +130,8 @@ module DataInserter
 
         def create_pricings
           @rate_hash[:rate].each do |rate|
-            find_transport_category(rate[:cargo_class])
+            @rate = rate.dup()
+            find_transport_category(@rate[:cargo_class])
             default_pricing_values = {
               transport_category: @transport_category,
               tenant: @tenant,
@@ -140,10 +144,10 @@ module DataInserter
               byebug
             end
             pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
-            pricing_details = [rate]
+            pricing_details = [@rate]
             
             pricing_details.each do |pricing_detail|
-              puts pricing_detail
+              # puts pricing_detail
               shipping_type = pricing_detail.delete(:code)
               currency = pricing_detail.delete(:currency)
               cargo_class = pricing_detail.delete(:cargo_class)
@@ -152,7 +156,7 @@ module DataInserter
               pricing_detail.update!(pricing_detail_params)
               pricing_detail.update!(currency_name: currency) # , external_updated_at: external_updated_at)
             end
-              awesome_print pricing_to_update.as_json
+              # awesome_print pricing_to_update.as_json
           end
         end
 

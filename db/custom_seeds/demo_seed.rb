@@ -18,17 +18,17 @@ subdomains.each do |sub|
   # ShippingTools.tenant_notification_email(shipper, shipment)
   # ShippingTools.shipper_notification_email(shipper, shipment)
   # ShippingTools.shipper_confirmation_email(shipper, conf_shipment)
-#   tenant.itineraries.destroy_all
-#   tenant.local_charges.destroy_all
-#   tenant.customs_fees.destroy_all
+  tenant.itineraries.destroy_all
+  tenant.local_charges.destroy_all
+  tenant.customs_fees.destroy_all
 # # #   # tenant.trucking_pricings.delete_all
-#   tenant.hubs.destroy_all
+  tenant.hubs.destroy_all
 # # # # #   # # # # #Overwrite hubs from excel sheet
 # #   # puts "# Overwrite hubs from excel sheet"
 
-#   hubs = File.open("#{Rails.root}/db/dummydata/demo/demo__hubs.xlsx")
-#   req = { 'xlsx' => hubs }
-#   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
   # Addon.destroy_all
   # agents = File.open("#{Rails.root}/db/dummydata/gateway/gateway__agents.xlsx")
   # req = { 'xlsx' => agents }
@@ -37,7 +37,7 @@ subdomains.each do |sub|
 
   
 
-  path = "#{Rails.root}/db/dummydata/saco/fcl_test_export_loader.xlsx"
+  path = "#{Rails.root}/db/dummydata/saco/fcl_export_loader.xlsx"
   imp_data = DataParser::Saco::SheetParserExport.new(path: path,
     _user: shipper,
     hub_type: 'ocean',
@@ -48,7 +48,7 @@ subdomains.each do |sub|
     _user: shipper,
     hub_type: 'ocean',
     direction: 'export').perform
-
+    
   res = DataInserter::Saco::RateInserter.new(rates: imp_data,
     tenant: tenant,
     # counterpart_hub: 'Copenhagen Port',
