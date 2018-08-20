@@ -18,8 +18,6 @@ require "charge_calculator/reducers/sum"
 require "charge_calculator/reducers/max"
 require "charge_calculator/reducers"
 
-require "charge_calculator/calculation"
-
 require "charge_calculator/calculators/base"
 require "charge_calculator/calculators/flat"
 require "charge_calculator/calculators/volume"
@@ -38,4 +36,7 @@ require "charge_calculator/contexts/shipment"
 require "charge_calculator/main"
 
 module ChargeCalculator
+  def self.calculate(shipment_params:, pricings:)
+    Main.new(shipment_params: shipment_params, pricings: pricings).price
+  end
 end
