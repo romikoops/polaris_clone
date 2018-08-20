@@ -8,8 +8,8 @@ module DataInserter
 
       def post_initialize(args)
         @rates = args[:rates]
-        @counterpart_hub = args[:counterpart_hub]
-        @counterpart_nexus = args[:counterpart_hub].split(' Port').first
+        # @counterpart_hub = args[:counterpart_hub]
+        # @counterpart_nexus = args[:counterpart_hub].split(' Port').first
         @tenant = args[:tenant]
         @direction = args[:direction]
         @cargo_class = args[:cargo_class]
@@ -94,7 +94,7 @@ module DataInserter
         end
 
         def generate_trips
-          transit_time = @rate[:data][:transit_time] ? @rate[:data][:transit_time].to_i : 30
+          transit_time = @rate_hash[:data][:transit_time] ? @rate_hash[:data][:transit_time].to_i : 30
           @itinerary.generate_weekly_schedules(
             @itinerary.stops.order(:index),
             [transit_time],
@@ -115,34 +115,45 @@ module DataInserter
           }
         end
 
-        def find_transport_category
-          service_level = @rate[:data][:service_level] || 'standard'
-          vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: @rate[:data][:mot], tenant_id: @tenant.id)
-          @tenant_vehicle = vehicle.presence || Vehicle.create_from_name(service_level, @rate[:data][:mot], @tenant.id)
-          @transport_category = @tenant_vehicle.vehicle.transport_categories.find_by(name: "any", cargo_class: @cargo_class)
+        def find_transport_category(cargo_class)
+          @transport_category = @tenant_vehicle.vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_class)
+        end
+
+        def find_tenant_vehicle
+          service_level = @rate_hash[:data][:service_level] || 'standard'
+          vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: @rate_hash[:data][:mot], tenant_id: @tenant.id)
+          @tenant_vehicle = vehicle.presence || Vehicle.create_from_name(service_level, @rate_hash[:data][:mot], @tenant.id)
         end
 
         def create_pricings
-          default_pricing_values = {
-            transport_category: @transport_category,
-            tenant: @tenant,
-            user: nil,
-            wm_rate: 1000,
-            effective_date: DateTime.now,
-            expiration_date: DateTime.now + 365
-          }
-          pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
-          pricing_details = @rate.delete(:rate)
-          pricing_details.each do |pricing_detail|
-            puts pricing_detail
-            shipping_type = pricing_detail.delete(:code)
-            currency = pricing_detail.delete(:currency)
-            pricing_detail_params = pricing_detail.merge(shipping_type: shipping_type, tenant: @tenant)
-            pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: @tenant)
-            pricing_detail.update!(pricing_detail_params)
-            pricing_detail.update!(currency_name: currency) # , external_updated_at: external_updated_at)
+          @rate_hash[:rate].each do |rate|
+            find_transport_category(rate[:cargo_class])
+            default_pricing_values = {
+              transport_category: @transport_category,
+              tenant: @tenant,
+              user: nil,
+              wm_rate: 1000,
+              effective_date: DateTime.now,
+              expiration_date: DateTime.now + 365
+            }
+            if !@transport_category
+              byebug
+            end
+            pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
+            pricing_details = [rate]
+            
+            pricing_details.each do |pricing_detail|
+              puts pricing_detail
+              shipping_type = pricing_detail.delete(:code)
+              currency = pricing_detail.delete(:currency)
+              cargo_class = pricing_detail.delete(:cargo_class)
+              pricing_detail_params = pricing_detail.merge(shipping_type: shipping_type, tenant: @tenant)
+              pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: @tenant)
+              pricing_detail.update!(pricing_detail_params)
+              pricing_detail.update!(currency_name: currency) # , external_updated_at: external_updated_at)
+            end
+              awesome_print pricing_to_update.as_json
           end
-            awesome_print pricing_to_update.as_json
         end
 
 
@@ -151,7 +162,7 @@ module DataInserter
             @rate_hash = rate_hash
             @rate_hash[:data][:itineraries].each do |hub_code, itinerary|
               find_or_create_itinerary(itinerary)
-              find_transport_category
+              find_tenant_vehicle
               generate_trips
               create_pricings
             end

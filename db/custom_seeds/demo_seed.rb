@@ -37,22 +37,23 @@ subdomains.each do |sub|
 
   
 
-  path = "#{Rails.root}/db/dummydata/saco/fcl_export_loader.xlsx"
+  path = "#{Rails.root}/db/dummydata/saco/fcl_test_export_loader.xlsx"
   imp_data = DataParser::Saco::SheetParserExport.new(path: path,
     _user: shipper,
     hub_type: 'ocean',
     load_type: 'container').perform
+    
   imp_hubs = DataInserter::Saco::HubInserter.new(data: imp_data,
     tenant: tenant,
     _user: shipper,
     hub_type: 'ocean',
     direction: 'export').perform
 
-  # res = DataInserter::PfcNordic::RateInserter.new(rates: imp_data,
-  #   tenant: tenant,
-  #   counterpart_hub: 'Copenhagen Port',
-  #   direction: 'import',
-  #   cargo_class: 'lcl').perform
+  res = DataInserter::Saco::RateInserter.new(rates: imp_data,
+    tenant: tenant,
+    # counterpart_hub: 'Copenhagen Port',
+    direction: 'export',
+    cargo_class: 'container').perform
 
   # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_export.xlsx"
   

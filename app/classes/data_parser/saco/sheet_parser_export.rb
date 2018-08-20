@@ -80,6 +80,7 @@ module DataParser
       end
 
       def row_to_hash(row)
+        
         {
           ports_of_loading: row[:origins],
           carrier:          row[:carrier],
@@ -114,9 +115,9 @@ module DataParser
 
       def determine_routes(hash)
         itineraries = {}
-        next unless hash[:ports_of_loading]
+        return nil unless hash[:ports_of_loading]
         destination = destination_port_name
-        origins = hash[:ports_of_loading].split("/").map do |hub_code|
+        origins = hash[:ports_of_loading].delete(' ').split("/").map do |hub_code|
           hub_name = determine_hub_from_abbreviation(hub_code)
           itineraries[hub_code] = { 
             name: "#{hub_name} - #{destination}",
@@ -192,7 +193,8 @@ module DataParser
             rate_basis: "PER_CONTAINER",
             rate:       hash[:rates][sym],
             currency:   hash[:currency],
-            code:       "BAS"
+            code:       "BAS",
+            cargo_class:  sym.to_s
           }
         end
         names_obj = extract_names(hash[:destination])
