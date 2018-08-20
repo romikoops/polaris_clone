@@ -278,10 +278,10 @@ export default function users (state = initialState, action) {
     }
     case userConstants.GET_CONTACTS_SUCCESS: {
       const cData = action.payload.data.contacts
-
       return {
         ...state,
         contactsData: cData,
+        num_contact_pages: state.dashboard.num_contact_pages,
         loading: false
       }
     }

@@ -245,7 +245,7 @@ export class AdminHubsComp extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-space-between-start">
-          <div className="layout-row flex-80 flex-sm-100">
+          <div className="layout-row flex-80 flex-md-75 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
               <div className="layout-row flex-95 layout-wrap card_margin_right" style={{ minHeight: '450px' }}>
                 {hubsArr}
@@ -278,12 +278,13 @@ export class AdminHubsComp extends Component {
 
             </div>
           </div>
-          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
-            <div className={`${styles.position_fixed_right}`}>
+          <div className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+            <div className={`${styles.position_fixed_right} flex`}>
 
               <div className={`${styles.filter_panel} flex layout-row`}>
                 <SideOptionsBox
                   header="Filters"
+                  flexOptions="flex"
                   content={(
                     <div>
                       <div

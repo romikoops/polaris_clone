@@ -465,7 +465,6 @@ function getContacts (redirect, page) {
         if (redirect) {
           dispatch(push(`/account/contacts`))
         }
-
         dispatch(success(data))
       },
       (error) => {

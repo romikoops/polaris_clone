@@ -31,41 +31,28 @@ export default function ContactCard ({
     >
       <div className={styles.overlay} />
       <div className="flex layout-row layout-wrap">
-        <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-60 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row alyout-align-start-center">
-              <i className="fa fa-user-circle-o flex-none clip" style={iconStyle} />
-              <p className={`flex ${styles.contact_header}`}>
-                {contact.firstName} {contact.lastName}
-              </p>
-            </div>
+
+        <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+          <div className="flex-100 layout-row alyout-align-start-center">
+            <i className="fa fa-user-circle-o flex-none clip" style={iconStyle} />
+            <p className={`flex ${styles.contact_header}`}>
+              {contact.firstName} {contact.lastName}
+            </p>
           </div>
-          <div className={
-            `flex-40 layout-row layout-wrap layout-align-start-center ${styles.contact_details}`
-          }
-          >
+          <div className="flex-100 layout-row layout-align-start-center">
+            <i className="fa fa-building-o flex-none clip" style={iconStyle} />
+            <p className={`flex-80 ${styles.contact_header}`}>
+              <Truncate trimWhitespace> {contact.companyName} </Truncate>
+            </p>
+          </div>
+          <div className={`flex-100 layout-row layout-wrap ${styles.info_wrapper}`}>
             <div className="flex-100 layout-row layout-align-start-center">
               <i className="fa fa-envelope flex-none clip" style={iconStyle} />
-              <p className="flex-none"> {contact.email} </p>
+              <div className="flex-none"> {contact.email} </div>
             </div>
-          </div>
-        </div>
-        <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-60 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <i className="fa fa-building-o flex-none clip" style={iconStyle} />
-              <p className={`flex-80 ${styles.contact_header}`}>
-                <Truncate trimWhitespace> {contact.companyName} </Truncate>
-              </p>
-            </div>
-          </div>
-          <div className={
-            `flex-40 layout-row layout-wrap layout-align-start-center ${styles.contact_details}`
-          }
-          >
             <div className="flex-100 layout-row layout-align-start-center">
               <i className="fa fa-phone flex-none clip" style={iconStyle} />
-              <p className="flex-none"> {contact.phone} </p>
+              <div className="flex-none"> {contact.phone} </div>
             </div>
           </div>
         </div>

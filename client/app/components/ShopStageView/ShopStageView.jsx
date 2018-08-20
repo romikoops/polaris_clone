@@ -128,7 +128,7 @@ export class ShopStageView extends Component {
     )
     const help = (
       <div
-        className={`${styles.help_btn} flex-none layout-row layout-align-center-center pointy`}
+        className="flex-none layout-row layout-align-center-center pointy"
         onClick={() => this.showContactHelp()}
       >
         <p className="flex-none">Need Help</p>
@@ -173,9 +173,9 @@ export class ShopStageView extends Component {
         </div>
         <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
           {backBtn}
-          <div className="layout-row layout-align-start-center">
+          <div>
             <div
-              className={`${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}
+              className={`${styles.line_box} layout-row layout-align-center flex-none`}
             >
               <div className={`${styles.line} flex-none`} />
               {stageBoxes}

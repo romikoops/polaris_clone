@@ -15,9 +15,8 @@ export default function ShipmentOverviewShowCard ({
     <div className="flex-100 layout-row">
       <div className={`${styles.info_hub_box} flex-60 layout-column`}>
         <h3>{hub.name}</h3>
-        {/* <p className={styles.address}>{hub.location.geocoded_address}</p> */}
         {et ? <div className="layout-row layout-align-start-center">
-          <div className="layout-column flex-60 layout-align-center-start">
+          <div className="flex-60 layout-align-center-start">
             <span>
             ETD
             </span>
@@ -28,7 +27,7 @@ export default function ShipmentOverviewShowCard ({
           {isAdmin
             ? (<div className="layout-row flex-40 layout-align-center-stretch">
               {editTime ? (
-                <span className="layout-column flex-100 layout-align-center-stretch">
+                <span className="flex-100 layout-align-center-stretch">
                   <div
                     onClick={handleSaveTime}
                     className={`layout-row flex-50 ${styles.save} layout-align-center-center`}

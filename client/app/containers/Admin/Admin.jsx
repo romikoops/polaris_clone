@@ -110,6 +110,7 @@ class Admin extends Component {
       position: 'relative',
       paddingBottom: '230px'
     }
+    const footerWidth = this.pageWindow ? this.pageWindow.offsetWidth : false
 
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
@@ -119,6 +120,7 @@ class Admin extends Component {
         <div
           className="flex layout-row layout-align-center-start layout-wrap"
           style={footerStyle}
+          ref={(ref) => { this.pageWindow = ref }}
         >
           <NavBar className={`${styles.top_margin}`} />
           <div
@@ -259,7 +261,7 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
-          <Footer theme={theme} tenant={tenant.data} isShop />
+          <Footer width={footerWidth} theme={theme} tenant={tenant.data} isShop />
         </div>
       </div>
     )

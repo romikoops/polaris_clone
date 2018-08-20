@@ -93,15 +93,17 @@ export class UserDashboard extends Component {
               className={`layout-row flex-100 layout-align-start-center
               ${ustyles.headerElement}`}
             >
-              <span className="layout-row flex-10 layout-align-center-center">
-                <i
-                  className={`fa fa-user clip ${ustyles.bigProfile}`}
-                  style={gradientFontStyle}
-                />
-              </span>
-              <span className={`${ustyles.welcome} flex-90 layout-row`}>
+              <div className="flex-60 layout-row layout-align-space-around-center">
+                <div className="layout-row flex-none layout-align-center-center">
+                  <i
+                    className={`fa fa-user clip ${ustyles.bigProfile}`}
+                    style={gradientFontStyle}
+                  />
+                </div>
+                <div className={`${ustyles.welcome} flex layout-row`}>
                 Welcome back,&nbsp; <b>{user.first_name}</b>
-              </span>
+                </div>
+              </div>
               <SquareButton
                 theme={theme}
                 handleNext={this.startBooking}

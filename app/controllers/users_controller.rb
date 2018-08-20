@@ -44,7 +44,7 @@ class UsersController < ApplicationController
       },
       pricings:          @pricings,
       contacts:          @contacts,
-      num_contact_pages: @shipper.contacts.count / 6,
+      num_contact_pages: (@shipper.contacts.count.to_f / 6).to_f.ceil,
       aliases:           @aliases,
       locations:         locations
     }

@@ -73,8 +73,8 @@ class UserContacts extends Component {
     this.setState({ submitAttempted: true })
 
     let shouldDispatch = true
-
-    contactsData.contacts.forEach((_contact) => {
+    
+    contactsData.forEach((_contact) => {
       const contactWithLocation = {
         city: _contact.location && _contact.location.city,
         companyName: _contact.company_name,
