@@ -1,0 +1,5 @@
+speedups:
+  # rescue_vs_respond_to: true
+exclude_paths:
+  - 'vendor/**/*.rb'
+  - 'db/schema.rb'
