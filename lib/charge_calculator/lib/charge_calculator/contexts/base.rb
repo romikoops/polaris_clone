@@ -3,9 +3,6 @@
 module ChargeCalculator
   module Contexts
     class Base
-      extend Forwardable
-      def_delegator :hash, :fetch
-
       def to_h
         hash
       end
@@ -15,7 +12,17 @@ module ChargeCalculator
       end
 
       def [](key)
-        hash[key].is_a?(Proc) ? hash[key].call(self) : hash[key]
+        call_if_proc(hash[key])
+      end
+
+      def fetch(key, default=nil, &block)
+        call_if_proc(hash.fetch(key, default, &block))
+      end
+
+      private
+
+      def call_if_proc(value)
+        value.is_a?(Proc) ? value.call(self) : value
       end
     end
   end

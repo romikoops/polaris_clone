@@ -3,9 +3,19 @@
 module ChargeCalculator
   module Contexts
     class Shipment < Base
-      def hash
-        { flat: 1 }
+      def initialize(data: {})
+        @data = data
       end
+
+      def hash
+        @hash ||= {
+          bills_of_lading: data[:bills_of_lading]
+        }
+      end
+
+      private
+
+      attr_reader :data
     end
   end
 end

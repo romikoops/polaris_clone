@@ -2,9 +2,9 @@
 
 module ChargeCalculator
   module Calculators
-    class Volume < Base
+    class BillOfLading < Base
       def result(context:, amount:)
-        context[:volume] * amount * quantity(context)
+        (context.fetch(:bills_of_lading)&.size || 1) * amount
       end
     end
   end

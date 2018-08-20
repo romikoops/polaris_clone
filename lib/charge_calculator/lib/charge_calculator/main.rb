@@ -4,7 +4,7 @@ module ChargeCalculator
   class Main
     def initialize(shipment_params:, pricings:)
       @pricings = pricings.map do |pricing_hash|
-        Models::Pricing.new(data: pricing_hash)
+        Models::Pricing.new(pricing_hash)
       end
 
       @cargo_units = shipment_params[:cargo_units].map do |cargo_unit_hash|
@@ -22,26 +22,16 @@ module ChargeCalculator
 
     def perform
       prices = pricings.map do |pricing|
-        shipment_calculation = Calculation.new(
-          rates:   pricing.shipment_rates,
-          context: Contexts::Shipment.new
-        )
+        pricing_shipment_prices = pricing.shipment_rates.map do |rate|
+          rate.price(context: Contexts::Shipment.new)
+        end
 
         pricing_cargo_unit_prices = cargo_units.map do |cargo_unit|
-          cargo_unit_calculation = Calculation.new(
-            rates:   pricing.cargo_unit_rates,
-            context: Contexts::CargoUnit.new(pricing: pricing, cargo_unit: cargo_unit)
-          )
-
-          Models::Price.new(
-            children:    cargo_unit_calculation.prices,
-            category:    "cargo_unit",
-            description: "cargo_unit_#{cargo_unit[:id]}"
-          )
+          cargo_unit.price(pricing: pricing)
         end
 
         Models::Price.new(
-          children:    [*shipment_calculation.prices, *pricing_cargo_unit_prices],
+          children:    [*pricing_shipment_prices, *pricing_cargo_unit_prices],
           category:    "route",
           description: pricing.route
         )

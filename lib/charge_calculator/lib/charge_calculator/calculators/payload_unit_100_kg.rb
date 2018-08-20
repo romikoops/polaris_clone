@@ -2,9 +2,9 @@
 
 module ChargeCalculator
   module Calculators
-    class Volume < Base
+    class PayloadUnit100Kg < Base
       def result(context:, amount:)
-        context[:volume] * amount * quantity(context)
+        (context.fetch(:payload) / 100.0).ceil * amount * quantity(context)
       end
     end
   end

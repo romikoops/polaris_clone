@@ -3,8 +3,16 @@
 module ChargeCalculator
   module Calculators
     class Base
-      def result(*_args)
-        raise NotImplementedError
+      def result
+        raise NotImplementError
+      end
+
+      private
+
+      attr_reader :context, :amount
+
+      def quantity(context)
+        context.fetch(:quantity, 1)
       end
     end
   end

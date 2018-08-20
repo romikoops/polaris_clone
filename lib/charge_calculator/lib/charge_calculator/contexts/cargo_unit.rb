@@ -3,9 +3,6 @@
 module ChargeCalculator
   module Contexts
     class CargoUnit < Base
-      extend Forwardable
-      def_delegator :hash, :fetch
-
       def initialize(pricing:, cargo_unit:)
         @pricing    = pricing
         @cargo_unit = cargo_unit
@@ -13,23 +10,34 @@ module ChargeCalculator
 
       def hash
         @hash ||= {
-          payload:             BigDecimal(cargo_unit.payload),
-          volume:              BigDecimal(cargo_unit.volume),
-          dimensions:          dimensions,
-          quantity:            cargo_unit.quantity.to_i,
-          chargeable_payload:  chargeable_payload,
-          payload_unit_100_kg: payload_unit_100_kg,
-          flat:                1
+          payload:            BigDecimal(cargo_unit.payload),
+          volume:             BigDecimal(cargo_unit.volume),
+          dimensions:         dimensions,
+          quantity:           cargo_unit.quantity.to_i,
+          chargeable_payload: chargeable_payload,
+          weight_measure:     weight_measure,
+          goods_value:        cargo_unit.goods_value
         }
       end
 
       private
+
+      attr_reader :pricing, :cargo_unit
 
       def chargeable_payload
         lambda do |context|
           [
             context[:payload],
             context[:volume] * pricing.weight_measure
+          ].max
+        end
+      end
+
+      def weight_measure
+        lambda do |context|
+          [
+            context[:payload] / pricing.weight_measure,
+            context[:volume]
           ].max
         end
       end
@@ -41,12 +49,6 @@ module ChargeCalculator
           end
         end
       end
-
-      def payload_unit_100_kg
-        ->(context) { (context[:payload] / 100.0).ceil }
-      end
-
-      attr_reader :pricing, :cargo_unit
     end
   end
 end

@@ -5,27 +5,29 @@ require "spec_helper"
 RSpec.describe ChargeCalculator::Main do
   let(:cargo_item_1) do
     {
-      id:         1,
-      quantity:   2,
-      payload:    "230.0",
-      dimensions: {
+      id:          1,
+      quantity:    2,
+      payload:     "230.0",
+      dimensions:  {
         x: "100.0",
         y: "100.0",
         z: "100.0"
-      }
+      },
+      goods_value: "1_000.00"
     }
   end
 
   let(:cargo_item_2) do
     {
-      id:         2,
-      quantity:   1,
-      payload:    "140.0",
-      dimensions: {
+      id:          2,
+      quantity:    1,
+      payload:     "140.0",
+      dimensions:  {
         x: "80.0",
         y: "70.0",
         z: "50.0"
-      }
+      },
+      goods_value: "850.00"
     }
   end
 
@@ -348,10 +350,10 @@ RSpec.describe ChargeCalculator::Main do
             {
               rule:   nil,
               amount: "47.0",
-              basis:  "ton"
+              basis:  "payload_unit_ton"
             },
             {
-              rule:   { equal: { field: "telegraphic_transfer", arg_value: true } },
+              rule:   { eq: { field: "telegraphic_transfer", arg_value: true } },
               amount: "44.0",
               basis:  "flat"
             }
@@ -366,7 +368,7 @@ RSpec.describe ChargeCalculator::Main do
             {
               rule:   nil,
               amount: "42.0",
-              basis:  "ton"
+              basis:  "payload_unit_ton"
             }
           ]
         },

@@ -2,9 +2,9 @@
 
 module ChargeCalculator
   module Calculators
-    class Volume < Base
+    class Payload < Base
       def result(context:, amount:)
-        context[:volume] * amount * quantity(context)
+        context.fetch(:payload) * amount * quantity(context)
       end
     end
   end

@@ -2,9 +2,9 @@
 
 module ChargeCalculator
   module Calculators
-    class Volume < Base
+    class WeightMeasure < Base
       def result(context:, amount:)
-        context[:volume] * amount * quantity(context)
+        context[:weight_measure] * amount * quantity(context)
       end
     end
   end

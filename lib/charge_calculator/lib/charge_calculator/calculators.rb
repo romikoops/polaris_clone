@@ -5,7 +5,14 @@ module ChargeCalculator
     NoSuchCalculatorError = Class.new(StandardError)
 
     CALCULATORS = {
-      volume: Volume
+      bill_of_lading:      BillOfLading,
+      volume:              Volume,
+      payload:             Payload,
+      payload_unit_100_kg: PayloadUnit100Kg,
+      payload_unit_ton:    PayloadUnitTon,
+      chargeable_payload:  ChargeablePayload,
+      weight_measure:      WeightMeasure,
+      flat:                Flat
     }.freeze
 
     def self.get(key)
