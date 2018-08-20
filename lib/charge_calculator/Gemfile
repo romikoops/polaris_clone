@@ -8,6 +8,7 @@ gemspec
 gem "rule_engine", git: "git@gitlab.com:itsmycargo/rule-engine.git"
 
 gem 'pry'
+gem "awesome_print"
 
 
 group :test do

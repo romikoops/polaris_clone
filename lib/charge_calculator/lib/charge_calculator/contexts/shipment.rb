@@ -8,9 +8,7 @@ module ChargeCalculator
       end
 
       def hash
-        @hash ||= {
-          bills_of_lading: data[:bills_of_lading]
-        }
+        data
       end
 
       private

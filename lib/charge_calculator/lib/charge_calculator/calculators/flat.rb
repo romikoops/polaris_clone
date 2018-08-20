@@ -3,8 +3,8 @@
 module ChargeCalculator
   module Calculators
     class Flat < Base
-      def result(amount:, **_args)
-        amount
+      def result(context:, amount:)
+        amount * quantity(context)
       end
     end
   end

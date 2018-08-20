@@ -7,13 +7,13 @@ RSpec.describe ChargeCalculator::Main do
     {
       id:          1,
       quantity:    2,
-      payload:     "230.0",
+      payload:     "1_130.0",
       dimensions:  {
         x: "100.0",
         y: "100.0",
         z: "100.0"
       },
-      goods_value: "1_000.00"
+      goods_value: "1_200.00"
     }
   end
 
@@ -21,7 +21,7 @@ RSpec.describe ChargeCalculator::Main do
     {
       id:          2,
       quantity:    1,
-      payload:     "140.0",
+      payload:     "540.0",
       dimensions:  {
         x: "80.0",
         y: "70.0",
@@ -41,17 +41,17 @@ RSpec.describe ChargeCalculator::Main do
           kind:      "cargo_unit",
           prices:    [
             {
-              rule:   { between: { field: "payload", from: 0, to: 100 } },
+              rule:   { between: { field: "payload", from: 0, to: 400 } },
               amount: "29.35",
               basis:  "chargeable_payload"
             },
             {
-              rule:   { between: { field: "payload", from: 100, to: 200 } },
+              rule:   { between: { field: "payload", from: 401, to: 800 } },
               amount: "25.78",
               basis:  "chargeable_payload"
             },
             {
-              rule:   { between: { field: "payload", from: 200, to: 300 } },
+              rule:   { between: { field: "payload", from: 801, to: 1_500 } },
               amount: "23.42",
               basis:  "chargeable_payload"
             }
@@ -81,17 +81,17 @@ RSpec.describe ChargeCalculator::Main do
           kind:      "cargo_unit",
           prices:    [
             {
-              rule:   { between: { field: "payload", from: 0, to: 150 } },
+              rule:   { between: { field: "payload", from: 0, to: 580 } },
               amount: "49.25",
               basis:  "chargeable_payload"
             },
             {
-              rule:   { between: { field: "payload", from: 151, to: 300 } },
+              rule:   { between: { field: "payload", from: 581, to: 1_400 } },
               amount: "33.58",
               basis:  "chargeable_payload"
             },
             {
-              rule:   { between: { field: "payload", from: 301, to: 500 } },
+              rule:   { between: { field: "payload", from: 1_401, to: 2_500 } },
               amount: "28.64",
               basis:  "chargeable_payload"
             }
@@ -146,14 +146,14 @@ RSpec.describe ChargeCalculator::Main do
           [
             {
               conversion_ratios: {
-                weight_measure: "1.0"
+                weight_measure: "1_000.0"
               },
               route:             "Hamburg - Gothenburg",
               rates:             rates_weight_steps_1
             },
             {
               conversion_ratios: {
-                weight_measure: "1.0"
+                weight_measure: "1_000.0"
               },
               route:             "Gothenburg - Shanghai",
               rates:             rates_weight_steps_2
@@ -180,24 +180,27 @@ RSpec.describe ChargeCalculator::Main do
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
 
+            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+
             expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-              BigDecimal("230.0") * BigDecimal("23.42") * 2
+              cargo_item_1_payload * BigDecimal("23.42") * 2
             )
             expect(node_tree.dig(:children, 0, :children, 0, :children, 1, :amount)).to eq(
-              BigDecimal("230.0") * BigDecimal("20.0") * 2
+              cargo_item_1_payload * BigDecimal("20.0") * 2
             )
             expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              BigDecimal("140.0") * BigDecimal("25.78")
+              cargo_item_2_payload * BigDecimal("25.78")
             )
             expect(node_tree.dig(:children, 0, :children, 1, :children, 1, :amount)).to eq(
-              BigDecimal("140.0") * BigDecimal("20.0")
+              cargo_item_2_payload * BigDecimal("20.0")
             )
 
             expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-              BigDecimal("230.0") * BigDecimal("33.58") * 2
+              cargo_item_1_payload * BigDecimal("33.58") * 2
             )
             expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-              BigDecimal("140.0") * BigDecimal("49.25")
+              cargo_item_2_payload * BigDecimal("49.25")
             )
           end
         end
@@ -208,14 +211,14 @@ RSpec.describe ChargeCalculator::Main do
           [
             {
               conversion_ratios: {
-                weight_measure: "1.0"
+                weight_measure: "1_000.0"
               },
               route:             "Hamburg - Gothenburg",
               rates:             rates_100_kg_basis
             },
             {
               conversion_ratios: {
-                weight_measure: "1.0"
+                weight_measure: "1_000.0"
               },
               route:             "Gothenburg - Shanghai",
               rates:             rates_weight_steps_2
@@ -242,18 +245,21 @@ RSpec.describe ChargeCalculator::Main do
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
 
+            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+
             expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-              3 * BigDecimal("51.25") * 2
+              (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
             )
             expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              2 * BigDecimal("51.25") * 1
+              (cargo_item_2_payload / 100).ceil * BigDecimal("51.25") * 1
             )
 
             expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-              BigDecimal("230.0") * BigDecimal("33.58") * 2
+              cargo_item_1_payload * BigDecimal("33.58") * 2
             )
             expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-              BigDecimal("140.0") * BigDecimal("49.25")
+              cargo_item_2_payload * BigDecimal("49.25")
             )
           end
         end
@@ -266,7 +272,7 @@ RSpec.describe ChargeCalculator::Main do
           [
             {
               conversion_ratios: {
-                weight_measure: "1.0"
+                weight_measure: "1_000.0"
               },
               route:             "Hamburg - Gothenburg",
               rates:             rates_weight_steps_1_and_flat_per_shipment
@@ -293,15 +299,18 @@ RSpec.describe ChargeCalculator::Main do
             node_tree = subject.price.to_nested_hash
             expect(node_tree.to_json).to match_json_schema("main/price")
 
+            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+
             expect(node_tree.dig(:children, 0, :children, 0, :amount)).to eq(
               BigDecimal("200.0")
             )
 
             expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              BigDecimal("230.0") * BigDecimal("23.42") * 2
+              cargo_item_1_payload * BigDecimal("23.42") * 2
             )
             expect(node_tree.dig(:children, 0, :children, 2, :children, 0, :amount)).to eq(
-              BigDecimal("140.0") * BigDecimal("25.78")
+              cargo_item_2_payload * BigDecimal("25.78")
             )
           end
         end
@@ -340,38 +349,6 @@ RSpec.describe ChargeCalculator::Main do
       # Fee Codes: THC, LCL, ANT, BL, AFR, ISP, VGM, CUST
 
       [
-        {
-          min_price: "47.0",
-          currency:  "USD",
-          category:  "THC",
-          kind:      "cargo_unit",
-          reducer:   "sum",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "47.0",
-              basis:  "payload_unit_ton"
-            },
-            {
-              rule:   { eq: { field: "telegraphic_transfer", arg_value: true } },
-              amount: "44.0",
-              basis:  "flat"
-            }
-          ]
-        },
-        {
-          min_price: "42.0",
-          currency:  "USD",
-          category:  "LCL",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "42.0",
-              basis:  "payload_unit_ton"
-            }
-          ]
-        },
         {
           min_price: "5.0",
           currency:  "USD",
@@ -412,19 +389,6 @@ RSpec.describe ChargeCalculator::Main do
           ]
         },
         {
-          min_price: "5.5",
-          currency:  "USD",
-          category:  "ISP",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "5.5",
-              basis:  "volume"
-            }
-          ]
-        },
-        {
           min_price: "18.0",
           currency:  "USD",
           category:  "VGM",
@@ -434,6 +398,51 @@ RSpec.describe ChargeCalculator::Main do
               rule:   nil,
               amount: "18.0",
               basis:  "bill_of_lading"
+            }
+          ]
+        },
+        {
+          min_price: "47.0",
+          currency:  "USD",
+          category:  "THC",
+          kind:      "cargo_unit",
+          reducer:   "sum",
+          prices:    [
+            {
+              rule:   nil,
+              amount: "47.0",
+              basis:  "payload_unit_ton"
+            },
+            {
+              rule:   { eq: { field: "telegraphic_transfer", arg_value: true } },
+              amount: "44.0",
+              basis:  "flat"
+            }
+          ]
+        },
+        {
+          min_price: "42.0",
+          currency:  "USD",
+          category:  "LCL",
+          kind:      "cargo_unit",
+          prices:    [
+            {
+              rule:   nil,
+              amount: "42.0",
+              basis:  "payload_unit_ton"
+            }
+          ]
+        },
+        {
+          min_price: "5.5",
+          currency:  "USD",
+          category:  "ISP",
+          kind:      "cargo_unit",
+          prices:    [
+            {
+              rule:   nil,
+              amount: "5.5",
+              basis:  "volume"
             }
           ]
         },
@@ -458,7 +467,7 @@ RSpec.describe ChargeCalculator::Main do
         [
           {
             conversion_ratios: {
-              weight_measure: "1.0"
+              weight_measure: "1_000.0"
             },
             route:             "Tokyo - Hamburg",
             rates:             rates_japan_freight
@@ -490,7 +499,44 @@ RSpec.describe ChargeCalculator::Main do
           node_tree = subject.price.to_nested_hash
           expect(node_tree.to_json).to match_json_schema("main/price")
 
-          # TODO: Add needle specs
+          cargo_item_1_volume  = BigDecimal("100.0")**3 / 1_000_000
+          wm_conversion_ratio  = BigDecimal("1_000")
+
+          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+
+          # Freight
+          expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
+            BigDecimal("19.0") * [cargo_item_1_volume, cargo_item_1_payload / wm_conversion_ratio].max * 2
+          )
+
+          # Local Charges
+          expect(node_tree.dig(:children, 1, :children, 0, :amount)).to eq(
+            BigDecimal("5.0")
+          )
+          expect(node_tree.dig(:children, 1, :children, 1, :amount)).to eq(
+            BigDecimal("2.5") * 1
+          )
+          expect(node_tree.dig(:children, 1, :children, 2, :amount)).to eq(
+            BigDecimal("35.0")
+          )
+          expect(node_tree.dig(:children, 1, :children, 3, :amount)).to eq(
+            BigDecimal("18.0") * 1
+          )
+
+          cargo_unit_1_payload_in_tons = (cargo_item_1_payload / 1_000).ceil
+
+          expect(node_tree.dig(:children, 1, :children, 4, :children, 0, :amount)).to eq(
+            BigDecimal("47.0") * cargo_unit_1_payload_in_tons * 2
+          )
+          expect(node_tree.dig(:children, 1, :children, 4, :children, 1, :amount)).to eq(
+            BigDecimal("42.0") * cargo_unit_1_payload_in_tons * 2
+          )
+          expect(node_tree.dig(:children, 1, :children, 4, :children, 2, :amount)).to eq(
+            BigDecimal("5.5") * cargo_item_1_volume * 2
+          )
+          expect(node_tree.dig(:children, 1, :children, 4, :children, 3, :amount)).to eq(
+            BigDecimal("25.0") * 2
+          )
         end
       end
     end
