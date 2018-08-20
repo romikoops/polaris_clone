@@ -30,6 +30,7 @@ gem 'rufo'
 gem 'shoryuken'
 
 gem 'activerecord-postgis-adapter'
+gem 'rgeo-geojson'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
