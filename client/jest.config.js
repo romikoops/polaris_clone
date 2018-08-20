@@ -1,7 +1,7 @@
 module.exports = {
   // if true stops test after first failure
   bail: true,
-  testRegex: '.spec.jsx$',
+  testRegex: '.spec.(jsx|js)$',
   collectCoverageFrom: ['app/components/**/*.(jsx|js)'],
   verbose: true,
   setupFiles: ['./jest.init.js'],
