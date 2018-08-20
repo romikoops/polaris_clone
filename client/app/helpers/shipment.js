@@ -16,16 +16,16 @@ export function formattedPriceValue (num) {
   return num ? (+num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') : '0.00'
 }
 
-export function checkPreCarriage (shipment) {
-  if (shipment.has_pre_carriage) {
+export function checkPreCarriage (shipment, action) {
+  if (shipment.has_pre_carriage && action === 'Pick-up') {
     return {
-      type: 'Pick-up',
+      type: action,
       date: shipment.planned_pickup_date
     }
   }
 
   return {
-    type: 'Origin Drop Off',
+    type: action,
     date: shipment.planned_origin_drop_off_date
   }
 }

@@ -59,9 +59,6 @@
     .image {
       background-position: center center;
       background-size: cover;
-      position: absolute;
-      right: 0;
-      width: 185px;
       height: 241px;
     }
     h3 {
@@ -104,7 +101,7 @@
     color: #EB5757;
   }
   .contact_box {
-    padding-left: 30px;
+    padding-left: 2vw;
     padding-top: 20px;
     .info_row {
       margin-bottom: 10px;
@@ -126,6 +123,7 @@
       font-size: 12px;
       letter-spacing: 0.03em;
       color: #4F4F4F;
+      hyphens: auto;
     }
   }
   .notifyee_box {
@@ -171,7 +169,11 @@
       line-height: 33px;
     }
   }
+  .min-height {
+    min-height: 180px;
+  }
   .column_info {
+    min-height: 100px;
     padding-right: 20px;
     border-bottom: 2px solid #E0E0E0;
     > * {

@@ -86,7 +86,7 @@ export class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>&nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
@@ -94,7 +94,7 @@ export class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
                 {numberSpacing((group.items[0].dimension_y *
@@ -106,7 +106,7 @@ export class CargoItemGroup extends Component {
           </div>
         </div>
         { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center"><span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span> &nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">Chargeable Weight</p>
           </div>
@@ -127,6 +127,7 @@ export class CargoItemGroup extends Component {
       </div>
     )
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
+
     return (
       <div className={`${styles.info}`}>
         <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
@@ -142,7 +143,7 @@ export class CargoItemGroup extends Component {
             )}
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
-            <div className="layout-column">
+            <div className="">
               <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
               <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
             </div>

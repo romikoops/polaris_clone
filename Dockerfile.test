@@ -1,0 +1,59 @@
+FROM ruby:2.5.1
+
+RUN set -ex \
+  \
+  && buildDeps=' \
+    apt-transport-https \
+    gnupg \
+    wget \
+  ' \
+  && apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $buildDeps \
+  \
+  # Set up the Chrome PPA \
+  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
+  \
+  # Set up Nodejs \
+  && wget -q -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+  && echo "deb https://deb.nodesource.com/node_8.x trusty main" >> /etc/apt/sources.list.d/nodejs.list \
+  \
+  && apt-get update \
+  && apt-get install -y \
+    cmake \
+    google-chrome-stable \
+    haveged \
+    jq \
+    libpq-dev \
+    libsqlite3-dev \
+    nodejs \
+    postgresql \
+    postgresql-client \
+    postgresql-contrib \
+    tzdata \
+    unzip \
+    xvfb \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Set up Chromedriver Environment variables
+ENV CHROMEDRIVER_VERSION 2.41
+
+# Download and install Chromedriver
+RUN set -ex \
+  && wget -q --continue "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" \
+  && unzip chromedriver_linux64.zip -d /usr/local/bin \
+  && rm -f chromedriver_linux64.zip.zip
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+RUN (bundle check || bundle install)
+
+COPY client/package.json ./client/
+RUN (cd client/; npm install)
+
+COPY . ./
+
+CMD ["bin/rspec"]
