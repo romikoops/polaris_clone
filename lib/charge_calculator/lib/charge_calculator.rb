@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "json-schema"
+require "rule_engine"
+require "bigdecimal"
+
 require "charge_calculator/version"
 
 require "charge_calculator/models/base"

@@ -49,8 +49,5 @@ module ChargeCalculator
 
       Models::Price.new(children: prices, category: "base", description: "Base")
     end
-
-    def cargo_unit_rates
-    end
   end
 end

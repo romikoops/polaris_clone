@@ -12,6 +12,7 @@ module ChargeCalculator
 
     def self.get(key)
       raise NoSuchReducerError, "The Reducer '#{key}' doesn't exist" unless REDUCERS.has_key? key
+
       REDUCERS[key].new
     end
   end
