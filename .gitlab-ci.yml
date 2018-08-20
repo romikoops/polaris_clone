@@ -9,6 +9,12 @@ pronto:
   script:
     - scripts/pronto
 
+charge_calculator:
+  stage: test
+  image: ruby:2.5
+  script:
+    - "cd lib/charge_calculator; bundle; bundle exec rspec"
+
 rspec:
   stage: test
   image: docker:stable
