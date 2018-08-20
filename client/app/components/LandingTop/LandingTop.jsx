@@ -34,7 +34,7 @@ export class LandingTop extends Component {
       theme, user, tenant, bookNow, toggleShowLogin
     } = this.props
     const myAccount = (
-      <div className="flex layout-row flex-50">
+      <div className="layout-row flex-50">
         <SquareButton
           text="My Account"
           theme={theme}
@@ -45,7 +45,7 @@ export class LandingTop extends Component {
       </div>
     )
     const toAdmin = (
-      <div className="flex layout-row flex-50">
+      <div className="layout-row flex-50">
         <SquareButton
           text="Admin Dashboard"
           theme={theme}
@@ -56,7 +56,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="flex layout-row flex-50">
+      <div className="layout-row flex-50">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
