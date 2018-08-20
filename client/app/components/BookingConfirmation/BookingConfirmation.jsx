@@ -46,7 +46,6 @@ const BACK_TO_DASHBOARD =
 const BACK_TO_DASHBOARD_CELL =
   `${defaults.content_width} flex-none ${ROW('CONTENT')} ${ALIGN_START_CENTER}`
 const BOOKING = `${ROW('NONE')} content_width_booking ${ALIGN_CENTER}`
-const BUTTON = `${ROW('NONE')} ${ALIGN_END}`
 const CHECKBOX = `${ROW(65)} ${ALIGN_START_CENTER}`
 const CHECKBOX_CELL = `${ROW(15)} ${ALIGN_CENTER}`
 const COLLAPSER = `${ROW(10)} ${ALIGN_CENTER}`
@@ -203,18 +202,20 @@ export class BookingConfirmation extends Component {
     const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle, t })
     const feeHash = shipment.selected_offer
     const acceptedBtn = (
-      <div className={BUTTON}>
+      <div>
         <RoundButton
           theme={theme}
-          text={t('bookconf:finishRequest')}
+          size="full"
+          text="Finish Booking Request"
           handleNext={() => this.requestShipment()}
           active
         />
       </div>
     )
     const nonAcceptedBtn = (
-      <div className={BUTTON}>
+      <div>
         <RoundButton
+          size="full"
           theme={theme}
           text={t('bookconf:finishRequest')}
           handleNext={e => e.preventDefault()}
@@ -861,7 +862,7 @@ function getTerms ({ theme, terms, t }) {
           />
         </div>
         <div className={`${ROW(100)} ${ALIGN_START}`}>
-          <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
+          <ul className={`flex-80 ${styles.terms_list}`}>{termBullets}</ul>
         </div>
       </div>
     </div>
@@ -954,4 +955,4 @@ function HeadingFactoryFn (theme) {
   )
 }
 
-export default translate(['bookconf','common'])(BookingConfirmation)
+export default BookingConfirmation

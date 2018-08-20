@@ -94,7 +94,7 @@ export class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{numberSpacing(group.items[0].payload_in_kg, 1)}</span>&nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">
@@ -104,7 +104,7 @@ export class CargoItemGroup extends Component {
         </div>
 
         <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center">
               <span>
                 {numberSpacing((group.items[0].dimension_y *
@@ -118,7 +118,7 @@ export class CargoItemGroup extends Component {
           </div>
         </div>
         { !group.size_class ? <div className={`${styles.unit_data_cell} flex-15 layout-row layout-align-center-center`}>
-          <div className="layout-column">
+          <div className="">
             <p className="flex-none layout-row layout-align-center-center"><span>{numberSpacing((group.items[0].chargeable_weight), 2)}</span> &nbsp;kg</p>
             <p className="flex-none layout-row layout-align-center-center">
               {t('cargo:chargableWeight')}
@@ -156,13 +156,9 @@ export class CargoItemGroup extends Component {
             )}
           </div>
           <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
-            <div className="layout-column">
-              <p className="flex-none layout-row layout-align-center-center">
-                <span className={styles.cargo_type}>{cargoCategory}</span>
-              </p>
-              <p className="flex-none layout-row layout-align-center-center">
-                {t('cargo:type')}
-              </p>
+            <div className="">
+              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
+              <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
             </div>
           </div>
           <div className="flex-55 layout-row">
@@ -197,4 +193,4 @@ CargoItemGroup.defaultProps = {
   theme: null
 }
 
-export default translate('cargo')(CargoItemGroup)
+export default CargoItemGroup

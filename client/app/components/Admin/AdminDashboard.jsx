@@ -107,7 +107,7 @@ export class AdminDashboard extends Component {
             theme={theme}
           />
         </div>
-        <div className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100">
+        <div className="flex-gt-md-50 layout-padding layout-row layout-align-center-center flex-100 hide_overflow">
           <WorldMap
             itineraries={itineraries}
             hoverId={hoverId}

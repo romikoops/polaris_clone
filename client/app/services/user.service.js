@@ -175,12 +175,12 @@ function updateContact (data) {
   const formData = new FormData()
   formData.append('update', JSON.stringify(data))
   const requestOptions = {
-    method: 'POST',
+    method: 'PATCH',
     headers: authHeader(),
     body: formData
   }
 
-  return fetch(`${BASE_URL}/contacts/update_contact/${data.id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/contacts/${data.id}`, requestOptions).then(handleResponse)
 }
 
 function newUserLocation (userId, data) {

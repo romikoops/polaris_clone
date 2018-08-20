@@ -34,7 +34,7 @@ export function UserContactsIndex ({
           flexOptions="layout-column flex-20 flex-md-15 flex-sm-10"
           content={
             <div className="layout-row flex layout-align-center-center">
-              <div className="flex-none layout-row layout-align-center-center">
+              <div className="flex-70 layout-row layout-align-start-center">
                 <RoundButton
                   theme={theme}
                   size="small"

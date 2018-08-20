@@ -89,7 +89,7 @@ export class Modal extends Component {
         <div
           ref={(div) => { this.modal = div }}
           style={modalStyles}
-          className={`${styles.modal} flex-none`}
+          className={`${styles.modal} ${this.props.flexOptions || 'flex-none'}`}
         >
           { component }
         </div>
@@ -102,12 +102,14 @@ Modal.propTypes = {
   component: PropTypes.node.isRequired,
   parentToggle: PropTypes.func.isRequired,
   minHeight: PropTypes.string,
+  flexOptions: PropTypes.string,
   horizontalPadding: PropTypes.string,
   verticalPadding: PropTypes.string
 }
 
 Modal.defaultProps = {
   minHeight: '',
+  flexOptions: '',
   horizontalPadding: '20px',
   verticalPadding: '20px'
 }

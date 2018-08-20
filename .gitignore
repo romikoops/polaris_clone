@@ -98,4 +98,5 @@ db/dummydata/.DS_Store
 
 # Ignore Excel lock files
 *~*.xls*
-.DS_Store
+
+blank.html

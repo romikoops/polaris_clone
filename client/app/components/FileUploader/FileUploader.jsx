@@ -97,7 +97,7 @@ class FileUploader extends React.Component {
   }
   render () {
     const {
-      theme, type, tooltip, square
+      theme, type, tooltip, square, size
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
@@ -113,7 +113,7 @@ class FileUploader extends React.Component {
             <SquareButton
               text="Upload"
               theme={theme}
-              size="small"
+              size={size}
               handleNext={e => this.clickUploaderInput(e)}
               active
               border
@@ -122,7 +122,7 @@ class FileUploader extends React.Component {
             <RoundButton
               text="Upload"
               theme={theme}
-              size="small"
+              size={size}
               handleNext={e => this.clickUploaderInput(e)}
               active
             />
@@ -153,7 +153,8 @@ FileUploader.propTypes = {
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
   uploadFn: PropTypes.func,
-  tooltip: PropTypes.string
+  tooltip: PropTypes.string,
+  size: PropTypes.string
 }
 
 FileUploader.defaultProps = {
@@ -161,7 +162,8 @@ FileUploader.defaultProps = {
   square: false,
   dispatchFn: null,
   theme: null,
-  tooltip: ''
+  tooltip: '',
+  size: 'small'
 }
 
 export default FileUploader
