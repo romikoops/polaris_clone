@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+require "spec_helper"
 
 RSpec.describe ChargeCalculator do
   let(:cargo_item_1) do
