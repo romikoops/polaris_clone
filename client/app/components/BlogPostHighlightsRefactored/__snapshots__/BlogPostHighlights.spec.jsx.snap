@@ -18,7 +18,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="blog_post layout-column"
-      key="0"
+      key="58361229-4847-4219-adf1-65c83ca14d2b"
     >
       <div
         className="bp_image flex-33"
@@ -104,7 +104,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="1"
+      key="f6b710f4-d816-4106-9a01-33adc7aba0dd"
     >
       <div
         className="bp_image flex-33"
@@ -189,7 +189,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="2"
+      key="b53411b1-89bc-458f-970f-7702c900e3fe"
     >
       <div
         className="bp_image flex-33"

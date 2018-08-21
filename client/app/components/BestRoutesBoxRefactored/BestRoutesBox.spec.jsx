@@ -3,7 +3,8 @@ import { shallow, mount } from 'enzyme'
 import { theme, identity, user, shipmentData } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x
+  gradientGenerator: x => x,
+  priceSpacing: x => x
 }))
 jest.mock('../../constants', () => {
   const moment = x => ({

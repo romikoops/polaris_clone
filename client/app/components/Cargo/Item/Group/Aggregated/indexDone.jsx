@@ -1,20 +1,16 @@
 import React from 'react'
-import styles from '../CargoContainerGroup.scss'
+import { translate } from 'react-i18next'
+import styles from '../CargoItemGroup.scss'
 import PropTypes from '../../../../../prop-types'
+import { numberSpacing } from '../../../../../helpers'
 
-export default function CargoContainerGroupAggregated ({ group }) {
+export function CargoItemGroupAggregated ({ group, t }) {
   return (
     <div className={
       `${styles.panel} ${styles.open_panel} flex-100 ` +
       'layout-row layout-wrap layout-align-start-center'
     }
     >
-      {/* <div className={
-        `${styles.detailed_row} flex-100 layout-row layout-wrap layout-align-none-center`
-      }
-      >
-        <h4 className="flex-none"> Aggregate Values:</h4>
-      </div> */}
       <div className={
         `${styles.detailed_row_aggregated} flex-100 ` +
         'layout-row layout-wrap layout-align-none-center'
@@ -23,7 +19,9 @@ export default function CargoContainerGroupAggregated ({ group }) {
         <div className="flex-33 layout-row layout-align-space-around">
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{group.payload_in_kg || group.weight}</span> &nbsp;kg </p>
-            <p className="flex-none layout-row layout-align-center-center">Cargo Gross Weight</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              {t('cargo:grossWeight')}
+            </p>
           </div>
         </div>
 
@@ -31,20 +29,25 @@ export default function CargoContainerGroupAggregated ({ group }) {
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span className={styles.cargo_type}>
-                {(+group.gross_weight)}
-              </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
+                {numberSpacing(+group.volume, 3)}
+              </span> &nbsp;m<sup>3</sup>
+            </p>
+            <p className="flex-none layout-row layout-align-center-center">
+              {t('cargo:volume')}
+            </p>
           </div>
         </div>
         <div className="flex-33 layout-row layout-align-space-around">
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span className={styles.cargo_type}>
-                {+(group.tare_weight).toFixed(3)}
+                {!group.size_class ? numberSpacing(group.chargeable_weight, 2) : ''}
               </span>
               &nbsp;kg
             </p>
-            <p className="flex-none layout-row layout-align-center-center">Tare Weight</p>
+            <p className="flex-none layout-row layout-align-center-center">
+              {t('cargo:chargebleWeight')}
+            </p>
           </div>
         </div>
       </div>
@@ -52,10 +55,12 @@ export default function CargoContainerGroupAggregated ({ group }) {
   )
 }
 
-CargoContainerGroupAggregated.propTypes = {
+CargoItemGroupAggregated.propTypes = {
   group: PropTypes.objectOf(PropTypes.any)
 }
 
-CargoContainerGroupAggregated.defaultProps = {
+CargoItemGroupAggregated.defaultProps = {
   group: {}
 }
+
+export default translate('cargo')(CargoItemGroupAggregated)

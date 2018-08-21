@@ -40,7 +40,7 @@ exports[`shallow rendering 1`] = `
     >
       <div>
         <b>
-          17
+          18
            days
         </b>
         <br />
@@ -59,7 +59,7 @@ exports[`shallow rendering 1`] = `
       className="layout-row flex-35 layout-align-center-center"
     >
       <div
-        className=" flex-100"
+        className="flex-100"
       >
         <b
           className="ref_row_card"
@@ -75,24 +75,20 @@ exports[`shallow rendering 1`] = `
     </div>
     <hr />
     <div
-      className="layout-row flex-60"
+      className="layout-row flex-60 layout-align-center-center"
     >
       <div
-        className=" flex-100"
+        className="flex-100"
       >
         <div
-          className="layout-row flex-50 layout-align-start-center"
+          className="layout-row flex-100 layout-align-start-center"
         >
           <div
             className="flex-10 layout-row layout-align-center-center"
           >
             <i
               className="fa fa-user clip"
-              style={
-                Object {
-                  "color": "black",
-                }
-              }
+              style="#333"
             />
           </div>
           <div
@@ -104,18 +100,14 @@ exports[`shallow rendering 1`] = `
           </div>
         </div>
         <div
-          className="layout-row flex-50 layout-align-start-center"
+          className="layout-row flex-100 layout-align-start-center"
         >
           <span
             className="flex-10 layout-row layout-align-center-center"
           >
             <i
               className="fa fa-building clip"
-              style={
-                Object {
-                  "color": "black",
-                }
-              }
+              style="#333"
             />
           </span>
           <span
@@ -132,7 +124,7 @@ exports[`shallow rendering 1`] = `
             middle_bottom_box smallText"
   >
     <div
-      className=" flex-20 layout-align-center-start"
+      className="flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
@@ -149,7 +141,7 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className=" flex-20 layout-align-center-start"
+      className="flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
@@ -166,7 +158,7 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className=" flex-20 layout-align-center-start"
+      className="flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
@@ -183,10 +175,10 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className=" flex-40 layout-align-start-end carriages"
+      className="flex-40 layout-align-start-end carriages"
     >
       <div
-        className="layout-row layout-align-start-start"
+        className="layout-row layout-align-end-end"
       >
         <i
           className="fa fa-times"
@@ -201,7 +193,7 @@ exports[`shallow rendering 1`] = `
         </p>
       </div>
       <div
-        className="layout-row layout-align-start-start"
+        className="layout-row layout-align-end-end"
       >
         <i
           className="fa fa-times"
@@ -300,11 +292,11 @@ exports[`shallow rendering 1`] = `
       >
         <span>
            
-          DZD
+          CNY
            
         </span>
         <span>
-          975
+          1034
         </span>
       </span>
     </div>

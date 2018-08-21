@@ -16,6 +16,7 @@ jest.mock('uuid', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientGenerator: x => x,
+  splitName: x => x,
   gradientTextGenerator: x => x,
   gradientBorderGenerator: x => x,
   switchIcon: x => x,

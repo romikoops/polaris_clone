@@ -1,6 +1,5 @@
 /* eslint react/prop-types: "off" */
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
 import { moment, documentTypes, shipmentStatii } from '../../constants'
@@ -85,7 +84,6 @@ export function calcFareTotals (feeHash) {
       .includes(k) && feeHash[k].total ? sum - feeHash[k].total.value : sum
   ), total).toFixed(2)
 }
-
 export function calcExtraTotals (feeHash) {
   let res1 = 0
   if (feeHash &&
@@ -159,8 +157,7 @@ export class BookingConfirmation extends Component {
       theme,
       shipmentData,
       shipmentDispatch,
-      t,
-      tenant,
+      tenant
     } = this.props
 
     if (!shipmentData) return <h1>Loading</h1>
@@ -178,10 +175,10 @@ export class BookingConfirmation extends Component {
       shipper
     } = shipmentData
 
-    if (!shipment || !locations || !cargoItemTypes) return <h1>{t('bookconf:loading')}</h1>
+    if (!shipment || !locations || !cargoItemTypes) return <h1> Loading</h1>
 
     const { acceptTerms, collapser } = this.state
-    const terms = getTenantTerms(tenant, t)
+    const terms = getTenantTerms(tenant)
     const textStyle = getTextStyle(theme)
     const createdDate = getCreatedDate(shipment)
 
@@ -199,7 +196,7 @@ export class BookingConfirmation extends Component {
     const shipperAndConsignee = getShipperAndConsignee({
       shipper, consignee, textStyle, shipment
     })
-    const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle, t })
+    const notifyeesJSX = getNotifyeesJSX({ notifyees, textStyle })
     const feeHash = shipment.selected_offer
     const acceptedBtn = (
       <div>
@@ -217,7 +214,7 @@ export class BookingConfirmation extends Component {
         <RoundButton
           size="full"
           theme={theme}
-          text={t('bookconf:finishRequest')}
+          text="Finish Booking Request"
           handleNext={e => e.preventDefault()}
         />
       </div>
@@ -232,16 +229,16 @@ export class BookingConfirmation extends Component {
     })
 
     const HeadingFactory = HeadingFactoryFn(theme)
-    const Terms = getTerms({ theme, terms, t })
+    const Terms = getTerms({ theme, terms })
     const LocationsOrigin = getLocationsOrigin({ shipment, locations })
     const LocationsDestination = getLocationsDestination({ shipment, locations })
     const arrivalTime = getArrivalTime(shipment)
     const status = shipmentStatii[shipment.status]
 
     const expectedTime = shipment.has_pre_carriage
-      ? `${t('bookconf:expectedCollection')}:`
-      : `${t('bookconf:expectedDeparture')}:`
-      
+      ? 'Expected Time of Collection:'
+      : 'Expected Time of Departure:'
+
     const plannedTime = shipment.has_pre_carriage
       ? `${moment(shipment.closing_date)
         .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
@@ -251,7 +248,7 @@ export class BookingConfirmation extends Component {
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:overview'))}
+          {HeadingFactory('Overview')}
           <div className={COLLAPSER} onClick={() => this.handleCollapser('overview')}>
             {getChevronIcon(collapser.overview)}
           </div>
@@ -260,21 +257,21 @@ export class BookingConfirmation extends Component {
           <div className={INNER_WRAPPER}>
 
             <div className={INNER_WRAPPER_CELL}>
-              <h4 className="flex-none">{`${t('bookconf:shipmentReference')}:`}</h4>
+              <h4 className="flex-none">Shipment Reference:</h4>
               <h4 className="clip flex-none offset-5" style={textStyle}>
                 {shipment.imc_reference}
               </h4>
             </div>
 
             <div className={INNER_WRAPPER_CELL}>
-              <p className={SUBTITLE_NORMAL}>{`${t('common:status')}:`}</p>
+              <p className={SUBTITLE_NORMAL}>Status:</p>
               <p className={SUBTITLE}>
                 {status}
               </p>
             </div>
 
             <div className={INNER_WRAPPER_CELL}>
-              <p className={SUBTITLE_NORMAL}>{`${t('common:createdAt')}:`}</p>
+              <p className={SUBTITLE_NORMAL}>Created at:</p>
               <p className={SUBTITLE}>
                 {createdDate}
               </p>
@@ -288,7 +285,7 @@ export class BookingConfirmation extends Component {
     const Itinerary = (
       <div className={ITINERARY}>
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:itinerary'))}
+          {HeadingFactory('Itinerary')}
           <div className={COLLAPSER} onClick={() => this.handleCollapser('itinerary')}>
             {getChevronIcon(collapser.itinerary)}
           </div>
@@ -315,8 +312,8 @@ export class BookingConfirmation extends Component {
 
               <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
-                  <p className="flex-100 letter_3">{` ${t('bookconf:expectedArrival')}:`}</p>
-                  <p className="flex-90 offset-10 center">{arrivalTime}</p>
+                  <p className="flex-100 letter_3"> Expected Time of Arrival:</p>
+                  <p className="flex-90 offset-10  center">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
               </div>
@@ -329,7 +326,7 @@ export class BookingConfirmation extends Component {
     const FaresAndFees = (
       <div className={SHIPMENT_CARD}>
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:faresFees'))}
+          {HeadingFactory('Fares & Fees')}
           <div className={COLLAPSER} onClick={() => this.handleCollapser('charges')}>
             {getChevronIcon(collapser.charges)}
           </div>
@@ -419,7 +416,7 @@ export class BookingConfirmation extends Component {
     const ContactDetails = (
       <div className={SHIPMENT_CARD}>
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('bookconf:contact'))}
+          {HeadingFactory('Contact Details')}
           <div
             className={`${ROW(10)} ${ALIGN_CENTER}`}
             onClick={() => this.handleCollapser('contacts')}
@@ -445,7 +442,7 @@ export class BookingConfirmation extends Component {
       <div className={SHIPMENT_CARD}>
 
         <div style={themeTitled} className={HEADING} >
-          {HeadingFactory(t('bookconf:cargo'))}
+          {HeadingFactory('Cargo Details')}
           <div className={COLLAPSER} onClick={() => this.handleCollapser('cargo')}>
             {getChevronIcon(collapser.cargo)}
           </div>
@@ -465,7 +462,7 @@ export class BookingConfirmation extends Component {
     const AdditionalInformation = (
       <div className={SHIPMENT_CARD}>
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:additional'))}
+          {HeadingFactory('Additional Information')}
           <div
             className={`${ROW(10)} ${ALIGN_CENTER}`}
             onClick={() => this.handleCollapser('extraInfo')}
@@ -478,13 +475,13 @@ export class BookingConfirmation extends Component {
           <div className={INNER_WRAPPER}>
             <div className={LAYOUT_WRAP}>
               <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-                {TotalGoodsValue(shipment, t)}
-                {Eori(shipment, t)}
+                {TotalGoodsValue(shipment)}
+                {Eori(shipment)}
 
                 {shipment.cargo_notes ? (
                   <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
                     <p className="flex-100">
-                      <b>{`${t('bookconf:description')}:`}</b>
+                      <b>Description of Goods:</b>
                     </p>
                     <p className="flex-100 no_m">{shipment.cargo_notes}</p>
                   </div>
@@ -494,7 +491,7 @@ export class BookingConfirmation extends Component {
                 {shipment.notes ? (
                   <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
                     <p className="flex-100">
-                      <b>{`${t('common:notes')}:`}</b>
+                      <b>Notes:</b>
                     </p>
                     <p className="flex-100 no_m">{shipment.notes}</p>
                   </div>
@@ -504,7 +501,7 @@ export class BookingConfirmation extends Component {
                 {shipment.incoterm_text ? (
                   <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
                     <p className="flex-100">
-                      <b>{`${t('common:incoterm')}:`}</b>
+                      <b>Incoterm:</b>
                     </p>
                     <p className="flex-100 no_m">{shipment.incoterm_text}</p>
                   </div>
@@ -522,7 +519,7 @@ export class BookingConfirmation extends Component {
       <div className={SHIPMENT_CARD}>
 
         <div style={themeTitled} className={HEADING}>
-          {HeadingFactory(t('common:documents'))}
+          {HeadingFactory('Documents')}
           <div className={COLLAPSER} onClick={() => this.handleCollapser('documents')}>
             {getChevronIcon(collapser.documents)}
           </div>
@@ -547,7 +544,7 @@ export class BookingConfirmation extends Component {
         <div className={LAYOUT_WRAP}>
 
           <div style={themeTitled} className={HEADING}>
-            {HeadingFactory(t('common:agree'))}
+            {HeadingFactory('Agree and Submit')}
           </div>
 
           <div className={CHECKBOX}>
@@ -594,7 +591,7 @@ export class BookingConfirmation extends Component {
             <div className={BACK_TO_DASHBOARD_CELL}>
               <RoundButton
                 theme={theme}
-                text={t('common:back')}
+                text="Back to dashboard"
                 back
                 iconClass="fa-angle-left"
                 handleNext={() => shipmentDispatch.toDashboard()}
@@ -761,16 +758,19 @@ function getDocs ({
   return { missingDocs, docView }
 }
 
-function getDefaultTerms (tenant, t) {
+function getDefaultTerms (tenant) {
   return [
-    t('bookconf:termsFirst'),
-    `${t('bookconf:termsSecond')} ${tenant.name}`,
-    t('bookconf:termsThird'),
+    'You verify that all the information provided above is true',
+    `You agree to our Terms and Conditions and the General Conditions of the
+                        Nordic Association of Freight Forwarders (NSAB) and those of 
+                        {tenant.name}`,
+    `You agree to pay the price of the
+    shipment as stated above upon arrival of the invoice`
   ]
 }
 
-function getTenantTerms (tenant, t) {
-  const defaultTerms = getDefaultTerms(tenant, t)
+function getTenantTerms (tenant) {
+  const defaultTerms = getDefaultTerms(tenant)
 
   return tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
 }
@@ -793,7 +793,7 @@ function getThemeTitled (theme) {
     : { background: 'rgba(0,0,0,0.25)', color: 'white' }
 }
 
-function getNotifyeesJSX ({ notifyees, textStyle, t }) {
+function getNotifyeesJSX ({ notifyees, textStyle }) {
   if (!notifyees) {
     return []
   }
@@ -808,7 +808,7 @@ function getNotifyeesJSX ({ notifyees, textStyle, t }) {
       </div>
       <div className={`${WRAP_ROW(85)} ${ALIGN_START}`}>
         <div className="flex-100">
-          <h3 style={{ fontWeight: 'normal' }}>{t('common:notifyee')}</h3>
+          <h3 style={{ fontWeight: 'normal' }}>Notifyee</h3>
         </div>
         <p style={{ marginTop: 0 }}>
           {notifyee.first_name} {notifyee.last_name}
@@ -847,19 +847,15 @@ function getShipperAndConsignee ({
   return els
 }
 
-function getTerms ({ theme, terms, t }) {
-  const termBullets = terms.map(term => <li key={v4()}> {term}</li>)
+function getTerms ({ theme, terms }) {
+  const termBullets = terms.map(t => <li key={v4()}> {t}</li>)
 
   return (
     <div className={`${ROW()} ${ALIGN_START_CENTER}`}>
       <div className="flex-5" />
       <div className={`${WRAP_ROW(95)} ${ALIGN_START_CENTER}`}>
         <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-          <TextHeading 
-            theme={theme} 
-            text={t('common:checkBox')} 
-            size={4} 
-          />
+          <TextHeading theme={theme} text="By checking this box" size={4} />
         </div>
         <div className={`${ROW(100)} ${ALIGN_START}`}>
           <ul className={`flex-80 ${styles.terms_list}`}>{termBullets}</ul>
@@ -916,11 +912,11 @@ function getArrivalTime (shipment) {
   return `${moment(shipment.planned_eta).format(format)}`
 }
 
-function TotalGoodsValue (shipment, t) {
+function TotalGoodsValue (shipment) {
   return shipment.total_goods_value ? (
     <div className={`${WRAP_ROW(45)} offset-5 ${ALIGN_START}`}>
       <p className="flex-100">
-        <b>{`${t('bookconf:totalValue')}:`}</b>
+        <b>Total Value of Goods:</b>
       </p>
       <p className="flex-100 no_m">{`${
         shipment.total_goods_value.currency
@@ -931,11 +927,11 @@ function TotalGoodsValue (shipment, t) {
   )
 }
 
-function Eori (shipment, t) {
+function Eori (shipment) {
   return shipment.eori ? (
     <div className={`${WRAP_ROW(45)} offset-10 ${ALIGN_START}`}>
       <p className="flex-100">
-        <b>{`${t('bookconf:eori')}:`}</b>
+        <b>EORI number:</b>
       </p>
       <p className="flex-100 no_m">{shipment.eori}</p>
     </div>

@@ -18,11 +18,12 @@ exports[`admin is true 1`] = `
         layout-row layout-wrap padding_bottom"
   >
     <div
-      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+      className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
         content={
           <AdminShipmentCard
+            confirmShipmentData={Object {}}
             dispatches={
               Object {
                 "foo": [Function],
@@ -74,8 +75,14 @@ exports[`admin is true 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
         titleAction={false}
-        wrapperClassName="layout-row flex layout-align-center-center"
+        wrapperClassName="layout-row"
       />
     </div>
   </div>
@@ -100,7 +107,7 @@ exports[`shallow rendering 1`] = `
         layout-row layout-wrap padding_bottom"
   >
     <div
-      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+      className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
         content={
@@ -110,7 +117,6 @@ exports[`shallow rendering 1`] = `
                 "foo": [Function],
               }
             }
-            hubs={Object {}}
             shipment={
               Object {
                 "clientName": "FOO_CLIENT_NAME",
@@ -138,8 +144,14 @@ exports[`shallow rendering 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
         titleAction={false}
-        wrapperClassName="layout-row flex layout-align-center-center"
+        wrapperClassName="layout-row"
       />
     </div>
   </div>

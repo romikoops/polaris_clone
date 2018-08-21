@@ -64,10 +64,10 @@ exports[`shallow render 1`] = `
         </span>
       </div>
       <div
-        className="layout-row flex-100 layout-align-center-start location_address"
+        className="layout-row flex-100 location_address"
       >
         <i
-          className="fa fa-map-marker clip"
+          className="flex-10 fa fa-map-marker clip"
           style={
             Object {
               "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -75,7 +75,7 @@ exports[`shallow render 1`] = `
           }
         />
         <div
-          className="content layout-row layout-wrap layout-align-start-start"
+          className="content flex layout-wrap layout-align-space-between"
         >
           <p
             className="flex-100"
@@ -100,7 +100,15 @@ exports[`shallow render 1`] = `
           <p
             className="flex-100"
           >
-            Germany
+             
+            <Truncate
+              ellipsis="…"
+              lines={2}
+              trimWhitespace={false}
+            >
+              Germany
+               
+            </Truncate>
           </p>
         </div>
       </div>
@@ -117,10 +125,10 @@ exports[`shallow render 1`] = `
         className="header layout-row layout-align-end-center"
       >
         <div
-          className="layout-row layout-wrap"
+          className="layout-row icon_primary"
         >
           <div
-            className="layout-row flex-20 layout-align-end"
+            className="layout-row"
           >
             <div
               className="makePrimary pointy"
@@ -155,10 +163,10 @@ exports[`shallow render 1`] = `
         </span>
       </div>
       <div
-        className="layout-row flex-100 layout-align-center-start location_address"
+        className="layout-row flex-100 location_address"
       >
         <i
-          className="fa fa-map-marker clip"
+          className="flex-10 fa fa-map-marker clip"
           style={
             Object {
               "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
@@ -166,7 +174,7 @@ exports[`shallow render 1`] = `
           }
         />
         <div
-          className="content layout-row layout-wrap layout-align-start-start"
+          className="content flex layout-wrap layout-align-space-between"
         >
           <p
             className="flex-100"
@@ -191,7 +199,15 @@ exports[`shallow render 1`] = `
           <p
             className="flex-100"
           >
-            Germany
+             
+            <Truncate
+              ellipsis="…"
+              lines={2}
+              trimWhitespace={false}
+            >
+              Germany
+               
+            </Truncate>
           </p>
         </div>
       </div>

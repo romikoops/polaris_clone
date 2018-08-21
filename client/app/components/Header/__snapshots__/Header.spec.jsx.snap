@@ -43,6 +43,7 @@ exports[`noMessages is true 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -124,6 +125,7 @@ exports[`shallow render 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -218,6 +220,7 @@ exports[`showRegistration is true 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -312,6 +315,7 @@ exports[`unread > 0 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -406,6 +410,7 @@ exports[`user is falsy 1`] = `
         <NavDropdown
           dropDownText=""
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -487,6 +492,7 @@ exports[`user.role_id === 2 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {

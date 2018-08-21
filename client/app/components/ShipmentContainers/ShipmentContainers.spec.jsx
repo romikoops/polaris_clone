@@ -55,7 +55,7 @@ test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
 
-test('props.nextStageAttempt is true', () => {
+test('nextStageAttempt is true', () => {
   const props = {
     ...propsBase,
     nextStageAttempt: true
@@ -63,7 +63,7 @@ test('props.nextStageAttempt is true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test('props.scope.dangerous_goods is true', () => {
+test('scope.dangerous_goods is true', () => {
   const props = {
     ...propsBase,
     scope: {
@@ -73,7 +73,7 @@ test('props.scope.dangerous_goods is true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test('props.containers has dangerous_goods as true', () => {
+test('containers.dangerous_goods is true', () => {
   const props = {
     ...propsBase,
     containers: [{
@@ -90,10 +90,9 @@ test('props.addContainer is called', () => {
     addContainer: jest.fn()
   }
   const wrapper = createWrapper(props)
-  const clickableDiv = wrapper.find('.add_unit').first()
-
-  expect(props.addContainer).not.toHaveBeenCalled()
+  const clickableDiv = wrapper.find('.add_unit_wrapper > div').first()
   clickableDiv.simulate('click')
+
   expect(props.addContainer).toHaveBeenCalled()
 })
 

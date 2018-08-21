@@ -78,7 +78,7 @@ exports[`loadType is cargo_item 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with pick-up
+          with Pick-up
         </p>
       </div>
       <div
@@ -92,7 +92,7 @@ exports[`loadType is cargo_item 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with delivery
+          with Delivery
         </p>
       </div>
     </div>
@@ -205,7 +205,7 @@ exports[`modeOfTransport is falsy 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with pick-up
+          with Pick-up
         </p>
       </div>
       <div
@@ -219,7 +219,7 @@ exports[`modeOfTransport is falsy 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with delivery
+          with Delivery
         </p>
       </div>
     </div>
@@ -320,7 +320,7 @@ exports[`shallow render 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with pick-up
+          with Pick-up
         </p>
       </div>
       <div
@@ -334,7 +334,7 @@ exports[`shallow render 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with delivery
+          with Delivery
         </p>
       </div>
     </div>
@@ -435,7 +435,7 @@ exports[`theme is falsy 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with pick-up
+          with Pick-up
         </p>
       </div>
       <div
@@ -449,7 +449,7 @@ exports[`theme is falsy 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with delivery
+          with Delivery
         </p>
       </div>
     </div>
@@ -550,7 +550,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with pick-up
+          with Pick-up
         </p>
       </div>
       <div
@@ -564,7 +564,7 @@ exports[`trucking.on_carriage is empty object 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          without delivery
+          without Delivery
         </p>
       </div>
     </div>
@@ -665,7 +665,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          without pick-up
+          without Pick-up
         </p>
       </div>
       <div
@@ -679,7 +679,7 @@ exports[`trucking.pre_carriage is empty object 1`] = `
         <p
           className="trucking_elem flex-none"
         >
-          with delivery
+          with Delivery
         </p>
       </div>
     </div>

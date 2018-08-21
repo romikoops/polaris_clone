@@ -73,7 +73,6 @@ exports[`props.viewHSCodes is true 1`] = `
               "size_class": "dry_goods",
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -277,7 +276,6 @@ exports[`shallow render 1`] = `
               "size_class": "dry_goods",
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -481,7 +479,6 @@ exports[`state.unitView is true 1`] = `
               "size_class": "dry_goods",
             }
           }
-          t={[Function]}
         />
       </div>
     </div>
@@ -685,7 +682,6 @@ exports[`state.viewer is true 1`] = `
               "size_class": "dry_goods",
             }
           }
-          t={[Function]}
         />
       </div>
     </div>

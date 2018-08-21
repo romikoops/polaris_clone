@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import '../../../../styles/react-toggle.scss'
 import styles from './CargoContainerGroup.scss'
 import PropTypes from '../../../../prop-types'
+// import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import CargoContainerGroupAggregated from './Aggregated'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator } from '../../../../helpers'
@@ -33,19 +33,14 @@ export class CargoContainerGroup extends Component {
     this.setState({ unitView: !this.state.unitView })
   }
   render () {
-    const { unitView, collapsed } = this.state
     const {
-      group,
-      shipment,
-      theme,
-      t
+      group, shipment, theme
     } = this.props
-
     const gradientTextStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
-
+    const { unitView, collapsed } = this.state
     const unitArr = (
       <div
         key={v4()}
@@ -54,27 +49,21 @@ export class CargoContainerGroup extends Component {
         } flex-100 layout-row layout-wrap layout-align-none-center`}
       >
         <div className="flex-10 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ fontSize: '10px' }}>
-            {t('cargo:singleItem')}
-          </p>
+          <p className="flex-none" style={{ fontSize: '10px' }}>Single Item</p>
         </div>
 
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{group.items[0].weight_class}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:weightClass')}
-            </p>
+            <p className="flex-none layout-row layout-align-center-center">Weight Class</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center">
               <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:cargoGrossWeight')}
-            </p>
+            <p className="flex-none layout-row layout-align-center-center">Cargo Gross Weight</p>
           </div>
         </div>
 
@@ -84,17 +73,13 @@ export class CargoContainerGroup extends Component {
               <span>
                 {(group.items[0].gross_weight)}
               </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:grossWeight')}
-            </p>
+            <p className="flex-none layout-row layout-align-center-center">Gross Weight</p>
           </div>
         </div>
         <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
           <div className="layout-column">
             <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
-              {t('cargo:tareWeight')}
-            </p>
+            <p className="flex-none layout-row layout-align-center-center">Tare Weight</p>
           </div>
         </div>
       </div>
@@ -152,19 +137,36 @@ export class CargoContainerGroup extends Component {
             {unitArr}
           </div>
         </div>
+        {/* {viewHSCodes ? (
+          <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
+            <i className="fa fa-eye clip flex-none" style={textStyle} />
+            <p className="offset-5 flex-none">View Hs Codes</p>
+          </div>
+        ) : (
+          ''
+        )}
+        {viewer ? (
+          <HsCodeViewer item={group} hsCodes={hsCodes} theme={theme} close={this.viewHsCodes} />
+        ) : (
+          ''
+        )}
+        {styleTagJSX} */}
       </div>
     )
   }
 }
 CargoContainerGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
+  // viewHSCodes: PropTypes.bool,
+  // hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   shipment: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.theme
 }
 
 CargoContainerGroup.defaultProps = {
+  // viewHSCodes: false,
   shipment: {},
   theme: null
 }
 
-export default translate('cargo')(CargoContainerGroup)
+export default CargoContainerGroup

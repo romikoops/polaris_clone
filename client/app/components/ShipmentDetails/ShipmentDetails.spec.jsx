@@ -92,6 +92,6 @@ afterEach(() => {
   Date = originalDate
 })
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<ShipmentDetails {...propsBase} />)).toMatchSnapshot()
 })

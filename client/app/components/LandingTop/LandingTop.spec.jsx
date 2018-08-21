@@ -57,19 +57,3 @@ test('user.role_id is 1', () => {
   }
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
-
-test('props.toggleShowLogin is called', () => {
-  const props = {
-    ...propsBase,
-    user: {
-      ...user,
-      guest: true
-    },
-    toggleShowLogin: jest.fn()
-  }
-  const wrapper = mount(<LandingTop {...props} />)
-  const link = wrapper.find('a').first()
-  link.simulate('click')
-
-  expect(props.toggleShowLogin).toHaveBeenCalled()
-})

@@ -14,7 +14,7 @@ exports[`shallow render 1`] = `
     </p>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center"
+    className="flex-100 layout-row layout-align-start-center layout-wrap"
   >
     <NotesCard
       note={

@@ -227,7 +227,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -619,7 +619,6 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "foo": 1,
                 }
               }
-              t={[Function]}
             />
           </div>
         </div>
@@ -930,7 +929,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_26"
@@ -958,9 +957,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -970,7 +967,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -1247,7 +1244,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -2012,7 +2009,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_32"
@@ -2040,9 +2037,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -2052,7 +2047,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -2323,7 +2318,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -3143,7 +3138,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_41"
@@ -3171,9 +3166,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -3183,7 +3176,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -3454,7 +3447,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -4167,7 +4160,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_47"
@@ -4195,9 +4188,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -4207,7 +4198,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -5498,7 +5489,7 @@ exports[`shallow render 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -6192,7 +6183,7 @@ exports[`shallow render 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_4"
@@ -6220,9 +6211,7 @@ exports[`shallow render 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -6232,7 +6221,7 @@ exports[`shallow render 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -6503,7 +6492,7 @@ exports[`with cargo items 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -7018,7 +7007,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7183,7 +7171,6 @@ exports[`with cargo items 1`] = `
                   },
                 }
               }
-              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -7502,7 +7489,7 @@ exports[`with cargo items 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_20"
@@ -7530,9 +7517,7 @@ exports[`with cargo items 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -7542,7 +7527,7 @@ exports[`with cargo items 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {
@@ -7813,7 +7798,7 @@ exports[`with containers 1`] = `
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -8310,7 +8295,6 @@ exports[`with containers 1`] = `
                   },
                 }
               }
-              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8451,7 +8435,6 @@ exports[`with containers 1`] = `
                   },
                 }
               }
-              t={[Function]}
               theme={
                 Object {
                   "colors": Object {
@@ -8770,7 +8753,7 @@ exports[`with containers 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-100 terms_list"
+                  className="flex-80 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_12"
@@ -8798,9 +8781,7 @@ exports[`with containers 1`] = `
             }
           }
         >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
+          <div>
             <RoundButton
               active={false}
               back={false}
@@ -8810,7 +8791,7 @@ exports[`with containers 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size=""
+              size="full"
               text="Finish Booking Request"
               theme={
                 Object {

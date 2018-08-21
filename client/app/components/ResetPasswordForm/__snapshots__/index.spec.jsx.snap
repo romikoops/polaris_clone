@@ -580,7 +580,9 @@ exports[`state.settingPassword is true 1`] = `
           <div
             className="spinner"
           >
-            <LoadingSpinner />
+            <LoadingSpinner
+              size=""
+            />
           </div>
         </div>
       </Formsy>
