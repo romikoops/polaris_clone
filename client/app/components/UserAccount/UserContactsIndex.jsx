@@ -95,7 +95,7 @@ export class UserContactsIndex extends Component {
           </div>
           {newContactBox}
         </div>
-        <div className="layout-column flex-20 flex-md-15 flex-sm-10 show-gt-xs hide-xs layout-align-end-end" style={sideBoxStyle}>
+        <div className="layout-column flex-20 hide-xs layout-align-end-end" style={sideBoxStyle}>
           <SideOptionsBox
             header="Data Manager"
             flexOptions="layout-column flex-20 flex-md-15 flex-sm-10"
