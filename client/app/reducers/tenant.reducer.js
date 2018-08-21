@@ -1,4 +1,4 @@
-import * as tenantActions from '../actions/tenant'
+import * as tenantConstants from '../constants/tenant.constants'
 
 export const tenant = (
   state = {
@@ -9,35 +9,48 @@ export const tenant = (
   action
 ) => {
   switch (action.type) {
-    case tenantActions.INVALIDATE_SUBDOMAIN:
-      return Object.assign({}, state, {
+    case tenantConstants.INVALIDATE_SUBDOMAIN:
+      return {
+        ...state,
         didInvalidate: true
-      })
-    case tenantActions.REQUEST_TENANT:
-      return Object.assign({}, state, {
+      }
+    case tenantConstants.REQUEST_TENANT:
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
-    case tenantActions.RECEIVE_TENANT:
-      return Object.assign({}, state, {
+      }
+    case tenantConstants.RECEIVE_TENANT:
+      return {
+        ...state,
         isFetching: false,
+        loading: true,
         didInvalidate: false,
         data: action.data,
         lastUpdated: action.receivedAt
-      })
-    case tenantActions.RECEIVE_TENANT_ERROR:
-      return Object.assign({}, state, {
+      }
+    case tenantConstants.RECEIVE_TENANT_ERROR:
+      return {
+        ...state,
         isFetching: false
-      })
-    case tenantActions.CLEAR_TENANT:
+      }
+    case tenantConstants.CLEAR_TENANT:
       return {}
-    case tenantActions.SET_THEME: {
+    case tenantConstants.SET_THEME: {
       return {
         ...state,
         data: {
           ...state.data,
           theme: action.payload
         }
+      }
+    }
+    case tenantConstants.CLEAR_LOADING: {
+      debugger // eslint-disable-line no-debugger
+
+      return {
+        ...state,
+        isFetching: false
       }
     }
     default:
@@ -47,7 +60,7 @@ export const tenant = (
 
 export const selectedSubdomain = (state = '', action) => {
   switch (action.type) {
-    case tenantActions.SELECT_SUBDOMAIN:
+    case tenantConstants.SELECT_SUBDOMAIN:
       return action.subdomain
     default:
       return state

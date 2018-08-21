@@ -18,6 +18,13 @@ function logOut () {
   }
 }
 
+function clearLoading () {
+  return {
+    type: tenantConstants.CLEAR_LOADING,
+    payload: null
+  }
+}
+
 function receiveTenant (subdomain, json) {
   return {
     type: tenantConstants.RECEIVE_TENANT,
@@ -41,6 +48,7 @@ function fetchTenant (subdomain) {
       error
     }
   }
+
   return (dispatch) => {
     dispatch(requestTenant(subdomain))
     return fetch(`${BASE_URL}/tenants/${subdomain}`)
@@ -87,7 +95,8 @@ const tenantActions = {
   invalidateSubdomain,
   fetchTenant,
   shouldFetchTenant,
-  fetchTenantIfNeeded
+  fetchTenantIfNeeded,
+  clearLoading
 }
 
 export default tenantActions
