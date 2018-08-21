@@ -1,6 +1,10 @@
 {
     "en": {
       "common": {
+        "selectCurrency": "Select Currency",
+        "closestDeparture": "This is the closest departure to the specified date",
+        "earlierDepartures": "Show earlier departures",
+        "laterDepartures": "Show later departures",
         "grossWeight": "Gross Weight",
         "viewHsCodes": "View Hs Codes",
         "length": "Length",

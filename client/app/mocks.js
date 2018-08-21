@@ -1,4 +1,4 @@
-import { set } from 'lodash'
+import { set, cloneDeep } from 'lodash'
 
 /**
  * Checks if variable is an non-empty object
@@ -7,7 +7,7 @@ import { set } from 'lodash'
  * Fase for `null, {}, [], [1,2,3]`
  */
 const isObject = (x) => {
-  const ok = !Array.isArray(x) && typeof x === 'object'
+  const ok = x !== null && !Array.isArray(x) && typeof x === 'object'
   if (!ok) {
     return false
   }
@@ -24,7 +24,8 @@ const isObject = (x) => {
  * if the change affects more than one of object's branches
  */
 export const change = (origin, pathRaw, rules) => {
-  const willReturn = JSON.parse(JSON.stringify(origin))
+  const willReturn = cloneDeep(origin)
+  
   if (!isObject(rules)) {
     set(willReturn, pathRaw, rules)
 
