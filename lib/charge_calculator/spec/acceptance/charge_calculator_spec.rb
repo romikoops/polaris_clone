@@ -211,7 +211,8 @@ RSpec.describe ChargeCalculator do
         BigDecimal("5.0")
       )
       expect(node_tree.dig(:children, 1, :children, 1, :amount)).to eq(
-        BigDecimal("2.5") * 1
+        # amount * number of bills of lading
+        BigDecimal("2.5")
       )
       expect(node_tree.dig(:children, 1, :children, 2, :amount)).to eq(
         BigDecimal("35.0")

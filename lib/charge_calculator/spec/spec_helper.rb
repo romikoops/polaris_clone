@@ -1,4 +1,8 @@
 require "bundler/setup"
+
+require 'simplecov'
+SimpleCov.start
+
 require "charge_calculator"
 
 require "support/json_schema_matcher"
