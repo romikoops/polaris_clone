@@ -4,7 +4,7 @@ module ChargeCalculator
   module Reducers
     class Sum < Base
       def apply(array)
-        array.reduce(&:+)
+        array.reduce(:+)
       end
     end
   end
