@@ -119,6 +119,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
     itinerary.notes.create!(body:   params[:notes][:body],
                             header: params[:notes][:header],
                             level:  params[:notes][:level])
+    itinerary.notes
   end
 
   def new_ids

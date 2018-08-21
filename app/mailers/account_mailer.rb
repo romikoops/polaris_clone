@@ -30,8 +30,8 @@ class AccountMailer < Devise::Mailer
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     opts[:subject] = "ItsMyCargo Account Password Reset"
-    @redirect_url = base_url(tenant) + "password_reset"
-
+    redirect_url = base_url(tenant) + "password_reset"
+    @reset_url = "#{base_server_url}subdomain/#{tenant.subdomain}/auth/password/edit?redirect_url=#{redirect_url}&reset_password_token=#{token}"
     # headers["Custom-header"] = "Some Headers"
     # opts[:reply_to] = 'example@email.com'
     super
