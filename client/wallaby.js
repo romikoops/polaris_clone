@@ -4,9 +4,10 @@ module.exports = function (wallaby) {
     files: [
       { pattern: 'jest.init.js', load: false, instrument: false },
       { pattern: 'package.json', load: false, instrument: false },
+      { pattern: 'translations/all.json ', load: false, instrument: false },
       { pattern: 'app/components/**/*.snap', load: false, instrument: false },
       { pattern: 'app/components/**/*Base.jsx', load: false, instrument: false },
-      { pattern: 'app/components/**/*Done.jsx', load: false, instrument: false },
+      '__mocks__/react-i18next.js',
       'app/**/*.js?(x)',
       '!app/components/**/*.spec.jsx'
     ],
