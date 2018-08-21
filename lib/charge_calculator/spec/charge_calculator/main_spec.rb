@@ -31,454 +31,131 @@ RSpec.describe ChargeCalculator::Main do
     }
   end
 
-  context "Dummy test cases" do
-    let(:rates_weight_steps_1) do
-      [
-        {
-          min_price: "20.0",
-          currency:  "EUR",
-          category:  "BAS",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   { between: { field: "payload", from: 0, to: 400 } },
-              amount: "29.35",
-              basis:  "chargeable_payload"
-            },
-            {
-              rule:   { between: { field: "payload", from: 401, to: 800 } },
-              amount: "25.78",
-              basis:  "chargeable_payload"
-            },
-            {
-              rule:   { between: { field: "payload", from: 801, to: 1_500 } },
-              amount: "23.42",
-              basis:  "chargeable_payload"
-            }
-          ]
-        },
-        {
-          min_price: "20.0",
-          currency:  "EUR",
-          category:  "HAS",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "20.0",
-              basis:  "chargeable_payload"
-            }
-          ]
-        }
-      ]
-    end
-    let(:rates_weight_steps_2) do
-      [
-        {
-          min_price: "5.0",
-          currency:  "EUR",
-          category:  "BAS",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   { between: { field: "payload", from: 0, to: 580 } },
-              amount: "49.25",
-              basis:  "chargeable_payload"
-            },
-            {
-              rule:   { between: { field: "payload", from: 581, to: 1_400 } },
-              amount: "33.58",
-              basis:  "chargeable_payload"
-            },
-            {
-              rule:   { between: { field: "payload", from: 1_401, to: 2_500 } },
-              amount: "28.64",
-              basis:  "chargeable_payload"
-            }
-          ]
-        }
-      ]
-    end
-    let(:rates_100_kg_basis) do
-      [
-        {
-          min_price: "30.0",
-          currency:  "EUR",
-          category:  "BAS",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "51.25",
-              basis:  "payload_unit_100_kg"
-            }
-          ]
-        }
-      ]
-    end
-
-    let(:rate_flat_per_shipment) do
+  let(:rates_weight_steps_1) do
+    [
       {
-        min_price: "30.0",
+        min_price: "20.0",
         currency:  "EUR",
-        category:  "flat_fees",
-        kind:      "shipment",
+        category:  "BAS",
+        kind:      "cargo_unit",
+        prices:    [
+          {
+            rule:   { between: { field: "payload", from: 0, to: 400 } },
+            amount: "29.35",
+            basis:  "chargeable_payload"
+          },
+          {
+            rule:   { between: { field: "payload", from: 401, to: 800 } },
+            amount: "25.78",
+            basis:  "chargeable_payload"
+          },
+          {
+            rule:   { between: { field: "payload", from: 801, to: 1_500 } },
+            amount: "23.42",
+            basis:  "chargeable_payload"
+          }
+        ]
+      },
+      {
+        min_price: "20.0",
+        currency:  "EUR",
+        category:  "HAS",
+        kind:      "cargo_unit",
         prices:    [
           {
             rule:   nil,
-            amount: "200.0",
-            basis:  "flat"
+            amount: "20.0",
+            basis:  "chargeable_payload"
           }
         ]
       }
-    end
-
-    let(:rates_weight_steps_1_and_flat_per_shipment) do
-      [
-        rates_weight_steps_1.first,
-        rate_flat_per_shipment
-      ]
-    end
-
-    context "2 Connected Ocean Routes" do
-      context "Weight Steps" do
-        let(:pricings) do
-          [
-            {
-              conversion_ratios: {
-                weight_measure: "1_000.0"
-              },
-              route:             "Hamburg - Gothenburg",
-              rates:             rates_weight_steps_1
-            },
-            {
-              conversion_ratios: {
-                weight_measure: "1_000.0"
-              },
-              route:             "Gothenburg - Shanghai",
-              rates:             rates_weight_steps_2
-            }
-          ]
-        end
-
-        let(:shipment_params) do
+    ]
+  end
+  let(:rates_weight_steps_2) do
+    [
+      {
+        min_price: "5.0",
+        currency:  "EUR",
+        category:  "BAS",
+        kind:      "cargo_unit",
+        prices:    [
           {
-            load_type:   "cargo_item",
-            cargo_units: [
-              cargo_item_1,
-              cargo_item_2
-            ]
-          }
-        end
-
-        subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
-
-        context "price" do
-          it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Models::Price
-
-            node_tree = subject.price.to_nested_hash
-            expect(node_tree.to_json).to match_json_schema("main/price")
-
-            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
-
-            expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-              cargo_item_1_payload * BigDecimal("23.42") * 2
-            )
-            expect(node_tree.dig(:children, 0, :children, 0, :children, 1, :amount)).to eq(
-              cargo_item_1_payload * BigDecimal("20.0") * 2
-            )
-            expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              cargo_item_2_payload * BigDecimal("25.78")
-            )
-            expect(node_tree.dig(:children, 0, :children, 1, :children, 1, :amount)).to eq(
-              cargo_item_2_payload * BigDecimal("20.0")
-            )
-
-            expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-              cargo_item_1_payload * BigDecimal("33.58") * 2
-            )
-            expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-              cargo_item_2_payload * BigDecimal("49.25")
-            )
-          end
-        end
-      end
-
-      context "100 Kg Basis (route 1), Weight Steps (route 2)" do
-        let(:pricings) do
-          [
-            {
-              conversion_ratios: {
-                weight_measure: "1_000.0"
-              },
-              route:             "Hamburg - Gothenburg",
-              rates:             rates_100_kg_basis
-            },
-            {
-              conversion_ratios: {
-                weight_measure: "1_000.0"
-              },
-              route:             "Gothenburg - Shanghai",
-              rates:             rates_weight_steps_2
-            }
-          ]
-        end
-
-        let(:shipment_params) do
+            rule:   { between: { field: "payload", from: 0, to: 580 } },
+            amount: "49.25",
+            basis:  "chargeable_payload"
+          },
           {
-            load_type:   "cargo_item",
-            cargo_units: [
-              cargo_item_1,
-              cargo_item_2
-            ]
-          }
-        end
-
-        subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
-
-        context "price" do
-          it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Models::Price
-
-            node_tree = subject.price.to_nested_hash
-            expect(node_tree.to_json).to match_json_schema("main/price")
-
-            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
-
-            expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-              (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
-            )
-            expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              (cargo_item_2_payload / 100).ceil * BigDecimal("51.25") * 1
-            )
-
-            expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-              cargo_item_1_payload * BigDecimal("33.58") * 2
-            )
-            expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-              cargo_item_2_payload * BigDecimal("49.25")
-            )
-          end
-        end
-      end
-    end
-
-    context "1 Route Ocean Route" do
-      context "100 Kg Basis (route 1), Weight Steps (route 2)" do
-        let(:pricings) do
-          [
-            {
-              conversion_ratios: {
-                weight_measure: "1_000.0"
-              },
-              route:             "Hamburg - Gothenburg",
-              rates:             rates_weight_steps_1_and_flat_per_shipment
-            }
-          ]
-        end
-
-        let(:shipment_params) do
+            rule:   { between: { field: "payload", from: 581, to: 1_400 } },
+            amount: "33.58",
+            basis:  "chargeable_payload"
+          },
           {
-            load_type:   "cargo_item",
-            cargo_units: [
-              cargo_item_1,
-              cargo_item_2
-            ]
+            rule:   { between: { field: "payload", from: 1_401, to: 2_500 } },
+            amount: "28.64",
+            basis:  "chargeable_payload"
           }
-        end
-
-        subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
-
-        context "price" do
-          it "calculates the correct price node tree" do
-            expect(subject.price).to be_a ChargeCalculator::Models::Price
-
-            node_tree = subject.price.to_nested_hash
-            expect(node_tree.to_json).to match_json_schema("main/price")
-
-            cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
-            cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
-
-            expect(node_tree.dig(:children, 0, :children, 0, :amount)).to eq(
-              BigDecimal("200.0")
-            )
-
-            expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-              cargo_item_1_payload * BigDecimal("23.42") * 2
-            )
-            expect(node_tree.dig(:children, 0, :children, 2, :children, 0, :amount)).to eq(
-              cargo_item_2_payload * BigDecimal("25.78")
-            )
-          end
-        end
-      end
-    end
+        ]
+      }
+    ]
+  end
+  let(:rates_100_kg_basis) do
+    [
+      {
+        min_price: "30.0",
+        currency:  "EUR",
+        category:  "BAS",
+        kind:      "cargo_unit",
+        prices:    [
+          {
+            rule:   nil,
+            amount: "51.25",
+            basis:  "payload_unit_100_kg"
+          }
+        ]
+      }
+    ]
   end
 
-  context "Real test cases" do
-    let(:rates_japan_freight) do
-      # Source
-      # Japan_SEARATES_USD
-      # https://docs.google.com/spreadsheets/d/1XGoGGpzxp76lp8J89TxOxyL6k_G5sa0JzbYXPqR12Yo/edit#gid=823988371
-
-      [
+  let(:rate_flat_per_shipment) do
+    {
+      min_price: "30.0",
+      currency:  "EUR",
+      category:  "flat_fees",
+      kind:      "shipment",
+      prices:    [
         {
-          min_price: "19.0",
-          currency:  "USD",
-          category:  "BAS",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "19.0",
-              basis:  "weight_measure"
-            }
-          ]
+          rule:   nil,
+          amount: "200.0",
+          basis:  "flat"
         }
       ]
-    end
+    }
+  end
 
-    let(:rates_japan_local_charges) do
-      # Source
-      # Japan_local_USD
-      # https://docs.google.com/spreadsheets/d/11lbOSY9UoyLNBr1QUGaCKTIISr8ajKjoCnkumUdavjE/edit#gid=1839599297
+  let(:rates_weight_steps_1_and_flat_per_shipment) do
+    [
+      rates_weight_steps_1.first,
+      rate_flat_per_shipment
+    ]
+  end
 
-      # Fee Codes: THC, LCL, ANT, BL, AFR, ISP, VGM, CUST
-
-      [
-        {
-          min_price: "5.0",
-          currency:  "USD",
-          category:  "ANT",
-          kind:      "shipment",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "5.0",
-              basis:  "flat"
-            }
-          ]
-        },
-        {
-          min_price: "2.5",
-          currency:  "USD",
-          category:  "BL",
-          kind:      "shipment",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "2.5",
-              basis:  "bill_of_lading"
-            }
-          ]
-        },
-        {
-          min_price: "35.0",
-          currency:  "USD",
-          category:  "AFR",
-          kind:      "shipment",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "35.0",
-              basis:  "flat"
-            }
-          ]
-        },
-        {
-          min_price: "18.0",
-          currency:  "USD",
-          category:  "VGM",
-          kind:      "shipment",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "18.0",
-              basis:  "bill_of_lading"
-            }
-          ]
-        },
-        {
-          min_price: "47.0",
-          currency:  "USD",
-          category:  "THC",
-          kind:      "cargo_unit",
-          reducer:   "sum",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "47.0",
-              basis:  "payload_unit_ton"
-            },
-            {
-              rule:   { eq: { field: "telegraphic_transfer", arg_value: true } },
-              amount: "44.0",
-              basis:  "flat"
-            }
-          ]
-        },
-        {
-          min_price: "42.0",
-          currency:  "USD",
-          category:  "LCL",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "42.0",
-              basis:  "payload_unit_ton"
-            }
-          ]
-        },
-        {
-          min_price: "5.5",
-          currency:  "USD",
-          category:  "ISP",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   nil,
-              amount: "5.5",
-              basis:  "volume"
-            }
-          ]
-        },
-        {
-          min_price: "25.0",
-          currency:  "USD",
-          category:  "CUST",
-          kind:      "cargo_unit",
-          prices:    [
-            {
-              rule:   { gt: { field: "goods_value", arg_value: 1000 } },
-              amount: "25.0",
-              basis:  "flat"
-            }
-          ]
-        }
-      ]
-    end
-
-    context "1 Route Ocean Route" do
+  context "2 Connected Ocean Routes" do
+    context "Weight Steps" do
       let(:pricings) do
         [
           {
             conversion_ratios: {
               weight_measure: "1_000.0"
             },
-            route:             "Tokyo - Hamburg",
-            rates:             rates_japan_freight
+            route:             "Hamburg - Gothenburg",
+            rates:             rates_weight_steps_1
           },
           {
             conversion_ratios: {
-              weight_measure: "1.0"
+              weight_measure: "1_000.0"
             },
-            route:             "Tokyo - Hamburg",
-            direction:         "Export",
-            rates:             rates_japan_local_charges
+            route:             "Gothenburg - Shanghai",
+            rates:             rates_weight_steps_2
           }
         ]
       end
@@ -486,7 +163,10 @@ RSpec.describe ChargeCalculator::Main do
       let(:shipment_params) do
         {
           load_type:   "cargo_item",
-          cargo_units: [cargo_item_1]
+          cargo_units: [
+            cargo_item_1,
+            cargo_item_2
+          ]
         }
       end
 
@@ -499,43 +179,137 @@ RSpec.describe ChargeCalculator::Main do
           node_tree = subject.price.to_nested_hash
           expect(node_tree.to_json).to match_json_schema("main/price")
 
-          cargo_item_1_volume  = BigDecimal("100.0")**3 / 1_000_000
-          wm_conversion_ratio  = BigDecimal("1_000")
+          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+
+          expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
+            cargo_item_1_payload * BigDecimal("23.42") * 2
+          )
+          expect(node_tree.dig(:children, 0, :children, 0, :children, 1, :amount)).to eq(
+            cargo_item_1_payload * BigDecimal("20.0") * 2
+          )
+          expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
+            cargo_item_2_payload * BigDecimal("25.78")
+          )
+          expect(node_tree.dig(:children, 0, :children, 1, :children, 1, :amount)).to eq(
+            cargo_item_2_payload * BigDecimal("20.0")
+          )
+
+          expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
+            cargo_item_1_payload * BigDecimal("33.58") * 2
+          )
+          expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
+            cargo_item_2_payload * BigDecimal("49.25")
+          )
+        end
+      end
+    end
+
+    context "100 Kg Basis (route 1), Weight Steps (route 2)" do
+      let(:pricings) do
+        [
+          {
+            conversion_ratios: {
+              weight_measure: "1_000.0"
+            },
+            route:             "Hamburg - Gothenburg",
+            rates:             rates_100_kg_basis
+          },
+          {
+            conversion_ratios: {
+              weight_measure: "1_000.0"
+            },
+            route:             "Gothenburg - Shanghai",
+            rates:             rates_weight_steps_2
+          }
+        ]
+      end
+
+      let(:shipment_params) do
+        {
+          load_type:   "cargo_item",
+          cargo_units: [
+            cargo_item_1,
+            cargo_item_2
+          ]
+        }
+      end
+
+      subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
+
+      context "price" do
+        it "calculates the correct price node tree" do
+          expect(subject.price).to be_a ChargeCalculator::Models::Price
+
+          node_tree = subject.price.to_nested_hash
+          expect(node_tree.to_json).to match_json_schema("main/price")
 
           cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
-          # Freight
           expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-            BigDecimal("19.0") * [cargo_item_1_volume, cargo_item_1_payload / wm_conversion_ratio].max * 2
+            (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
+          )
+          expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
+            (cargo_item_2_payload / 100).ceil * BigDecimal("51.25") * 1
           )
 
-          # Local Charges
-          expect(node_tree.dig(:children, 1, :children, 0, :amount)).to eq(
-            BigDecimal("5.0")
+          expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
+            cargo_item_1_payload * BigDecimal("33.58") * 2
           )
-          expect(node_tree.dig(:children, 1, :children, 1, :amount)).to eq(
-            BigDecimal("2.5") * 1
+          expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
+            cargo_item_2_payload * BigDecimal("49.25")
           )
-          expect(node_tree.dig(:children, 1, :children, 2, :amount)).to eq(
-            BigDecimal("35.0")
-          )
-          expect(node_tree.dig(:children, 1, :children, 3, :amount)).to eq(
-            BigDecimal("18.0") * 1
+        end
+      end
+    end
+  end
+
+  context "1 Route Ocean Route" do
+    context "100 Kg Basis (route 1), Weight Steps (route 2)" do
+      let(:pricings) do
+        [
+          {
+            conversion_ratios: {
+              weight_measure: "1_000.0"
+            },
+            route:             "Hamburg - Gothenburg",
+            rates:             rates_weight_steps_1_and_flat_per_shipment
+          }
+        ]
+      end
+
+      let(:shipment_params) do
+        {
+          load_type:   "cargo_item",
+          cargo_units: [
+            cargo_item_1,
+            cargo_item_2
+          ]
+        }
+      end
+
+      subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
+
+      context "price" do
+        it "calculates the correct price node tree" do
+          expect(subject.price).to be_a ChargeCalculator::Models::Price
+
+          node_tree = subject.price.to_nested_hash
+          expect(node_tree.to_json).to match_json_schema("main/price")
+
+          cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
+          cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
+
+          expect(node_tree.dig(:children, 0, :children, 0, :amount)).to eq(
+            BigDecimal("200.0")
           )
 
-          cargo_unit_1_payload_in_tons = (cargo_item_1_payload / 1_000).ceil
-
-          expect(node_tree.dig(:children, 1, :children, 4, :children, 0, :amount)).to eq(
-            BigDecimal("47.0") * cargo_unit_1_payload_in_tons * 2
+          expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
+            cargo_item_1_payload * BigDecimal("23.42") * 2
           )
-          expect(node_tree.dig(:children, 1, :children, 4, :children, 1, :amount)).to eq(
-            BigDecimal("42.0") * cargo_unit_1_payload_in_tons * 2
-          )
-          expect(node_tree.dig(:children, 1, :children, 4, :children, 2, :amount)).to eq(
-            BigDecimal("5.5") * cargo_item_1_volume * 2
-          )
-          expect(node_tree.dig(:children, 1, :children, 4, :children, 3, :amount)).to eq(
-            BigDecimal("25.0") * 2
+          expect(node_tree.dig(:children, 0, :children, 2, :children, 0, :amount)).to eq(
+            cargo_item_2_payload * BigDecimal("25.78")
           )
         end
       end
