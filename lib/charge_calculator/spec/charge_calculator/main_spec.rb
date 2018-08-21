@@ -176,7 +176,7 @@ RSpec.describe ChargeCalculator::Main do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
-          node_tree = subject.price.to_nested_hash
+          node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema("main/price")
 
           cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
@@ -247,7 +247,7 @@ RSpec.describe ChargeCalculator::Main do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
-          node_tree = subject.price.to_nested_hash
+          node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema("main/price")
 
           cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])
@@ -305,7 +305,7 @@ RSpec.describe ChargeCalculator::Main do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
-          node_tree = subject.price.to_nested_hash
+          node_tree = subject.price.to_h
           expect(node_tree.to_json).to match_json_schema("main/price")
 
           cargo_item_1_payload = BigDecimal(cargo_item_1[:payload])

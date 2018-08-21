@@ -194,7 +194,7 @@ RSpec.describe ChargeCalculator do
       it "should calculate the correct price" do
         expect(result).to be_a ChargeCalculator::Models::Price
   
-        node_tree = result.to_nested_hash
+        node_tree = result.to_h
         expect(node_tree.to_json).to match_json_schema("main/price")
   
         cargo_item_1_volume  = BigDecimal("100.0")**3 / 1_000_000

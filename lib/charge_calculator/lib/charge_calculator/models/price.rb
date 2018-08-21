@@ -18,12 +18,9 @@ module ChargeCalculator
           amount:      amount,
           currency:    currency,
           category:    category,
-          description: description
+          description: description,
+          children:    children.map(&:to_h)
         }
-      end
-
-      def to_nested_hash
-        to_h.merge(children: children.map(&:to_nested_hash))
       end
     end
   end

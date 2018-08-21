@@ -49,10 +49,10 @@ RSpec.describe ChargeCalculator::Models::Price do
     end
   end
 
-  context "to_nested_hash" do
+  describe "#to_h" do
     context "single node" do
       it "calculates the correct hash" do
-        expect(price.to_nested_hash).to eq(
+        expect(price.to_h).to eq(
           amount:      BigDecimal("100"),
           currency:    "EUR",
           category:    "base",
@@ -64,7 +64,7 @@ RSpec.describe ChargeCalculator::Models::Price do
 
     context "2 level tree" do
       it "calculates the correct hash" do
-        expect(price_with_children.to_nested_hash).to eq(
+        expect(price_with_children.to_h).to eq(
           amount:      BigDecimal("100"),
           currency:    "EUR",
           category:    "base",
