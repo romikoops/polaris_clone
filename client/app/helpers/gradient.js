@@ -8,7 +8,7 @@ export const gradientGenerator = (colour1, colour2, direction = '-90deg') => {
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
     return { background: `-moz-linear-gradient(${direction}, ${colour1},${colour2})` }
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-    return { background: `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%)` }
+    return { background: `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${colour1}, endColorstr=${colour2})` }
   }
 
   return { background: `-webkit-linear-gradient(${direction}, ${colour1},${colour2})` }
@@ -24,7 +24,7 @@ export const gradientCSSGenerator = (colour1, colour2, direction = '-90deg') => 
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
     return `-moz-linear-gradient(${direction}, ${colour1},${colour2})`
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-    return `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%)`
+    return `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${colour1}, endColorstr=${colour2})`
   }
 
   return `-webkit-linear-gradient(${direction}, ${colour1},${colour2})`
@@ -56,7 +56,7 @@ export const gradientBorderGenerator = (colour1, colour2, direction = '-90deg') 
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
     return { backgroundImage: `-moz-linear-gradient(${direction}, ${colour1},${colour2})` }
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-    return { backgroundImage: `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%)` }
+    return { backgroundImage: `linear-gradient(to ${direction}, ${colour1} 0%, ${colour2} 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${colour1}, endColorstr=${colour2})` }
   }
 
   return { backgroundImage: `-webkit-linear-gradient(${direction}, ${colour1}, ${colour2})` }
