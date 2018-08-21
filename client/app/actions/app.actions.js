@@ -271,11 +271,14 @@ function fetchTenants () {
     .then(response => response.json())
     .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
 }
-function shouldFetchTenant (state, subdomain) {
+function shouldFetchTenant (state, subdomain, dispatch) {
   const { tenant } = state
   if (!tenant.data || (Object.keys(tenant.data).length < 1) ||
   (tenant && tenant.data && tenant.data.subdomain !== subdomain)) {
     return true
+  }
+  if (tenant.isFetching && (tenant.data && Object.keys(tenant.data).length > 1)) {
+    return dispatch(tenantActions.clearLoading())
   }
   if (tenant.isFetching) {
     return false
@@ -292,7 +295,7 @@ function fetchTenantIfNeeded (subdomain) {
   // a cached value is already available.
 
   return (dispatch, getState) => {
-    if (shouldFetchTenant(getState(), subdomain)) {
+    if (shouldFetchTenant(getState(), subdomain, dispatch)) {
       // Dispatch a thunk from thunk!
       return dispatch(fetchTenant(subdomain))
     }
@@ -310,6 +313,7 @@ function clearLoading () {
     dispatch(userActions.clearLoading())
     dispatch(adminActions.clearLoading())
     dispatch(documentActions.clearLoading())
+    dispatch(tenantActions.clearLoading())
   }
 }
 
