@@ -277,9 +277,7 @@ function shouldFetchTenant (state, subdomain, dispatch) {
   (tenant && tenant.data && tenant.data.subdomain !== subdomain)) {
     return true
   }
-  // if (tenant.isFetching && (tenant.data && Object.keys(tenant.data).length > 1)) {
-  //   return dispatch(tenantActions.clearLoading())
-  // }
+
   if (tenant.isFetching) {
     return false
   }
