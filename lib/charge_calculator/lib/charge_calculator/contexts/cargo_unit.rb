@@ -8,6 +8,11 @@ module ChargeCalculator
         @cargo_unit = cargo_unit
       end
 
+      
+      private
+      
+      attr_reader :pricing, :cargo_unit
+
       def hash
         @hash ||= {
           payload:            BigDecimal(cargo_unit.payload),
@@ -19,10 +24,6 @@ module ChargeCalculator
           goods_value:        cargo_unit.goods_value
         }
       end
-
-      private
-
-      attr_reader :pricing, :cargo_unit
 
       def chargeable_payload
         lambda do |context|
