@@ -11,6 +11,7 @@ import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
+import QuoteCard from '../Quote/Card'
 
 export class ChooseOffer extends Component {
   static dynamicSort (property) {
@@ -167,7 +168,14 @@ export class ChooseOffer extends Component {
     })
     const focusRoutestoRender = focusRoutes
       .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
-      .map(s => (
+      .map(s => (tenant.data.subdomain === 'gateway' ? (
+        <QuoteCard
+          theme={theme}
+          tenant={tenant}
+          schedule={s}
+          cargo={shipmentData.cargoUnits}
+        />
+      ) : (
         <RouteResult
           key={v4()}
           selectResult={this.chooseResult}
@@ -182,23 +190,32 @@ export class ChooseOffer extends Component {
           pickupDate={shipment.planned_pickup_date}
           truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
         />
+      )
       ))
     const closestRoutestoRender = closestRoutes.map(s => (
-      <RouteResult
-        key={v4()}
-        selectResult={this.chooseResult}
-        theme={this.props.theme}
-        originHubs={originHubs}
-        destinationHubs={destinationHubs}
-        fees={shipment.schedules_charges}
-        schedule={s}
-        user={user}
-        pickup={shipment.has_pre_carriage}
-        loadType={shipment.load_type}
-        pickupDate={shipment.planned_pickup_date}
-        truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-      />
-    ))
+      tenant.data.subdomain === 'gateway' ? (
+        <QuoteCard
+          theme={theme}
+          tenant={tenant}
+          schedule={s}
+          cargo={shipmentData.cargoUnits}
+        />
+      ) : (
+        <RouteResult
+          key={v4()}
+          selectResult={this.chooseResult}
+          theme={this.props.theme}
+          originHubs={originHubs}
+          destinationHubs={destinationHubs}
+          fees={shipment.schedules_charges}
+          schedule={s}
+          user={user}
+          pickup={shipment.has_pre_carriage}
+          loadType={shipment.load_type}
+          pickupDate={shipment.planned_pickup_date}
+          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+        />
+      )))
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
 
     return (
@@ -290,42 +307,6 @@ export class ChooseOffer extends Component {
               </div>
 
             </div>
-            {/* <div className="flex-100 layout-row layout-wrap">
-              <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                <div className="flex-none">
-                  <TextHeading theme={theme} size={3} text="Alternative modes of transport" />
-                </div>
-              </div>
-               {altRoutestoRender}
-              {limitedAlts.length !== altRoutes.length ? (
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <div
-                    className="flex-33 layout-row layout-align-space-around-center"
-                    onClick={() => this.toggleLimits('alt')}
-                  >
-                    {limits.alt ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                    <div className="flex-5" />
-                    {limits.alt ? (
-                      <p className="flex-none">More</p>
-                    ) : (
-                      <p className="flex-none">Less</p>
-                    )}
-                    <div className="flex-5" />
-                    {limits.alt ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                ''
-              )}
-            </div> */}
           </div>
         </div>
 

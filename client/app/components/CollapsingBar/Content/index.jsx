@@ -25,7 +25,7 @@ export default class CollapsingContent extends React.PureComponent {
     }
   }
   render () {
-    const { collapsed, content, minHeight } = this.props
+    const { collapsed, content, minHeight, contentStyle } = this.props
     const { firstRender } = this.state
 
     return (
@@ -39,7 +39,7 @@ export default class CollapsingContent extends React.PureComponent {
       >
         <div
           className={
-            `${styles.inner_wrapper} flex-100 ` +
+            `${contentStyle || styles.inner_wrapper} flex-100 ` +
           'layout-row layout-wrap layout-align-start-start'
           }
           ref={(div) => { this.panel = div }}
@@ -54,11 +54,13 @@ export default class CollapsingContent extends React.PureComponent {
 CollapsingContent.propTypes = {
   collapsed: Proptypes.bool,
   content: Proptypes.node,
-  minHeight: Proptypes.string
+  minHeight: Proptypes.string,
+  contentStyle: Proptypes.objectOf(Proptypes.any)
 }
 
 CollapsingContent.defaultProps = {
   collapsed: false,
   content: '',
+  contentStyle: {},
   minHeight: ''
 }
