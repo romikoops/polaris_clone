@@ -12,7 +12,7 @@ import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import { appActions, authenticationActions, userActions, tenantActions } from '../../actions'
+import { appActions, authenticationActions, userActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
@@ -58,7 +58,7 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch, appDispatch
+      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />
@@ -104,7 +104,7 @@ class App extends Component {
             <Route
               exact
               path="/password_reset"
-              render={props => <ResetPasswordForm user={user} theme={theme} {...props} clearLoading={() => appDispatch.clearLoading()} />}
+              render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
             />
             <PrivateRoute
               path="/booking"
@@ -148,8 +148,7 @@ App.propTypes = {
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
     fetchTenantIfNeeded: PropTypes.func,
-    fetchCurrencies: PropTypes.func,
-    clearLoading: PropTypes.func
+
   }).isRequired,
   sending: PropTypes.bool,
   showMessages: PropTypes.bool,
@@ -190,7 +189,6 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
-    tenantDispatch: bindActionCreators(tenantActions, dispatch),
     authDispatch: bindActionCreators(authenticationActions, dispatch),
     userDispatch: bindActionCreators(userActions, dispatch)
   }
