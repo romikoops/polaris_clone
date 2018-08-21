@@ -4,6 +4,13 @@ import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '..
 import { ChargeIcons } from './ChargeIcons'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 
+function filteredKeys (key) {
+  Object.entries(key)
+    .map(array => array.filter((value, index, arr) =>
+      value !== 'total' && value !== 'edited_total'))
+    .filter((value, index, arr) => value.length !== 1)
+}
+
 class QuoteCard extends PureComponent {
   constructor (props) {
     super(props)
@@ -33,6 +40,10 @@ class QuoteCard extends PureComponent {
     const destinationHub = schedule.destination_hub
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
+    // const filteredKeys = Object.entries(quote.export)
+    //   .map(array => array.filter((value, index, arr) =>
+    //     value !== 'total' && value !== 'edited_total'))
+    //   .filter((value, index, arr) => value.length !== 1)
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
       Object.keys(quote).splice(2).map(key => (<CollapsingBar
         showArrow
@@ -53,18 +64,21 @@ class QuoteCard extends PureComponent {
             </div>
           </div>
         )}
-        content={Object.entries(quote.trucking_pre).splice(2).map((price) => {
-          const pop = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
-            <div className="flex-45 layout-row layout-align-start-center">
-              <span>{price[0]}</span>
-            </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(price[1].value || price[1].total.value, 1)}&nbsp;{quote.total.currency}</p>
-            </div>
-          </div>)
+        content={Object.entries(quote[`${key}`])
+          .map(array => array.filter((value, index, arr) =>
+            value !== 'total' && value !== 'edited_total'))
+          .filter((value, index, arr) => value.length !== 1).map((price) => {
+            const pop = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+              <div className="flex-45 layout-row layout-align-start-center">
+                <span>{price[0]}</span>
+              </div>
+              <div className="flex-50 layout-row layout-align-end-center">
+                <p>{numberSpacing(price[1].value || price[1].total.value, 1)}&nbsp;{quote.total.currency}</p>
+              </div>
+            </div>)
 
-          return pop
-        })}
+            return pop
+          })}
       />))
     ) : ''
 
