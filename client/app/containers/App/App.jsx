@@ -22,17 +22,17 @@ import CookieConsentBar from '../../components/CookieConsentBar'
 
 class App extends Component {
   componentWillMount () {
-    const { tenant, isFetching, tenantDispatch } = this.props
+    const { tenant, isFetching, appDispatch } = this.props
     if (!tenant && !isFetching) {
       const subdomain = getSubdomain()
-      tenantDispatch.fetchTenantIfNeeded(subdomain)
+      appDispatch.fetchTenantIfNeeded(subdomain)
     }
     this.isUserExpired()
   }
   componentDidMount () {
-    const { appDispatch, tenantDispatch } = this.props
+    const { appDispatch } = this.props
     const subdomain = getSubdomain()
-    tenantDispatch.fetchTenantIfNeeded(subdomain)
+    appDispatch.fetchTenantIfNeeded(subdomain)
     appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
@@ -41,8 +41,8 @@ class App extends Component {
     if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
       (!this.props.tenant && !this.props.isFetching) ||
     (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-      const { tenantDispatch, selectedSubdomain } = this.props
-      tenantDispatch.fetchTenantIfNeeded(selectedSubdomain)
+      const { appDispatch, selectedSubdomain } = this.props
+      appDispatch.fetchTenantIfNeeded(selectedSubdomain)
     }
   }
   isUserExpired () {
