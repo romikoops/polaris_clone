@@ -3,15 +3,31 @@
 require "spec_helper"
 
 RSpec.describe ChargeCalculator::Models::CargoUnit do
-  subject { described_class.new(data: { payload: "100.0" }) }
+  subject do
+    described_class.new(data: {
+      id:          1,
+      quantity:    2,
+      payload:     "1_130.0",
+      dimensions:  {
+        x: "100.0",
+        y: "100.0",
+        z: "100.0"
+      },
+      goods_value: "1_200.00"
+    })
+  end
 
-  context "method_missing" do
-    it "accesses a given data attribute" do
-      expect(subject.payload).to eq("100.0")
+  context "instance methods" do
+    describe "#volume" do
+      it "should calculate the correct volume from dimensions" do
+        expect(subject.volume).to eq(1)
+      end
     end
 
-    it "raises a NoMethodError if attribute cannot be found" do
-      expect { subject.foo }.to raise_error(NoMethodError)
+    describe "#goods_value" do
+      it "should return the correct goods value" do
+        expect(subject.goods_value).to eq(1_200)
+      end
     end
   end
 end

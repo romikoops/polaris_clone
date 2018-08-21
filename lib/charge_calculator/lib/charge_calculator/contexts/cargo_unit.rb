@@ -8,7 +8,6 @@ module ChargeCalculator
         @cargo_unit = cargo_unit
       end
 
-      
       private
       
       attr_reader :pricing, :cargo_unit
