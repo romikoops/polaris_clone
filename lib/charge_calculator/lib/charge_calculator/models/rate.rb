@@ -17,7 +17,7 @@ module ChargeCalculator
       def price(context:)
         calculated_price_value = reducer.apply(calculated_price_values(context: context)) || 0
 
-        calculated_price_value = Reducers::Max.new.apply [calculated_price_value, min_price]
+        calculated_price_value = Reducers::Max.new.apply([calculated_price_value, min_price])
 
         Models::Price.new(
           amount:      calculated_price_value,
