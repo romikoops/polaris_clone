@@ -55,6 +55,7 @@ class NotesWriter extends Component {
     const { itineraryNotes } = this.state
     const { adminDispatch, targetId } = this.props
     adminDispatch.saveItineraryNotes(targetId, itineraryNotes)
+    this.props.toggleView()
   }
   render () {
     const { itineraryNotes } = this.state
@@ -126,12 +127,14 @@ class NotesWriter extends Component {
 NotesWriter.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  targetId: PropTypes.number
+  targetId: PropTypes.number,
+  toggleView: PropTypes.func
 }
 
 NotesWriter.defaultProps = {
   theme: null,
-  targetId: null
+  targetId: null,
+  toggleView: null
 }
 
 function mapStateToProps (state) {
