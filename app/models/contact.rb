@@ -23,7 +23,7 @@ class Contact < ApplicationRecord
                 search_query
               )
 
-  self.per_page = 12 # default for will_paginate
+  self.per_page = 6 # default for will_paginate
 
   scope :search_query, lambda { |query|
     return nil if query.blank?

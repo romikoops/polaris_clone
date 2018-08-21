@@ -36,8 +36,8 @@ export class AdminHubCard extends Component {
     } = this.props
 
     return (
-      <div className={`layout-wrap layout-row flex-100 layout-align-space-between-stretch ${styles.container}`}>
-        <div className="layout-padding flex-100 layout-align-start-center greyBg">
+      <div className={`layout-column flex-100 layout-align-space-between-stretch ${styles.container}`}>
+        <div className="layout-padding layout-align-start-center greyBg">
           <span><b>Hubs</b></span>
         </div>
         <div className={`layout-wrap layout-row flex-100 ${styles.scrolling}`}>

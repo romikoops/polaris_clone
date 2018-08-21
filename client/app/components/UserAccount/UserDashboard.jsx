@@ -137,7 +137,7 @@ export class UserDashboard extends Component {
               placeholder="Search Contacts"
               title="Most used Contacts"
               handleClick={this.viewClient}
-              seeAll={() => userDispatch.goTo('/account/contacts')}
+              seeAll={() => userDispatch.getContacts(true, 1)}
             />
           </div>
         </div>
@@ -154,7 +154,10 @@ export class UserDashboard extends Component {
                 <span><b>My Shipment Addresses</b></span>
               </div>
             </div>
-            <UserLocations
+            {locations.length === 0 ? (
+              'No addresses yet'
+            ) : (
+              <UserLocations
               setNav={() => {}}
               userDispatch={userDispatch}
               locations={locations}
@@ -162,6 +165,8 @@ export class UserDashboard extends Component {
               theme={theme}
               user={user}
             />
+            )}
+            
           </div>
         </div>
       </div>

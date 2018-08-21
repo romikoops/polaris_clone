@@ -5,10 +5,7 @@ import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
-// import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
-// import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
-// import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, adminActions, authenticationActions } from '../../actions'
@@ -66,7 +63,7 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, showModal
     } = this.props
     const textStyle1 =
       theme && theme.colors
@@ -94,7 +91,7 @@ class Landing extends Component {
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
           {loadingScreen}
-          {this.state.showLogin ? loginModal : ''}
+          {showModal && this.state.showLogin ? loginModal : ''}
           <LandingTop
             className="flex-100"
             user={user}
@@ -202,6 +199,7 @@ Landing.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
+  showModal: PropTypes.bool,
   loading: PropTypes.bool,
   userDispatch: PropTypes.shape({
     goTo: PropTypes.func
@@ -215,6 +213,7 @@ Landing.propTypes = {
 
 Landing.defaultProps = {
   loggedIn: false,
+  showModal: true,
   loading: false,
   theme: null,
   tenant: null,
@@ -231,7 +230,7 @@ function mapDispatchToProps (dispatch) {
 function mapStateToProps (state) {
   const { users, authentication, tenant } = state
   const {
-    user, loggedIn, loggingIn, registering, loading
+    user, loggedIn, loggingIn, registering, loading, showModal
   } = authentication
 
   return {
@@ -241,7 +240,8 @@ function mapStateToProps (state) {
     loggedIn,
     loggingIn,
     registering,
-    loading
+    loading,
+    showModal
   }
 }
 

@@ -25,19 +25,22 @@ export default function (state = initialState, action) {
         ...state,
         loginAttempt: false,
         loggingIn: true,
+        showModal: true,
         loading: true
       }
     case authenticationConstants.LOGIN_SUCCESS:
       return {
         user: action.user,
         loggedIn: true,
-        loading: false
+        showModal: false,
+        loading: true
       }
     case authenticationConstants.LOGIN_FAILURE:
       return {
         ...(action.loginFailure.persistState ? state : {}),
         error: action.loginFailure.error,
         loginAttempt: true,
+        showModal: false,
         loggingIn: false,
         loading: false
       }

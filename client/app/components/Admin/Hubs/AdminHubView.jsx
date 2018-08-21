@@ -22,6 +22,7 @@ import ItineraryRow from '../Itineraries/ItineraryRow'
 import { AdminHubEdit } from './AdminHubEdit'
 import { SimpleMap as Map } from '../../Maps/SimpleMap'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
+import GradientBorder from '../../GradientBorder';
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -238,7 +239,7 @@ export class AdminHubView extends Component {
     const deactivate = (
       <div
         className={`flex-none layout-row pointy layout-align-center-center ${hubStyles.header_bar_active_button}`}
-        style={textStyle}
+        style={gradientBackground}
         onClick={this.toggleHubActive}
       >
         <p className="flex-none">
@@ -283,6 +284,10 @@ export class AdminHubView extends Component {
       theme={theme}
       saveChanges={e => this.saveMandatoryChargeEdit(e)}
     />)
+    const gradientBorderStyle =
+    theme && theme.colors
+      ? gradientBorderGenerator(theme.colors.primary, theme.colors.secondary)
+      : { background: 'black' }
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
     const itinerariesBox =
@@ -295,7 +300,7 @@ export class AdminHubView extends Component {
             theme={theme}
             adminDispatch={adminActions}
           />))}
-      <div className="flex-95 layout-row layout-align-center-center margin_bottom">
+      <div className="flex-100 layout-row layout-align-center-center margin_bottom">
         <div
           className={`
                 flex-15 layout-row layout-align-center-center pointy
@@ -350,43 +355,49 @@ export class AdminHubView extends Component {
             </div>
 
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
-            <div className={`flex flex-xs-100 flex-sm-100 layout-row layout-align-center-center ${hubStyles.hub_title}`} style={gradientBackground} >
-              <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
-                <div className="flex-70 layout-row layout-align-start-center">
-                  <h3 className="flex-none"> {hub.nexus.name}</h3>
-                </div>
-                <div className="flex-30 layout-row layout-align-end-center">
-                  <div className="flex-none layout-row layout-align-center-center">
-                    <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
+          <div className="flex-100 layout-row layout-align-space-between-stretch buffer_10">
+            <GradientBorder
+              wrapperClassName="flex flex-xs-100 flex-sm-100 layout-row layout-align-space-between-stretch"
+              className="flex-100 layout-row"
+              gradient={gradientBorderStyle}
+              content={(
+                <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_title_content}`}>
+                  <div className="flex-70 layout-row layout-align-start-center">
+                    <h3 className="flex-none"> {hub.nexus.name}</h3>
                   </div>
-                  <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
-                    {switchIcon(hub.hub_type)}
+                  <div className="flex-30 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-center-center">
+                      <h4 className="flex-none" > {renderHubType(hub.hub_type)}</h4>
+                    </div>
+                    <div className="flex-none layout-row layout-align-center-center" style={{ color: primary }} >
+                      {switchIcon(hub.hub_type)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              )}
+            />
             <div className={`flex layout-row flex-xs-100 flex-sm-100 ${hubStyles.location_data_box}`}>
               <div className={`flex-55 layout-row ${hubStyles.address_box}`}>
                 <div className={`flex-none layout-column layout-align-center-center ${hubStyles.location_icon}`}>
                   <i className="flex-none fa fa-map-marker clip" style={gradientIcon} />
                 </div>
-                <div className="flex layout-column layout-align-space-around-start">
+                <div className="flex layout-align-space-around-start">
                   <div className="flex-none layout-row layout-wrap ">
-                    <p className={`flex-100  ${hubStyles.address_part_1}`}>{addressString1}</p>
-                    <p className={`flex-100  ${hubStyles.address_part_2}`}>{addressString2}</p>
+                    <p className={`flex-100  ${hubStyles.address_part_1}`}>{addressString1}<br />
+                    <strong>{addressString2}</strong>
+                    </p>
                   </div>
                 </div>
               </div>
               <div className={`flex-45 layout-row ${hubStyles.lat_lng_box}`}>
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.latitude}</p>
-                  <p className={`flex-90 ${hubStyles.lat_lng}`}>Latitude</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{location.latitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>Latitude</p>
                 </div>
                 <div className={`flex-none ${hubStyles.lat_lng_divider}`} />
                 <div className="flex-50 layout-column layout-align-center-center">
-                  <p className={`flex-90 ${hubStyles.lat_lng}`}>{location.longitude}</p>
-                  <p className={`flex-90 ${hubStyles.lat_lng}`}>Longitude</p>
+                  <p className={` ${hubStyles.lat_lng}`}>{location.longitude}</p>
+                  <p className={` ${hubStyles.lat_lng}`}>Longitude</p>
                 </div>
               </div>
             </div>
@@ -395,7 +406,7 @@ export class AdminHubView extends Component {
           <div className="flex-100 layout-row layout-align-space-between-center buffer_10">
             <div className={`flex-25 layout-row layout-align-center-center ${hubStyles.hub_photo}`} style={gradientBackground} >
               <div className={`flex-none layout-row layout-align-space-between-center ${hubStyles.hub_photo_content}`} >
-                <img src={hub.photo} alt="" />
+                <img src={hub.photo || 'https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg'} alt="" />
               </div>
             </div>
             <div className={`flex layout-row ${hubStyles.map_box}`} ref={(mapElement) => { this.mapElement = mapElement }} >
@@ -417,21 +428,26 @@ export class AdminHubView extends Component {
               loadType={currentFeeLoadType.value}
             />
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
-            <div className="flex-100 flex-gt-sm-33 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-space-between-stretch layout-wrap">
+            <div className="flex-100 flex-gt-sm-33 layout-row layout-align-start-stretch">
               <GreyBox
-                wrapperClassName="layout-row flex-100 layout-align-center-center"
+                wrapperClassName="layout-row flex-100 layout-align-start-start"
                 contentClassName="layout-row flex-100 layout-wrap"
                 title="Mandatory Charges"
                 content={mandatoryChargeBox}
               />
             </div>
-            <div className="flex-100 flex-gt-sm-60 layout-row layout-align-start-center">
+            {console.log(routes)}
+            <div className="flex-100 flex-gt-sm-60 layout-row layout-align-start-stretch">
               <GreyBox
-                wrapperClassName="layout-row flex-100 layout-align-center-center"
+                wrapperClassName="layout-row flex-100 layout-align-center-stretch"
                 contentClassName="layout-row flex-100 layout-wrap"
                 title="Itineraries"
-                content={itinerariesBox}
+                content={routes.length === 0 ? 
+                  (<div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                    No itineraries yet
+                    </div>) 
+                  : itinerariesBox}
               />
             </div>
           </div>
