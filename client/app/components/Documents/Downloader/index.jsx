@@ -64,7 +64,7 @@ class DocumentsDownloader extends React.Component {
   }
   render () {
     const {
-      theme, loading, tooltip, square
+      theme, loading, tooltip, square, size
     } = this.props
     const { requested } = this.state
     const tooltipId = v4()
@@ -73,7 +73,7 @@ class DocumentsDownloader extends React.Component {
       <SquareButton
         text="Request"
         theme={theme}
-        size="small"
+        size={size}
         handleNext={() => this.requestDocument()}
         active
         border
@@ -82,7 +82,7 @@ class DocumentsDownloader extends React.Component {
       <RoundButton
         text="Request"
         theme={theme}
-        size="small"
+        size={size}
         handleNext={() => this.requestDocument()}
         active
       />
@@ -97,7 +97,7 @@ class DocumentsDownloader extends React.Component {
       <SquareButton
         text="Download"
         theme={theme}
-        size="small"
+        size={size}
         handleNext={() => this.downloadFile()}
         active
         border
@@ -106,7 +106,7 @@ class DocumentsDownloader extends React.Component {
       <RoundButton
         text="Download"
         theme={theme}
-        size="small"
+        size={size}
         handleNext={() => this.downloadFile()}
         active
       />
@@ -139,7 +139,8 @@ DocumentsDownloader.propTypes = {
   square: PropTypes.bool,
   target: PropTypes.string,
   loading: PropTypes.bool,
-  options: PropTypes.objectOf(PropTypes.any)
+  options: PropTypes.objectOf(PropTypes.any),
+  size: PropTypes.string
 }
 
 DocumentsDownloader.defaultProps = {
@@ -149,7 +150,8 @@ DocumentsDownloader.defaultProps = {
   tooltip: '',
   target: '',
   loading: false,
-  options: {}
+  options: {},
+  size: 'small'
 }
 
 function mapStateToProps (state) {

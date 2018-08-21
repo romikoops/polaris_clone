@@ -4,16 +4,16 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   skip_before_action :require_authentication!, only: :currencies
-  skip_before_action :require_non_guest_authentication!, only: %i[update set_currency currencies]
+  skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
   def home
     @shipper = current_user
     requested_shipments = @shipper.shipments.where(
-      status:    %w[requested requested_by_unconfirmed_account],
+      status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     open_shipments = @shipper.shipments.where(
-      status:    %w[in_progress confirmed],
+      status:    %w(in_progress confirmed),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     finished_shipments = @shipper.shipments
@@ -31,22 +31,22 @@ class UsersController < ApplicationController
         except: %i(created_at updated_at location_id))
     end
     @aliases = @shipper.contacts.where(alias: true)
-
     user_locs = @shipper.user_locations
     locations = user_locs.map do |ul|
-      { user: ul, location: ul.location }
+      { user: ul, location: ul.location.to_custom_hash }
     end
 
     resp = {
-      shipments: {
+      shipments:         {
         requested: @requested_shipments,
         open:      @open_shipments,
         finished:  @finished_shipments
       },
-      pricings:  @pricings,
-      contacts:  @contacts,
-      aliases:   @aliases,
-      locations: locations
+      pricings:          @pricings,
+      contacts:          @contacts,
+      num_contact_pages: (@shipper.contacts.count.to_f / 6).to_f.ceil,
+      aliases:           @aliases,
+      locations:         locations
     }
     response_handler(resp)
   end

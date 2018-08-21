@@ -61,7 +61,7 @@ class Shipment < ApplicationRecord
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
     end
   end
-  self.per_page = 6
+  self.per_page = 4
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
   accepts_nested_attributes_for :contacts, allow_destroy: true

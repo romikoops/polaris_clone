@@ -697,6 +697,9 @@ export class ShipmentDetails extends Component {
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
+
+    if (!filteredRouteIndexes.length) return ''
+
     const { theme, scope } = tenant.data
     let cargoDetails
     if (showRegistration) this.props.hideRegistration()

@@ -23,9 +23,9 @@ const EditProfileBox = ({
         <input
           className="flex-100"
           type="text"
-          value={user.company_name}
+          value={user.companyName}
           onChange={handleChange}
-          name="company_name"
+          name="companyName"
         />
       </div>
     </div>
@@ -39,9 +39,9 @@ const EditProfileBox = ({
         <input
           className="flex-none"
           type="text"
-          value={user.first_name}
+          value={user.firstName}
           onChange={handleChange}
-          name="first_name"
+          name="firstName"
         />
       </div>
     </div>
@@ -55,9 +55,9 @@ const EditProfileBox = ({
         <input
           className="flex-none"
           type="text"
-          value={user.last_name}
+          value={user.lastName}
           onChange={handleChange}
-          name="last_name"
+          name="lastName"
         />
       </div>
     </div>
@@ -94,7 +94,7 @@ const EditProfileBox = ({
       </div>
     </div>
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
-      <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
+      <div className="flex-50 layout-row layout-align-center-center button_padding">
         <RoundButton
           theme={theme}
           handleNext={close}
@@ -103,7 +103,7 @@ const EditProfileBox = ({
           iconClass="fa-times"
         />
       </div>
-      <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
+      <div className="flex-50 layout-row layout-align-center-center button_padding">
         <RoundButton
           theme={theme}
           handleNext={onSave}
@@ -218,9 +218,17 @@ export class UserContactsView extends Component {
   editProfile () {
     const { contactData } = this.props
     const { contact } = contactData
+    const newEditObj = {
+      firstName: contact.first_name,
+      lastName: contact.last_name,
+      companyName: contact.company_name,
+      phone: contact.phone,
+      email: contact.email,
+      id: contact.id
+    }
     this.setState({
       editBool: true,
-      editObj: contact
+      editObj: newEditObj
     })
   }
   closeEdit () {

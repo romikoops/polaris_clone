@@ -178,12 +178,15 @@ export class AdminPricingBox extends Component {
     const nameKeys = selection.name.split('-')
     if (nameKeys[2] === 'rate_basis') {
       const price = this.state.editor.data[nameKeys[1]]
-      const newSchema = rateBasisSchema[selection.value]
+      const newSchema = rateBasisSchema[selection.value] || {}
       Object.keys(newSchema).forEach((k) => {
         if ((price[k] && newSchema[k] && k !== 'rate_basis') || k === 'effective_date' || k === 'expiration_date') {
           newSchema[k] = price[k]
         }
       })
+      if (price.range) {
+        newSchema.range = price.range
+      }
       this.setState({
         editor: {
           ...this.state.editor,

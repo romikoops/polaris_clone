@@ -250,10 +250,10 @@ export class ShipmentContainers extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div className={`${styles.add_unit_wrapper} content_width`}>
               <div
-                className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`}
+                className="layout-row flex-none layout-align-start-center"
                 onClick={this.addContainer}
               >
-                <p> Add unit </p>
+                <p> Add unit &nbsp;&nbsp;</p>
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
               </div>
             </div>

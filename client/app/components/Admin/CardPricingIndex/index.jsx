@@ -162,7 +162,7 @@ export default class CardPricingIndex extends Component {
         </div>
         <div className="flex-20 layout-row layout-align-end-end">
 
-          <div className="hide-sm hide-xs">
+          <div className="hide-sm hide-xs layout-row layout-wrap  flex-100">
             <PricingSearchBar
               onChange={(e, t) => this.handlePricingSearch(e, t)}
               value={searchText}
@@ -170,6 +170,7 @@ export default class CardPricingIndex extends Component {
             />
             <SideOptionsBox
               header="Uploads"
+              flexOptions="flex-100"
               content={
                 <div
                   className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
@@ -185,6 +186,7 @@ export default class CardPricingIndex extends Component {
                       dispatchFn={e => this.lclUpload(e)}
                       tooltip={priceTip.upload_lcl}
                       type="xlsx"
+                      size="full"
                       text="Dedicated Pricings .xlsx"
                     />
 
@@ -195,6 +197,7 @@ export default class CardPricingIndex extends Component {
             />
             <SideOptionsBox
               header="Downloads"
+              flexOptions="flex-100"
               content={
                 <div
                   className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
@@ -205,7 +208,12 @@ export default class CardPricingIndex extends Component {
                     } flex-100 layout-row layout-wrap layout-align-center-center`}
                   >
                     <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
-                    <DocumentsDownloader theme={theme} target="pricing" options={{ mot }} />
+                    <DocumentsDownloader
+                      theme={theme}
+                      target="pricing"
+                      options={{ mot }}
+                      size="full"
+                    />
                   </div>
                 </div>
               }

@@ -6,7 +6,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { adminClicked as clickTip } from '../../../constants'
 import { Checkbox } from '../../Checkbox/Checkbox'
-import { capitalize, filters } from '../../../helpers'
+import { capitalize } from '../../../helpers'
 import { AdminHubTile } from './AdminHubTile'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
@@ -19,8 +19,6 @@ export class AdminHubsComp extends Component {
     this.state = {
       searchFilters: {
         hubType: {
-          // air: true,
-          // ocean: true
         },
         status: {
           active: true,
@@ -28,8 +26,8 @@ export class AdminHubsComp extends Component {
         },
         countries: []
       },
-      expander: {},
-      page: 1
+      page: 1,
+      expander: {}
     }
     this.nextPage = this.nextPage.bind(this)
     this.handleFilters = this.handleFilters.bind(this)
@@ -90,6 +88,7 @@ export class AdminHubsComp extends Component {
       }
     })
   }
+
   toggleFilterValue (target, key) {
     this.setState({
       searchFilters: {
@@ -160,9 +159,6 @@ export class AdminHubsComp extends Component {
       searchFilters.countries.map(selection => selection.value)
     const statusFilterKeys =
       Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-
-    // const setPage = !hubFilterKeys && !countryKeys && !statusFilterKeys ?
-      //   prevState.page : prevState.page + (1 * direction)
     this.setState((prevState) => {
       this.searchHubsFromPage(value, 1, hubFilterKeys, countryKeys, statusFilterKeys)
 
@@ -170,43 +166,15 @@ export class AdminHubsComp extends Component {
     })
   }
 
-  applyFilters (array) {
-    const { searchFilters } = this.state
-
-    const hubFilterKeys =
-      Object.keys(searchFilters.hubType).filter(key => searchFilters.hubType[key])
-    const filter1 = array.filter(a => hubFilterKeys.includes(a.data.hub_type))
-
-    let filter2 = []
-    const countryKeys =
-      Object.keys(searchFilters.countries).filter(key => searchFilters.countries[key])
-    if (countryKeys.length > 0) {
-      filter2 = filter1.filter(a => countryKeys.includes(a.location.country))
-    } else {
-      filter2 = filter1
-    }
-
-    const statusFilterKeys =
-      Object.keys(searchFilters.status).filter(key => searchFilters.status[key])
-    const filter3 = filter2.filter(a => statusFilterKeys.includes(a.data.hub_status))
-
-    let filter4
-    if (searchFilters.query && searchFilters.query !== '') {
-      filter4 = filters.handleSearchChange(
-        searchFilters.query,
-        ['data.name', 'data.hub_type', 'location.country'],
-        filter3
-      )
-    } else {
-      filter4 = filter3
-    }
-
-    return filter4
-  }
   render () {
     const { searchFilters, expander } = this.state
     const {
-      theme, actionNodes, hubs, countries, numHubPages, handleClick
+      theme,
+      actionNodes,
+      hubs,
+      countries,
+      numHubPages,
+      handleClick
     } = this.props
 
     if (!this.props.hubs) {
@@ -277,7 +245,7 @@ export class AdminHubsComp extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-space-between-start">
-          <div className="layout-row flex-80 flex-sm-100">
+          <div className="layout-row flex-80 flex-md-75 flex-sm-100">
             <div className="layout-row flex-100 layout-align-start-center header_buffer layout-wrap">
               <div className="layout-row flex-95 layout-wrap card_margin_right" style={{ minHeight: '450px' }}>
                 {hubsArr}
@@ -291,7 +259,6 @@ export class AdminHubsComp extends Component {
                     `}
                   onClick={this.state.page > 1 ? this.prevPage : null}
                 >
-                  {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                   <i className="fa fa-chevron-left" />
                   <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
                 </div>
@@ -311,12 +278,13 @@ export class AdminHubsComp extends Component {
 
             </div>
           </div>
-          <div className="flex-20 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
-            <div className={`${styles.position_fixed_right}`}>
+          <div className="flex-20 flex-md-25 hide-sm hide-xs layout-row layout-wrap layout-align-end-end">
+            <div className={`${styles.position_fixed_right} flex`}>
 
               <div className={`${styles.filter_panel} flex layout-row`}>
                 <SideOptionsBox
                   header="Filters"
+                  flexOptions="flex"
                   content={(
                     <div>
                       <div
@@ -379,7 +347,7 @@ export class AdminHubsComp extends Component {
 AdminHubsComp.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  numHubPages: PropTypes.number,
+  numHubPages: PropTypes.number.isRequired,
   countries: PropTypes.arrayOf(PropTypes.any),
   actionNodes: PropTypes.arrayOf(PropTypes.node),
   handleClick: PropTypes.func,
@@ -397,7 +365,6 @@ AdminHubsComp.propTypes = {
 AdminHubsComp.defaultProps = {
   theme: null,
   hubs: [],
-  numHubPages: 1,
   countries: [],
   actionNodes: [],
   handleClick: null,
