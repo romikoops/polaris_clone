@@ -45,7 +45,7 @@ export const tenant = (
         }
       }
     }
-    case tenantConstants.CLEAR_LOADING: {
+    case tenantActions.CLEAR_LOADING: {
       return {
         ...state,
         isFetching: false
