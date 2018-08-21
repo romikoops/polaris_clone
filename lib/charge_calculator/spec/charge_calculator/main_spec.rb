@@ -172,7 +172,7 @@ RSpec.describe ChargeCalculator::Main do
 
       subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
 
-      context "price" do
+      describe "#price" do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
@@ -183,23 +183,29 @@ RSpec.describe ChargeCalculator::Main do
           cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-            cargo_item_1_payload * BigDecimal("23.42") * 2
+            # cargo_item_1_payload * BigDecimal("23.42") * 2
+            52_929.2
           )
           expect(node_tree.dig(:children, 0, :children, 0, :children, 1, :amount)).to eq(
-            cargo_item_1_payload * BigDecimal("20.0") * 2
+            # cargo_item_1_payload * BigDecimal("20.0") * 2
+            45_200
           )
           expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-            cargo_item_2_payload * BigDecimal("25.78")
+            # cargo_item_2_payload * BigDecimal("25.78")
+            13_921.2
           )
           expect(node_tree.dig(:children, 0, :children, 1, :children, 1, :amount)).to eq(
-            cargo_item_2_payload * BigDecimal("20.0")
+            # cargo_item_2_payload * BigDecimal("20.0")
+            10_800
           )
 
           expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-            cargo_item_1_payload * BigDecimal("33.58") * 2
+            # cargo_item_1_payload * BigDecimal("33.58") * 2
+            75_890.8
           )
           expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-            cargo_item_2_payload * BigDecimal("49.25")
+            # cargo_item_2_payload * BigDecimal("49.25")
+            26_595
           )
         end
       end
@@ -237,7 +243,7 @@ RSpec.describe ChargeCalculator::Main do
 
       subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
 
-      context "price" do
+      describe "#price" do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
@@ -248,17 +254,21 @@ RSpec.describe ChargeCalculator::Main do
           cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :children, 0, :amount)).to eq(
-            (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
+            # (cargo_item_1_payload / 100).ceil * BigDecimal("51.25") * 2
+            1_230
           )
           expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-            (cargo_item_2_payload / 100).ceil * BigDecimal("51.25") * 1
+            # (cargo_item_2_payload / 100).ceil * BigDecimal("51.25") * 1
+            307.5
           )
 
           expect(node_tree.dig(:children, 1, :children, 0, :children, 0, :amount)).to eq(
-            cargo_item_1_payload * BigDecimal("33.58") * 2
+            # cargo_item_1_payload * BigDecimal("33.58") * 2
+            75890.8
           )
           expect(node_tree.dig(:children, 1, :children, 1, :children, 0, :amount)).to eq(
-            cargo_item_2_payload * BigDecimal("49.25")
+            # cargo_item_2_payload * BigDecimal("49.25")
+            26595
           )
         end
       end
@@ -291,7 +301,7 @@ RSpec.describe ChargeCalculator::Main do
 
       subject { described_class.new(shipment_params: shipment_params, pricings: pricings) }
 
-      context "price" do
+      describe "#price" do
         it "calculates the correct price node tree" do
           expect(subject.price).to be_a ChargeCalculator::Models::Price
 
@@ -302,14 +312,16 @@ RSpec.describe ChargeCalculator::Main do
           cargo_item_2_payload = BigDecimal(cargo_item_2[:payload])
 
           expect(node_tree.dig(:children, 0, :children, 0, :amount)).to eq(
-            BigDecimal("200.0")
+            200
           )
 
           expect(node_tree.dig(:children, 0, :children, 1, :children, 0, :amount)).to eq(
-            cargo_item_1_payload * BigDecimal("23.42") * 2
+            # cargo_item_1_payload * BigDecimal("23.42") * 2
+            52929.2
           )
           expect(node_tree.dig(:children, 0, :children, 2, :children, 0, :amount)).to eq(
-            cargo_item_2_payload * BigDecimal("25.78")
+            # cargo_item_2_payload * BigDecimal("25.78")
+            13921.2
           )
         end
       end
