@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'production') {
   // url = 'https://api2.itsmycargo.com'
   // url = 'https://devapi.itsmycargo.com'
   // url = 'http://192.168.0.1:3000'
+  // url = 'http://192.168.178.122:3000'
   // url = 'http://imc-beta.eu-central-1.elasticbeanstalk.com/'
   // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';178
 }
