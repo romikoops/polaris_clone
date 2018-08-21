@@ -33,7 +33,7 @@ export default function (state = initialState, action) {
         user: action.user,
         loggedIn: true,
         showModal: false,
-        loading: true
+        loading: false
       }
     case authenticationConstants.LOGIN_FAILURE:
       return {
