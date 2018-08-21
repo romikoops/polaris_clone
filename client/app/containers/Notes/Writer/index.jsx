@@ -63,6 +63,8 @@ class NotesWriter extends Component {
 
     const importanceLevels = nbLevels.map((l) => {
       const style = l === itineraryNotes.level ? styles[`${l}_selected`] : styles[l]
+      debugger // eslint-disable-line no-debugger
+
       return (
         <div
           className={`${style} flex-90 layout-row layout-align-center-center pointy`}
@@ -77,6 +79,7 @@ class NotesWriter extends Component {
         </div>
       )
     })
+
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center">
         <div

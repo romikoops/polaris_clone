@@ -12,7 +12,7 @@ import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
 import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import InsuranceDetails from '../../components/InsuranceDetails/InsuranceDetails'
-import { appActions, authenticationActions, userActions } from '../../actions'
+import { appActions, authenticationActions, userActions, tenantActions } from '../../actions'
 import { defaultTheme, moment } from '../../constants'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
@@ -22,17 +22,17 @@ import CookieConsentBar from '../../components/CookieConsentBar'
 
 class App extends Component {
   componentWillMount () {
-    const { tenant, isFetching, appDispatch } = this.props
+    const { tenant, isFetching, tenantDispatch } = this.props
     if (!tenant && !isFetching) {
       const subdomain = getSubdomain()
-      appDispatch.fetchTenantIfNeeded(subdomain)
+      tenantDispatch.fetchTenantIfNeeded(subdomain)
     }
     this.isUserExpired()
   }
   componentDidMount () {
-    const { appDispatch } = this.props
+    const { appDispatch, tenantDispatch } = this.props
     const subdomain = getSubdomain()
-    appDispatch.fetchTenantIfNeeded(subdomain)
+    tenantDispatch.fetchTenantIfNeeded(subdomain)
     appDispatch.fetchCurrencies()
     this.isUserExpired()
   }
@@ -41,8 +41,8 @@ class App extends Component {
     if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
       (!this.props.tenant && !this.props.isFetching) ||
     (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
-      const { appDispatch, selectedSubdomain } = this.props
-      appDispatch.fetchTenantIfNeeded(selectedSubdomain)
+      const { tenantDispatch, selectedSubdomain } = this.props
+      tenantDispatch.fetchTenantIfNeeded(selectedSubdomain)
     }
   }
   isUserExpired () {
@@ -58,9 +58,10 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
+      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch, appDispatch
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
+      debugger // eslint-disable-line no-debugger
       return <Loading theme={defaultTheme} text="loading..." />
     }
     const { theme } = tenant.data
@@ -104,7 +105,7 @@ class App extends Component {
             <Route
               exact
               path="/password_reset"
-              render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
+              render={props => <ResetPasswordForm user={user} theme={theme} {...props} clearLoading={() => appDispatch.clearLoading()} />}
             />
             <PrivateRoute
               path="/booking"
@@ -148,7 +149,8 @@ App.propTypes = {
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
     fetchTenantIfNeeded: PropTypes.func,
-    fetchCurrencies: PropTypes.func
+    fetchCurrencies: PropTypes.func,
+    clearLoading: PropTypes.func
   }).isRequired,
   sending: PropTypes.bool,
   showMessages: PropTypes.bool,
@@ -189,6 +191,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
+    tenantDispatch: bindActionCreators(tenantActions, dispatch),
     authDispatch: bindActionCreators(authenticationActions, dispatch),
     userDispatch: bindActionCreators(userActions, dispatch)
   }
