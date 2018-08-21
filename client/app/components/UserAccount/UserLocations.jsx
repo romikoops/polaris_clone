@@ -8,7 +8,6 @@ import { EditLocation } from './EditLocation'
 import { gradientTextGenerator } from '../../helpers'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
   <div
     key="addLocationButton"
