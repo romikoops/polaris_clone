@@ -19,8 +19,8 @@ module ChargeCalculator
       def price(pricing:)
         Models::Price.new(
           children:    prices(pricing: pricing),
-          category:    "cargo_unit",
-          description: "cargo_unit_#{id}"
+          category:    :cargo_unit,
+          description: "cargo_unit_#{id}".to_sym
         )
       end
 

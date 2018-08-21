@@ -32,12 +32,12 @@ module ChargeCalculator
 
         Models::Price.new(
           children:    [*pricing_shipment_prices, *pricing_cargo_unit_prices],
-          category:    "route",
+          category:    :route,
           description: pricing.route
         )
       end
 
-      Models::Price.new(children: prices, category: "base", description: "Base")
+      Models::Price.new(children: prices, category: :base, description: :Base)
     end
   end
 end
