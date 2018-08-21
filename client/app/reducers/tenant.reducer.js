@@ -46,7 +46,6 @@ export const tenant = (
       }
     }
     case tenantConstants.CLEAR_LOADING: {
-      debugger // eslint-disable-line no-debugger
 
       return {
         ...state,

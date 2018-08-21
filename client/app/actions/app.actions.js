@@ -295,7 +295,6 @@ function fetchTenantIfNeeded (subdomain) {
   // a cached value is already available.
 
   return (dispatch, getState) => {
-    debugger // eslint-disable-line no-debugger
     if (shouldFetchTenant(getState(), subdomain, dispatch)) {
       // Dispatch a thunk from thunk!
       return dispatch(fetchTenant(subdomain))

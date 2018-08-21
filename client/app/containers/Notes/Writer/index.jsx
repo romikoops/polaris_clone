@@ -63,7 +63,6 @@ class NotesWriter extends Component {
 
     const importanceLevels = nbLevels.map((l) => {
       const style = l === itineraryNotes.level ? styles[`${l}_selected`] : styles[l]
-      debugger // eslint-disable-line no-debugger
 
       return (
         <div

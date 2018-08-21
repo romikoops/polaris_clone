@@ -61,7 +61,6 @@ class App extends Component {
       tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch, appDispatch
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
-      debugger // eslint-disable-line no-debugger
       return <Loading theme={defaultTheme} text="loading..." />
     }
     const { theme } = tenant.data
