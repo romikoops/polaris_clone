@@ -184,13 +184,7 @@ class Header extends Component {
               onClick={this.goHome}
             />
           </div>
-          {
-            component
-              ? <div className="flex layout-row layout-align-center-center">
-                {component}
-              </div>
-              : ''
-          }
+          {component}
           <div className="flex layout-row layout-align-end-center">
             {dropDowns}
             {
