@@ -55,6 +55,7 @@ class NotesWriter extends Component {
     const { itineraryNotes } = this.state
     const { adminDispatch, targetId } = this.props
     adminDispatch.saveItineraryNotes(targetId, itineraryNotes)
+    this.props.toggleView()
   }
   render () {
     const { itineraryNotes } = this.state
@@ -63,6 +64,7 @@ class NotesWriter extends Component {
 
     const importanceLevels = nbLevels.map((l) => {
       const style = l === itineraryNotes.level ? styles[`${l}_selected`] : styles[l]
+
       return (
         <div
           className={`${style} flex-90 layout-row layout-align-center-center pointy`}
@@ -77,6 +79,7 @@ class NotesWriter extends Component {
         </div>
       )
     })
+
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center">
         <div
@@ -124,12 +127,14 @@ class NotesWriter extends Component {
 NotesWriter.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  targetId: PropTypes.number
+  targetId: PropTypes.number,
+  toggleView: PropTypes.func
 }
 
 NotesWriter.defaultProps = {
   theme: null,
-  targetId: null
+  targetId: null,
+  toggleView: null
 }
 
 function mapStateToProps (state) {

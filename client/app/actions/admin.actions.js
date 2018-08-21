@@ -1031,6 +1031,7 @@ function saveItineraryNotes (itineraryId, notes) {
     adminService.saveItineraryNotes(itineraryId, notes).then(
       (data) => {
         dispatch(alertActions.success('Saving Itinerary Notes successful'))
+        debugger // eslint-disable-line
         dispatch(success(data.data))
       },
       (error) => {

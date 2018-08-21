@@ -188,7 +188,11 @@ export class AdminRouteView extends Component {
           </div>
           <div className="flex-100 layout-row">
             {editNotes ? (
-              <NotesWriter theme={theme} targetId={itinerary.id} />
+              <NotesWriter
+                theme={theme}
+                targetId={itinerary.id}
+                toggleView={() => this.toggleNotesEdit()}
+              />
             ) : (
               <NotesRow notes={notes} theme={theme} />
             )}
