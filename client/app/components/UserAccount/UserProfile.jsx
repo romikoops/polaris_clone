@@ -765,6 +765,7 @@ export class UserProfile extends Component {
               makePrimary={this.makePrimary}
               userDispatch={userDispatch}
               theme={theme}
+              cols={2}
               user={user}
             />
           </div>

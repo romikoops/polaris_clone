@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -7,10 +8,10 @@ import { EditLocation } from './EditLocation'
 import { gradientTextGenerator } from '../../helpers'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
   <div
     key="addLocationButton"
-    className={`${defaults.pointy} flex-30 flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
+    className={`${defaults.pointy} ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
     onClick={() => toggleActiveView('editLocation')}
   >
     <div
@@ -30,7 +31,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
   locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
     <div
       key={v4()}
-      className={`flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
+      className={`${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
     >
       <div className={`${styles['location-box']} flex-100 layout-column`}>
         <div className={`${styles.header} layout-row layout-align-end-center`}>
@@ -73,7 +74,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
               <p className="flex-100">{op.location.zip_code}</p>
             ) : ''}
             {op.location.country ? (
-              <p className="flex-100">{op.location.country}</p>
+              <p className="flex-100"> <Truncate lines={2}>{op.location.country} </Truncate></p>
             ) : ''}
           </div>
         </div>
@@ -137,7 +138,7 @@ export class UserLocations extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, cols } = this.props
     const locInfo = this.props.locations
     const gradientFontStyle =
       theme && theme.colors
@@ -153,7 +154,8 @@ export class UserLocations extends Component {
             this.toggleActiveView,
             this.destroyLocation,
             this.editLocation,
-            gradientFontStyle
+            gradientFontStyle,
+            cols
           )
           : undefined
         break
@@ -184,7 +186,7 @@ export class UserLocations extends Component {
         )
         break
       default:
-        activeView = LocationView(locInfo, gradientFontStyle)
+        activeView = LocationView(locInfo, gradientFontStyle, cols)
     }
 
     return (
@@ -202,12 +204,14 @@ UserLocations.propTypes = {
     newUserLocation: PropTypes.func,
     destroyLocation: PropTypes.func
   }).isRequired,
+  cols: PropTypes.number,
   locations: PropTypes.arrayOf(PropTypes.location)
 }
 
 UserLocations.defaultProps = {
   theme: null,
-  locations: []
+  locations: [],
+  cols: 3
 }
 
 export default UserLocations
