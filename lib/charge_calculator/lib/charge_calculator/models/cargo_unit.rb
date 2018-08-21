@@ -3,6 +3,15 @@
 module ChargeCalculator
   module Models
     class CargoUnit < Base
+      #   Attribute   |   Unit
+      #
+      #   dimensions  |   --
+      #     x         |   cm
+      #     y         |   cm
+      #     z         |   cm
+      #   volume      |   m3    
+      #   payload     |   kg    
+
       def volume
         @volume ||= data.fetch(:volume) { volume_from_dimensions }
       end
