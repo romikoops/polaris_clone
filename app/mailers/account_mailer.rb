@@ -31,8 +31,7 @@ class AccountMailer < Devise::Mailer
 
     opts[:subject] = "ItsMyCargo Account Password Reset"
     @redirect_url = base_url(tenant) + "password_reset"
-
-    # headers["Custom-header"] = "Some Headers"
+        # headers["Custom-header"] = "Some Headers"
     # opts[:reply_to] = 'example@email.com'
     super
   end

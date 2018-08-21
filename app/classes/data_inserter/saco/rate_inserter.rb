@@ -162,13 +162,14 @@ module DataInserter
 
 
         def insert_rates
-          @rates.each do |rate_hash|
+          @rates.each_with_index do |rate_hash, i|
             @rate_hash = rate_hash
             @rate_hash[:data][:itineraries].each do |hub_code, itinerary|
               find_or_create_itinerary(itinerary)
               find_tenant_vehicle
               generate_trips
               create_pricings
+              p "#{i}/#{@rates.length}"
             end
           end
         end
