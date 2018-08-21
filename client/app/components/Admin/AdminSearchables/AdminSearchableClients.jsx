@@ -83,6 +83,7 @@ export class AdminSearchableClients extends Component {
           key={v4()}
           client={client}
           theme={theme}
+          flexClasses="flex-45 flex-gt-sm-33"
           handleClick={this.handleClick}
           tooltip={tooltip}
           showTooltip={showTooltip}
