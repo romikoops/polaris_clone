@@ -21,7 +21,11 @@ export class FlashMessages extends Component {
     const { messages } = this.state
     const index = messages.indexOf(message)
     messages.splice(index, 1)
-    this.setState({ messages })
+    this.setState({ messages }, () => {
+      if (this.state.messages.length === 0) {
+        this.props.onClose()
+      }
+    })
   }
 
   render () {
@@ -44,7 +48,8 @@ export class FlashMessages extends Component {
 }
 
 FlashMessages.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.string).isRequired
+  messages: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClose: PropTypes.func.isRequired
 }
 
 export default FlashMessages
