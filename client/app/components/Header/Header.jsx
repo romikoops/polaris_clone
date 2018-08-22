@@ -79,7 +79,6 @@ class Header extends Component {
       scrollable,
       noMessages,
       component,
-      // adminDispatch,
       isLanding
     } = this.props
     const { isTop } = this.state
@@ -173,8 +172,7 @@ class Header extends Component {
       `${invert ? styles.inverted : ''} ` +
       `${scrollable ? styles.scrollable : ''} ` +
       `${scrollable && !isTop ? styles.scrolled : ''}`
-    console.log(this.props)
-    console.log('!!!!!!!!!props!!!!!!!!!!')
+
     return (
       <div className={headerClass} style={{ color: invert ? 'white' : 'black' }}>
         <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
