@@ -35,6 +35,7 @@ module ShippingTools
         Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     end
+    last_trip_date = current_user.tenant.trips.order(:start_date).last.start_date
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
@@ -47,23 +48,26 @@ module ShippingTools
       lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types:         tenant.cargo_item_types,
       max_dimensions:           tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions
+      max_aggregate_dimensions: tenant.max_aggregate_dimensions,
+      last_trip_date:           last_trip_date
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def self.get_offers(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
-
+    
     offer_calculator.perform
 
     offer_calculator.shipment.save!
+    last_trip_date = current_user.tenant.trips.order(:start_date).last.start_date
     {
       shipment:        offer_calculator.shipment,
       schedules:       offer_calculator.detailed_schedules,
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
-      cargoUnits:      offer_calculator.shipment.cargo_units
+      cargoUnits:      offer_calculator.shipment.cargo_units,
+      lastTripDate:           last_trip_date
     }
   end
 

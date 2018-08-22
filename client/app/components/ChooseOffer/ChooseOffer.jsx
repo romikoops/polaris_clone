@@ -127,7 +127,7 @@ export class ChooseOffer extends Component {
     const { currentCurrency } = this.state
 
     const {
-      shipment, originHubs, destinationHubs, schedules
+      shipment, originHubs, destinationHubs, schedules, lastTripDate
     } = shipmentData
     if (!shipment || !schedules) return ''
 
@@ -199,7 +199,11 @@ export class ChooseOffer extends Component {
         truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
       />
     ))
+    const lastResultDate = schedules[schedules.length - 1].etd
+    const firstResultDate = schedules[0].etd
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+    const showLaterDepButton = Math.abs(moment(lastTripDate).diff(lastResultDate, 'days')) > 5
+    const showEarlierDepButton = Math.abs(moment().diff(firstResultDate, 'days')) > 10
 
     return (
       <div
@@ -219,6 +223,7 @@ export class ChooseOffer extends Component {
               departureDate={depDay}
               shipment={shipment}
               availableMotKeys={availableMoTKeys}
+              lastTripDate={lastTripDate}
               setDepartureDate={this.setDepartureDate}
             />
           </div>
@@ -228,16 +233,31 @@ export class ChooseOffer extends Component {
                 <div
                   className="flex-none layout-row layout-align-space-around-center pointy"
                   onClick={() => this.shiftDepartureDate('subtract', 5)}
+
                 >
-                  <i className="flex-none fa fa-angle-double-left" style={{ margin: '0 5px' }} />
-                  <p className="flex-none no_m">Show earlier departures</p>
+                  <i
+                    style={!showEarlierDepButton ? { display: 'none' } : { margin: '0 5px' }}
+                    className="flex-none fa fa-angle-double-left"
+                  />
+                  <p
+                    style={!showEarlierDepButton ? { display: 'none' } : {}}
+                    className="flex-none no_m"
+                  >Show earlier departures
+                  </p>
                 </div>
                 <div
                   className="flex-none layout-row layout-align-space-around-center pointy"
                   onClick={() => this.shiftDepartureDate('add', 5)}
                 >
-                  <p className="flex-none no_m">Show later departures</p>
-                  <i className="flex-none fa fa-angle-double-right" style={{ margin: '0 5px' }} />
+                  <p
+                    style={!showLaterDepButton ? { display: 'none' } : {}}
+                    className="flex-none no_m"
+                  >Show later departures
+                  </p>
+                  <i
+                    style={!showLaterDepButton ? { display: 'none' } : { margin: '0 5px' }}
+                    className="flex-none fa fa-angle-double-right"
+                  />
                 </div>
               </div>
               <div
