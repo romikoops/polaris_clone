@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import styles from './index.scss'
+import PropTypes from '../../../prop-types'
 import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
@@ -42,7 +43,7 @@ class QuoteCard extends PureComponent {
         collapsed={!this.state.expander[`${key}`]}
         theme={theme}
         contentStyle={styles.sub_price_row_wrapper}
-        headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center puppa"
+        headerWrapClasses="flex-100 layout-row layout-wrap layout-align-start-center"
         handleCollapser={() => this.toggleExpander(`${key}`)}
         mainWrapperStyle={{ borderTop: '1px solid #E0E0E0', minHeight: '50px' }}
         contentHeader={(
@@ -105,9 +106,6 @@ class QuoteCard extends PureComponent {
               />
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
-              {/* <p className="flex-50 layout-row layout-align-center-center">
-                {`${numberSpacing(cargos.volume, 3)} m`} <sup>3</sup>
-              </p> */}
               <p className="flex-100 layout-row layout-align-end-center">
                 Kg:&nbsp; <span>{`${numberSpacing(calcPayload.total, 1)} kg`}</span>
               </p>
@@ -135,6 +133,26 @@ class QuoteCard extends PureComponent {
       </div>
     )
   }
+}
+
+QuoteCard.propTypes = {
+  theme: PropTypes.theme,
+  tenant: PropTypes.tenant,
+  schedule: PropTypes.objectOf(PropTypes.any),
+  cargo: PropTypes.arrayOf(PropTypes.any),
+  handleInputChange: PropTypes.func,
+  checked: PropTypes.bool,
+  handleClick: PropTypes.func
+}
+
+QuoteCard.defaultProps = {
+  theme: null,
+  tenant: {},
+  schedule: {},
+  cargo: [],
+  handleInputChange: null,
+  checked: false,
+  handleClick: null
 }
 
 export default QuoteCard

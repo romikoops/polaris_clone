@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import styled from 'styled-components'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
@@ -149,10 +148,10 @@ export class RouteFilterBox extends Component {
 RouteFilterBox.propTypes = {
   departureDate: PropTypes.number,
   theme: PropTypes.theme,
+  cargos: PropTypes.arrayOf(PropTypes.any),
   setDurationFilter: PropTypes.func.isRequired,
   setMoT: PropTypes.func.isRequired,
   setDepartureDate: PropTypes.func.isRequired,
-  // durationFilter: PropTypes.number.isRequired,
   pickup: PropTypes.bool,
   shipment: PropTypes.objectOf(PropTypes.any),
   availableMotKeys: PropTypes.objectOf(PropTypes.bool)
@@ -162,6 +161,7 @@ RouteFilterBox.defaultProps = {
   departureDate: 0,
   theme: 0,
   pickup: false,
+  cargos: [],
   shipment: {},
   availableMotKeys: {}
 }
