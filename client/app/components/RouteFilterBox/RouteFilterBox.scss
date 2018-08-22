@@ -15,7 +15,24 @@
 		margin-bottom: 15px;
   }
   .cargos_recap {
-    min-height: 70px;
+    > div {
+      min-height: 70px;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    > div:first-child {
+      border-top: 1px solid #E0E0E0;
+      margin-top: 25px;
+    }
+    > div:last-child {
+      margin-bottom: 25px;
+    }
+  }
+  .cargo_img {
+    min-height: 42px;
+    background: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 70px;
   }
 	.dpb {
 	  height: 36px;

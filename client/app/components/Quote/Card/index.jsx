@@ -52,7 +52,7 @@ class QuoteCard extends PureComponent {
               <span>{capitalize(key)}</span>
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(quote[`${key}`].total.value, 1)}&nbsp;{quote.total.currency}</p>
+              <p>{numberSpacing(quote[`${key}`].total.value, 2)}&nbsp;{quote.total.currency}</p>
             </div>
           </div>
         )}
@@ -65,7 +65,7 @@ class QuoteCard extends PureComponent {
                 <span>{price[0]}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
-                <p>{numberSpacing(price[1].value || price[1].total.value, 1)}&nbsp;{quote.total.currency}</p>
+                <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{quote.total.currency}</p>
               </div>
             </div>)
 
@@ -75,7 +75,14 @@ class QuoteCard extends PureComponent {
     ) : ''
 
     return (
-      <div className={`flex-100 layout-row layout-wrap ${styles.wrapper}`}>
+      <div
+        className={`flex-100 layout-row layout-wrap ${styles.wrapper} ${checked ? styles.wrapper_selected : ''}`}
+      >
+        {checked ? (
+          <div className={`${styles.wrapper_gradient}`}>
+            <div className={`${styles.gradient}`} style={gradientStyle} />
+          </div>
+        ) : ''}
         <div className={`flex-100 layout-row layout-align-start-center ${styles.container}`}>
           <div className={`flex-10 layout-row layout-align-center-center ${styles.mot_icon}`}>
             {switchIcon(schedule.mode_of_transport, gradientStyle)}
@@ -102,24 +109,23 @@ class QuoteCard extends PureComponent {
                 {`${numberSpacing(cargos.volume, 3)} m`} <sup>3</sup>
               </p> */}
               <p className="flex-100 layout-row layout-align-end-center">
-                Kg:&nbsp; <span>{`${numberSpacing(calcPayload.payload_in_kg, 1)} kg`}</span>
+                Kg:&nbsp; <span>{`${numberSpacing(calcPayload.total, 1)} kg`}</span>
               </p>
             </div>
           </div>
         </div>
         {pricesArr}
-        <div className="flex-100 layout-wrap layout-align-start-start">
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.total_row}`}>
+        <div className="flex-100 layout-wrap layout-align-start-stretch">
+          <div className={`flex-100 layout-row layout-align-start-stretch ${styles.total_row}`}>
             <div className="flex-50 layout-row layout-align-start-center">
               <span>Total</span>
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(quote.total.value, 1)}&nbsp;{quote.total.currency}</p>
+              <p>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
               <input
                 className="pointy"
                 name="checked"
                 type="checkbox"
-                checked={checked}
                 onClick={handleClick}
                 onChange={handleInputChange}
               />

@@ -79,6 +79,8 @@ export class RouteFilterBox extends Component {
         </label>
       </div>
     ))
+    const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
+    const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -127,16 +129,11 @@ export class RouteFilterBox extends Component {
           </div>
           {motCheckBoxes}
         </div>
-        <div className={`layout-row flex-100 layout-align-start-center ${styles.cargos_recap}`}>
+        <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.cargos_recap}`}>
           {cargos.map(cargo => (
-            <div className="flex-100 layout-row">
+            <div className="flex-100 layout-row layout-align-start-center">
               <div>x{cargo.quantity}</div>
-              {cargo.cargo_class === 'lcl' ? (
-                // continue from here
-                <img src={shipment.load_type === LOAD_TYPES.code ? LOAD_TYPES.img : LOAD_TYPES.name} alt="lcl" />
-              ) : (
-                <img src="" alt="fcl" />
-              )}
+              <div className={styles.cargo_img} style={shipment.load_type === 'cargo_item' ? imgLCL : imgFCL} />
             </div>
           ))}
         </div>

@@ -5,6 +5,7 @@ import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
+import { numberSpacing } from '../../helpers'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -45,14 +46,14 @@ export class ChooseOffer extends Component {
         alt: true
       },
       outerLimit: 20,
-      isChecked: false,
-      selectedOffers: [] 
+      selectedOffers: [],
+      isChecked: false
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
+    // this.handleInputChange = this.handleInputChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
@@ -83,15 +84,20 @@ export class ChooseOffer extends Component {
       }
     })
   }
-  handleInputChange () {
-    this.setState(prevState => ({
-      isChecked: !prevState.isChecked
-    }))
-  }
-  handleClick (offer) {
-    this.setState(prevState => ({
-      selectedOffers: prevState.selectedOffers.push(offer)
-    }))
+  handleClick (e, value) {
+    if (e.target.checked) {
+      this.state.selectedOffers.push(value)
+      this.setState({
+        selectedOffers: this.state.selectedOffers
+      })
+    } else {
+      this.setState({
+        selectedOffers: this.state.selectedOffers.filter(val => val !== value)
+      })
+    }
+    this.setState({
+      isChecked: e.target.checked
+    })
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
@@ -186,8 +192,9 @@ export class ChooseOffer extends Component {
           theme={theme}
           tenant={tenant}
           schedule={s}
+          checked={this.state.isChecked}
           cargo={shipmentData.cargoUnits}
-          handleInputChange={this.handleInputChange}
+          handleClick={e => this.handleClick(e, s.quote.total.value)}
         />
       ) : (
         <RouteResult
@@ -212,9 +219,9 @@ export class ChooseOffer extends Component {
           theme={theme}
           tenant={tenant}
           schedule={s}
+          checked={this.state.isChecked}
           cargo={shipmentData.cargoUnits}
-          handleInputChange={offer => this.handleInputChange(offer)}
-          handleClick={offer => this.handleClick(offer)}
+          handleClick={e => this.handleClick(e, s.quote.total.value)}
         />
       ) : (
         <RouteResult
@@ -286,7 +293,6 @@ export class ChooseOffer extends Component {
                     text="This is the closest departure to the specified date"
                   />
                 </div>
-                {console.log(this.state.selectedOffer)}
                 <div className="flex-30 layout-row layout-align-end-center">
                   {scope.fixed_currency ? (
                     ''
@@ -310,7 +316,6 @@ export class ChooseOffer extends Component {
                 </div>
               </div>
               {focusRoutestoRender}
-
               <div className="flex-100 layout-row layout-align-center-center">
                 <div
                   className="flex-33 layout-row layout-align-space-around-center"
@@ -327,17 +332,30 @@ export class ChooseOffer extends Component {
             </div>
           </div>
           {tenant.data.subdomain === 'gateway' ? (
-            <div className={`flex-25 offset-5 layout-row ${styles.download_section}`}>
-              <p>Selected Offers</p>
-              {/* {selectedOffers ? (
-                selectedOffers.map(offer =>
-                  offer)
-              ) : ''} */}
+            <div className={`flex-25 offset-5 layout-wrap ${styles.download_section}`}>
+              <p className={`flex-100 layout-row ${styles.offer_title}`} >Selected Offers</p>
+              {this.state.selectedOffers !== 0 ? (
+                this.state.selectedOffers.map(offer =>
+                  (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
+                    <span>{numberSpacing(offer, 2)}&nbsp;{shipmentData.schedules[0].quote.total.currency}</span>
+                    <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={e => this.handleClick(e, offer)} />
+                  </div>))
+              ) : ''}
+              <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
+                <div className="flex-90 layout-row layout-align-center-center">
+                  <RoundButton
+                    theme={theme}
+                    size="full"
+                    active
+                    text="Download pdf"
+                    handleNext={() => this.downloadFile()}
+                  />
+                </div>
+              </div>
             </div>
           ) : ''}
 
         </div>
-
         {!user.guest && (
           <div
             className={`${
