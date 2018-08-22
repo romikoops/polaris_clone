@@ -20,6 +20,17 @@ export default function (state = initialState, action) {
   }
 
   switch (action.type) {
+    case authenticationConstants.SHOW_LOGIN:
+      return {
+        ...state,
+        showModal: true,
+        ...action.payload
+      }
+    case authenticationConstants.CLOSE_LOGIN:
+      return {
+        ...state,
+        showModal: false
+      }
     case authenticationConstants.LOGIN_REQUEST:
       return {
         ...state,
@@ -47,8 +58,7 @@ export default function (state = initialState, action) {
     case authenticationConstants.UPDATE_USER_REQUEST:
       return {
         ...state,
-        loggedIn: true,
-        registering: true
+        loggedIn: true
       }
     case authenticationConstants.UPDATE_USER_SUCCESS:
       return {
