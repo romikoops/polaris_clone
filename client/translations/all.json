@@ -1,6 +1,11 @@
 {
     "en": {
       "common": {
+        "availabilitiesHead": "Availabilities will be shown for all applicable",
+        "availabilitiesTail": " modes of transport for your shipment",
+        "itemsOrContainers": "Are you shipping cargo items or containers?",
+        "importOrExport": "Are you importing or exporting?",
+        "nextStep": "Next Step",
         "selectCurrency": "Select Currency",
         "closestDeparture": "This is the closest departure to the specified date",
         "earlierDepartures": "Show earlier departures",
