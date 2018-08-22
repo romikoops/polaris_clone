@@ -786,7 +786,8 @@ export class ShipmentDetails extends Component {
       disabledDays: {
         before: new Date(moment()
           .add(7, 'days')
-          .format())
+          .format()),
+        after: new Date(moment(shipmentData.lastTripDate))
       },
       month: new Date(
         moment()
