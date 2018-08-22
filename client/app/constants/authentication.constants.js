@@ -12,7 +12,9 @@ export const authenticationConstants = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'FAILURE',
   LOGOUT: 'LOGOUT',
-  SET_USER: 'SET_USER'
+  SET_USER: 'SET_USER',
+  SHOW_LOGIN: 'SHOW_LOGIN',
+  CLOSE_LOGIN: 'CLOSE_LOGIN'
 }
 
 export default authenticationConstants

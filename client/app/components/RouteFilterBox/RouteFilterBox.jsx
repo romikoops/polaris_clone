@@ -45,13 +45,14 @@ export class RouteFilterBox extends Component {
   }
   render () {
     const {
-      theme, pickup, shipment, availableMotKeys, cargos
+      theme, pickup, shipment, availableMotKeys, cargos, lastTripDate
     } = this.props
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
           .add(7, 'days')
-          .format())
+          .format()),
+        after: new Date(moment(lastTripDate))
       },
       month: new Date(
         moment()
@@ -63,6 +64,7 @@ export class RouteFilterBox extends Component {
       ),
       name: 'dayPicker'
     }
+
     const motCheckBoxKeys = Object.keys(availableMotKeys)
     const motCheckBoxes = motCheckBoxKeys.map(mKey => (
       <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
@@ -154,7 +156,8 @@ RouteFilterBox.propTypes = {
   setDepartureDate: PropTypes.func.isRequired,
   pickup: PropTypes.bool,
   shipment: PropTypes.objectOf(PropTypes.any),
-  availableMotKeys: PropTypes.objectOf(PropTypes.bool)
+  availableMotKeys: PropTypes.objectOf(PropTypes.bool),
+  lastTripDate: PropTypes.string
 }
 
 RouteFilterBox.defaultProps = {
@@ -163,7 +166,8 @@ RouteFilterBox.defaultProps = {
   pickup: false,
   cargos: [],
   shipment: {},
-  availableMotKeys: {}
+  availableMotKeys: {},
+  lastTripDate: ''
 }
 
 export default RouteFilterBox

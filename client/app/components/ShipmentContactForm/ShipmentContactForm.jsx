@@ -160,6 +160,7 @@ export class ShipmentContactForm extends Component {
         handlePlaceChange={place => this.handlePlaceChange(place)}
         setContactAttempted={this.state.setContactAttempted}
         setContactBtn={setContactBtn}
+        newLocation={this.state.contactData.location}
       />
     )
 

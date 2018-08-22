@@ -9,8 +9,6 @@ import styles from './Landing.scss'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, adminActions, authenticationActions } from '../../actions'
-import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper'
-import { Modal } from '../../components/Modal/Modal'
 import { gradientTextGenerator } from '../../helpers'
 import { Footer } from '../../components/Footer/Footer'
 
@@ -63,27 +61,14 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, showModal
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
     } = this.props
     const textStyle1 =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
-    const loginModal = (
-      <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{ theme }}
-            RegistrationPageProps={{ theme, tenant }}
-            initialCompName="LoginPage"
-          />
-        }
-        verticalPadding="30px"
-        horizontalPadding="40px"
-        parentToggle={() => this.toggleShowLogin()}
-      />
-    )
+
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
 
@@ -91,7 +76,6 @@ class Landing extends Component {
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
           {loadingScreen}
-          {showModal && this.state.showLogin ? loginModal : ''}
           <LandingTop
             className="flex-100"
             user={user}
@@ -199,7 +183,6 @@ Landing.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
-  showModal: PropTypes.bool,
   loading: PropTypes.bool,
   userDispatch: PropTypes.shape({
     goTo: PropTypes.func
@@ -213,7 +196,6 @@ Landing.propTypes = {
 
 Landing.defaultProps = {
   loggedIn: false,
-  showModal: true,
   loading: false,
   theme: null,
   tenant: null,

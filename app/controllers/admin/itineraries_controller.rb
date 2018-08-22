@@ -116,9 +116,10 @@ class Admin::ItinerariesController < Admin::AdminBaseController
 
   def itinerary_with_notes
     itinerary = Itinerary.find(params[:id])
-    itinerary.notes.create!(body:   params[:notes][:body],
+    itinerary.notes.find_or_create_by!(body:   params[:notes][:body],
                             header: params[:notes][:header],
                             level:  params[:notes][:level])
+    itinerary.notes
   end
 
   def new_ids

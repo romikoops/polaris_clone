@@ -13,13 +13,11 @@ import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
-import { shipmentActions } from '../../actions/shipment.actions'
+import { shipmentActions, authenticationActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
-import { Modal } from '../../components/Modal/Modal'
-import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -101,10 +99,7 @@ class Shop extends Component {
   }
 
   toggleShowRegistration (req) {
-    this.setState(prevState => ({
-      showRegistration: !prevState.showRegistration,
-      req
-    }))
+    this.props.authenticationDispatch.showLogin({ req })
   }
 
   hideRegistration () {
@@ -176,46 +171,22 @@ class Shop extends Component {
       shipmentDispatch,
       bookingSummaryDispatch,
       currencies,
-      dashboard,
-      noRedirect
+      dashboard
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
       request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
-    console.log(error)
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req, showRegistration } = this.state
-
-    const loginModal = (
-      <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{
-              theme,
-              noRedirect,
-              handleClick: () => this.toggleShowLogin()
-            }}
-            RegistrationPageProps={{ theme, tenant, noRedirect }}
-            initialCompName="LoginPage"
-          />
-        }
-        verticalPadding="30px"
-        horizontalPadding="40px"
-        parentToggle={() => this.toggleShowLogin()}
-      />
-    )
-
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
         {loadingScreen}
-        {this.state.showLogin ? loginModal : ''}
         <Header
-          toggleShowLogin={() => this.toggleShowLogin()}
           theme={this.props.theme}
           component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
           showMessages={this.toggleShowMessages}
@@ -223,6 +194,7 @@ class Shop extends Component {
           req={req}
           noMessages
           scrollable
+          noRedirect
         />
 
         <ShopStageView
@@ -390,6 +362,9 @@ Shop.propTypes = {
   }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({
     update: PropTypes.func
+  }).isRequired,
+  authenticationDispatch: PropTypes.shape({
+    showLogin: PropTypes.func
   }).isRequired
 }
 
@@ -430,6 +405,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }

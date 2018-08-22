@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import styles from './ChooseShipment.scss'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
@@ -36,7 +35,7 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, messages, scope } = this.props
+    const { theme, scope } = this.props
     const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
     const allowedCargoTypes = { cargo_item: false, container: false }
     Object.keys(scope.modes_of_transport).forEach((mot) => {
@@ -50,7 +49,6 @@ export class ChooseShipment extends Component {
       allowedCargoTypes.cargo_item = true
     }
     const { loadType, direction } = this.state
-    const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -97,7 +95,6 @@ export class ChooseShipment extends Component {
 
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
-        {flash}
         <div
           className={
             `flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`
@@ -172,14 +169,12 @@ export class ChooseShipment extends Component {
 
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
-  messages: PropTypes.arrayOf(PropTypes.string),
   selectLoadType: PropTypes.func.isRequired,
   scope: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 ChooseShipment.defaultProps = {
-  theme: null,
-  messages: []
+  theme: null
 }
 
 export default ChooseShipment
