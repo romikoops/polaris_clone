@@ -30,6 +30,14 @@ function logout (closeWindow) {
   }
 }
 
+function showLogin (args) {
+  return { type: authenticationConstants.SHOW_LOGIN, payload: args }
+}
+
+function closeLogin () {
+  return { type: authenticationConstants.CLOSE_LOGIN, payload: null }
+}
+
 function login (data) {
   function request (user) {
     return { type: authenticationConstants.LOGIN_REQUEST, user }
@@ -47,6 +55,7 @@ function login (data) {
       (response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
+
         if (shipmentReq) {
           shipmentReq.user_id = response.data.id
           dispatch(shipmentActions.chooseOffer(shipmentReq))
@@ -56,13 +65,15 @@ function login (data) {
           dispatch(adminActions.getDashboard(true))
         } else if (['shipper', 'agent', 'agency_manager'].includes(response.data.role.name) && !data.noRedirect) {
           dispatch(push('/account'))
+        } else {
+          dispatch(closeLogin())
         }
       },
       (error) => {
         error.then((errorData) => {
           dispatch(failure({
             error: errorData,
-            persistState: !!data.req
+            persistState: !!data.req || !!data.noRedirect
           }))
         })
       }
@@ -157,7 +168,9 @@ export const authenticationActions = {
   register,
   updateUser,
   setUser,
-  goTo
+  goTo,
+  showLogin,
+  closeLogin
 }
 
 export default authenticationActions
