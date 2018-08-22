@@ -9,7 +9,7 @@ jest.mock('../../helpers', () => ({
   humanizedMotAndLoadType: x => x
 }))
 // eslint-disable-next-line
-import ChooseShipment from './ChooseShipmentDone'
+import ChooseShipment from './ChooseShipment'
 
 const propsBase = {
   theme,

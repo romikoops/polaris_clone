@@ -1,6 +1,7 @@
 {
     "en": {
       "common": {
+        "address": "Address",
         "availabilitiesHead": "Availabilities will be shown for all applicable",
         "availabilitiesTail": " modes of transport for your shipment",
         "itemsOrContainers": "Are you shipping cargo items or containers?",
