@@ -28,7 +28,6 @@ exports[`theme has truthy properties 1`] = `
             "welcome_text": "FOO_WELCOME_TEXT",
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",
@@ -215,7 +214,6 @@ exports[`user.role_id is 1 1`] = `
             },
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",
@@ -394,7 +392,6 @@ exports[`user.role_id is 2 1`] = `
             },
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",

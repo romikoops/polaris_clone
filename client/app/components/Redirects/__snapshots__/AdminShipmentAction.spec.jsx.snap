@@ -13,7 +13,6 @@ exports[`shallow rendering 1`] = `
   <Modal
     component={
       <LoginPage
-        handleClick={null}
         loggingIn={false}
         loginAttempt={false}
         noRedirect={true}
