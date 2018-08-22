@@ -35,7 +35,7 @@ module ShippingTools
         Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     end
-    last_trip_date = current_user.tenant.trips.order(:start_date).last.start_date
+    last_trip_date = last_trip(current_user)
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
@@ -60,14 +60,14 @@ module ShippingTools
     offer_calculator.perform
 
     offer_calculator.shipment.save!
-    last_trip_date = current_user.tenant.trips.order(:start_date).last.start_date
+    last_trip_date = last_trip(current_user)
     {
       shipment:        offer_calculator.shipment,
       schedules:       offer_calculator.detailed_schedules,
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
       cargoUnits:      offer_calculator.shipment.cargo_units,
-      lastTripDate:           last_trip_date
+      lastTripDate:    last_trip_date
     }
   end
 
@@ -536,6 +536,10 @@ module ShippingTools
         shipment
       ).deliver_later
     end
+  end
+
+  def self.last_trip(user)
+    user.tenant.trips.order(:start_date)&.last&.start_date
   end
 
   def build_and_upload_pdf(args)
