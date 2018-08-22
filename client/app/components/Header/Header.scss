@@ -77,4 +77,10 @@
   .logo {
     margin-left: calc(100vw / 12);
   }
+  .error_messages {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 }
