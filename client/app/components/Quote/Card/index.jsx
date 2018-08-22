@@ -4,13 +4,6 @@ import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '..
 import { ChargeIcons } from './ChargeIcons'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 
-function filteredKeys (key) {
-  Object.entries(key)
-    .map(array => array.filter((value, index, arr) =>
-      value !== 'total' && value !== 'edited_total'))
-    .filter((value, index, arr) => value.length !== 1)
-}
-
 class QuoteCard extends PureComponent {
   constructor (props) {
     super(props)
@@ -31,7 +24,10 @@ class QuoteCard extends PureComponent {
       theme,
       tenant,
       schedule,
-      cargo
+      cargo,
+      handleInputChange,
+      checked,
+      handleClick
     } = this.props
     const {
       quote
@@ -40,10 +36,6 @@ class QuoteCard extends PureComponent {
     const destinationHub = schedule.destination_hub
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
-    // const filteredKeys = Object.entries(quote.export)
-    //   .map(array => array.filter((value, index, arr) =>
-    //     value !== 'total' && value !== 'edited_total'))
-    //   .filter((value, index, arr) => value.length !== 1)
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
       Object.keys(quote).splice(2).map(key => (<CollapsingBar
         showArrow
@@ -106,10 +98,10 @@ class QuoteCard extends PureComponent {
               />
             </div>
             <div className={`flex-100 layout-row layout-wrap layout-align-end-center ${styles.unit_info}`}>
-              <p className="flex-50 layout-row layout-align-center-center">
-                {/* {`${numberSpacing(cargos.volume, 3)} m`} <sup>3</sup> */}
-              </p>
-              <p className="flex-50 layout-row layout-align-center-center">
+              {/* <p className="flex-50 layout-row layout-align-center-center">
+                {`${numberSpacing(cargos.volume, 3)} m`} <sup>3</sup>
+              </p> */}
+              <p className="flex-100 layout-row layout-align-end-center">
                 Kg:&nbsp; <span>{`${numberSpacing(calcPayload.payload_in_kg, 1)} kg`}</span>
               </p>
             </div>
@@ -123,7 +115,14 @@ class QuoteCard extends PureComponent {
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
               <p>{numberSpacing(quote.total.value, 1)}&nbsp;{quote.total.currency}</p>
-              <p>select checkbox</p>
+              <input
+                className="pointy"
+                name="checked"
+                type="checkbox"
+                checked={checked}
+                onClick={handleClick}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
         </div>

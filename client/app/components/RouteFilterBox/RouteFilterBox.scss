@@ -13,10 +13,16 @@
 			margin: 0 0 15px 0;
 		}
 		margin-bottom: 15px;
-	}
-	.dpb{
+  }
+  .cargos_recap {
+    min-height: 70px;
+  }
+	.dpb {
 	  height: 36px;
-	  width: 160px;
+    width: 160px;
+    span {
+      padding-left: 8px;
+    }
 	}
 	.dpb_icon {
 	  height: 38px;

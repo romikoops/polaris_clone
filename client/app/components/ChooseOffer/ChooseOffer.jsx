@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
-// import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
@@ -45,12 +44,16 @@ export class ChooseOffer extends Component {
         focus: true,
         alt: true
       },
-      outerLimit: 20
+      outerLimit: 20,
+      isChecked: false,
+      selectedOffers: [] 
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
   componentDidMount () {
@@ -79,6 +82,16 @@ export class ChooseOffer extends Component {
         [target]: val
       }
     })
+  }
+  handleInputChange () {
+    this.setState(prevState => ({
+      isChecked: !prevState.isChecked
+    }))
+  }
+  handleClick (offer) {
+    this.setState(prevState => ({
+      selectedOffers: prevState.selectedOffers.push(offer)
+    }))
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
@@ -174,6 +187,7 @@ export class ChooseOffer extends Component {
           tenant={tenant}
           schedule={s}
           cargo={shipmentData.cargoUnits}
+          handleInputChange={this.handleInputChange}
         />
       ) : (
         <RouteResult
@@ -199,6 +213,8 @@ export class ChooseOffer extends Component {
           tenant={tenant}
           schedule={s}
           cargo={shipmentData.cargoUnits}
+          handleInputChange={offer => this.handleInputChange(offer)}
+          handleClick={offer => this.handleClick(offer)}
         />
       ) : (
         <RouteResult
@@ -224,10 +240,11 @@ export class ChooseOffer extends Component {
         style={{ marginTop: '62px', marginBottom: '166px' }}
       >
         {flash}
-        <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
+        <div className={`flex-none ${defs.content_width} layout-row`}>
           <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
               theme={theme}
+              cargos={shipmentData.cargoUnits}
               pickup={shipment.has_pre_carriage}
               setDurationFilter={this.setDuration}
               durationFilter={this.state.durationFilter}
@@ -239,7 +256,7 @@ export class ChooseOffer extends Component {
               setDepartureDate={this.setDepartureDate}
             />
           </div>
-          <div className="flex-75 offset-5 layout-row layout-wrap">
+          <div className="flex-75  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center">
                 <div
@@ -269,6 +286,7 @@ export class ChooseOffer extends Component {
                     text="This is the closest departure to the specified date"
                   />
                 </div>
+                {console.log(this.state.selectedOffer)}
                 <div className="flex-30 layout-row layout-align-end-center">
                   {scope.fixed_currency ? (
                     ''
@@ -308,6 +326,16 @@ export class ChooseOffer extends Component {
 
             </div>
           </div>
+          {tenant.data.subdomain === 'gateway' ? (
+            <div className={`flex-25 offset-5 layout-row ${styles.download_section}`}>
+              <p>Selected Offers</p>
+              {/* {selectedOffers ? (
+                selectedOffers.map(offer =>
+                  offer)
+              ) : ''} */}
+            </div>
+          ) : ''}
+
         </div>
 
         {!user.guest && (

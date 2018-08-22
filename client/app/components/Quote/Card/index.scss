@@ -72,6 +72,7 @@
   .total_row {
     background: #F8F8F8;
     border: 1px solid #BDBDBD;
+    min-height: 62px;
     span {
       padding-left: 10px;
       font-style: italic;
@@ -86,6 +87,10 @@
       font-size: 30px;
       text-align: right;
       letter-spacing: 0.02em;
+    }
+    input {
+      margin-right: 15px;
+      margin-left: 10px;
     }
   }
   .fee_tile {
