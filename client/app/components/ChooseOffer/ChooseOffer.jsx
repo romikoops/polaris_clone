@@ -6,7 +6,6 @@ import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
@@ -120,7 +119,7 @@ export class ChooseOffer extends Component {
   }
   render () {
     const {
-      shipmentData, messages, user, shipmentDispatch, theme, tenant, originalSelectedDay
+      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
@@ -201,7 +200,6 @@ export class ChooseOffer extends Component {
     ))
     const lastResultDate = schedules[schedules.length - 1].etd
     const firstResultDate = schedules[0].etd
-    const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const showLaterDepButton = Math.abs(moment(lastTripDate).diff(lastResultDate, 'days')) > 5
     const showEarlierDepButton = Math.abs(moment().diff(firstResultDate, 'days')) > 10
 
@@ -210,7 +208,6 @@ export class ChooseOffer extends Component {
         className="flex-100 layout-row layout-align-center-start layout-wrap"
         style={{ marginTop: '62px', marginBottom: '166px' }}
       >
-        {flash}
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
@@ -375,7 +372,6 @@ ChooseOffer.propTypes = {
   user: PropTypes.user.isRequired,
   shipmentData: PropTypes.shipmentData.isRequired,
   chooseOffer: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.string),
   req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   originalSelectedDay: PropTypes.string,
@@ -391,7 +387,6 @@ ChooseOffer.propTypes = {
 ChooseOffer.defaultProps = {
   theme: null,
   prevRequest: null,
-  messages: [],
   req: {},
   tenant: {},
   originalSelectedDay: false

@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
-// import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
-// import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
@@ -19,7 +17,6 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
 import { camelize, isEmpty, chargeableWeight } from '../../helpers'
@@ -693,7 +690,11 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration
+      tenant,
+      user,
+      shipmentData,
+      shipmentDispatch,
+      showRegistration
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
@@ -780,7 +781,7 @@ export class ShipmentDetails extends Component {
     const formattedSelectedDay = this.state.selectedDay
       ? moment(this.state.selectedDay).format('DD/MM/YYYY')
       : ''
-    const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
@@ -869,7 +870,6 @@ export class ShipmentDetails extends Component {
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
         style={{ minHeight: '1800px' }}
       >
-        {flash}
         {modals &&
           Object.keys(modals)
             .filter(modalName => modals[modalName].show)
@@ -1083,7 +1083,6 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   getOffers: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
@@ -1107,7 +1106,6 @@ ShipmentDetails.propTypes = {
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: [],
   reusedShipment: null,
   showRegistration: false,
   hideRegistration: null,
