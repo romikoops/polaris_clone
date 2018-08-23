@@ -381,7 +381,7 @@ module ExcelTool
             pricing_detail = pricing.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
             pricing_detail.update!(range: range, currency_name: currency)
           end
-
+          p pricing.id
           pricing_exceptions.each do |pricing_exception_data|
             pricing_details = pricing_exception_data.delete(:data)
             pricing_exception = pricing.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: tenant))
