@@ -87,8 +87,8 @@ const tenantActions = {
   receiveTenant,
   invalidateSubdomain,
   fetchTenant,
-  shouldFetchTenant,
-  fetchTenantIfNeeded
+  fetchTenantIfNeeded,
+  shouldFetchTenant
 }
 
 export default tenantActions
