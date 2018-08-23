@@ -54,60 +54,6 @@ exports[`shallow render 1`] = `
 </div>
 `;
 
-exports[`shallow render 2`] = `
-<div
-  className="cookie_flex "
-  style={
-    Object {
-      "background": "#fafafa",
-      "filter": "grayscale(60%)",
-    }
-  }
->
-  <p
-    className="cookie_text"
-  >
-    This website uses cookies to enhance your user experience. 
-    <a
-      href="https://www.itsmycargo.com/en/privacy"
-      target="_blank"
-    >
-      Learn more
-    </a>
-  </p>
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="accept"
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-  <ConsentButton
-    active={true}
-    disabled={false}
-    handleDisabled={null}
-    handleNext={[Function]}
-    text="decline"
-    theme={
-      Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
-      }
-    }
-  />
-</div>
-`;
-
 exports[`state.showModal is true 1`] = `
 <div
   className="cookie_flex "

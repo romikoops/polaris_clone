@@ -9,7 +9,7 @@ import {
 } from '../../mocks'
 
 // eslint-disable-next-line
-import CookieConsentBar from './indexDone'
+import CookieConsentBar from './'
 
 const propsBase = {
   theme,
