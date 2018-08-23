@@ -29,7 +29,7 @@ module DocumentService
         current_origin        = origin_aux_data[:location]
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
-
+        carrier               = carrier(pricing)
         key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
         key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
@@ -53,6 +53,7 @@ module DocumentService
                 current_vehicle,
                 key,
                 fee,
+                carrier,
                 range_fee)
               data << range_fee[:min]
               data << range_fee[:max]
@@ -66,7 +67,8 @@ module DocumentService
               current_transit_time,
               current_vehicle,
               key,
-              fee)
+              fee,
+              carrier)
               @worksheet = write_to_sheet(worksheet, row, column, data)
             row += 1
           end
@@ -124,6 +126,12 @@ module DocumentService
 
     def transport_category(transport_category_id)
       TransportCategory.find(transport_category_id)
+    end
+
+    def carrier(pricing)
+      vehicle = transport_category(pricing[:transport_category_id]).vehicle
+      tenant_vehicle = vehicle.tenant_vehicles.where(tenant_id: pricing[:tenant_id])
+      tenant_vehicle.carrier ? tenant_vehicle.carrier.name : ''
     end
 
     def location_and_aux_data(pricing, key1, key2)

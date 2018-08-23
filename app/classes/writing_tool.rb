@@ -62,8 +62,8 @@ module WritingTool
     worksheet
   end
 
-  def writeable_data(current_itinerary, pricing, current_origin, current_destination, current_transit_time, current_vehicle, key, fee, range_fee = nil)
-    data = [current_itinerary.mode_of_transport, pricing[:load_type], pricing[:effective_date], pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time,pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min]]
+  def writeable_data(current_itinerary, pricing, current_origin, current_destination, current_transit_time, current_vehicle, key, fee, carrier, range_fee = nil)
+    data = [carrier, current_itinerary.mode_of_transport, pricing[:load_type], pricing[:effective_date], pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time,pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min]]
       if range_fee
         data << range_fee[:rate]
       else 

@@ -21,8 +21,7 @@ export default class CardPricingIndex extends Component {
     this.state = {
       expander: {},
       searchText: '',
-      page: 1,
-      numPerPage: 9
+      page: 1
     }
     this.handleClick = this.handleClick.bind(this)
     this.iconClasses = {
@@ -87,15 +86,23 @@ export default class CardPricingIndex extends Component {
     return filters.handleSearchChange(searchText, ['name'], array)
   }
   handlePricingSearch (event) {
-    const { adminDispatch, mot } = this.props
-    this.setState(
-      {
-        searchText: event.target.value,
-        page: 1
-      },
-      () => adminDispatch.searchPricings(this.state.searchText, 1, mot)
-    )
+    const { searchTimeout } = this.state
+    if (searchTimeout) {
+      window.clearTimeout(searchTimeout)
+    }
+    const newTimeout = window.setTimeout(this.executeSearch(event.target.value), 750)
+    this.setState({
+      searchText: event.target.value,
+      page: 1,
+      searchTimeout: newTimeout
+    })
   }
+
+  executeSearch () {
+    const { adminDispatch, mot } = this.props
+    adminDispatch.searchPricings(this.state.searchText, 1, mot)
+  }
+
   deltaPage (val) {
     const { adminDispatch, mot } = this.props
     this.setState(
