@@ -13,13 +13,13 @@ subdomains.each do |sub|
   tenant.local_charges.destroy_all
   tenant.customs_fees.destroy_all
   # # tenant.trucking_pricings.delete_all
-  tenant.hubs.destroy_all
-  tenant.nexuses.destroy_all
+  # tenant.hubs.destroy_all
+  # tenant.nexuses.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
   # # # puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
-  req = { 'xlsx' => hubs }
-  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  # hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
+  # req = { 'xlsx' => hubs }
+  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }

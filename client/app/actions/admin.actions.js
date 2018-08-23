@@ -499,7 +499,7 @@ function getItineraryPricings (id, redirect) {
 
   return (dispatch) => {
     dispatch(request())
-
+    dispatch(getTrucking())
     adminService.getItineraryPricings(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Route Prices successful'))
