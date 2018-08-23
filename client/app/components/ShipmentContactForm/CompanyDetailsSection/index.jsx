@@ -5,7 +5,7 @@ import styles from '../ShipmentContactForm.scss'
 import IconLable from '../IconLable'
 
 export default function CompanyDetailsSection ({
-  theme, contactData, setContactAttempted
+  theme, contactData, setContactAttempted, checkValid, formErrors
 }) {
   return (
     <div className="flex-100 layout-row layout-wrap">
@@ -89,17 +89,18 @@ export default function CompanyDetailsSection ({
             value={contactData.contact.email}
             name="email"
             placeholder="Email"
+            onBlur={() => checkValid('email')}
             submitAttempted={setContactAttempted}
             errorMessageStyles={{
               fontSize: '12px',
               bottom: '-19px'
             }}
             validations={{
-              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
             }}
             validationErrors={{
               isDefaultRequiredValue: 'Must not be blank',
-              matchRegexp: 'Invalid email'
+              matchRegexp: 'Invalid email',
             }}
             required
           />
@@ -134,10 +135,13 @@ export default function CompanyDetailsSection ({
 CompanyDetailsSection.propTypes = {
   theme: PropTypes.theme,
   contactData: PropTypes.objectOf(PropTypes.any).isRequired,
-  setContactAttempted: PropTypes.bool
+  setContactAttempted: PropTypes.bool,
+  checkValid: PropTypes.func.isRequired,
+  formErrors: PropTypes.bool
 }
 
 CompanyDetailsSection.defaultProps = {
   theme: null,
-  setContactAttempted: false
+  setContactAttempted: false,
+  formErrors: false
 }
