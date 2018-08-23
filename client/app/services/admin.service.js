@@ -261,13 +261,23 @@ function confirmShipment (id, action) {
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function getPricings () {
+function getPricings (page, mot) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/pricings`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions).then(handleResponse)
+}
+
+function searchPricings (text, page, mot) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/search/pricings?page=${page || 1}&mot=${mot}&text=${text}`, requestOptions)
+    .then(handleResponse)
 }
 
 function deletePricing (pricing) {
@@ -674,7 +684,8 @@ export const adminService = {
   getAllHubs,
   getPricingsTest,
   searchShipments,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  searchPricings
 }
 
 export default adminService

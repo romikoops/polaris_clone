@@ -8,13 +8,14 @@ class Admin::PricingsController < Admin::AdminBaseController
   def index
     @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = itineraries.map(&:as_pricing_json)
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id, mode_of_transport: params[:mot])
+    detailed_itineraries = itineraries.paginate(page: params[:page]).map(&:as_pricing_json)
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
+      numItineraryPages:    itineraries.count/12,
       tenant_pricings:     @tenant_pricings,
       transportCategories: @transports,
       lastUpdate:          last_updated
@@ -26,6 +27,27 @@ class Admin::PricingsController < Admin::AdminBaseController
     @client = User.find(params[:id])
 
     response_handler(userPricings: @pricings, client: @client)
+  end
+
+  def search
+    query = {
+      tenant_id: current_user.tenant_id
+    }
+
+    query[:mode_of_transport] = params[:mot] if params[:mot]
+    itineraries = Itinerary.where(query).order("name ASC")
+    itinerary_results = itineraries.where("name ILIKE ?", "%#{params[:text]}%")
+    @transports = TransportCategory.all.uniq
+    detailed_itineraries = itinerary_results.paginate(page: params[:page]).map(&:as_pricing_json)
+    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
+    response_handler(
+      itineraries:         itineraries,
+      detailedItineraries: detailed_itineraries,
+      numItineraryPages:    itineraries.count/12,
+      tenant_pricings:     @tenant_pricings,
+      transportCategories: @transports,
+      lastUpdate:          last_updated
+    )
   end
 
   def route

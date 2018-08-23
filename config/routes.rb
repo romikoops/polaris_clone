@@ -98,6 +98,7 @@ Rails.application.routes.draw do
       post 'schedules/download', to: 'schedules#download_schedules'
       get 'hubs',      to: 'hubs#index'
       get 'search/hubs',      to: 'hubs#search'
+      get 'search/pricings',      to: 'pricings#search'
       get 'dashboard', to: 'dashboard#index'
     end
 

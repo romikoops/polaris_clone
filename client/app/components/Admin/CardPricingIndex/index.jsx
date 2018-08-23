@@ -62,13 +62,9 @@ export default class CardPricingIndex extends Component {
     })
   }
   generateCardPricings (mot) {
-    const { page, numPerPage } = this.state
     const { hubs, theme, itineraries } = this.props
     let itinerariesArr = []
-    const sliceStartIndex = (page - 1) * numPerPage
-    const sliceEndIndex = (page * numPerPage)
-    itinerariesArr = this.updateSearch(itineraries)
-      .slice(sliceStartIndex, sliceEndIndex)
+    itinerariesArr = itineraries
       .map((rt, i) => (
         <CardRoutesPricing
           key={v4()}
@@ -91,22 +87,26 @@ export default class CardPricingIndex extends Component {
     return filters.handleSearchChange(searchText, ['name'], array)
   }
   handlePricingSearch (event) {
-    const { itineraries } = this.props
+    const { adminDispatch, mot } = this.props
     this.setState(
       {
         searchText: event.target.value,
         page: 1
       },
-      () => this.updateSearch(itineraries)
+      () => adminDispatch.searchPricings(this.state.searchText, 1, mot)
     )
   }
   deltaPage (val) {
-    this.setState((prevState) => {
-      const newPageVal = prevState.page + val
-      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+    const { adminDispatch, mot } = this.props
+    this.setState(
+      (prevState) => {
+        const newPageVal = prevState.page + val
+        const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
 
-      return { page }
-    })
+        return { page }
+      },
+      () => adminDispatch.getPricings(false, this.state.page, mot)
+    )
   }
 
   render () {
