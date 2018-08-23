@@ -124,8 +124,9 @@ module DataInserter
 
         def find_tenant_vehicle
           service_level = @rate_hash[:data][:service_level] || 'standard'
-          vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: @rate_hash[:data][:mot], tenant_id: @tenant.id)
-          @tenant_vehicle = vehicle.presence || Vehicle.create_from_name(service_level, @rate_hash[:data][:mot], @tenant.id)
+          carrier = Carrier.find_or_create_by!(name: @rate_hash[:data][:carrier])
+          vehicle = TenantVehicle.find_by(name: service_level, mode_of_transport: @rate_hash[:data][:mot], tenant_id: @tenant.id, carrier: carrier)
+          @tenant_vehicle = vehicle.presence || Vehicle.create_from_name(service_level, @rate_hash[:data][:mot], @tenant.id, carrier.name)
         end
 
         def create_pricings
@@ -167,7 +168,7 @@ module DataInserter
             @rate_hash[:data][:itineraries].each do |hub_code, itinerary|
               find_or_create_itinerary(itinerary)
               find_tenant_vehicle
-              generate_trips
+              # generate_trips
               create_pricings
               p "#{i}/#{@rates.length}"
             end

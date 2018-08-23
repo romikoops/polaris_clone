@@ -212,6 +212,7 @@ module DataParser
             port:              names_obj[:name],
             alternative_names: names_obj[:alternative_names],
             country:           hash[:country],
+            carrier:           hash[:carrier],
             load_type:         load_type,
             mot:               @hub_type,
             service_level:     service_level_from_transshipment(hash[:transshipment])
