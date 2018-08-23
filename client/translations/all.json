@@ -1,9 +1,7 @@
 {
     "en": {
-      "doc": {
-        "reject": "Reject document"
-      },
       "common": {
+        "upload": "Upload",
         "accept": "accept",
         "deny": "Deny",
         "title": "Title",
@@ -69,6 +67,9 @@
         "withoutDelivery": "without Delivery",
         "withoutPickup": "without pick-up",
         "status": "Status"
+      },
+      "doc": {
+        "reject": "Reject document"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",
