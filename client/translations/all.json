@@ -1,6 +1,14 @@
 {
     "en": {
       "common": {
+        "accept": "accept",
+        "decline": "decline",
+        "learnMore": "Learn more",
+        "useCookies": "This website uses cookies to enhance your user experience. ",
+        "cookiesPolicy":"cookies policy",
+        "ok": "ok, accept",
+        "cookieHead": "We use cookies to enhance your user experience. ",
+        "cookieTail": "The consent is not mandatory but necessary to continue using our website. Are you sure you want to decline the usage of cookies?",
         "numberContainers": "No. of Containers",
         "address": "Address",
         "availabilitiesHead": "Availabilities will be shown for all applicable",

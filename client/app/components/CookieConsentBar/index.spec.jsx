@@ -9,7 +9,7 @@ import {
 } from '../../mocks'
 
 // eslint-disable-next-line
-import CookieConsentBar from './'
+import CookieConsentBar from './indexDone'
 
 const propsBase = {
   theme,
@@ -24,4 +24,11 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<CookieConsentBar {...propsBase} />)).toMatchSnapshot()
+})
+
+test('state.showModal is true', () => {
+  const wrapper = shallow(<CookieConsentBar {...propsBase} />)
+  wrapper.setState({showModal: true})
+
+  expect(wrapper).toMatchSnapshot()
 })
