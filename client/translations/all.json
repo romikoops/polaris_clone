@@ -1,7 +1,13 @@
 {
     "en": {
+      "doc": {
+        "reject": "Reject document"
+      },
       "common": {
         "accept": "accept",
+        "deny": "Deny",
+        "title": "Title",
+        "pending": "Pending",
         "decline": "decline",
         "learnMore": "Learn more",
         "useCookies": "This website uses cookies to enhance your user experience. ",
