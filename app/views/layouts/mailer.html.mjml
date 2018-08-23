@@ -3,7 +3,7 @@
     <% primary_color = @user.tenant.theme["colors"]["primary"] %>
     <mj-section full-width="full-width">
       <mj-column>
-        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
+        <mj-image width="100px" src="<%= @user.tenant.theme["logoLarge"] %>" />
       </mj-column>
     </mj-section>
     <mj-section full-width="full-width">

@@ -20,17 +20,30 @@ export default function (state = initialState, action) {
   }
 
   switch (action.type) {
+    case authenticationConstants.SHOW_LOGIN:
+      return {
+        ...state,
+        showModal: true,
+        ...action.payload
+      }
+    case authenticationConstants.CLOSE_LOGIN:
+      return {
+        ...state,
+        showModal: false
+      }
     case authenticationConstants.LOGIN_REQUEST:
       return {
         ...state,
         loginAttempt: false,
         loggingIn: true,
+        showModal: true,
         loading: true
       }
     case authenticationConstants.LOGIN_SUCCESS:
       return {
         user: action.user,
         loggedIn: true,
+        showModal: false,
         loading: false
       }
     case authenticationConstants.LOGIN_FAILURE:
@@ -38,14 +51,14 @@ export default function (state = initialState, action) {
         ...(action.loginFailure.persistState ? state : {}),
         error: action.loginFailure.error,
         loginAttempt: true,
+        showModal: false,
         loggingIn: false,
         loading: false
       }
     case authenticationConstants.UPDATE_USER_REQUEST:
       return {
         ...state,
-        loggedIn: true,
-        registering: true
+        loggedIn: true
       }
     case authenticationConstants.UPDATE_USER_SUCCESS:
       return {

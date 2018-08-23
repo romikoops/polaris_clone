@@ -4,45 +4,49 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   skip_before_action :require_authentication!, only: :currencies
-  skip_before_action :require_non_guest_authentication!, only: %i[update set_currency currencies]
+  skip_before_action :require_non_guest_authentication!, only: %i(update set_currency currencies)
 
   def home
     @shipper = current_user
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
     requested_shipments = @shipper.shipments.where(
-      status:    %w[requested requested_by_unconfirmed_account],
+      status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
     open_shipments = @shipper.shipments.where(
-      status:    %w[in_progress confirmed],
+      status:    %w(in_progress confirmed),
       tenant_id: current_user.tenant_id
     ).order(booking_placed_at: :desc)
-    finished_shipments = @shipper.shipments.where(status: "finished", tenant_id: current_user.tenant_id).order(booking_placed_at: :desc)
-    @requested_shipments = requested_shipments.map{|shipment| shipment.with_address_options_json}
-    @open_shipments = open_shipments.map{|shipment| shipment.with_address_options_json}
-    @finished_shipments = finished_shipments.map{|shipment| shipment.with_address_options_json}
+    finished_shipments = @shipper.shipments
+      .where(status: "finished", tenant_id: current_user.tenant_id)
+      .order(booking_placed_at: :desc)
+    @requested_shipments = requested_shipments.map(&:with_address_options_json)
+    @open_shipments = open_shipments.map(&:with_address_options_json)
+    @finished_shipments = finished_shipments.map(&:with_address_options_json)
 
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false).map do |contact|
-      contact.as_json(include: { location: { include: { country: { only: :name} }, except: %i(created_at updated_at country_id) } }, except: %i(created_at updated_at location_id))
+      contact.as_json(
+        include: { location: { include: { country: { only: :name} },
+        except: %i(created_at updated_at country_id) } },
+        except: %i(created_at updated_at location_id))
     end
     @aliases = @shipper.contacts.where(alias: true)
-
     user_locs = @shipper.user_locations
     locations = user_locs.map do |ul|
-      { user: ul, location: ul.location }
+      { user: ul, location: ul.location.to_custom_hash }
     end
 
     resp = {
-      shipments: {
+      shipments:         {
         requested: @requested_shipments,
         open:      @open_shipments,
         finished:  @finished_shipments
       },
-      pricings:  @pricings,
-      contacts:  @contacts,
-      aliases:   @aliases,
-      locations: locations
+      pricings:          @pricings,
+      contacts:          @contacts,
+      num_contact_pages: (@shipper.contacts.count.to_f / 6).to_f.ceil,
+      aliases:           @aliases,
+      locations:         locations
     }
     response_handler(resp)
   end

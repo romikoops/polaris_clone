@@ -6,6 +6,7 @@ import PropTypes from '../../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
 import { AdminUploadsSuccess } from '../Uploads/Success'
 import { adminActions, documentActions, appActions } from '../../../actions'
+import { Modal } from '../../Modal/Modal'
 // import styles from '../Admin.scss'
 
 class AdminHubs extends Component {
@@ -98,7 +99,15 @@ class AdminHubs extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         {this.state.newHub ? (
-          <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />
+          <Modal
+            component={
+              <AdminHubForm theme={theme} close={this.toggleNewHub} saveHub={this.saveNewHub} />
+            }
+            verticalPadding="30px"
+            horizontalPadding="40px"
+            parentToggle={this.toggleNewHub}
+          />
+
         ) : (
           ''
         )}

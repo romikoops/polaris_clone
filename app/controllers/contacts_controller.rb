@@ -4,6 +4,12 @@ class ContactsController < ApplicationController
   include Response
   before_action :require_login
 
+  def index
+    contacts = current_user.contacts
+    paginated_contacts = current_user.contacts.paginate(page: params[:page]).map(&:as_options_json)
+    response_handler(contacts: paginated_contacts)
+  end
+
   def show
     contact = Contact.find(params[:id])
     scs = contact.shipment_contacts
@@ -121,8 +127,7 @@ class ContactsController < ApplicationController
   private
 
   def require_login
-    unless user_signed_in? && current_user && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
-      flash[:error] = "You are not authorized to access this section."
+    unless user_signed_in? && current_user && current_user.tenant_id == Tenant.find_by_subdomain(params[:subdomain_id]).id
       redirect_to root_path
     end
   end

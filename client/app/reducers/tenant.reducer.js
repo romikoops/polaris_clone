@@ -10,25 +10,30 @@ export const tenant = (
 ) => {
   switch (action.type) {
     case tenantActions.INVALIDATE_SUBDOMAIN:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         didInvalidate: true
-      })
+      }
     case tenantActions.REQUEST_TENANT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: true,
         didInvalidate: false
-      })
+      }
     case tenantActions.RECEIVE_TENANT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false,
+        loading: true,
         didInvalidate: false,
         data: action.data,
         lastUpdated: action.receivedAt
-      })
+      }
     case tenantActions.RECEIVE_TENANT_ERROR:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isFetching: false
-      })
+      }
     case tenantActions.CLEAR_TENANT:
       return {}
     case tenantActions.SET_THEME: {
@@ -38,6 +43,12 @@ export const tenant = (
           ...state.data,
           theme: action.payload
         }
+      }
+    }
+    case tenantActions.CLEAR_LOADING: {
+      return {
+        ...state,
+        isFetching: false
       }
     }
     default:

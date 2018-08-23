@@ -11,8 +11,10 @@ function logout (closeWindow) {
   function lo () {
     localStorage.removeItem('state')
     localStorage.removeItem(cookieKey)
+
     return { type: authenticationConstants.LOGOUT }
   }
+
   return (dispatch) => {
     if (closeWindow) {
       setTimeout(() => {
@@ -28,6 +30,14 @@ function logout (closeWindow) {
   }
 }
 
+function showLogin (args) {
+  return { type: authenticationConstants.SHOW_LOGIN, payload: args }
+}
+
+function closeLogin () {
+  return { type: authenticationConstants.CLOSE_LOGIN, payload: null }
+}
+
 function login (data) {
   function request (user) {
     return { type: authenticationConstants.LOGIN_REQUEST, user }
@@ -38,30 +48,32 @@ function login (data) {
   function failure (loginFailure) {
     return { type: authenticationConstants.LOGIN_FAILURE, loginFailure }
   }
+
   return (dispatch) => {
     dispatch(request({ email: data.email, password: data.password }))
     authenticationService.login(data).then(
       (response) => {
         const shipmentReq = data.req
         dispatch(success(response.data))
+
         if (shipmentReq) {
           shipmentReq.user_id = response.data.id
           dispatch(shipmentActions.chooseOffer(shipmentReq))
         } else if (
-          (response.data.role.name === 'admin' && !data.noRedirect) ||
-          (response.data.role.name === 'super_admin' && !data.noRedirect) ||
-          (response.data.role.name === 'sub_admin' && !data.noRedirect)
+          ['admin', 'super_admin', 'sub_admin'].includes(response.data.role.name) && !data.noRedirect
         ) {
           dispatch(adminActions.getDashboard(true))
-        } else if (response.data.role.name === 'shipper' && !data.noRedirect) {
+        } else if (['shipper', 'agent', 'agency_manager'].includes(response.data.role.name) && !data.noRedirect) {
           dispatch(push('/account'))
+        } else {
+          dispatch(closeLogin())
         }
       },
       (error) => {
         error.then((errorData) => {
           dispatch(failure({
             error: errorData,
-            persistState: !!data.req
+            persistState: !!data.req || !!data.noRedirect
           }))
         })
       }
@@ -104,6 +116,7 @@ function register (user, target) {
 }
 function setUser (user) {
   window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
+
   return { type: authenticationConstants.SET_USER, user: user.data }
 }
 
@@ -143,6 +156,7 @@ function goTo (path, newTab) {
   if (newTab) {
     return () => window.open(path, '_blank')
   }
+
   return (dispatch) => {
     dispatch(push(path))
   }
@@ -154,7 +168,9 @@ export const authenticationActions = {
   register,
   updateUser,
   setUser,
-  goTo
+  goTo,
+  showLogin,
+  closeLogin
 }
 
 export default authenticationActions

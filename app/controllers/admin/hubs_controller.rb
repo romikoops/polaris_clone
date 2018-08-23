@@ -14,27 +14,21 @@ class Admin::HubsController < Admin::AdminBaseController
     query = {
       tenant_id: current_user.tenant_id
     }
-    if params[:hub_type]
-      query[:hub_type] = params[:hub_type].split(',')
-    end
+    query[:hub_type] = params[:hub_type].split(",") if params[:hub_type]
 
-    if params[:name]
-      query[:name] = params[:name]
-    end
+    query[:name] = params[:name] if params[:name]
 
-    if params[:hub_status]
-      query[:hub_status] = params[:hub_status].split(',')
-    end
+    query[:hub_status] = params[:hub_status].split(",") if params[:hub_status]
     if params[:country_ids]
-      hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(',').map(&:to_i))
+      hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(",").map(&:to_i))
     else
-       hubs = Hub.where(query).order('name ASC')
+      hubs = Hub.where(query).order("name ASC")
     end
 
     paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
       { data: hub, location: hub.location.to_custom_hash }
     end
-    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 12)
+    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 9)
   end
 
   def permitted_params
@@ -118,21 +112,15 @@ class Admin::HubsController < Admin::AdminBaseController
     query = {
       tenant_id: current_user.tenant_id
     }
-    if params[:hub_type]
-      query[:hub_type] = params[:hub_type].split(',')
-    end
+    query[:hub_type] = params[:hub_type].split(",") if params[:hub_type]
 
-    if params[:name]
-      query[:name] = params[:name]
-    end
+    query[:name] = params[:name] if params[:name]
 
-    if params[:hub_status]
-      query[:hub_status] = params[:hub_status].split(',')
-    end
+    query[:hub_status] = params[:hub_status].split(",") if params[:hub_status]
     if params[:country_ids]
-      hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(',').map(&:to_i))
+      hubs = Hub.where(query).joins(:location).where("locations.country_id IN (?)", params[:country_ids].split(",").map(&:to_i))
     else
-      hubs = Hub.where(query).order('name ASC')
+      hubs = Hub.where(query).order("name ASC")
     end
     hub_results = hubs.where("name ILIKE ?", "%#{params[:text]}%")
 

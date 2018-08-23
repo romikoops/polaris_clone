@@ -40,12 +40,13 @@
     }
     .footer_wrapper {
       position: absolute;
-      bottom: 0;
+      bottom: 0px;
+      left: 0px;
       width: 100%;
     }
     .footer_shop {
       min-height: 100px;
-      min-width: 950px;
+      // min-width: 950px;
       background: #5E5E5E;
     }
     .copyright_shop {

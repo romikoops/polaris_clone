@@ -9,30 +9,37 @@ class ShipmentsController < ApplicationController
   def index
     @shipper = current_user
     requested_shipments = @shipper.shipments.where(
-      status:    %w[requested requested_by_unconfirmed_account],
+      status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
     )
     open_shipments = @shipper.shipments.where(
-      status:    %w[in_progress confirmed],
+      status:    %w(in_progress confirmed),
       tenant_id: current_user.tenant_id
     )
-    finished_shipments = @shipper.shipments.where(status: "finished", tenant_id: current_user.tenant_id)
+    finished_shipments = @shipper.shipments
+      .where(status: "finished", tenant_id: current_user.tenant_id)
     r_shipments = requested_shipments
     o_shipments = open_shipments
     f_shipments = finished_shipments
     num_pages = {
-      finished: (f_shipments.count / 6.0).ceil,
-      requested: (r_shipments.count / 6.0).ceil,
-      open: (o_shipments.count / 6.0).ceil
+      finished: (f_shipments.count / 4.0).ceil,
+      requested: (r_shipments.count / 4.0).ceil,
+      open: (o_shipments.count / 4.0).ceil
     }
-    
+
     response_handler(
-      requested: requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
-      open:      open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
-      finished:  finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
-      pages: {
-        open: params[:open_page],
-        finished: params[:finished_page],
+      requested:          requested_shipments
+        .paginate(page: params[:requested_page])
+        .map(&:with_address_options_json),
+      open:               open_shipments
+        .paginate(page: params[:open_page])
+        .map(&:with_address_options_json),
+      finished:           finished_shipments
+        .paginate(page: params[:finished_page])
+        .map(&:with_address_options_json),
+      pages:              {
+        open:      params[:open_page],
+        finished:  params[:finished_page],
         requested: params[:requested_page]
       },
       num_shipment_pages: num_pages
@@ -48,19 +55,21 @@ class ShipmentsController < ApplicationController
     when "finished"
       shipment_association = current_user.shipments.finished
     end
-    shipments = shipment_association.paginate(page: params[:page]).map(&:with_address_options_json)
+    shipments = shipment_association
+      .paginate(page: params[:page])
+      .map(&:with_address_options_json)
     response_handler(
-      shipments: shipments,
+      shipments:          shipments,
       num_shipment_pages: (shipment_association.count / 6.0).ceil,
-      target: params[:target],
-      page: params[:page]
+      target:             params[:target],
+      page:               params[:page]
     )
   end
 
   def new; end
 
   def test_email
-    tenant_notification_email(current_user, Shipment.where(status: 'requested').first)
+    tenant_notification_email(current_user, Shipment.where(status: "requested").first)
   end
 
   def search_shipments
@@ -79,21 +88,20 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.finished
     end
 
-    filterrific = initialize_filterrific(
+    (filterrific = initialize_filterrific(
       shipment_association,
       filterific_params,
       available_filters: filters,
-      sanitize_params: true
-    ) or return
+      sanitize_params:   true
+    )) || return
     shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
-    
-    response_handler(
-      shipments: shipments,
-      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
-      target: params[:target],
-      page: params[:page]
-    )
 
+    response_handler(
+      shipments:          shipments,
+      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
+      target:             params[:target],
+      page:               params[:page]
+    )
   end
 
   # Uploads document and returns Document item
@@ -116,9 +124,7 @@ class ShipmentsController < ApplicationController
     end
 
     contacts = shipment.shipment_contacts.map do |sc|
-      if sc.contact
-        { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
-      end
+      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location } if sc.contact
     end
 
     documents = shipment.documents.map do |doc|

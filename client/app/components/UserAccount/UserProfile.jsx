@@ -7,15 +7,22 @@ import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
-import { gradientTextGenerator } from '../../helpers'
+import {
+  gradientTextGenerator,
+  authHeader
+} from '../../helpers'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
+import { BASE_URL } from '../../constants'
 import GreyBox from '../GreyBox/GreyBox'
 import {
   OptOutCookies,
   OptOutTenant,
   OptOutItsMyCargo
 } from '../OptOut'
+import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
+
+const { fetch } = window
 
 const ProfileBox = ({ user, style, edit }) => (
   <div
@@ -32,7 +39,7 @@ const ProfileBox = ({ user, style, edit }) => (
         <p className="flex-none"> {user.company_name}</p>
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           Email
@@ -42,7 +49,7 @@ const ProfileBox = ({ user, style, edit }) => (
         <p className="flex-none"> {user.email}</p>
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
           Phone
@@ -73,7 +80,7 @@ const EditNameBox = () => (
 )
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme
+  user, handleChange, onSave, close, style, theme, handlePasswordChange, passwordResetSent, passwordResetRequested
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="layout-row flex-90" />
@@ -160,7 +167,7 @@ const EditProfileBox = ({
         />
       </div>
     </div>
-    <div className="flex-50 layout-row layout-align-start-start layout-wrap margin_bottom">
+    <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className={`clip flex-none ${styles.margin_label}`}>
           Phone
@@ -176,6 +183,32 @@ const EditProfileBox = ({
         />
       </div>
     </div>
+    <div
+      className={`flex-100 layout-row layout-align-center layout-wrap padding_top ${styles.form_group_submit_btn}`}
+    >
+      <div className="flex-50 layout-row layout-align-start-center">
+        <RoundButton
+          theme={theme}
+          size="medium"
+          active
+          text="Change my Password"
+          handleNext={handlePasswordChange}
+        />
+      </div>
+      <div className={`${styles.spinner} flex-50 layout-row layout-align-start-start`}>
+        {passwordResetRequested &&
+        <LoadingSpinner
+          size="extra_small"
+        />}
+      </div>
+      { passwordResetSent && (
+        <div className="flex-100 layout-row layout-align-center-start padding_top">
+          <p>
+            Please check your email for a link to change your password.
+          </p>
+        </div>
+      )}
+    </div>
   </div>
 )
 
@@ -185,7 +218,10 @@ EditProfileBox.propTypes = {
   handleChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  style: PropTypes.objectOf(PropTypes.string)
+  style: PropTypes.objectOf(PropTypes.string),
+  handlePasswordChange: PropTypes.func.isRequired,
+  passwordResetSent: PropTypes.bool.isRequired,
+  passwordResetRequested: PropTypes.bool.isRequired
 }
 
 EditProfileBox.defaultProps = {
@@ -201,6 +237,8 @@ export class UserProfile extends Component {
       editObj: {},
       newAlias: {},
       newAliasBool: false,
+      passwordResetSent: false,
+      passwordResetRequested: false,
       currencySelect: {
         label: this.props.user ? this.props.user.currency : 'EUR',
         value: this.props.user ? this.props.user.currency : 'EUR'
@@ -217,6 +255,7 @@ export class UserProfile extends Component {
     this.deleteAlias = this.deleteAlias.bind(this)
     this.setCurrency = this.setCurrency.bind(this)
     this.saveCurrency = this.saveCurrency.bind(this)
+    this.handlePasswordChange = this.handlePasswordChange.bind(this)
   }
   componentDidMount () {
     this.props.setNav('profile')
@@ -263,6 +302,24 @@ export class UserProfile extends Component {
   }
   closeOptOutModal () {
     this.setState({ optOut: false })
+  }
+  handlePasswordChange () {
+    const payload = {
+      email: this.props.user.email,
+      redirect_url: ''
+    }
+    fetch(`${BASE_URL}/auth/password`, {
+      method: 'POST',
+      headers: { ...authHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then((promise) => {
+      promise.json().then((
+        this.setState({
+          passwordResetSent: true,
+          passwordResetRequested: false
+        })))
+    })
+    this.setState({ passwordResetRequested: true })
   }
   generateModal (target) {
     const {
@@ -339,7 +396,7 @@ export class UserProfile extends Component {
       return ''
     }
     const {
-      editBool, editObj, newAliasBool, newAlias, optOut
+      editBool, editObj, newAliasBool, newAlias, optOut, passwordResetSent, passwordResetRequested
     } = this.state
     const optOutModal = optOut ? this.generateModal(optOut) : ''
     const contactArr = aliases.map(cont => (
@@ -488,18 +545,20 @@ export class UserProfile extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding">
         {newAliasBool ? newAliasBox : ''}
-        <div className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
+        <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding">
           {editBool ? (
             <EditNameBox
               user={editObj}
               handleChange={this.handleChange}
+              handlePasswordChange={this.handlePasswordChange}
+              passwordResetSent={this.passwordResetSent}
             />
           ) : (
             <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
-              <span className="layout-row flex-20 layout-align-center-center">
+              <div className="layout-row flex-none layout-align-center-center">
                 <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
-              </span>
-              <div className="layout-align-center-center layout-row flex">
+              </div>
+              <div className="layout-align-start-center layout-row flex">
                 <p>Hello,&nbsp;</p>
                 <h1 className="flex-none cli">
                   {user.first_name} {user.last_name}
@@ -511,9 +570,9 @@ export class UserProfile extends Component {
         <div
           className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}
         >
-          <div className="flex-100 layout-row layout-align-space-between-stretch">
+          <div className="flex-100 layout-row layout-wrap layout-align-space-between-stretch">
             <GreyBox
-              wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
+              wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
               contentClassName="layout-row flex"
               content={(
                 <div className="layout-row flex-100">
@@ -523,8 +582,11 @@ export class UserProfile extends Component {
                       style={textStyle}
                       theme={theme}
                       handleChange={this.handleChange}
+                      handlePasswordChange={this.handlePasswordChange}
                       onSave={this.saveEdit}
                       close={this.closeEdit}
+                      passwordResetSent={passwordResetSent}
+                      passwordResetRequested={passwordResetRequested}
                     />
                   ) : (
                     <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
@@ -571,12 +633,12 @@ export class UserProfile extends Component {
             />
             <GreyBox
               title="GDPR - Your Data"
-              wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
+              wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
               contentClassName="layout-column flex"
               content={(
                 <div className={`layout-row layout-wrap ${styles.conditions_box}`}>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-70 layout-row layout-align-start-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
                       {/* <p className="flex-none">
                         Here you can download all the data that ItsMyCargo has related to your account.
                       </p> */}
@@ -584,24 +646,25 @@ export class UserProfile extends Component {
                         Download all data from ItsMyCargo
                       </p>
                     </div>
-                    <div className="flex-30 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-center-center ">
                       <DocumentsDownloader
                         theme={theme}
                         target="gdpr"
+                        size="full"
                         options={{ userId: user.id }}
                       />
                     </div>
                   </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-70 layout-row layout-align-start-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`${tenant && tenant.data ? tenant.data.name : ''} Terms and Conditions`}
                       </p>
                     </div>
-                    <div className="flex-30 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
-                        size="small"
+                        size="full"
                         active
                         text="Opt Out"
                         handleNext={() => this.optOut('tenant')}
@@ -609,7 +672,7 @@ export class UserProfile extends Component {
                     </div>
                   </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-70 layout-row layout-align-start-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`ItsMyCargo GMBH Terms and Conditions`}
                       </p>
@@ -617,10 +680,10 @@ export class UserProfile extends Component {
                         {`To opt out of the ItsMyCargo GMBH Terms and Conditions click the "Opt Out" button to the right`}
                       </p> */}
                     </div>
-                    <div className="flex-30 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
-                        size="small"
+                        size="full"
                         active
                         text="Opt Out"
                         handleNext={() => this.optOut('itsmycargo')}
@@ -628,7 +691,7 @@ export class UserProfile extends Component {
                     </div>
                   </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
-                    <div className="flex-70 layout-row layout-align-start-center">
+                    <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
                         {`ItsMyCargo's use of cookies`}
                       </p>
@@ -636,10 +699,10 @@ export class UserProfile extends Component {
                         {`To opt out of the ItsMyCargo's use of cookies click the "Opt Out" button to the right`}
                       </p> */}
                     </div>
-                    <div className="flex-30 layout-row layout-align-center-center ">
+                    <div className="flex-33 layout-row layout-align-center-center ">
                       <RoundButton
                         theme={theme}
-                        size="small"
+                        size="full"
                         active
                         text="Opt Out"
                         handleNext={() => this.optOut('cookies')}
@@ -702,6 +765,7 @@ export class UserProfile extends Component {
               makePrimary={this.makePrimary}
               userDispatch={userDispatch}
               theme={theme}
+              cols={2}
               user={user}
             />
           </div>

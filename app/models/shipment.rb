@@ -61,7 +61,7 @@ class Shipment < ApplicationRecord
       reduce({}) { |obj, charge_breakdown| obj.merge(charge_breakdown.to_schedule_charges) }
     end
   end
-  self.per_page = 6
+  self.per_page = 4
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
   accepts_nested_attributes_for :contacts, allow_destroy: true
@@ -305,6 +305,10 @@ class Shipment < ApplicationRecord
 
   def selected_offer
     charge_breakdowns.selected.to_nested_hash
+  end
+
+  def view_offers(index)
+    awesome_print charge_breakdowns[index].to_nested_hash
   end
 
   def as_options_json(options={})

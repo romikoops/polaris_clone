@@ -255,7 +255,7 @@ MessageCenter.defaultProps = {
   theme: null,
   user: null,
   tenant: null,
-  shipments: [],
+  shipments: {},
   loading: false,
   clients: null,
   shipment: null,

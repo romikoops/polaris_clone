@@ -57,7 +57,7 @@
       font-size: 87%;
       p {
         padding-bottom: 10px;
-        font-size: 12px;
+        font-size: 16px;
         margin: 0;
       }
     }
@@ -198,7 +198,7 @@
     right: 0;
   }
   .location_address {
-      padding: 25px 15px 15px 15px;
+      padding: 15px 15px 15px 15px;
     i {
       font-size: 25px;
     }
@@ -224,7 +224,7 @@
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
-    padding: 2px 25px;
+    padding: 2px 20px;
     p {
       font-size: 12px !important;
     }
@@ -408,6 +408,7 @@
     font-size: 60px;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin: 0 20px;
   }
   .tile_padding {
     padding: 10px;
@@ -416,4 +417,10 @@
   .location_spacing {
     margin-left: 10px;
   }
+
+  .spinner {
+    opacity: 0.6;
+    margin: -50px 0px;
+  }
+
 }

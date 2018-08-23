@@ -148,7 +148,7 @@ App.propTypes = {
   loggedIn: PropTypes.bool,
   appDispatch: PropTypes.shape({
     fetchTenantIfNeeded: PropTypes.func,
-    fetchCurrencies: PropTypes.func
+
   }).isRequired,
   sending: PropTypes.bool,
   showMessages: PropTypes.bool,

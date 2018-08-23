@@ -667,7 +667,30 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
-    case adminConstants.GET_PRICING_FAILURE: {
+    case adminConstants.GET_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_SUCCESS: {
+      return {
+        ...state,
+        itineraryPricings: {
+          ...state.itineraryPricings,
+          testResults: action.payload.data
+        },
+        loading: false
+      }
+    }
+    case adminConstants.GET_PRICINGS_TEST_FAILURE: {
       return {
         ...state,
         error: { pricings: action.error },
@@ -1195,7 +1218,7 @@ export default function admin (state = {}, action) {
         ...state,
         itinerary: {
           ...state.itinerary,
-          itinerary: action.payload
+          notes: action.payload
         },
         loading: false
       }

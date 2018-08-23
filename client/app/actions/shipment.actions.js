@@ -8,7 +8,7 @@ import { alertActions, userActions, appActions } from './'
 // const subdomainKey = getSubdomain()
 // const cookieKey = `${subdomainKey}_user`
 // const userData = JSON.parse(window.localStorage.getItem(cookieKey))
-function newShipment (type) {
+function newShipment (type, redirect) {
   function request (shipmentData) {
     return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
   }
@@ -26,7 +26,9 @@ function newShipment (type) {
         const shipmentData = resp.data
         dispatch(alertActions.success('Fetching New Shipment successful'))
         dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+        }
       },
       (error) => {
         error.then((data) => {
@@ -511,6 +513,11 @@ function toDashboard (id) {
 function clearLoading () {
   return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
+
+function clearErrors (stage) {
+  return { type: shipmentConstants.CLEAR_ERRORS, payload: stage }
+}
+
 function logOut () {
   return {
     type: shipmentConstants.CLEAR_SHIPMENTS,
@@ -547,7 +554,8 @@ export const shipmentActions = {
   logOut,
   getOffersForNewDate,
   updateContact,
-  delete: _delete
+  delete: _delete,
+  clearErrors
 }
 
 export default shipmentActions
