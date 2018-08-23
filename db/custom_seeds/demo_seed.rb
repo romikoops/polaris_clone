@@ -3,7 +3,7 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(demo)
+subdomains = %w(schryver)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
@@ -38,13 +38,11 @@ subdomains.each do |sub|
 
   
 
-  # path = "#{Rails.root}/db/dummydata/saco/fcl_export_loader.xlsx"
-  # imp_data = DataParser::Saco::SheetParserExport.new(path: path,
-  #   _user: shipper,
-  #   hub_type: 'ocean',
-  #   load_type: 'container').perform
-    
-  # imp_hubs = DataInserter::Saco::HubInserter.new(data: imp_data,
+  path = "#{Rails.root}/db/dummydata/schryver/ftl_rates.xlsx"
+  imp_data = DataParser::Schryver::FtlParser.new(path: path,
+    _user: shipper
+  ).perform
+  # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
   #   tenant: tenant,
   #   _user: shipper,
   #   hub_type: 'ocean',
