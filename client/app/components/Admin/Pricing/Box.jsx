@@ -53,7 +53,7 @@ export class AdminPricingBox extends Component {
       charges: props.charges,
       edit: false,
       direction: 'import',
-      selectedCargoClass: 'lcl'
+      selectedCargoClass: props.charges.length > 0 ? props.charges[0].transport_category.cargo_class : 'lcl'
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -66,19 +66,18 @@ export class AdminPricingBox extends Component {
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
   }
-  // componentDidMount () {
 
-  // }
   componentWillReceiveProps (nextProps) {
     const { selectedCargoClass } = this.state
     if (nextProps.charges[0]) {
-      const charge = nextProps.charges
-        .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
-      this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      nextProps.charges.forEach((charge) => {
+        this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      })
     }
     if (this.state.charges !== nextProps.charges) {
       this.setState({
-        charges: nextProps.charges
+        charges: nextProps.charges,
+        selectedCargoClass: nextProps.charges[0].transport_category.cargo_class
       })
     }
     if (this.state.editor === {}) {
@@ -387,9 +386,9 @@ export class AdminPricingBox extends Component {
       : { background: 'black' }
 
     const editCharge = { ...editor }
-    const currentCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
-    console.log('#########')
-    console.log(editor)
+    const selectedCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
+    const currentCharge = selectedCharge || charges[0]
+
     const feeRows = Object.keys(currentCharge.pricing.data).map((ck) => {
       const fee = currentCharge.pricing.data[ck]
       fee.key = ck
