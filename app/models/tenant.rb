@@ -82,6 +82,18 @@ class Tenant < ApplicationRecord
     ).perform
   end
 
+  def autogenerate_all_schedules(start_date, end_date, ordinals)
+    itineraries.each do |itinerary|
+      tenant_vehicle_ids = itinerary.trips.pluck(:tenant_vehicle_id).uniq
+      stops_in_order = itinerary.stops.order(:index)
+      tenant_vehicle_ids.each do |tv_id|
+         ex_trip = itinerary.trips.find_by(tenant_vehicle_id: tv_id)
+         steps_in_order = [(ex_trip.end_date - ex_trip.start_date).to_i]
+        itinerary.generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinals, tv_id, 4)
+      end
+    end
+  end
+
   def mode_of_transport_in_scope?(mode_of_transport, load_type=nil)
     return scope.dig("modes_of_transport", mode_of_transport.to_s).values.any? if load_type.nil?
 

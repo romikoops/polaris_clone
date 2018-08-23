@@ -8,7 +8,7 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
 
-  # shipper = tenant.users.shipper.first
+  shipper = tenant.users.shipper.first
   # tenant.users.shipper.where.not(id: shipper.id).destroy_all
   # tenant.users.agent.destroy_all
   # tenant.users.agency_manager.destroy_all
@@ -37,13 +37,13 @@ subdomains.each do |sub|
 
   
 
-  path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
-  imp_data = DataParser::Saco::SheetParserExport.new(path: path,
-    _user: shipper,
-    counterpart_hub_name: 'Copenhagen Port',
-    hub_type: 'ocean',
-    cargo_class: 'lcl',
-    load_type: 'cargo_item').perform
+  # path = "#{Rails.root}/db/dummydata/easyshipping/pfc_import.xlsx"
+  # imp_data = DataParser::Saco::SheetParserExport.new(path: path,
+  #   _user: shipper,
+  #   counterpart_hub_name: 'Copenhagen Port',
+  #   hub_type: 'ocean',
+  #   cargo_class: 'lcl',
+  #   load_type: 'cargo_item').perform
   # imp_hubs = DataInserter::PfcNordic::HubInserter.new(data: imp_data,
   #   tenant: tenant,
   #   counterpart_hub: 'Copenhagen Port',
@@ -115,9 +115,9 @@ subdomains.each do |sub|
 #   # public_pricings = File.open("#{Rails.root}/db/dummydata/demo_freight_rates.xlsx")
 #   # req = {"xlsx" => public_pricings}
 #   # overwrite_freight_rates(req, shipper, true)
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/demo/demo__freight_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # response = ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  response = ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
   # pp response
 # # # # # #   # # # # # Overwrite public pricings from excel sheet
 

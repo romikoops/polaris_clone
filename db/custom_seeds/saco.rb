@@ -23,7 +23,7 @@ subdomains.each do |sub|
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
-  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
 
   # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
