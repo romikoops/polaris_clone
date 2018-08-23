@@ -1,72 +1,36 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './AlertModalBody.scss'
-import { trim, ROW } from '../../classNames'
-
-const LOGO_BOX = 'https://assets.itsmycargo.com/assets/logos/logo_box.png'
-const CONTAINER = 'ALERT_MODAL_BODY layout row layout-align-center'
 
 export function AlertModalBody (props) {
   const {
-    message,
-    maxWidth,
-    logo,
-    toggleAlertModal
+    message, maxWidth, logo, toggleAlertModal
   } = props
-
-  const Icon = (
-    <i
-      className={trim(`
-        ${styles.exit_icon} 
-        fa fa-times
-      `)}
-      onClick={toggleAlertModal}
-    />
-  )
 
   return (
     <div
-      className={CONTAINER}
+      className="layout row layout-align-center"
       style={{ maxWidth: maxWidth || '600px', width: '80vw' }}
     >
-      {Icon}
+      <i className={`${styles.exit_icon} fa fa-times`} onClick={toggleAlertModal} />
 
       <div>
         <div>
-          <img
-            src={logo}
-            style={{ height: '50px' }}
-          />
+          <img src={logo} style={{ height: '50px' }} />
         </div>
 
         { message }
 
-        <div
-          className={trim(`
-            ${ROW(100)} 
-            layout-align-end
-          `)}
-        >
+        <div className="flex-100 layout-row layout-align-end">
           <div>
-            <span style={{
-              fontSize: '10px', marginRight: '2px'
-            }}
-            >Powered by</span>
-
+            <span style={{ fontSize: '10px', marginRight: '2px' }}>Powered by</span>
             <img
-              src={LOGO_BOX}
-              style={{
-                height: '20px',
-                margin: '0 3px -5px 3px'
-              }}
+              src="https://assets.itsmycargo.com/assets/logos/logo_box.png"
+              style={{ height: '20px', margin: '0 3px -5px 3px' }}
             />
-
-            <span style={{
-              fontWeight: 'bold',
-              color: 'rgb(100, 100, 100)',
-              fontSize: '14px'
-            }}
-            >ItsMyCargo</span>
+            <span style={{ fontWeight: 'bold', color: 'rgb(100, 100, 100)', fontSize: '14px' }}>
+              ItsMyCargo
+            </span>
           </div>
         </div>
       </div>
@@ -75,14 +39,13 @@ export function AlertModalBody (props) {
 }
 
 AlertModalBody.propTypes = {
-  logo: PropTypes.string.isRequired,
-  maxWidth: PropTypes.string,
   message: PropTypes.string.isRequired,
-  toggleAlertModal: PropTypes.func.isRequired
+  logo: PropTypes.string.isRequired,
+  toggleAlertModal: PropTypes.func.isRequired,
+  maxWidth: PropTypes.string
 }
 
 AlertModalBody.defaultProps = {
   maxWidth: null
 }
-
 export default AlertModalBody
