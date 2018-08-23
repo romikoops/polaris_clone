@@ -1,45 +1,65 @@
 :local {
+  p {
+    margin: 0;
+  }
+  .levels_row {
+    margin-top: 20px;
+  }
   .button {
-    margin: 5px;
-    border-radius: 10px;
+    font-size: 12px;
+    margin-top: 5px;
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
   }
   .urgent {
     @extend .button;
-    border: 1px solid darkred;
-    box-shadow: 1px 0 0 1px darkred;
+    background: #FF9883;
+    width: 32px;
     i {
-      color: darkred;
+      color: white;
+    }
+    &:hover {
+      background: #D73C1D;
     }
   }
   .important {
     @extend .button;
-    border: 1px solid rgb(243, 133, 6);
-    box-shadow: 1px 0 0 1px rgb(243, 133, 6);
+    background: #FFBF7B;
+    width: 32px;
     i {
-      color:  rgb(243, 133, 6);
+      color: white;
+    }
+    &:hover {
+      background: #FF9626;
     }
   }
   .notification {
     @extend .button;
-    border: 1px solid darkgoldenrod;
-    box-shadow: 1px 0 0 1px darkgoldenrod;
+    background: #FFE79A;
+    width: 32px;
     i {
-      color:  darkgoldenrod;
+      color: white;
+    }
+    &:hover {
+      background: #FFCF32;
     }
   }
   .alert {
     @extend .button;
-    border: 1px solid darkgreen;
-    box-shadow: 1px 0 0 1px darkgreen;
+    width: 32px;
+    background: #B1E185;
     i {
-      color:  darkgreen;
+      color: white;
+    }
+    &:hover {
+      background: #6DC66B;
     }
   }
   .urgent_selected {
     @extend .button;
-    border: 1px solid darkred;
-    background: darkred;
-    box-shadow: 1px 0 0 1px darkred;
+    border: 1px solid #FF9883;
+    background: #FF9883;
     color: white;
     i {
       color: white;
@@ -47,9 +67,8 @@
   }
   .important_selected {
     @extend .button;
-    border: 1px solid rgb(243, 133, 6);
-    background: rgb(243, 133, 6);
-    box-shadow: 1px 0 0 1px rgb(243, 133, 6);
+    border: 1px solid #FFBF7B;
+    background: #FFBF7B;
     color: white;
     i {
       color:  white;
@@ -57,9 +76,8 @@
   }
   .notification_selected {
     @extend .button;
-    border: 1px solid darkgoldenrod;
-    background: darkgoldenrod;
-    box-shadow: 1px 0 0 1px darkgoldenrod;
+    border: 1px solid #FFE79A;
+    background: #FFE79A;
     color: white;
     i {
       color:  white;
@@ -67,9 +85,8 @@
   }
   .alert_selected {
     @extend .button;
-    border: 1px solid darkgreen;
-    background: darkgreen;
-    box-shadow: 1px 0 0 1px darkgreen;
+    border: 1px solid #B1E185;
+    background: #B1E185;
     color: white;
     i {
       color:  white;
