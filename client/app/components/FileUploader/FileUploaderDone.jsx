@@ -1,5 +1,5 @@
 import React from 'react'
-import {translate} from 'react-i18next'
+import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
@@ -41,10 +41,10 @@ class FileUploader extends React.Component {
   fileUpload (baseFile) {
     const file = baseFile
     const {
-      dispatchFn, 
-      type, 
-      uploadFn, 
-      url, 
+      dispatchFn,
+      type,
+      uploadFn,
+      url
     } = this.props
 
     if (!file) return ''
@@ -56,10 +56,11 @@ class FileUploader extends React.Component {
       if (this.uploaderInput.files.length) {
         this.uploaderInput.value = ''
       }
+
       return null
     }
     if (uploadFn) return uploadFn(file, type, url)
-    
+
     const formData = new window.FormData()
     formData.append('file', file)
     formData.append('type', type)
@@ -73,6 +74,7 @@ class FileUploader extends React.Component {
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
+
     return null
   }
   showFileTypeError () {
@@ -86,11 +88,11 @@ class FileUploader extends React.Component {
   render () {
     const {
       size,
-      square, 
+      square,
       t,
-      theme, 
-      tooltip, 
-      type, 
+      theme,
+      tooltip,
+      type
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''

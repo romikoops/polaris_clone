@@ -65,6 +65,7 @@ class FileUploader extends React.Component {
       if (this.uploaderInput.files.length) {
         this.uploaderInput.value = ''
       }
+
       return null
     }
     if (uploadFn) {
@@ -83,6 +84,7 @@ class FileUploader extends React.Component {
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
+
     return null
     // }
     // return this.showFileTypeError()
@@ -102,6 +104,7 @@ class FileUploader extends React.Component {
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
     console.log(errorStyle)
+
     return (
       <div
         className={`flex-none layout-row ${styles.upload_btn_wrapper} `}

@@ -1,6 +1,7 @@
 {
     "en": {
       "common": {
+        "collapseSidebar": "Collapse sidebar",
         "upload": "Upload",
         "accept": "accept",
         "deny": "Deny",
