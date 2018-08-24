@@ -1,5 +1,6 @@
-module WritingTool
+# frozen_string_literal: true
 
+module WritingTool
   def write_to_aws(dir, tenant, filename, doc_type)
     file = open(dir)
     obj_key = "documents/#{tenant.subdomain}/downloads/#{doc_type}/#{filename}"
@@ -8,16 +9,16 @@ module WritingTool
     new_doc.get_signed_url
   end
 
-  def filename_formatter(options, completing_string = "pricings_")
+  def filename_formatter(options, completing_string="pricings_")
     if options[:mot]
       "#{options[:mot]}_#{completing_string + formated_date}.xlsx"
-    else 
+    else
       "#{completing_string + formated_date}.xlsx"
     end
   end
 
   def formated_date
-    DateTime.now.strftime('%Y-%m-%d')
+    DateTime.now.strftime("%Y-%m-%d")
   end
 
   def default_aux_hash
@@ -41,15 +42,15 @@ module WritingTool
     WriteXLSX.new(dir)
   end
 
-  def add_worksheet_to_workbook(workbook, header_text, worksheet_name = nil)
+  def add_worksheet_to_workbook(workbook, header_text, worksheet_name=nil)
     header_format = workbook.add_format
     header_format.set_bold
     # byebug
-    if worksheet_name
-      worksheet = workbook.add_worksheet(worksheet_name)
-    else
-      worksheet = workbook.add_worksheet
-    end
+    worksheet = if worksheet_name
+                  workbook.add_worksheet(worksheet_name)
+                else
+                  workbook.add_worksheet
+                end
     header_text.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format) }
     { worksheet: worksheet, workbook: workbook }
   end
@@ -62,23 +63,15 @@ module WritingTool
     worksheet
   end
 
-  def writeable_data(current_itinerary, pricing, current_origin, current_destination, current_transit_time, current_vehicle, key, fee, carrier, range_fee = nil)
-    data = [carrier, current_itinerary.mode_of_transport, pricing[:load_type], pricing[:effective_date], pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time,pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min]]
-      if range_fee
-        data << range_fee[:rate]
-      else 
-        data << fee[:rate]
-      end
-      if fee[:hw_threshold]
-        data << fee[:hw_threshold]
-      else
-        data << ""
-      end
-      if fee[:hw_rate_basis]
-        data << fee[:hw_rate_basis]
-      else
-        data << ""
-      end
+  def writeable_data(current_itinerary, pricing, current_origin, current_destination, current_transit_time, current_vehicle, key, fee, carrier, range_fee=nil)
+    data = [carrier, current_itinerary.mode_of_transport, pricing[:load_type], pricing[:effective_date], pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min]]
+    data << if range_fee
+              range_fee[:rate]
+            else
+              fee[:rate]
+            end
+    data << fee[:hw_threshold] || ""
+    data << fee[:hw_rate_basis] || ""
     data
   end
 

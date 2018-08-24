@@ -15,7 +15,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
-      numItineraryPages:    itineraries.count/12,
+      numItineraryPages:   itineraries.count / 12,
       tenant_pricings:     @tenant_pricings,
       transportCategories: @transports,
       lastUpdate:          last_updated
@@ -43,7 +43,7 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
-      numItineraryPages:    itineraries.count/12,
+      numItineraryPages:   itineraries.count / 12,
       tenant_pricings:     @tenant_pricings,
       transportCategories: @transports,
       lastUpdate:          last_updated
@@ -117,7 +117,6 @@ class Admin::PricingsController < Admin::AdminBaseController
         transport_category: pricing_to_update.transport_category,
         user_id:            client_id.to_i
       }
-      
     end
     response_handler(new_pricings)
   end
