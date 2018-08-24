@@ -83,8 +83,6 @@ module ExcelTool
         range_max:       "RANGE_MAX",
         service_level:   "SERVICE_LEVEL",
         destination:     "DESTINATION",
-        # watershed:       "WATERSHED",
-        # extra:           "EXTRA",
         title:           "TITLE",
         text_array:      "TEXT_ARRAY",
         read_more:       "READ_MORE",
@@ -171,25 +169,9 @@ module ExcelTool
         populate_addons_for_cargo_class(addons, row, tenant_vehicle_id, hub, counterpart_id)
       end
       hash_builder = { addons: addons }
-      # hash_builder = expand_customs_addons(addons, rows, hub)
       { addons: hash_builder[:addons], tenant_vehicles: tenant_vehicles, counterparts: counterparts }
     end
 
-    # def expand_customs_addons(addons, rows, hub, type)
-    #   addons.each do |hub_key, tv_ids|
-    #     tv_ids.keys.each do |tv_id|
-    #       %w(export import).each do |direction|
-    #         addons[hub_key][tv_id][direction] = {} if !addons[hub_key][tv_id][direction]
-    #         %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
-    #           addons[hub_key][tv_id][direction][lt] = {} if !addons[hub_key][tv_id][direction][lt]
-    #           addons[hub_key][tv_id][direction][lt][type] = addons_and_customs_builder(direction,
-    #             rows[0][:mot].downcase, hub, lt, tv_id, hub_key, type)
-    #         end
-    #       end
-    #     end
-    #   end
-    #   { addons: addons }
-    # end
     def populate_addons_for_cargo_class(addons, row, tv_id, hub, counter_id)
       cargo_classes = if row[:cargo_class].casecmp("fcl").zero?
                         %w(fcl_20 fcl_40 fcl_40_hq)
@@ -203,15 +185,7 @@ module ExcelTool
           hub, lt, tv_id, counter_id, row
         )
       end
-      # addons[counter_id][tv_id][row[:direction.downcase]]
-      # addons.each do |hub_key, tv_ids|
-      #   [tv_id].keys.each do |tv_id|
-      #     %w(export import).each do |direction|
-      #       addons[hub_key][tv_id][direction] = {} if !addons[hub_key][tv_id][direction]
 
-      #     end
-      #   end
-      # end
       { addons: addons }
     end
 
@@ -284,7 +258,6 @@ module ExcelTool
         counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general",
         row[:addon_type]
       )
-      # attach_text(row, addons, tenant_vehicles, counterparts)
     end
 
     def attach_text(row, addons, tenant_vehicles, counterparts)
