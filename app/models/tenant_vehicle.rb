@@ -3,7 +3,8 @@
 class TenantVehicle < ApplicationRecord
   belongs_to :tenant
   belongs_to :vehicle
-  belongs_to :carrier, optional: true 
+  belongs_to :carrier, optional: true
+  has_many :pricings
 
   after_create do |tvt|
     vt = tvt.vehicle
