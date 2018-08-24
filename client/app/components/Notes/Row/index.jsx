@@ -13,7 +13,7 @@ const NotesRow = ({ notes, theme }) => {
       >
         <p className={` ${styles.sec_header_text} flex-none`}> Notes </p>
       </div>
-      <div className="flex-100 layout-row layout-align-start-center">
+      <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         {noteCards}
       </div>
 

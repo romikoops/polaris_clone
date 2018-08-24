@@ -41,6 +41,7 @@ function fetchTenant (subdomain) {
       error
     }
   }
+
   return (dispatch) => {
     dispatch(requestTenant(subdomain))
     return fetch(`${BASE_URL}/tenants/${subdomain}`)
@@ -86,8 +87,8 @@ const tenantActions = {
   receiveTenant,
   invalidateSubdomain,
   fetchTenant,
-  shouldFetchTenant,
-  fetchTenantIfNeeded
+  fetchTenantIfNeeded,
+  shouldFetchTenant
 }
 
 export default tenantActions

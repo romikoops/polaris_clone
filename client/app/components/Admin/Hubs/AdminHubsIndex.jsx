@@ -17,6 +17,7 @@ export class AdminHubsIndex extends Component {
     this.state = {
       expander: {}
     }
+    // this.toggleExpander = this.toggleExpander.bind(this)
   }
   toggleExpander (key) {
     this.setState({
@@ -165,7 +166,10 @@ export class AdminHubsIndex extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
-        <AdminHubsComp actionNodes={actionNodes} handleClick={viewHub} />
+        <AdminHubsComp
+          actionNodes={actionNodes}
+          handleClick={viewHub}
+        />
       </div>
 
     )

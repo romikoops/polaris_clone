@@ -6,7 +6,7 @@ import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-import { appActions, messagingActions, adminActions } from '../../actions'
+import { appActions, messagingActions, adminActions, authenticationActions } from '../../actions'
 
 class Header extends Component {
   constructor (props) {
@@ -57,9 +57,12 @@ class Header extends Component {
     this.props.appDispatch.goTo('/')
   }
   toggleShowLogin () {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
+    const { showModal, authenticationDispatch, noRedirect } = this.props
+    if (showModal) {
+      authenticationDispatch.closeLogin()
+    } else {
+      authenticationDispatch.showLogin({ noRedirect })
+    }
   }
   toggleShowMessages () {
     const { messageDispatch } = this.props
@@ -76,8 +79,6 @@ class Header extends Component {
       scrollable,
       noMessages,
       component,
-      toggleShowLogin,
-      // adminDispatch,
       isLanding
     } = this.props
     const { isTop } = this.state
@@ -136,7 +137,7 @@ class Header extends Component {
         invert={isTop && invert}
         user={user}
         isLanding={isLanding}
-        toggleShowLogin={toggleShowLogin}
+        toggleShowLogin={this.toggleShowLogin}
       />
     )
 
@@ -146,7 +147,6 @@ class Header extends Component {
         {!noMessages ? mail : ''}
       </div>
     )
-
     const loginModal = (
       <Modal
         component={
@@ -166,6 +166,7 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+
     const headerClass =
       `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
       `${invert ? styles.inverted : ''} ` +
@@ -189,11 +190,10 @@ class Header extends Component {
             {dropDowns}
             {
               (
-                this.state.showLogin ||
+                this.props.showModal ||
                 this.props.loggingIn ||
                 this.props.registering
               ) &&
-              this.props.req &&
               loginModal
             }
           </div>
@@ -208,6 +208,7 @@ Header.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   registering: PropTypes.bool,
+  noRedirect: PropTypes.bool,
   loggingIn: PropTypes.bool,
   isLanding: PropTypes.bool,
   invert: PropTypes.bool,
@@ -221,9 +222,10 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
-  toggleShowLogin: PropTypes.func,
+  authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   noMessages: PropTypes.bool,
-  component: PropTypes.node
+  component: PropTypes.node,
+  showModal: PropTypes.bool
 }
 
 Header.defaultProps = {
@@ -231,6 +233,7 @@ Header.defaultProps = {
   theme: null,
   user: null,
   registering: false,
+  noRedirect: false,
   isLanding: false,
   loggingIn: false,
   invert: false,
@@ -239,10 +242,10 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   req: null,
-  toggleShowLogin: null,
   scrollable: false,
   noMessages: false,
-  component: null
+  component: null,
+  showModal: false
 }
 
 function mapStateToProps (state) {
@@ -250,7 +253,7 @@ function mapStateToProps (state) {
     authentication, tenant, shipment, app, messaging
   } = state
   const {
-    user, loggedIn, loggingIn, registering, loginAttempt
+    user, loggedIn, loggingIn, registering, loginAttempt, showModal
   } = authentication
   const { unread, messages } = messaging
   const { currencies } = app
@@ -265,12 +268,14 @@ function mapStateToProps (state) {
     shipment,
     currencies,
     unread,
-    messages
+    messages,
+    showModal
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
     messageDispatch: bindActionCreators(messagingActions, dispatch)
   }

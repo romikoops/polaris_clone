@@ -5,15 +5,10 @@ import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
-// import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
-// import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
-// import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { userActions, adminActions, authenticationActions } from '../../actions'
-import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper'
-import { Modal } from '../../components/Modal/Modal'
 import { gradientTextGenerator } from '../../helpers'
 import { Footer } from '../../components/Footer/Footer'
 
@@ -73,20 +68,7 @@ class Landing extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
-    const loginModal = (
-      <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{ theme }}
-            RegistrationPageProps={{ theme, tenant }}
-            initialCompName="LoginPage"
-          />
-        }
-        verticalPadding="30px"
-        horizontalPadding="40px"
-        parentToggle={() => this.toggleShowLogin()}
-      />
-    )
+
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
 
@@ -94,7 +76,6 @@ class Landing extends Component {
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
           {loadingScreen}
-          {this.state.showLogin ? loginModal : ''}
           <LandingTop
             className="flex-100"
             user={user}
@@ -231,7 +212,7 @@ function mapDispatchToProps (dispatch) {
 function mapStateToProps (state) {
   const { users, authentication, tenant } = state
   const {
-    user, loggedIn, loggingIn, registering, loading
+    user, loggedIn, loggingIn, registering, loading, showModal
   } = authentication
 
   return {
@@ -241,7 +222,8 @@ function mapStateToProps (state) {
     loggedIn,
     loggingIn,
     registering,
-    loading
+    loading,
+    showModal
   }
 }
 

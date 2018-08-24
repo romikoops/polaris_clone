@@ -31,10 +31,10 @@ export class LandingTop extends Component {
   }
   render () {
     const {
-      theme, user, tenant, bookNow, toggleShowLogin
+      theme, user, tenant, bookNow
     } = this.props
     const myAccount = (
-      <div className="flex">
+      <div className="layout-row flex-50">
         <SquareButton
           text="My Account"
           theme={theme}
@@ -45,7 +45,7 @@ export class LandingTop extends Component {
       </div>
     )
     const toAdmin = (
-      <div className="flex">
+      <div className="layout-row flex-50">
         <SquareButton
           text="Admin Dashboard"
           theme={theme}
@@ -56,7 +56,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="flex layout-row flex-100">
+      <div className="layout-row flex-50">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
@@ -74,7 +74,7 @@ export class LandingTop extends Component {
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
           <div className="flex-100 layout-row">
-            <Header user={user} theme={theme} isLanding toggleShowLogin={toggleShowLogin} scrollable invert noMessages />
+            <Header user={user} theme={theme} isLanding scrollable invert noMessages />
           </div>
           <div className="flex-50 layout-row layout-align-center layout-wrap">
             <div className={`${styles.content_wrapper} flex-100 layout-row layout-wrap layout-align-center-center`}>
@@ -150,7 +150,6 @@ LandingTop.propTypes = {
   toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
   tenant: PropTypes.tenant,
-  toggleShowLogin: PropTypes.func,
   bookNow: PropTypes.func
 }
 
@@ -158,7 +157,6 @@ LandingTop.defaultProps = {
   theme: null,
   user: null,
   tenant: null,
-  toggleShowLogin: null,
   bookNow: null
 }
 

@@ -102,7 +102,7 @@ module DataInserter
             @itinerary.stops.order(:index),
             [transit_time],
             DateTime.now,
-            DateTime.now + 8.weeks,
+            DateTime.now + 1.week,
             [2, 5],
             @tenant_vehicle.id,
             4
@@ -168,7 +168,7 @@ module DataInserter
             @rate_hash[:data][:itineraries].each do |hub_code, itinerary|
               find_or_create_itinerary(itinerary)
               find_tenant_vehicle
-              # generate_trips
+              generate_trips
               create_pricings
               p "#{i}/#{@rates.length}"
             end

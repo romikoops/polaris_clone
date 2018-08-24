@@ -113,9 +113,9 @@ subdomains.each do |sub|
 #   # public_pricings = File.open("#{Rails.root}/db/dummydata/demo_freight_rates.xlsx")
 #   # req = {"xlsx" => public_pricings}
 #   # overwrite_freight_rates(req, shipper, true)
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/demo/demo__freight_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # response = ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
+  public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  response = ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
   # pp response
 # # # # # #   # # # # # Overwrite public pricings from excel sheet
 

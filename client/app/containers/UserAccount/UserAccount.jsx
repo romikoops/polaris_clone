@@ -81,7 +81,7 @@ class UserAccount extends Component {
         break
       case 'contacts':
         // this.setState({ activeLink: target })
-        userDispatch.goTo('/account/contacts')
+        userDispatch.getContacts(true, 1)
         break
       case 'dashboard':
         // this.setState({ activeLink: target })
