@@ -136,7 +136,6 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-    # byebug
     if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),

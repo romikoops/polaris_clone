@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ExcelTool
   class FreightRatesOverwriter < ExcelTool::BaseTool
     attr_reader :first_sheet, :tenant, :aux_data, :new_pricings, :nested_pricings, :user, :effective_date,
       :expiration_date, :pricing_key, :cargo_type, :itinerary, :generate
-    
+
     def post_initialize(args)
       @first_sheet = xlsx.sheet(xlsx.sheets.first)
       @user = args[:_user]
@@ -14,9 +16,9 @@ module ExcelTool
     end
 
     def perform
-      overwrite_freight_rates 
+      overwrite_freight_rates
     end
-    
+
     private
 
     def overwrite_freight_rates
@@ -41,15 +43,12 @@ module ExcelTool
       add_exceptions_to_new_pricings
       process_hashes
       generate_map_data
-      { results: results, stats: stats, unsaved_initnerary: @unsaved_itins, saved: @saved}
+      { results: results, stats: stats, unsaved_initnerary: @unsaved_itins, saved: @saved }
     end
 
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
-      if aux_data[pricing_key][:stops_in_order].length != 2
-        # byebug
-      end
-      if aux_data[pricing_key][:stops_in_order].length > 0
+      if !aux_data[pricing_key][:stops_in_order].empty?
         itinerary.stops << aux_data[pricing_key][:stops_in_order]
         itinerary.save!
         @saved << itinerary
@@ -59,14 +58,12 @@ module ExcelTool
     end
 
     def generate_map_data
-      @saved.each do |itinerary|
-        itinerary.generate_map_data
-      end
+      @saved.each(&:generate_map_data)
     end
 
     def _stats
       {
-        type: "pricings",
+        type:              "pricings",
         pricings:          {
           number_updated: 0,
           number_created: 0
@@ -97,21 +94,18 @@ module ExcelTool
         },
         userAffected:      []
       }
-
-      
     end
 
     def _results
       {
-        pricings: [],
+        pricings:          [],
         itineraryPricings: [],
-        userPricings: [],
-        itineraries: [],
-        stops: [],
-        layovers: [],
-        trips: []
+        userPricings:      [],
+        itineraries:       [],
+        stops:             [],
+        layovers:          [],
+        trips:             []
       }
-      
     end
 
     def pricing_rows
@@ -144,7 +138,7 @@ module ExcelTool
       @effective_date = DateTime.parse(row[:effective_date].to_s)
       @expiration_date = DateTime.parse(row[:expiration_date].to_s)
     end
-    
+
     def set_pricing_key(row)
       @pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}\
       _#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}\
@@ -157,33 +151,29 @@ module ExcelTool
 
     def populate_new_pricings
       new_pricings[pricing_key][cargo_type] ||= {
-          data:            {},
-          exceptions:      [],
-          effective_date:  effective_date,
-          expiration_date: expiration_date,
-          updated_at:      DateTime.now
-        }
+        data:            {},
+        exceptions:      [],
+        effective_date:  effective_date,
+        expiration_date: expiration_date,
+        updated_at:      DateTime.now
+      }
     end
 
     def find_nexus(string, tenant_id)
       nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
-      if nexus
-        return nexus
-      else
-        nexus = Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
-      end
+      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
     end
 
     def tenant_vehicle(row)
       if row[:carrier]
         carrier = Carrier.find_or_create_by!(name: row[:carrier])
-        return carrier.tenant_vehicles.find_by(
+        carrier.tenant_vehicles.find_by(
           tenant_id:         user.tenant_id,
           mode_of_transport: row[:mot].downcase,
           name:              row[:vehicle]
         )
       else
-        return TenantVehicle.find_by(
+        TenantVehicle.find_by(
           tenant_id:         user.tenant_id,
           mode_of_transport: row[:mot].downcase,
           name:              row[:service_level]
@@ -194,18 +184,16 @@ module ExcelTool
     def populate_aux_data(row)
       if aux_data[pricing_key][:tenant_vehicle].blank?
         vehicle = tenant_vehicle(row)
-        
-        aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
+
+        aux_data[pricing_key][:tenant_vehicle] = vehicle.presence ||
+          Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
 
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
-      if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
-        puts row
-        
-      end
+      puts row if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
@@ -246,23 +234,23 @@ module ExcelTool
       end
       _steps_in_order
     end
-    
+
     def populate_stats_and_results
       start_date = DateTime.now
       end_date = start_date + 60.days
       if generate && !@unsaved_itins.include?(@itinerary)
-          generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
-            aux_data[pricing_key][:stops_in_order],
-            steps_in_order,
-            start_date,
-            end_date,
-            [1, 5],
-            aux_data[pricing_key][:tenant_vehicle].id
-          )
-          results[:layovers] = generator_results[:results][:layovers]
-          results[:trips] = generator_results[:results][:trips]
-          stats[:layovers][:number_created] = generator_results[:results][:layovers].length
-          stats[:trips][:number_created] = generator_results[:results][:trips].length
+        generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
+          aux_data[pricing_key][:stops_in_order],
+          steps_in_order,
+          start_date,
+          end_date,
+          [1, 5],
+          aux_data[pricing_key][:tenant_vehicle].id
+        )
+        results[:layovers] = generator_results[:results][:layovers]
+        results[:trips] = generator_results[:results][:trips]
+        stats[:layovers][:number_created] = generator_results[:results][:layovers].length
+        stats[:trips][:number_created] = generator_results[:results][:trips].length
         end
     end
 
@@ -346,9 +334,7 @@ module ExcelTool
         nested_min_range(row)
         nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]][:min] = row[:rate_min] if row[:rate_min]
       else
-        unless new_pricings[pricing_key][cargo_type][:data][row[:fee]]
-          add_fee_to_new_princings(row)
-        end
+        add_fee_to_new_princings(row) unless new_pricings[pricing_key][cargo_type][:data][row[:fee]]
         new_pricings[pricing_key][cargo_type][:wm_rate] = row[:wm_rate]
 
         if row[:hw_threshold]
@@ -363,7 +349,7 @@ module ExcelTool
     end
 
     def process_hashes
-       new_pricings.each do |it_key, cargo_pricings|
+      new_pricings.each do |it_key, cargo_pricings|
         cargo_pricings.each do |cargo_key, pricing_data|
           new_pricing_data = pricing_data.clone
           transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: "any", cargo_class: cargo_key)
@@ -386,7 +372,6 @@ module ExcelTool
             pricing_detail = pricing.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
             pricing_detail.update!(range: range, currency_name: currency)
           end
-
           pricing_exceptions.each do |pricing_exception_data|
             pricing_details = pricing_exception_data.delete(:data)
             pricing_exception = pricing.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: tenant))
@@ -407,7 +392,7 @@ module ExcelTool
           stats[:pricings][:number_created] += 1
           results[:pricings] << pricing
         end
-      end      
+      end
     end
   end
 end

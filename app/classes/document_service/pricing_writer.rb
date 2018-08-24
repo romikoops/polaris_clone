@@ -112,7 +112,10 @@ module DocumentService
         vehicle = transport_category(pricing[:transport_category_id]).vehicle
         aux_data[:vehicle][pricing[:transport_category_id]] = vehicle
       end
-      { current_vehicle: aux_data[:vehicle][pricing[:transport_category_id]], aux_data: aux_data }
+      {
+        current_vehicle: aux_data[:vehicle][pricing[:transport_category_id]],
+        aux_data:        aux_data
+      }
     end
 
     def transport_category(transport_category_id)
@@ -155,7 +158,11 @@ module DocumentService
         aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ""
       end
 
-      { destination_layover: destination_layover, origin_layover: origin_layover, aux_data: aux_data }
+      {
+        destination_layover: destination_layover,
+        origin_layover:      origin_layover,
+        aux_data:            aux_data
+      }
     end
 
     def get_tenant_pricings_by_mot(tenant_id, mot)

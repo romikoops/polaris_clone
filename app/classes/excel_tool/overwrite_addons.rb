@@ -143,10 +143,6 @@ module ExcelTool
       rows.each do |row|
         if row[:destination]
           counterpart_hub = find_hub(row)
-          unless counterpart_hub
-            # byebug
-            puts row
-          end
           counterpart_hub_id = counterpart_hub.id
           addons[counterpart_hub_id] = {} unless addons[counterpart_hub_id]
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
@@ -185,7 +181,6 @@ module ExcelTool
           hub, lt, tv_id, counter_id, row
         )
       end
-
       { addons: addons }
     end
 

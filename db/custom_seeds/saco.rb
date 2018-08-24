@@ -2,7 +2,7 @@
 
 include ExcelTools
 include MongoTools
-# subdomains = %w(demo greencarrier easyshipping hartrodt)
+
 subdomains = %w[saco saco-sandbox]
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
@@ -16,11 +16,11 @@ subdomains.each do |sub|
   # tenant.hubs.destroy_all
   # tenant.nexuses.destroy_all
   # # # #   # # # # #Overwrite hubs from excel sheet
-  # # # puts '# Overwrite hubs from excel sheet'
-  # hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
-  # req = { 'xlsx' => hubs }
-  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
-
+  puts '# Overwrite hubs from excel sheet'
+  hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  puts '# Overwrite pricings and rates from excel sheet'
   public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
   ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
@@ -28,9 +28,9 @@ subdomains.each do |sub|
   # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
 
   # # # # puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/saco/saco__local_charges.xlsx")
-  req = { 'xlsx' => local_charges }
-  ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
+  # local_charges = File.open("#{Rails.root}/db/dummydata/saco/saco__local_charges.xlsx")
+  # req = { 'xlsx' => local_charges }
+  # ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
 
   # #   # # # # # # Overwrite trucking data from excel sheet
 
