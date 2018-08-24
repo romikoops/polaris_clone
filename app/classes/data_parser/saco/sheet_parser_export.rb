@@ -306,7 +306,7 @@ module DataParser
 
       def parse_rates
         row_hashes = []
-        @sheets.each do |sheet|
+        @sheets.each_with_index do |sheet, i|
           @sheet = @xlsx.sheet(sheet)
           @sheet_rows = parse_sheet_rows(@sheet)
           @sheet_rows.each_with_index do |row, _i|
@@ -319,7 +319,7 @@ module DataParser
             row_hashes << converted_hash
             awesome_print converted_hash
           end
-          
+          p "Sheet #{i}"
         end
         row_hashes
     end
