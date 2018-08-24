@@ -80,7 +80,6 @@ module DataParser
       end
 
       def row_to_hash(row)
-        
         {
           ports_of_loading: row[:origins],
           carrier:          row[:carrier],
@@ -117,11 +116,11 @@ module DataParser
         itineraries = {}
         return nil unless hash[:ports_of_loading]
         destination = destination_port_name(port_name)
-        origins = hash[:ports_of_loading].delete(' ').split("/").map do |hub_code|
+        origins = hash[:ports_of_loading].delete(" ").split("/").map do |hub_code|
           hub_name = determine_hub_from_abbreviation(hub_code)
-          itineraries[hub_code] = { 
-            name: "#{hub_name} - #{destination}",
-            origin: hub_name,
+          itineraries[hub_code] = {
+            name:        "#{hub_name} - #{destination}",
+            origin:      hub_name,
             destination: destination
           }
         end
@@ -130,9 +129,9 @@ module DataParser
 
       def destination_port_name(port_name)
         if port_name.downcase.end_with?(" port")
-          return port_name
+          port_name
         else
-          return "#{port_name} Port"
+          "#{port_name} Port"
         end
       end
 
@@ -153,9 +152,7 @@ module DataParser
         end
       end
 
-      def return_country_for_origin
-
-      end
+      def return_country_for_origin; end
 
       def hub_abbreviations_from_country(_country)
         case abv
@@ -193,17 +190,14 @@ module DataParser
         rates = []
         %i(fcl_20 fcl_40 fcl_40_hq).each do |sym|
           rates << {
-            rate_basis: "PER_CONTAINER",
-            rate:       hash[:rates][sym],
-            currency:   hash[:currency],
-            code:       "BAS",
-            cargo_class:  sym.to_s
+            rate_basis:  "PER_CONTAINER",
+            rate:        hash[:rates][sym],
+            currency:    hash[:currency],
+            code:        "BAS",
+            cargo_class: sym.to_s
           }
         end
         names_obj = extract_names(hash[:destination])
-        # if names_obj[:name] == 'Cabinda'
-        #   byebug
-        # end
         {
           rate: rates,
           data: {
@@ -223,32 +217,25 @@ module DataParser
       def validate_row(row)
         check1 = begin
                      Float(row[:fcl_20_rate])
-                   rescue StandardError
-                     nil
-                   end
-        check2 = begin
                      Float(row[:fcl_40_rate])
-                   rescue StandardError
-                     nil
-                   end
-        check3 = begin
                      Float(row[:fcl_40_hq_rate])
-                   rescue StandardError
+                   rescue ArgumentError
                      nil
                    end
-        check4 = row[:country]
-        check5 = row[:origins]
+       
+        check2 = row[:country]
+        check3 = row[:origins]
 
-        [check1, check2, check3, check4, check5].none?(nil)
+        [check1, check2, check3].none?(nil)
       end
 
       def parse_alternative_names(str)
-        if str.include?('/')
-          return str.split('/').map{|char| char.delete("(").delete(")")}
-        elsif str.include?(',')
-          return str.split(',').map{|char| char.delete("(").delete(")")}
+        if str.include?("/")
+          str.split("/").map { |char| char.delete("(").delete(")") }
+        elsif str.include?(",")
+          str.split(",").map { |char| char.delete("(").delete(")") }
         else
-          return str.delete("(").delete(")")
+          str.delete("(").delete(")")
         end
       end
 
@@ -256,30 +243,15 @@ module DataParser
         new_str = str.gsub("(Free-out)", "")
         alternative_names_str = new_str[/\(.*?\)/]
         new_str.sub!(/\(.*?\)/, "")
-        if !alternative_names_str && new_str.include?(',')
-          names = new_str.split(',')
-          new_str = names.shift()
+        if !alternative_names_str && new_str.include?(",")
+          names = new_str.split(",")
+          new_str = names.shift
           alternative_names = names
         elsif alternative_names_str
           alternative_names = parse_alternative_names(alternative_names_str)
         end
-        if alternative_names
-         
-          alt_name = alternative_names
-        end
-        if new_str.end_with?("  ")
-          new_str.slice!(-2, 2)
-        elsif new_str.end_with?(" ")
-          new_str.slice!(-1)
-        end
-        if new_str.starts_with?("  ")
-          new_str.slice!(0,1)
-        elsif new_str.starts_with?(" ")
-          new_str.slice!(0)
-        end
-        if new_str.include?("(")
-          byebug
-        end
+        alt_name = alternative_names if alternative_names
+        new_str.strip
         { name: new_str, alternative_names: alt_name }
       end
 
@@ -294,12 +266,8 @@ module DataParser
           fcl_20_rate:     "20'DC",
           fcl_40_rate:     "40'DC",
           fcl_40_hq_rate:  "40'HC",
-          # thc:              "THC(D/NL/B)",
-          # isps:             "ISPS",
           currency:        "Cur.",
-          # ebs:              "EBS/TEU",
           origins:         "POL"
-          # transit_time:     "Transittime"
         )
       end
 
@@ -308,7 +276,7 @@ module DataParser
         @sheets.each do |sheet|
           @sheet = @xlsx.sheet(sheet)
           @sheet_rows = parse_sheet_rows(@sheet)
-          @sheet_rows.each_with_index do |row, _i|
+          @sheet_rows.each do |row|
             next unless validate_row(row)
             @row = row
 
@@ -318,7 +286,6 @@ module DataParser
             row_hashes << converted_hash
             awesome_print converted_hash
           end
-          
         end
         row_hashes
     end

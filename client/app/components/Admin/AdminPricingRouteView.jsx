@@ -123,7 +123,7 @@ export class AdminPricingRouteView extends Component {
       itineraryPricingData,
       stops,
       userPricings,
-      serviceLevels // eslint-disable-line
+      serviceLevels
     } = itineraryPricings
     if (!itinerary || !itineraryPricingData) {
       return ''
