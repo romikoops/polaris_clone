@@ -22,7 +22,7 @@ module ExcelTool
     def overwrite_freight_rates
       @unsaved_itins = []
       @saved = []
-      pricing_rows.each do |row|
+      pricing_rows.each_with_index do |row, i|
         set_pricing_key(row)
         new_pricings[pricing_key] = {} unless new_pricings[pricing_key]
         set_dates(row)
@@ -36,6 +36,7 @@ module ExcelTool
         save_stops
         populate_stats_and_results
         process_row_data(row)
+        p "#{i}/#{pricing_rows.length}"
       end
 
       add_exceptions_to_new_pricings
@@ -47,7 +48,7 @@ module ExcelTool
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
       if aux_data[pricing_key][:stops_in_order].length != 2
-        # byebug
+        byebug
       end
       if aux_data[pricing_key][:stops_in_order].length > 0
         itinerary.stops << aux_data[pricing_key][:stops_in_order]
