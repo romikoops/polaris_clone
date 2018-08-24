@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux'
 import PropTypes from '../../../prop-types'
 import { adminActions } from '../../../actions'
 import styles from './index.scss'
-import adminStyles from '../../Admin/Admin.scss'
+import adminStyles from '../../../components/Admin/Admin.scss'
 import { RoundButton } from '../../../components/RoundButton/RoundButton'
 
 class NotesWriter extends Component {
@@ -132,22 +132,24 @@ class NotesWriter extends Component {
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-space-between">
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+          className={`flex-100 layout-row layout-align-space-between-center ${adminStyles.sec_header}`}
         >
-          <p className={` ${styles.sec_header_text} flex-none`}> Comments </p>
+          <p className={` ${adminStyles.sec_header_text} flex-none`}> Comments </p>
         </div>
         <div className="flex-65 layout-row layout-align-start-start layout-wrap">
-          <div className="flex-100 layou-row input_box_full" style={{ margin: '10px 0' }}>
-            <div className="flex-70 layout-row layout-align-center-center">
+          <div className={`flex-100 layou-row input_box_full ${styles.form}`} >
+            <div className="flex-70 layout-row layout-wrap layout-align-center-center">
               <input
                 type="text"
-                className="flex-100 layout-row"
-                placeholder="Title"
+                name="title"
+                className={`flex-100 layout-row ${styles.title_input}`}
+                placeholder="Place title here"
                 value={itineraryNotes.header}
                 onChange={e => this.handleItineraryNotes(e, 'header')}
               />
+              <label className={`flex-100 layout-row ${styles.title_label}`} htmlFor="title">Title</label>
             </div>
-            <div className={`flex-70 layout-row layout-align-space-around-center ${styles.levels_row}`}>
+            <div className={`flex-50 layout-row layout-align-space-around-center ${styles.levels_row}`}>
               <p className="layout-row layout-align-start-center">Importance:</p>
               {importanceLevels}
             </div>

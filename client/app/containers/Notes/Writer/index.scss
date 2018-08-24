@@ -45,6 +45,9 @@
       background: #FFCF32;
     }
   }
+  .form {
+    margin-top: 30px;
+  }
   .alert {
     @extend .button;
     width: 32px;
@@ -91,5 +94,40 @@
     i {
       color:  white;
     }
+  }
+
+  // input transition
+  .title_label, .title_input {
+    transition: all 0.2s;
+    touch-action: manipulation;
+  }
+  .title_label {
+    margin-top: -106px;
+    z-index: -5;
+  }
+  .title_input:focus {
+    outline: 0;
+    border-bottom: 1px solid #BDBDBD;
+  }
+  .title_input:placeholder-shown + .title_label {
+    cursor: text;
+    max-width: 66.66%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform-origin: left bottom;
+    transform: translate(0, 2rem) scale(1.5);
+  }
+  ::-webkit-input-placeholder {
+    opacity: 0;
+    transition: inherit;
+  }
+  .title_input:focus::-webkit-input-placeholder {
+    opacity: 1;
+  }
+  .title_input:not(:placeholder-shown) + .title_label,
+  .title_input:focus + .title_label {
+    transform: translate(0, 0) scale(1);
+    cursor: pointer;
   }
 }
