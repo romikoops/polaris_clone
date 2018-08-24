@@ -127,9 +127,11 @@ class SideNav extends Component {
       url: '/admin/superadmin',
       target: 'superadmin'
     }
+    /* eslint-disable prefer-destructuring */
     this.defaultMotForPricings = Object.keys(tenant.data.scope.modes_of_transport)
       .filter(key => Object.keys(tenant.data.scope.modes_of_transport[key])
-        .filter(key2 => tenant.data.scope.modes_of_transport[key][key2])[0])[0] // eslint-disable-line
+        .filter(key2 => tenant.data.scope.modes_of_transport[key][key2])[0])[0]
+    /* eslint-disable prefer-destructuring */
     if (user.role && user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }

@@ -96,9 +96,9 @@ Rails.application.routes.draw do
       post 'schedules/auto_generate',
         to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
-      get 'hubs',      to: 'hubs#index'
-      get 'search/hubs',      to: 'hubs#search'
-      get 'search/pricings',      to: 'pricings#search'
+      get 'hubs', to: 'hubs#index'
+      get 'search/hubs', to: 'hubs#search'
+      get 'search/pricings', to: 'pricings#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
