@@ -25,7 +25,8 @@ module DataParser
           "HAM" => "Hamburg",
           "RTM" => "Rotterdam",
           "ANR" => "Antwerp",
-          "FXT" => "Felixstowe"
+          "FXT" => "Felixstowe",
+          "WVN" => "Wilhelmshaven"
         }
       end
 
@@ -147,7 +148,7 @@ module DataParser
         when "HAM"
           "Hamburg Port"
         when "WVN"
-          "Wilhelmhaven Port"
+          "Wilhelmshaven Port"
         when "FXT"
           "Felixstowe Port"
         end
