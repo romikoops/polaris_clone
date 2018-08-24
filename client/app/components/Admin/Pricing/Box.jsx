@@ -74,7 +74,7 @@ export class AdminPricingBox extends Component {
         this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
       })
     }
-    if (this.state.charges !== nextProps.charges) {
+    if (this.state.charges !== nextProps.charges && nextProps.charges.length > 0) {
       this.setState({
         charges: nextProps.charges,
         selectedCargoClass: nextProps.charges[0].transport_category.cargo_class
