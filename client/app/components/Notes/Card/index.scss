@@ -1,55 +1,79 @@
 :local {
+  .button {
+    font-size: 12px;
+    margin-top: 5px;
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
+  }
+  .urgent_border_style {
+    border: 2px solid #D73C1D;
+  }
+  .important_border_style {
+    border: 2px solid #FF9626;
+  }
+  .notification_border_style {
+    border: 2px solid #FFCF32;
+  }
+  .alert_border_style {
+    border: 2px solid #6DC66B;
+  }
   .note_card {
     margin: 5px;
+    background: white;
     border-radius: 3px;
-    width: 300px;
     min-height: 175px;
+    padding: 18px;
     p {
-      font-size: 10px;
+      margin-top: 20px !important;
+      padding-top: 20px;
+      border-top: 1px solid #E0E0E0;
+      font-size: 12px;
       margin: 4px 0;
+      // padding-left: 32px;
     }
   }
-  .note_header {
-    font-size: 12px !important;
-  }
   .note_route {
-    font-size: 14px !important;
-    font-style: italic;
+    span {
+      font-size: 15px;
+      padding-left: 15px;
+      font-weight: bold;
+    }
   }
   .urgent {
     .note_route {
-      border-bottom: 1px solid darkred;
+      border-bottom: 1px solid #D73C1D;
     }
-    box-shadow: 1px 1px 1px 2px rgba(139,0,0,0.25);
-    i.warning_icon {
-      color: darkred;
-    }
+      background: #D73C1D;
+      i {
+        color: white;
+      }
   }
   .important {
     .note_route {
-      border-bottom: 1px solid rgb(243, 133, 6);
+      border-bottom: 1px solid #FF9626;
     }
-    box-shadow: 1px 1px 1px 2px rgba(243, 133, 6, 0.25);
-    i.warning_icon {
-      color:  rgb(243, 133, 6);
+    background: #FF9626;
+    i {
+      color: white;
     }
   }
   .notification {
     .note_route {
       border-bottom: 1px solid darkgoldenrod;
     }
-    box-shadow: 1px 1px 1px 2px rgba(184,134,11, 0.25);
-    i.warning_icon {
-      color:  darkgoldenrod;
+    background: #FFCF32;
+    i {
+      color:  white;
     }
   }
   .alert {
     .note_route {
-      border-bottom: 1px solid darkgreen;
+      border-bottom: 1px solid #6DC66B;
     }
-    box-shadow: 1px 1px 1px 2px rgba(0,100,0,0.25);
-    i.warning_icon {
-      color:  darkgreen;
+    background: #6DC66B;
+    i {
+      color:  white;
     }
   }
 }

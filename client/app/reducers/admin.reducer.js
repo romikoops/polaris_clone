@@ -1218,7 +1218,7 @@ export default function admin (state = {}, action) {
         ...state,
         itinerary: {
           ...state.itinerary,
-          itinerary: action.payload
+          notes: action.payload
         },
         loading: false
       }

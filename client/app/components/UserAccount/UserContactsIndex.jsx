@@ -48,17 +48,10 @@ export class UserContactsIndex extends Component {
       numPages
     } = this.props
 
-    const sideBoxStyle = {
-      position: 'fixed',
-      top: '160px',
-      right: '0px',
-      backgroundColor: 'white'
-    }
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
-        <div className="flex-75 flex-sm-95 flex-xs-95 layout-row layout-align-start-start">
-          <div className="layout-column">
+        <div className="flex-80 flex-sm-95 flex-xs-95 layout-row layout-align-start-start">
+          <div className="layout-row layout-wrap flex-100">
             <AdminSearchableClients
               theme={theme}
               hideFilters
@@ -95,25 +88,27 @@ export class UserContactsIndex extends Component {
           </div>
           {newContactBox}
         </div>
-        <div className="layout-column flex-20 hide-xs layout-align-end-end" style={sideBoxStyle}>
-          <SideOptionsBox
-            header="Data Manager"
-            flexOptions="layout-column flex-20 flex-md-15 flex-sm-10"
-            content={
-              <div className="layout-row flex layout-align-center-center">
-                <div className="flex-none layout-row layout-align-center-center">
-                  <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="New Contact"
-                    active
-                    handleNext={toggleNewContact}
-                    iconClass="fa-plus"
-                  />
+        <div className="layout-column flex-20 hide-xs hide-sm layout-align-end-end relative" >
+          <div className={`layout-column  hide-xs layout-align-end-end ${styles.side_box_style}`}>
+            <SideOptionsBox
+              header="Data Manager"
+              flexOptions="layout-row layout-wrap flex-20 flex-md-15 flex-sm-10 "
+              content={
+                <div className="layout-row flex-100 layout-align-center-center">
+                  <div className="flex-100 layout-row layout-align-center-center">
+                    <RoundButton
+                      theme={theme}
+                      size="full"
+                      text="New Contact"
+                      active
+                      handleNext={toggleNewContact}
+                      iconClass="fa-plus"
+                    />
+                  </div>
                 </div>
-              </div>
-            }
-          />
+              }
+            />
+          </div>
         </div>
       </div>
     )

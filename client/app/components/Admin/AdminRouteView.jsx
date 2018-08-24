@@ -175,22 +175,15 @@ export class AdminRouteView extends Component {
           {schedArr}
         </div>
         <div className="flex-95 layout-row layout-align-space-between-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-60 layout-row layout-align-start-cetner">
-              <p className="flex-none">Notes</p>
-            </div>
-            <div
-              className="flex-10 layout-row alyout-align-center-center"
-              onClick={() => this.toggleNotesEdit()}
-            >
-              <i className="fa fa-pencil clip" style={textStyle} />
-            </div>
-          </div>
           <div className="flex-100 layout-row">
             {editNotes ? (
-              <NotesWriter theme={theme} targetId={itinerary.id} />
+              <NotesWriter
+                theme={theme}
+                targetId={itinerary.id}
+                toggleView={() => this.toggleNotesEdit()}
+              />
             ) : (
-              <NotesRow notes={notes} theme={theme} />
+              <NotesRow notes={notes} textStyle={textStyle} toggleNotesEdit={() => this.toggleNotesEdit()} theme={theme} />
             )}
           </div>
         </div>

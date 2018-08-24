@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
-// import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
-// import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
@@ -19,7 +17,6 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
 import { camelize, isEmpty, chargeableWeight } from '../../helpers'
@@ -159,7 +156,7 @@ export class ShipmentDetails extends Component {
     if (reusedShipment && reusedShipment.shipment && !this.state.prevRequestLoaded) {
       this.loadReusedShipment(reusedShipment)
     } else if (prevRequest && prevRequest.shipment && !this.state.prevRequestLoaded) {
-      this.loadPrevReq(prevRequest.shipment)
+      this.loadPrevReq(prevRequest)
     }
     if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
       this.presetMandatoryCarriage()
@@ -253,7 +250,17 @@ export class ShipmentDetails extends Component {
     this.setState({ noteIds })
   }
   setTargetAddress (target, address) {
-    this.setState({ [target]: address })
+    this.setState(prevState => ({
+      [target]: address,
+      prevRequest: {
+        ...prevState.prevRequest,
+        shipment: {
+          ...prevState.prevRequest.shipment,
+          [target]: address
+        }
+
+      }
+    }))
   }
 
   setAggregatedCargo (bool) {
@@ -288,7 +295,8 @@ export class ShipmentDetails extends Component {
     this.setState({ mandatoryCarriageIsPreset: true })
   }
 
-  loadPrevReq (obj) {
+  loadPrevReq (req) {
+    const obj = req.shipment
     const newCargoItemsErrors = obj.cargo_items_attributes.map(cia => ({
       payload_in_kg: false,
       dimension_x: false,
@@ -301,7 +309,6 @@ export class ShipmentDetails extends Component {
       payload_in_kg: false
     }))
     this.getInitalFilteredRouteIndexes()
-
     this.setState({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
@@ -315,6 +322,7 @@ export class ShipmentDetails extends Component {
       trucking: obj.trucking,
       incoterm: obj.incoterm,
       routeSet: true,
+      prevRequest: req,
       prevRequestLoaded: true
     })
   }
@@ -693,7 +701,11 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch, messages, showRegistration
+      tenant,
+      user,
+      shipmentData,
+      shipmentDispatch,
+      showRegistration
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
@@ -748,44 +760,16 @@ export class ShipmentDetails extends Component {
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
-    const mapBox = (
-      <GmapsLoader
-        theme={theme}
-        setTargetAddress={this.setTargetAddress}
-        allNexuses={shipmentData.allNexuses}
-        component={ShipmentLocationBox}
-        handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
-        has_on_carriage={this.state.has_on_carriage}
-        has_pre_carriage={this.state.has_pre_carriage}
-        origin={this.state.origin}
-        destination={this.state.destination}
-        nextStageAttempts={this.state.nextStageAttempts}
-        handleAddressChange={this.handleAddressChange}
-        shipmentData={shipmentData}
-        routeIds={routeIds}
-        setNotesIds={(e, t) => this.setNotesIds(e, t)}
-        shipmentDispatch={shipmentDispatch}
-        prevRequest={this.props.prevRequest}
-        handleSelectLocation={this.handleSelectLocation}
-        scope={scope}
-        selectedTrucking={this.state.shipment.trucking}
-        handleTruckingDetailsChange={this.handleTruckingDetailsChange}
-        filteredRouteIndexes={filteredRouteIndexes}
-        updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
-        reusedShipment={this.props.reusedShipment}
-        hideMap={this.props.hideMap}
-      />
-    )
-
     const formattedSelectedDay = this.state.selectedDay
       ? moment(this.state.selectedDay).format('DD/MM/YYYY')
       : ''
-    const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
           .add(7, 'days')
-          .format())
+          .format()),
+        after: new Date(moment(shipmentData.lastTripDate))
       },
       month: new Date(
         moment()
@@ -868,12 +852,38 @@ export class ShipmentDetails extends Component {
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
         style={{ minHeight: '1800px' }}
       >
-        {flash}
         {modals &&
           Object.keys(modals)
             .filter(modalName => modals[modalName].show)
             .map(modalName => modals[modalName].jsx)}
-        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>
+          <GmapsLoader
+            theme={theme}
+            setTargetAddress={this.setTargetAddress}
+            allNexuses={shipmentData.allNexuses}
+            component={ShipmentLocationBox}
+            handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
+            has_on_carriage={this.state.has_on_carriage}
+            has_pre_carriage={this.state.has_pre_carriage}
+            origin={this.state.origin}
+            destination={this.state.destination}
+            nextStageAttempts={this.state.nextStageAttempts}
+            handleAddressChange={this.handleAddressChange}
+            shipmentData={shipmentData}
+            routeIds={routeIds}
+            setNotesIds={(e, t) => this.setNotesIds(e, t)}
+            shipmentDispatch={shipmentDispatch}
+            prevRequest={this.state.prevRequest}
+            handleSelectLocation={this.handleSelectLocation}
+            scope={scope}
+            selectedTrucking={this.state.shipment.trucking}
+            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+            filteredRouteIndexes={filteredRouteIndexes}
+            updateFilteredRouteIndexes={this.updateFilteredRouteIndexes}
+            reusedShipment={this.props.reusedShipment}
+            hideMap={this.props.hideMap}
+          />
+        </div>
         <div
           className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${
             styles.note_box
@@ -1082,7 +1092,6 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   getOffers: PropTypes.func.isRequired,
-  messages: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
@@ -1106,7 +1115,6 @@ ShipmentDetails.propTypes = {
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: [],
   reusedShipment: null,
   showRegistration: false,
   hideRegistration: null,

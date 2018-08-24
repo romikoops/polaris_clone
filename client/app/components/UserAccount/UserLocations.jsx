@@ -8,12 +8,11 @@ import { EditLocation } from './EditLocation'
 import { gradientTextGenerator } from '../../helpers'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
   <div
     key="addLocationButton"
     className={`${defaults.pointy} ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
-    onClick={() => toggleActiveView('editLocation')}
+    onClick={() => toggleActiveView('newLocation')}
   >
     <div
       className={`${styles['location-box']} ${

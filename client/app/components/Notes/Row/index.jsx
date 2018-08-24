@@ -2,18 +2,28 @@ import React from 'react'
 import PropTypes from '../../../prop-types'
 import NotesCard from '../Card'
 import styles from './index.scss'
+import adminStyles from '../../Admin/Admin.scss'
 
-const NotesRow = ({ notes, theme }) => {
+const NotesRow = ({
+  notes, theme, toggleNotesEdit, textStyle
+}) => {
   const noteCards = notes.map(n =>
     <NotesCard note={n} theme={theme} />)
+
   return (
-    <div className="layout-row flex-100 layout-wrap layout-align-center">
+    <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.notes_wrapper}`}>
       <div
-        className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+        className={`flex-100 layout-row layout-start-center ${adminStyles.sec_header}`}
       >
-        <p className={` ${styles.sec_header_text} flex-none`}> Notes </p>
+        <p className={`${adminStyles.sec_header_text} flex-none`}> Notes </p>
+        <div
+          className="flex-10 layout-row alyout-align-center-center pointy"
+          onClick={toggleNotesEdit}
+        >
+          <i className={`fa fa-plus clip pointy ${styles.plus}`} style={textStyle} />
+        </div>
       </div>
-      <div className="flex-100 layout-row layout-align-start-center">
+      <div className="flex-100 layout-row card_margin_right layout-wrap">
         {noteCards}
       </div>
 
@@ -23,12 +33,16 @@ const NotesRow = ({ notes, theme }) => {
 
 NotesRow.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.any),
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  toggleNotesEdit: PropTypes.func,
+  textStyle: PropTypes.objectOf(PropTypes.style)
 }
 
 NotesRow.defaultProps = {
   notes: [],
-  theme: {}
+  theme: {},
+  toggleNotesEdit: null,
+  textStyle: {}
 }
 
 export default NotesRow

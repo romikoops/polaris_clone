@@ -16,21 +16,17 @@ class Itinerary < ApplicationRecord
   has_many :map_data,  dependent: :destroy
 
   scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
-  scope :for_tenant, -> (tenant_id) { where(tenant_id: tenant_id) }
+  scope :for_tenant, ->(tenant_id) { where(tenant_id: tenant_id) }
   # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
   validate :must_have_stops
-
+  self.per_page = 12
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
       trips:    []
     }
-    trip_check = trips.find_by(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
-    if trip_check
-      p "REJECTED"
-      # return results
-    end
+
     trip = trips.create!(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     results[:trips] << trip
     stops.each do |stop|
@@ -74,53 +70,57 @@ class Itinerary < ApplicationRecord
         number_updated: 0
       }
     }
-
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
-
+    stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        trip_check = trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
-        if trip_check && !trip_check.layovers.empty?
+        trip = trips.create(
+            start_date:        journey_start,
+            end_date:          journey_end,
+            tenant_vehicle_id: tenant_vehicle_id,
+            closing_date:      closing_date
+          )
+        unless trip
           tmp_date += 1.day
-          stats[:trips][:number_updated] += 1
           next
         end
-        trip = trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         stops_in_order.each do |stop|
           if stop.index.zero?
-            data = {
+            stop_data << {
               eta:          nil,
               etd:          journey_start,
               stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
               stop_id:      stop.id,
-              closing_date: closing_date
+              closing_date: closing_date,
+              trip_id:      trip.id
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
-            data = {
+            stop_data << {
               eta:          journey_start,
               etd:          journey_start + 1.day,
               stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id:      stop.id
+              stop_id:      stop.id,
+              trip_id:      trip.id
             }
           end
-          layover = trip.layovers.create!(data)
-          results[:layovers] << layover
           stats[:layovers][:number_created] += 1
         end
       end
 
       tmp_date += 1.day
     end
+
+    Layover.create!(stop_data)
     { results: results, stats: stats }
   end
 
@@ -154,8 +154,8 @@ class Itinerary < ApplicationRecord
   end
 
   def test_pricings(data, user)
-   results = PriceCheckerService::PriceChecker.new(self.id, data, user).perform
-   results.map{|charge| {quote: charge[:quote].deconstruct_tree_into_schedule_charge, itinerary: self.as_options_json, service_level: charge[:service_level]} }
+    results = PriceCheckerService::PriceChecker.new(id, data, user).perform
+    results.map { |charge| { quote: charge[:quote].deconstruct_tree_into_schedule_charge, itinerary: as_options_json, service_level: charge[:service_level] } }
   end
 
   def self.ids_dedicated(user=nil)
@@ -243,17 +243,16 @@ class Itinerary < ApplicationRecord
         return
       end
       {
-        origin: stop_array[0].hub.lng_lat_array,
+        origin:      stop_array[0].hub.lng_lat_array,
         destination: stop_array[1].hub.lng_lat_array,
-        line: {
-          type: 'LineString',
-          id: "#{self.id}-#{stop_array[0].index}",
+        line:        {
+          type:        "LineString",
+          id:          "#{id}-#{stop_array[0].index}",
           coordinates: [stop_array[0].hub.lng_lat_array, stop_array[1].hub.lng_lat_array]
         }
       }
     end
   end
-
 
   def detailed_hash(stop_array, options={})
     origin = stop_array[0]
@@ -287,8 +286,8 @@ class Itinerary < ApplicationRecord
 
   def generate_map_data
     routes.each do |route_data|
-      route_data[:tenant_id] = self.tenant_id
-      self.map_data.find_or_create_by!(route_data)
+      route_data[:tenant_id] = tenant_id
+      map_data.find_or_create_by!(route_data)
     end
   end
 
@@ -336,7 +335,6 @@ class Itinerary < ApplicationRecord
     ", origin_hub_ids, destination_hub_ids)
   end
 
-
   def self.for_locations(shipment, trucking_data)
     if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
@@ -380,16 +378,16 @@ class Itinerary < ApplicationRecord
           include: {
             hub: {
               include: {
-                nexus:    { only: %i[id name] },
-                location: { only: %i[longitude latitude geocoded_address] }
+                nexus:    { only: %i(id name) },
+                location: { only: %i(longitude latitude geocoded_address) }
               },
-              only:    %i[id name]
+              only:    %i(id name)
             }
           },
-          only:    %i[id index]
+          only:    %i(id index)
         }
       },
-      only:    %i[id name mode_of_transport]
+      only:    %i(id name mode_of_transport)
     )
     as_json(new_options)
   end
