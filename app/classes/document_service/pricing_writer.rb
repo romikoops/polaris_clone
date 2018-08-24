@@ -29,7 +29,6 @@ module DocumentService
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
         carrier               = carrier(pricing)
-        binding.pry
         key_origin = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"]
         key_destination = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"]
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
@@ -121,15 +120,11 @@ module DocumentService
     end
 
     def carrier(pricing)
-      vehicle = transport_category(pricing[:transport_category_id]).vehicle
-      tenant_vehicle = vehicle.tenant_vehicles.find_by(tenant_id: pricing[:tenant_id])
+      tenant_vehicle = TenantVehicle.find(pricing[:tenant_vehicle_id])
       tenant_vehicle.carrier ? tenant_vehicle.carrier.name : nil
     end
 
     def location_and_aux_data(pricing, key1, key2)
-      binding.pry if !aux_data[:itineraries][pricing[:itinerary_id]] ||
-        !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1] ||
-        !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
       { location: aux_data[:nexuses][stop_id], aux_data: aux_data }
@@ -164,9 +159,10 @@ module DocumentService
     end
 
     def get_tenant_pricings_by_mot(tenant_id, mot)
-      itinerary_ids = Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).limit(10).ids
+      itinerary_ids = Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).ids
       Pricing.where(itinerary_id: itinerary_ids).map(&:as_json)
     end
+
     def get_tenant_pricings(tenant_id)
       Pricing.where(tenant_id: tenant_id).map(&:as_json)
     end
