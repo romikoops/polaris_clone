@@ -14,10 +14,11 @@ function GreyBox ({
   flexGtLg,
   flexMd,
   padding,
-  fullWidth
+  fullWidth,
+  borderStyle
 }) {
   return (
-    <div className={`${adminStyles.border_box} ${wrapperClassName} 
+    <div className={`${borderStyle || adminStyles.border_box} ${wrapperClassName} 
       ${flex === 0 ? 'flex' : (`flex-${flex}`)}
       ${flexGtLg === 0 ? '' : (`flex-gt-lg-${flexGtLg}`)}
       ${flexMd === 0 ? '' : (`flex-md-${flexMd}`)}
@@ -48,7 +49,8 @@ GreyBox.propTypes = {
   fullWidth: PropTypes.bool,
   isBox: PropTypes.bool,
   padding: PropTypes.bool,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  borderStyle: PropTypes.string,
   content: PropTypes.node,
   titleAction: PropTypes.node,
   wrapperClassName: PropTypes.string,
@@ -63,6 +65,8 @@ GreyBox.defaultProps = {
   isBox: false,
   padding: false,
   wrapperClassName: '',
+  title: '',
+  borderStyle: '',
   contentClassName: '',
   content: [''],
   titleAction: false

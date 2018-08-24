@@ -136,9 +136,6 @@ module DataInserter
           
           @data.each do |hub_data|
             @hub_data = hub_data[:data]
-            #  if @hub_data[:port].include?('Brisbane')
-            #   byebug
-            #  end
             @existing_hub_data = find_port_data
             find_or_create_hub
           end

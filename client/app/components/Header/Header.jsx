@@ -6,7 +6,14 @@ import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-import { appActions, messagingActions, adminActions, authenticationActions } from '../../actions'
+import {
+  appActions,
+  messagingActions,
+  adminActions,
+  authenticationActions,
+  shipmentActions
+} from '../../actions'
+import { FlashMessages } from '../FlashMessages/FlashMessages'
 
 class Header extends Component {
   constructor (props) {
@@ -17,6 +24,7 @@ class Header extends Component {
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
+    this.clearErrors = this.clearErrors.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
   }
@@ -68,6 +76,10 @@ class Header extends Component {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
   }
+  clearErrors () {
+    const { shipmentDispatch, currentStage } = this.props
+    shipmentDispatch.clearErrors(currentStage)
+  }
   render () {
     const {
       user,
@@ -79,7 +91,9 @@ class Header extends Component {
       scrollable,
       noMessages,
       component,
-      isLanding
+      isLanding,
+      error,
+      currentStage
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -140,6 +154,7 @@ class Header extends Component {
         toggleShowLogin={this.toggleShowLogin}
       />
     )
+    const hasErrors = error && error[currentStage] && error[currentStage].length > 0
 
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
@@ -198,6 +213,10 @@ class Header extends Component {
             }
           </div>
         </div>
+        { hasErrors
+          ? <div className={`flex-none layout-row ${styles.error_messages}`}>
+            <FlashMessages messages={error[currentStage]} onClose={this.clearErrors} />
+          </div> : '' }
       </div>
     )
   }
@@ -223,9 +242,12 @@ Header.propTypes = {
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
   authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  shipmentDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   noMessages: PropTypes.bool,
   component: PropTypes.node,
-  showModal: PropTypes.bool
+  showModal: PropTypes.bool,
+  error: PropTypes.objectOf(PropTypes.any),
+  currentStage: PropTypes.string
 }
 
 Header.defaultProps = {
@@ -245,18 +267,21 @@ Header.defaultProps = {
   scrollable: false,
   noMessages: false,
   component: null,
-  showModal: false
+  showModal: false,
+  error: null,
+  currentStage: 'stage1'
 }
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, shipment, app, messaging
+    authentication, tenant, shipment, app, messaging, bookingData
   } = state
   const {
     user, loggedIn, loggingIn, registering, loginAttempt, showModal
   } = authentication
   const { unread, messages } = messaging
   const { currencies } = app
+  const { error, currentStage } = bookingData
 
   return {
     user,
@@ -269,7 +294,9 @@ function mapStateToProps (state) {
     currencies,
     unread,
     messages,
-    showModal
+    showModal,
+    error,
+    currentStage
   }
 }
 function mapDispatchToProps (dispatch) {
@@ -277,6 +304,7 @@ function mapDispatchToProps (dispatch) {
     appDispatch: bindActionCreators(appActions, dispatch),
     authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
     messageDispatch: bindActionCreators(messagingActions, dispatch)
   }
 }
