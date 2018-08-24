@@ -6,7 +6,6 @@ class Admin::PricingsController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id, mode_of_transport: params[:mot])
     detailed_itineraries = itineraries.paginate(page: params[:page]).map(&:as_pricing_json)
@@ -16,7 +15,6 @@ class Admin::PricingsController < Admin::AdminBaseController
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
       numItineraryPages:   itineraries.count / 12,
-      tenant_pricings:     @tenant_pricings,
       transportCategories: @transports,
       lastUpdate:          last_updated
     )
@@ -44,7 +42,6 @@ class Admin::PricingsController < Admin::AdminBaseController
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
       numItineraryPages:   itineraries.count / 12,
-      tenant_pricings:     @tenant_pricings,
       transportCategories: @transports,
       lastUpdate:          last_updated
     )

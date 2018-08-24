@@ -45,7 +45,6 @@ module WritingTool
   def add_worksheet_to_workbook(workbook, header_text, worksheet_name=nil)
     header_format = workbook.add_format
     header_format.set_bold
-    # byebug
     worksheet = if worksheet_name
                   workbook.add_worksheet(worksheet_name)
                 else

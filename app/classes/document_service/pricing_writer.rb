@@ -122,14 +122,14 @@ module DocumentService
 
     def carrier(pricing)
       vehicle = transport_category(pricing[:transport_category_id]).vehicle
-      tenant_vehicle = vehicle.tenant_vehicles.where(tenant_id: pricing[:tenant_id])
+      tenant_vehicle = vehicle.tenant_vehicles.find_by(tenant_id: pricing[:tenant_id])
       tenant_vehicle.carrier ? tenant_vehicle.carrier.name : nil
     end
 
     def location_and_aux_data(pricing, key1, key2)
-      if !aux_data[:itineraries][pricing[:itinerary_id]] || !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1] || !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
-        # byebug
-      end
+      binding.pry if !aux_data[:itineraries][pricing[:itinerary_id]] ||
+        !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1] ||
+        !aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
       { location: aux_data[:nexuses][stop_id], aux_data: aux_data }
