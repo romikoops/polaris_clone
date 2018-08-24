@@ -2,12 +2,19 @@ variables:
   POSTGRES_DB: imcr_test
   DATABASE_URL: postgis://postgres:@postgresql/imcr_test
   REDIS_URL: "redis://redis:6379"
+  BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
 
 pronto:
   stage: test
   image: registry.gitlab.com/itsmycargo/docker-images/pronto:latest
   script:
     - scripts/pronto
+
+charge_calculator:
+  stage: test
+  image: ruby:2.5
+  script:
+    - "cd lib/charge_calculator; bundle; bundle exec rspec"
 
 rspec:
   stage: test
