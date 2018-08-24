@@ -112,6 +112,7 @@ export class ShipmentContactForm extends Component {
     this.contactForm.reset()
     this.setState({ setContactAttempted: false })
   }
+
   editSubmit (contactData) {
     const { shipmentDispatch } = this.props
 

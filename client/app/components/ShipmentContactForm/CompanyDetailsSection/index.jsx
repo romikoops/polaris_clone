@@ -3,9 +3,10 @@ import PropTypes from '../../../prop-types'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import styles from '../ShipmentContactForm.scss'
 import IconLable from '../IconLable'
+import { invalid } from 'moment';
 
 export default function CompanyDetailsSection ({
-  theme, contactData, setContactAttempted, checkValid, formErrors
+  theme, contactData, setContactAttempted, checkValid
 }) {
   return (
     <div className="flex-100 layout-row layout-wrap">
@@ -136,12 +137,10 @@ CompanyDetailsSection.propTypes = {
   theme: PropTypes.theme,
   contactData: PropTypes.objectOf(PropTypes.any).isRequired,
   setContactAttempted: PropTypes.bool,
-  checkValid: PropTypes.func.isRequired,
-  formErrors: PropTypes.bool
+  checkValid: PropTypes.func.isRequired
 }
 
 CompanyDetailsSection.defaultProps = {
   theme: null,
   setContactAttempted: false,
-  formErrors: false
 }
