@@ -60,7 +60,7 @@ Tab.propTypes = {
 
 Tab.defaultProps = {
   onClick: null,
-  extraClick: null,
+  extraClick: () => console.log(''),
   tabIndex: 0,
   linkClassName: '',
   mot: '',
