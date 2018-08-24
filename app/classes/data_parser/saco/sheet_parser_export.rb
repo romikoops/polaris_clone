@@ -25,7 +25,8 @@ module DataParser
           "HAM" => "Hamburg",
           "RTM" => "Rotterdam",
           "ANR" => "Antwerp",
-          "FXT" => "Felixstowe"
+          "FXT" => "Felixstowe",
+          "WVN" => "Wilhelmshaven"
         }
       end
 
@@ -146,7 +147,7 @@ module DataParser
         when "HAM"
           "Hamburg Port"
         when "WVN"
-          "Wilhelmhaven Port"
+          "Wilhelmshaven Port"
         when "FXT"
           "Felixstowe Port"
         end
@@ -222,7 +223,7 @@ module DataParser
                    rescue ArgumentError
                      nil
                    end
-       
+
         check2 = row[:country]
         check3 = row[:origins]
 
@@ -288,7 +289,7 @@ module DataParser
           end
         end
         row_hashes
-    end
+      end
     end
   end
 end

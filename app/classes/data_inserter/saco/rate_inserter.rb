@@ -90,7 +90,7 @@ module DataInserter
             @itinerary.stops.order(:index),
             [transit_time],
             DateTime.now,
-            DateTime.now + 8.weeks,
+            DateTime.now + 1.week,
             [2, 5],
             @tenant_vehicle.id,
             4
