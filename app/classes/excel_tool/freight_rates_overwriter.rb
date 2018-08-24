@@ -360,7 +360,7 @@ module ExcelTool
             transport_category: transport_category, 
             tenant: tenant, 
             user: user, 
-            tenant_vehicle: aux_data[it_key][:tenant_vehicle]
+            tenant_vehicle_id: aux_data[it_key][:tenant_vehicle].id
           )
           pricing_details = new_pricing_data.delete(:data)
           pricing_exceptions = new_pricing_data.delete(:exceptions)
