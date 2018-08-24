@@ -72,23 +72,24 @@ class Tenant < ApplicationRecord
 
   def test_pricings(load_type, expected_values, pickup, dropoff, import, export)
     DataValidator::ItineraryPriceValidator.new(
-      load_type: load_type,
-      expected_values: expected_values,
-      tenant: self.id,
+      load_type:        load_type,
+      expected_values:  expected_values,
+      tenant:           id,
       has_pre_carriage: pickup,
-      has_on_carriage: dropoff,
-      import: import,
-      export: export
+      has_on_carriage:  dropoff,
+      import:           import,
+      export:           export
     ).perform
   end
 
-  def autogenerate_all_schedules(start_date, end_date, ordinals)
+  def autogenerate_all_schedules(args)
+    start_date, end_date, ordinals = args.values_at(:start_date, :end_date, :ordinals)
     itineraries.each do |itinerary|
       tenant_vehicle_ids = itinerary.trips.pluck(:tenant_vehicle_id).uniq
       stops_in_order = itinerary.stops.order(:index)
       tenant_vehicle_ids.each do |tv_id|
-         ex_trip = itinerary.trips.find_by(tenant_vehicle_id: tv_id)
-         steps_in_order = [(ex_trip.end_date - ex_trip.start_date).to_i]
+        ex_trip = itinerary.trips.find_by(tenant_vehicle_id: tv_id)
+        steps_in_order = [(ex_trip.end_date - ex_trip.start_date).to_i]
         itinerary.generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinals, tv_id, 4)
       end
     end

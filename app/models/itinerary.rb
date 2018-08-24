@@ -78,19 +78,22 @@ class Itinerary < ApplicationRecord
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
-
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
         begin
-          trip = trips.create(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
+          trip = trips.create!(
+            start_date:        journey_start,
+            end_date:          journey_end,
+            tenant_vehicle_id: tenant_vehicle_id,
+            closing_date:      closing_date
+          )
         rescue ActiveModel::ValidationError
           tmp_date += 1.day
           next
         end
-
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         stops_in_order.each do |stop|

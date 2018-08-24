@@ -4,8 +4,10 @@ class Trip < ApplicationRecord
   has_many :layovers, dependent: :destroy
   belongs_to :tenant_vehicle
   belongs_to :itinerary
-  validates :itinerary_id, uniqueness: { scope:   %i(start_date end_date closing_date tenant_vehicle_id),
-    message: "Trip must be unique to add." }
+  validates :itinerary_id, uniqueness: { 
+    scope:   %i(start_date end_date closing_date tenant_vehicle_id),
+    message: "Trip must be unique to add."
+  }
 
   scope :lastday_today, -> { where("closing_date > ?", Date.today) }
   def self.update_times
