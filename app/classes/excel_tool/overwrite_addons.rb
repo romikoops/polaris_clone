@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExcelTool
   class OverwriteAddons < ExcelTool::BaseTool
     attr_reader :user
@@ -31,7 +33,7 @@ module ExcelTool
           end
         end
 
-       update_result_and_stats_fees(addons, tenant_vehicles, hub)
+        update_result_and_stats_fees(addons, tenant_vehicles, hub)
       end
       { stats: stats, results: results }
     end
@@ -61,7 +63,8 @@ module ExcelTool
         fee:             "FEE",
         mot:             "MOT",
         fee_code:        "FEE_CODE",
-        cargo_class:       "LOAD_TYPE",
+        carrier:         "CARRIER",
+        cargo_class:     "LOAD_TYPE",
         direction:       "DIRECTION",
         currency:        "CURRENCY",
         rate_basis:      "RATE_BASIS",
@@ -80,24 +83,22 @@ module ExcelTool
         range_max:       "RANGE_MAX",
         service_level:   "SERVICE_LEVEL",
         destination:     "DESTINATION",
-        # watershed:       "WATERSHED",
-        # extra:           "EXTRA",
         title:           "TITLE",
         text_array:      "TEXT_ARRAY",
         read_more:       "READ_MORE",
         accept_text:     "ACCEPT_TEXT",
         decline_text:    "DECLINE_TEXT",
-        additional_info:    "ADDITIONAL_INFO",
-        addon_type:    "ADDON_TYPE"
+        additional_info: "ADDITIONAL_INFO",
+        addon_type:      "ADDON_TYPE"
       )
     end
 
     def hub_type_name
       {
-        'ocean' => 'Port',
-        'air' => 'Airport',
-        'rail' => 'Railyard',
-        'truck' => 'Depot'
+        "ocean" => "Port",
+        "air"   => "Airport",
+        "rail"  => "Railyard",
+        "truck" => "Depot"
       }
     end
 
@@ -107,7 +108,6 @@ module ExcelTool
           "general" => {}
         }
       }
-      
     end
 
     def _customs
@@ -127,13 +127,14 @@ module ExcelTool
       TenantVehicle.find_by(
         tenant_id:         user.tenant_id,
         mode_of_transport: row[:mot].downcase,
-        name:              row[:service_level]
+        name:              row[:service_level],
+        carrier:           Carrier.find_by_name(row[:carrier])
       ).try(:id)
     end
 
-    def create_vehicle_from_name(row, name = nil)
+    def create_vehicle_from_name(row, name=nil)
       name ||= row[:service_level]
-      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id).id
+      Vehicle.create_from_name(name, row[:mot].downcase, user.tenant_id, row[:carrier]).id
     end
 
     def build_hash(rows, addons, hub)
@@ -142,12 +143,12 @@ module ExcelTool
       rows.each do |row|
         if row[:destination]
           counterpart_hub = find_hub(row)
-          if !counterpart_hub
+          unless counterpart_hub
             # byebug
             puts row
           end
           counterpart_hub_id = counterpart_hub.id
-          addons[counterpart_hub_id] = {} if !addons[counterpart_hub_id]
+          addons[counterpart_hub_id] = {} unless addons[counterpart_hub_id]
           counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] = counterpart_hub_id
         end
         if row[:service_level]
@@ -158,76 +159,53 @@ module ExcelTool
           tenant_vehicle_id = "general"
         end
 
-        if !tenant_vehicles["standard-#{row[:mot].downcase}"]
+        unless tenant_vehicles["standard-#{row[:mot].downcase}"]
           tenant_vehicles["standard-#{row[:mot].downcase}"] = tenant_vehicle_id(row)
           tenant_vehicles["standard-#{row[:mot].downcase}"] ||= create_vehicle_from_name(row, "standard")
         end
         counterpart_id = counterpart_hub_id || "general"
-        addons[counterpart_id][tenant_vehicle_id] = {} if ! addons[counterpart_id][tenant_vehicle_id]
-        addons[counterpart_id][tenant_vehicle_id][row[:direction].downcase] = {} if ! addons[counterpart_id][tenant_vehicle_id][row[:direction].downcase]
+        addons[counterpart_id][tenant_vehicle_id] = {} unless addons[counterpart_id][tenant_vehicle_id]
+        addons[counterpart_id][tenant_vehicle_id][row[:direction].downcase] = {} unless addons[counterpart_id][tenant_vehicle_id][row[:direction].downcase]
         populate_addons_for_cargo_class(addons, row, tenant_vehicle_id, hub, counterpart_id)
       end
-      hash_builder = {addons: addons}
-      # hash_builder = expand_customs_addons(addons, rows, hub)
-      { addons: hash_builder[:addons],  tenant_vehicles: tenant_vehicles, counterparts: counterparts }
+      hash_builder = { addons: addons }
+      { addons: hash_builder[:addons], tenant_vehicles: tenant_vehicles, counterparts: counterparts }
     end
-    
-    # def expand_customs_addons(addons, rows, hub, type)
-    #   addons.each do |hub_key, tv_ids|
-    #     tv_ids.keys.each do |tv_id|
-    #       %w(export import).each do |direction|
-    #         addons[hub_key][tv_id][direction] = {} if !addons[hub_key][tv_id][direction]
-    #         %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
-    #           addons[hub_key][tv_id][direction][lt] = {} if !addons[hub_key][tv_id][direction][lt]
-    #           addons[hub_key][tv_id][direction][lt][type] = addons_and_customs_builder(direction,
-    #             rows[0][:mot].downcase, hub, lt, tv_id, hub_key, type)
-    #         end
-    #       end
-    #     end
-    #   end
-    #   { addons: addons }
-    # end
+
     def populate_addons_for_cargo_class(addons, row, tv_id, hub, counter_id)
-      if row[:cargo_class].downcase == 'fcl'
-        cargo_classes = %w[fcl_20 fcl_40 fcl_40_hq]
-      else
-        cargo_classes = [row[:cargo_class].downcase]
-      end
+      cargo_classes = if row[:cargo_class].casecmp("fcl").zero?
+                        %w(fcl_20 fcl_40 fcl_40_hq)
+                      else
+                        [row[:cargo_class].downcase]
+                      end
       direction = row[:direction].downcase
       cargo_classes.each do |lt|
-        addons[counter_id][tv_id][direction][lt] = {} if !addons[counter_id][tv_id][direction][lt]
+        addons[counter_id][tv_id][direction][lt] = {} unless addons[counter_id][tv_id][direction][lt]
         addons[counter_id][tv_id][direction][lt][row[:addon_type]] = addons_and_customs_builder(
-          hub, lt, tv_id, counter_id, row)
+          hub, lt, tv_id, counter_id, row
+        )
       end
-      # addons[counter_id][tv_id][row[:direction.downcase]]
-      # addons.each do |hub_key, tv_ids|
-      #   [tv_id].keys.each do |tv_id|
-      #     %w(export import).each do |direction|
-      #       addons[hub_key][tv_id][direction] = {} if !addons[hub_key][tv_id][direction]
-            
-      #     end
-      #   end
-      # end
+
       { addons: addons }
     end
 
     def addons_and_customs_builder(hub, lt, tv_id, hub_key, row)
       {
-        "fees"            => {},
-        "direction"         => row[:direction].downcase,
-        "mode_of_transport" => row[:mot].downcase,
-        "tenant_id"         => hub.tenant_id,
-        "hub_id"            => hub.id,
-        "cargo_class"         => lt,
-        "tenant_vehicle_id" => tv_id != "general" ? tv_id : nil,
-        "counterpart_hub_id" => hub_key != "general" ? hub_key : nil,
-        "addon_type" => row[:addon_type].downcase,
-        "title" => row[:title],
-        "text" => text_object_from_csv(row[:text_array]),
-        "read_more" => row[:read_more],
+        "fees"                 => {},
+        "direction"            => row[:direction].downcase,
+        "mode_of_transport"    => row[:mot].downcase,
+        "tenant_id"            => hub.tenant_id,
+        "hub_id"               => hub.id,
+        "cargo_class"          => lt,
+        "tenant_vehicle_id"    => tv_id != "general" ? tv_id : nil,
+        "counterpart_hub_id"   => hub_key != "general" ? hub_key : nil,
+        "addon_type"           => row[:addon_type].downcase,
+        "title"                => row[:title],
+        "text"                 => text_object_from_csv(row[:text_array]),
+        "read_more"            => row[:read_more],
         "additional_info_text" => row[:additional_info],
-        "addon_type" => row[:addon_type]
-  
+        "addon_type"           => row[:addon_type]
+
       }
     end
 
@@ -270,22 +248,21 @@ module ExcelTool
 
     def update_hashes(row, addons, tenant_vehicles, counterparts)
       charge = build_charge(row)
-        addons = addon_load_setter(
-          addons,
-          charge,
-          row[:cargo_class].downcase,
-          row[:direction].downcase,
-          tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
-          row[:mot],
-          counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general",
-          row[:addon_type]
-        )
-        # attach_text(row, addons, tenant_vehicles, counterparts)
+      addons = addon_load_setter(
+        addons,
+        charge,
+        row[:cargo_class].downcase,
+        row[:direction].downcase,
+        tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general",
+        row[:mot],
+        counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general",
+        row[:addon_type]
+      )
     end
 
     def attach_text(row, addons, tenant_vehicles, counterparts)
       tv_id =  tenant_vehicles["#{row[:service_level]}-#{row[:mot].downcase}"] || "general"
-      cph_id =  counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
+      cph_id = counterparts["#{row[:destination]} #{hub_type_name[row[:mot].downcase]}"] || "general"
       dir = row[:direction].downcase
       lt = row[:cargo_class].downcase
       add_on = addons[tv_id][dir][lt]
@@ -294,33 +271,33 @@ module ExcelTool
       v["read_more"] = row[:read_more]
       v["additional_info_text"] = row[:additional_info]
       v["addon_type"] = row[:addon_type]
-
     end
+
     def text_object_from_csv(str)
       if str.is_a? Array
-        return str.map{|s| {text: s}}
+        str.map { |s| { text: s } }
       elsif str.is_a?(String) && str.include?('\", \"')
-        return str.map {|s| {text: s.chomp}}
-      elsif str.is_a?(String) 
-        return [{text: str}]
+        str.map { |s| { text: s.chomp } }
+      elsif str.is_a?(String)
+        [{ text: str }]
       end
     end
 
     def update_result_and_stats_fees(addons, tenant_vehicles, hub)
-      addons.each do |hub_key, tv_ids|
-        tv_ids.each do |tv_id, directions|
+      addons.each do |_hub_key, tv_ids|
+        tv_ids.each do |_tv_id, directions|
           directions.each do |direction_key, load_type_values|
             load_type_values.each do |lt, type_object|
               type_object.each do |type, obj|
-                obj["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{obj["mode_of_transport"]}"]
-                
+                obj["tenant_vehicle_id"] ||= tenant_vehicles["standard-#{obj['mode_of_transport']}"]
+
                 lc = hub.addons.find_by(mode_of_transport: obj["mode_of_transport"], cargo_class: lt,
                   direction: direction_key, tenant_vehicle_id: obj["tenant_vehicle_id"],
                   counterpart_hub_id: obj["counterpart_hub_id"], addon_type: type)
                 if lc
                   lc.update_attributes(obj)
                 else
-                  
+
                   hub.addons.create!(obj)
                 end
                 results[:charges] << obj
@@ -340,7 +317,6 @@ module ExcelTool
     end
 
     def pushable_charg(charge)
-      
       {
         currency:   charge[:currency],
         rate_basis: charge[:rate_basis],
@@ -352,12 +328,12 @@ module ExcelTool
 
     def expanded_charge(charge)
       {
-        effective_date: charge[:effective_date],
+        effective_date:  charge[:effective_date],
         expiration_date: charge[:expiration_date],
-        currency:   charge[:currency],
-        rate_basis: charge[:rate_basis],
-        min:        charge[:min],
-        range:      [
+        currency:        charge[:currency],
+        rate_basis:      charge[:rate_basis],
+        min:             charge[:min],
+        range:           [
           {
             currency: charge[:currency],
             min:      charge[:range_min],
@@ -365,11 +341,12 @@ module ExcelTool
             rate:     rate_value(charge)
           }
         ],
-        key:        charge[:key],
-        name:       charge[:name]
+        key:             charge[:key],
+        name:            charge[:name]
       }
     end
-    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id)
+
+    def set_range_fee(all_charges, charge, load_type, direction, tenant_vehicle_id, _mot, counterpart_hub_id)
       existing_charge = all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]]
       if existing_charge && existing_charge[:range]
         all_charges[counterpart_hub_id][tenant_vehicle_id][direction][load_type]["fees"][charge[:key]][:range] << pushable_charg(charge)
@@ -384,14 +361,14 @@ module ExcelTool
       debug_message(charge)
       debug_message(all_charges)
 
-      if counterpart_hub_id == "general" && tenant_vehicle_id != 'general'
+      if counterpart_hub_id == "general" && tenant_vehicle_id != "general"
         all_charges.keys.each do |ac_key|
           if all_charges[ac_key][tenant_vehicle_id]
             set_general_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, ac_key, type)
           end
         end
 
-      elsif counterpart_hub_id == "general" && tenant_vehicle_id == 'general'
+      elsif counterpart_hub_id == "general" && tenant_vehicle_id == "general"
         all_charges.keys.each do |ac_key|
           all_charges[ac_key].keys.each do |tv_key|
             if all_charges[ac_key][tv_key]
@@ -402,7 +379,7 @@ module ExcelTool
 
       else
         if all_charges[counterpart_hub_id][tenant_vehicle_id]
-         set_general_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
+          set_general_addon(all_charges, charge, load_type, direction, tenant_vehicle_id, mot, counterpart_hub_id, type)
         end
       end
       all_charges
@@ -439,6 +416,5 @@ module ExcelTool
       end
       all_charges
     end
-
   end
 end
