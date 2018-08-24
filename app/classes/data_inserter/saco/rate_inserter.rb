@@ -68,7 +68,6 @@ module DataInserter
               tenant: @tenant
             )
           create_stops(itinerary_hash)
-          binding.pry if @itinerary.stops.length < 2
           @itinerary.save!
         end
 
@@ -79,7 +78,6 @@ module DataInserter
               if hub.nil?
                 hub = @tenant.hubs.where("name ILIKE ?", "%#{stop_name}%").first
               end
-              binding.pry if hub.nil?
               @itinerary.stops << @itinerary.stops.find_by(hub_id: hub.id, index: i) || Stop.new(hub_id: hub.id, index: i) if hub
               
             end
@@ -131,7 +129,6 @@ module DataInserter
               effective_date: DateTime.now,
               expiration_date: DateTime.now + 365
             }
-            binding.pry if !@transport_category
             pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
             pricing_details = [@rate]
             

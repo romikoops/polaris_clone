@@ -48,7 +48,6 @@ module ExcelTool
 
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
-      binding.pry if aux_data[pricing_key][:stops_in_order].length != 2
       if !aux_data[pricing_key][:stops_in_order].empty?
         itinerary.stops << aux_data[pricing_key][:stops_in_order]
         itinerary.save!

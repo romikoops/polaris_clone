@@ -42,10 +42,6 @@ module DataParser
         end
       end
 
-      def find_or_create_hub
-        # byebug
-      end
-
       def geocode_port_data(country_key, port_object)
         port_location = Location.geocoded_location("#{port_object[:name]}, #{country_key}")
         port_nexus = Location.from_short_name("#{port_object[:name]} ,#{country_key}", 'nexus')
@@ -67,7 +63,6 @@ module DataParser
             port_object.deep_symbolize_keys!
             existing_port_data = find_port_data(country_key, port_object)
             next if !existing_port_data
-            find_or_create_hub
           end
         end
         { stats: stats, results: results }

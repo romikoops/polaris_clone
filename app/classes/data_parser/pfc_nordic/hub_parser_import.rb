@@ -84,7 +84,6 @@ module DataParser
           row_hashes = []
           @sheet.each_with_index do |_row, i|
             row_index = i + 1
-            # byebug
             # "Hafen" is unique anchor that differentiates the data
             # of the individual countries.
             puts @sheet.cell("B", row_index)
