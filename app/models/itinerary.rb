@@ -79,14 +79,13 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        begin
-          trip = trips.create!(
+        trip = trips.create(
             start_date:        journey_start,
             end_date:          journey_end,
             tenant_vehicle_id: tenant_vehicle_id,
             closing_date:      closing_date
           )
-        rescue ActiveModel::ValidationError
+        unless trip
           tmp_date += 1.day
           next
         end
