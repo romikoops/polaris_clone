@@ -85,7 +85,7 @@ class Itinerary < ApplicationRecord
             tenant_vehicle_id: tenant_vehicle_id,
             closing_date:      closing_date
           )
-        unless trip
+        if trip.nil?
           tmp_date += 1.day
           next
         end
