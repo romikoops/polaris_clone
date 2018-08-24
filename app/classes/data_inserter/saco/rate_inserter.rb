@@ -8,8 +8,6 @@ module DataInserter
 
       def post_initialize(args)
         @rates = args[:rates]
-        # @counterpart_hub = args[:counterpart_hub]
-        # @counterpart_nexus = args[:counterpart_hub].split(' Port').first
         @tenant = args[:tenant]
         @direction = args[:direction]
         @cargo_class = args[:cargo_class]
@@ -70,9 +68,6 @@ module DataInserter
               tenant: @tenant
             )
           create_stops(itinerary_hash)
-          if @itinerary.stops.length < 2
-            # byebug
-          end
           @itinerary.save!
         end
 
@@ -83,15 +78,8 @@ module DataInserter
               if hub.nil?
                 hub = @tenant.hubs.where("name ILIKE ?", "%#{stop_name}%").first
               end
-              if hub.nil?
-                # byebug
-              end
-            if hub
-              stop = @itinerary.stops.find_by(hub_id: hub.id, index: i)
-              if stop.nil?
-                stop = Stop.new(hub_id: hub.id, index: i)
-              end
-              @itinerary.stops << stop
+              @itinerary.stops << @itinerary.stops.find_by(hub_id: hub.id, index: i) || Stop.new(hub_id: hub.id, index: i) if hub
+              
             end
           end
         end
@@ -141,23 +129,20 @@ module DataInserter
               effective_date: DateTime.now,
               expiration_date: DateTime.now + 365
             }
-            if !@transport_category
-              byebug
-            end
             pricing_to_update = @itinerary.pricings.find_or_create_by!(default_pricing_values)
             pricing_details = [@rate]
             
             pricing_details.each do |pricing_detail|
-              # puts pricing_detail
+
               shipping_type = pricing_detail.delete(:code)
               currency = pricing_detail.delete(:currency)
               cargo_class = pricing_detail.delete(:cargo_class)
               pricing_detail_params = pricing_detail.merge(shipping_type: shipping_type, tenant: @tenant)
               pricing_detail = pricing_to_update.pricing_details.find_or_create_by(shipping_type: shipping_type, tenant: @tenant)
               pricing_detail.update!(pricing_detail_params)
-              pricing_detail.update!(currency_name: currency) # , external_updated_at: external_updated_at)
+              pricing_detail.update!(currency_name: currency) 
             end
-              # awesome_print pricing_to_update.as_json
+
           end
         end
 

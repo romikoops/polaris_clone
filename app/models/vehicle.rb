@@ -3,6 +3,7 @@
 class Vehicle < ApplicationRecord
   has_many :transport_categories
   has_many :itineraries
+  has_many :tenant_vehicles
 
   validates :name,
     presence:   true,

@@ -2,8 +2,8 @@
 
 include ExcelTools
 include MongoTools
-# subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w[saco-sandbox]
+
+subdomains = %w[saco saco-sandbox]
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -15,11 +15,11 @@ subdomains.each do |sub|
   # # tenant.trucking_pricings.delete_all
   # tenant.hubs.destroy_all
   # tenant.nexuses.destroy_all
-  # # # # #   # # # # #Overwrite hubs from excel sheet
-  # puts '# Overwrite hubs from excel sheet'
-  # hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
-  # req = { 'xlsx' => hubs }
-  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  # # # #   # # # # #Overwrite hubs from excel sheet
+  puts '# Overwrite hubs from excel sheet'
+  hubs = File.open("#{Rails.root}/db/dummydata/saco/saco__hubs.xlsx")
+  req = { 'xlsx' => hubs }
+  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
   puts '# Overwrite pricings and rates from excel sheet'
   public_pricings = File.open("#{Rails.root}/db/dummydata/saco/saco__freight_rates.xlsx")
   req = { 'xlsx' => public_pricings }
