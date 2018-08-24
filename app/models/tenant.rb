@@ -82,7 +82,8 @@ class Tenant < ApplicationRecord
     ).perform
   end
 
-  def autogenerate_all_schedules(start_date, end_date, ordinals)
+  def autogenerate_all_schedules(args)
+    start_date, end_date, ordinals = args.values_at(:start_date, :end_date, :ordinals)
     itineraries.each do |itinerary|
       tenant_vehicle_ids = itinerary.trips.pluck(:tenant_vehicle_id).uniq
       stops_in_order = itinerary.stops.order(:index)
