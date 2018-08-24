@@ -5,7 +5,7 @@ import { gradientBorderGenerator, gradientTextGenerator, switchIcon } from '../.
 
 export default function Tab (props) {
   const {
-    linkClassName, isActive, onClick, tabIndex, tabTitle, theme, icon, mot
+    linkClassName, isActive, onClick, tabIndex, tabTitle, theme, icon, mot, extraClick
   } = props
 
   const borderGradient =
@@ -29,6 +29,7 @@ export default function Tab (props) {
           className={`layout-row layout-align-${icon || mot ? 'center' : 'space-around'}-end ${linkClassName} ${isActive ? 'active' && styles.active : styles.disabled}`}
           onClick={(event) => {
             event.preventDefault()
+            extraClick()
             onClick(tabIndex)
           }}
         >
@@ -47,6 +48,7 @@ export default function Tab (props) {
 
 Tab.propTypes = {
   onClick: PropTypes.func,
+  extraClick: PropTypes.func,
   tabIndex: PropTypes.number,
   isActive: PropTypes.bool,
   linkClassName: PropTypes.string,
@@ -58,6 +60,7 @@ Tab.propTypes = {
 
 Tab.defaultProps = {
   onClick: null,
+  extraClick: null,
   tabIndex: 0,
   linkClassName: '',
   mot: '',

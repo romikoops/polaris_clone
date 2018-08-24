@@ -28,7 +28,7 @@ module DocumentService
         current_origin        = origin_aux_data[:location]
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
-
+        carrier               = carrier(pricing)
         key_origin = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"]
         key_destination = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"]
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
@@ -42,7 +42,7 @@ module DocumentService
         aux_data = vehicle_hash[:aux_data]
 
         pricing[:data].each do |key, fee|
-          column = 3
+          column = 2
           if fee[:range] && !fee[:range].empty?
             fee[:range].each do |range_fee|
               data = writeable_data(current_itinerary,
@@ -52,6 +52,7 @@ module DocumentService
                 current_vehicle,
                 key,
                 fee,
+                carrier,
                 range_fee)
               data << range_fee[:min]
               data << range_fee[:max]
@@ -65,7 +66,8 @@ module DocumentService
               current_transit_time,
               current_vehicle,
               key,
-              fee)
+              fee,
+              carrier)
             @worksheet = write_to_sheet(worksheet, row, column, data)
             row += 1
           end
@@ -74,24 +76,7 @@ module DocumentService
         next unless pricing[:exceptions] && !pricing[:exceptions].empty?
         pricing[:exceptions].each do |ex_pricing|
           ex_pricing[:data].each do |key, fee|
-            data = [
-              "TRUE",
-              nil,
-              current_itinerary.mode_of_transport,
-              pricing[:load_type],
-              ex_pricing[:effective_date],
-              ex_pricing[:expiration_date],
-              current_origin.name,
-              current_destination.name,
-              current_transit_time,
-              pricing[:wm_rate],
-              current_vehicle.name,
-              key,
-              fee[:currency],
-              fee[:rate_basis],
-              fee[:min],
-              fee[:rate]
-            ]
+            data = ["TRUE", nil, current_itinerary.mode_of_transport, pricing[:load_type], ex_pricing[:effective_date], ex_pricing[:expiration_date], current_origin.name, current_destination.name, current_transit_time, pricing[:wm_rate], current_vehicle.name, key, fee[:currency], fee[:rate_basis], fee[:min], fee[:rate]]
             data << fee[:hw_threshold] || ""
             data << fee[:hw_rate_basis] || ""
             @worksheet = write_to_sheet(worksheet, row, 1, data)
@@ -137,6 +122,11 @@ module DocumentService
       TransportCategory.find(transport_category_id)
     end
 
+    def carrier(pricing)
+      tenant_vehicle = TenantVehicle.find(pricing[:tenant_vehicle_id])
+      tenant_vehicle.carrier ? tenant_vehicle.carrier.name : nil
+    end
+
     def location_and_aux_data(pricing, key1, key2)
       stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
@@ -176,8 +166,12 @@ module DocumentService
     end
 
     def get_tenant_pricings_by_mot(tenant_id, mot)
-      Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot)
-        .flat_map { |itin| map_itin_pricings(itin) }
+      itinerary_ids = Tenant.find(tenant_id).itineraries.where(mode_of_transport: mot).ids
+      Pricing.where(itinerary_id: itinerary_ids).map(&:as_json)
+    end
+
+    def get_tenant_pricings(tenant_id)
+      Pricing.where(tenant_id: tenant_id).map(&:as_json)
     end
 
     def map_itin_pricings(itin)
