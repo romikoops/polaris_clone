@@ -58,10 +58,6 @@ class Admin::PricingsController < Admin::AdminBaseController
       tenant_vehicle.name
       { label: "#{carrier_name}", value: tenant_vehicle.vehicle_id}
     end
-<<<<<<< HEAD
-=======
-
->>>>>>> f78579fac5d86d840e27274c751f34dec1242165
     stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(
       itineraryPricingData: pricings,
