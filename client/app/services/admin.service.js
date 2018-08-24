@@ -257,7 +257,6 @@ function confirmShipment (id, action) {
   }
   const url = `${BASE_URL}/admin/shipments/${id}`
 
-  // FIXME: console.log(url)
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -267,7 +266,8 @@ function getPricings (page, mot) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions)
+    .then(handleResponse)
 }
 
 function searchPricings (text, page, mot) {
@@ -276,7 +276,8 @@ function searchPricings (text, page, mot) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/search/pricings?page=${page || 1}&mot=${mot}&text=${text}`, requestOptions)
+  return fetch(`${BASE_URL}/admin/search/pricings?page=${page || 1}
+    &mot=${mot}&text=${text}`, requestOptions)
     .then(handleResponse)
 }
 
