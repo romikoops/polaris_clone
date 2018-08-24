@@ -70,53 +70,57 @@ class Itinerary < ApplicationRecord
         number_updated: 0
       }
     }
-
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
-
+    stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        trip_check = trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
-        if trip_check && !trip_check.layovers.empty?
+        trip = trips.create(
+            start_date:        journey_start,
+            end_date:          journey_end,
+            tenant_vehicle_id: tenant_vehicle_id,
+            closing_date:      closing_date
+          )
+        unless trip
           tmp_date += 1.day
-          stats[:trips][:number_updated] += 1
           next
         end
-        trip = trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id, closing_date: closing_date)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         stops_in_order.each do |stop|
           if stop.index.zero?
-            data = {
+            stop_data << {
               eta:          nil,
               etd:          journey_start,
               stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
               stop_id:      stop.id,
-              closing_date: closing_date
+              closing_date: closing_date,
+              trip_id:      trip.id
             }
           else
             journey_start += steps_in_order[stop.index - 1].days
-            data = {
+            stop_data << {
               eta:          journey_start,
               etd:          journey_start + 1.day,
               stop_index:   stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id:      stop.id
+              stop_id:      stop.id,
+              trip_id:      trip.id
             }
           end
-          layover = trip.layovers.create!(data)
-          results[:layovers] << layover
           stats[:layovers][:number_created] += 1
         end
       end
 
       tmp_date += 1.day
     end
+
+    Layover.create!(stop_data)
     { results: results, stats: stats }
   end
 
