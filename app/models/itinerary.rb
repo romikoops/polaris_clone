@@ -20,17 +20,13 @@ class Itinerary < ApplicationRecord
   # scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
 
   validate :must_have_stops
-
+  self.per_page = 12
   def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
       trips:    []
     }
-    trip_check = trips.find_by(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
-    if trip_check
-      p "REJECTED"
-      # return results
-    end
+
     trip = trips.create!(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     results[:trips] << trip
     stops.each do |stop|

@@ -6,16 +6,15 @@ class Admin::PricingsController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = itineraries.map(&:as_pricing_json)
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id, mode_of_transport: params[:mot])
+    detailed_itineraries = itineraries.paginate(page: params[:page]).map(&:as_pricing_json)
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
-      tenant_pricings:     @tenant_pricings,
+      numItineraryPages:   itineraries.count / 12,
       transportCategories: @transports,
       lastUpdate:          last_updated
     )
@@ -28,15 +27,44 @@ class Admin::PricingsController < Admin::AdminBaseController
     response_handler(userPricings: @pricings, client: @client)
   end
 
+  def search
+    query = {
+      tenant_id: current_user.tenant_id
+    }
+
+    query[:mode_of_transport] = params[:mot] if params[:mot]
+    itineraries = Itinerary.where(query).order("name ASC")
+    itinerary_results = itineraries.where("name ILIKE ?", "%#{params[:text]}%")
+    @transports = TransportCategory.all.uniq
+    detailed_itineraries = itinerary_results.paginate(page: params[:page]).map(&:as_pricing_json)
+    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
+    response_handler(
+      itineraries:         itineraries,
+      detailedItineraries: detailed_itineraries,
+      numItineraryPages:   itineraries.count / 12,
+      transportCategories: @transports,
+      lastUpdate:          last_updated
+    )
+  end
+
   def route
     itinerary = Itinerary.find(params[:id])
     pricings = ordinary_pricings(itinerary)
     user_pricings = user_pricing(itinerary)
+    service_levels = itinerary.trips.pluck(:tenant_vehicle_id).uniq.map do |tv_id|
+      tenant_vehicle = TenantVehicle.find(tv_id)
+      carrier_name = tenant_vehicle.carrier ?
+      "#{tenant_vehicle.carrier.name} - #{tenant_vehicle.name}" :
+      tenant_vehicle.name
+      { label: "#{carrier_name}", value: tenant_vehicle.vehicle_id}
+    end
+
     stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(
       itineraryPricingData: pricings,
       itinerary:            itinerary.as_options_json,
       stops:                stops,
+      serviceLevels:       service_levels,
       userPricings:         user_pricings
     )
   end
@@ -95,7 +123,6 @@ class Admin::PricingsController < Admin::AdminBaseController
         transport_category: pricing_to_update.transport_category,
         user_id:            client_id.to_i
       }
-      
     end
     response_handler(new_pricings)
   end
