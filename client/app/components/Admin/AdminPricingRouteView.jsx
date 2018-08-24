@@ -123,7 +123,7 @@ export class AdminPricingRouteView extends Component {
       itineraryPricingData,
       stops,
       userPricings,
-      service_levels // eslint-disable-line
+      serviceLevels // eslint-disable-line
     } = itineraryPricings
     if (!itinerary || !itineraryPricingData) {
       return ''
@@ -247,7 +247,7 @@ export class AdminPricingRouteView extends Component {
               itinerary={itinerary}
               charges={itineraryPricingData}
               theme={theme}
-              serviceLevels={service_levels} // eslint-disable-line 
+              serviceLevels={serviceLevels}
               adminDispatch={adminActions}
               title="Open Pricing"
             />
@@ -286,7 +286,7 @@ export class AdminPricingRouteView extends Component {
                 <div>
                   <AdminPricingBox
                     itinerary={itinerary}
-                    serviceLevels={service_levels} // eslint-disable-line 
+                    serviceLevels={serviceLevels}
                     charges={userPricings.filter(up => up.user_id === selectedClient.id)}
                     theme={theme}
                     adminDispatch={adminActions}
@@ -299,7 +299,7 @@ export class AdminPricingRouteView extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
             <AdminPricingDedicated
               theme={theme}
-              serviceLevels={service_levels} // eslint-disable-line 
+              serviceLevels={serviceLevels}
               backBtn={() => this.addNewPricings()}
               closePricingView={() => this.addNewPricings()}
               adminDispatch={adminActions}

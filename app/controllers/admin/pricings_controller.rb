@@ -45,7 +45,7 @@ class Admin::PricingsController < Admin::AdminBaseController
       itineraryPricingData: pricings,
       itinerary:            itinerary.as_options_json,
       stops:                stops,
-      service_levels:       service_levels,
+      serviceLevels:       service_levels,
       userPricings:         user_pricings
     )
   end
