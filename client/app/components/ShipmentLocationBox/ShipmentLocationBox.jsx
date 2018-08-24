@@ -153,8 +153,6 @@ export class ShipmentLocationBox extends Component {
   }
 
   setDestNexus (event) {
-    // this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
-
     if (event) {
       const destination = {
         nexus_id: event.value.id,
@@ -168,6 +166,7 @@ export class ShipmentLocationBox extends Component {
       this.props.setNotesIds([event.value.id], 'destination')
       this.props.setTargetAddress('destination', destination)
       this.setMarker({ lat, lng }, destination.nexus_name, 'destination')
+
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
     } else {
       this.setState({
@@ -615,7 +614,6 @@ export class ShipmentLocationBox extends Component {
           }, () => this.prepForSelect(target))
           this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
           this.props.setNotesIds(nexusIds, target)
-          // this.scopeNexusOptions(nexusIds, hubIds, counterpart)
 
           addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
             this.props.setTargetAddress(target, { ...address, nexusIds })
@@ -664,7 +662,7 @@ export class ShipmentLocationBox extends Component {
     if (!prevRequest.shipment) {
       return
     }
-    //
+
     const { shipment } = prevRequest
     const newState = {}
     if (!this.props.has_pre_carriage) {
@@ -819,7 +817,6 @@ export class ShipmentLocationBox extends Component {
       )
 
       let fieldsHaveErrors = false
-
       if (targetTrucking && newFilteredRouteIndexes.length === 0) {
         newFilteredRouteIndexes = filteredRouteIndexes
         fieldsHaveErrors = true
