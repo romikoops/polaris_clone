@@ -237,8 +237,8 @@ module ExcelTool
 
     def populate_stats_and_results
       start_date = DateTime.now
-      end_date = start_date + 60.days
-      if generate && !@unsaved_itins.include?(@itinerary)
+      end_date = generate ? start_date + 60.days : start_date + 5.days
+      if !@unsaved_itins.include?(@itinerary)
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
           aux_data[pricing_key][:stops_in_order],
           steps_in_order,
@@ -251,7 +251,7 @@ module ExcelTool
         results[:trips] = generator_results[:results][:trips]
         stats[:layovers][:number_created] = generator_results[:results][:layovers].length
         stats[:trips][:number_created] = generator_results[:results][:trips].length
-        end
+      end
     end
 
     def nested_key
