@@ -71,9 +71,7 @@ export class AdminPricingDedicated extends Component {
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
   }
-  componentWillMount () {
-    // this.setAllFromOptions()
-  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.charges[0] && nextProps.charges[0].pricing) {
       nextProps.charges.forEach((charge) => {
@@ -82,7 +80,8 @@ export class AdminPricingDedicated extends Component {
     }
     if (this.state.charges !== nextProps.charges) {
       this.setState({
-        charges: nextProps.charges
+        charges: nextProps.charges,
+        selectedCargoClass: nextProps.charges[0].transport_category.cargo_class
       })
     }
   }
@@ -295,10 +294,8 @@ export class AdminPricingDedicated extends Component {
       Object.keys(charges[direction][oKey]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
         }
         newObj[direction][oKey][chargeKey] = AdminPricingDedicated.selectFromOptions(
           opts,
@@ -415,7 +412,8 @@ export class AdminPricingDedicated extends Component {
       return ''
     }
 
-    const currentCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
+    const selectedCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
+    const currentCharge = selectedCharge || charges[0]
     const editCharge = this.state.editor
 
     const feeRows = Object.keys(currentCharge.pricing.data).map((ck) => {

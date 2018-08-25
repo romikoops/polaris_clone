@@ -68,7 +68,6 @@
   }
   .map_cont {
     min-height: 550px;
-    padding-top: 50px;
   }
   .open_notes {
     height: 250px;
@@ -77,6 +76,7 @@
     height: 0;
   }
   .note_box {
+    padding-left: 3vw;
     overflow: hidden;
     transition: all 1250ms ease-in-out;
   }

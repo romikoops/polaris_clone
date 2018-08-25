@@ -115,7 +115,7 @@ class SideNav extends Component {
       }
     ]
 
-    const { user } = props
+    const { user, tenant } = props
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
       (user.role && user.role.name === 'sub_admin')
@@ -127,6 +127,11 @@ class SideNav extends Component {
       url: '/admin/superadmin',
       target: 'superadmin'
     }
+    /* eslint-disable prefer-destructuring */
+    this.defaultMotForPricings = Object.keys(tenant.data.scope.modes_of_transport)
+      .filter(key => Object.keys(tenant.data.scope.modes_of_transport[key])
+        .filter(key2 => tenant.data.scope.modes_of_transport[key][key2])[0])[0]
+    /* eslint-enable prefer-destructuring */
     if (user.role && user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }
@@ -160,7 +165,7 @@ class SideNav extends Component {
         adminDispatch.getServiceCharges(true)
         break
       case 'pricing':
-        adminDispatch.getPricings(true)
+        adminDispatch.getPricings(true, 1, this.defaultMotForPricings)
         break
       case 'schedules':
         adminDispatch.getSchedules(true)
@@ -307,6 +312,7 @@ class SideNav extends Component {
 
 SideNav.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.tenant,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
@@ -332,6 +338,7 @@ SideNav.propTypes = {
 
 SideNav.defaultProps = {
   theme: null,
+  tenant: null,
   expand: false
 }
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { nameToDisplay, authHeader } from '../../helpers'
+import { nameToDisplay, authHeader, emailServerValidation } from '../../helpers'
 import { BASE_URL } from '../../constants'
 import AddressDetailsSection from './AddressDetailsSection'
 import CompanyDetailsSection from './CompanyDetailsSection'
@@ -33,6 +33,12 @@ export class ShipmentContactForm extends Component {
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.editSubmit = this.editSubmit.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.checkValid = this.checkValid.bind(this)
+  }
+
+  handleInputChange (event) {
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   handlePlaceChange (place) {
@@ -106,6 +112,7 @@ export class ShipmentContactForm extends Component {
     this.contactForm.reset()
     this.setState({ setContactAttempted: false })
   }
+
   editSubmit (contactData) {
     const { shipmentDispatch } = this.props
 
@@ -134,6 +141,20 @@ export class ShipmentContactForm extends Component {
 
   handleInvalidSubmit () {
     this.setState({ setContactAttempted: true })
+  }
+
+  checkValid () {
+    const input = this.contactForm.inputs.filter(x => x.props.name === 'email')[0].state.value
+
+    function isEmailValid (data) {
+      if (data.email === true) {
+        this.contactForm.updateInputsWithError({
+          email: 'This email already exists'
+        })
+      }
+    }
+
+    emailServerValidation('email', null, input, isEmailValid.bind(this))
   }
 
   render () {
@@ -191,7 +212,9 @@ export class ShipmentContactForm extends Component {
             <CompanyDetailsSection
               theme={theme}
               showEdit={showEdit}
+              checkValid={this.checkValid}
               contactData={this.props.selectedContact}
+              handleInputChange={this.handleInputChange}
               setContactAttempted={this.state.setContactAttempted}
             />
           </div>
