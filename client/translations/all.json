@@ -69,6 +69,14 @@
         "withoutPickup": "without pick-up",
         "status": "Status"
       },
+      "footer": {
+        "about": "About Us",
+        "legal":"Legal",
+        "privacy":"Privacy Policy",
+        "terms":"Terms and Conditions",
+        "poweredBy":"Powered by",
+        "copyright":"Copyright"
+      },
       "doc": {
         "reject": "Reject document"
       },
