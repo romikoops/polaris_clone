@@ -18,6 +18,7 @@ import {
 import { gradientGenerator } from '../../../helpers'
 import PricingRow from './Row'
 import PricingRangeRow from './RangeRow'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -53,38 +54,41 @@ export class AdminPricingBox extends Component {
       charges: props.charges,
       edit: false,
       direction: 'import',
-      selectedCargoClass: 'lcl'
+      selectedServiceLevel: false,
+      selectedCargoClass: props.charges.length > 0 ? props.charges[0].transport_category.cargo_class : 'lcl'
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
+    this.handleServiceLevelChange = this.handleServiceLevelChange.bind(this)
     this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
     this.deleteFee = this.deleteFee.bind(this)
     this.showAddFeePanel = this.showAddFeePanel.bind(this)
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
   }
-  // componentDidMount () {
 
-  // }
   componentWillReceiveProps (nextProps) {
     const { selectedCargoClass } = this.state
     if (nextProps.charges[0]) {
-      const charge = nextProps.charges
-        .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
-      this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      nextProps.charges.forEach((charge) => {
+        this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
+      })
     }
-    if (this.state.charges !== nextProps.charges) {
+    if (this.state.charges !== nextProps.charges && nextProps.charges.length > 0) {
       this.setState({
-        charges: nextProps.charges
+        charges: nextProps.charges,
+        selectedCargoClass: nextProps.charges[0].transport_category.cargo_class
       })
     }
     if (this.state.editor === {}) {
       const charge = nextProps.charges
         .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
-      this.setState({ editor: charge })
+      const serviceLevel = nextProps.serviceLevels
+        .filter(sl => sl.value === charge.transport_category.vehicle_id)[0]
+      this.setState({ editor: charge, selectedServiceLevel: serviceLevel })
     }
   }
 
@@ -143,10 +147,12 @@ export class AdminPricingBox extends Component {
   }
   prepAllOptions () {
     const {
-      selectedCargoClass, charges
+      selectedCargoClass, charges, selectedServiceLevel
     } = this.state
     const charge = charges
-      .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
+      .filter(c => (c.transport_category.cargo_class === selectedCargoClass) &&
+       (c.transport_category.vehicle_id === selectedServiceLevel.value ||
+         !selectedServiceLevel))[0]
     this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
   }
   isEditing () {
@@ -258,6 +264,9 @@ export class AdminPricingBox extends Component {
       }
     })
   }
+  handleServiceLevelChange (event) {
+    this.setState({ selectedServiceLevel: event }, () => { this.prepAllOptions() })
+  }
   handleRangeChange (event) {
     const { name, value } = event.target
     const nameKeys = name.split('-')
@@ -301,10 +310,8 @@ export class AdminPricingBox extends Component {
       Object.keys(charges[direction][oKey]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
         }
         newObj[direction][oKey][chargeKey] = AdminPricingBox.selectFromOptions(
           opts,
@@ -369,13 +376,16 @@ export class AdminPricingBox extends Component {
   }
 
   render () {
-    const { theme, title, closeView } = this.props
+    const {
+      theme, title, closeView, serviceLevels
+    } = this.props
 
     const {
       selectOptions,
       charges,
       selectedCargoClass,
-      editor
+      editor,
+      selectedServiceLevel
     } = this.state
 
     if (!charges || (charges && !charges[0])) {
@@ -387,15 +397,18 @@ export class AdminPricingBox extends Component {
       : { background: 'black' }
 
     const editCharge = { ...editor }
-    const currentCharge = charges.filter(charge => charge.transport_category.cargo_class === selectedCargoClass)[0]
-    console.log('#########')
-    console.log(editor)
+    const selectedCharge = charges.filter(c => (c.transport_category.cargo_class === selectedCargoClass) &&
+    (c.transport_category.vehicle_id === selectedServiceLevel.value ||
+      !selectedServiceLevel))[0]
+    const currentCharge = selectedCharge || charges[0]
+
     const feeRows = Object.keys(currentCharge.pricing.data).map((ck) => {
       const fee = currentCharge.pricing.data[ck]
       fee.key = ck
       fee.name = chargeGlossary[ck]
       fee.effective_date = currentCharge.pricing.effective_date
       fee.expiration_date = currentCharge.pricing.expiration_date
+
       return fee.range ? (<PricingRangeRow
         className="flex-100"
         theme={theme}
@@ -432,6 +445,14 @@ export class AdminPricingBox extends Component {
           <div className="flex-30 layout-row layout-align-start-center">
             <p className={`flex-none ${styles2.text}`} >{title || 'Fees & Charges' }</p>
           </div>
+          <div className="flex-25 layout-row layout-align-end-center">
+            <NamedSelect
+              options={serviceLevels}
+              onChange={this.handleServiceLevelChange}
+              value={selectedServiceLevel}
+              className="flex-100"
+            />
+          </div>
           {closeView ? <div
             className="flex-none layout-row layout-align-center-center"
             onClick={closeView}
@@ -456,11 +477,13 @@ AdminPricingBox.propTypes = {
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   closeView: PropTypes.objectOf(PropTypes.func),
   charges: PropTypes.arrayOf(PropTypes.any),
+  serviceLevels: PropTypes.arrayOf(PropTypes.any),
   title: PropTypes.string
 }
 AdminPricingBox.defaultProps = {
   theme: {},
   charges: [],
+  serviceLevels: [],
   title: '',
   closeView: null
 }

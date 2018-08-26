@@ -25,6 +25,10 @@ export class AdminPricingsIndex extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
   }
+  getInitialPricingPage (mot) {
+    const { adminDispatch } = this.props
+    adminDispatch.getPricings(false, 1, mot)
+  }
   toggleCreator (mot) {
     this.setState(prevState => ({
       newPricing: {
@@ -55,6 +59,7 @@ export class AdminPricingsIndex extends Component {
     const { documentDispatch } = this.props
     documentDispatch.uploadPricings(file, 'fcl', false)
   }
+
   render () {
     const {
       theme, pricingData, clients, adminDispatch, scope, hubHash
@@ -86,6 +91,7 @@ export class AdminPricingsIndex extends Component {
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
+      extraClick={() => this.getInitialPricingPage(mot)}
       icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardPricingIndex

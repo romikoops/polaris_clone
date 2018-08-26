@@ -96,8 +96,9 @@ Rails.application.routes.draw do
       post 'schedules/auto_generate',
         to: 'schedules#auto_generate_schedules'
       post 'schedules/download', to: 'schedules#download_schedules'
-      get 'hubs',      to: 'hubs#index'
-      get 'search/hubs',      to: 'hubs#search'
+      get 'hubs', to: 'hubs#index'
+      get 'search/hubs', to: 'hubs#search'
+      get 'search/pricings', to: 'pricings#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
@@ -137,6 +138,7 @@ Rails.application.routes.draw do
 
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
+    get 'contacts/validations/form', to: 'contacts#is_valid'
     post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
     post 'shipments/:shipment_id/upload/:type', to: 'shipments#upload_document'
     post 'search/hscodes', to: 'search#search_hs_codes'

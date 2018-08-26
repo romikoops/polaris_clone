@@ -12,7 +12,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { userActions } from '../../actions'
 import {
   gradientTextGenerator,
-  areEqual
+  emailServerValidation
 } from '../../helpers'
 
 const errorStyle = {
@@ -67,41 +67,22 @@ class UserContacts extends Component {
     const { userDispatch } = this.props
     userDispatch.getContacts(true, 1)
   }
-  handleValidSubmit (contact, reset, invalidate) {
-    const { contactsData } = this.props
 
+  handleValidSubmit (contact, reset, invalidate) {
     this.setState({ submitAttempted: true })
 
-    let shouldDispatch = true
-
-    contactsData.forEach((_contact) => {
-      const contactWithLocation = {
-        city: _contact.location && _contact.location.city,
-        companyName: _contact.company_name,
-        country: _contact.location && _contact.location.country && _contact.location.country.name,
-        email: _contact.email,
-        firstName: _contact.first_name,
-        lastName: _contact.last_name,
-        number: _contact.location && _contact.location.street_number,
-        phone: _contact.phone,
-        street: _contact.location && _contact.location.street,
-        zipCode: _contact.location && _contact.location.zip_code
+    function handleResponse (data) {
+      if (data.email === true) {
+        invalidate({ email: 'Contact already exists.' })
+        return
       }
 
-      if (areEqual(contactWithLocation, contact)) {
-        shouldDispatch = false
+      const { userDispatch } = this.props
+      userDispatch.newContact(contact)
+      this.toggleNewContact()
+    }
 
-        invalidate((
-          Object.keys(contact).reduce((acc, k) => ({ ...acc, [k]: 'Contact already exists.' }), {})
-        ))
-      }
-    })
-
-    if (!shouldDispatch) return
-
-    const { userDispatch } = this.props
-    userDispatch.newContact(contact)
-    this.toggleNewContact()
+    emailServerValidation('email', null, contact.email, handleResponse.bind(this))
   }
 
   handleInvalidSubmit () {
@@ -109,7 +90,9 @@ class UserContacts extends Component {
   }
 
   render () {
-    const { newContact, newContactBool, submitAttempted } = this.state
+    const {
+      newContact, newContactBool, submitAttempted
+    } = this.state
     const {
       theme, hubs, contactData, contactsData, userDispatch, loading, numPages
     } = this.props
@@ -160,185 +143,6 @@ class UserContacts extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
 
-    const newContactBox = (
-      <div
-        className={`flex-none layout-row layout-wrap layout-align-center-center ${
-          styles.new_contact
-        }`}
-      >
-        <div
-          className={`flex-none layout-row layout-wrap layout-align-center-center ${
-            styles.new_contact_backdrop
-          }`}
-          onClick={this.toggleNewContact}
-        />
-        <Formsy
-          className={`flex-none layout-row layout-wrap layout-align-start-start ${
-            styles.new_contact_content
-          }`}
-          onValidSubmit={this.handleValidSubmit}
-          onInvalidSubmit={this.handleInvalidSubmit}
-        >
-          <div
-            className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
-          >
-            <i className="fa fa-user flex-none" style={textStyle} />
-            <p className="flex-none">New Contact</p>
-          </div>
-          <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.firstName}
-            name="firstName"
-            placeholder="First Name"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.lastName}
-            name="lastName"
-            placeholder="Last Name"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_60}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.companyName}
-            name="companyName"
-            placeholder="Company Name"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_33}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.phone}
-            name="phone"
-            placeholder="Phone"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <MailCheck email={this.state.email}>
-            {mailCheckCallback}
-          </MailCheck>
-          <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.street}
-            name="street"
-            placeholder="Street"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_50}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.number}
-            name="number"
-            placeholder="Street Number"
-            validations="minLength:1"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least one character long'
-            }}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_33}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.zipCode}
-            name="zipCode"
-            placeholder="Postal Code"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_33}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.city}
-            name="city"
-            placeholder="City"
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-          />
-          <FormsyInput
-            wrapperClassName={styles.input_33}
-            className={styles.input}
-            errorMessageStyles={errorStyle}
-            submitAttempted={submitAttempted}
-            type="text"
-            value={newContact.country}
-            name="country"
-            placeholder="Country"
-            validations="minLength:4"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least four characters long'
-            }}
-          />
-          <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
-            <RoundButton
-              theme={theme}
-              size="small"
-              active
-              text="Save"
-              iconClass="fa-floppy-o"
-            />
-          </div>
-        </Formsy>
-      </div>
-    )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
         <Switch className="flex">
@@ -349,7 +153,185 @@ class UserContacts extends Component {
               <UserContactsIndex
                 theme={theme}
                 loading={loading}
-                newContactBox={newContactBool ? newContactBox : ''}
+                newContactBox={newContactBool && (
+                  <div
+                    className={`flex-none layout-row layout-wrap layout-align-center-center ${
+                      styles.new_contact
+                    }`}
+                  >
+                    <div
+                      className={`flex-none layout-row layout-wrap layout-align-center-center ${
+                        styles.new_contact_backdrop
+                      }`}
+                      onClick={this.toggleNewContact}
+                    />
+                    <Formsy
+                      className={`flex-none layout-row layout-wrap layout-align-start-start ${
+                        styles.new_contact_content
+                      }`}
+                      onValidSubmit={this.handleValidSubmit}
+                      onInvalidSubmit={this.handleInvalidSubmit}
+                      ref={(form) => { this.contactsForm = form }}
+                    >
+                      <div
+                        className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}
+                      >
+                        <i className="fa fa-user flex-none" style={textStyle} />
+                        <p className="flex-none">New Contact</p>
+                      </div>
+                      <FormsyInput
+                        wrapperClassName={styles.input_50}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.firstName}
+                        name="firstName"
+                        placeholder="First Name"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_50}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.lastName}
+                        name="lastName"
+                        placeholder="Last Name"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_60}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.companyName}
+                        name="companyName"
+                        placeholder="Company Name"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_33}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.phone}
+                        name="phone"
+                        placeholder="Phone"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                      />
+                      <MailCheck email={this.state.email}>
+                        {mailCheckCallback}
+                      </MailCheck>
+                      <FormsyInput
+                        wrapperClassName={styles.input_50}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.street}
+                        name="street"
+                        placeholder="Street"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_50}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.number}
+                        name="number"
+                        placeholder="Street Number"
+                        validations="minLength:1"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least one character long'
+                        }}
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_33}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.zipCode}
+                        name="zipCode"
+                        placeholder="Postal Code"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_33}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.city}
+                        name="city"
+                        placeholder="City"
+                        validations="minLength:2"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least two characters long'
+                        }}
+                      />
+                      <FormsyInput
+                        wrapperClassName={styles.input_33}
+                        className={styles.input}
+                        errorMessageStyles={errorStyle}
+                        submitAttempted={submitAttempted}
+                        type="text"
+                        value={newContact.country}
+                        name="country"
+                        placeholder="Country"
+                        validations="minLength:4"
+                        validationErrors={{
+                          isDefaultRequiredValue: 'Must not be blank',
+                          minLength: 'Must be at least four characters long'
+                        }}
+                      />
+                      <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
+                        <RoundButton
+                          theme={theme}
+                          size="small"
+                          active
+                          text="Save"
+                          iconClass="fa-floppy-o"
+                        />
+                      </div>
+                    </Formsy>
+                  </div>
+                )}
                 toggleNewContact={this.toggleNewContact}
                 handleClientAction={this.handleClientAction}
                 contacts={contactsData}

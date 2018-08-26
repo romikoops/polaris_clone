@@ -92,10 +92,8 @@ module ShippingTools
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id)  # NOT CORRECT: .merge(alias: shipment.export?)
-    )
-    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
+    contact_params = contact_params(resource, contact_location.id)
+    contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
     shipper = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
@@ -103,16 +101,15 @@ module ShippingTools
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by!(
-      contact_params(resource, contact_location.id)    # NOT CORRECT: .merge(alias: shipment.import?)
-    )
+    contact_params = contact_params(resource, contact_location.id)
+    contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "consignee")
     consignee = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      contact = current_user.contacts.find_or_create_by!(contact_params(resource))
+      contact = search_contacts(contact_params)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []
@@ -136,7 +133,6 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-    # byebug
     if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),
@@ -483,6 +479,16 @@ module ShippingTools
       max_dimensions:           tenant.max_dimensions,
       max_aggregate_dimensions: tenant.max_aggregate_dimensions
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+  end
+
+  def self.search_contacts(contact_params, current_user)
+    contact_email = contact_params['email']
+    existing_contact = current_user.contacts.where(email: contact_email).first
+    if existing_contact
+      return existing_contact
+    else
+      current_user.contacts.create(contact_params(resource, contact_location.id))
+    end
   end
 
   def self.reuse_cargo_units(shipment, cargo_units)
