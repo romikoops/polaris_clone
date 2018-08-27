@@ -2,19 +2,28 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout-row flex-100 layout-wrap layout-align-center"
+  className="layout-row flex-100 layout-wrap layout-align-start-center notes_wrapper"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center sec_header"
+    className="flex-100 layout-row layout-start-center sec_header"
   >
     <p
-      className=" sec_header_text flex-none"
+      className="sec_header_text flex-none"
     >
        Notes 
     </p>
+    <div
+      className="flex-10 layout-row alyout-align-center-center pointy"
+      onClick={null}
+    >
+      <i
+        className="fa fa-plus clip pointy plus"
+        style={Object {}}
+      />
+    </div>
   </div>
   <div
-    className="flex-100 layout-row layout-align-start-center layout-wrap"
+    className="flex-100 layout-row card_margin_right layout-wrap"
   >
     <NotesCard
       note={

@@ -21,6 +21,7 @@ exports[`admin is true 1`] = `
       className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
+        borderStyle=""
         content={
           <AdminShipmentCard
             confirmShipmentData={Object {}}
@@ -81,6 +82,7 @@ exports[`admin is true 1`] = `
         fullWidth={false}
         isBox={false}
         padding={false}
+        title=""
         titleAction={false}
         wrapperClassName="layout-row"
       />
@@ -110,6 +112,7 @@ exports[`shallow rendering 1`] = `
       className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
+        borderStyle=""
         content={
           <UserShipmentCard
             dispatches={
@@ -150,6 +153,7 @@ exports[`shallow rendering 1`] = `
         fullWidth={false}
         isBox={false}
         padding={false}
+        title=""
         titleAction={false}
         wrapperClassName="layout-row"
       />

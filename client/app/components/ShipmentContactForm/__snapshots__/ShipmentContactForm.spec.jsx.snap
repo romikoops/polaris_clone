@@ -20,7 +20,9 @@ exports[`shallow rendering 1`] = `
       className="flex layout-row"
     >
       <CompanyDetailsSection
+        checkValid={[Function]}
         contactData={Object {}}
+        handleInputChange={[Function]}
         setContactAttempted={false}
         showEdit={false}
         theme={
