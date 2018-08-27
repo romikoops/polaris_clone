@@ -70,8 +70,8 @@ class MandatoryChargeBox extends PureComponent {
     return (
       <div className="flex-100 layout-row layout-align-start-start layout-wrap">
         { confimPrompt }
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-75 layout-row layout-align-space-around-center">
+        <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.mandatory_charges_box}`}>
+          <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
             <p className="flex-none">Import Fees</p>
             <Checkbox
               theme={theme}
@@ -80,7 +80,7 @@ class MandatoryChargeBox extends PureComponent {
               onChange={e => this.handleToggle(e, 'import_charges')}
             />
           </div>
-          <div className="flex-75 layout-row layout-align-space-around-center">
+          <div className={`flex-75 layout-row layout-align-space-around-center ${styles.charges_row_padding}`}>
             <p className="flex-none">Export Fees</p>
             <Checkbox
               theme={theme}
