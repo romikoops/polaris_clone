@@ -54,7 +54,21 @@ class Itinerary < ApplicationRecord
     end
     results
   end
-
+  def default_generate_schedules()
+    tenant_vehicle_ids = pricings.pluck(:tenant_vehicle_id).uniq
+      stops_in_order = stops.order(:index)
+      tenant_vehicle_ids.each do |tv_id|
+      generate_weekly_schedules(
+        stops_in_order,
+        [rand(20..50)],
+        DateTime.now,
+        DateTime.now + 21.days,
+        [1,5],
+        tv_id,
+        4
+        )
+      end
+  end
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer=4)
     results = {
       layovers: [],
@@ -72,6 +86,7 @@ class Itinerary < ApplicationRecord
     }
     tmp_date = start_date.is_a?(Date)      ? start_date : DateTime.parse(start_date)
     end_date_parsed = end_date.is_a?(Date) ? end_date   : DateTime.parse(end_date)
+    
     stop_data = []
     steps_in_order = steps_in_order.map(&:to_i)
     while tmp_date < end_date_parsed
@@ -79,6 +94,7 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
+        
         trip = trips.new(
             start_date:        journey_start,
             end_date:          journey_end,
@@ -88,9 +104,6 @@ class Itinerary < ApplicationRecord
         unless trip.save
           tmp_date += 1.day
           next
-        end
-        if !trip
-          byebug
         end
         results[:trips] << trip
         stats[:trips][:number_created] += 1
