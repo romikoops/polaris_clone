@@ -20,7 +20,6 @@ module DataParser
           @sheet_rows = []
           (2..sheet.last_row).each do |line|
             row = sheet.row(line)
-            p row
             next unless validate_row(row)
             @sheet_rows << {
               zip_code: row[0],
@@ -97,7 +96,7 @@ module DataParser
        
 
         def parse_rates
-          parse_sheet_rows(@xlsx.sheet(@sheets.first))
+          parse_sheet_rows(@xlsx.sheet(@sheets.last))
           collate_by_origin_and_destinations
           determine_highest_price
           byebug
