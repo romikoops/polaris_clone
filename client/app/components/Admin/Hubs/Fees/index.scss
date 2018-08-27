@@ -76,7 +76,7 @@
     }
   }
   .cargo_class_button {
-    padding: 8px 2px;
+    padding: 2px 2px;
     margin: 5px 0px;
     position: relative;
     .cargo_class_divider {
@@ -90,6 +90,7 @@
     }
     .cargo_class_button_inner {
       background: white;
+      padding: 5px 0px;
       width: 100%;
       height: 100%;
       p {
