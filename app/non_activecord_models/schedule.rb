@@ -43,7 +43,7 @@ class Schedule
 
   def self.from_routes(routes, current_etd_in_search, delay_in_days)
     grouped_data_from_routes = Route.group_data_by_attribute(routes)
-
+    
     raw_query = "
       SELECT DISTINCT
         origin_hubs.id                AS origin_hub_id,
@@ -84,7 +84,7 @@ class Schedule
         current_etd_in_search
       ]
     )
-
+      
     ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
       Schedule.new(attributes.merge(id: SecureRandom.uuid))
     end

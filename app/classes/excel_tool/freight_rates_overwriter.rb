@@ -39,7 +39,6 @@ module ExcelTool
         populate_stats_and_results
         process_row_data(row)
       end
-
       add_exceptions_to_new_pricings
       process_hashes
       generate_map_data
@@ -48,9 +47,8 @@ module ExcelTool
 
     def save_stops
       aux_data[pricing_key][:stops_in_order] = map_stop_hubs
-      if !aux_data[pricing_key][:stops_in_order].empty?
-        itinerary.stops << aux_data[pricing_key][:stops_in_order]
-        itinerary.save!
+      itinerary.stops << aux_data[pricing_key][:stops_in_order]
+      if itinerary.save
         @saved << itinerary
       else
         @unsaved_itins << @itinerary
@@ -186,16 +184,16 @@ module ExcelTool
         vehicle = tenant_vehicle(row)
 
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence ||
-          Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
+        Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id, row[:carrier])
       end
 
       aux_data[pricing_key][:customer] = User.find_by(email: row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
-      puts row if aux_data[pricing_key][:destination].nil? || aux_data[pricing_key][:origin].nil?
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
+
       aux_data[pricing_key][:hub_ids] = aux_data[pricing_key][:origin_hub_ids] + aux_data[pricing_key][:destination_hub_ids]
     end
 
