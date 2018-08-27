@@ -69,6 +69,12 @@
         "withoutPickup": "without pick-up",
         "status": "Status"
       },
+      "nav": {
+        "signOut": "Sign out",
+        "loginPage": "LoginPage",
+        "registrationPage": "RegistrationPage",
+        "account": "Account"
+      },
       "footer": {
         "about": "About Us",
         "legal":"Legal",
