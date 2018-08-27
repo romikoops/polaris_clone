@@ -82,9 +82,9 @@ class Tenant < ApplicationRecord
     ).perform
   end
 
-  def autogenerate_all_schedules()
+  def autogenerate_all_schedules(end_date)
     itineraries.each do |itinerary|
-      itinerary.default_generate_schedules
+      itinerary.default_generate_schedules(end_date)
     end
   end
 
