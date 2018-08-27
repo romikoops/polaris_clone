@@ -797,6 +797,8 @@ export class ShipmentLocationBox extends Component {
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
       const counterpart = target === 'origin' ? 'destination' : 'origin'
+      const counterpartLocation = target === 'origin' ? dSelect : oSelect
+      const counterpartTrucking = truckingHubs[counterpart]
 
       let indexes = filteredRouteIndexes.slice()
 
@@ -810,9 +812,14 @@ export class ShipmentLocationBox extends Component {
           lookupTablesForRoutes,
           targetTrucking, `${target}Hub`
         )
+      } else if (!targetLocation.label && !targetTrucking) {
+        indexes = routes.map((_, i) => i)
       }
+      const unfilteredRouteIndexes = routes.map((_, i) => i)
+      const indexesToUse = (counterpartLocation.label || counterpartTrucking)
+        ? unfilteredRouteIndexes : filteredRouteIndexes
       let newFilteredRouteIndexes = routeFilters.scopeIndexes(
-        filteredRouteIndexes,
+        indexesToUse,
         indexes
       )
 
@@ -824,7 +831,6 @@ export class ShipmentLocationBox extends Component {
           fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
         this.props.handleSelectLocation(addressFormsHaveErrors)
       }
-
       const newFilteredRoutes = []
       const selectOptions = []
       const counterpartNexusIds = []

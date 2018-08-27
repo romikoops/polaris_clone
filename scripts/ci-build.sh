@@ -9,6 +9,8 @@ prepare=0
 : ${RACK_ENV:=test}
 export RAILS_ENV RACK_ENV
 
+export SPEC_OPTS="--format RspecJunitFormatter --out rspec.xml --format Fuubar --color"
+
 install() {
   if [ $install -eq 0 ];
   then

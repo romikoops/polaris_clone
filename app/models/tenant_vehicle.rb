@@ -13,4 +13,8 @@ class TenantVehicle < ApplicationRecord
     tvt.is_default = true unless default_tvt
     tvt.save!
   end
+
+  def with_carrier
+    as_json(include: { carrier: { only: %i(id name) } })
+  end
 end
