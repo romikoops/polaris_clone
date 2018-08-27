@@ -21,8 +21,7 @@ export default class CardPricingIndex extends Component {
     this.state = {
       expander: {},
       searchText: '',
-      page: 1,
-      numPerPage: 9
+      page: 1
     }
     this.handleClick = this.handleClick.bind(this)
     this.iconClasses = {
@@ -44,11 +43,11 @@ export default class CardPricingIndex extends Component {
     const numPages = Math.ceil(itineraries.length / 12)
     this.setState({ numPages })
   }
-  generateViewType (mot, limit) {
+  generateViewType (mot) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
         <div className="layout-row flex-90 layout-align-start-center layout-wrap">
-          {this.generateCardPricings(mot, limit)}
+          {this.generateCardPricings(mot)}
         </div>
       </div>
     )
@@ -62,13 +61,9 @@ export default class CardPricingIndex extends Component {
     })
   }
   generateCardPricings (mot) {
-    const { page, numPerPage } = this.state
     const { hubs, theme, itineraries } = this.props
     let itinerariesArr = []
-    const sliceStartIndex = (page - 1) * numPerPage
-    const sliceEndIndex = (page * numPerPage)
-    itinerariesArr = this.updateSearch(itineraries)
-      .slice(sliceStartIndex, sliceEndIndex)
+    itinerariesArr = itineraries
       .map((rt, i) => (
         <CardRoutesPricing
           key={v4()}
@@ -91,28 +86,40 @@ export default class CardPricingIndex extends Component {
     return filters.handleSearchChange(searchText, ['name'], array)
   }
   handlePricingSearch (event) {
-    const { itineraries } = this.props
-    this.setState(
-      {
-        searchText: event.target.value,
-        page: 1
-      },
-      () => this.updateSearch(itineraries)
-    )
-  }
-  deltaPage (val) {
-    this.setState((prevState) => {
-      const newPageVal = prevState.page + val
-      const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
-
-      return { page }
+    const { searchTimeout } = this.state
+    if (searchTimeout) {
+      window.clearTimeout(searchTimeout)
+    }
+    const newTimeout = window.setTimeout(this.executeSearch(event.target.value), 750)
+    this.setState({
+      searchText: event.target.value,
+      page: 1,
+      searchTimeout: newTimeout
     })
+  }
+
+  executeSearch () {
+    const { adminDispatch, mot } = this.props
+    adminDispatch.searchPricings(this.state.searchText, 1, mot)
+  }
+
+  deltaPage (val) {
+    const { adminDispatch, mot } = this.props
+    this.setState(
+      (prevState) => {
+        const newPageVal = prevState.page + val
+        const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+
+        return { page }
+      },
+      () => adminDispatch.getPricings(false, this.state.page, mot)
+    )
   }
 
   render () {
     const { searchText, page, numPages } = this.state
     const {
-      theme, limit, scope, toggleCreator, mot
+      theme, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
 
@@ -130,7 +137,7 @@ export default class CardPricingIndex extends Component {
             }`}
           >
             <div className="flex-100 layout-row layout-align-center-start" style={{ minHeight: '560px' }}>
-              {this.generateViewType(mot, limit)}
+              {this.generateViewType(mot)}
             </div>
             <div className="flex-95 layout-row layout-align-center-center margin_bottom">
               <div
@@ -233,7 +240,6 @@ CardPricingIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
-  limit: PropTypes.number,
   toggleCreator: PropTypes.func,
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
@@ -253,6 +259,5 @@ CardPricingIndex.defaultProps = {
   hubs: [],
   itineraries: [],
   scope: null,
-  limit: 9,
   toggleCreator: null
 }

@@ -124,6 +124,11 @@ class ContactsController < ApplicationController
     response_handler(contact)
   end
 
+  def is_valid
+    valid = current_user.contacts.where(email: params[:email]).length > 0
+    response_handler({email: valid})
+  end
+
   private
 
   def require_login

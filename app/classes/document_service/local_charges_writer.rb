@@ -21,7 +21,6 @@ module DocumentService
       results_by_hub.each do |hub, results|
         row = 1
         hub_string = hub.dup()
-        # byebug
         workbook_hash = add_worksheet_to_workbook(workbook, header_values, hub_string.gsub('/', ''))
         @workbook = workbook_hash[:workbook]
         worksheet = workbook_hash[:worksheet]
@@ -111,9 +110,6 @@ module DocumentService
     end
 
     def worksheet_conditional_builder(worksheet,  row, fee, range_fee=nil)
-      # if range_fee
-      #   byebug
-      # end
       case fee[:rate_basis]
       when "PER_CONTAINER"
         worksheet.write(row, 17, fee[:value])

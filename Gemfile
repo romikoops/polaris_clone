@@ -99,8 +99,8 @@ gem 'aws-sdk', '~> 3'
 
 # Google translate api
 gem 'google-cloud-translate'
-gem 'signet'
 gem 'googleauth'
+gem 'signet'
 # New email gem
 gem 'mjml-rails'
 
@@ -108,7 +108,7 @@ gem 'pry-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'byebug', platforms: %i(mri mingw x64_mingw)
   # Better debugging
   gem 'debase'
   gem 'dotenv-rails' # set environment variables
@@ -135,4 +135,4 @@ group :development, :staging do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'tzinfo-data', platforms: %i(mingw mswin x64_mingw jruby)

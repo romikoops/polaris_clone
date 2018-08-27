@@ -343,7 +343,7 @@ function getServiceCharges (redirect) {
     )
   }
 }
-function getPricings (redirect) {
+function getPricings (redirect, page, mot) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
@@ -357,7 +357,7 @@ function getPricings (redirect) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getPricings().then(
+    adminService.getPricings(page, mot).then(
       (data) => {
         dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {
@@ -372,6 +372,35 @@ function getPricings (redirect) {
     )
   }
 }
+
+function searchPricings (text, page, mot) {
+  function request (pricingData) {
+    return { type: adminConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+  }
+  function success (pricingData) {
+    return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+  }
+  function failure (error) {
+    return { type: adminConstants.GET_PRICINGS_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.searchPricings(text, page, mot).then(
+      (data) => {
+        dispatch(alertActions.success('Pricings Search successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function getPricingsTest (req) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_TEST_REQUEST, payload: prData }
@@ -470,7 +499,7 @@ function getItineraryPricings (id, redirect) {
 
   return (dispatch) => {
     dispatch(request())
-
+    dispatch(getTrucking())
     adminService.getItineraryPricings(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Route Prices successful'))
@@ -1752,7 +1781,8 @@ export const adminActions = {
   getAllHubs,
   getPricingsTest,
   searchShipments,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  searchPricings
 }
 
 export default adminActions
