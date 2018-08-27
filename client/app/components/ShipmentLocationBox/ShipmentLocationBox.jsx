@@ -812,6 +812,8 @@ export class ShipmentLocationBox extends Component {
           lookupTablesForRoutes,
           targetTrucking, `${target}Hub`
         )
+      } else if (!targetLocation.label && !targetTrucking) {
+        indexes = routes.map((_, i) => i)
       }
       const unfilteredRouteIndexes = routes.map((_, i) => i)
       const indexesToUse = (counterpartLocation.label || counterpartTrucking)
