@@ -20,9 +20,8 @@ module DataParser
           @sheet_rows = []
           (2..sheet.last_row).each do |line|
             row = sheet.row(line)
-            unless validate_row(row)
-              next
-            end
+            p row
+            next unless validate_row(row)
             @sheet_rows << {
               zip_code: row[0],
               destination: row[1],
