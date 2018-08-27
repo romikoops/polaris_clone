@@ -163,7 +163,6 @@ class AdminScheduleGenerator extends Component {
     const future = {
       after: new Date()
     }
-    console.log('mot', mot)
     const vehicleTypeOptions = []
     if (vehicleTypes && mot) {
       vehicleTypes.forEach((vt) => {
