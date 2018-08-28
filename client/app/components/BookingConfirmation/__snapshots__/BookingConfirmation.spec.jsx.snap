@@ -190,9 +190,10 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -204,12 +205,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -222,12 +223,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -1207,9 +1208,10 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -1221,12 +1223,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -1239,12 +1241,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -2281,9 +2283,10 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -2295,12 +2298,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -2313,12 +2316,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -3410,9 +3413,10 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -3424,12 +3428,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -3442,12 +3446,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -5452,9 +5456,10 @@ exports[`shallow render 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -5466,12 +5471,12 @@ exports[`shallow render 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -5484,12 +5489,12 @@ exports[`shallow render 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -6455,9 +6460,10 @@ exports[`with cargo items 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -6469,12 +6475,12 @@ exports[`with cargo items 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -6487,12 +6493,12 @@ exports[`with cargo items 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
@@ -6959,7 +6965,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 1000,
                   "quantity": 5,
-                  "volume": 0.18,
+                  "volume": 0.12,
                 }
               }
               key="RANDOM_KEY_14"
@@ -7123,7 +7129,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 700,
                   "quantity": 7,
-                  "volume": 1.75,
+                  "volume": 2.4499999999999997,
                 }
               }
               key="RANDOM_KEY_15"
@@ -7761,9 +7767,10 @@ exports[`with containers 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-center"
+            className="flex-100 layout-row layout-align-space-between-start"
             style={
               Object {
+                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -7775,12 +7782,12 @@ exports[`with containers 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100  center"
                 >
                   19
                 </p>
@@ -7793,12 +7800,12 @@ exports[`with containers 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-100 center"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-100 center"
                 >
                   19
                 </p>
