@@ -107,15 +107,18 @@ gem 'mjml-rails'
 gem 'pry-rails'
 
 group :development, :test do
+  gem 'dotenv-rails' # set environment variables
+  gem 'factory_bot_rails'
+  gem 'fuubar'
+  gem 'rails-erd'
+  gem 'rspec-rails'
+  gem 'rspec_junit_formatter'
+  gem 'rubocop'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i(mri mingw x64_mingw)
   # Better debugging
   gem 'debase'
-  gem 'dotenv-rails' # set environment variables
-  gem 'factory_bot_rails'
-  gem 'rails-erd'
-  gem 'rspec-rails'
-  gem 'rubocop'
   gem 'ruby-debug-ide'
 end
 

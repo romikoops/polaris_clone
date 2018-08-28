@@ -69,7 +69,7 @@ module OfferCalculatorService
           @schedule.origin_hub_id,
           @user
         )
-
+          
         unless local_charges_data.empty?
           create_charges_from_fees_data!(local_charges_data, ChargeCategory.from_code("import"))
         end
@@ -118,6 +118,7 @@ module OfferCalculatorService
           total_units,
           @shipment.planned_pickup_date,
           @schedule.mode_of_transport)
+
         next if charge_result.nil?
 
         cargo_unit_model = cargo_unit.class.to_s == "Hash" ? "CargoItem" : cargo_unit.class.to_s

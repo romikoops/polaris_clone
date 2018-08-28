@@ -687,6 +687,9 @@ GEM
     ffi (1.9.25)
     filterrific (5.0.1)
     foundation_emails (2.2.1.0)
+    fuubar (2.3.2)
+      rspec-core (~> 3.0)
+      ruby-progressbar (~> 1.4)
     geocoder (1.4.9)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -844,6 +847,8 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    rspec_junit_formatter (0.4.1)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.58.2)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
@@ -947,6 +952,7 @@ DEPENDENCIES
   dotenv-rails
   factory_bot_rails
   filterrific
+  fuubar
   geocoder
   google-cloud-translate
   googleauth
@@ -969,6 +975,7 @@ DEPENDENCIES
   rgeo-geojson
   roo
   rspec-rails
+  rspec_junit_formatter
   rubocop
   ruby-debug-ide
   rufo

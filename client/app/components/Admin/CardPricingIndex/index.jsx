@@ -43,11 +43,11 @@ export default class CardPricingIndex extends Component {
     const numPages = Math.ceil(itineraries.length / 12)
     this.setState({ numPages })
   }
-  generateViewType (mot, limit) {
+  generateViewType (mot) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
         <div className="layout-row flex-90 layout-align-start-center layout-wrap">
-          {this.generateCardPricings(mot, limit)}
+          {this.generateCardPricings(mot)}
         </div>
       </div>
     )
@@ -119,7 +119,7 @@ export default class CardPricingIndex extends Component {
   render () {
     const { searchText, page, numPages } = this.state
     const {
-      theme, limit, scope, toggleCreator, mot
+      theme, scope, toggleCreator, mot
     } = this.props
     if (!scope) return ''
 
@@ -137,7 +137,7 @@ export default class CardPricingIndex extends Component {
             }`}
           >
             <div className="flex-100 layout-row layout-align-center-start" style={{ minHeight: '560px' }}>
-              {this.generateViewType(mot, limit)}
+              {this.generateViewType(mot)}
             </div>
             <div className="flex-95 layout-row layout-align-center-center margin_bottom">
               <div
@@ -240,7 +240,6 @@ CardPricingIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
-  limit: PropTypes.number,
   toggleCreator: PropTypes.func,
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
@@ -260,6 +259,5 @@ CardPricingIndex.defaultProps = {
   hubs: [],
   itineraries: [],
   scope: null,
-  limit: 9,
   toggleCreator: null
 }

@@ -188,7 +188,7 @@ export class AdminHubView extends Component {
     }
 
     const {
-      hub, relatedHubs, routes, location, charges, customs
+      hub, relatedHubs, routes, location, charges, customs, serviceLevels, counterpartHubs
     } = hubData
     if (!hub) {
       return ''
@@ -424,6 +424,8 @@ export class AdminHubView extends Component {
               theme={theme}
               charges={charges}
               customs={customs}
+              serviceLevels={serviceLevels}
+              counterpartHubs={counterpartHubs}
               adminDispatch={adminActions}
               loadType={currentFeeLoadType.value}
             />
@@ -446,7 +448,7 @@ export class AdminHubView extends Component {
                 content={routes.length === 0 ? 
                   (<div className="flex-100 layout-row layout-align-center-center layout-wrap">
                     No itineraries yet
-                    </div>) 
+                  </div>) 
                   : itinerariesBox}
               />
             </div>
@@ -472,6 +474,8 @@ AdminHubView.propTypes = {
     schedules: PropTypes.array,
     charges: PropTypes.array,
     customs: PropTypes.array,
+    serviceLevels: PropTypes.array,
+    counterpartHubs: PropTypes.array,
     location: PropTypes.objectOf(PropTypes.any),
     mandatoryCharges: PropTypes.objectOf(PropTypes.any)
   })

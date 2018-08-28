@@ -1,24 +1,41 @@
-# README
+# ItsMyCargo [![pipeline status](https://gitlab.com/itsmycargo/imc-react-api/badges/dev/pipeline.svg)](https://gitlab.com/itsmycargo/imc-react-api/commits/dev) [![coverage report](https://gitlab.com/itsmycargo/imc-react-api/badges/dev/coverage.svg)](https://gitlab.com/itsmycargo/imc-react-api/commits/dev)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## :ship: Deployments
 
-Things you may want to cover:
+We currently deploy API layer via AWS Elastic Beanstalk.
+Frontend code is deployed by manually via `npm deploy` script in `client/` directory.
 
-* Ruby version
+## Development Setup
 
-* System dependencies
+### Overcommit
 
-* Configuration
+We use [overcommit](https://github.com/brigade/overcommit) to maintain our git hooks. Currently only commit message format
+is enforced with pre-commit hooks, but other mandatory checks can be added if required.
 
-* Database creation
+First install `overcommit` globally: `gem install overcommit` and then simply install overcommit hooks with
+`overcommit --install`.
+Sometimes overcommit will make life difficult, i.e. when rebasing and rebase contains overcommit config file changes.
+These cases Overcommit will fail and abort rebasing process. These cases Overcommit can be disabled by setting environment
+variable `OVERCOMMIT_DISABLE=1`, e.g. to rebase:
 
-* Database initialization
+    OVERCOMMIT_DISABLE=1 git rebase -i origin/master
 
-* How to run the test suite
+#### Commit Message
 
-* Services (job queues, cache servers, search engines, etc.)
+Please keep your commit message sensible and descriptive. For example of what is considered good git commit message,
+please see [Linus' instructions](https://github.com/torvalds/subsurface-for-dirk/blob/master/README#L92). Each commit
+message should adhere to the following pattern:
 
-* Deployment instructions
+    IMC-123 Summary: explain the commit in one line (use the imperative)
 
-* ...
+    Body of commit message is a few lines of text, explaining things
+          in more detail, possibly giving some background about the issue
+          being fixed, etc etc.
+
+This allows us to quickly look through our git history and see relevant changes or commits - as well see more detail on said change (if applicable). For JIRA to link commits and PRs to tickets, each commit must have a JIRA ticket key. In the case that there is no JIRA ticket, you should either create one, or use one of following prefixes:
+
+  * `HOTFIX:` - Hotfixing broken master
+  * `WIP:` - The commit is a work in progress
+  * `CHORE:` - The commit is a quick chore or task and does not directly relate to any ticket (such as README cleanups etc)
+
+All prefixes are case insensitive.
