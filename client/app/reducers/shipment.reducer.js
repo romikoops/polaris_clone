@@ -57,6 +57,14 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: true
       }
+    case shipmentConstants.SET_ERROR:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          [action.payload.stage]: action.payload.errors
+        }
+      }
     case shipmentConstants.GET_SHIPMENT_SUCCESS:
       return action.shipmentData
     case shipmentConstants.GET_SHIPMENT_FAILURE:
