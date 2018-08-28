@@ -160,8 +160,10 @@ export class AdminHubFees extends Component {
       direction, selectedServiceLevel, selectedCounterpartHub, selectedCargoClass
     } = this.state
 
-    const tenantVehicle = selectedServiceLevel.label ? selectedServiceLevel.value : null
-    const counterHub = selectedCounterpartHub.label ? selectedCounterpartHub.value.id : null    
+    const tenantVehicle = selectedServiceLevel && selectedServiceLevel.label
+      ? selectedServiceLevel.value : null
+    const counterHub = selectedCounterpartHub && selectedCounterpartHub.label
+      ? selectedCounterpartHub.value.id : null
 
     return charge.direction === direction && charge.load_type === selectedCargoClass &&
           charge.counterpart_hub_id === counterHub && charge.tenant_vehicle_id === tenantVehicle
