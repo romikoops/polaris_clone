@@ -48,7 +48,7 @@ class Shop extends Component {
     this.toggleShowRegistration = this.toggleShowRegistration.bind(this)
     this.hideRegistration = this.hideRegistration.bind(this)
 
-    // props.bookingSummaryDispatch.update()
+    props.bookingSummaryDispatch.update()
   }
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
@@ -61,11 +61,6 @@ class Shop extends Component {
     const { loggingIn, registering, loading } = nextProps
 
     return loading || !(loggingIn || registering)
-  }
-
-  componentWillUnmount () {
-    debugger // eslint-disable-line
-    this.props.bookingSummaryDispatch.update()
   }
 
   getShipment (loadType) {
