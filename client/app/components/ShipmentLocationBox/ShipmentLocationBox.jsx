@@ -668,21 +668,18 @@ export class ShipmentLocationBox extends Component {
       const newStateOrigin = routes.find(o => (
         o.origin.nexusId === shipment.origin.nexus_id
       ))
-      if (newStateOrigin) {
-        newState.oSelect = routeHelpers.routeOption(newStateOrigin.origin)
-      } else {
-        newState.oSelect = {}
-      }
+
+      newState.oSelect = newStateOrigin
+        ? routeHelpers.routeOption(newStateOrigin.origin)
+        : {}
     }
     if (!this.props.has_on_carriage) {
       const newStateDestination = routes.find(d => (
         d.destination.nexusId === shipment.destination.nexus_id
       ))
-      if (newStateDestination) {
-        newState.dSelect = routeHelpers.routeOption(newStateDestination.destination)
-      } else {
-        newState.dSelect = {}
-      }
+      newState.dSelect = newStateDestination
+        ? routeHelpers.routeOption(newStateDestination.destination)
+        : {}
     }
     newState.autoText = {
       origin: shipment.origin.fullAddress || '',
@@ -749,12 +746,7 @@ export class ShipmentLocationBox extends Component {
   handleSwap () {
     /* eslint-disable camelcase */
     const { has_on_carriage, has_pre_carriage } = this.props
-    // if (!has_on_carriage) {
-    //   this.setOriginNexus()
-    // }
-    // if (!has_pre_carriage) {
-    //   this.setDestNexus()
-    // }
+
     // Handle the cases for when trucking exists
     if (has_pre_carriage || has_on_carriage) {
       this.handleTrucking({
