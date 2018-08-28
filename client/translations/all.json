@@ -69,6 +69,11 @@
         "withoutPickup": "without pick-up",
         "status": "Status"
       },
+      "help": {
+        "sendEmail": " Send an email detailing your issues to:",
+        "enquiries": "General Enquiries: ",
+        "needHelp": "Need help?"
+      },
       "nav": {
         "signOut": "Sign out",
         "loginPage": "LoginPage",

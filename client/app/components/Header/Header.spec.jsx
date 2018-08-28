@@ -33,6 +33,14 @@ test('shallow render', () => {
   expect(shallow(<Header {...propsBase} />)).toMatchSnapshot()
 })
 
+test('checkIsTop method', () => {
+  const wrapper = shallow(<Header {...propsBase} />)
+  wrapper.setState({ isTop: false })
+  wrapper.instance().checkIsTop()
+
+  expect(wrapper.state().isTop).toBe(true)
+})
+
 test('noMessages is true', () => {
   const props = {
     ...propsBase,
