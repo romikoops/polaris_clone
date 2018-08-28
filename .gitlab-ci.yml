@@ -31,3 +31,12 @@ rspec:
   artifacts:
     reports:
       junit: rspec.xml
+
+jest:
+  stages: test
+  image: eu.gcr.io/itsmycargo-main/base:stable
+
+  script:
+    - cd client 
+    - npm install
+    - npm test
