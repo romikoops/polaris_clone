@@ -23,3 +23,13 @@ rspec:
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
   script:
     - scripts/ci-build.sh bin/rspec
+
+jest:
+  stages: test
+  image: eu.gcr.io/itsmycargo-main/base:stable
+
+  script:
+    - cd client 
+    - npm install
+    - npm test
+
