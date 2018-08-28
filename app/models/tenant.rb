@@ -72,14 +72,20 @@ class Tenant < ApplicationRecord
 
   def test_pricings(load_type, expected_values, pickup, dropoff, import, export)
     DataValidator::ItineraryPriceValidator.new(
-      load_type: load_type,
-      expected_values: expected_values,
-      tenant: self.id,
+      load_type:        load_type,
+      expected_values:  expected_values,
+      tenant:           id,
       has_pre_carriage: pickup,
-      has_on_carriage: dropoff,
-      import: import,
-      export: export
+      has_on_carriage:  dropoff,
+      import:           import,
+      export:           export
     ).perform
+  end
+
+  def autogenerate_all_schedules(end_date)
+    itineraries.each do |itinerary|
+      itinerary.default_generate_schedules(end_date)
+    end
   end
 
   def mode_of_transport_in_scope?(mode_of_transport, load_type=nil)

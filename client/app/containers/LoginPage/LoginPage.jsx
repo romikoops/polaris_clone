@@ -43,7 +43,9 @@ class LoginPage extends React.Component {
 
   handleSubmit (model) {
     const { email, password } = model
-    const { dispatch, req, noRedirect } = this.props
+    const {
+      dispatch, req, noRedirect
+    } = this.props
     dispatch(authenticationActions.login({
       email,
       password,
@@ -69,7 +71,7 @@ class LoginPage extends React.Component {
   }
 
   render () {
-    const { loggingIn, theme, handleClick } = this.props
+    const { loggingIn, theme } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
@@ -131,7 +133,7 @@ class LoginPage extends React.Component {
           </a>
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton text="Sign In" theme={theme} active handleNext={handleClick} />
+          <RoundButton text="Sign In" theme={theme} active />
           <div className={styles.spinner}>{loggingIn && <LoadingSpinner />}</div>
         </div>
       </Formsy>
@@ -140,18 +142,22 @@ class LoginPage extends React.Component {
 }
 
 function mapStateToProps (state) {
-  const { loggingIn, loginAttempt, user } = state.authentication
+  const { authentication } = state
+  const {
+    loggingIn, loginAttempt, user, noRedirect, req
+  } = authentication
 
   return {
     loggingIn,
     loginAttempt,
-    user
+    user,
+    noRedirect,
+    req
   }
 }
 
 LoginPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  handleClick: PropTypes.func,
   loggingIn: PropTypes.bool,
   theme: PropTypes.theme,
   loginAttempt: PropTypes.bool,
@@ -163,7 +169,6 @@ LoginPage.propTypes = {
 LoginPage.defaultProps = {
   loggingIn: false,
   theme: null,
-  handleClick: null,
   loginAttempt: false,
   noRedirect: false,
   req: null

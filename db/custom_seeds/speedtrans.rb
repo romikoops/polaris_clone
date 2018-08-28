@@ -33,9 +33,7 @@ subdomains.each do |sub|
   req = { 'xlsx' => local_charges }
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
-  hubs = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__addons.xlsx")
-  req = { 'xlsx' => hubs }
-  ExcelTool::OverwriteAddons.new(params: req, _user: shipper).perform
+
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = File.open("#{Rails.root}/db/dummydata/speedtrans/speedtrans__trucking_ltl__hamburg_port.xlsx")

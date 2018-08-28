@@ -513,6 +513,11 @@ function toDashboard (id) {
 function clearLoading () {
   return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
+
+function clearErrors (stage) {
+  return { type: shipmentConstants.CLEAR_ERRORS, payload: stage }
+}
+
 function logOut () {
   return {
     type: shipmentConstants.CLEAR_SHIPMENTS,
@@ -549,7 +554,8 @@ export const shipmentActions = {
   logOut,
   getOffersForNewDate,
   updateContact,
-  delete: _delete
+  delete: _delete,
+  clearErrors
 }
 
 export default shipmentActions

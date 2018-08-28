@@ -7,10 +7,20 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: false
       }
+    case shipmentConstants.CLEAR_ERRORS: {
+      const { error } = state
+      delete error[action.payload]
+
+      return {
+        ...state,
+        error
+      }
+    }
     case shipmentConstants.REUSE_SHIPMENT_REQUEST:
       return {
         reusedShipment: action.payload,
-        loading: true
+        loading: true,
+        currentStage: 'stage1'
       }
     case shipmentConstants.NEW_SHIPMENT_REQUEST:
       return {
@@ -18,7 +28,8 @@ export default function shipment (state = {}, action) {
         request: {
           stage1: action.shipmentData
         },
-        loading: true
+        loading: true,
+        currentStage: 'stage1'
       }
     case shipmentConstants.NEW_SHIPMENT_SUCCESS:
       return {
@@ -27,6 +38,7 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage1: action.shipmentData
         },
+        currentStage: 'stage2',
         activeShipment: action.shipmentData.shipment.id,
         loading: false
       }
@@ -78,6 +90,7 @@ export default function shipment (state = {}, action) {
           stage2: action.shipmentData
         },
         loading: false,
+        currentStage: 'stage3',
         activeShipment: action.shipmentData.shipment.id
       }
     case shipmentConstants.GET_OFFERS_FAILURE:
@@ -155,6 +168,7 @@ export default function shipment (state = {}, action) {
           ...state.response,
           stage3: action.shipmentData
         },
+        currentStage: 'stage4',
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }
@@ -184,6 +198,7 @@ export default function shipment (state = {}, action) {
           stage4: action.shipmentData
         },
         loading: false,
+        currentStage: 'stage5',
         activeShipment: action.shipmentData.shipment.id
       }
     case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
@@ -214,6 +229,7 @@ export default function shipment (state = {}, action) {
         },
         reusedShipment: false,
         loading: false,
+        currentStage: 'stage6',
         activeShipment: action.shipmentData.shipment.id
       }
     case shipmentConstants.REQUEST_SHIPMENT_FAILURE:

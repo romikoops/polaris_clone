@@ -6,7 +6,14 @@ import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-import { appActions, messagingActions, adminActions } from '../../actions'
+import {
+  appActions,
+  messagingActions,
+  adminActions,
+  authenticationActions,
+  shipmentActions
+} from '../../actions'
+import { FlashMessages } from '../FlashMessages/FlashMessages'
 
 class Header extends Component {
   constructor (props) {
@@ -17,6 +24,7 @@ class Header extends Component {
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
+    this.clearErrors = this.clearErrors.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
   }
@@ -57,13 +65,20 @@ class Header extends Component {
     this.props.appDispatch.goTo('/')
   }
   toggleShowLogin () {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
+    const { showModal, authenticationDispatch, noRedirect } = this.props
+    if (showModal) {
+      authenticationDispatch.closeLogin()
+    } else {
+      authenticationDispatch.showLogin({ noRedirect })
+    }
   }
   toggleShowMessages () {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
+  }
+  clearErrors () {
+    const { shipmentDispatch, currentStage } = this.props
+    shipmentDispatch.clearErrors(currentStage)
   }
   render () {
     const {
@@ -76,9 +91,9 @@ class Header extends Component {
       scrollable,
       noMessages,
       component,
-      toggleShowLogin,
-      // adminDispatch,
-      isLanding
+      isLanding,
+      error,
+      currentStage
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -136,9 +151,10 @@ class Header extends Component {
         invert={isTop && invert}
         user={user}
         isLanding={isLanding}
-        toggleShowLogin={toggleShowLogin}
+        toggleShowLogin={this.toggleShowLogin}
       />
     )
+    const hasErrors = error && error[currentStage] && error[currentStage].length > 0
 
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
@@ -146,7 +162,6 @@ class Header extends Component {
         {!noMessages ? mail : ''}
       </div>
     )
-
     const loginModal = (
       <Modal
         component={
@@ -166,6 +181,7 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+
     const headerClass =
       `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
       `${invert ? styles.inverted : ''} ` +
@@ -189,15 +205,18 @@ class Header extends Component {
             {dropDowns}
             {
               (
-                this.state.showLogin ||
+                this.props.showModal ||
                 this.props.loggingIn ||
                 this.props.registering
               ) &&
-              this.props.req &&
               loginModal
             }
           </div>
         </div>
+        { hasErrors
+          ? <div className={`flex-none layout-row ${styles.error_messages}`}>
+            <FlashMessages messages={error[currentStage]} onClose={this.clearErrors} />
+          </div> : '' }
       </div>
     )
   }
@@ -208,6 +227,7 @@ Header.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   registering: PropTypes.bool,
+  noRedirect: PropTypes.bool,
   loggingIn: PropTypes.bool,
   isLanding: PropTypes.bool,
   invert: PropTypes.bool,
@@ -221,9 +241,13 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
-  toggleShowLogin: PropTypes.func,
+  authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  shipmentDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   noMessages: PropTypes.bool,
-  component: PropTypes.node
+  component: PropTypes.node,
+  showModal: PropTypes.bool,
+  error: PropTypes.objectOf(PropTypes.any),
+  currentStage: PropTypes.string
 }
 
 Header.defaultProps = {
@@ -231,6 +255,7 @@ Header.defaultProps = {
   theme: null,
   user: null,
   registering: false,
+  noRedirect: false,
   isLanding: false,
   loggingIn: false,
   invert: false,
@@ -239,21 +264,24 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   req: null,
-  toggleShowLogin: null,
   scrollable: false,
   noMessages: false,
-  component: null
+  component: null,
+  showModal: false,
+  error: null,
+  currentStage: 'stage1'
 }
 
 function mapStateToProps (state) {
   const {
-    authentication, tenant, shipment, app, messaging
+    authentication, tenant, shipment, app, messaging, bookingData
   } = state
   const {
-    user, loggedIn, loggingIn, registering, loginAttempt
+    user, loggedIn, loggingIn, registering, loginAttempt, showModal
   } = authentication
   const { unread, messages } = messaging
   const { currencies } = app
+  const { error, currentStage } = bookingData
 
   return {
     user,
@@ -265,13 +293,18 @@ function mapStateToProps (state) {
     shipment,
     currencies,
     unread,
-    messages
+    messages,
+    showModal,
+    error,
+    currentStage
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     adminDispatch: bindActionCreators(adminActions, dispatch),
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
     messageDispatch: bindActionCreators(messagingActions, dispatch)
   }
 }

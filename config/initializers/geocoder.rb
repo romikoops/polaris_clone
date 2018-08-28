@@ -8,5 +8,5 @@ Geocoder.configure(
   units: :km,
 
   # Geocoding service request timeout, in seconds (default 3):
-  timeout: 1200
+  timeout: 2000
 )

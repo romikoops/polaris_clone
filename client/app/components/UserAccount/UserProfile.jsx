@@ -448,86 +448,146 @@ export class UserProfile extends Component {
             <i className="fa fa-user flex-10" style={textStyle} />
             <p className="flex-none">New Alias</p>
           </div>
-          <input
-            className={styles.input_100}
-            type="text"
-            value={newAlias.companyName}
-            name="companyName"
-            placeholder="Company Name"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_50}
-            type="text"
-            value={newAlias.firstName}
-            name="firstName"
-            placeholder="First Name"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_50}
-            type="text"
-            value={newAlias.lastName}
-            name="lastName"
-            placeholder="Last Name"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_50}
-            type="text"
-            value={newAlias.email}
-            name="email"
-            placeholder="Email"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_50}
-            type="text"
-            value={newAlias.phone}
-            name="phone"
-            placeholder="Phone"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_street}
-            type="text"
-            value={newAlias.street}
-            name="street"
-            placeholder="Street"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_no}
-            type="text"
-            value={newAlias.number}
-            name="number"
-            placeholder="Number"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_zip}
-            type="text"
-            value={newAlias.zipCode}
-            name="zipCode"
-            placeholder="Postal Code"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_cc}
-            type="text"
-            value={newAlias.city}
-            name="city"
-            placeholder="City"
-            onChange={this.handleFormChange}
-          />
-          <input
-            className={styles.input_cc}
-            type="text"
-            value={newAlias.country}
-            name="country"
-            placeholder="Country"
-            onChange={this.handleFormChange}
-          />
+          <div className="flex-100 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="companyName">
+              Company Name
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.companyName}
+              name="companyName"
+              id="companyName"
+              placeholder="Company Name"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="firstName">
+              First Name
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.firstName}
+              name="firstName"
+              id="firstName"
+              placeholder="First Name"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="lastName">
+              Last Name
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.lastName}
+              name="lastName"
+              id="lastName"
+              placeholder="Last Name"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="email">
+              Email
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.email}
+              name="email"
+              id="email"
+              placeholder="Email"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-50 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="phone">
+              Phone
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.phone}
+              name="phone"
+              id="phone"
+              placeholder="Phone"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-75 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="street">
+              Street
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.street}
+              name="street"
+              id="street"
+              placeholder="Street"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-25 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="number">
+              Number
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.number}
+              name="number"
+              id="number"
+              placeholder="Number"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-20 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="zipCode">
+              Zip Code
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.zipCode}
+              name="zipCode"
+              id="zipCode"
+              placeholder="Postal Code"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="city">
+              city
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.city}
+              name="city"
+              id="city"
+              placeholder="City"
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div className="flex-40 layout-row layout-align-center-center input_box_label relative">
+            <label htmlFor="country">
+              Country
+            </label>
+            <input
+              className="flex"
+              type="text"
+              value={newAlias.country}
+              name="country"
+              id="country"
+              placeholder="Country"
+              onChange={this.handleFormChange}
+            />
+          </div>
           <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
             <RoundButton
               theme={theme}

@@ -1,22 +1,33 @@
 variables:
-  POSTGRES_DB: imcr_test
-  DATABASE_URL: postgis://postgres:@postgresql/imcr_test
-  REDIS_URL: "redis://redis:6379"
+  BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
 
 pronto:
   stage: test
-  image: registry.gitlab.com/itsmycargo/docker-images/pronto:latest
+  image: eu.gcr.io/itsmycargo-main/pronto:stable
   script:
     - scripts/pronto
 
+charge_calculator:
+  stage: test
+  image: ruby:2.5
+  variables:
+    SPEC_OPTS: "--format RspecJunitFormatter --out rspec.xml --format Fuubar --color"
+  script:
+    - "cd lib/charge_calculator; bundle; bundle exec rspec"
+  artifacts:
+    reports:
+      junit: lib/charge_calculator/rspec.xml
+
 rspec:
   stage: test
-  image: docker:stable
+  image: eu.gcr.io/itsmycargo-main/base:stable
   services:
-    - docker:dind
     - mdillon/postgis
-    - redis
+  variables:
+    POSTGRES_DB: imcr_test
+    DATABASE_URL: postgis://postgres:@localhost/imcr_test
   script:
-    - apk add --no-cache python py2-pip
-    - pip install --no-cache-dir docker-compose
-    - docker-compose -f docker-compose.test.yml run --rm api bin/rspec
+    - scripts/ci-build.sh bin/rspec
+  artifacts:
+    reports:
+      junit: rspec.xml

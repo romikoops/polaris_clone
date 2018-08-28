@@ -100,3 +100,7 @@ db/dummydata/.DS_Store
 *~*.xls*
 
 blank.html
+
+.rspec_status
+lib/*/Gemfile.lock
+rspec.xml

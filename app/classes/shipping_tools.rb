@@ -35,6 +35,7 @@ module ShippingTools
         Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     end
+    last_trip_date = last_trip(current_user)
 
     routes_data = Route.detailed_hashes_from_itinerary_ids(
       itinerary_ids,
@@ -47,23 +48,26 @@ module ShippingTools
       lookup_tables_for_routes: routes_data[:look_ups],
       cargo_item_types:         tenant.cargo_item_types,
       max_dimensions:           tenant.max_dimensions,
-      max_aggregate_dimensions: tenant.max_aggregate_dimensions
+      max_aggregate_dimensions: tenant.max_aggregate_dimensions,
+      last_trip_date:           last_trip_date
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
   def self.get_offers(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
-
+    
     offer_calculator.perform
 
     offer_calculator.shipment.save!
+    last_trip_date = last_trip(current_user)
     {
       shipment:        offer_calculator.shipment,
       schedules:       offer_calculator.detailed_schedules,
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
-      cargoUnits:      offer_calculator.shipment.cargo_units
+      cargoUnits:      offer_calculator.shipment.cargo_units,
+      lastTripDate:    last_trip_date
     }
   end
 
@@ -88,10 +92,8 @@ module ShippingTools
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id)  # NOT CORRECT: .merge(alias: shipment.export?)
-    )
-    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
+    contact_params = contact_params(resource, contact_location.id)
+    contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
     shipper = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
@@ -99,16 +101,15 @@ module ShippingTools
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by!(
-      contact_params(resource, contact_location.id)    # NOT CORRECT: .merge(alias: shipment.import?)
-    )
+    contact_params = contact_params(resource, contact_location.id)
+    contact = search_contacts(contact_params, current_user)
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "consignee")
     consignee = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      contact = current_user.contacts.find_or_create_by!(contact_params(resource))
+      contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []
@@ -132,7 +133,6 @@ module ShippingTools
         parent:                   charge_breakdown.charge('grand_total')
       )
     end
-    # byebug
     if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
         children_charge_category: ChargeCategory.from_code("customs"),
@@ -481,6 +481,16 @@ module ShippingTools
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
+  def self.search_contacts(contact_params, current_user)
+    contact_email = contact_params['email']
+    existing_contact = current_user.contacts.where(email: contact_email).first
+    if existing_contact
+      return existing_contact
+    else
+      current_user.contacts.create(contact_params(resource, contact_location.id))
+    end
+  end
+
   def self.reuse_cargo_units(shipment, cargo_units)
     cargo_units.each do |cargo_unit|
       cargo_json = cargo_unit.clone().as_json
@@ -532,6 +542,10 @@ module ShippingTools
         shipment
       ).deliver_later
     end
+  end
+
+  def self.last_trip(user)
+    user.tenant.trips.order(:start_date)&.last&.start_date
   end
 
   def build_and_upload_pdf(args)

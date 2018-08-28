@@ -61,10 +61,8 @@ class AdminScheduleGenerator extends Component {
     }
   }
   componentDidMount () {
-    const { hubs, vehicleTypes, adminDispatch } = this.props
-    if (vehicleTypes.length < 1) {
-      adminDispatch.getVehicleTypes(false)
-    }
+    const { hubs, adminDispatch, itinerary } = this.props
+    adminDispatch.getVehicleTypes(itinerary.id)
     if (!hubs) {
       adminDispatch.getHubs(false)
     }
@@ -165,21 +163,23 @@ class AdminScheduleGenerator extends Component {
     const future = {
       after: new Date()
     }
-    console.log('mot', mot)
     const vehicleTypeOptions = []
     if (vehicleTypes && mot) {
       vehicleTypes.forEach((vt) => {
+        const nameWithCarrier = vt.carrier
+          ? `${vt.carrier.name} - ${vt.name}`
+          : vt.name
         if (vt.mode_of_transport === mot) {
           vehicleTypeOptions.push({
             value: vt.id,
-            label: AdminScheduleGenerator.camelToCaps(vt.name ? vt.name : `${vt.mode_of_transport}_default`)
+            label: AdminScheduleGenerator.camelToCaps(nameWithCarrier)
           })
         }
         if (vt.is_default && !vehicleType && vt.mode_of_transport === mot) {
           this.setState({
             vehicleType: {
               value: vt.id,
-              label: AdminScheduleGenerator.camelToCaps(vt.name ? vt.name : `${vt.mode_of_transport}_default`)
+              label: AdminScheduleGenerator.camelToCaps(nameWithCarrier)
             }
           })
         }
@@ -267,6 +267,7 @@ class AdminScheduleGenerator extends Component {
       ) : (
         <RoundButton text="Generate" iconClass="fa-plus-o" theme={theme} disabled />
       )
+
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -512,6 +513,7 @@ function mapDispatchToProps (dispatch) {
 function mapStateToProps (state) {
   const { admin } = state
   const { hubs, vehicleTypes } = admin
+
   return {
     hubs,
     vehicleTypes

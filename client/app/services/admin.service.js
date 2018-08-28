@@ -257,17 +257,28 @@ function confirmShipment (id, action) {
   }
   const url = `${BASE_URL}/admin/shipments/${id}`
 
-  // FIXME: console.log(url)
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function getPricings () {
+function getPricings (page, mot) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/pricings`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions)
+    .then(handleResponse)
+}
+
+function searchPricings (text, page, mot) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/search/pricings?page=${page || 1}
+    &mot=${mot}&text=${text}`, requestOptions)
+    .then(handleResponse)
 }
 
 function deletePricing (pricing) {
@@ -326,13 +337,13 @@ function getTrucking () {
   return fetch(`${BASE_URL}/admin/trucking`, requestOptions).then(handleResponse)
 }
 
-function getVehicleTypes () {
+function getVehicleTypes (itineraryId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/vehicle_types`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/vehicle_types?itinerary_id=${itineraryId}`, requestOptions).then(handleResponse)
 }
 
 function autoGenSchedules (data) {
@@ -674,7 +685,8 @@ export const adminService = {
   getAllHubs,
   getPricingsTest,
   searchShipments,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  searchPricings
 }
 
 export default adminService

@@ -294,6 +294,10 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        links: {
+          about: '',
+          legal: ''
+        },
         quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
@@ -395,6 +399,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -473,6 +481,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -536,6 +548,10 @@ class TenantSeeder
             container: false,
             cargo_item: false
           }
+        },
+        links: {
+          about: '',
+          legal: ''
         },
         quotation_tool: false,
         consolidate_cargo: false,
@@ -626,6 +642,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -702,6 +722,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -776,6 +800,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -850,6 +878,10 @@ class TenantSeeder
         has_insurance: true,
         has_customs: false,
         terms: [],
+        links: {
+          about: '',
+          legal: ''
+        },
         carriage_options: {
           on_carriage: {
             import: 'optional',
@@ -926,6 +958,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1008,6 +1044,10 @@ class TenantSeeder
             container: false,
             cargo_item: false
           }
+        },
+        links: {
+          about: '',
+          legal: ''
         },
         quotation_tool: false,
         consolidate_cargo: false,
@@ -1114,6 +1154,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1213,6 +1257,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1299,6 +1347,10 @@ class TenantSeeder
             container: true,
             cargo_item: true
           }
+        },
+        links: {
+          about: '',
+          legal: ''
         },
         quotation_tool: false,
         consolidate_cargo: false,
@@ -1405,6 +1457,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
@@ -1520,6 +1576,10 @@ class TenantSeeder
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
+        links: {
+          about: '',
+          legal: ''
+        },
         has_insurance: false,
         has_customs: false,
         terms: [
@@ -1640,6 +1700,10 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
@@ -1731,6 +1795,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
@@ -1818,6 +1886,10 @@ class TenantSeeder
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
@@ -1897,6 +1969,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: true,
+        links: {
+          about: '',
+          legal: ''
+        },
         detailed_billing: false,
         quotation_tool: true,
         consolidate_cargo: false,
@@ -1990,6 +2066,10 @@ class TenantSeeder
             container: false,
             cargo_item: false
           }
+        },
+        links: {
+          about: '',
+          legal: ''
         },
         dangerous_goods: false,
         detailed_billing: false,

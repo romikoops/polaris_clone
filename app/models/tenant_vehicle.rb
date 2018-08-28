@@ -3,7 +3,8 @@
 class TenantVehicle < ApplicationRecord
   belongs_to :tenant
   belongs_to :vehicle
-  belongs_to :carrier, optional: true 
+  belongs_to :carrier, optional: true
+  has_many :pricings
 
   after_create do |tvt|
     vt = tvt.vehicle
@@ -11,5 +12,9 @@ class TenantVehicle < ApplicationRecord
     default_tvt = TenantVehicle.find_by(mode_of_transport: tvt.mode_of_transport, is_default: true, tenant_id: tvt.tenant_id)
     tvt.is_default = true unless default_tvt
     tvt.save!
+  end
+
+  def with_carrier
+    as_json(include: { carrier: { only: %i(id name) } })
   end
 end
