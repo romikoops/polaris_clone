@@ -242,7 +242,6 @@ export class ShipmentLocationBox extends Component {
     }
   }
   setOriginNexus (event) {
-    // this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'destination')
     if (event) {
       const origin = {
         nexus_id: event.value.id,
@@ -669,19 +668,26 @@ export class ShipmentLocationBox extends Component {
       const newStateOrigin = routes.find(o => (
         o.origin.nexusId === shipment.origin.nexus_id
       ))
-      newState.oSelect = routeHelpers.routeOption(newStateOrigin.origin)
+      if (newStateOrigin) {
+        newState.oSelect = routeHelpers.routeOption(newStateOrigin.origin)
+      } else {
+        newState.oSelect = {}
+      }
     }
     if (!this.props.has_on_carriage) {
       const newStateDestination = routes.find(d => (
         d.destination.nexusId === shipment.destination.nexus_id
       ))
-      newState.dSelect = routeHelpers.routeOption(newStateDestination.destination)
+      if (newStateDestination) {
+        newState.dSelect = routeHelpers.routeOption(newStateDestination.destination)
+      } else {
+        newState.dSelect = {}
+      }
     }
     newState.autoText = {
       origin: shipment.origin.fullAddress || '',
       destination: shipment.destination.fullAddress || ''
     }
-
     if (shipment.origin.nexus_id) {
       this.state.map
         ? this.setOriginNexus(newState.oSelect)
@@ -743,7 +749,12 @@ export class ShipmentLocationBox extends Component {
   handleSwap () {
     /* eslint-disable camelcase */
     const { has_on_carriage, has_pre_carriage } = this.props
-
+    // if (!has_on_carriage) {
+    //   this.setOriginNexus()
+    // }
+    // if (!has_pre_carriage) {
+    //   this.setDestNexus()
+    // }
     // Handle the cases for when trucking exists
     if (has_pre_carriage || has_on_carriage) {
       this.handleTrucking({
@@ -792,7 +803,7 @@ export class ShipmentLocationBox extends Component {
       const {
         truckingHubs, oSelect, dSelect
       } = prevState
-      const { filteredRouteIndexes } = this.props
+      const { filteredRouteIndexes, shipmentDispatch } = this.props
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
@@ -801,7 +812,6 @@ export class ShipmentLocationBox extends Component {
       const counterpartTrucking = truckingHubs[counterpart]
 
       let indexes = filteredRouteIndexes.slice()
-
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
           lookupTablesForRoutes,
@@ -847,7 +857,15 @@ export class ShipmentLocationBox extends Component {
       const truckingBoolean = !newFilteredRouteIndexes.some(i => routes[i][counterpart].truckTypes.length > 0)
 
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
-
+      if (newFilteredRouteIndexes.length === 0) {
+        const errors = [
+          {
+            type: 'error',
+            text: `No routes found between ${counterpartLocation.label} and ${targetLocation.label}`
+          }
+        ]
+        shipmentDispatch.setError({ stage: 'stage2', errors })
+      }
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
 
       return {
@@ -1361,6 +1379,7 @@ ShipmentLocationBox.propTypes = {
   theme: PropTypes.theme,
   setNotesIds: PropTypes.func,
   shipmentData: PropTypes.shipmentData,
+  shipmentDispatch: PropTypes.objectOf(PropTypes.func),
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   handleCarriageChange: PropTypes.func.isRequired,
@@ -1391,6 +1410,7 @@ ShipmentLocationBox.defaultProps = {
   nextStageAttempts: 0,
   theme: null,
   selectedTrucking: {},
+  shipmentDispatch: {},
   shipmentData: null,
   setNotesIds: null,
   routeIds: [],
