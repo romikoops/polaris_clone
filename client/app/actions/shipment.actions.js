@@ -513,8 +513,8 @@ function toDashboard (id) {
 function clearLoading () {
   return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
-function setError (error) {
-  return { type: shipmentConstants.SET_ERROR, payload: error }
+function setError (payload) {
+  return { type: shipmentConstants.SET_ERROR, payload }
 }
 
 function clearErrors (stage) {
