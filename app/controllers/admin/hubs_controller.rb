@@ -48,6 +48,16 @@ class Admin::HubsController < Admin::AdminBaseController
 
   def show
     hub = Hub.find(params[:id])
+    charges = hub.local_charges
+    service_levels = charges.map(&:tenant_vehicle).uniq.map(&:with_carrier).map do |tenant_vehicle|
+      carrier_name = tenant_vehicle["carrier"] ?
+      "#{tenant_vehicle["carrier"]["name"]} - #{tenant_vehicle["name"]}" :
+      tenant_vehicle["name"]
+      { label: "#{carrier_name.capitalize}", value: tenant_vehicle["id"]}
+    end
+    counter_part_hubs = charges.map(&:counterpart_hub).uniq.compact.map do |hub|
+      { label: hub.name, value: hub}
+    end
     resp = {
       hub:              hub.as_options_json,
       routes:           hub_route_map(hub),
@@ -56,7 +66,9 @@ class Admin::HubsController < Admin::AdminBaseController
       charges:          hub.local_charges,
       customs:          hub.customs_fees,
       location:         hub.location,
-      mandatoryCharges: hub.mandatory_charge
+      mandatoryCharges: hub.mandatory_charge,
+      serviceLevels: service_levels,
+      counterpartHubs: counter_part_hubs
     }
     response_handler(resp)
   end

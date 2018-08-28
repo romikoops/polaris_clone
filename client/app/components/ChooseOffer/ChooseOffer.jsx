@@ -59,9 +59,11 @@ export class ChooseOffer extends Component {
     window.scrollTo(0, 0)
     setStage(3)
   }
+
   shouldComponentUpdate () {
     return !!(this.props.shipmentData && this.props.shipmentData.shipment)
   }
+
   setDuration (val) {
     this.setState({ durationFilter: val })
   }

@@ -2,7 +2,7 @@
 function selectFromLookupTable (lookupTablesForRoutes, targetIds, target) {
   const results = []
   targetIds.forEach((targetId) => {
-    const lookup = lookupTablesForRoutes[target][targetId]
+    const lookup = lookupTablesForRoutes[target][targetId] || []
     lookup.forEach((ri) => {
       if (!results.includes(ri)) {
         results.push(ri)

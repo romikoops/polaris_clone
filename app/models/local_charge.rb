@@ -3,4 +3,6 @@
 class LocalCharge < ApplicationRecord
   belongs_to :hub
   belongs_to :tenant
+  belongs_to :tenant_vehicle, optional: true
+  belongs_to :counterpart_hub, class_name: "Hub", optional: true
 end
