@@ -396,7 +396,7 @@ export class AdminPricingDedicated extends Component {
 
   render () {
     const {
-      theme, clients, backBtn
+      theme, clients, backBtn, initialEdit
     } = this.props
 
     const {
@@ -437,7 +437,7 @@ export class AdminPricingDedicated extends Component {
         saveEdit={e => this.saveEdit(e)}
         handleRangeChange={this.handleRangeChange}
         target="charges"
-        initialEdit
+        initialEdit={initialEdit}
       />) : (<PricingRow
         className="flex-100"
         theme={theme}
@@ -451,7 +451,7 @@ export class AdminPricingDedicated extends Component {
         handleChange={this.handleChange}
         saveEdit={e => this.saveEdit(e)}
         target="charges"
-        initialEdit
+        initialEdit={initialEdit}
       />)
     })
     const gradientStyle =
@@ -582,12 +582,14 @@ AdminPricingDedicated.propTypes = {
   charges: PropTypes.arrayOf(PropTypes.any),
   clients: PropTypes.arrayOf(PropTypes.user).isRequired,
   backBtn: PropTypes.func,
-  closePricingView: PropTypes.func.isRequired
+  closePricingView: PropTypes.func.isRequired,
+  initialEdit: PropTypes.bool
 }
 AdminPricingDedicated.defaultProps = {
   theme: {},
   charges: [],
-  backBtn: null
+  backBtn: null,
+  initialEdit: false
 }
 
 export default AdminPricingDedicated
