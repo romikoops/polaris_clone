@@ -814,7 +814,7 @@ function getClient (id, redirect) {
   }
 }
 
-function getVehicleTypes () {
+function getVehicleTypes (itineraryId) {
   function request (vehicleData) {
     return { type: adminConstants.GET_VEHICLE_TYPES_REQUEST, payload: vehicleData }
   }
@@ -828,7 +828,7 @@ function getVehicleTypes () {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getVehicleTypes().then(
+    adminService.getVehicleTypes(itineraryId).then(
       (data) => {
         dispatch(alertActions.success('Fetching Vehicle Types successful'))
         dispatch(success(data))

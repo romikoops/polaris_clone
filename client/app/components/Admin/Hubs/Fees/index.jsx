@@ -14,9 +14,11 @@ import {
   rateBasisSchema,
   moment
 } from '../../../../constants'
-import { gradientGenerator } from '../../../../helpers'
+import { gradientGenerator, capitalize } from '../../../../helpers'
 import FeeRow from './FeeRow'
 import FeeRangeRow from './FeeRangeRow'
+import { NamedSelect } from '../../../NamedSelect/NamedSelect'
+
 
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -60,7 +62,9 @@ export class AdminHubFees extends Component {
       },
       edit: false,
       direction: 'import',
-      selectedCargoClass: 'lcl'
+      selectedCargoClass: 'lcl',
+      selectedServiceLevel: props.serviceLevels[0],
+      selectedCounterpartHub: props.counterpartHubs[0]
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -72,26 +76,28 @@ export class AdminHubFees extends Component {
     this.showAddFeePanel = this.showAddFeePanel.bind(this)
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
     this.handleRangeChange = this.handleRangeChange.bind(this)
+    this.handleServiceLevelChange = this.handleServiceLevelChange.bind(this)
+    this.handleCounterpartHubChange = this.handleCounterpartHubChange.bind(this)
   }
   componentWillMount () {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
-    const { direction, selectedCargoClass } = this.state
     if (nextProps.charges[0] && nextProps.charges[0].hub_id) {
       this.setAllFromOptions(nextProps.charges
-        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'charges')
+        .filter(c => this.checkCharge(c))[0], 'charges')
       this.setAllFromOptions(nextProps.customs
-        .filter(c => c.direction === direction && c.load_type === selectedCargoClass)[0], 'customs')
+        .filter(c => this.checkCharge(c))[0], 'customs')
     }
     if (this.state.charges !== nextProps.charges || this.state.customs !== nextProps.customs) {
       this.setState({
         charges: nextProps.charges,
-        customs: nextProps.customs
+        customs: nextProps.customs,
+        selectedServiceLevel: nextProps.serviceLevels[0],
+        selectedCounterpartHub: nextProps.counterpartHubs[0]
       })
     }
   }
-
   setCargoClass (type) {
     this.setState({ selectedCargoClass: type }, () => { this.prepAllOptions() })
   }
@@ -148,6 +154,19 @@ export class AdminHubFees extends Component {
         }
       }
     ))
+  }
+  checkCharge (charge) {
+    const {
+      direction, selectedServiceLevel, selectedCounterpartHub, selectedCargoClass
+    } = this.state
+
+    const tenantVehicle = selectedServiceLevel && selectedServiceLevel.label
+      ? selectedServiceLevel.value : null
+    const counterHub = selectedCounterpartHub && selectedCounterpartHub.label
+      ? selectedCounterpartHub.value.id : null
+
+    return charge.direction === direction && charge.load_type === selectedCargoClass &&
+          charge.counterpart_hub_id === counterHub && charge.tenant_vehicle_id === tenantVehicle
   }
   isEditing () {
     this.setState({ isEditing: !this.state.isEditing })
@@ -296,6 +315,12 @@ export class AdminHubFees extends Component {
       }
     })
   }
+  handleServiceLevelChange (event) {
+    this.setState({ selectedServiceLevel: event })
+  }
+  handleCounterpartHubChange (event) {
+    this.setState({ selectedCounterpartHub: event })
+  }
   handleRangeChange (event, target) {
     const { name, value } = event.target
     const nameKeys = name.split('-')
@@ -409,15 +434,15 @@ export class AdminHubFees extends Component {
   }
 
   render () {
-    const { theme } = this.props
+    const { theme, serviceLevels, counterpartHubs } = this.props
 
     const {
       selectOptions,
-
+      selectedServiceLevel,
+      selectedCounterpartHub,
       direction,
       directionBool,
       charges,
-      selectedCargoClass,
       customs
     } = this.state
     const { primary, secondary } = theme.colors
@@ -428,15 +453,15 @@ export class AdminHubFees extends Component {
     }
     const impStyle = directionBool ? styles2.toggle_off : styles2.toggle_on
     const expStyle = directionBool ? styles2.toggle_on : styles2.toggle_off
-    const currentCharge = charges.filter(charge => charge.load_type === selectedCargoClass && charge.direction === direction)[0]
-    const currentCustoms = customs.filter(custom => custom.load_type === selectedCargoClass && custom.direction === direction)[0]
+    const currentCharge = charges.filter(charge => this.checkCharge(charge))[0]
+    const currentCustoms = customs.filter(custom => this.checkCharge(custom))[0]
     const editCharge = this.state.editor.charges[direction]
     const editCustoms = this.state.editor.customs[direction]
-    const feeRows = Object.keys(currentCharge.fees).map((ck) => {
+    const feeRows = currentCharge ? Object.keys(currentCharge.fees).map((ck) => {
       const fee = currentCharge.fees[ck]
 
       return fee.range ? (<FeeRangeRow
-        className="flex-100"
+        className={`flex-100 ${styles2.fee_row_padding}`}
         theme={theme}
         fee={fee}
         selectOptions={selectOptions.charges[currentCharge.load_type]}
@@ -450,7 +475,7 @@ export class AdminHubFees extends Component {
         saveEdit={e => this.saveEdit(e)}
         target="charges"
       />) : (<FeeRow
-        className="flex-100"
+        className={`flex-100 ${styles2.fee_row_padding}`}
         theme={theme}
         fee={fee}
         selectOptions={selectOptions.charges[currentCharge.load_type]}
@@ -463,8 +488,14 @@ export class AdminHubFees extends Component {
         saveEdit={e => this.saveEdit(e)}
         target="charges"
       />)
-    })
-    const customsRows = Object.keys(currentCustoms.fees).map((ck) => {
+    }) : (
+      <div className="flex-100">
+        <p className={`${styles2.no_results}`}>
+          There are no results.
+        </p>
+      </div>
+    )
+    const customsRows = currentCustoms ? Object.keys(currentCustoms.fees).map((ck) => {
       const fee = currentCustoms.fees[ck]
 
       return (<FeeRow
@@ -480,7 +511,7 @@ export class AdminHubFees extends Component {
         saveEdit={e => this.saveEdit(e)}
         target="customs"
       />)
-    })
+    }) : ''
 
     return (
       <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles2.container}`}>
@@ -505,6 +536,18 @@ export class AdminHubFees extends Component {
             </div>
           </div>
         </div>
+        <NamedSelect
+          options={serviceLevels}
+          onChange={this.handleServiceLevelChange}
+          value={selectedServiceLevel}
+          className="flex-50"
+        />
+        <NamedSelect
+          options={counterpartHubs}
+          onChange={this.handleCounterpartHubChange}
+          value={selectedCounterpartHub}
+          className="flex-50"
+        />
         <div className="flex-100 layout-row layout-align-start-start layout-wrap">
           <div className={`flex-100 layout-row ${styles.cargo_class_row}`}>
             {this.renderCargoClassButtons()}
@@ -529,12 +572,16 @@ AdminHubFees.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.arrayOf(PropTypes.any),
-  customs: PropTypes.arrayOf(PropTypes.any)
+  customs: PropTypes.arrayOf(PropTypes.any),
+  serviceLevels: PropTypes.arrayOf(PropTypes.any),
+  counterpartHubs: PropTypes.arrayOf(PropTypes.any)
 }
 AdminHubFees.defaultProps = {
   theme: {},
   charges: [],
-  customs: []
+  customs: [],
+  serviceLevels: [],
+  counterpartHubs: []
 }
 
 export default AdminHubFees

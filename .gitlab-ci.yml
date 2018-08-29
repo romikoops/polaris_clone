@@ -10,8 +10,13 @@ pronto:
 charge_calculator:
   stage: test
   image: ruby:2.5
+  variables:
+    SPEC_OPTS: "--format RspecJunitFormatter --out rspec.xml --format Fuubar --color"
   script:
     - "cd lib/charge_calculator; bundle; bundle exec rspec"
+  artifacts:
+    reports:
+      junit: lib/charge_calculator/rspec.xml
 
 rspec:
   stage: test
@@ -23,9 +28,12 @@ rspec:
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
   script:
     - scripts/ci-build.sh bin/rspec
+  artifacts:
+    reports:
+      junit: rspec.xml
 
 jest:
-  stages: test
+  stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
 
   script:
