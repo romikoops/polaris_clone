@@ -650,6 +650,13 @@ export class ShipmentLocationBox extends Component {
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
+    const targetLocation = this.props[target]
+    if (targetLocation && event.type !== 'focus') {
+      const newAutotext = `${targetLocation.street} ${targetLocation.number} ${targetLocation.city} ${targetLocation.zipCode} ${
+        targetLocation.country
+      }`
+      this.triggerPlaceChanged(newAutotext, target)
+    }
   }
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
