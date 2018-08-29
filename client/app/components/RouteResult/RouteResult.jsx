@@ -4,7 +4,7 @@ import styles from './RouteResult.scss'
 import { moment } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Price } from '../Price/Price'
-import { switchIcon } from '../../helpers'
+import { switchIcon, capitalize } from '../../helpers'
 
 export class RouteResult extends Component {
   static returnHubType (hub) {
@@ -87,8 +87,15 @@ export class RouteResult extends Component {
                 </div>
               </div>
             </div>
-            <div className={`flex-20 layout-row layout-align-start-center ${styles.load_type}`}>
-              {/* <p className="flex-none no_m">{loadType}</p> */}
+            <div className={`flex-20 layout-row layout-wrap layout-align-start-center ${styles.load_type}`}>
+              <div className="flex-100 layout-row layout-align-center-center">
+                <i className="flex-10 fa fa-ship" />
+                <p className="flex-90 no_m">{schedule.carrier_name}</p>
+              </div>
+              <div className="flex-100 layout-row layout-align-center-center">
+                <i className="flex-10 fa fa-bell-o" />
+                <p className="flex-90 no_m">{capitalize(schedule.vehicle_name)}</p>
+              </div>
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-center">
