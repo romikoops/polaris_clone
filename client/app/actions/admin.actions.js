@@ -343,7 +343,7 @@ function getServiceCharges (redirect) {
     )
   }
 }
-function getPricings (redirect, page, mot) {
+function getPricings (redirect, pages) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
@@ -357,7 +357,7 @@ function getPricings (redirect, page, mot) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getPricings(page, mot).then(
+    adminService.getPricings(pages).then(
       (data) => {
         dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {

@@ -6,15 +6,56 @@ class Admin::PricingsController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-    @transports = TransportCategory.all.uniq
-    itineraries = Itinerary.where(tenant_id: current_user.tenant_id, mode_of_transport: params[:mot])
-    detailed_itineraries = itineraries.paginate(page: params[:page]).map(&:as_pricing_json)
-    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
 
+    @transports = TransportCategory.all.uniq
+    tenant = current_user.tenant
+
+    itineraries = tenant.itineraries
+    mots = tenant.scope[:modes_of_transport].keys.reject do |key| 
+      !tenant.scope[:modes_of_transport][key]["container"] &&
+      !tenant.scope[:modes_of_transport][key]["cargo_item"] 
+    end
+    byebug
+    detailed_itineraries = {}
+    mot_page_counts = {}
+    if params[:air]
+      air_itineraries = itineraries
+      .where(mode_of_transport: 'air')
+      detailed_itineraries[:air] = air_itineraries
+        .paginate(page: params[:air])
+        .map(&:as_pricing_json)
+      mot_page_counts[:air] = air_itineraries.count / 12
+    end
+    if params[:rail]
+      rail_itineraries = itineraries
+      .where(mode_of_transport: 'rail')
+      detailed_itineraries[:rail] = rail_itineraries
+        .paginate(page: params[:rail])
+        .map(&:as_pricing_json)
+      mot_page_counts[:rail] = rail_itineraries.count / 12
+    end
+    if params[:truck]
+      truck_itineraries = itineraries
+      .where(mode_of_transport: 'truck')
+      detailed_itineraries[:truck] = truck_itineraries
+        .paginate(page: params[:truck])
+        .map(&:as_pricing_json)
+      mot_page_counts[:truck] = truck_itineraries.count / 12
+    end
+    if params[:ocean]
+      ocean_itineraries = itineraries
+      .where(mode_of_transport: 'ocean')
+      detailed_itineraries[:ocean] = ocean_itineraries
+        .paginate(page: params[:ocean])
+        .map(&:as_pricing_json)
+      mot_page_counts[:ocean] = ocean_itineraries.count / 12
+    end
+    last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
+    byebug
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
-      numItineraryPages:   itineraries.count / 12,
+      numItineraryPages:   mot_page_counts,
       transportCategories: @transports,
       lastUpdate:          last_updated
     )
