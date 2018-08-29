@@ -57,7 +57,6 @@ function update (data) {
   }
   payload.trucking = data.shipment.trucking
   payload.loadType = data.shipment.load_type
-
   return dispatch => dispatch({ type: bookingSummaryConstants.UPDATE, payload })
 }
 

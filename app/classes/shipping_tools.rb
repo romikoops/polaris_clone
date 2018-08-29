@@ -109,7 +109,7 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      contact = search_contacts(contact_params)
+      contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
       contact
     end || []

@@ -337,13 +337,13 @@ function getTrucking () {
   return fetch(`${BASE_URL}/admin/trucking`, requestOptions).then(handleResponse)
 }
 
-function getVehicleTypes () {
+function getVehicleTypes (itineraryId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/vehicle_types`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/vehicle_types?itinerary_id=${itineraryId}`, requestOptions).then(handleResponse)
 }
 
 function autoGenSchedules (data) {

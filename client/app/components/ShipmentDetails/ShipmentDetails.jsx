@@ -250,18 +250,25 @@ export class ShipmentDetails extends Component {
     this.setState({ noteIds })
   }
   setTargetAddress (target, address) {
-    this.setState(prevState => ({
-      [target]: address,
-      prevRequest: {
-        ...prevState.prevRequest,
-        shipment: {
-          ...prevState.shipment,
-          [target]: address
-        }
+    this.setState((prevState) => {
+      if (prevState.prevRequest) {
+        return {
+          [target]: address,
+          prevRequest: {
+            ...prevState.prevRequest,
+            shipment: {
+              ...prevState.prevRequest.shipment,
+              [target]: address
+            }
 
+          }
+        }
       }
-    }
-    ))
+
+      return {
+        [target]: address
+      }
+    })
   }
 
   setAggregatedCargo (bool) {

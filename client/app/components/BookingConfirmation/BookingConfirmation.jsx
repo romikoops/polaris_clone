@@ -295,15 +295,15 @@ export class BookingConfirmation extends Component {
           <div className={INNER_WRAPPER}>
             <RouteHubBox shipment={shipment} theme={theme} />
             <div
-              className={`${ROW(100)} ${ALIGN_BETWEEN_CENTER}`}
-              style={{ position: 'relative' }}
+              className={`${ROW(100)} ${ALIGN_BETWEEN_START}`}
+              style={{ position: 'relative', paddingTop: '15px' }}
             >
               <div className={`flex-40 ${WRAP_ROW()} ${ALIGN_CENTER}`}>
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
-                  <p className="flex-100 letter_3">
+                  <p className="flex-100 center">
                     {expectedTime}
                   </p>
-                  <p className="flex-90 offset-10  center">
+                  <p className="flex-100  center">
                     {plannedTime}
                   </p>
                 </div>
@@ -312,8 +312,8 @@ export class BookingConfirmation extends Component {
 
               <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
                 <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
-                  <p className="flex-100 letter_3"> Expected Time of Arrival:</p>
-                  <p className="flex-90 offset-10  center">{arrivalTime}</p>
+                  <p className="flex-100 center"> Expected Time of Arrival:</p>
+                  <p className="flex-100 center">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
               </div>
@@ -673,10 +673,9 @@ function prepCargoItemGroups (cargos, props) {
     const payload = parsedPayload * parsedQuantity
     const chargable = parsedChargable * parsedQuantity
 
-    const volume = parsedY * parsedX * parsedY / 1000000 * parsedQuantity
+    const volume = parsedY * parsedX * parsedZ / 1000000 * parsedQuantity
     const cargoType = cargoItemTypes[singleCargo.cargo_item_type_id]
     const items = Array(parsedQuantity).fill(singleCargo)
-
     cargoGroups[singleCargo.id] = {
       cargoType,
       cargo_group_id: singleCargo.id,

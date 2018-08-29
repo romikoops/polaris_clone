@@ -3,7 +3,7 @@
 module ExcelTool
   class BaseTool
     attr_reader :results, :stats, :hub, :tenant, :xlsx, :hub_id
-
+    include AwsConfig
     def initialize(args={ _user: current_user })
       params = args[:params]
       @stats = _stats
@@ -12,7 +12,12 @@ module ExcelTool
         @hub_id = args[:hub_id]
         @hub = Hub.find(@hub_id)
       end
-      @xlsx = open_file(params["xlsx"])
+      if params['xlsx']
+        @xlsx = open_file(params["xlsx"])
+      elsif params['key']
+        signed_url = get_file_url(params['key'], "assets.itsmycargo.com")
+        @xlsx = open_file(signed_url)
+      end
       post_initialize(args)
     end
 
