@@ -9,6 +9,11 @@ exports[`shallow rendering 1`] = `
   >
     <a
       onClick={null}
+      style={
+        Object {
+          "color": "#333333",
+        }
+      }
     >
       Log In / Register
     </a>
@@ -25,6 +30,11 @@ exports[`when linkOptions doesn't provide url 1`] = `
   >
     <a
       onClick={null}
+      style={
+        Object {
+          "color": "#333333",
+        }
+      }
     >
       Log In / Register
     </a>

@@ -85,11 +85,13 @@ exports[`props.containers has dangerous_goods as true 1`] = `
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
+                  "maxValue": "Value must be less than 32630 kg",
                   "nonNegative": "Must be greater than 0",
                 }
               }
               validations={
                 Object {
+                  "maxValue": [Function],
                   "nonNegative": [Function],
                 }
               }
@@ -256,11 +258,11 @@ exports[`props.containers has dangerous_goods as true 1`] = `
         className="add_unit_wrapper content_width"
       >
         <div
-          className="layout-row flex-none add_unit layout-align-start-center"
+          className="layout-row flex-none layout-align-start-center"
           onClick={[Function]}
         >
           <p>
-             Add unit 
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -578,11 +580,13 @@ exports[`props.nextStageAttempt is true 1`] = `
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
+                  "maxValue": "Value must be less than 32630 kg",
                   "nonNegative": "Must be greater than 0",
                 }
               }
               validations={
                 Object {
+                  "maxValue": [Function],
                   "nonNegative": [Function],
                 }
               }
@@ -749,11 +753,11 @@ exports[`props.nextStageAttempt is true 1`] = `
         className="add_unit_wrapper content_width"
       >
         <div
-          className="layout-row flex-none add_unit layout-align-start-center"
+          className="layout-row flex-none layout-align-start-center"
           onClick={[Function]}
         >
           <p>
-             Add unit 
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1071,11 +1075,13 @@ exports[`props.scope.dangerous_goods is true 1`] = `
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
+                  "maxValue": "Value must be less than 32630 kg",
                   "nonNegative": "Must be greater than 0",
                 }
               }
               validations={
                 Object {
+                  "maxValue": [Function],
                   "nonNegative": [Function],
                 }
               }
@@ -1242,11 +1248,11 @@ exports[`props.scope.dangerous_goods is true 1`] = `
         className="add_unit_wrapper content_width"
       >
         <div
-          className="layout-row flex-none add_unit layout-align-start-center"
+          className="layout-row flex-none layout-align-start-center"
           onClick={[Function]}
         >
           <p>
-             Add unit 
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1564,11 +1570,13 @@ exports[`shallow rendering 1`] = `
               validationErrors={
                 Object {
                   "isDefaultRequiredValue": "Must not be blank",
+                  "maxValue": "Value must be less than 32630 kg",
                   "nonNegative": "Must be greater than 0",
                 }
               }
               validations={
                 Object {
+                  "maxValue": [Function],
                   "nonNegative": [Function],
                 }
               }
@@ -1735,11 +1743,11 @@ exports[`shallow rendering 1`] = `
         className="add_unit_wrapper content_width"
       >
         <div
-          className="layout-row flex-none add_unit layout-align-start-center"
+          className="layout-row flex-none layout-align-start-center"
           onClick={[Function]}
         >
           <p>
-             Add unit 
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"

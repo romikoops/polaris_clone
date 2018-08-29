@@ -35,7 +35,8 @@ exports[`props.contactData.location is falsy 1`] = `
   <div
     className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <AlternativeGreyBox
+    <GreyBox
+      borderStyle=""
       content={
         <div
           className="layout-row flex-100"
@@ -61,6 +62,13 @@ exports[`props.contactData.location is falsy 1`] = `
         </div>
       }
       contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
       titleAction={false}
       wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
@@ -136,7 +144,8 @@ exports[`props.loading is true 1`] = `
   <div
     className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <AlternativeGreyBox
+    <GreyBox
+      borderStyle=""
       content={
         <div
           className="layout-row flex-100"
@@ -162,6 +171,13 @@ exports[`props.loading is true 1`] = `
         </div>
       }
       contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
       titleAction={false}
       wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
@@ -272,7 +288,8 @@ exports[`shallow render 1`] = `
   <div
     className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <AlternativeGreyBox
+    <GreyBox
+      borderStyle=""
       content={
         <div
           className="layout-row flex-100"
@@ -298,6 +315,13 @@ exports[`shallow render 1`] = `
         </div>
       }
       contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
       titleAction={false}
       wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
@@ -408,7 +432,8 @@ exports[`state.editBool is true 1`] = `
   <div
     className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <AlternativeGreyBox
+    <GreyBox
+      borderStyle=""
       content={
         <div
           className="layout-row flex-100"
@@ -431,6 +456,13 @@ exports[`state.editBool is true 1`] = `
         </div>
       }
       contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
       titleAction={false}
       wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />

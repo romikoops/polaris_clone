@@ -19,6 +19,7 @@ jest.mock('uuid', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
+  numberSpacing: x => x,
   totalPrice: () => ({
     currency: 'CHF'
   }),

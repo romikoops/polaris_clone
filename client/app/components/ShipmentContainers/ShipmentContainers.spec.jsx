@@ -84,7 +84,7 @@ test('props.containers has dangerous_goods as true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test('props.addContainer is called', () => {
+test.skip('props.addContainer is called', () => {
   const props = {
     ...propsBase,
     addContainer: jest.fn()

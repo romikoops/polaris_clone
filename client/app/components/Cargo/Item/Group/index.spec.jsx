@@ -3,7 +3,8 @@ import { shallow } from 'enzyme'
 import { theme } from '../../../../mocks'
 
 jest.mock('../../../../helpers', () => ({
-  gradientTextGenerator: x => x
+  gradientTextGenerator: x => x,
+  numberSpacing: x => x,
 }))
 jest.mock('uuid', () => {
   let counter = -1

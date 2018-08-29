@@ -29,6 +29,7 @@ jest.mock('../../constants', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
+  checkPreCarriage: x => x,
   switchIcon: x => x,
   totalPrice: () => ({ currency: 'BGN' }),
   formattedPriceValue: () => ({ currency: 'PHP' }),

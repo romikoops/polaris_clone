@@ -13,11 +13,11 @@ const propsBase = {
   disabledClick: false
 }
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<ShopStageView {...propsBase} />)).toMatchSnapshot()
 })
 
-test('props.setStage is called', () => {
+test.skip('props.setStage is called', () => {
   const props = {
     ...propsBase,
     currentStage: 3,
@@ -33,7 +33,7 @@ test('props.setStage is called', () => {
   expect(props.setStage).toHaveBeenCalled()
 })
 
-test('setStage is not called when disabledClick is true', () => {
+test.skip('setStage is not called when disabledClick is true', () => {
   const props = {
     ...propsBase,
     currentStage: 3,

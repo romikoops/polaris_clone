@@ -36,6 +36,6 @@ const propsBase = {
   shipment
 }
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<UserShipmentCard {...propsBase} />)).toMatchSnapshot()
 })

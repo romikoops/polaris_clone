@@ -43,6 +43,7 @@ exports[`noMessages is true 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -59,7 +60,7 @@ exports[`noMessages is true 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={
             Object {
               "company_name": "FOO_COMPANY",
@@ -124,6 +125,7 @@ exports[`shallow render 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -140,7 +142,7 @@ exports[`shallow render 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={
             Object {
               "company_name": "FOO_COMPANY",
@@ -218,6 +220,7 @@ exports[`showRegistration is true 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -234,7 +237,7 @@ exports[`showRegistration is true 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={
             Object {
               "company_name": "FOO_COMPANY",
@@ -312,6 +315,7 @@ exports[`unread > 0 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -328,7 +332,7 @@ exports[`unread > 0 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={
             Object {
               "company_name": "FOO_COMPANY",
@@ -406,6 +410,7 @@ exports[`user is falsy 1`] = `
         <NavDropdown
           dropDownText=""
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -422,7 +427,7 @@ exports[`user is falsy 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={null}
         />
         <div
@@ -487,6 +492,7 @@ exports[`user.role_id === 2 1`] = `
         <NavDropdown
           dropDownText="John Doe"
           invert={false}
+          isLanding={false}
           linkOptions={
             Array [
               Object {
@@ -503,7 +509,7 @@ exports[`user.role_id === 2 1`] = `
               },
             ]
           }
-          toggleShowLogin={null}
+          toggleShowLogin={[Function]}
           user={
             Object {
               "company_name": "FOO_COMPANY",

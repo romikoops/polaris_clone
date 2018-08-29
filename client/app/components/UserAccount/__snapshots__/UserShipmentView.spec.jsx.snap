@@ -7,19 +7,29 @@ exports[`loading is true 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-start-center title_grey"
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
       >
-        Shipment
+        Ref:  
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
       </p>
     </div>
     <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
       onClick={[Function]}
       style="#333"
     >
@@ -35,11 +45,14 @@ exports[`loading is true 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
-      wrapperTabs="layout-row flex-100"
+      wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Overview"
@@ -55,28 +68,6 @@ exports[`loading is true 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-          >
-            <p
-              className="layout-row flex-md-30 flex-20"
-            >
-              Ref:  
-              <span />
-            </p>
-            <hr
-              className="layout-row flex-md-40 flex-55"
-            />
-            <p
-              className="layout-row flex-md-30 flex-25 layout-align-end-center"
-            >
-              <strong>
-                Placed at: 
-              </strong>
-               
-              19
-            </p>
-          </div>
           <div
             className="layout-row flex-100 margin_bottom"
           >
@@ -107,13 +98,13 @@ exports[`loading is true 1`] = `
             className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
           >
             <div
-              className="layout-column flex-60 layout-align-center-stretch"
+              className="flex-60 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
               >
                 <div
-                  className="flex-40 layout-row layout-align-start-center"
+                  className="flex-100 layout-row layout-align-start-center"
                 >
                   <i
                     className="flex-none fa fa-check-square clip check_square"
@@ -132,27 +123,13 @@ exports[`loading is true 1`] = `
                   <h4
                     className="flex-95 layout-row"
                   >
-                    Pick-up
+                     
                   </h4>
                 </div>
-                <div
-                  className="flex-40 layout-row layout-align-start-center"
-                >
-                  <p>
-                    20
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
             <div
-              className="layout-column flex-40 layout-align-center-stretch"
+              className="flex-40 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
@@ -174,23 +151,19 @@ exports[`loading is true 1`] = `
                 <h4
                   className="flex-95 layout-row"
                 >
-                  Delivery
+                   
                 </h4>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
           </div>
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Freight"
@@ -222,7 +195,7 @@ exports[`loading is true 1`] = `
                   className="layout-wrap layout-row flex"
                 >
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -251,7 +224,7 @@ exports[`loading is true 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -280,7 +253,7 @@ exports[`loading is true 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -311,7 +284,7 @@ exports[`loading is true 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -342,7 +315,7 @@ exports[`loading is true 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -364,10 +337,10 @@ exports[`loading is true 1`] = `
               </div>
             </div>
             <div
-              className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+              className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
             >
               <div
-                className="layout-column flex-80"
+                className="flex-80"
               >
                 <h3>
                   Additional Services
@@ -376,7 +349,7 @@ exports[`loading is true 1`] = `
                   className=""
                 >
                   <div
-                    className="layout-column flex-100 margin_bottom"
+                    className="flex-100 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -435,12 +408,9 @@ exports[`loading is true 1`] = `
                   </div>
                 </div>
               </div>
-              <div
-                className="layout-row layout-padding flex-20 layout-align-center-start"
-              />
             </div>
             <div
-              className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+              className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
             >
               <div
                 className="layout-column flex-100"
@@ -449,10 +419,10 @@ exports[`loading is true 1`] = `
                   className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
                 >
                   <div
-                    className="layout-align-center-center layout-row flex"
+                    className="layout-align-start-center layout-row flex"
                   >
                     <span
-                      className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+                      className="layout-align-center-center layout-row flex-none quantity_square"
                       style="#333"
                     >
                       x 
@@ -464,7 +434,7 @@ exports[`loading is true 1`] = `
                   </div>
                 </div>
                 <h2
-                  className="layout-align-end-center layout-row flex"
+                  className="layout-align-start-center layout-row flex"
                 >
                    
                   BGN
@@ -475,8 +445,11 @@ exports[`loading is true 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Contacts"
@@ -490,7 +463,7 @@ exports[`loading is true 1`] = `
         }
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+          className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
         >
           <ContactDetailsRow
             accountId={null}
@@ -514,8 +487,11 @@ exports[`loading is true 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Cargo Details"
@@ -531,14 +507,22 @@ exports[`loading is true 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={Array []}
             contentClassName="layout-column flex"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Cargo Details"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right"
           />
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="layout-column flex-100"
@@ -612,7 +596,7 @@ exports[`loading is true 1`] = `
                       className="flex-100 layout-row layout-align-start-center"
                     >
                       <span
-                        className="flex-20 layout-row"
+                        className="flex-30 layout-row"
                       >
                         Description of Goods:
                       </span>
@@ -645,6 +629,13 @@ exports[`loading is true 1`] = `
               </div>
             }
             contentClassName="layout-row flex-100"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
+            title=""
             titleAction={false}
             wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
@@ -652,8 +643,11 @@ exports[`loading is true 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Documents"
@@ -669,7 +663,8 @@ exports[`loading is true 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -734,6 +729,7 @@ exports[`loading is true 1`] = `
                   >
                     <FileUploader
                       dispatchFn={null}
+                      size="small"
                       square={false}
                       text="Packing Sheet"
                       theme={
@@ -796,7 +792,13 @@ exports[`loading is true 1`] = `
                 </div>
               </div>
             }
-            contentClassName="layout-row layout-wrap flex"
+            contentClassName="layout-row layout-wrap flex min_height"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Documents"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
@@ -813,19 +815,29 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-start-center title_grey"
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
       >
-        Shipment
+        Ref:  
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
       </p>
     </div>
     <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
       onClick={[Function]}
       style="#333"
     >
@@ -841,11 +853,14 @@ exports[`shallow render 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
-      wrapperTabs="layout-row flex-100"
+      wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Overview"
@@ -860,56 +875,6 @@ exports[`shallow render 1`] = `
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-          >
-            <p
-              className="layout-row flex-md-30 flex-20"
-            >
-              Ref:  
-              <span />
-            </p>
-            <hr
-              className="layout-row flex-md-40 flex-55"
-            />
-            <p
-              className="layout-row flex-md-30 flex-25 layout-align-end-center"
-            >
-              <strong>
-                Placed at: 
-              </strong>
-               
-              19
-            </p>
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-           
-          BGN
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={Array []}
-    style="#333"
-  />
-  <GreyBox
-    content={Array []}
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
         >
           <div
             className="layout-row flex-100 margin_bottom"
@@ -941,13 +906,13 @@ exports[`shallow render 1`] = `
             className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
           >
             <div
-              className="layout-column flex-60 layout-align-center-stretch"
+              className="flex-60 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
               >
                 <div
-                  className="flex-40 layout-row layout-align-start-center"
+                  className="flex-100 layout-row layout-align-start-center"
                 >
                   <i
                     className="flex-none fa fa-check-square clip check_square"
@@ -966,27 +931,13 @@ exports[`shallow render 1`] = `
                   <h4
                     className="flex-95 layout-row"
                   >
-                    Pick-up
+                     
                   </h4>
                 </div>
-                <div
-                  className="flex-40 layout-row layout-align-start-center"
-                >
-                  <p>
-                    20
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
             <div
-              className="layout-column flex-40 layout-align-center-stretch"
+              className="flex-40 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
@@ -1008,23 +959,19 @@ exports[`shallow render 1`] = `
                 <h4
                   className="flex-95 layout-row"
                 >
-                  Delivery
+                   
                 </h4>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
           </div>
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Freight"
@@ -1056,7 +1003,7 @@ exports[`shallow render 1`] = `
                   className="layout-wrap layout-row flex"
                 >
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1085,7 +1032,7 @@ exports[`shallow render 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1114,7 +1061,7 @@ exports[`shallow render 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1145,7 +1092,7 @@ exports[`shallow render 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1176,7 +1123,7 @@ exports[`shallow render 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1198,10 +1145,10 @@ exports[`shallow render 1`] = `
               </div>
             </div>
             <div
-              className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+              className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
             >
               <div
-                className="layout-column flex-80"
+                className="flex-80"
               >
                 <h3>
                   Additional Services
@@ -1210,7 +1157,7 @@ exports[`shallow render 1`] = `
                   className=""
                 >
                   <div
-                    className="layout-column flex-100 margin_bottom"
+                    className="flex-100 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1269,12 +1216,9 @@ exports[`shallow render 1`] = `
                   </div>
                 </div>
               </div>
-              <div
-                className="layout-row layout-padding flex-20 layout-align-center-start"
-              />
             </div>
             <div
-              className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+              className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
             >
               <div
                 className="layout-column flex-100"
@@ -1283,10 +1227,10 @@ exports[`shallow render 1`] = `
                   className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
                 >
                   <div
-                    className="layout-align-center-center layout-row flex"
+                    className="layout-align-start-center layout-row flex"
                   >
                     <span
-                      className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+                      className="layout-align-center-center layout-row flex-none quantity_square"
                       style="#333"
                     >
                       x 
@@ -1298,7 +1242,7 @@ exports[`shallow render 1`] = `
                   </div>
                 </div>
                 <h2
-                  className="layout-align-end-center layout-row flex"
+                  className="layout-align-start-center layout-row flex"
                 >
                    
                   BGN
@@ -1307,19 +1251,27 @@ exports[`shallow render 1`] = `
             </div>
           </div>
         </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="Contacts"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+          className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
         >
           <ContactDetailsRow
             accountId={null}
@@ -1343,8 +1295,11 @@ exports[`shallow render 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Cargo Details"
@@ -1360,14 +1315,22 @@ exports[`shallow render 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={Array []}
             contentClassName="layout-column flex"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Cargo Details"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right"
           />
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="layout-column flex-100"
@@ -1441,7 +1404,7 @@ exports[`shallow render 1`] = `
                       className="flex-100 layout-row layout-align-start-center"
                     >
                       <span
-                        className="flex-20 layout-row"
+                        className="flex-30 layout-row"
                       >
                         Description of Goods:
                       </span>
@@ -1474,6 +1437,13 @@ exports[`shallow render 1`] = `
               </div>
             }
             contentClassName="layout-row flex-100"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
+            title=""
             titleAction={false}
             wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
@@ -1481,8 +1451,11 @@ exports[`shallow render 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Documents"
@@ -1498,7 +1471,8 @@ exports[`shallow render 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -1563,6 +1537,7 @@ exports[`shallow render 1`] = `
                   >
                     <FileUploader
                       dispatchFn={null}
+                      size="small"
                       square={false}
                       text="Packing Sheet"
                       theme={
@@ -1625,7 +1600,13 @@ exports[`shallow render 1`] = `
                 </div>
               </div>
             }
-            contentClassName="layout-row layout-wrap flex"
+            contentClassName="layout-row layout-wrap flex min_height"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Documents"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
@@ -1642,19 +1623,29 @@ exports[`shipmentData.cargoItems is present 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-start-center title_grey"
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
       >
-        Shipment
+        Ref:  
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
       </p>
     </div>
     <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
       onClick={[Function]}
       style="#333"
     >
@@ -1670,11 +1661,14 @@ exports[`shipmentData.cargoItems is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
-      wrapperTabs="layout-row flex-100"
+      wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Overview"
@@ -1690,28 +1684,6 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-          >
-            <p
-              className="layout-row flex-md-30 flex-20"
-            >
-              Ref:  
-              <span />
-            </p>
-            <hr
-              className="layout-row flex-md-40 flex-55"
-            />
-            <p
-              className="layout-row flex-md-30 flex-25 layout-align-end-center"
-            >
-              <strong>
-                Placed at: 
-              </strong>
-               
-              19
-            </p>
-          </div>
           <div
             className="layout-row flex-100 margin_bottom"
           >
@@ -1742,13 +1714,13 @@ exports[`shipmentData.cargoItems is present 1`] = `
             className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
           >
             <div
-              className="layout-column flex-60 layout-align-center-stretch"
+              className="flex-60 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
               >
                 <div
-                  className="flex-40 layout-row layout-align-start-center"
+                  className="flex-100 layout-row layout-align-start-center"
                 >
                   <i
                     className="flex-none fa fa-check-square clip check_square"
@@ -1767,27 +1739,13 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   <h4
                     className="flex-95 layout-row"
                   >
-                    Pick-up
+                     
                   </h4>
                 </div>
-                <div
-                  className="flex-40 layout-row layout-align-start-center"
-                >
-                  <p>
-                    20
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
             <div
-              className="layout-column flex-40 layout-align-center-stretch"
+              className="flex-40 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
@@ -1809,23 +1767,19 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 <h4
                   className="flex-95 layout-row"
                 >
-                  Delivery
+                   
                 </h4>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
           </div>
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Freight"
@@ -1857,7 +1811,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   className="layout-wrap layout-row flex"
                 >
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1886,7 +1840,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1915,7 +1869,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1946,7 +1900,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1977,7 +1931,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -1999,10 +1953,10 @@ exports[`shipmentData.cargoItems is present 1`] = `
               </div>
             </div>
             <div
-              className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+              className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
             >
               <div
-                className="layout-column flex-80"
+                className="flex-80"
               >
                 <h3>
                   Additional Services
@@ -2011,7 +1965,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   className=""
                 >
                   <div
-                    className="layout-column flex-100 margin_bottom"
+                    className="flex-100 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2070,12 +2024,9 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   </div>
                 </div>
               </div>
-              <div
-                className="layout-row layout-padding flex-20 layout-align-center-start"
-              />
             </div>
             <div
-              className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+              className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
             >
               <div
                 className="layout-column flex-100"
@@ -2084,10 +2035,10 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
                 >
                   <div
-                    className="layout-align-center-center layout-row flex"
+                    className="layout-align-start-center layout-row flex"
                   >
                     <span
-                      className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+                      className="layout-align-center-center layout-row flex-none quantity_square"
                       style="#333"
                     >
                       x 
@@ -2099,7 +2050,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   </div>
                 </div>
                 <h2
-                  className="layout-align-end-center layout-row flex"
+                  className="layout-align-start-center layout-row flex"
                 >
                    
                   BGN
@@ -2110,8 +2061,11 @@ exports[`shipmentData.cargoItems is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Contacts"
@@ -2125,7 +2079,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
         }
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+          className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
         >
           <ContactDetailsRow
             accountId={null}
@@ -2149,8 +2103,11 @@ exports[`shipmentData.cargoItems is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Cargo Details"
@@ -2166,7 +2123,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               Array [
                 <CargoItemGroup
@@ -2228,11 +2186,18 @@ exports[`shipmentData.cargoItems is present 1`] = `
               ]
             }
             contentClassName="layout-column flex"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Cargo Details"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right"
           />
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="layout-column flex-100"
@@ -2306,7 +2271,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       className="flex-100 layout-row layout-align-start-center"
                     >
                       <span
-                        className="flex-20 layout-row"
+                        className="flex-30 layout-row"
                       >
                         Description of Goods:
                       </span>
@@ -2339,6 +2304,13 @@ exports[`shipmentData.cargoItems is present 1`] = `
               </div>
             }
             contentClassName="layout-row flex-100"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
+            title=""
             titleAction={false}
             wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
@@ -2346,8 +2318,11 @@ exports[`shipmentData.cargoItems is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Documents"
@@ -2363,7 +2338,8 @@ exports[`shipmentData.cargoItems is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -2428,6 +2404,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                   >
                     <FileUploader
                       dispatchFn={null}
+                      size="small"
                       square={false}
                       text="Packing Sheet"
                       theme={
@@ -2490,7 +2467,13 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 </div>
               </div>
             }
-            contentClassName="layout-row layout-wrap flex"
+            contentClassName="layout-row layout-wrap flex min_height"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Documents"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
@@ -2507,19 +2490,29 @@ exports[`shipmentData.contacts is present 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-start-center title_grey"
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
       >
-        Shipment
+        Ref:  
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
       </p>
     </div>
     <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
       onClick={[Function]}
       style="#333"
     >
@@ -2535,11 +2528,14 @@ exports[`shipmentData.contacts is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
-      wrapperTabs="layout-row flex-100"
+      wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Overview"
@@ -2554,56 +2550,6 @@ exports[`shipmentData.contacts is present 1`] = `
       >
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-          >
-            <p
-              className="layout-row flex-md-30 flex-20"
-            >
-              Ref:  
-              <span />
-            </p>
-            <hr
-              className="layout-row flex-md-40 flex-55"
-            />
-            <p
-              className="layout-row flex-md-30 flex-25 layout-align-end-center"
-            >
-              <strong>
-                Placed at: 
-              </strong>
-               
-              19
-            </p>
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-           
-          BGN
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={Array []}
-    style="#333"
-  />
-  <GreyBox
-    content={Array []}
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
         >
           <div
             className="layout-row flex-100 margin_bottom"
@@ -2635,13 +2581,13 @@ exports[`shipmentData.contacts is present 1`] = `
             className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
           >
             <div
-              className="layout-column flex-60 layout-align-center-stretch"
+              className="flex-60 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
               >
                 <div
-                  className="flex-40 layout-row layout-align-start-center"
+                  className="flex-100 layout-row layout-align-start-center"
                 >
                   <i
                     className="flex-none fa fa-check-square clip check_square"
@@ -2660,27 +2606,13 @@ exports[`shipmentData.contacts is present 1`] = `
                   <h4
                     className="flex-95 layout-row"
                   >
-                    Pick-up
+                     
                   </h4>
                 </div>
-                <div
-                  className="flex-40 layout-row layout-align-start-center"
-                >
-                  <p>
-                    20
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
             <div
-              className="layout-column flex-40 layout-align-center-stretch"
+              className="flex-40 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
@@ -2702,23 +2634,19 @@ exports[`shipmentData.contacts is present 1`] = `
                 <h4
                   className="flex-95 layout-row"
                 >
-                  Delivery
+                   
                 </h4>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
           </div>
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Freight"
@@ -2750,7 +2678,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   className="layout-wrap layout-row flex"
                 >
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2779,7 +2707,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2808,7 +2736,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2839,7 +2767,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2870,7 +2798,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2892,10 +2820,10 @@ exports[`shipmentData.contacts is present 1`] = `
               </div>
             </div>
             <div
-              className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+              className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
             >
               <div
-                className="layout-column flex-80"
+                className="flex-80"
               >
                 <h3>
                   Additional Services
@@ -2904,7 +2832,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   className=""
                 >
                   <div
-                    className="layout-column flex-100 margin_bottom"
+                    className="flex-100 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -2963,12 +2891,9 @@ exports[`shipmentData.contacts is present 1`] = `
                   </div>
                 </div>
               </div>
-              <div
-                className="layout-row layout-padding flex-20 layout-align-center-start"
-              />
             </div>
             <div
-              className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+              className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
             >
               <div
                 className="layout-column flex-100"
@@ -2977,10 +2902,10 @@ exports[`shipmentData.contacts is present 1`] = `
                   className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
                 >
                   <div
-                    className="layout-align-center-center layout-row flex"
+                    className="layout-align-start-center layout-row flex"
                   >
                     <span
-                      className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+                      className="layout-align-center-center layout-row flex-none quantity_square"
                       style="#333"
                     >
                       x 
@@ -2992,7 +2917,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   </div>
                 </div>
                 <h2
-                  className="layout-align-end-center layout-row flex"
+                  className="layout-align-start-center layout-row flex"
                 >
                    
                   BGN
@@ -3001,19 +2926,27 @@ exports[`shipmentData.contacts is present 1`] = `
             </div>
           </div>
         </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="Contacts"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+          className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
         >
           <ContactDetailsRow
             accountId={null}
@@ -3085,8 +3018,11 @@ exports[`shipmentData.contacts is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Cargo Details"
@@ -3102,14 +3038,22 @@ exports[`shipmentData.contacts is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={Array []}
             contentClassName="layout-column flex"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Cargo Details"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right"
           />
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="layout-column flex-100"
@@ -3183,7 +3127,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       className="flex-100 layout-row layout-align-start-center"
                     >
                       <span
-                        className="flex-20 layout-row"
+                        className="flex-30 layout-row"
                       >
                         Description of Goods:
                       </span>
@@ -3216,6 +3160,13 @@ exports[`shipmentData.contacts is present 1`] = `
               </div>
             }
             contentClassName="layout-row flex-100"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
+            title=""
             titleAction={false}
             wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
@@ -3223,8 +3174,11 @@ exports[`shipmentData.contacts is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Documents"
@@ -3240,7 +3194,8 @@ exports[`shipmentData.contacts is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -3305,6 +3260,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   >
                     <FileUploader
                       dispatchFn={null}
+                      size="small"
                       square={false}
                       text="Packing Sheet"
                       theme={
@@ -3367,7 +3323,13 @@ exports[`shipmentData.contacts is present 1`] = `
                 </div>
               </div>
             }
-            contentClassName="layout-row layout-wrap flex"
+            contentClassName="layout-row layout-wrap flex min_height"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Documents"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
@@ -3384,19 +3346,29 @@ exports[`shipmentData.documents is present 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding"
 >
   <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
+    className="margin_box_right layout-row flex-100 layout-align-center-stretch margin_bottom"
   >
     <div
-      className="layout-row flex layout-align-start-center title_grey"
+      className="layout-row flex layout-align-space-between-center title_shipment_grey"
     >
       <p
         className="layout-align-start-center layout-row"
       >
-        Shipment
+        Ref:  
+        <span />
+      </p>
+      <p
+        className="layout-row layout-align-end-end"
+      >
+        <strong>
+          Placed at: 
+        </strong>
+         
+        19
       </p>
     </div>
     <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
+      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy shipment_view_margin_buffer  reuse_shipment_box"
       onClick={[Function]}
       style="#333"
     >
@@ -3412,11 +3384,14 @@ exports[`shipmentData.documents is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
-      wrapperTabs="layout-row flex-100"
+      wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Overview"
@@ -3432,1247 +3407,8 @@ exports[`shipmentData.documents is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          Delivery
-        </h4>
-      </div>
-      <div
-        className="flex-100 layout-row"
-      >
-        <div
-          className="flex-5 layout-row"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-    className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
-  >
-    <div
-      className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Freight, Duties & Carriage:
-        </h3>
-        <div
-          className="layout-wrap layout-row flex"
-        >
           <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Pre-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              On-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Origin Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text-o clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Destination Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-ship clip flex-none layout-align-center-center"
-              style="#333"
-            />
-            <p>
-              Freight
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Additional Services
-        </h3>
-        <div
-          className=""
-        >
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-id-card clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Customs
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-umbrella clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Insurance
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-        >
-          <div
-            className="layout-align-center-center layout-row flex"
-          >
-            <span
-              className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
-              style="#333"
-            >
-              x 
-              -2
-            </span>
-            <p
-              className="layout-align-sm-end-center layout-align-xs-end-center"
-            />
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-           
-          BGN
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={Array []}
-    style="#333"
-  />
-  <GreyBox
-    content={
-      Array [
-        <CargoItemGroup
-          group={
-            Object {
-              "cargoType": "FOO_CARGO_TYPE",
-              "cargo_group_id": 0,
-              "chargeable_weight": NaN,
-              "dimension_x": NaN,
-              "dimension_y": NaN,
-              "dimension_z": NaN,
-              "groupAlias": 1,
-              "hsCodes": undefined,
-              "hsText": undefined,
-              "items": Array [],
-              "payload_in_kg": NaN,
-              "quantity": 1,
-              "volume": NaN,
-            }
-          }
-          shipment={Object {}}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />,
-        <CargoItemGroup
-          group={
-            Object {
-              "cargoType": "BAR_CARGO_TYPE",
-              "cargo_group_id": 1,
-              "chargeable_weight": NaN,
-              "dimension_x": NaN,
-              "dimension_y": NaN,
-              "dimension_z": NaN,
-              "groupAlias": 2,
-              "hsCodes": undefined,
-              "hsText": undefined,
-              "items": Array [],
-              "payload_in_kg": NaN,
-              "quantity": 1,
-              "volume": NaN,
-            }
-          }
-          shipment={Object {}}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />,
-      ]
-    }
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                Total Value of Goods:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                15
-                USD
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                EORI number:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                1234
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap"
-          >
-            <div
-              className="flex-100 layout-column layout-align-center-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-center-center layout-row"
-              >
-                Incoterm:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                FOO_INCOTERM_TEXT
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-column flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="border_bottom flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Description of Goods:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_CARGO_NOTES
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Notes:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_NOTES
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
-      >
-        <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center "
-        >
-          <div
-            className="flex-50 layout-align-start-center layout-row"
-          >
-            <p
-              className="sec_subheader_text flex-none letter_3"
-            >
-              Upload New Document
-            </p>
-            <Styled(Select)
-              className="select flex-50"
-              name="file-type"
-              onChange={[Function]}
-              options={
-                Array [
-                  Object {
-                    "label": "Packing Sheet",
-                    "value": "packing_sheet",
-                  },
-                  Object {
-                    "label": "Commercial Invoice",
-                    "value": "commercial_invoice",
-                  },
-                  Object {
-                    "label": "Customs Declaration",
-                    "value": "customs_declaration",
-                  },
-                  Object {
-                    "label": "Customs Value Declaration",
-                    "value": "customs_value_declaration",
-                  },
-                  Object {
-                    "label": "EORI",
-                    "value": "eori",
-                  },
-                  Object {
-                    "label": "Certificate Of Origin",
-                    "value": "certificate_of_origin",
-                  },
-                  Object {
-                    "label": "Dangerous Goods",
-                    "value": "dangerous_goods",
-                  },
-                ]
-              }
-              value={
-                Object {
-                  "label": "Packing Sheet",
-                  "value": "packing_sheet",
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-50 layout-align-end-center layout-row"
-          >
-            <FileUploader
-              dispatchFn={null}
-              square={false}
-              text="Packing Sheet"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              tooltip=""
-              type="packing_sheet"
-              uploadFn={null}
-              url="/shipments/undefined/upload/packing_sheet"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center "
-        />
-        <div
-          className="flex-25 layout-row layout-align-start-center no_doc"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="flex-none fa fa-ban"
-            />
-          </div>
-          <div
-            className="flex layout-align-start-center layout-row"
-          >
-            <p
-              className="flex-none"
-            >
-              undefined: Not Uploaded
-            </p>
-          </div>
-        </div>
-        <div
-          className="flex-25 layout-row layout-align-start-center no_doc"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="flex-none fa fa-ban"
-            />
-          </div>
-          <div
-            className="flex layout-align-start-center layout-row"
-          >
-            <p
-              className="flex-none"
-            >
-              undefined: Not Uploaded
-            </p>
-          </div>
-        </div>
-      </div>
-    }
-    contentClassName="layout-row layout-wrap flex"
-    title="Documents"
-    wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"
-  />
-</div>
-`;
-
-exports[`shipmentData.contacts is present 1`] = `
-<div
-  className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
->
-  <div
-    className="margin_box_right layout-row flex-100 layout-align-center-stretch"
-  >
-    <div
-      className="layout-row flex layout-align-start-center title_grey"
-    >
-      <p
-        className="layout-align-start-center layout-row"
-      >
-        Shipment
-      </p>
-    </div>
-    <div
-      className="layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy header_margin_buffer  reuse_shipment_box"
-      onClick={[Function]}
-      style="#333"
-    >
-      <p
-        className="layout-align-center-center layout-row"
-      >
-        Reuse Shipment 
-      </p>
-    </div>
-  </div>
-  <div
-    className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-  >
-    <p
-      className="layout-row flex-md-30 flex-20"
-    >
-      Ref:  
-      <span />
-    </p>
-    <hr
-      className="layout-row flex-md-40 flex-55"
-    />
-    <p
-      className="layout-row flex-md-30 flex-25 layout-align-end-center"
-    >
-      <strong>
-        Placed at: 
-      </strong>
-       
-      19
-    </p>
-  </div>
-  <div
-    className="layout-row flex-100 margin_bottom"
-  >
-    <div
-      className="layout-row flex-20 layout-align-center-center"
-    >
-      <div
-        className="layout-column flex layout-align-center-center font_adjustaments"
-      >
-        <div
-          className="layout-align-center-center layout-row"
-          style="#333"
-        />
-        <p
-          className=""
-        >
-          Estimated time delivery
-        </p>
-        <h5>
-          17
-           days
-           
-        </h5>
-      </div>
-    </div>
-  </div>
-  <div
-    className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
-  >
-    <div
-      className="layout-column flex-60 layout-align-center-stretch"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <i
-          className="flex-none fa fa-check-square clip check_square"
-          style={
-            Object {
-              "0": "#",
-              "1": "D",
-              "2": "C",
-              "3": "D",
-              "4": "B",
-              "5": "D",
-              "6": "C",
-            }
-          }
-        />
-        <h4
-          className="flex-95 layout-row"
-        >
-          Pick-up
-        </h4>
-      </div>
-      <div
-        className="flex-100 layout-row"
-      >
-        <div
-          className="flex-5 layout-row"
-        />
-      </div>
-    </div>
-    <div
-      className="layout-column flex-40 layout-align-center-stretch"
-    >
-      <div
-        className="layout-row flex-100 layout-align-start-center"
-      >
-        <i
-          className="flex-none fa fa-check-square clip check_square"
-          style={
-            Object {
-              "0": "#",
-              "1": "D",
-              "2": "C",
-              "3": "D",
-              "4": "B",
-              "5": "D",
-              "6": "C",
-            }
-          }
-        />
-        <h4
-          className="flex-95 layout-row"
-        >
-          Delivery
-        </h4>
-      </div>
-      <div
-        className="flex-100 layout-row"
-      >
-        <div
-          className="flex-5 layout-row"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-    className="border_box margin_bottom layout-sm-column layout-xs-column layout-row flex-100"
-  >
-    <div
-      className="flex-50 flex-sm-100 flex-xs-100 layout-row services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Freight, Duties & Carriage:
-        </h3>
-        <div
-          className="layout-wrap layout-row flex"
-        >
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Pre-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-truck clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              On-Carriage
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Origin Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-file-text-o clip flex-none layout-align-center-center"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Destination Documentation
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-ship clip flex-none layout-align-center-center"
-              style="#333"
-            />
-            <p>
-              Freight
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <h3>
-          Additional Services
-        </h3>
-        <div
-          className=""
-        >
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-id-card clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Customs
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-umbrella clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Insurance
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-        >
-          <div
-            className="layout-align-center-center layout-row flex"
-          >
-            <span
-              className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
-              style="#333"
-            >
-              x 
-              -2
-            </span>
-            <p
-              className="layout-align-sm-end-center layout-align-xs-end-center"
-            />
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-           
-          BGN
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={
-      Array [
-        Object {
-          "contact": Object {
-            "first_name": "FOO_FIRST_NAME",
-            "last_name": "FOO_LAST_NAME",
-          },
-          "type": "notifyee",
-        },
-        Object {
-          "contact": Object {
-            "first_name": "BAR_FIRST_NAME",
-            "last_name": "BAR_LAST_NAME",
-          },
-          "location": Object {
-            "city": "FOO_CITY",
-            "country": "Germany",
-            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-            "id": 246,
-            "primary": true,
-            "street": "FOO_STREET",
-            "streetNumber": 579,
-            "street_number": 579,
-            "zipCode": "22456",
-            "zip_code": "22456",
-          },
-          "type": "shipper",
-        },
-        Object {
-          "contact": Object {
-            "first_name": "BAZ_FIRST_NAME",
-            "last_name": "BAZ_LAST_NAME",
-          },
-          "location": Object {
-            "city": "FOO_CITY",
-            "country": "Germany",
-            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
-            "id": 246,
-            "primary": true,
-            "street": "FOO_STREET",
-            "streetNumber": 579,
-            "street_number": 579,
-            "zipCode": "22456",
-            "zip_code": "22456",
-          },
-          "type": "consignee",
-        },
-      ]
-    }
-    style="#333"
-  />
-  <GreyBox
-    content={Array []}
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                Total Value of Goods:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                15
-                USD
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
-          >
-            <div
-              className="flex-100 layout-xs-column layout-row layout-align-start-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                EORI number:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
-              >
-                1234
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-33 layout-row offset-5 layout-align-center-center layout-wrap"
-          >
-            <div
-              className="flex-100 layout-column layout-align-center-start"
-            >
-              <span
-                className="flex-40 flex-xs-100 layout-align-center-center layout-row"
-              >
-                Incoterm:
-              </span>
-              <p
-                className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
-              >
-                FOO_INCOTERM_TEXT
-              </p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="layout-column flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="border_bottom flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Description of Goods:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_CARGO_NOTES
-              </p>
-            </div>
-          </div>
-          <div
-            className="flex-100 flex-sm-100 flex-xs-100 layout-row offset-5 layout-align-start-start layout-wrap"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <span
-                className="flex-20 layout-row"
-              >
-                Notes:
-              </span>
-              <p
-                className="flex-80 layout-padding layout-row"
-              >
-                FOO_NOTES
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
-      >
-        <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center "
-        >
-          <div
-            className="flex-50 layout-align-start-center layout-row"
-          >
-            <p
-              className="sec_subheader_text flex-none letter_3"
-            >
-              Upload New Document
-            </p>
-            <Styled(Select)
-              className="select flex-50"
-              name="file-type"
-              onChange={[Function]}
-              options={
-                Array [
-                  Object {
-                    "label": "Packing Sheet",
-                    "value": "packing_sheet",
-                  },
-                  Object {
-                    "label": "Commercial Invoice",
-                    "value": "commercial_invoice",
-                  },
-                  Object {
-                    "label": "Customs Declaration",
-                    "value": "customs_declaration",
-                  },
-                  Object {
-                    "label": "Customs Value Declaration",
-                    "value": "customs_value_declaration",
-                  },
-                  Object {
-                    "label": "EORI",
-                    "value": "eori",
-                  },
-                  Object {
-                    "label": "Certificate Of Origin",
-                    "value": "certificate_of_origin",
-                  },
-                  Object {
-                    "label": "Dangerous Goods",
-                    "value": "dangerous_goods",
-                  },
-                ]
-              }
-              value={
-                Object {
-                  "label": "Packing Sheet",
-                  "value": "packing_sheet",
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex-50 layout-align-end-center layout-row"
-          >
-            <FileUploader
-              dispatchFn={null}
-              square={false}
-              text="Packing Sheet"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-              tooltip=""
-              type="packing_sheet"
-              uploadFn={null}
-              url="/shipments/undefined/upload/packing_sheet"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-100 layout-row layout-wrap layout-align-start-center "
-        />
-        <div
-          className="flex-25 layout-row layout-align-start-center no_doc"
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-          >
-            <i
-              className="flex-none fa fa-ban"
-            />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center ref_row"
-          >
-            <p
-              className="layout-row flex-md-30 flex-20"
-            >
-              Ref:  
-              <span />
-            </p>
-            <hr
-              className="layout-row flex-md-40 flex-55"
-            />
-            <p
-              className="layout-row flex-md-30 flex-25 layout-align-end-center"
-            >
-              <strong>
-                Placed at: 
-              </strong>
-               
-              19
-            </p>
-          </div>
-          <div
-            className="layout-row flex-50 margin_bottom"
-          >
-            <i
-              className="fa fa-umbrella clip flex-none"
-              style={
-                Object {
-                  "0": "#",
-                  "1": "D",
-                  "2": "C",
-                  "3": "D",
-                  "4": "B",
-                  "5": "D",
-                  "6": "C",
-                }
-              }
-            />
-            <p>
-              Insurance
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
-    >
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
-        >
-          <div
-            className="layout-align-center-center layout-row flex"
-          >
-            <span
-              className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
-              style="#333"
-            >
-              x 
-              -2
-            </span>
-            <p
-              className="layout-align-sm-end-center layout-align-xs-end-center"
-            />
-          </div>
-        </div>
-        <h2
-          className="layout-align-end-center layout-row flex"
-        >
-           
-          BGN
-        </h2>
-      </div>
-    </div>
-  </div>
-  <ContactDetailsRow
-    contacts={Array []}
-    style="#333"
-  />
-  <GreyBox
-    content={Array []}
-    contentClassName="layout-column flex"
-    title="Cargo Details"
-    wrapperClassName="layout-row flex-100 no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="layout-column flex-100"
-      >
-        <div
-          className="layout-row flex-100 flex-sm-100 flex-xs-100 column_info"
-        >
-          <div
-            className="flex-33 layout-row offset-5 layout-align-start-center layout-wrap border_right"
+            className="layout-row flex-100 margin_bottom"
           >
             <div
               className="layout-row flex-20 layout-align-center-center"
@@ -4701,13 +3437,13 @@ exports[`shipmentData.contacts is present 1`] = `
             className="flex-100 layout-row layout-align-space-between-start info_delivery margin_bottom"
           >
             <div
-              className="layout-column flex-60 layout-align-center-stretch"
+              className="flex-60 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
               >
                 <div
-                  className="flex-40 layout-row layout-align-start-center"
+                  className="flex-100 layout-row layout-align-start-center"
                 >
                   <i
                     className="flex-none fa fa-check-square clip check_square"
@@ -4726,27 +3462,13 @@ exports[`shipmentData.contacts is present 1`] = `
                   <h4
                     className="flex-95 layout-row"
                   >
-                    Pick-up
+                     
                   </h4>
                 </div>
-                <div
-                  className="flex-40 layout-row layout-align-start-center"
-                >
-                  <p>
-                    20
-                  </p>
-                </div>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
             <div
-              className="layout-column flex-40 layout-align-center-stretch"
+              className="flex-40 layout-align-center-stretch"
             >
               <div
                 className="layout-row flex-100 layout-align-start-center"
@@ -4768,23 +3490,19 @@ exports[`shipmentData.contacts is present 1`] = `
                 <h4
                   className="flex-95 layout-row"
                 >
-                  Delivery
+                   
                 </h4>
-              </div>
-              <div
-                className="flex-100 layout-row"
-              >
-                <div
-                  className="flex-5 layout-row"
-                />
               </div>
             </div>
           </div>
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Freight"
@@ -4816,7 +3534,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   className="layout-wrap layout-row flex"
                 >
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -4845,7 +3563,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -4874,7 +3592,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -4905,7 +3623,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-offset-10 flex-45 margin_bottom"
+                    className="flex-offset-10 flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -4936,7 +3654,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     </div>
                   </div>
                   <div
-                    className="layout-column flex-45 margin_bottom"
+                    className="flex-45 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -4958,10 +3676,10 @@ exports[`shipmentData.contacts is present 1`] = `
               </div>
             </div>
             <div
-              className="flex-30 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
+              className="flex-25 layout-row flex-sm-100 flex-xs-100 additional_services services_box border_right"
             >
               <div
-                className="layout-column flex-80"
+                className="flex-80"
               >
                 <h3>
                   Additional Services
@@ -4970,7 +3688,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   className=""
                 >
                   <div
-                    className="layout-column flex-100 margin_bottom"
+                    className="flex-100 margin_bottom"
                   >
                     <div
                       className="layout-row flex-100"
@@ -5029,12 +3747,9 @@ exports[`shipmentData.contacts is present 1`] = `
                   </div>
                 </div>
               </div>
-              <div
-                className="layout-row layout-padding flex-20 layout-align-center-start"
-              />
             </div>
             <div
-              className="flex-20 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
+              className="flex-25 flex-sm-100 flex-xs-100 layout-row layout-align-center-center layout-padding services_box"
             >
               <div
                 className="layout-column flex-100"
@@ -5043,10 +3758,10 @@ exports[`shipmentData.contacts is present 1`] = `
                   className="layout-row layout-align-sm-end-center layout-align-xs-center-center flex-100"
                 >
                   <div
-                    className="layout-align-center-center layout-row flex"
+                    className="layout-align-start-center layout-row flex"
                   >
                     <span
-                      className="layout-align-center-center layout-row flex-20 flex-sm-5 flex-xs-5 quantity_square"
+                      className="layout-align-center-center layout-row flex-none quantity_square"
                       style="#333"
                     >
                       x 
@@ -5058,7 +3773,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   </div>
                 </div>
                 <h2
-                  className="layout-align-end-center layout-row flex"
+                  className="layout-align-start-center layout-row flex"
                 >
                    
                   BGN
@@ -5067,19 +3782,27 @@ exports[`shipmentData.contacts is present 1`] = `
             </div>
           </div>
         </div>
-      </div>
-    }
-    contentClassName="layout-row flex-100"
-    wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
-          no_border_top margin_bottom no_margin_box_right"
-  />
-  <GreyBox
-    content={
-      <div
-        className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
+      </Tab>
+      <Tab
+        extraClick={[Function]}
+        icon=""
+        isActive={false}
+        linkClassName=""
+        mot=""
+        onClick={null}
+        tabIndex={0}
+        tabTitle="Contacts"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
       >
         <div
-          className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
+          className="flex-100 layout-row layout-wrap layout-align-center-center padding_top"
         >
           <ContactDetailsRow
             accountId={null}
@@ -5103,8 +3826,11 @@ exports[`shipmentData.contacts is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Cargo Details"
@@ -5120,14 +3846,22 @@ exports[`shipmentData.contacts is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={Array []}
             contentClassName="layout-column flex"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Cargo Details"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right"
           />
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="layout-column flex-100"
@@ -5201,7 +3935,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       className="flex-100 layout-row layout-align-start-center"
                     >
                       <span
-                        className="flex-20 layout-row"
+                        className="flex-30 layout-row"
                       >
                         Description of Goods:
                       </span>
@@ -5234,6 +3968,13 @@ exports[`shipmentData.contacts is present 1`] = `
               </div>
             }
             contentClassName="layout-row flex-100"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
+            title=""
             titleAction={false}
             wrapperClassName="layout-row layout-wrap layout-sm-column layout-xs-column flex-100
           no_border_top margin_bottom no_margin_box_right"
@@ -5241,8 +3982,11 @@ exports[`shipmentData.contacts is present 1`] = `
         </div>
       </Tab>
       <Tab
-        icon={null}
+        extraClick={[Function]}
+        icon=""
         isActive={false}
+        linkClassName=""
+        mot=""
         onClick={null}
         tabIndex={0}
         tabTitle="Documents"
@@ -5258,7 +4002,8 @@ exports[`shipmentData.contacts is present 1`] = `
         <div
           className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top"
         >
-          <AlternativeGreyBox
+          <GreyBox
+            borderStyle=""
             content={
               <div
                 className="flex-100 layout-row padding_bottom padding_top layout-wrap layout-align-start-center padding_left"
@@ -5323,6 +4068,7 @@ exports[`shipmentData.contacts is present 1`] = `
                   >
                     <FileUploader
                       dispatchFn={null}
+                      size="small"
                       square={false}
                       text="Packing Sheet"
                       theme={
@@ -5456,7 +4202,13 @@ exports[`shipmentData.contacts is present 1`] = `
                 </div>
               </div>
             }
-            contentClassName="layout-row layout-wrap flex"
+            contentClassName="layout-row layout-wrap flex min_height"
+            flex={0}
+            flexGtLg={0}
+            flexMd={0}
+            fullWidth={false}
+            isBox={false}
+            padding={false}
             title="Documents"
             titleAction={false}
             wrapperClassName="layout-row flex-100 no_margin_box_right margin_bottom"

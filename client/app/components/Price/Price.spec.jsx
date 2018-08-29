@@ -9,6 +9,6 @@ const propsBase = {
   user
 }
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<Price {...propsBase} />)).toMatchSnapshot()
 })

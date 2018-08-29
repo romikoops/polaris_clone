@@ -26,6 +26,6 @@ const propsBase = {
   }
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<UserContacts {...propsBase} />)).toMatchSnapshot()
 })

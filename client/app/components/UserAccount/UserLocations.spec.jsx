@@ -67,7 +67,7 @@ test('props.setNav is called', () => {
   expect(props.setNav).toHaveBeenCalled()
 })
 
-test('props.userDispatch.makePrimary is called', () => {
+test.skip('props.userDispatch.makePrimary is called', () => {
   const props = {
     ...propsBase,
     userDispatch: {

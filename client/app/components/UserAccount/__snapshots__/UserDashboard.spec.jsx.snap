@@ -14,22 +14,26 @@ exports[`shallow render 1`] = `
         className="layout-row flex-100 layout-align-start-center
               headerElement"
       >
-        <span
-          className="layout-row flex-10 layout-align-center-center"
+        <div
+          className="flex-60 layout-row layout-align-space-around-center"
         >
-          <i
-            className="fa fa-user clip bigProfile"
-            style="#333"
-          />
-        </span>
-        <span
-          className="welcome flex-90 layout-row"
-        >
-          Welcome back,  
-          <b>
-            John
-          </b>
-        </span>
+          <div
+            className="layout-row flex-none layout-align-center-center"
+          >
+            <i
+              className="fa fa-user clip bigProfile"
+              style="#333"
+            />
+          </div>
+          <div
+            className="welcome flex layout-row"
+          >
+            Welcome back,  
+            <b>
+              John
+            </b>
+          </div>
+        </div>
         <SquareButton
           active={true}
           back={false}
@@ -54,6 +58,7 @@ exports[`shallow render 1`] = `
     </div>
     <ShipmentOverviewCard
       admin={false}
+      confirmShipmentData={Object {}}
       dispatches={
         Object {
           "getShipment": [Function],

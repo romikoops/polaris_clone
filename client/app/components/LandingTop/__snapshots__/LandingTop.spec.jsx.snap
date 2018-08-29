@@ -13,6 +13,7 @@ exports[`theme has truthy properties 1`] = `
     >
       <Component
         invert={true}
+        isLanding={true}
         noMessages={true}
         scrollable={true}
         theme={
@@ -27,7 +28,6 @@ exports[`theme has truthy properties 1`] = `
             "welcome_text": "FOO_WELCOME_TEXT",
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",
@@ -97,91 +97,86 @@ exports[`theme has truthy properties 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
           >
-            <div
-              className="flex layout-row flex-md-100"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="Find Rates"
-                theme={
-                  Object {
-                    "background": "green",
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                    "logoLarge": "FOO_LOGO_LARGE",
-                    "logoWhite": "FOO_LOGO_WHITE",
-                    "welcome_text": "FOO_WELCOME_TEXT",
-                  }
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "background": "green",
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                  "logoLarge": "FOO_LOGO_LARGE",
+                  "logoWhite": "FOO_LOGO_WHITE",
+                  "welcome_text": "FOO_WELCOME_TEXT",
                 }
-              />
-            </div>
-            <div
-              className="flex"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="My Account"
-                theme={
-                  Object {
-                    "background": "green",
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                    "logoLarge": "FOO_LOGO_LARGE",
-                    "logoWhite": "FOO_LOGO_WHITE",
-                    "welcome_text": "FOO_WELCOME_TEXT",
-                  }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="My Account"
+              theme={
+                Object {
+                  "background": "green",
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                  "logoLarge": "FOO_LOGO_LARGE",
+                  "logoWhite": "FOO_LOGO_WHITE",
+                  "welcome_text": "FOO_WELCOME_TEXT",
                 }
-              />
-            </div>
-            <div
-              className="flex layout-row flex-md-100 banner_text"
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-70 banner_text"
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
+          >
+            <h4
+              className="flex-none"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
-              >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
-                />
-                <a
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>
@@ -203,6 +198,7 @@ exports[`user.role_id is 1 1`] = `
     >
       <Component
         invert={true}
+        isLanding={true}
         noMessages={true}
         scrollable={true}
         theme={
@@ -213,7 +209,6 @@ exports[`user.role_id is 1 1`] = `
             },
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",
@@ -283,83 +278,78 @@ exports[`user.role_id is 1 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
           >
-            <div
-              className="flex layout-row flex-md-100"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="Find Rates"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
                 }
-              />
-            </div>
-            <div
-              className="flex"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="My Account"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="My Account"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
                 }
-              />
-            </div>
-            <div
-              className="flex layout-row flex-md-100 banner_text"
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-70 banner_text"
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
+          >
+            <h4
+              className="flex-none"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
-              >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
-                />
-                <a
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>
@@ -381,6 +371,7 @@ exports[`user.role_id is 2 1`] = `
     >
       <Component
         invert={true}
+        isLanding={true}
         noMessages={true}
         scrollable={true}
         theme={
@@ -391,7 +382,6 @@ exports[`user.role_id is 2 1`] = `
             },
           }
         }
-        toggleShowLogin={[Function]}
         user={
           Object {
             "company_name": "FOO_COMPANY",
@@ -461,83 +451,78 @@ exports[`user.role_id is 2 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
           >
-            <div
-              className="flex layout-row flex-md-100"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="Find Rates"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
                 }
-              />
-            </div>
-            <div
-              className="flex"
-            >
-              <SquareButton
-                active={true}
-                back={false}
-                border={false}
-                disabled={false}
-                handleDisabled={null}
-                handleNext={[Function]}
-                icon=""
-                iconClass=""
-                size="small"
-                text="My Account"
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="My Account"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
                 }
-              />
-            </div>
-            <div
-              className="flex layout-row flex-md-100 banner_text"
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-70 banner_text"
+        >
+          <div
+            className="flex-none layout-row layout-align-start-center"
+          >
+            <h4
+              className="flex-none"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
-              >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
-                />
-                <a
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>

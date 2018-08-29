@@ -42,6 +42,6 @@ const propsBase = {
   hubs: { foo: hub }
 }
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<AdminShipmentCard {...propsBase} />)).toMatchSnapshot()
 })

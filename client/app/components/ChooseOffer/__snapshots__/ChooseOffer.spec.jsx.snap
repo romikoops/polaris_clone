@@ -10,14 +10,6 @@ exports[`shallow render 1`] = `
     }
   }
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO_MESSAGE",
-        "BAR_MESSAGE",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-wrap"
   >
@@ -32,6 +24,7 @@ exports[`shallow render 1`] = `
         }
         departureDate={0}
         durationFilter={40}
+        lastTripDate=""
         moT={
           Object {
             "air": true,
@@ -115,12 +108,17 @@ exports[`shallow render 1`] = `
               className="flex-none fa fa-angle-double-left"
               style={
                 Object {
-                  "margin": "0 5px",
+                  "display": "none",
                 }
               }
             />
             <p
               className="flex-none no_m"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
             >
               Show earlier departures
             </p>
@@ -131,6 +129,11 @@ exports[`shallow render 1`] = `
           >
             <p
               className="flex-none no_m"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
             >
               Show later departures
             </p>
@@ -138,7 +141,7 @@ exports[`shallow render 1`] = `
               className="flex-none fa fa-angle-double-right"
               style={
                 Object {
-                  "margin": "0 5px",
+                  "display": "none",
                 }
               }
             />
@@ -456,14 +459,6 @@ exports[`state.selectedMoT.ocean is false 1`] = `
     }
   }
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO_MESSAGE",
-        "BAR_MESSAGE",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-wrap"
   >
@@ -478,6 +473,7 @@ exports[`state.selectedMoT.ocean is false 1`] = `
         }
         departureDate={0}
         durationFilter={40}
+        lastTripDate=""
         moT={
           Object {
             "air": true,
@@ -561,12 +557,17 @@ exports[`state.selectedMoT.ocean is false 1`] = `
               className="flex-none fa fa-angle-double-left"
               style={
                 Object {
-                  "margin": "0 5px",
+                  "display": "none",
                 }
               }
             />
             <p
               className="flex-none no_m"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
             >
               Show earlier departures
             </p>
@@ -577,6 +578,11 @@ exports[`state.selectedMoT.ocean is false 1`] = `
           >
             <p
               className="flex-none no_m"
+              style={
+                Object {
+                  "display": "none",
+                }
+              }
             >
               Show later departures
             </p>
@@ -584,7 +590,7 @@ exports[`state.selectedMoT.ocean is false 1`] = `
               className="flex-none fa fa-angle-double-right"
               style={
                 Object {
-                  "margin": "0 5px",
+                  "display": "none",
                 }
               }
             />
