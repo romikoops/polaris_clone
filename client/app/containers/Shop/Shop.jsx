@@ -260,7 +260,6 @@ class Shop extends Component {
               setStage={this.selectShipmentStage}
               messages={error ? error.stage3 : []}
               shipmentDispatch={shipmentDispatch}
-              shipmentData={shipmentData}
               reusedShipment={reusedShipment}
               originalSelectedDay={originalSelectedDay}
             />

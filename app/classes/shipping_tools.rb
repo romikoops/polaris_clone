@@ -523,6 +523,12 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
+  def agent_quotation_email(user, shipment)
+    if ENV['BETA'] != "true"
+      QuoteMailer.quotation_email(user, shipment).deliver_now
+    end
+  end
+
   def self.tenant_notification_email(user, shipment)
     if ENV['BETA'] != "true"
       ShipmentMailer.tenant_notification(user, shipment).deliver_later

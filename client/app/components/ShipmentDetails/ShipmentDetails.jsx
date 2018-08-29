@@ -255,12 +255,13 @@ export class ShipmentDetails extends Component {
       prevRequest: {
         ...prevState.prevRequest,
         shipment: {
-          ...prevState.prevRequest.shipment,
+          ...prevState.shipment,
           [target]: address
         }
 
       }
-    }))
+    }
+    ))
   }
 
   setAggregatedCargo (bool) {

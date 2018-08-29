@@ -6,7 +6,7 @@ import { RouteResult } from '../RouteResult/RouteResult'
 import { currencyOptions, moment } from '../../constants'
 import styles from './ChooseOffer.scss'
 import { numberSpacing } from '../../helpers'
-import { FlashMessages } from '../FlashMessages/FlashMessages'
+import DocumentsDownloader from '../Documents/Downloader'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
@@ -86,6 +86,7 @@ export class ChooseOffer extends Component {
   }
   handleClick (e, value) {
     if (e.target.checked) {
+      console.log(value)
       this.state.selectedOffers.push(value)
       this.setState({
         selectedOffers: this.state.selectedOffers
@@ -117,6 +118,10 @@ export class ChooseOffer extends Component {
     req.delay = outerLimit + dayFactor
     shipmentDispatch.getOffers(req, false)
     this.setState({ outerLimit: req.delay })
+  }
+  downloadQuotations () {
+    const { shipmentDispatch } = this.props
+    shipmentDispatch.downloadQuotations()
   }
   shiftDepartureDate (operator, days) {
     const { shipmentDispatch, req } = this.props
@@ -194,7 +199,7 @@ export class ChooseOffer extends Component {
           schedule={s}
           checked={this.state.isChecked}
           cargo={shipmentData.cargoUnits}
-          handleClick={e => this.handleClick(e, s.quote.total.value)}
+          handleClick={e => this.handleClick(e, s)}
         />
       ) : (
         <RouteResult
@@ -221,7 +226,7 @@ export class ChooseOffer extends Component {
           schedule={s}
           checked={this.state.isChecked}
           cargo={shipmentData.cargoUnits}
-          handleClick={e => this.handleClick(e, s.quote.total.value)}
+          handleClick={e => this.handleClick(e, s)}
         />
       ) : (
         <RouteResult
@@ -267,6 +272,7 @@ export class ChooseOffer extends Component {
               setDepartureDate={this.setDepartureDate}
             />
           </div>
+          {console.log(this.state.selectedOffers)}
           <div className="flex-75  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center">
@@ -356,19 +362,27 @@ export class ChooseOffer extends Component {
               {this.state.selectedOffers !== 0 ? (
                 this.state.selectedOffers.map(offer =>
                   (<div className={`flex-100 layout-row layout-align-start-center ${styles.selected_offer}`}>
-                    <span>{numberSpacing(offer, 2)}&nbsp;{shipmentData.schedules[0].quote.total.currency}</span>
+                    <span>{numberSpacing(offer.quote.total.value, 2)}&nbsp;{shipmentData.schedules[0].quote.total.currency}</span>
                     <i className="fa fa-times pointy layout-row layout-align-end-center" onClick={e => this.handleClick(e, offer)} />
                   </div>))
               ) : ''}
               <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
                 <div className="flex-90 layout-row layout-align-center-center">
-                  <RoundButton
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="quotations"
+                    options={{ quote: this.state.selectedOffers }}
+                    size="full"
+                    shipment={shipment}
+                    shipmentDispatch={shipmentDispatch}
+                  />
+                  {/* <RoundButton
                     theme={theme}
                     size="full"
                     active
                     text="Download pdf"
                     handleNext={() => this.downloadFile()}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

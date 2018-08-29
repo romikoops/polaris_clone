@@ -36,6 +36,23 @@ class Document < ApplicationRecord
     )
   end
 
+  # def self.new_upload_backend_with_quotes(file, shipment, quotes, type, user)
+  #   file_name = File.basename(file.path)
+  #   obj_key = self.obj_key(shipment, type, file_name)
+  #   byebug
+  #   upload(bucket: "imcdev", key: obj_key, file: file, content_type: "application/pdf", acl: "private")
+
+  #   Document.create!(
+  #     url:      obj_key,
+  #     shipment: shipment,
+  #     text:     file_name,
+  #     doc_type: type,
+  #     quotes:   quotes,
+  #     user:     user,
+  #     tenant:   user.tenant
+  #   )
+  # end
+
   def get_signed_url
     @url = get_file_url(url)
   end

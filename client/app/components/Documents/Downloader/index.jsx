@@ -24,7 +24,7 @@ class DocumentsDownloader extends React.Component {
   }
 
   requestDocument () {
-    const { target, documentDispatch, options } = this.props
+    const { target, documentDispatch, shipmentDispatch, options, shipment } = this.props
     switch (target) {
       case 'pricing':
         documentDispatch.downloadPricings(options)
@@ -46,6 +46,9 @@ class DocumentsDownloader extends React.Component {
         break
       case 'gdpr':
         documentDispatch.downloadGdpr(options)
+        break
+      case 'quotations':
+        shipmentDispatch.downloadQuotations(options, shipment)
         break
 
       default:
@@ -133,7 +136,8 @@ class DocumentsDownloader extends React.Component {
 
 DocumentsDownloader.propTypes = {
   theme: PropTypes.theme,
-  documentDispatch: PropTypes.func.isRequired,
+  documentDispatch: PropTypes.func,
+  shipmentDispatch: PropTypes.func,
   downloadUrls: PropTypes.objectOf(PropTypes.any),
   tooltip: PropTypes.string,
   square: PropTypes.bool,
@@ -146,6 +150,8 @@ DocumentsDownloader.propTypes = {
 DocumentsDownloader.defaultProps = {
   square: false,
   downloadUrls: {},
+  documentDispatch: null,
+  shipmentDispatch: null,
   theme: null,
   tooltip: '',
   target: '',

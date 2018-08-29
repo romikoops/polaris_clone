@@ -1,0 +1,260 @@
+<style media="screen" type="text/css">
+  body{
+    color: #4F4F4F;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .wrapper {
+    padding-left: 400px;
+    padding-right: 400px;
+  }
+  .wrapper .title h1 {
+    font-size: 80px !important;
+    padding: 400px !important;
+    font-weight: bold !important;
+  }
+  .col-xs-12{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word; 
+  }
+
+  .col-xs-6{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-2{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-1{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-5{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-3{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-7{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-8{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-9{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-4{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+
+  .hr-right{
+    border-right: 1px solid #096CAF;
+  }
+  .hr-bottom{
+    border-bottom: 1px solid #096CAF;
+  }
+  .hr-top{
+    border-top: 1px solid #096CAF;
+  }
+  .hr-left{
+    border-left: 1px solid #096CAF;
+  }
+  .no-padding{
+    padding: 0%;
+  }
+  .watermark {
+    color: #6699ff;
+    font-size: 100pt;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    position: absolute;
+    z-index: -1;
+    left:200px;
+    top:550px;
+    text-align: center;
+    opacity: 0.1;
+  }
+  .quote {
+    font-size: 45px;
+  }
+  .wrapper-vertical {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    text-align: center;
+    height: 25mm;
+    width: 25mm;
+  }
+  .vertical {
+    white-space: nowrap;
+    margin: 0; 
+    font-size: 90%;
+  }
+  .text{
+    padding-left: 2px;
+  }
+  br{
+    padding-bottom: 5px;
+  }
+  .logo {
+    height: 130px;
+  }
+  .info {
+    padding: 20px 25px;
+  }
+  .info i {
+    padding-top: 40px;
+    color: #e10f21;
+    font-size: 80px;
+  }
+  .info p {
+    font-size: 50px;
+  }
+  .info p span {
+    font-size: 60px;
+    font-weight: bold;
+  }
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #F8F8F8;
+    border: 3px solid #BDBDBD;
+    min-height: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .total-price-single {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-top: 3px solid #E0E0E0;
+    border: 3px solid #E0E0E0;
+  }
+  .subtotal-price-single {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: #F8F8F8;
+    border-bottom: 3px solid #E0E0E0;
+  }
+  .subtotal-price-single h3 {
+    padding-right: 40px;
+    font-size: 32px;
+    text-align: right;
+    font-weight: bold;
+  }
+  .subtotal-price-single h4 {
+    padding-left: 40px;
+    font-weight: bold;
+    font-size: 32px;
+  }
+  .total-price-single h4 {
+    font-size: 38px;
+    padding-left: 40px;
+    text-transform: capitalize;
+  }
+  .total-price-single h3 {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 80px;
+  }
+  .total-row h4 {
+    padding-top: 25px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 60px;
+    padding-left: 40px;
+  }
+  .total-row p {
+    font-weight: bold;
+    padding-right: 40px;
+    font-size: 76px;
+    text-align: right;
+  }
+  .info {
+    padding: 60px;
+    border: 6px solid #E0E0E0;
+  }
+  .sub-prices {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .main-container {
+    margin-bottom: 80px
+  }
+</style>
+
+<% cargo_units = shipment.cargo_items.empty? ? shipment.containers : shipment.cargo_items %>
+
+<div class="wrapper">
+  <%= image_tag shipment.tenant.theme["logoLarge"], class: 'logo' %>
+  <div class="col-xs-12 title" style="font-size: 150%; text-align: center;">
+    <h1>QUOTATIONS</h1>
+  </div>
+
+  <div class="main-container container-fluid" > 
+    <!-- first segment  -->
+    <% quotes.map do |quote| %>
+      <div class="info row">
+        <% if quote["mode_of_transport"] == "ocean" %>
+          <i class="fas fa-anchor col-xs-1"></i>
+        <% end %>
+        <% if quote["mode_of_transport"] == "air" %>
+          <i class="fas fa-paper-plane col-xs-1"></i>
+        <% end %>
+        <div class="col-xs-11">
+          <p>From:&nbsp;<span><%= quote["origin_hub"]["name"] %></span></p>
+          <p>To:&nbsp;<span><%= quote["destination_hub"]["name"] %></span></p>
+        </div>
+      </div>
+      
+    
+      <div class="total-row row">
+        <h4 class="col-xs-6">Total</h4>
+        <p class="quote col-xs-6"><%= quote["quote"]["total"]["value"].to_f.truncate(2) %>&nbsp;<%= quote["quote"]["total"]["currency"] %></p>
+      </div>
+        <% quote["quote"].each_pair do |k, v| %>
+          <div class="sub-prices row">
+            <% if k != "total" && k != "edited_total" %>
+              <div class="col-xs-12">
+                <div class="total-price-single row">
+                  <h4 class="col-xs-6"><%= k %></h4>
+                  <h3 class="col-xs-6"><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
+                </div>
+              </div>
+              <% v.each_pair do |a, b| %>
+                <% if a != "total" && a != "edited_total" %>
+                  <div class="col-xs-12">
+                    <div class="subtotal-price-single row">
+                      <h4 class="col-xs-6"><%= a %></h4>
+                      <% if b["value"] %>
+                        <h3 class="col-xs-6"><%= b["value"] %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
+                      <% else %>
+                        <h3 class="col-xs-6"><%= b["total"]["value"] %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+    <% end %>
+  </div>
+</div>

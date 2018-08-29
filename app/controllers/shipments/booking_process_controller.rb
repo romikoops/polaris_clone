@@ -14,7 +14,9 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def choose_offer
+    shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
+    ShippingTools.agent_quotation_email(current_user, shipment)
     response_handler(resp)
   end
 
@@ -23,10 +25,25 @@ class Shipments::BookingProcessController < ApplicationController
     response_handler(resp)
   end
 
+  def download_quotations
+    shipment = Shipment.find(params[:shipment_id])
+    quotation = PdfHandler.new(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/quotations.pdf.erb",
+      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
+      quotes:   params[:options].fetch(:quote),
+      name:     "quotation"
+    )
+    quotation.generate
+    quotation.upload
+  end
+
   def request_shipment
     resp = ShippingTools.request_shipment(params, current_user)
     ShippingTools.tenant_notification_email(resp.user, resp)
     ShippingTools.shipper_notification_email(resp.user, resp)
+    # ShippingTools.agent_quotation_email(resp.user, resp)
     response_handler(shipment: resp)
   end
 end
