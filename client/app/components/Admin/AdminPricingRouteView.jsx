@@ -305,6 +305,7 @@ export class AdminPricingRouteView extends Component {
               adminDispatch={adminActions}
               charges={itineraryPricingData}
               clients={clients}
+              initialEdit={showPricingAdder}
             />
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" >
