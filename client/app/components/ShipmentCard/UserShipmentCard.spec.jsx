@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment } from '../../mocks'
-
 import { UserShipmentCard } from './UserShipmentCard'
 
 jest.mock('../../helpers', () => ({
@@ -9,6 +8,7 @@ jest.mock('../../helpers', () => ({
   gradientGenerator: x => x,
   gradientBorderGenerator: x => x,
   switchIcon: x => x,
+  splitName: x => x,
   totalPrice: () => ({ currency: 'DZD' }),
   formattedPriceValue: () => 975
 }))
@@ -36,6 +36,6 @@ const propsBase = {
   shipment
 }
 
-test.skip('shallow rendering', () => {
+test('shallow rendering', () => {
   expect(shallow(<UserShipmentCard {...propsBase} />)).toMatchSnapshot()
 })

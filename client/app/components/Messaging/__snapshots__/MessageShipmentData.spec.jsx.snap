@@ -377,9 +377,7 @@ exports[`shallow render 1`] = `
             }
           }
         />
-        <Price
-          scale=""
-        />
+        <Price />
       </div>
     </div>
     <div

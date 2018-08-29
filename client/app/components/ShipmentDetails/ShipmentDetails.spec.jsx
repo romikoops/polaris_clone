@@ -81,6 +81,7 @@ let originalDate
 const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
   originalDate = Date
+  // eslint-disable-next-line no-global-assign
   Date = class extends Date {
     constructor () {
       return constantDate
@@ -89,9 +90,17 @@ beforeEach(() => {
 })
 
 afterEach(() => {
+  // eslint-disable-next-line no-global-assign
   Date = originalDate
 })
 
+/**
+ * The component is too big
+ * Test will be fixed and test coverage will increase,
+ * once the refactoring is started
+ */
 test.skip('shallow rendering', () => {
-  expect(shallow(<ShipmentDetails {...propsBase} />)).toMatchSnapshot()
+  const wrapper = shallow(<ShipmentDetails {...propsBase} />)
+  wrapper.setState({ filteredRouteIndexes: [{}] })
+  expect(wrapper).toMatchSnapshot()
 })

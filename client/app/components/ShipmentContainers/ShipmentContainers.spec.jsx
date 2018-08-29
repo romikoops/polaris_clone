@@ -84,13 +84,13 @@ test('props.containers has dangerous_goods as true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test.skip('props.addContainer is called', () => {
+test('props.addContainer is called', () => {
   const props = {
     ...propsBase,
     addContainer: jest.fn()
   }
   const wrapper = createWrapper(props)
-  const clickableDiv = wrapper.find('.add_unit').first()
+  const clickableDiv = wrapper.find('.add_unit_wrapper > div').first()
 
   expect(props.addContainer).not.toHaveBeenCalled()
   clickableDiv.simulate('click')

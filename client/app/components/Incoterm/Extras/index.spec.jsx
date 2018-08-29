@@ -14,7 +14,10 @@ const editedTenant = {
   data: {
     ...tenant.data,
     scope: {
-      detailed_billing: true
+      detailed_billing: true,
+      has_customs: true,
+      has_insurance: true,
+      customs_export_paper: true
     }
   }
 }
@@ -28,11 +31,11 @@ const propsBase = {
   shipment
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<IncotermExtras {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('props.feeHash is empty object', () => {
+test('props.feeHash is empty object', () => {
   const props = {
     ...propsBase,
     feeHash: {}

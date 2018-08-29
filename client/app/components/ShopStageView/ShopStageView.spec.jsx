@@ -13,7 +13,7 @@ const propsBase = {
   disabledClick: false
 }
 
-test.skip('shallow rendering', () => {
+test('shallow rendering', () => {
   expect(shallow(<ShopStageView {...propsBase} />)).toMatchSnapshot()
 })
 
