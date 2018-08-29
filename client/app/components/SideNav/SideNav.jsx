@@ -115,7 +115,7 @@ class SideNav extends Component {
       }
     ]
 
-    const { user, tenant } = props
+    const { user } = props
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
       (user.role && user.role.name === 'sub_admin')

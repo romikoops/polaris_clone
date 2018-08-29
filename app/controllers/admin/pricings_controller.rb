@@ -6,52 +6,25 @@ class Admin::PricingsController < Admin::AdminBaseController
   include ItineraryTools
 
   def index
-
     @transports = TransportCategory.all.uniq
     tenant = current_user.tenant
 
     itineraries = tenant.itineraries
-    mots = tenant.scope[:modes_of_transport].keys.reject do |key| 
-      !tenant.scope[:modes_of_transport][key]["container"] &&
-      !tenant.scope[:modes_of_transport][key]["cargo_item"] 
+    mots = tenant.scope['modes_of_transport'].keys.reject do |key|
+      !tenant.scope['modes_of_transport'][key]['container'] &&
+        !tenant.scope['modes_of_transport'][key]['cargo_item']
     end
-    byebug
     detailed_itineraries = {}
     mot_page_counts = {}
-    if params[:air]
-      air_itineraries = itineraries
-      .where(mode_of_transport: 'air')
-      detailed_itineraries[:air] = air_itineraries
-        .paginate(page: params[:air])
-        .map(&:as_pricing_json)
-      mot_page_counts[:air] = air_itineraries.count / 12
-    end
-    if params[:rail]
-      rail_itineraries = itineraries
-      .where(mode_of_transport: 'rail')
-      detailed_itineraries[:rail] = rail_itineraries
-        .paginate(page: params[:rail])
-        .map(&:as_pricing_json)
-      mot_page_counts[:rail] = rail_itineraries.count / 12
-    end
-    if params[:truck]
-      truck_itineraries = itineraries
-      .where(mode_of_transport: 'truck')
-      detailed_itineraries[:truck] = truck_itineraries
-        .paginate(page: params[:truck])
-        .map(&:as_pricing_json)
-      mot_page_counts[:truck] = truck_itineraries.count / 12
-    end
-    if params[:ocean]
-      ocean_itineraries = itineraries
-      .where(mode_of_transport: 'ocean')
-      detailed_itineraries[:ocean] = ocean_itineraries
-        .paginate(page: params[:ocean])
-        .map(&:as_pricing_json)
-      mot_page_counts[:ocean] = ocean_itineraries.count / 12
+    mots.each do |mot|
+      mot_itineraries = itineraries
+                        .where(mode_of_transport: mot)
+      detailed_itineraries[mot] = mot_itineraries
+                                  .paginate(page: params[mot] || 1)
+                                  .map(&:as_pricing_json)
+      mot_page_counts[mot] = mot_itineraries.count / 12
     end
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
-    byebug
     response_handler(
       itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
@@ -74,8 +47,8 @@ class Admin::PricingsController < Admin::AdminBaseController
     }
 
     query[:mode_of_transport] = params[:mot] if params[:mot]
-    itineraries = Itinerary.where(query).order("name ASC")
-    itinerary_results = itineraries.where("name ILIKE ?", "%#{params[:text]}%")
+    itineraries = Itinerary.where(query).order('name ASC')
+    itinerary_results = itineraries.where('name ILIKE ?', "%#{params[:text]}%")
     @transports = TransportCategory.all.uniq
     detailed_itineraries = itinerary_results.paginate(page: params[:page]).map(&:as_pricing_json)
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
@@ -84,7 +57,8 @@ class Admin::PricingsController < Admin::AdminBaseController
       detailedItineraries: detailed_itineraries,
       numItineraryPages:   itineraries.count / 12,
       transportCategories: @transports,
-      lastUpdate:          last_updated
+      lastUpdate:          last_updated,
+      mode_of_transport:   params[:mot]
     )
   end
 
@@ -97,7 +71,7 @@ class Admin::PricingsController < Admin::AdminBaseController
       carrier_name = tenant_vehicle.carrier ?
       "#{tenant_vehicle.carrier.name} - #{tenant_vehicle.name}" :
       tenant_vehicle.name
-      { label: "#{carrier_name}", value: tenant_vehicle.vehicle_id}
+      { label: carrier_name.to_s, value: tenant_vehicle.vehicle_id }
     end
     stops = itinerary.stops.map { |s| { stop: s, hub: s.hub.as_options_json } }
     response_handler(
@@ -115,24 +89,24 @@ class Admin::PricingsController < Admin::AdminBaseController
       ex_pricing = Pricing.where(user_id: client_id, itinerary_id: itinerary_id).first
       pricing_to_update = ex_pricing || Pricing.new
       new_pricing_data = params[:pricing].as_json
-      new_pricing_data.delete("controller")
-      new_pricing_data.delete("subdomain_id")
-      new_pricing_data.delete("action")
-      new_pricing_data.delete("id")
-      new_pricing_data.delete("created_at")
-      new_pricing_data.delete("updated_at")
-      new_pricing_data.delete("load_type")
-      new_pricing_data["user_id"] = client_id.to_i
-      pricing_details = new_pricing_data.delete("data")
-      pricing_exceptions = new_pricing_data.delete("exceptions")
+      new_pricing_data.delete('controller')
+      new_pricing_data.delete('subdomain_id')
+      new_pricing_data.delete('action')
+      new_pricing_data.delete('id')
+      new_pricing_data.delete('created_at')
+      new_pricing_data.delete('updated_at')
+      new_pricing_data.delete('load_type')
+      new_pricing_data['user_id'] = client_id.to_i
+      pricing_details = new_pricing_data.delete('data')
+      pricing_exceptions = new_pricing_data.delete('exceptions')
       pricing_to_update.update(new_pricing_data)
       pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete("currency")
+        currency = pricing_detail_data.delete('currency')
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type,
           tenant:        current_user.tenant
         )
-        range = pricing_detail_params.delete("range")
+        range = pricing_detail_params.delete('range')
         pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
           shipping_type: shipping_type,
           tenant:        current_user.tenant
@@ -142,18 +116,18 @@ class Admin::PricingsController < Admin::AdminBaseController
       end
 
       pricing_exceptions.each do |pricing_exception_data|
-        pricing_details = pricing_exception_data.delete("data")
+        pricing_details = pricing_exception_data.delete('data')
         pricing_exception = pricing_to_update.pricing_exceptions
-          .where(pricing_exception_data)
-          .first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
+                                             .where(pricing_exception_data)
+                                             .first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
         pricing_details.each do |shipping_type, pricing_detail_data|
-          currency = pricing_detail_data.delete("currency")
-          range = pricing_detail_data.delete("range")
+          currency = pricing_detail_data.delete('currency')
+          range = pricing_detail_data.delete('range')
           pricing_detail_params = pricing_detail_data
-            .merge(shipping_type: shipping_type, tenant: current_user.tenant)
+                                  .merge(shipping_type: shipping_type, tenant: current_user.tenant)
           pricing_detail = pricing_exception.pricing_details
-            .where(pricing_detail_params)
-            .first_or_create!(pricing_detail_params)
+                                            .where(pricing_detail_params)
+                                            .first_or_create!(pricing_detail_params)
           pricing_detail.update!(range: range, currency_name: currency)
         end
       end
@@ -189,12 +163,12 @@ class Admin::PricingsController < Admin::AdminBaseController
     options = params[:options].as_json.deep_symbolize_keys!
     options[:tenant_id] = current_user.tenant_id
     url = DocumentService::PricingWriter.new(options).perform
-    response_handler(url: url, key: "pricing")
+    response_handler(url: url, key: 'pricing')
   end
 
   def overwrite_main_lcl_carriage
-    if params[:file] && params[:file] != "null"
-      req = { "xlsx" => params[:file] }
+    if params[:file] && params[:file] != 'null'
+      req = { 'xlsx' => params[:file] }
       results = ExcelTool::FreightRatesOverwriter.new(
         params:   req,
         _user:    current_user,
@@ -207,8 +181,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def overwrite_main_fcl_carriage
-    if params[:file] && params[:file] != "null"
-      req = { "xlsx" => params[:file] }
+    if params[:file] && params[:file] != 'null'
+      req = { 'xlsx' => params[:file] }
       results = ExcelTool::FreightRatesOverwriter.new(
         params:   req,
         _user:    current_user,
@@ -242,10 +216,10 @@ class Admin::PricingsController < Admin::AdminBaseController
   def itineraries_array(prices, itin)
     results = []
     prices.each do |_k, v|
-      splits = v.split("_")
+      splits = v.split('_')
       hub1 = splits[0].to_i
       hub2 = splits[1].to_i
-      results.push(itin) if itin["first_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+      results.push(itin) if itin['first_stop_id'] == hub1 && itin['destination_stop_id'] == hub2
     end
     results
   end
@@ -267,11 +241,11 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def update_pricing_details(pricing_to_update)
     sanitzed_params.each do |shipping_type, pricing_detail_data|
-      currency = pricing_detail_data.delete("currency")
+      currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
         shipping_type: shipping_type, tenant: current_user.tenant
       )
-      range = pricing_detail_params.delete("range")
+      range = pricing_detail_params.delete('range')
       pricing_detail = pricing_to_update.pricing_details.find_or_create_by(
         shipping_type: shipping_type, tenant: current_user.tenant
       )
@@ -282,15 +256,15 @@ class Admin::PricingsController < Admin::AdminBaseController
 
   def update_pricing_exception_data(pricing_to_update)
     sanitzed_params.each do |pricing_exception_data|
-      pricing_details = pricing_exception_data.delete("data")
+      pricing_details = pricing_exception_data.delete('data')
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
       ).first_or_create(pricing_exception_data.merge(
                           tenant: current_user.tenant
                         ))
       pricing_details.each do |shipping_type, pricing_detail_data|
-        currency = pricing_detail_data.delete("currency")
-        range = pricing_detail_data.delete("range")
+        currency = pricing_detail_data.delete('currency')
+        range = pricing_detail_data.delete('range')
         pricing_detail_params = pricing_detail_data.merge(
           shipping_type: shipping_type, tenant: current_user.tenant
         )
@@ -305,8 +279,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   def sanitzed_params
     new_pricing_data = params.as_json
     new_pricing_data.except(
-      "controller", "subdomain_id", "action", "id", "created_at",
-      "updated_at", "load_type", "currency", "data", "exceptions"
+      'controller', 'subdomain_id', 'action', 'id', 'created_at',
+      'updated_at', 'load_type', 'currency', 'data', 'exceptions'
     )
   end
 

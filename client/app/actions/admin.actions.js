@@ -358,12 +358,12 @@ function getPricings (redirect, pages) {
     dispatch(request())
     dispatch(getTrucking())
     adminService.getPricings(pages).then(
-      (data) => {
+      (response) => {
         dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {
           dispatch(push('/admin/pricings'))
         }
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         dispatch(failure(error))
@@ -375,22 +375,22 @@ function getPricings (redirect, pages) {
 
 function searchPricings (text, page, mot) {
   function request (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_REQUEST, payload: pricingData }
   }
   function success (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_SUCCESS, payload: pricingData }
   }
   function failure (error) {
-    return { type: adminConstants.GET_PRICINGS_FAILURE, error }
+    return { type: adminConstants.SEARCH_PRICINGS_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request())
 
     adminService.searchPricings(text, page, mot).then(
-      (data) => {
+      (response) => {
         dispatch(alertActions.success('Pricings Search successful'))
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         // ;

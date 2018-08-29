@@ -83,7 +83,7 @@ export class AdminPricingsIndex extends Component {
     }
 
     const {
-      itineraries, detailedItineraries, transportCategories, lastUpdate
+      itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
     const gradientFontStyle =
@@ -93,15 +93,15 @@ export class AdminPricingsIndex extends Component {
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
     const truckIcon = <i className="fa fa-truck clip flex-none" style={gradientFontStyle} />
-      if (detailedItineraries.length === 0) debugger // eslint-disable-line
+
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
-      extraClick={() => this.getInitialPricingPage(mot)}
       icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardPricingIndex
-        itineraries={detailedItineraries.filter(itin => itin.mode_of_transport === mot)}
+        itineraries={detailedItineraries[mot]}
+        numPages={numItineraryPages}
         theme={theme}
         scope={scope}
         mot={mot}
