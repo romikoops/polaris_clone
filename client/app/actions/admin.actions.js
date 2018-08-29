@@ -843,8 +843,8 @@ function getVehicleTypes (itineraryId) {
 }
 
 function getDashboard (redirect) {
-  function request (dashData) {
-    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: dashData }
+  function request (showLoading) {
+    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: showLoading }
   }
   function success (dashData) {
     return { type: adminConstants.GET_DASHBOARD_SUCCESS, payload: dashData }
@@ -854,7 +854,7 @@ function getDashboard (redirect) {
   }
 
   return (dispatch) => {
-    dispatch(request())
+    dispatch(request(redirect))
 
     adminService.getDashboard().then(
       (data) => {

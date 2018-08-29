@@ -234,11 +234,10 @@ export default function admin (state = {}, action) {
       return errHub
     }
     case adminConstants.GET_DASHBOARD_REQUEST: {
-      const reqDash = merge({}, state, {
-        loading: true
-      })
-
-      return reqDash
+      return {
+        ...state,
+        loading: action.payload
+      }
     }
     case adminConstants.GET_DASHBOARD_SUCCESS:
       return {
@@ -248,12 +247,11 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.GET_DASHBOARD_FAILURE: {
-      const errDash = merge({}, state, {
+      return {
+        ...state,
         error: { hubs: action.error },
         loading: false
-      })
-
-      return errDash
+      }
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
