@@ -66,20 +66,3 @@ test('props.setNav is called', () => {
   createWrapper(props)
   expect(props.setNav).toHaveBeenCalled()
 })
-
-test.skip('props.userDispatch.makePrimary is called', () => {
-  const props = {
-    ...propsBase,
-    userDispatch: {
-      ...propsBase,
-      makePrimary: jest.fn()
-    }
-  }
-  const selector = 'div[className="layout-row flex-20 layout-align-end"] > div'
-
-  const wrapper = createWrapper(props)
-  const clickableDiv = wrapper.find(selector).first()
-
-  clickableDiv.simulate('click')
-  expect(props.userDispatch.makePrimary).toHaveBeenCalled()
-})

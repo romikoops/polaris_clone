@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { identity, theme } from '../../mocks'
+import { identity, theme, tenant } from '../../mocks'
 import { ShopStageView } from './ShopStageView'
 
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
@@ -10,14 +10,15 @@ const propsBase = {
   setStage: identity,
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
-  disabledClick: false
+  disabledClick: false,
+  tenant
 }
 
 test('shallow rendering', () => {
   expect(shallow(<ShopStageView {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('props.setStage is called', () => {
+test('props.setStage is called', () => {
   const props = {
     ...propsBase,
     currentStage: 3,
@@ -33,7 +34,7 @@ test.skip('props.setStage is called', () => {
   expect(props.setStage).toHaveBeenCalled()
 })
 
-test.skip('setStage is not called when disabledClick is true', () => {
+test('setStage is not called when disabledClick is true', () => {
   const props = {
     ...propsBase,
     currentStage: 3,

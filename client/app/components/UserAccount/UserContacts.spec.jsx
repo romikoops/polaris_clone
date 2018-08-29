@@ -14,7 +14,7 @@ const propsBase = {
   contacts: [],
   dispatch: identity,
   userDispatch: {
-    getContact: identity,
+    getContacts: identity,
     confirmShipment: identity
   },
   history,
@@ -26,6 +26,6 @@ const propsBase = {
   }
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserContacts {...propsBase} />)).toMatchSnapshot()
 })
