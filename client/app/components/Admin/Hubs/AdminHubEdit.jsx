@@ -92,7 +92,6 @@ export class AdminHubEdit extends Component {
     const key1 = eventKeys[0]
     const key2 = eventKeys[1]
     const val = event.target.value
-
     this.setState({
       [key1]: {
         ...this.state[key1],
@@ -220,7 +219,7 @@ export class AdminHubEdit extends Component {
                   >
                     <p className="flex-100">Latitude</p>
                     <input
-                      name="location-latitdue"
+                      name="location-latitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
