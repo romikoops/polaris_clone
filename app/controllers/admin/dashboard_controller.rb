@@ -49,8 +49,4 @@ class Admin::DashboardController < Admin::AdminBaseController
     Itinerary.for_tenant(current_user.tenant_id).limit(40).map(&:as_options_json)
   end
 
-  def flap_map_schedule_by_mot(mot)
-    @tenant.itineraries.where(mode_of_transport: mot).limit(10)
-           .flat_map { |it| it.prep_schedules(5) }
-  end
 end
