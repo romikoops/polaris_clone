@@ -88,14 +88,14 @@ export class RouteResult extends Component {
               </div>
             </div>
             <div className={`flex-20 layout-row layout-wrap layout-align-start-center ${styles.load_type}`}>
-              <div className="flex-100 layout-row layout-align-center-center">
+              { schedule.carrier_name ? <div className="flex-100 layout-row layout-align-center-center">
                 <i className="flex-10 fa fa-ship" />
                 <p className="flex-90 no_m">{schedule.carrier_name}</p>
-              </div>
-              <div className="flex-100 layout-row layout-align-center-center">
+              </div> : '' }
+              { schedule.vehicle_name ? <div className="flex-100 layout-row layout-align-center-center">
                 <i className="flex-10 fa fa-bell-o" />
                 <p className="flex-90 no_m">{capitalize(schedule.vehicle_name)}</p>
-              </div>
+              </div> : '' }
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-center">
