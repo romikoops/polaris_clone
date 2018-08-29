@@ -9,6 +9,7 @@ module DataParser
         @load_type = args[:load_type]
         @hub_type = args[:hub_type]
         @input_language = args[:input_language]
+        @all_destinations = []
       end
 
       def perform
@@ -53,6 +54,7 @@ module DataParser
         def collate_by_origin_and_destinations
           @collated_rows = {}
           @sheet_rows.each do |row|
+            @all_destinations << row[:destination]
             if row[:origin].include?(';')
               cities = row[:origin].split(';')
               row_keys = cities.map{|city| "#{city}-#{row[:zipcode]}"}
@@ -99,7 +101,7 @@ module DataParser
           parse_sheet_rows(@xlsx.sheet(@sheets.last))
           collate_by_origin_and_destinations
           determine_highest_price
-          byebug
+          { rows: @final_rows, names: @all_destinations }
         end
     end
   end

@@ -69,7 +69,7 @@ class Geometry < ApplicationRecord
     name = raw_name.split.map(&:capitalize).join(" ")
 
     (1..4).to_a.reverse.each do |i|
-      result = where("name_#{i}" => name).first
+      result = where("name_#{i} ILIKE ?", name).first
       return result unless result.nil?
     end
 

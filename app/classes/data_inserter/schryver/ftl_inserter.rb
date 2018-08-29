@@ -10,6 +10,7 @@ module DataInserter
         @rates = args[:rates]
         @tenant = args[:tenant]
         @courier = Courier.find_or_create_by!(name: 'IGS Intermodal', tenant_id: @tenant.id)
+        @missing_geometries = []
       end
 
       def perform
@@ -24,12 +25,16 @@ module DataInserter
         )
 
         if geometry.nil?
-          geocoder_results = Geocoder.search("#{town_name}, Germany")
-          coordinates = geocoder_results.first.geometry['location']
-          geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
+          begin
+            geocoder_results = Geocoder.search(town_name)
+            coordinates = geocoder_results.first.geometry['location']
+            geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
+          rescue
+            geometry = nil
+          end
         end
 
-        raise "no geometry found for #{town_name}" if geometry.nil?
+        @missing_geometries << town_name if geometry.nil?
 
         geometry
       end
@@ -61,8 +66,8 @@ module DataInserter
         weight_pairs = {}
         rate_keys = rate.keys
         rate_keys.each_with_index do |w_key, index|
-          w_value = w_key.to_s.sub('under_', '').sub('_', '.').to_d
-          weight_keys[w_key] = w_value
+          w_value = w_key.to_s.sub('under_', '').sub('_', '.').to_d * 1000
+          weight_keys[w_key] = w_value 
           weight_pairs[w_key] = [(weight_keys[rate_keys[index - 1]] || 0), w_value]
         end
         weight_pairs.each do |rate_key, weights|
@@ -98,11 +103,11 @@ module DataInserter
       end
 
       def build_trucking_destination(destination)
-        if destination.include?('/')
-          destinations = destination.split('/')
-        else
-          destinations = [destination]
-        end
+        destinations = if destination.include?('/')
+                         destination.split('/')
+                       else
+                         [destination]
+                       end
         geometry = find_geometry(destinations.first)
         return nil unless geometry
         TruckingDestination.find_or_create_by(
@@ -126,7 +131,8 @@ module DataInserter
             @rate_hash = rate_hash
             %w(pre on).each do |direction|
               @rate_hash[:rates].each do |cargo_class, rate|
-                trucking_destination =  build_trucking_destination(destination)
+                trucking_destination = build_trucking_destination(destination)
+                next unless trucking_destination
                 trucking_pricing = build_trucking_pricing(cargo_class, rate, direction)
                 hub_trucking = build_hub_trucking(trucking_destination, trucking_pricing, @hub)
                 # p hub_trucking
@@ -134,6 +140,7 @@ module DataInserter
             end
           end
         end
+        p @missing_geometries
       end
     end
   end
