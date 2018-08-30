@@ -25,9 +25,15 @@ export class AdminPricingsIndex extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
   }
-  getInitialPricingPage (mot) {
-    const { adminDispatch } = this.props
-    adminDispatch.getPricings(false, 1, mot)
+  getInitialPricingPage () {
+    const { adminDispatch, scope } = this.props
+    const pages = {}
+    Object.keys(scope.modes_of_transport).forEach((mot) => {
+      if (Object.values(scope.modes_of_transport[mot]) > 0) {
+        pages[mot] = 1
+      }
+    })
+    adminDispatch.getPricings(false, pages)
   }
   toggleCreator (mot) {
     this.setState(prevState => ({
@@ -77,7 +83,7 @@ export class AdminPricingsIndex extends Component {
     }
 
     const {
-      itineraries, detailedItineraries, transportCategories, lastUpdate
+      itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
     const gradientFontStyle =
@@ -91,11 +97,11 @@ export class AdminPricingsIndex extends Component {
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
-      extraClick={() => this.getInitialPricingPage(mot)}
       icon={switchIcon(mot, gradientFontStyle)}
     >
       <CardPricingIndex
-        itineraries={detailedItineraries.filter(itin => itin.mode_of_transport === mot)}
+        itineraries={detailedItineraries[mot]}
+        numPages={numItineraryPages}
         theme={theme}
         scope={scope}
         mot={mot}

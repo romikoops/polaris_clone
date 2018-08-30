@@ -44,6 +44,7 @@ export default function (state = initialState, action) {
         user: action.user,
         loggedIn: true,
         showModal: false,
+        logginIn: false,
         loading: false
       }
     case authenticationConstants.LOGIN_FAILURE:

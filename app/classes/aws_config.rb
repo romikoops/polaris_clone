@@ -34,8 +34,8 @@ module AwsConfig
       shipment.documents.create(url: public_awsurl, shipment_id: shipment["uuid"], text: file.name)
     end
 
-    def get_file_url(key)
-      self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
+    def get_file_url(key, bucket=ENV["AWS_BUCKET"])
+      self.aws_signer.presigned_url(:get_object, bucket: bucket, key: key)
     end
 
     def delete_documents(docs)
@@ -105,8 +105,8 @@ module AwsConfig
       self.class.create_on_aws(file, shipment)
     end
 
-    def get_file_url(key)
-      self.aws_signer.presigned_url(:get_object, bucket: ENV["AWS_BUCKET"], key: key)
+    def get_file_url(key, bucket=ENV["AWS_BUCKET"])
+      self.aws_signer.presigned_url(:get_object, bucket: bucket, key: key)
     end
 
     def delete_documents(docs)
