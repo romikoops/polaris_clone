@@ -115,7 +115,7 @@ class SideNav extends Component {
       }
     ]
 
-    const { user, tenant } = props
+    const { user } = props
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
       (user.role && user.role.name === 'sub_admin')
@@ -127,11 +127,6 @@ class SideNav extends Component {
       url: '/admin/superadmin',
       target: 'superadmin'
     }
-    /* eslint-disable prefer-destructuring */
-    this.defaultMotForPricings = Object.keys(tenant.data.scope.modes_of_transport)
-      .filter(key => Object.keys(tenant.data.scope.modes_of_transport[key])
-        .filter(key2 => tenant.data.scope.modes_of_transport[key][key2])[0])[0]
-    /* eslint-enable prefer-destructuring */
     if (user.role && user.role.name === 'super_admin' && links.indexOf(superAdminLink) < 0) {
       links.push(superAdminLink)
     }
@@ -156,7 +151,8 @@ class SideNav extends Component {
     }
   }
   setAdminUrl (target) {
-    const { adminDispatch } = this.props
+    const { adminDispatch, tenant } = this.props
+    const { scope } = tenant.data
     switch (target) {
       case 'hubs':
         adminDispatch.getHubs(true)
@@ -164,9 +160,15 @@ class SideNav extends Component {
       case 'serviceCharges':
         adminDispatch.getServiceCharges(true)
         break
-      case 'pricing':
-        adminDispatch.getPricings(true, 1, this.defaultMotForPricings)
-        break
+      case 'pricing': {
+        const pages = {}
+        Object.keys(scope.modes_of_transport).forEach((mot) => {
+          if (Object.values(scope.modes_of_transport[mot]) > 0) {
+            pages[mot] = 1
+          }
+        })
+        adminDispatch.getPricings(true, pages)
+        break }
       case 'schedules':
         adminDispatch.getSchedules(true)
         break

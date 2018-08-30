@@ -661,11 +661,38 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_PRICINGS_SUCCESS: {
       return {
         ...state,
-        pricingData: action.payload.data,
+        pricingData: action.payload,
         loading: false
       }
     }
     case adminConstants.GET_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
+    }
+    case adminConstants.SEARCH_PRICINGS_REQUEST: {
+      return state
+    }
+    case adminConstants.SEARCH_PRICINGS_SUCCESS: {
+      return {
+        ...state,
+        pricingData: {
+          ...state.pricingData,
+          detailedItineraries: {
+            ...state.pricingData.detailedItineraries,
+            [action.payload.mode_of_transport]: action.payload.detailedItineraries
+          },
+          numItineraryPages: {
+            ...state.pricingData.numItineraryPages,
+            [action.payload.mode_of_transport]: action.payload.numItineraryPages
+          }
+        },
+        loading: false
+      }
+    }
+    case adminConstants.SEARCH_PRICINGS_FAILURE: {
       return {
         ...state,
         error: { pricings: action.error },
