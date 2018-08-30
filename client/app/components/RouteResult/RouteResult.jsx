@@ -87,7 +87,7 @@ export class RouteResult extends Component {
                 </div>
               </div>
             </div>
-            <div className={`flex-20 layout-row layout-wrap layout-align-start-center ${styles.load_type}`}>
+            <div className={`flex-20 layout-row layout-wrap layout-align-start-center ${styles.carrier_service_level}`}>
               { schedule.carrier_name ? <div className="flex-100 layout-row layout-align-center-center">
                 <i className="flex-10 fa fa-ship" />
                 <p className="flex-90 no_m">{schedule.carrier_name}</p>
