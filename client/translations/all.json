@@ -3,6 +3,7 @@
       "common": {
         "containerSize": " Container Size",
         "upload": "Upload",
+        "hsCodes": "HS Codes",
         "netWeight": "Net Weight",
         "cargoGroup": "Cargo Group",
         "collapseSidebar": "Collapse sidebar",
