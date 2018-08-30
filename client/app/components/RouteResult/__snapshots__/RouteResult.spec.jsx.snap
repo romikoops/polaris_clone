@@ -75,7 +75,7 @@ exports[`props.pickup is false 1`] = `
         </div>
       </div>
       <div
-        className="flex-20 layout-row layout-align-start-center load_type"
+        className="flex-20 layout-row layout-wrap layout-align-start-center carrier_service_level"
       />
     </div>
     <div
@@ -302,7 +302,7 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
       <div
-        className="flex-20 layout-row layout-align-start-center load_type"
+        className="flex-20 layout-row layout-wrap layout-align-start-center carrier_service_level"
       />
     </div>
     <div
