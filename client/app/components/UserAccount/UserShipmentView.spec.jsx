@@ -65,7 +65,7 @@ const propsBase = {
   tenant
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 
