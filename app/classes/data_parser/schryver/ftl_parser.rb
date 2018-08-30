@@ -63,13 +63,14 @@ module DataParser
             end
             row_keys.each do |origin|
               row_key = origin.split(' ').first
+              destination_key ="#{row[:zipcode] - row[:destination]}"
               unless @collated_rows[row_key]
                 @collated_rows[row_key] = {}
               end
-              unless @collated_rows[row_key][row[:destination]]
-                @collated_rows[row_key][row[:destination]] = []
+              unless @collated_rows[row_key][destination_key]
+                @collated_rows[row_key][destination_key] = []
               end
-              @collated_rows[row_key][row[:destination]] << row
+              @collated_rows[row_key][destination_key] << row
             end
           end
         end

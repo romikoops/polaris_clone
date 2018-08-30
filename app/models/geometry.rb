@@ -48,6 +48,7 @@ class Geometry < ApplicationRecord
     results["contains"]
   end
 
+
   private
 
   def self.cascading_find_by_two_names(raw_name_1, raw_name_2)

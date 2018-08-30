@@ -41,20 +41,7 @@ subdomains.each do |sub|
   ftl_data = DataParser::Schryver::FtlParser.new(path: path,
     _user: shipper
   ).perform
-  rejects = []
-  
-  ftl_data[:names].uniq.each do |name|
-    destinations = if name.include?('/')
-      name.split('/')
-    else
-      [name]
-    end
-    geometry = Geometry.cascading_find_by_names(
-      destinations.first
-    )
-    rejects << name unless geometry
-  end
-  byebug
+
   path = "#{Rails.root}/db/dummydata/schryver/ftl_rates.xlsx"
   ftl_results = DataInserter::Schryver::FtlInserter.new(rates: ftl_data,
     _user: shipper,

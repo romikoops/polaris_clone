@@ -19,14 +19,14 @@ module DataInserter
 
       private
 
-      def find_geometry(town_name)
-        geometry = Geometry.cascading_find_by_names(
-          town_name
+      def find_geometry(destination_key)
+        geometry = Geometry.find_by_name_1(
+          destination_key
         )
 
         if geometry.nil?
           begin
-            geocoder_results = Geocoder.search(town_name)
+            geocoder_results = Geocoder.search(destination_key)
             coordinates = geocoder_results.first.geometry['location']
             geometry = Geometry.find_by_coordinates(coordinates['lat'], coordinates['lng'])
           rescue
@@ -34,7 +34,7 @@ module DataInserter
           end
         end
 
-        @missing_geometries << town_name if geometry.nil?
+        @missing_geometries << destination_key if geometry.nil?
 
         geometry
       end
@@ -103,12 +103,8 @@ module DataInserter
       end
 
       def build_trucking_destination(destination)
-        destinations = if destination.include?('/')
-                         destination.split('/')
-                       else
-                         [destination]
-                       end
-        geometry = find_geometry(destinations.first)
+        
+        geometry = find_geometry(destination)
         return nil unless geometry
         TruckingDestination.find_or_create_by(
           country_code: 'DE',
