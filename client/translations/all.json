@@ -1,8 +1,11 @@
 {
     "en": {
       "common": {
-        "collapseSidebar": "Collapse sidebar",
+        "containerSize": " Container Size",
         "upload": "Upload",
+        "netWeight": "Net Weight",
+        "cargoGroup": "Cargo Group",
+        "collapseSidebar": "Collapse sidebar",
         "accept": "accept",
         "deny": "Deny",
         "title": "Title",
@@ -32,7 +35,10 @@
         "chargeableWeight": "Chargeable Weight",
         "width": "Width",
         "volume": "Volume",
-        "height​​": "Height​​",
+        "copyPaste": "Copy/Paste: ",
+        "height": "Height",
+        "payload": "Payload​​",
+        "depth": "Depth",
         "accountTitle": "My Account",
         "additional": "Additional Information",
         "agree": "Agree and Submit",

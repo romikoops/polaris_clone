@@ -8,11 +8,10 @@ module.exports = {
       ...Component.defaultProps,
       t: (key) => {
         const [scope, id] = key.split(':')
-        if (!en[scope] || !en[scope][id]) {
-          return `NO_TRANSLATION | key "${key}"`
-        }
 
-        return en[scope][id]
+        return en[scope] && en[scope][id]
+          ? en[scope][id]
+          : `NO_TRANSLATION | key "${key}"`
       }
     }
 
