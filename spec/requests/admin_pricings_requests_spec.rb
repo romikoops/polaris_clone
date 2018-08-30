@@ -7,13 +7,11 @@ Dir["#{Rails.root}/spec/support/auxiliary_constants/shipments/*.rb"].each do |fi
 end
 
 describe 'Pricing requests', type: :request do
-
-  
-  let(:role) { create(:role, name: 'admin')}
+  let(:role) { create(:role, name: 'admin') }
   let(:user) { create(:user, tenant: tenant, role: role) }
 
-  let(:transport_category) { create(:transport_category)}
-  
+  let(:transport_category) { create(:transport_category) }
+
   let(:origin_nexus) { create(:nexus) }
   let(:destination_nexus) { create(:nexus) }
   let!(:ocean_itinerary) { create(:itinerary, tenant: tenant, stops: [ocean_origin_stop, ocean_destination_stop], layovers: [ocean_origin_layover, ocean_destination_layover], trips: [ocean_trip], mode_of_transport: 'ocean') }
@@ -24,7 +22,6 @@ describe 'Pricing requests', type: :request do
   let(:ocean_destination_stop) { create(:stop, index: 1, hub_id: ocean_destination_hub.id, layovers: [ocean_destination_layover]) }
   let(:ocean_origin_layover) { create(:layover, stop_index: 0, trip: ocean_trip) }
   let(:ocean_destination_layover) { create(:layover, stop_index: 1, trip: ocean_trip) }
-
 
   let!(:air_itinerary) { create(:itinerary, tenant: tenant, stops: [air_origin_stop, air_destination_stop], layovers: [air_origin_layover, air_destination_layover], trips: [air_trip], mode_of_transport: 'air') }
   let(:air_trip) { create(:trip) }
@@ -44,44 +41,26 @@ describe 'Pricing requests', type: :request do
   let(:rail_origin_layover) { create(:layover, stop_index: 0, trip: rail_trip) }
   let(:rail_destination_layover) { create(:layover, stop_index: 1, trip: rail_trip) }
 
-
   context 'user logged in' do
-    
-    let(:pages) do { 
-        "rail" => 1,
-        "air" => 1,
-        "ocean" => 1
+    let(:pages) do
+      {
+        'rail' => 1,
+        'air' => 1,
+        'ocean' => 1
       }
     end
 
     sign_in(:user)
 
     context '#subdomain_admin_pricings_path' do
-      let(:response_data) do
-        {
-          # TBD - check cargo_item_types
-          detailedItineraries:    {
-            air: [air_itinerary.as_pricing_json],
-            ocean: [ocean_itinerary.as_pricing_json],
-            rail: [rail_itinerary.as_pricing_json],
-          },
-          numItineraryPages:   {
-            air: 1,
-            ocean: 1,
-            rail: 0,
-          },
-          transportCategories: [transport_category],
-          lastUpdate: ocean_itinerary.updated_at
-        }.deep_symbolize_keys!
-      end
 
       it 'Queries the DB for itineraries, sorted by MOT' do
         get subdomain_admin_pricings_path(subdomain_id: 'demo'), params: { pages: pages }
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
-        expect(json[:data].dig(:detailedItineraries, :air, 0, :mode_of_transport)).to eq("air")
+        expect(json[:data].dig(:detailedItineraries, :air, 0, :mode_of_transport)).to eq('air')
         expect(json[:data].dig(:detailedItineraries, :rail, 0, :mode_of_transport)).to eq(nil)
-        expect(json[:data].dig(:detailedItineraries, :ocean, 0, :mode_of_transport)).to eq("ocean")
+        expect(json[:data].dig(:detailedItineraries, :ocean, 0, :mode_of_transport)).to eq('ocean')
         expect(json[:data].dig(:numItineraryPages, :air)).to eq(1)
         expect(json[:data].dig(:numItineraryPages, :rail)).to eq(nil)
         expect(json[:data].dig(:numItineraryPages, :ocean)).to eq(1)
@@ -89,28 +68,11 @@ describe 'Pricing requests', type: :request do
     end
 
     context '#subdomain_admin_pricings_search_path' do
-      let(:params) do 
+      let(:params) do
         {
           mot: 'ocean',
           text: 'Gothen'
         }
-      end
-      let(:response_data) do
-        {
-          # TBD - check cargo_item_types
-          detailedItineraries:    {
-            air: [air_itinerary.as_pricing_json],
-            ocean: [ocean_itinerary.as_pricing_json],
-            rail: [rail_itinerary.as_pricing_json],
-          },
-          numItineraryPages:   {
-            air: 1,
-            ocean: 1,
-            rail: 0,
-          },
-          transportCategories: [transport_category],
-          lastUpdate: ocean_itinerary.updated_at
-        }.deep_symbolize_keys!
       end
 
       it 'Queries the DB for itineraries, sorted by MOT' do
@@ -118,14 +80,11 @@ describe 'Pricing requests', type: :request do
         expect(response).to have_http_status(:success)
         expect(json[:success]).to be_truthy
         awesome_print json[:data]
-        expect(json[:data].dig(:detailedItineraries, 0, :mode_of_transport)).to eq("ocean")
-        expect(json[:data].dig(:detailedItineraries, 0, :name)).to eq("Gothenburg - Shanghai")
+        expect(json[:data].dig(:detailedItineraries, 0, :mode_of_transport)).to eq('ocean')
+        expect(json[:data].dig(:detailedItineraries, 0, :name)).to eq('Gothenburg - Shanghai')
         expect(json[:data][:numItineraryPages]).to eq(1)
         expect(json[:data][:mode_of_transport]).to eq('ocean')
-      
       end
     end
-
-  
   end
 end
