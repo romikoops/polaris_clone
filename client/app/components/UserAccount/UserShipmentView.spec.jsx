@@ -49,7 +49,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('../GradientBorder', x => x)
 
 // eslint-disable-next-line import/first
-import { UserShipmentView } from './UserShipmentView'
+import { UserShipmentView } from './UserShipmentViewDone'
 
 const propsBase = {
   theme,
@@ -65,7 +65,7 @@ const propsBase = {
   tenant
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 

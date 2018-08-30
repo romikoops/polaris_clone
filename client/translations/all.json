@@ -3,6 +3,7 @@
       "common": {
         "containerSize": " Container Size",
         "upload": "Upload",
+        "uploadNewDocument": "Upload a New Document",
         "netWeight": "Net Weight",
         "cargoGroup": "Cargo Group",
         "collapseSidebar": "Collapse sidebar",
@@ -73,7 +74,9 @@
         "withPickup": "with pick-up",
         "withoutDelivery": "without Delivery",
         "withoutPickup": "without pick-up",
-        "status": "Status"
+        "status": "Status",
+        "inProcess": "In Process",
+        "days": "days"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
@@ -176,6 +179,21 @@
         "viewDocuments": "View or download documents when you need them",
         "welcomeTextHead": "Welcome to the",
         "welcomeTextTail": "shop for online freight"
+      },
+      "shipment": {
+        "reuseShipment": "Reuse Shipment",
+        "estimatedTimeDelivery": "Estimated Time Delivery",
+        "freightDutiesAndCarriage": "Freight, Duties & Carriage:",
+        "pickUp": "Pick-up",
+        "delivery": "Delivery",
+        "origin": "Origin",
+        "destination": "Destination",
+        "documentation": "Documentation",
+        "freight": "Freight",
+        "additionalServices": "Additional Services",
+        "customs":"Customs",
+        "insurance":"Insurance",
+        "requested":"Requested"
       }
     }
 }
