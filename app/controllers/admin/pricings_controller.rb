@@ -22,11 +22,11 @@ class Admin::PricingsController < Admin::AdminBaseController
       detailed_itineraries[mot] = mot_itineraries
                                   .paginate(page: params[mot] || 1)
                                   .map(&:as_pricing_json)
-      mot_page_counts[mot] = mot_itineraries.count / 12
+                                  
+      mot_page_counts[mot] = (mot_itineraries.count / 12.0).ceil
     end
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
-      itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
       numItineraryPages:   mot_page_counts,
       transportCategories: @transports,
@@ -53,9 +53,8 @@ class Admin::PricingsController < Admin::AdminBaseController
     detailed_itineraries = itinerary_results.paginate(page: params[:page]).map(&:as_pricing_json)
     last_updated = itineraries.first ? itineraries.first.updated_at : DateTime.now
     response_handler(
-      itineraries:         itineraries,
       detailedItineraries: detailed_itineraries,
-      numItineraryPages:   itineraries.count / 12,
+      numItineraryPages:   (itineraries.count / 12.0).ceil,
       transportCategories: @transports,
       lastUpdate:          last_updated,
       mode_of_transport:   params[:mot]
