@@ -234,11 +234,10 @@ export default function admin (state = {}, action) {
       return errHub
     }
     case adminConstants.GET_DASHBOARD_REQUEST: {
-      const reqDash = merge({}, state, {
-        loading: true
-      })
-
-      return reqDash
+      return {
+        ...state,
+        loading: action.payload
+      }
     }
     case adminConstants.GET_DASHBOARD_SUCCESS:
       return {
@@ -248,12 +247,11 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.GET_DASHBOARD_FAILURE: {
-      const errDash = merge({}, state, {
+      return {
+        ...state,
         error: { hubs: action.error },
         loading: false
-      })
-
-      return errDash
+      }
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
@@ -663,11 +661,38 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_PRICINGS_SUCCESS: {
       return {
         ...state,
-        pricingData: action.payload.data,
+        pricingData: action.payload,
         loading: false
       }
     }
     case adminConstants.GET_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
+    }
+    case adminConstants.SEARCH_PRICINGS_REQUEST: {
+      return state
+    }
+    case adminConstants.SEARCH_PRICINGS_SUCCESS: {
+      return {
+        ...state,
+        pricingData: {
+          ...state.pricingData,
+          detailedItineraries: {
+            ...state.pricingData.detailedItineraries,
+            [action.payload.mode_of_transport]: action.payload.detailedItineraries
+          },
+          numItineraryPages: {
+            ...state.pricingData.numItineraryPages,
+            [action.payload.mode_of_transport]: action.payload.numItineraryPages
+          }
+        },
+        loading: false
+      }
+    }
+    case adminConstants.SEARCH_PRICINGS_FAILURE: {
       return {
         ...state,
         error: { pricings: action.error },

@@ -175,6 +175,7 @@ export class AdminDashboard extends Component {
           <div className="flex-gt-md-35 flex-100">
             <AdminClientCardIndex
               clients={clients}
+              viewClient={id => adminDispatch.getClient(id, true)}
               theme={theme}
             />
             <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>

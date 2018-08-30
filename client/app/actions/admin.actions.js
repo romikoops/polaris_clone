@@ -343,7 +343,7 @@ function getServiceCharges (redirect) {
     )
   }
 }
-function getPricings (redirect, page, mot) {
+function getPricings (redirect, pages) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
@@ -357,13 +357,13 @@ function getPricings (redirect, page, mot) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getPricings(page, mot).then(
-      (data) => {
+    adminService.getPricings(pages).then(
+      (response) => {
         dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {
           dispatch(push('/admin/pricings'))
         }
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         dispatch(failure(error))
@@ -375,22 +375,22 @@ function getPricings (redirect, page, mot) {
 
 function searchPricings (text, page, mot) {
   function request (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_REQUEST, payload: pricingData }
   }
   function success (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_SUCCESS, payload: pricingData }
   }
   function failure (error) {
-    return { type: adminConstants.GET_PRICINGS_FAILURE, error }
+    return { type: adminConstants.SEARCH_PRICINGS_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request())
 
     adminService.searchPricings(text, page, mot).then(
-      (data) => {
+      (response) => {
         dispatch(alertActions.success('Pricings Search successful'))
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         // ;
@@ -843,8 +843,8 @@ function getVehicleTypes (itineraryId) {
 }
 
 function getDashboard (redirect) {
-  function request (dashData) {
-    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: dashData }
+  function request (showLoading) {
+    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: showLoading }
   }
   function success (dashData) {
     return { type: adminConstants.GET_DASHBOARD_SUCCESS, payload: dashData }
@@ -854,7 +854,7 @@ function getDashboard (redirect) {
   }
 
   return (dispatch) => {
-    dispatch(request())
+    dispatch(request(redirect))
 
     adminService.getDashboard().then(
       (data) => {

@@ -16,7 +16,7 @@ class ContactsController < ApplicationController
     shipments = []
     scs.each do |s|
       tmp_shipment = s.shipment
-      next if !tmp_shipment
+      next unless tmp_shipment
       shipments.push(tmp_shipment.with_address_options_json)
     end
     location = contact.location
@@ -25,27 +25,32 @@ class ContactsController < ApplicationController
 
   def update
     update_data = JSON.parse(params[:update])
-    
+
     contact = Contact.find(params[:id])
     loc = contact.location || Location.new
-    update_data.delete("id")
-    update_data.delete("userId")
-    update_data.delete("locationId")
+    update_data.delete('id')
+    update_data.delete('userId')
+    update_data.delete('locationId')
 
     edited_contact_data = {}
     edited_contact_location = {}
-    edited_contact_data[:first_name] = update_data["firstName"]
-    edited_contact_data[:last_name] = update_data["lastName"]
-    edited_contact_data[:company_name] = update_data["companyName"]
-    edited_contact_data[:phone] = update_data["phone"]
-    edited_contact_data[:email] = update_data["email"]
-
-    edited_contact_location[:street_number] = update_data["number"] || update_data["streetNumber"]
-    edited_contact_location[:street] = update_data["street"]
-    edited_contact_location[:city] = update_data["city"]
-    edited_contact_location[:zip_code] = update_data["zipCode"]
-    edited_contact_location[:country] = Country.geo_find_by_name(update_data["country"])
-
+    edited_contact_data[:first_name] = update_data['firstName']
+    edited_contact_data[:last_name] = update_data['lastName']
+    edited_contact_data[:company_name] = update_data['companyName']
+    edited_contact_data[:phone] = update_data['phone']
+    edited_contact_data[:email] = update_data['email']
+    if !update_data['geocodedAddress']
+      edited_contact_location[:geocoded_address] =
+        "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}, #{update_data['city']}, #{update_data['zipCode']}, #{update_data['country']}"
+    else
+      edited_contact_location[:geocoded_address] = update_data['geocodedAddress']
+    end
+    edited_contact_location[:street_number] = update_data['number'] || update_data['streetNumber']
+    edited_contact_location[:street] = update_data['street']
+    edited_contact_location[:street_address] = "#{update_data['street']} #{update_data['number'] || update_data['streetNumber']}"
+    edited_contact_location[:city] = update_data['city']
+    edited_contact_location[:zip_code] = update_data['zipCode']
+    edited_contact_location[:country] = Country.geo_find_by_name(update_data['country'])
     loc.update_attributes(edited_contact_location)
     edited_contact_data[:location_id] = loc.id
     edited_contact_data[:user_id] = current_user.id
@@ -56,8 +61,8 @@ class ContactsController < ApplicationController
 
   def update_contact_address
     data = JSON.parse(params[:address])
-    loc = Location.find(data["id"])
-    data.delete("id")
+    loc = Location.find(data['id'])
+    data.delete('id')
     loc.update_attributes(data)
     loc.save!
     response_handler(loc)
@@ -73,18 +78,18 @@ class ContactsController < ApplicationController
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}
     ncl = {}
-    ncd[:first_name] = contact_data["firstName"]
-    ncd[:last_name] = contact_data["lastName"]
-    ncd[:company_name] = contact_data["companyName"]
-    ncd[:phone] = contact_data["phone"]
-    ncd[:email] = contact_data["email"]
+    ncd[:first_name] = contact_data['firstName']
+    ncd[:last_name] = contact_data['lastName']
+    ncd[:company_name] = contact_data['companyName']
+    ncd[:phone] = contact_data['phone']
+    ncd[:email] = contact_data['email']
     ncd[:alias] = true
 
-    ncl[:street_number] = contact_data["number"]
-    ncl[:street] = contact_data["street"]
-    ncl[:city] = contact_data["city"]
-    ncl[:zip_code] = contact_data["zipCode"]
-    ncl[:country] = Country.geo_find_by_name(contact_data["country"])
+    ncl[:street_number] = contact_data['number']
+    ncl[:street] = contact_data['street']
+    ncl[:city] = contact_data['city']
+    ncl[:zip_code] = contact_data['zipCode']
+    ncl[:country] = Country.geo_find_by_name(contact_data['country'])
 
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id
@@ -106,17 +111,17 @@ class ContactsController < ApplicationController
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}
     ncl = {}
-    ncd[:first_name] = contact_data["firstName"]
-    ncd[:last_name] = contact_data["lastName"]
-    ncd[:company_name] = contact_data["companyName"]
-    ncd[:phone] = contact_data["phone"]
-    ncd[:email] = contact_data["email"]
+    ncd[:first_name] = contact_data['firstName']
+    ncd[:last_name] = contact_data['lastName']
+    ncd[:company_name] = contact_data['companyName']
+    ncd[:phone] = contact_data['phone']
+    ncd[:email] = contact_data['email']
 
-    ncl[:street_number] = contact_data["number"] || contact_data["streetNumber"]
-    ncl[:street] = contact_data["street"]
-    ncl[:city] = contact_data["city"]
-    ncl[:zip_code] = contact_data["zipCode"]
-    ncl[:country] = Country.find_by_name(contact_data["country"])
+    ncl[:street_number] = contact_data['number'] || contact_data['streetNumber']
+    ncl[:street] = contact_data['street']
+    ncl[:city] = contact_data['city']
+    ncl[:zip_code] = contact_data['zipCode']
+    ncl[:country] = Country.find_by_name(contact_data['country'])
 
     new_loc = Location.create!(ncl)
     ncd[:location_id] = new_loc.id
@@ -125,8 +130,8 @@ class ContactsController < ApplicationController
   end
 
   def is_valid
-    valid = current_user.contacts.where(email: params[:email]).length > 0
-    response_handler({email: valid})
+    valid = !current_user.contacts.where(email: params[:email]).empty?
+    response_handler(email: valid)
   end
 
   private
