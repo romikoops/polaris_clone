@@ -348,6 +348,7 @@ export class UserContactsView extends Component {
               address={location}
               theme={theme}
               client={contact}
+              showDelete={false}
               saveEdit={userDispatch.saveAddressEdit}
               deleteAddress={userDispatch.deleteContactAddress}
             />
