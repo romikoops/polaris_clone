@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types';
 import { Async } from 'react-select'
-// import fetch from 'isomorphic-fetch';
 import styled from 'styled-components'
 import '../../styles/select-css-custom.css'
-// import { authHeader } from '../../helpers';
-// import { BASE_URL } from '../../constants';
 import PropTypes from '../../prop-types'
 
 export class NamedAsync extends Component {

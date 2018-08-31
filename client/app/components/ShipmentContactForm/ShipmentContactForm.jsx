@@ -5,7 +5,7 @@ import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { nameToDisplay, authHeader, emailServerValidation } from '../../helpers'
-import { BASE_URL } from '../../constants'
+import getApiHost from '../../constants/api.constants'
 import AddressDetailsSection from './AddressDetailsSection'
 import CompanyDetailsSection from './CompanyDetailsSection'
 
@@ -104,7 +104,7 @@ class ShipmentContactForm extends Component {
       headers: authHeader(),
       body: formData
     }
-    fetch(`${BASE_URL}/contacts`, requestOptions)
+    fetch(`${getApiHost()}/contacts`, requestOptions)
       .then(
         () => console.log('saved'),
         error => console.log(error)

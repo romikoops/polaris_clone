@@ -1,6 +1,7 @@
 import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
-import { BASE_URL, appConstants } from '../constants'
+import { appConstants } from '../constants'
+import getApiHost from '../constants/api.constants'
 import { appService } from '../services'
 import {
   alertActions,
@@ -12,7 +13,6 @@ import {
   tenantActions
 } from './'
 import getSubdomain from '../helpers'
-// import { Promise } from 'es6-promise-promise';
 
 const { fetch } = window
 
@@ -248,7 +248,7 @@ function fetchTenant (subdomain) {
       subdomainToFetch = subdomain
     }
 
-    return fetch(`${BASE_URL}/tenants/${subdomainToFetch}`)
+    return fetch(`${getApiHost()}/tenants/${subdomainToFetch}`)
       .then(response => response.json())
       .then(
         json => dispatch(receiveTenant(subdomainToFetch, json)),
@@ -261,7 +261,7 @@ function fetchTenants () {
     return { type: appConstants.RECEIVE_TENANT_ERROR, error }
   }
 
-  return dispatch => fetch(`${BASE_URL}/tenants`)
+  return dispatch => fetch(`${getApiHost()}/tenants`)
     .then(response => response.json())
     .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
 }

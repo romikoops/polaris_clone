@@ -11,6 +11,10 @@ module MultiTenantTools
       favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
       indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+      # Replace API Host and tenantName
+      indexHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
+      indexHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
+
       titles = indexHtml.xpath("//title")
       titles[0].content = title
       links = indexHtml.xpath("//link")

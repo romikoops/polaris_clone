@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { BASE_URL } from '../constants'
+import getApiHost from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch, FormData } = window
@@ -12,6 +12,7 @@ function handleResponse (response) {
 
   return response.json()
 }
+
 function uploadPricings (file, loadType, open) {
   const formData = new FormData()
   formData.append('file', file)
@@ -24,7 +25,7 @@ function uploadPricings (file, loadType, open) {
     ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv`
     : `/admin/pricings/ocean_${loadType}_pricings/process_csv`
 
-  return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}${url}`, requestOptions).then(handleResponse)
 }
 
 function uploadHubs (file) {
@@ -36,8 +37,9 @@ function uploadHubs (file) {
     body: formData
   }
 
-  return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
+
 function downloadPricings (options) {
   const requestOptions = {
     method: 'POST',
@@ -45,7 +47,7 @@ function downloadPricings (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${BASE_URL}/admin/pricings/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/pricings/download`, requestOptions).then(handleResponse)
 }
 
 function uploadSchedules (file, target) {
@@ -57,7 +59,7 @@ function uploadSchedules (file, target) {
     body: formData
   }
 
-  return fetch(`${BASE_URL}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
 }
 
 function uploadItinerarySchedules (file, target) {
@@ -69,7 +71,7 @@ function uploadItinerarySchedules (file, target) {
     body: formData
   }
 
-  return fetch(`${BASE_URL}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
 function uploadLocalCharges (file) {
@@ -81,7 +83,7 @@ function uploadLocalCharges (file) {
     body: formData
   }
 
-  return fetch(`${BASE_URL}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
 function downloadLocalCharges (options) {
@@ -91,7 +93,7 @@ function downloadLocalCharges (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${BASE_URL}/admin/local_charges/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/local_charges/download`, requestOptions).then(handleResponse)
 }
 
 function downloadQuotations (options) {
@@ -110,16 +112,18 @@ function downloadHubs () {
     headers: { ...authHeader() }
   }
 
-  return fetch(`${BASE_URL}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
 }
+
 function downloadGdpr (id) {
   const requestOptions = {
     method: 'GET',
     headers: { ...authHeader() }
   }
 
-  return fetch(`${BASE_URL}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
 }
+
 function downloadSchedules (options) {
   const requestOptions = {
     method: 'POST',
@@ -127,7 +131,7 @@ function downloadSchedules (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${BASE_URL}/admin/schedules/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/schedules/download`, requestOptions).then(handleResponse)
 }
 
 function downloadTrucking (options) {
@@ -137,7 +141,7 @@ function downloadTrucking (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${BASE_URL}/admin/trucking/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/trucking/download`, requestOptions).then(handleResponse)
 }
 
 export const documentService = {

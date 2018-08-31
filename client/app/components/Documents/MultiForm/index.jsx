@@ -7,7 +7,7 @@ import ReactTooltip from 'react-tooltip'
 import { Link } from 'react-router-dom'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { BASE_URL } from '../../../constants'
+import getApiHost from '../../../constants/api.constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
 
@@ -76,7 +76,7 @@ class DocumentsMultiForm extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = BASE_URL + url
+      const uploadUrl = getApiHost() + url
       return fetch(uploadUrl, requestOptions).then(DocumentsMultiForm.handleResponse)
     }
     return this.showFileTypeError()

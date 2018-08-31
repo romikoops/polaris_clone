@@ -1,10 +1,10 @@
-import { BASE_URL } from '../../constants'
+import getApiHost from '../../constants/api.constants'
 import { authHeader } from '../../helpers'
 
 const { fetch } = window
 
 function findNexus (lat, lng, callback) {
-  fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
+  fetch(`${getApiHost()}/find_nexus?lat=${lat}&lng=${lng}`, {
     method: 'GET',
     headers: authHeader()
   }).then((promise) => {
@@ -16,7 +16,7 @@ function findNexus (lat, lng, callback) {
 
 function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubIds, callback) {
   fetch(
-    `${BASE_URL}/trucking_availability?` +
+    `${getApiHost()}/trucking_availability?` +
       `lat=${lat}&lng=${lng}&` +
       `tenant_id=${tenantId}&` +
       `load_type=${loadType}&` +
@@ -43,7 +43,7 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
 
 function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
   fetch(
-    `${BASE_URL}/truck_type_availability?` +
+    `${getApiHost()}/truck_type_availability?` +
       `origin_nexus_ids=${originNexusIds}&` +
       `destination_nexus_ids=${destinationNexusIds}`,
     {
@@ -60,7 +60,7 @@ function findTruckTypes (originNexusIds, destinationNexusIds, callback) {
 
 function nexuses (nexusIds, hubIds, target, itineraryIds, callback) {
   fetch(
-    `${BASE_URL}/nexuses?` +
+    `${getApiHost()}/nexuses?` +
       `itinerary_ids=${itineraryIds}&` +
       `target=${target}&` +
       `nexus_ids=${nexusIds}&` +
@@ -78,7 +78,7 @@ function nexuses (nexusIds, hubIds, target, itineraryIds, callback) {
 
 function incoterms (direction, preCarriage, onCarriage, callback) {
   fetch(
-    `${BASE_URL}/incoterms?` +
+    `${getApiHost()}/incoterms?` +
       `pre_carriage=${preCarriage}&` +
       `on_carriage=${onCarriage}&` +
       `direction=${direction}`,

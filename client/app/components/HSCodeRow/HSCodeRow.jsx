@@ -6,7 +6,7 @@ import styles from './HSCodeRow.scss'
 import {
   CONTAINER_DESCRIPTIONS,
   // CONTAINER_TARE_WEIGHTS,
-  BASE_URL
+  getApiHost
 } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
@@ -68,7 +68,7 @@ export class HSCodeRow extends Component {
         body: formData
       }
       return window
-        .fetch(`${BASE_URL}/search/hscodes`, requestOptions)
+        .fetch(`${getApiHost()}/search/hscodes`, requestOptions)
         .then(response => response.json())
         .then(json => ({ options: json.data }))
       // }

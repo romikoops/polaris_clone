@@ -73,6 +73,11 @@ class App extends Component {
     }
     const { theme } = tenant.data
 
+    // Update document title
+    if (tenant.data.name) {
+      document.title = `${tenant.data.name} | ItsMyCargo`
+    }
+
     return (
       <div className="layout-fill layout-row layout-wrap layout-align-start hundred text-break">
         <CookieConsentBar
