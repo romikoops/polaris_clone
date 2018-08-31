@@ -28,8 +28,9 @@ class ShipmentMailer < ApplicationMailer
       bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
       subject: "Your booking through ItsMyCargo"
     ) do |format|
-      format.mjml
       format.html
+      format.mjml
+      
     end
   end
 
@@ -47,8 +48,8 @@ class ShipmentMailer < ApplicationMailer
       bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
       subject: "Your booking through ItsMyCargo"
     ) do |format|
-      format.mjml
       format.html
+      format.mjml
     end
   end
 
@@ -71,8 +72,8 @@ class ShipmentMailer < ApplicationMailer
       bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
       subject: "Your booking through ItsMyCargo"
     ) do |format|
-      format.mjml
       format.html
+      format.mjml
     end
   end
 
