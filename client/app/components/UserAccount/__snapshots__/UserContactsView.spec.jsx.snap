@@ -218,7 +218,7 @@ exports[`props.loading is true 1`] = `
     />
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
     <div
       className="flex-100 layout-row layout-align-space-between-center"
@@ -241,7 +241,8 @@ exports[`props.loading is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_1"
+      key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -250,6 +251,16 @@ exports[`props.loading is true 1`] = `
           },
         }
       }
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
 </div>
@@ -386,6 +397,7 @@ exports[`shallow render 1`] = `
         }
       }
       key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -526,7 +538,8 @@ exports[`state.editBool is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_3"
+      key="RANDOM_KEY_1"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
