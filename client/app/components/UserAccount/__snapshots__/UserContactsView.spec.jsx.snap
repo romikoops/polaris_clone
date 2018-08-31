@@ -241,7 +241,8 @@ exports[`props.loading is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_1"
+      key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -386,6 +387,7 @@ exports[`shallow render 1`] = `
         }
       }
       key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -526,7 +528,8 @@ exports[`state.editBool is true 1`] = `
           "last_name": "Doe",
         }
       }
-      key="RANDOM_KEY_3"
+      key="RANDOM_KEY_1"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
