@@ -37,7 +37,6 @@ class ShipmentMailer < ApplicationMailer
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
       
     end
   end
@@ -57,7 +56,6 @@ class ShipmentMailer < ApplicationMailer
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
     end
   end
 
@@ -81,7 +79,6 @@ class ShipmentMailer < ApplicationMailer
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
     end
   end
 
