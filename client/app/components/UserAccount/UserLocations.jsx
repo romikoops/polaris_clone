@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
@@ -8,7 +9,7 @@ import { EditLocation } from './EditLocation'
 import { gradientTextGenerator } from '../../helpers'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols, t) => [
   <div
     key="addLocationButton"
     className={`${defaults.pointy} ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
@@ -24,7 +25,9 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, e
       </div>
 
       <div className="layout-row layout-align-center flex-100">
-        <h3>Add location</h3>
+        <h3>
+          {t('user:addLocation')}
+        </h3>
       </div>
     </div>
   </div>,
@@ -138,7 +141,7 @@ export class UserLocations extends Component {
   }
 
   render () {
-    const { theme, cols } = this.props
+    const { theme, cols, t } = this.props
     const locInfo = this.props.locations
     const gradientFontStyle =
       theme && theme.colors
@@ -155,7 +158,8 @@ export class UserLocations extends Component {
             this.destroyLocation,
             this.editLocation,
             gradientFontStyle,
-            cols
+            cols,
+            t
           )
           : undefined
         break
@@ -186,7 +190,7 @@ export class UserLocations extends Component {
         )
         break
       default:
-        activeView = LocationView(locInfo, gradientFontStyle, cols)
+        activeView = LocationView(locInfo, gradientFontStyle, cols, t)
     }
 
     return (
@@ -197,6 +201,7 @@ export class UserLocations extends Component {
 
 UserLocations.propTypes = {
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   setNav: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   userDispatch: PropTypes.shape({
@@ -214,4 +219,4 @@ UserLocations.defaultProps = {
   cols: 3
 }
 
-export default UserLocations
+export default translate('common')(UserLocations)

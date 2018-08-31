@@ -75,7 +75,9 @@
         "withPickup": "with pick-up",
         "withoutDelivery": "without Delivery",
         "withoutPickup": "without pick-up",
+        "reference": "Reference",
         "status": "Status",
+        "requiresAction": "Requires Action",
         "inProcess": "In Process",
         "days": "days",
         "capitalDays": "Days",
@@ -87,7 +89,9 @@
         "currency": "Currency",
         "downloadAllData": "Download all data from ItsMyCargo",
         "optOut": "Opt Out",
-        "yes": "Yes"
+        "yes": "Yes",
+        "noData": "NO DATA",
+        "welcomeBack": "Welcome back,"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
@@ -206,7 +210,10 @@
         "insurance": "Insurance",
         "requested": "Requested",
         "ETA": "ETA",
-        "estimatedTransitTime": "Estimated Transit Time"
+        "estimatedTransitTime": "Estimated Transit Time",
+        "seeMoreShipments": "See more shipments",
+        "myShipmentAddresses": "My Shipment Addresses",
+        "noAddresses": "No addresses yet"
       },
       "user": {
         "newAlias": "New Alias",
@@ -223,7 +230,9 @@
         "aliases": "Aliases",
         "addAlias": "Add Alias",
         "savedLocations": "Saved Locations",
-        "userPassword": "User Password"
+        "userPassword": "User Password",
+        "addLocation": "Add location",
+        "userEmails": "UserEmails"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",

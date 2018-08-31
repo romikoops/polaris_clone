@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 // import styles from './UserAccount.scss';
 
@@ -8,12 +9,18 @@ export class UserEmails extends Component {
   }
 
   render () {
-    return <h1>UserEmails</h1>
+    const { t } = this.props
+
+    return (
+      <h1>
+        {t('user:userEmails')}
+      </h1>)
   }
 }
 
 UserEmails.propTypes = {
+  t: PropTypes.func.isRequired,
   setNav: PropTypes.func.isRequired
 }
 
-export default UserEmails
+export default translate('user')(UserEmails)
