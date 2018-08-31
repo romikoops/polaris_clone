@@ -81,7 +81,11 @@
         "pickupDate": "Pick-up Date",
         "closingDate": "Closing Date",
         "etd": "ETD",
-        "eta": "ETA"
+        "eta": "ETA",
+        "greeting": "Hello,",
+        "currency": "Currency",
+        "downloadAllData": "Download all data from ItsMyCargo",
+        "optOut": "Opt Out"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
@@ -201,6 +205,26 @@
         "requested": "Requested",
         "ETA": "ETA",
         "estimatedTransitTime": "Estimated Transit Time"
+      },
+      "user": {
+        "newAlias": "New Alias",
+        "companyName": "Company Name",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "street": "Street",
+        "number": "Number",
+        "zipCode": "Zip Code",
+        "city": "City",
+        "country": "Country",
+        "aliases": "Aliases",
+        "addAlias": "Add Alias",
+        "savedLocations": "Saved Locations"
+      },
+      "imc": {
+        "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
+        "imcCookies": "ItsMyCargo's use of cookies"
       }
     }
 }

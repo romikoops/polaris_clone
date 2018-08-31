@@ -70,7 +70,7 @@ export class UserShipmentRow extends Component {
   }
   render () {
     const {
-      theme, shipment, hubs, user
+      theme, shipment, hubs, user, t
     } = this.props
     const schedule = {}
     const originHub = hubs[shipment.origin_hub_id].data
@@ -200,7 +200,7 @@ export class UserShipmentRow extends Component {
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title}>
-                  {shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date'}
+                  {shipment.has_pre_carriage ? t('common:pickUpDate') : t('common:closingDate')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -216,7 +216,7 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> ETD</h4>
+                <h4 className={styles.date_title}> {t('common:etd')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -231,7 +231,7 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> ETA </h4>
+                <h4 className={styles.date_title}> {t('common:eta')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -246,13 +246,13 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> Estimated Transit Time </h4>
+                <h4 className={styles.date_title}> {t('shipment:estimatedTransitTime')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}
-                  {'  Days'}
+                  {moment(shipment.planned_eta).diff(shipment.planned_etd, t('common:days'))}
+                  {'  '}{t('common:capitalDays')}
                 </p>
               </div>
             </div>
@@ -264,6 +264,7 @@ export class UserShipmentRow extends Component {
 }
 UserShipmentRow.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   handleSelect: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
