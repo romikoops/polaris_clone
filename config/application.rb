@@ -7,6 +7,7 @@ require 'rails'
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
@@ -21,11 +22,12 @@ Bundler.require(*Rails.groups)
 module Imcr
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 5.2
 
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
@@ -34,15 +36,5 @@ module Imcr
     config.active_job.queue_adapter = :shoryuken
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore, key: '_imc_platform_session'
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        # origins '*'
-        origins 'http://localhost:8080', 'localhost:8080', 'localhost:3001', 'http://localhost:3001', /https:\/\/(.*?)\.itsmycargo\.com/
-        resource '*', headers: :any, expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'], methods: %i[get post patch put delete options]
-      end
-    end
-
-    # Autoloads the validators directory
-    config.autoload_paths += %W["#{config.root}/app/validators/"]
   end
 end
