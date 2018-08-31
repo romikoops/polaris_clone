@@ -190,14 +190,6 @@ exports[`shallow render 1`] = `
 <div
   className="card_link_row layout-row flex-100 layout-align-center"
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO",
-        "BAR",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-align-start-center layout-wrap"
   >
@@ -384,14 +376,6 @@ exports[`state.direction && state.loadType 1`] = `
 <div
   className="card_link_row layout-row flex-100 layout-align-center"
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO",
-        "BAR",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-align-start-center layout-wrap"
   >
@@ -582,14 +566,6 @@ exports[`state.direction === export 1`] = `
 <div
   className="card_link_row layout-row flex-100 layout-align-center"
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO",
-        "BAR",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-align-start-center layout-wrap"
   >
@@ -780,14 +756,6 @@ exports[`theme is falsy 1`] = `
 <div
   className="card_link_row layout-row flex-100 layout-align-center"
 >
-  <FlashMessages
-    messages={
-      Array [
-        "FOO",
-        "BAR",
-      ]
-    }
-  />
   <div
     className="flex-none content_width layout-row layout-align-start-center layout-wrap"
   >

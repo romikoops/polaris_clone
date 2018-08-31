@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment, identity, theme, hub } from '../../mocks'
-
 import { AdminShipmentCard } from './AdminShipmentCard'
 
 jest.mock('uuid', () => {
@@ -19,6 +18,7 @@ jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
   gradientBorderGenerator: x => x,
   switchIcon: x => x,
+  splitName: x => x,
   formattedPriceValue: () => 1034,
   totalPrice: () => ({ currency: 'CNY' })
 }))

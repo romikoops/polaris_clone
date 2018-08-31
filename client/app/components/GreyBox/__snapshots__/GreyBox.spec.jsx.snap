@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="border_box FOO_WRAPPER_CLASS_NAME 
+      flex
+      
+      
+      
+       
+      "
+>
+  <div
+    className="FOO_CONTENT_CLASS_NAME"
+  >
+    <div
+      className="layout-align-space-between-center flex layout-row title_grey"
+    >
+      <p
+        className="layout-align-start-center flex layout-row title_grey"
+      >
+        FOO_TITLE
+      </p>
+    </div>
+    <div>
+      FOO_CONTENT
+    </div>
+  </div>
+</div>
+`;
+
+exports[`title is falsy 1`] = `
+<div
+  className="border_box FOO_WRAPPER_CLASS_NAME 
+      flex
+      
+      
+      
+       
+      "
+>
+  <div
+    className="FOO_CONTENT_CLASS_NAME"
+  >
+    <div>
+      FOO_CONTENT
+    </div>
+  </div>
+</div>
+`;

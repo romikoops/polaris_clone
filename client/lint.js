@@ -1,11 +1,12 @@
 const { exec } = require('child_process')
-const { resolve } = require('path')
+const { resolve: resolvePath } = require('path')
 
-const DIR = resolve('..', __dirname)
+const DIR = resolvePath('..', __dirname)
 
+/* eslint-disable */
 function lintFile (filepath) {
   return new Promise((resolve, reject) => {
-    const command = `yarn eslint-file ${filepath} --fix`
+    const command = `yarn eslint-file ${filepath} --no-ignore --fix`
     const proc = exec(command, { cwd: __dirname })
 
     proc.stdout.on('data', (chunk) => {
@@ -39,7 +40,7 @@ function getModified () {
   })
 }
 
-void (async function lint () {
+async function lint () {
   console.time('lint')
   const modified = await getModified()
 
@@ -53,4 +54,7 @@ void (async function lint () {
   console.log(modified)
 
   console.timeEnd('lint')
-}())
+}
+
+lint().then(() => console.log('done')).catch(console.log)
+/* eslint-enable */

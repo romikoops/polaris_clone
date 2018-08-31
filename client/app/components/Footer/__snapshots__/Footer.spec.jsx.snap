@@ -2,10 +2,13 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap footer_wrapper"
+  className="flex-100 layout-row 
+      layout-wrap footer_wrapper layout-align-start"
+  style={Object {}}
 >
   <div
-    className="contact_bar flex-100 layout-row layout-align-center-center"
+    className="contact_bar
+         flex-100 layout-row layout-align-center-center"
   >
     <div
       className="flex-none content_width layout-row"
@@ -35,7 +38,8 @@ exports[`shallow render 1`] = `
           />
         </a>
         <div
-          className="flex-none layout-row layout-align-center-end contact_elem"
+          className="flex-none layout-row layout-align-center-end
+               contact_elem"
         >
           <i
             aria-hidden="true"
@@ -51,37 +55,13 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="footer layout-row flex-100 layout-wrap"
+    className="footer_shop layout-row flex-100 layout-wrap"
   >
     <div
-      className="flex-100 button_row layout-row layout-align-end-center"
+      className="flex-100 layout-align-center"
     >
       <div
-        className="flex-50 buttons layout-row layout-align-center-center"
-      >
-        <div
-          className="flex-50 layout-row layout-align-start-center"
-        >
-          <div
-            className="flex-5"
-          />
-          <p
-            className="flex-none"
-          >
-            powered by
-          </p>
-          <div
-            className="flex-5"
-          />
-          <img
-            alt=""
-            className="flex-none powered_by_logo"
-            src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-          />
-        </div>
-      </div>
-      <div
-        className="flex-50 buttons layout-row layout-align-end-center"
+        className="flex-100 buttons upper_footer layout-row layout-align-center-center"
       >
         <div
           className="flex-25 layout-row layout-align-center-center"
@@ -124,27 +104,50 @@ exports[`shallow render 1`] = `
           </a>
         </div>
       </div>
-      <div
-        className="flex-20"
-      />
     </div>
     <div
-      className="flex-100 layout-row copyright"
+      className="flex-100 layout-align-center"
     >
       <div
-        className="flex-80 layout-row layout-align-end-center"
+        className="flex-100
+          layout-row layout-align-space-between-center lower_footer"
       >
-        <p
-          className="flex-none"
+        <div
+          className="flex-20"
+        />
+        <div
+          className="flex-60 buttons
+            layout-row layout-align-center-center"
         >
-          Copyright © 
-          2018
-           
-        </p>
+          <div
+            className="flex-45 layout-row layout-align-end-center"
+          >
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              Powered by
+            </p>
+            <div
+              className="flex-5"
+            />
+          </div>
+          <div
+            className="flex-55 layout-row layout-align-start-center"
+          >
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-20"
+        />
       </div>
-      <div
-        className="flex-20"
-      />
     </div>
   </div>
 </div>

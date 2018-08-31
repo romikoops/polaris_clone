@@ -103,6 +103,7 @@ exports[`state.error is true 1`] = `
       handleNext={[Function]}
       icon=""
       iconClass=""
+      inverse={false}
       size="small"
       text="Upload"
       theme={
