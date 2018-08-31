@@ -25,7 +25,15 @@ class ShipmentMailer < ApplicationMailer
     mail(
       to:      tenant.email_for(:sales, shipment.mode_of_transport),
       # to: TESTING_EMAIL,
-      bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
+      bcc:     "warwick@itsmycargo.com",
+      subject: "Your booking through ItsMyCargo"
+    ) do |format|
+      format.html
+      format.mjml
+      
+    end
+    mail(
+      to:      "warwick@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
