@@ -1,6 +1,6 @@
 
 
-
+<mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0 5%">
     <mj-column width="100%"  padding="0px">
       <mj-text>
@@ -155,14 +155,13 @@
       </mj-table>
     </mj-column>
   </mj-section>
+</mj-wrapper>
 
+<mj-spacer height="15px" />
 
-
-
-
+<mj-wrapper full-width="full-width" padding="0px">
   <mj-section padding="0px">
     <mj-column width="100%" padding="0 5%">
-    <mj-spacer height="15px" />
       <mj-text>
         <h3 style="margin: 0;"><span class="bold">Customer Details:</span></h3>
       </mj-text>
@@ -198,14 +197,13 @@
       </mj-table>
     </mj-column>
   </mj-section>
+</mj-wrapper>
 
+<mj-spacer height="15px" />
 
-
-
-
+<mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0px">
       <mj-column width="40%">
-      <mj-spacer height="15px" />
         <mj-text align="center">
           <h2 style="margin: 0;"><span class="bold">Total cost:</span></h2>
         </mj-text>
@@ -220,4 +218,4 @@
         </mj-text>
       </mj-column>
     </mj-section>
-
+</mj-wrapper>
