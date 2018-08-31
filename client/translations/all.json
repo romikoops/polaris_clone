@@ -3,6 +3,9 @@
       "common": {
         "containerSize": " Container Size",
         "upload": "Upload",
+        "customsExportPaper": "Customs Export Paper",
+        "none": "None",
+        "requested": "Requested",
         "selectIncoterm": "Select Incoterm:",
         "uploadNewDocument": "Upload a New Document",
         "hsCodes": "HS Codes",
