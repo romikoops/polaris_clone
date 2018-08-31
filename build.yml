@@ -1,0 +1,18 @@
+build:
+  version: 2016-03-14 # version of the build schema.
+  steps:
+    api:
+      name: _env(REGISTRY)/imc/api:_env(TAG)
+      dockerfile: Dockerfile
+    client_builder:
+      name: client_builder
+      context: ./client/
+      dockerfile: Dockerfile.build
+      artifacts:
+        - /dist/:./client/
+    client:
+      name: _env(REGISTRY)/imc/client:_env(TAG)
+      context: ./client/
+      dockerfile: Dockerfile
+      depends_on:
+        - client_builder
