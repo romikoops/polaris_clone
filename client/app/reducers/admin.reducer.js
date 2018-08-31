@@ -357,16 +357,15 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.CONFIRM_SHIPMENT_REQUEST: {
-      const reqConfShip = merge({}, state, {
+      return {
+        ...state,
         confirmShipmentData: {
           shipmentId: action.payload.id,
           requested: true,
           action: action.payload.action
         },
         loading: false
-      })
-
-      return reqConfShip
+      }
     }
     case adminConstants.CONFIRM_SHIPMENT_SUCCESS: {
       const req =
@@ -388,26 +387,42 @@ export default function admin (state = {}, action) {
       if (shipment) {
         shipment.status = 'confirmed'
       }
-
-      return {
-        ...state,
-        dashboard: {
-          ...state.dashboard,
-          shipments: {
-            ...state.dashboard.shipments,
-            open: dashOpen,
-            requested: dashReq
-          }
-        },
+      const newDashboard = state.dashboard ? {
+        ...state.dashboard,
         shipments: {
+          ...state.dashboard.shipments,
+          open: dashOpen,
+          requested: dashReq
+        }
+      } : {
+        shipments: {
+          open: dashOpen,
+          requested: dashReq
+        }
+      }
+      const newShipments = state.shipments
+        ? {
           ...state.shipments,
           open,
           requested: req
-        },
-        shipment: {
+        }
+        : {
+          open,
+          requested: req
+        }
+      const newShipment = state.shipment
+        ? {
           ...state.shipment,
           shipment
-        },
+        } : {
+          shipment
+        }
+
+      return {
+        ...state,
+        dashboard: newDashboard,
+        shipments: newShipments,
+        shipment: newShipment,
         loading: false,
         confirmShipmentData: {
           shipmentId: action.payload.id,
