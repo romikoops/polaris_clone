@@ -3,6 +3,7 @@
       "common": {
         "containerSize": " Container Size",
         "upload": "Upload",
+        "selectIncoterm": "Select Incoterm:",
         "uploadNewDocument": "Upload a New Document",
         "hsCodes": "HS Codes",
         "netWeight": "Net Weight",
@@ -63,6 +64,7 @@
         "miscellaneous": "Miscellaneous",
         "newContact": "NEW CONTACT",
         "nonEmpty": "Must not be empty",
+        "noBlank": "Must not be blank",
         "notes": "Notes",
         "notifyee": "Notifyee",
         "overview": "Overview",
@@ -92,6 +94,16 @@
         "yes": "Yes",
         "noData": "NO DATA",
         "welcomeBack": "Welcome back,"
+      },
+      "itbox": {
+        "component": "IncotermBox",
+        "originToDestination": "Origin Port to Destination Port",
+        "doorToDestination": "Door to Destination Port",
+        "originToDoor": "Origin Port to Door",
+        "doorToDoor": "Door to Door",
+        "doorToPort": "Door to Port",
+        "portToDoor": "Port to Door",
+        "portToPort": "Port to Port"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
