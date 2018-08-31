@@ -67,6 +67,11 @@ exports[`shallow render 1`] = `
           "currency": "USD",
           "value": 12,
         },
+        "trucking": Object {
+          "pre_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
+        },
       }
     }
     theme={
@@ -83,11 +88,15 @@ exports[`shallow render 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
-      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
       shipper={Object {}}
       theme={
         Object {
@@ -97,7 +106,6 @@ exports[`shallow render 1`] = `
           },
         }
       }
-      userLocations={Array []}
     />
   </div>
   <Formsy
@@ -251,6 +259,11 @@ exports[`shallow render 1`] = `
               "currency": "USD",
               "value": 12,
             },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
           },
         }
       }
@@ -315,10 +328,10 @@ exports[`shallow render 1`] = `
         className="content_width flex-none layout-row layout-wrap layout-align-start-center"
       >
         <div
-          className="flex-50 layout-row layout-align-start-center"
+          className="layout-align-start-center"
         />
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="layout-align-end-center"
         >
           <div
             className="flex-none layout-row"
@@ -400,14 +413,17 @@ exports[`theme is falsy 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
-      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}
       setContact={[Function]}
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
       shipper={Object {}}
       theme={null}
-      userLocations={Array []}
     />
   </div>
   <Formsy
@@ -561,6 +577,11 @@ exports[`theme is falsy 1`] = `
               "currency": "USD",
               "value": 12,
             },
+            "trucking": Object {
+              "pre_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
+            },
           },
         }
       }
@@ -618,10 +639,10 @@ exports[`theme is falsy 1`] = `
         className="content_width flex-none layout-row layout-wrap layout-align-start-center"
       >
         <div
-          className="flex-50 layout-row layout-align-start-center"
+          className="layout-align-start-center"
         />
         <div
-          className="flex-50 layout-row layout-align-end-center"
+          className="layout-align-end-center"
         >
           <div
             className="flex-none layout-row"

@@ -1,11 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { toBeType } from 'jest-tobetype'
-import expect from 'expect'
+const { toBeType } = require('jest-tobetype')
+const expect = require('expect')
+const Enzyme = require('enzyme')
+const Adapter = require('enzyme-adapter-react-16')
 
-import Enzyme from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
 /* eslint-enable import/no-extraneous-dependencies */
-
 Enzyme.configure({ adapter: new Adapter() })
 
 expect.extend({

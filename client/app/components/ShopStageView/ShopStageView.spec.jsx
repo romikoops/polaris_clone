@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { identity, theme } from '../../mocks'
+import { identity, theme, tenant } from '../../mocks'
 import { ShopStageView } from './ShopStageView'
 
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
@@ -10,7 +10,8 @@ const propsBase = {
   setStage: identity,
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
-  disabledClick: false
+  disabledClick: false,
+  tenant
 }
 
 test('shallow rendering', () => {
