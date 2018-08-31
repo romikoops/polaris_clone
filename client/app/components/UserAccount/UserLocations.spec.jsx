@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { theme, identity, user, location } from '../../mocks'
+import { theme, identity, user, location, change } from '../../mocks'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -65,4 +65,18 @@ test('props.setNav is called', () => {
 
   createWrapper(props)
   expect(props.setNav).toHaveBeenCalled()
+})
+
+test('props.userDispatch.makePrimary is called', () => {
+  const props = change(
+    propsBase,
+    'userDispatch.makePrimary',
+    jest.fn()
+  )
+  const selector = '.icon_primary > div > div'
+  const wrapper = createWrapper(props)
+  const clickableDiv = wrapper.find(selector).first()
+  clickableDiv.simulate('click')
+
+  expect(props.userDispatch.makePrimary).toHaveBeenCalled()
 })

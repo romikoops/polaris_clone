@@ -226,8 +226,8 @@ export class CargoDetails extends Component {
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
-        <div className="flex-80 layout-row layout-wrap">
-          <p className="flex-90">
+        <div className="flex-60 layout-row layout-wrap">
+          <p className="flex-90 margin_5">
             <strong>
               {' '}
               When you ship goods from outside the European Union (EU), you may be charged customs
@@ -235,7 +235,7 @@ export class CargoDetails extends Component {
               handle it for you.
             </strong>
           </p>
-          <p className="flex-90">
+          <p className="flex-90 margin_5">
             To cover our costs when we present your goods to the customs authorities – and pay any
             customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
             depends on the value of the goods you are shipping, and can be found here to the right.
@@ -350,8 +350,8 @@ export class CargoDetails extends Component {
           styles.no_customs_box
         } ${!this.state.customsView ? styles.show : ''}`}
       >
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <p className="flex-100">
+        <div className="flex-60 layout-row layout-align-start-center layout-wrap">
+          <p className="flex-100 margin_5">
             <b>
               {`A customs declaration is mandatory to pass a national border when exporting or
               importing. If you choose to handle the customs clearance on your own, ${
@@ -360,35 +360,13 @@ export class CargoDetails extends Component {
               will need a copy of the customs declaration.`}
             </b>
           </p>
-          <p className="flex-100">
+          <p className="flex-100 margin_5">
             <b>
               When you ship goods from outside the European Union (EU), you may be charged customs
               duty and/or VAT according to local regulations.
             </b>
           </p>
         </div>
-        {/* <div className="flex-33 no_max layout-row layout-align-start-center">
-          <div className="flex-90 layout-row layout-wrap">
-            <div className="flex-100">
-              <TextHeading theme={theme} size={3} text="Customs Declaration" />
-            </div>
-            <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
-              <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
-                <div className="flex-100 layout-row">
-                  <DocumentsForm
-                    theme={theme}
-                    type="customs_declaration"
-                    dispatchFn={this.fileFn}
-                    text="Customs decl."
-                    doc={documents.customs_declaration}
-                    isRequired
-                    deleteFn={this.deleteDoc}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <div className="flex-33 no_max layout-row layout-align-end-center">
           {this.props.totalGoodsValue.value > 20000 ? (
             <div className="flex-90 layout-row layout-wrap">
@@ -488,13 +466,6 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100">
-                    {/* <textarea
-                      className={styles.cargo_text_area}
-                      rows="6"
-                      name="cargoNotes"
-                      value={this.props.cargoNotes}
-                      onChange={this.handleChange}
-                    /> */}
                     <FormsyTextarea
                       className={`flex-100 ${styles.cargo_text_area} `}
                       wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
@@ -518,7 +489,6 @@ export class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none layout-row layout-wrap ${styles.f_header}`}>
                       {' '}
-                      {/* <TextHeading theme={theme} size={4} text="" /> */}
                       <h4 className="no_m flex-100">Incoterms</h4>
                       <p className="flex-90">
                         2010 by the International Chamber of Commerce (ICC) (Optional)
@@ -690,7 +660,7 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-center">
-                    <p className="flex-100">
+                    <p className="flex-60 margin_5">
                       <b>
                         Cargo Insurance provides cover on all risk terms for physical loss or damage
                         to cargo during transport by land, sea or air.
@@ -699,7 +669,7 @@ export class CargoDetails extends Component {
                   </div>
                   {!this.state.insuranceView ? (
                     <div className="flex-100 layout-row layout-align-start-center">
-                      <p className="flex-100">
+                      <p className="flex-60 margin_5">
                         <b>
                           Insurance is a cost effective and simple way to cover for physical loss or
                           damage to goods in transit.
