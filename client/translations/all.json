@@ -76,7 +76,12 @@
         "withoutPickup": "without pick-up",
         "status": "Status",
         "inProcess": "In Process",
-        "days": "days"
+        "days": "days",
+        "capitalDays": "Days",
+        "pickupDate": "Pick-up Date",
+        "closingDate": "Closing Date",
+        "etd": "ETD",
+        "eta": "ETA"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
@@ -191,9 +196,11 @@
         "documentation": "Documentation",
         "freight": "Freight",
         "additionalServices": "Additional Services",
-        "customs":"Customs",
-        "insurance":"Insurance",
-        "requested":"Requested"
+        "customs": "Customs",
+        "insurance": "Insurance",
+        "requested": "Requested",
+        "ETA": "ETA",
+        "estimatedTransitTime": "Estimated Transit Time"
       }
     }
 }
