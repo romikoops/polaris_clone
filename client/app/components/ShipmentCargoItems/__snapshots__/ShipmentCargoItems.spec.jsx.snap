@@ -185,8 +185,11 @@ exports[`shallow rendering 1`] = `
               />
               <div
                 className="flex-90 layout-row input_box"
+                data-event="disable"
                 data-tip=""
                 onBlur={[Function]}
+                onFocus={[Function]}
+                onMouseEnter={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -242,8 +245,11 @@ exports[`shallow rendering 1`] = `
               />
               <div
                 className="flex-90 layout-row input_box"
+                data-event="disable"
                 data-tip=""
                 onBlur={[Function]}
+                onFocus={[Function]}
+                onMouseEnter={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -293,8 +299,11 @@ exports[`shallow rendering 1`] = `
             >
               <div
                 className="flex-90 layout-row input_box"
+                data-event="disable"
                 data-tip=""
                 onBlur={[Function]}
+                onFocus={[Function]}
+                onMouseEnter={[Function]}
               >
                 <div
                   className="flex-20 layout-row layout-align-center-center"
@@ -329,6 +338,7 @@ exports[`shallow rendering 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value=""
                   wrapperClassName="flex-55"
                 />
                 <div
@@ -378,6 +388,7 @@ exports[`shallow rendering 1`] = `
                       "nonNegative": [Function],
                     }
                   }
+                  value=""
                   wrapperClassName="flex-60"
                 />
                 <div
@@ -693,8 +704,11 @@ exports[`shallow rendering 1`] = `
                 />
                 <div
                   className="flex-90 layout-row input_box"
+                  data-event="disable"
                   data-tip=""
                   onBlur={[Function]}
+                  onFocus={[Function]}
+                  onMouseEnter={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"
@@ -723,8 +737,11 @@ exports[`shallow rendering 1`] = `
                 />
                 <div
                   className="flex-90 layout-row input_box"
+                  data-event="disable"
                   data-tip=""
                   onBlur={[Function]}
+                  onFocus={[Function]}
+                  onMouseEnter={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"
@@ -747,8 +764,11 @@ exports[`shallow rendering 1`] = `
               >
                 <div
                   className="flex-90 layout-row input_box"
+                  data-event="disable"
                   data-tip=""
                   onBlur={[Function]}
+                  onFocus={[Function]}
+                  onMouseEnter={[Function]}
                 >
                   <div
                     className="flex-20 layout-row layout-align-center-center"

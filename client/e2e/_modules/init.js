@@ -12,9 +12,9 @@ const STEP_DELAY = Number(process.env.STEP_DELAY || '0')
 const DELAY = 250
 
 async function delayAndNotify (label) {
-  // log(`__${label}__DELAY_START______`, 'success')
+  log(`__${label}__DELAY_START______`, 'gradient')
   await delay(1500)
-  // log(`__${label}__DELAY_END________`, 'success')
+  log(`__${label}__DELAY_END________`, 'gradient')
 }
 
 function waitNotificator (selector, type) {
@@ -217,6 +217,7 @@ export default async function init (options) {
       selector
     )
     const index = texts.indexOf(text)
+    console.log(texts, text, index)
 
     if (index === -1) {
       return false

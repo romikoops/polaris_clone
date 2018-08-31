@@ -4,7 +4,8 @@ import { theme, shipmentData, user, identity } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
   switchIcon: x => x,
-  totalPrice: x => x
+  totalPrice: x => x,
+  priceSpacing: x => x
 }))
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -18,6 +19,10 @@ jest.mock('../../constants', () => {
 jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
   Tooltip: ({ props }) => <div {...props} />
+}))
+jest.mock('../Price/Price', () => ({
+  // eslint-disable-next-line react/prop-types
+  Price: ({ props }) => <div {...props} />
 }))
 
 // eslint-disable-next-line

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`x 1`] = `
+exports[`shallow render 1`] = `
 <RouteSelector
   routeSelected={[Function]}
   routes={

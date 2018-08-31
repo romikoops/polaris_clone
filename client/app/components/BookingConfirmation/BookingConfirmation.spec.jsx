@@ -19,6 +19,7 @@ jest.mock('uuid', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
+  numberSpacing: x => x,
   totalPrice: () => ({
     currency: 'CHF'
   }),
@@ -224,7 +225,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
+test('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {

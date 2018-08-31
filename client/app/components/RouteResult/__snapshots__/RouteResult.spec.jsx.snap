@@ -20,19 +20,15 @@ exports[`props.pickup is false 1`] = `
           <i
             className="fa fa-map-marker map_marker"
           />
-          <div
-            className="flex-100 layout-row"
+          <h4
+            className="flex-100"
           >
-            <h4
-              className="flex-100"
-            >
-               
-               
-            </h4>
-          </div>
+             
+             
+          </h4>
         </div>
         <div
-          className="connection_graphics"
+          className="connection_graphics flex"
         >
           <div
             className="flex-none layout-row layout-align-center-center"
@@ -60,16 +56,12 @@ exports[`props.pickup is false 1`] = `
           <i
             className="fa fa-flag-o flag"
           />
-          <div
-            className="flex-100 layout-row"
+          <h4
+            className="flex-100"
           >
-            <h4
-              className="flex-100"
-            >
-               
-               
-            </h4>
-          </div>
+             
+             
+          </h4>
           <div
             className="flex-100"
           >
@@ -83,7 +75,7 @@ exports[`props.pickup is false 1`] = `
         </div>
       </div>
       <div
-        className="flex-20 layout-row layout-align-start-center load_type"
+        className="flex-20 layout-row layout-wrap layout-align-start-center carrier_service_level"
       />
     </div>
     <div
@@ -255,19 +247,15 @@ exports[`shallow rendering 1`] = `
           <i
             className="fa fa-map-marker map_marker"
           />
-          <div
-            className="flex-100 layout-row"
+          <h4
+            className="flex-100"
           >
-            <h4
-              className="flex-100"
-            >
-               
-               
-            </h4>
-          </div>
+             
+             
+          </h4>
         </div>
         <div
-          className="connection_graphics"
+          className="connection_graphics flex"
         >
           <div
             className="flex-none layout-row layout-align-center-center"
@@ -295,16 +283,12 @@ exports[`shallow rendering 1`] = `
           <i
             className="fa fa-flag-o flag"
           />
-          <div
-            className="flex-100 layout-row"
+          <h4
+            className="flex-100"
           >
-            <h4
-              className="flex-100"
-            >
-               
-               
-            </h4>
-          </div>
+             
+             
+          </h4>
           <div
             className="flex-100"
           >
@@ -318,7 +302,7 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
       <div
-        className="flex-20 layout-row layout-align-start-center load_type"
+        className="flex-20 layout-row layout-wrap layout-align-start-center carrier_service_level"
       />
     </div>
     <div

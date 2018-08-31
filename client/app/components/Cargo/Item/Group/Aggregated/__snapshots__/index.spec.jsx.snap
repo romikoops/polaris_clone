@@ -68,7 +68,7 @@ exports[`shallow render 1`] = `
           <span
             className="cargo_type"
           >
-            7
+            7.00
           </span>
            kg
         </p>
