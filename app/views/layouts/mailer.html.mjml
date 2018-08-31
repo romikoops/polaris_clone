@@ -1,4 +1,4 @@
-<mjml owa="desktop">
+<mjml>
   <mj-body width="800px">
     <% primary_color = @user.tenant.theme["colors"]["primary"] %>
     <mj-section full-width="full-width">

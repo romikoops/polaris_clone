@@ -29,16 +29,7 @@ class ShipmentMailer < ApplicationMailer
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
-      
-    end
-    mail(
-      to:      "warwick@itsmycargo.com",
-      subject: "Your booking through ItsMyCargo"
-    ) do |format|
-      format.html
-      format.mjml
-      
+      format.text
     end
   end
 
