@@ -86,7 +86,8 @@
         "greeting": "Hello,",
         "currency": "Currency",
         "downloadAllData": "Download all data from ItsMyCargo",
-        "optOut": "Opt Out"
+        "optOut": "Opt Out",
+        "yes": "Yes"
       },
       "help": {
         "sendEmail": " Send an email detailing your issues to:",
@@ -221,7 +222,8 @@
         "country": "Country",
         "aliases": "Aliases",
         "addAlias": "Add Alias",
-        "savedLocations": "Saved Locations"
+        "savedLocations": "Saved Locations",
+        "userPassword": "User Password"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
