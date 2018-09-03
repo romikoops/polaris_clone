@@ -96,7 +96,9 @@
         "optOut": "Opt Out",
         "yes": "Yes",
         "noData": "NO DATA",
-        "welcomeBack": "Welcome back,"
+        "welcomeBack": "Welcome back,",
+        "next":"Next",
+        "basicBack":"Back"
       },
       "itbox": {
         "component": "IncotermBox",
