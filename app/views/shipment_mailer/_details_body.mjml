@@ -134,13 +134,13 @@
         <tr>
           <td style="padding: 0 15px 0 0;">Customs Clearance:</td>
           <td style="padding: 0 15px;">
-            <%= @shipment.has_customs? ? format_to_price(@shipment.selected_offer["customs"]["total"]) : 'Handled by Shipper' %>
+            <%= @shipment.has_customs? ? format_to_price(@shipment.selected_offer.dig("customs","total")) : 'Handled by Shipper' %>
           </td>
         </tr>
         <tr>
           <td style="padding: 0 15px 0 0;">Insurance:</td>
           <td style="padding: 0 15px;">
-            <%= @shipment.has_insurance? ? format_to_price(@shipment.selected_offer["insurance"]["total"]) : 'None' %>
+            <%= @shipment.has_insurance? ? format_to_price(@shipment.selected_offer.dig("insurance","total")) : 'None' %>
           </td>
         </tr>
         <% if @shipment.load_type == 'cargo_item' %>
