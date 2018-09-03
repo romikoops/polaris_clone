@@ -1361,6 +1361,32 @@ function documentAction (docId, action) {
     )
   }
 }
+function deleteDocument (docId) {
+  function request (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_REQUEST, payload: docData }
+  }
+  function success (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_SUCCESS, payload: docData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DOCUMENT_DELETE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteDocument(docId).then(
+      (data) => {
+        dispatch(alertActions.success('Document Action successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function saveNewHub (hub, location) {
   function request (hubData) {
@@ -1782,6 +1808,7 @@ export const adminActions = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
+  deleteDocument,
   searchPricings
 }
 

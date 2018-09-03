@@ -439,6 +439,15 @@ function documentAction (docId, action) {
     .then(handleResponse)
 }
 
+function deleteDocument (documentId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
+}
+
 function saveNewHub (hub, location) {
   const requestOptions = {
     method: 'POST',
@@ -640,6 +649,7 @@ export const adminService = {
   getHub,
   deleteTrip,
   getItineraries,
+  deleteDocument,
   editTruckingPrice,
   deleteItinerary,
   uploadTrucking,

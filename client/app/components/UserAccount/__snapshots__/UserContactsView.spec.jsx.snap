@@ -7,9 +7,6 @@ exports[`props.contactData.location is falsy 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center sec_title"
-  />
-  <div
     className="flex-100 layout-row layout-align-start-stretch username_title"
   >
     <span
@@ -77,6 +74,12 @@ exports[`props.contactData.location is falsy 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <AdminSearchableShipments
+      dispatches={
+        Object {
+          "getContact": [Function],
+          "goBack": [Function],
+        }
+      }
       hubs={
         Array [
           Object {},
@@ -106,6 +109,7 @@ exports[`props.contactData.location is falsy 1`] = `
         }
       }
       title="Related Shipments"
+      userView={true}
     />
   </div>
 </div>
@@ -271,9 +275,6 @@ exports[`shallow render 1`] = `
   className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
-    className="flex-100 layout-row layout-align-space-between-center sec_title"
-  />
-  <div
     className="flex-100 layout-row layout-align-start-stretch username_title"
   >
     <span
@@ -341,6 +342,12 @@ exports[`shallow render 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <AdminSearchableShipments
+      dispatches={
+        Object {
+          "getContact": [Function],
+          "goBack": [Function],
+        }
+      }
       hubs={
         Array [
           Object {},
@@ -370,6 +377,7 @@ exports[`shallow render 1`] = `
         }
       }
       title="Related Shipments"
+      userView={true}
     />
   </div>
   <div
