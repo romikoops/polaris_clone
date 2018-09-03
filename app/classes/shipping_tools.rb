@@ -523,10 +523,33 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
-  def agent_quotation_email(user, shipment)
-    if ENV['BETA'] != "true"
-      QuoteMailer.quotation_email(user, shipment).deliver_now
+  def self.save_and_send_quotes(shipment, quotes, email)
+    main_quote = Quotation.create(user_id: shipment.user_id, target_email: email)
+    quotes.each do |quote|
+      trip = Trip.find(quote["trip_id"])
+      new_shipment = main_quote.shipments.create!(
+        status: 'quoted',
+        user_id: shipment.user_id,
+        imc_reference: shipment.imc_reference,
+        origin_hub_id: quote["origin_hub"]["id"],
+        destination_hub_id: quote["destination_hub"]["id"],
+        quotation_id: quote["id"],
+        trip_id: trip.id,
+        itinerary: trip.itinerary
+      )
+      binding.pry
+      shipment.charge_breakdowns.each do |cb|
+        ncb = cb.as_json.except("id", "shipment_id")
+        new_shipment.charge_breakdowns.create!(ncb)
+      end
     end
+    ShippingTools.agent_quotation_email(shipment, quotes, email)
+  end
+
+  def agent_quotation_email(shipment, quotes, email)
+    # if ENV['BETA'] != "true"
+      QuoteMailer.quotation_email(shipment, quotes, email).deliver_now
+    # end
   end
 
   def self.tenant_notification_email(user, shipment)

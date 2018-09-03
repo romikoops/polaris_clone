@@ -114,7 +114,7 @@ class Shop extends Component {
     })
   }
   determineForwardFunction (stage) {
-    const { bookingData, shipmentDispatch } = this.props
+    const { bookingData, shipmentDispatch, tenant } = this.props
     const { request } = bookingData
     const req = request[`stage${stage}`]
     switch (stage) {
@@ -122,10 +122,10 @@ class Shop extends Component {
         shipmentDispatch.newShipment(req)
         break
       case 2:
-        shipmentDispatch.getOffers(req, true)
+        shipmentDispatch.getOffers(req, tenant.data.subdomain, true)
         break
       case 3:
-        shipmentDispatch.chooseOffer(req)
+        shipmentDispatch.chooseOffer(req) || shipmentDispatch.chooseQuotes(req)
         break
       case 4:
         shipmentDispatch.setShipmentContacts(req)
@@ -196,7 +196,6 @@ class Shop extends Component {
           scrollable
           noRedirect
         />
-
         <ShopStageView
           shopType={this.state.shopType}
           theme={theme}
@@ -233,7 +232,7 @@ class Shop extends Component {
               shipmentData={shipmentData}
               prevRequest={request && request.stage2 ? request.stage2 : {}}
               req={request && request.stage1 ? request.stage1 : {}}
-              getOffers={data => shipmentDispatch.getOffers(data, true)}
+              getOffers={data => shipmentDispatch.getOffers(data, tenant.data.subdomain, true)}
               setStage={this.selectShipmentStage}
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
@@ -357,6 +356,7 @@ Shop.propTypes = {
     updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
+    chooseQuotes: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({

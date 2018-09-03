@@ -120,7 +120,7 @@ Rails.application.routes.draw do
     resources :shipments, only: %i[index show] do
       get 'test_email'
       get 'reuse_booking_data', as: :reuse_booking
-      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
+      %w(choose_offer get_offers update_shipment request_shipment choose_quotes).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
       post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'

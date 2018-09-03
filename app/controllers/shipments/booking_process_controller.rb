@@ -16,8 +16,13 @@ class Shipments::BookingProcessController < ApplicationController
   def choose_offer
     shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
-    ShippingTools.agent_quotation_email(current_user, shipment)
     response_handler(resp)
+  end
+
+  def choose_quotes
+    shipment = Shipment.find(params[:shipment_id])
+    ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email])
+    # response_handler(resp)
   end
 
   def update_shipment

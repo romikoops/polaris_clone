@@ -27,7 +27,7 @@ module OfferCalculatorService
         tenant_id: itinerary.tenant_id
       )
       
-      faux_trip = itinerary.trips.create!(tenant_vehicle_id: tenant_vehicle.id)
+      faux_trip = itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle.id)
       {
         origin_hub_id: origin_hub.id,
         destination_hub_id: destination_hub.id,

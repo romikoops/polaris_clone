@@ -12,6 +12,7 @@ class Shipment < ApplicationRecord
     declined
     ignored
     finished
+    quoted
   ).freeze
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   DIRECTIONS = %w(import export).freeze
@@ -38,6 +39,7 @@ class Shipment < ApplicationRecord
 
   # ActiveRecord associations
   belongs_to :user
+  belongs_to :quotation, optional: true
   belongs_to :tenant
   has_many :documents
   has_many :shipment_contacts
@@ -428,6 +430,10 @@ class Shipment < ApplicationRecord
 
   def set_tenant
     self.tenant_id ||= user.tenant_id
+  end
+
+  def self.shipment_from_quote
+
   end
 
   def sync_nexuses

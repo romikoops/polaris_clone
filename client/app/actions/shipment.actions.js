@@ -53,7 +53,7 @@ function reuseShipment (shipment) {
   }
 }
 
-function getOffers (data, redirect) {
+function getOffers (data, tenant, redirect) {
   function request (shipmentData) {
     return {
       type: shipmentConstants.GET_OFFERS_REQUEST,
@@ -159,6 +159,42 @@ function chooseOffer (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/final_details`))
+        dispatch(alertActions.success('Set Shipment Route successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function chooseQuotes (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.CHOOSE_QUOTES_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.CHOOSE_QUOTES_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.CHOOSE_QUOTES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(data))
+
+    shipmentService.chooseQuotes(data).then(
+      (resp) => {
+        debugger // eslint-disable-line no-debugger
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/thank_you`))
         dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
@@ -566,6 +602,7 @@ export const shipmentActions = {
   newShipment,
   downloadQuotations,
   chooseOffer,
+  chooseQuotes,
   getOffers,
   setShipmentContacts,
   fetchShipment,

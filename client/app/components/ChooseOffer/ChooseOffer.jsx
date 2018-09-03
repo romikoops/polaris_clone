@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 import { RouteResult } from '../RouteResult/RouteResult'
@@ -12,6 +13,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import QuoteCard from '../Quote/Card'
+import FormsyInput from '../FormsyInput/FormsyInput'
 
 export class ChooseOffer extends Component {
   static dynamicSort (property) {
@@ -47,12 +49,15 @@ export class ChooseOffer extends Component {
       },
       outerLimit: 20,
       selectedOffers: [],
-      isChecked: false
+      isChecked: false,
+      email: ''
     }
     this.chooseResult = this.chooseResult.bind(this)
+    this.selectQuotes = this.selectQuotes.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
+    this.emailValue = this.emailValue.bind(this)
     // this.handleInputChange = this.handleInputChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
@@ -88,7 +93,6 @@ export class ChooseOffer extends Component {
   }
   handleClick (e, value) {
     if (e.target.checked) {
-      console.log(value)
       this.state.selectedOffers.push(value)
       this.setState({
         selectedOffers: this.state.selectedOffers
@@ -121,6 +125,11 @@ export class ChooseOffer extends Component {
     shipmentDispatch.getOffers(req, false)
     this.setState({ outerLimit: req.delay })
   }
+  emailValue (e) {
+    this.setState({
+      email: e.target.value
+    })
+  }
   downloadQuotations () {
     const { shipmentDispatch } = this.props
     shipmentDispatch.downloadQuotations()
@@ -144,6 +153,18 @@ export class ChooseOffer extends Component {
 
   chooseResult (obj) {
     this.props.chooseOffer(obj)
+  }
+  selectQuotes (shipment, quotes, email) {
+    const {
+      shipmentDispatch, toggleShowRegistration, hideRegistration
+    } = this.props
+    // if (this.props.user.guest) {
+    //   this.toggleShowRegistration(quotes)
+
+    //   return
+    // }
+    // this.hideRegistration()
+    shipmentDispatch.chooseQuotes({ shipment, quotes, email })
   }
   render () {
     const {
@@ -274,7 +295,6 @@ export class ChooseOffer extends Component {
               setDepartureDate={this.setDepartureDate}
             />
           </div>
-          {console.log(this.state.selectedOffers)}
           <div className="flex-75  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center">
@@ -369,7 +389,7 @@ export class ChooseOffer extends Component {
                   </div>))
               ) : ''}
               <div className={`flex-100 layout-row layout-align-center-center ${styles.download_button}`}>
-                <div className="flex-90 layout-row layout-align-center-center">
+                <div className="flex-90 layout-row layout-align-center-center layout-wrap">
                   <DocumentsDownloader
                     theme={theme}
                     target="quotations"
@@ -378,13 +398,22 @@ export class ChooseOffer extends Component {
                     shipment={shipment}
                     shipmentDispatch={shipmentDispatch}
                   />
-                  {/* <RoundButton
-                    theme={theme}
-                    size="full"
-                    active
-                    text="Download pdf"
-                    handleNext={() => this.downloadFile()}
-                  /> */}
+                  <Formsy>
+                    <FormsyInput
+                      type="email"
+                      name="quotation_email"
+                      value={this.state.email}
+                      onChange={this.emailValue}
+                      placeholder="bob@gateway.com"
+                    />
+                    <RoundButton
+                      theme={theme}
+                      size="full"
+                      active
+                      text="Send email"
+                      handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
+                    />
+                  </Formsy>
                 </div>
               </div>
             </div>
@@ -416,7 +445,8 @@ ChooseOffer.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
   shipmentData: PropTypes.shipmentData.isRequired,
-  chooseOffer: PropTypes.func.isRequired,
+  chooseOffer: PropTypes.func,
+  chooseQuotes: PropTypes.func,
   req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   originalSelectedDay: PropTypes.string,
@@ -431,6 +461,8 @@ ChooseOffer.propTypes = {
 
 ChooseOffer.defaultProps = {
   theme: null,
+  chooseQuotes: null,
+  chooseOffer: null,
   prevRequest: null,
   req: {},
   tenant: {},

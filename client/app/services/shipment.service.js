@@ -70,6 +70,16 @@ function chooseOffer (data) {
 
   return fetch(url, requestOptions).then(handleResponse)
 }
+function chooseQuotes (data) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }
+  const url = `${BASE_URL}/shipments/${data.shipment.id}/choose_quotes`
+
+  return fetch(url, requestOptions).then(handleResponse)
+}
 function downloadQuotations (options, data) {
   const requestOptions = {
     method: 'POST',
@@ -161,6 +171,7 @@ export const shipmentService = {
   getAll,
   getShipment,
   chooseOffer,
+  chooseQuotes,
   downloadQuotations,
   deleteDocument,
   getOffers,

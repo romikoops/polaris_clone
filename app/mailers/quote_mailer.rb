@@ -7,10 +7,11 @@ class QuoteMailer < ApplicationMailer
 
   TESTING_EMAIL = "angelica.vanni@itsmycargo.com"
 
-  def quotation_email(user, shipment)
-    @user = user
-    tenant = user.tenant
+  def quotation_email(shipment, quotes, email)
     @shipment = shipment
+    @user = @shipment.user
+    tenant = @user.tenant
+    byebug
     # @quote = @shipment.quote
     base_url =
       case Rails.env
@@ -20,18 +21,20 @@ class QuoteMailer < ApplicationMailer
       end
 
     # @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
-
+    generate_and_upload_quotation(quotes)
+    pdf_name = "quotation_#{@shipment.imc_reference.pdf}"
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
+    attachments.inline[pdf_name] = File.read("tmp/" + pdf_name)
 
-    mail(
-      # to:      tenant.email_for(:sales, shipment.mode_of_transport),
-      to: TESTING_EMAIL,
-      # bcc:     "bookings@itsmycargo.com",
-      subject: "Quotation for #{@shipment.orgin_hub.name} - #{@shipment.destination_hub.name}"
-    ) do |format|
-      format.html
-      format.mjml
-    end
+    # mail(
+    #   # to:      tenant.email_for(:sales, shipment.mode_of_transport),
+    #   to: email,
+    #   # bcc:     "bookings@itsmycargo.com",
+    #   subject: "Quotation for #{@shipment.orgin_hub.name} - #{@shipment.destination_hub.name}"
+    # ) do |format|
+    #   format.html
+    #   format.mjml
+    # end
   end
 
   private
