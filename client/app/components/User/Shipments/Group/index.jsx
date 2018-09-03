@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from '../../../Admin/Admin.scss'
 import { AdminSearchableShipments } from '../../../Admin/AdminSearchables'
@@ -28,8 +29,6 @@ export class UserShipmentsGroup extends Component {
   }
 
   render () {
-    console.log(this.props)
-    // const {selectedShipment} = this.state;
     const {
       theme,
       shipments,
@@ -38,7 +37,8 @@ export class UserShipmentsGroup extends Component {
       hubHash,
       userDispatch,
       title,
-      target
+      target,
+      t
     } = this.props
     // ;
     if (!shipments || !hubHash || !user) {
@@ -73,9 +73,9 @@ export class UserShipmentsGroup extends Component {
                 styles.sec_subheader
               }`}
             >
-              <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+              <p className={` ${styles.sec_subheader_text} flex-none`}>{t('shipment:noShipments')}</p>
             </div>
-            <p className="flex-none"> As shipments are requested, they will appear here</p>
+            <p className="flex-none">{t('shipment:noShipmentExplaination')}</p>
           </div>
         ) : (
           ''
@@ -92,6 +92,7 @@ export class UserShipmentsGroup extends Component {
 }
 UserShipmentsGroup.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   title: PropTypes.string,
   target: PropTypes.string,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
@@ -111,4 +112,4 @@ UserShipmentsGroup.defaultProps = {
   target: ''
 }
 
-export default UserShipmentsGroup
+export default translate('shipment')(UserShipmentsGroup)

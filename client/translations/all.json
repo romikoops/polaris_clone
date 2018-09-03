@@ -231,6 +231,8 @@
         "estimatedTransitTime": "Estimated Transit Time",
         "seeMoreShipments": "See more shipments",
         "myShipmentAddresses": "My Shipment Addresses",
+        "noShipments":"No Shipments yet",
+        "noShipmentExplaination":"As shipments are requested, they will appear here",
         "noAddresses": "No addresses yet",
         "locations": "Locations"
       },
