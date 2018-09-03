@@ -14,7 +14,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Max: 25
   Exclude:
-    - config/routes.rb
+    - config/**/*.rb
     - db/migrate/*.rb
     - spec/**/*_spec.rb
 

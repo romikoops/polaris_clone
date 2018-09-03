@@ -2,7 +2,7 @@
 
 Geocoder.configure(
   # Use API key (server key from Google)
-  api_key: ENV['GOOGLE_MAPS_SERVER_API_KEY'],
+  api_key: Settings.google.api_key,
   use_https:  false,
   # Set default units to kilometers:
   units: :km,

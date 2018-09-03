@@ -582,20 +582,18 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if Rails.env.production? && ENV['BETA'] != 'true'
-      ShipmentMailer.shipper_confirmation(
-        user,
-        shipment
-      ).deliver_later
-    end
+    ShipmentMailer.shipper_confirmation(
+      user,
+      shipment
+    ).deliver_later
   end
 
   def get_shipment_pdf(params)
@@ -676,16 +674,14 @@ module ShippingTools
   end
 
   def send_booking_emails(shipment)
-    if ENV['BETA'] != 'true'
-      shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      ShipmentMailer.summary_mail_shipper(shipment, 'Booking_' + shipment.imc_reference + '.pdf', shipper_pdf).deliver_now
-      ShipmentMailer.summary_mail_trucker(shipment, 'Booking_' + shipment.imc_reference + '.pdf', trucker_pdf).deliver_now
-      ShipmentMailer.summary_mail_consolidator(shipment, 'Booking_' + shipment.imc_reference + '.pdf', consolidator_pdf).deliver_now
-      ShipmentMailer.summary_mail_receiver(shipment, 'Booking_' + shipment.imc_reference + '.pdf', receiver_pdf).deliver_now
-    end
+    shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    ShipmentMailer.summary_mail_shipper(shipment, 'Booking_' + shipment.imc_reference + '.pdf', shipper_pdf).deliver_now
+    ShipmentMailer.summary_mail_trucker(shipment, 'Booking_' + shipment.imc_reference + '.pdf', trucker_pdf).deliver_now
+    ShipmentMailer.summary_mail_consolidator(shipment, 'Booking_' + shipment.imc_reference + '.pdf', consolidator_pdf).deliver_now
+    ShipmentMailer.summary_mail_receiver(shipment, 'Booking_' + shipment.imc_reference + '.pdf', receiver_pdf).deliver_now
     # TBD - Set up flash message
   end
 

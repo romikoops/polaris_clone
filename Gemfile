@@ -14,6 +14,9 @@ gem 'puma', '~> 3.11'
 # Use activerecord-import for bulk insertion
 gem 'activerecord-import'
 
+# Setup RailsConfig for easier secret management
+gem 'config'
+
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 
@@ -88,6 +91,9 @@ gem 'filterrific'
 # Pagination library
 gem 'will_paginate', '~> 3.1.5'
 
+# Email support
+gem 'recipient_interceptor'
+
 # Easier CSS for emails
 gem 'inky-rb', require: 'inky'
 gem 'premailer-rails'
@@ -137,9 +143,10 @@ group :test do
   gem 'webmock'
 end
 
-group :development, :staging do
+group :development do
   gem 'google-api-client', '~> 0.23.7'
   gem 'google-cloud-storage'
+  gem 'letter_opener', '~> 1.6'
 
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

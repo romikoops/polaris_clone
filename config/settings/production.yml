@@ -1,0 +1,20 @@
+aws:
+  access_key_id: <%= Rails.application.credentials.production_aws_access_key_id %>
+  secret_access_key: <%= Rails.application.credentials.production_aws_secret_access_key %>
+  region: eu-central-1
+  bucket: imcdev
+
+fixer:
+  api_key: <%= Rails.application.credentials.production_fixer_api_key %>
+
+google:
+  api_key: <%= Rails.application.credentials.production_google_api_key %>
+
+smtp:
+  host: sendgrid.net
+  domain: itsmycargo.com
+  username: itsmycargo
+  password: <%= Rails.application.credentials.production_smtp_password %>
+
+mailer:
+  queue: https://sqs.eu-central-1.amazonaws.com/003688427525/mailers

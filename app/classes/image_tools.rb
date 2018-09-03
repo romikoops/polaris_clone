@@ -28,19 +28,17 @@ module ImageTools
 
   def upload_image(filepath)
     s3 = Aws::S3::Client.new(
-      access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-      secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-      region:            ENV["AWS_REGION"]
+      access_key_id:     Settings.aws.access_key_id,
+      secret_access_key: Settings.aws.secret_access_key,
+      region:            Settings.aws.region
     )
     filename = filepath[2..-1]
     objKey = "assets/default_images/" + filename
     File.open(filepath, "rb") do |file|
-      s3.put_object(bucket: ENV["AWS_BUCKET"], key: objKey, body: file, acl: "public-read")
+      s3.put_object(bucket: Settings.aws.bucket, key: objKey, body: file, acl: "public-read")
     end
-    # s3.bucket(ENV['AWS_BUCKET']).object(objKey).upload_file(filepath)
     awsurl = "https://assets.itsmycargo.com/" + objKey
 
     awsurl
-    # s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'public-read')
   end
 end
