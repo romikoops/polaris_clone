@@ -39,14 +39,13 @@ class MessageCenter extends Component {
     this.setSelected = this.setSelected.bind(this)
   }
   componentWillMount () {
-    if (!this.props.shipments || (this.props.shipments && this.props.shipments.length === 0)) {
-      const { messageDispatch, conversations } = this.props
-      if (conversations) {
-        messageDispatch.getShipments(Object.keys(conversations))
-      }
+    const { messageDispatch, conversations } = this.props
+    if (conversations) {
+      messageDispatch.getShipments(Object.keys(conversations))
     }
   }
   componentWillReceiveProps (nextProps) {
+    
     if (!nextProps.shipments && !nextProps.loading) {
       const { messageDispatch, conversations } = this.props
       messageDispatch.getShipments(Object.keys(conversations))
@@ -105,10 +104,7 @@ class MessageCenter extends Component {
       shipments.open.length < 1 &&
       shipments.finished.length < 1
     ) {
-      console.log('dsfds')
       const ld = messageDispatch.getShipment(convoKey)
-      console.log(ld)
-      console.log('sdf')
     }
     tmpShipment.length > 0
       ? (shipment = {
@@ -140,7 +136,7 @@ class MessageCenter extends Component {
     if (!conversations && !loading) {
       return ''
     }
-    let convoKeys = {}
+    let convoKeys = []
     convoKeys = conversations ? Object.keys(conversations) : []
 
     const convoArray = convoKeys.map(ms => ({
