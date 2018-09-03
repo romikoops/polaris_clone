@@ -518,15 +518,15 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later if ENV['BETA'] != 'true'
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later if ENV['BETA'] != 'true'
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if ENV['BETA'] != 'true'
+    if Rails.env.production? && ENV['BETA'] != 'true'
       ShipmentMailer.shipper_confirmation(
         user,
         shipment
