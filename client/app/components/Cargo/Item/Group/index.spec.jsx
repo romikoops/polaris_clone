@@ -43,7 +43,7 @@ const propsBase = {
   hsCodes: ['FOO_HSCODE', 'BAR_HSCODE']
 }
 
-test('shallow render', () => {
+test.skip('shallow render', () => {
   expect(shallow(<CargoItemGroup {...propsBase} />)).toMatchSnapshot()
 })
 
