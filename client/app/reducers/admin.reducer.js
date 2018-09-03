@@ -1070,7 +1070,8 @@ export default function admin (state = {}, action) {
       return reqDocAction
     }
     case adminConstants.DOCUMENT_ACTION_SUCCESS: {
-      const docs = state.shipment.documents.filter(x => x.id !== action.payload.id)
+      const docs = state.shipment.documents
+        .filter(x => x.id !== parseInt(action.payload.id, 10))
       docs.push(action.payload)
 
       return {
@@ -1089,6 +1090,32 @@ export default function admin (state = {}, action) {
       })
 
       return errDocAction
+    }
+    case adminConstants.DOCUMENT_DELETE_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.DOCUMENT_DELETE_SUCCESS: {
+      const docs = state.shipment.documents
+        .filter(x => x.id !== parseInt(action.payload.id, 10))
+
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          documents: docs
+        },
+        loading: false
+      }
+    }
+    case adminConstants.DOCUMENT_DELETE_FAILURE: {
+      return {
+        ...state,
+        error: { documents: action.error },
+        loading: false
+      }
     }
 
     case adminConstants.NEW_HUB_REQUEST:

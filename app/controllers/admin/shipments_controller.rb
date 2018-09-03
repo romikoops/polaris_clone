@@ -135,6 +135,13 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
     response_handler(tmp)
   end
+  
+  def document_delete
+    @document = Document.find(params[:id])
+    @document.destroy
+
+    response_handler({id: params[:id]})
+  end
 
   private
 
