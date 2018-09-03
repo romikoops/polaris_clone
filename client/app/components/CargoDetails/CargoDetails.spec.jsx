@@ -1,18 +1,13 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, shipmentData, identity } from '../../mocks'
-
-/**
- * ISSUE
- * `totalGoodsValue: PropTypes.number.isRequired,` is wrong
- */
+import { theme, shipmentData, identity, change } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
   // eslint-disable-next-line react/prop-types
   converter: x => x
 }))
-// eslint-disable-next-line import/first
-import { CargoDetails } from './CargoDetails'
+// eslint-disable-next-line
+import CargoDetails from './CargoDetails'
 
 const editedShipmentData = {
   ...shipmentData,
@@ -36,6 +31,19 @@ const editedShipmentData = {
   }
 }
 
+const customsDataBase = {
+  val: 'FOO_CUSTOM_DATA',
+  import: {
+    bool: true,
+    total: {
+      currency: 'USD'
+    }
+  },
+  export: {
+    bool: true
+  }
+}
+
 const propsBase = {
   theme,
   tenant: {
@@ -52,18 +60,7 @@ const propsBase = {
     val: 'FOO_INSURANCE',
     bool: true
   },
-  customsData: {
-    val: 'FOO_CUSTOM_DATA',
-    import: {
-      bool: true,
-      total: {
-        currency: 'USD'
-      }
-    },
-    export: {
-      bool: true
-    }
-  },
+  customsData: customsDataBase,
   setCustomsFee: identity,
   shipmentDispatch: {
     deleteDocument: identity,
@@ -81,6 +78,103 @@ const propsBase = {
   notes: 'FOO_NOTES',
   incoterm: 'FOO_INCOTERM'
 }
+
+test('scope.has_customs || scope.has_insurance', () => {
+  const changeData = {
+    shipmentData: {
+      addons: {
+        customs_export_paper: true
+      }
+    },
+    tenant: {
+      data: {
+        scope: {
+          has_insurance: true,
+          has_customs: true,
+          customs_export_paper: true
+        }
+      }
+    }
+  }
+  const props = change(
+    {
+      ...propsBase,
+      insurance: { bool: null }
+    },
+    '',
+    changeData
+  )
+
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('shipment.has_pre_carriage ?', () => {
+  const changeData = {
+    has_pre_carriage: true,
+    has_on_carriage: true
+  }
+  const props = change(
+    propsBase,
+    'shipmentData.shipment',
+    changeData
+  )
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('this.props.insurance.bool ?', () => {
+  const props = {
+    ...propsBase,
+    insurance: {
+      bool: false
+    }
+  }
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('customsData[target].unknown', () => {
+  const props = {
+    ...propsBase,
+    customsData: {
+      import: { unknown: true },
+      export: {}
+    }
+  }
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('fee && !fee.unknown && fee.total.value', () => {
+  const changeData = {
+    import: {
+      unknown: false
+    },
+    export: {
+      unknown: false
+    }
+  }
+  const props = change(
+    propsBase,
+    'shipmentData.customs',
+    changeData
+  )
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
+
+test('customs.import.unknown && customs.export.unknown', () => {
+  const changeData = {
+    import: {
+      unknown: true
+    },
+    export: {
+      unknown: true
+    }
+  }
+  const props = change(
+    propsBase,
+    'shipmentData.customs',
+    changeData
+  )
+  expect(shallow(<CargoDetails {...props} />)).toMatchSnapshot()
+})
 
 test('shallow render', () => {
   expect(shallow(<CargoDetails {...propsBase} />)).toMatchSnapshot()

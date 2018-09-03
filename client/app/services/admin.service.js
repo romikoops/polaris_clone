@@ -260,13 +260,20 @@ function confirmShipment (id, action) {
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function getPricings (page, mot) {
+function getPricings (pages) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  let pageQuery = ''
+  if (pages) {
+    Object.keys(pages).forEach((key) => {
+      pageQuery += `${key}=${pages[key]}&`
+    })
+    pageQuery = pageQuery.slice(0, -1)
+  }
 
-  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions)
+  return fetch(`${BASE_URL}/admin/pricings?${pageQuery}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -430,6 +437,15 @@ function documentAction (docId, action) {
 
   return fetch(`${BASE_URL}/admin/documents/action/${docId}`, requestOptions)
     .then(handleResponse)
+}
+
+function deleteDocument (documentId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function saveNewHub (hub, location) {
@@ -633,6 +649,7 @@ export const adminService = {
   getHub,
   deleteTrip,
   getItineraries,
+  deleteDocument,
   editTruckingPrice,
   deleteItinerary,
   uploadTrucking,

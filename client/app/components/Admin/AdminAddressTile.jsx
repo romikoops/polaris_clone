@@ -40,7 +40,8 @@ export class AdminAddressTile extends Component {
   render () {
     const {
       theme,
-      address
+      address,
+      showDelete
     } = this.props
     const { showEdit, editor } = this.state
     if (!address) {
@@ -135,28 +136,24 @@ export class AdminAddressTile extends Component {
             onChange={this.handleChange}
           />
         </div>
-        {/* <div className="flex-100 layout-row layout-wrap layout-align-space-between-center ">
-          <RoundButton
-            size="full"
-            text="Save Edit"
-            theme={theme}
-            active
-            handleNext={this.saveEdit}
-          />
-          <hr className="flex-100" />
-          <RoundButton
-            size="full"
-            text="Delete"
-            theme={theme}
-            handleNext={this.deleteAddress}
-          />
-        </div> */}
       </div>
     )
-    const pencilIcon = (<i
-      className="flex-none fa fa-pencil clip"
-      style={{ background: '#BDBDBD', paddingRight: '1.7vw' }}
-    />)
+    const pencilIcon = (
+      <div
+        className="flex-33 layout-row layout-align-center-center pointy"
+        style={{ height: '50px' }}
+        onClick={this.toggleEdit}
+      >
+        <i
+          className="flex-none fa fa-pencil clip"
+          style={{ background: '#BDBDBD', paddingRight: '1.7vw' }}
+        />
+      </div>)
+    const deleteIcon = showDelete
+      ? (<div className="flex-33 layout-row layout-align-center-center">
+        <i className={`fa fa-trash pointy ${styles.trashy}`} onClick={this.deleteAddress} />
+      </div>)
+      : ''
 
     return (
       <div
@@ -172,22 +169,30 @@ export class AdminAddressTile extends Component {
               styles.sec_subheader
             }`}
           >
-            <p
-              className={` ${styles.sec_subheader_text} ${styles.clip} flex-none no_m`}
-              style={textStyle}
-            />
             <div
-              className="flex-none layout-row layout-align-center-center"
-              onClick={this.toggleEdit}
+              className="flex-100 layout-row layout-align-end-center height_100"
+
             >
               {showEdit ? (
-                <div className={`layout-row flex-100 ${styles.icons_location}`}>
-                  <i className="fa fa-check pointy" onClick={this.saveEdit} />
-                  <i className={`fa fa-trash pointy ${styles.trashy}`} onClick={this.deleteAddress} />
-                  <i
-                    className="flex-none fa fa-times clip extra_padding_right"
-                    style={{ background: '#BDBDBD', cursor: 'pointer' }}
-                  />
+                <div className={`layout-row flex-100 layout-align-end-center ${styles.icons_location}`}>
+                  <div
+                    className="flex-33 layout-row layout-align-center-center"
+                    style={{ height: '50px' }}
+                    onClick={this.saveEdit}
+                  >
+                    <i className="fa fa-check pointy" />
+                  </div>
+                  {deleteIcon}
+                  <div
+                    className="flex-33 layout-row layout-align-center-center"
+                    style={{ height: '50px' }}
+                    onClick={this.toggleEdit}
+                  >
+                    <i
+                      className="flex-none fa fa-times clip extra_padding_right"
+                      style={{ background: '#BDBDBD', cursor: 'pointer' }}
+                    />
+                  </div>
                 </div>
               )
                 : pencilIcon }
@@ -203,12 +208,14 @@ AdminAddressTile.propTypes = {
   theme: PropTypes.theme,
   saveEdit: PropTypes.func.isRequired,
   deleteAddress: PropTypes.func.isRequired,
-  address: PropTypes.address
+  address: PropTypes.address,
+  showDelete: PropTypes.bool
 }
 
 AdminAddressTile.defaultProps = {
   theme: null,
-  address: null
+  address: null,
+  showDelete: true
 }
 
 export default AdminAddressTile

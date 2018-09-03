@@ -4,65 +4,73 @@ exports[`props.contactData is falsy 1`] = `""`;
 
 exports[`props.contactData.location is falsy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
     className="flex-100 layout-row layout-align-space-between-center sec_title"
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-stretch username_title"
   >
-    <p
-      className=" sec_title_text flex-none clip"
-      style="#333"
+    <span
+      className="layout-row flex-none layout-align-start-center card_padding_right"
     >
-      Overview
-    </p>
-    <div
-      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-left"
-        inverse={false}
-        size="small"
-        text="Back"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+      <i
+        className="fa fa-user clip bigProfile"
+        style="#333"
       />
+    </span>
+    <div
+      className="layout-align-start-center layout-row flex-70"
+    >
+      <h1
+        className="flex-none cli"
+      >
+        John
+         
+        Doe
+      </h1>
     </div>
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
-    >
-      <p
-        className=" sec_header_text flex-none"
-      >
-         Details 
-      </p>
-    </div>
-    <ProfileBox
-      edit={[Function]}
-      style="#333"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
+    <GreyBox
+      borderStyle=""
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ProfileBox
+            edit={[Function]}
+            style="#333"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "first_name": "John",
+                "last_name": "Doe",
+              }
+            }
+          />
+        </div>
       }
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
   <div
@@ -75,11 +83,12 @@ exports[`props.contactData.location is falsy 1`] = `
         ]
       }
       limit={5}
+      seeAll={false}
       shipments={
         Array [
           Object {
-            "clientName": "",
-            "companyName": "",
+            "clientName": "John Doe",
+            "companyName": "undefined",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -104,65 +113,73 @@ exports[`props.contactData.location is falsy 1`] = `
 
 exports[`props.loading is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
     className="flex-100 layout-row layout-align-space-between-center sec_title"
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-stretch username_title"
   >
-    <p
-      className=" sec_title_text flex-none clip"
-      style="#333"
+    <span
+      className="layout-row flex-none layout-align-start-center card_padding_right"
     >
-      Overview
-    </p>
-    <div
-      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-left"
-        inverse={false}
-        size="small"
-        text="Back"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+      <i
+        className="fa fa-user clip bigProfile"
+        style="#333"
       />
+    </span>
+    <div
+      className="layout-align-start-center layout-row flex-70"
+    >
+      <h1
+        className="flex-none cli"
+      >
+        John
+         
+        Doe
+      </h1>
     </div>
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
-    >
-      <p
-        className=" sec_header_text flex-none"
-      >
-         Details 
-      </p>
-    </div>
-    <ProfileBox
-      edit={[Function]}
-      style="#333"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
+    <GreyBox
+      borderStyle=""
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ProfileBox
+            edit={[Function]}
+            style="#333"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "first_name": "John",
+                "last_name": "Doe",
+              }
+            }
+          />
+        </div>
       }
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
   <div
@@ -175,11 +192,12 @@ exports[`props.loading is true 1`] = `
         ]
       }
       limit={5}
+      seeAll={false}
       shipments={
         Array [
           Object {
-            "clientName": "",
-            "companyName": "",
+            "clientName": "John Doe",
+            "companyName": "undefined",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -200,20 +218,31 @@ exports[`props.loading is true 1`] = `
     />
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
+      className="flex-100 layout-row layout-align-space-between-center"
     >
-      <p
-        className=" sec_header_text flex-none"
+      <div
+        className="flex-100 layout-align-start-center greyBg"
       >
-         Locations
-      </p>
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
     </div>
     <AdminAddressTile
       address={[Function]}
-      key="RANDOM_KEY_1"
+      client={
+        Object {
+          "first_name": "John",
+          "last_name": "Doe",
+        }
+      }
+      key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -222,6 +251,16 @@ exports[`props.loading is true 1`] = `
           },
         }
       }
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
 </div>
@@ -229,65 +268,73 @@ exports[`props.loading is true 1`] = `
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
     className="flex-100 layout-row layout-align-space-between-center sec_title"
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-stretch username_title"
   >
-    <p
-      className=" sec_title_text flex-none clip"
-      style="#333"
+    <span
+      className="layout-row flex-none layout-align-start-center card_padding_right"
     >
-      Overview
-    </p>
-    <div
-      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-left"
-        inverse={false}
-        size="small"
-        text="Back"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+      <i
+        className="fa fa-user clip bigProfile"
+        style="#333"
       />
+    </span>
+    <div
+      className="layout-align-start-center layout-row flex-70"
+    >
+      <h1
+        className="flex-none cli"
+      >
+        John
+         
+        Doe
+      </h1>
     </div>
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
-    >
-      <p
-        className=" sec_header_text flex-none"
-      >
-         Details 
-      </p>
-    </div>
-    <ProfileBox
-      edit={[Function]}
-      style="#333"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
+    <GreyBox
+      borderStyle=""
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <ProfileBox
+            edit={[Function]}
+            style="#333"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={
+              Object {
+                "first_name": "John",
+                "last_name": "Doe",
+              }
+            }
+          />
+        </div>
       }
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
   <div
@@ -300,11 +347,12 @@ exports[`shallow render 1`] = `
         ]
       }
       limit={5}
+      seeAll={false}
       shipments={
         Array [
           Object {
-            "clientName": "",
-            "companyName": "",
+            "clientName": "John Doe",
+            "companyName": "undefined",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -328,17 +376,28 @@ exports[`shallow render 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
+      className="flex-100 layout-row layout-align-space-between-center"
     >
-      <p
-        className=" sec_header_text flex-none"
+      <div
+        className="flex-100 layout-align-start-center greyBg"
       >
-         Locations
-      </p>
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
     </div>
     <AdminAddressTile
       address={[Function]}
+      client={
+        Object {
+          "first_name": "John",
+          "last_name": "Doe",
+        }
+      }
       key="RANDOM_KEY_0"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {
@@ -354,68 +413,70 @@ exports[`shallow render 1`] = `
 
 exports[`state.editBool is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
+  className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding"
 >
   <div
     className="flex-100 layout-row layout-align-space-between-center sec_title"
+  />
+  <div
+    className="flex-100 layout-row layout-align-start-stretch username_title"
   >
-    <p
-      className=" sec_title_text flex-none clip"
-      style="#333"
+    <span
+      className="layout-row flex-none layout-align-start-center card_padding_right"
     >
-      Overview
-    </p>
-    <div
-      className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-chevron-left"
-        inverse={false}
-        size="small"
-        text="Back"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+      <i
+        className="fa fa-user clip bigProfile"
+        style="#333"
       />
+    </span>
+    <div
+      className="layout-align-start-center layout-row flex-70"
+    >
+      <h1
+        className="flex-none cli"
+      >
+        John
+         
+        Doe
+      </h1>
     </div>
   </div>
   <div
-    className="layout-row flex-100 layout-wrap layout-align-start-center"
+    className="layout-row flex-100 layout-wrap layout-align-start-center margin_bottom"
   >
-    <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
-    >
-      <p
-        className=" sec_header_text flex-none"
-      >
-         Details 
-      </p>
-    </div>
-    <EditProfileBox
-      close={[Function]}
-      handleChange={[Function]}
-      onSave={[Function]}
-      style="#333"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
+    <GreyBox
+      borderStyle=""
+      content={
+        <div
+          className="layout-row flex-100"
+        >
+          <EditProfileBox
+            close={[Function]}
+            handleChange={[Function]}
+            onSave={[Function]}
+            style="#333"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+            user={Object {}}
+          />
+        </div>
       }
-      user={Object {}}
+      contentClassName="layout-row flex"
+      flex={0}
+      flexGtLg={0}
+      flexMd={0}
+      fullWidth={false}
+      isBox={false}
+      padding={false}
+      title=""
+      titleAction={false}
+      wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
     />
   </div>
   <div
@@ -428,11 +489,12 @@ exports[`state.editBool is true 1`] = `
         ]
       }
       limit={5}
+      seeAll={false}
       shipments={
         Array [
           Object {
-            "clientName": "",
-            "companyName": "",
+            "clientName": "John Doe",
+            "companyName": "undefined",
             "schedule_set": Array [
               Object {
                 "hub_route_key": "foo-bar",
@@ -456,17 +518,28 @@ exports[`state.editBool is true 1`] = `
     className="layout-row flex-100 layout-wrap layout-align-start-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-center sec_header"
+      className="flex-100 layout-row layout-align-space-between-center"
     >
-      <p
-        className=" sec_header_text flex-none"
+      <div
+        className="flex-100 layout-align-start-center greyBg"
       >
-         Locations
-      </p>
+        <span>
+          <b>
+            Locations
+          </b>
+        </span>
+      </div>
     </div>
     <AdminAddressTile
       address={[Function]}
-      key="RANDOM_KEY_3"
+      client={
+        Object {
+          "first_name": "John",
+          "last_name": "Doe",
+        }
+      }
+      key="RANDOM_KEY_1"
+      showDelete={false}
       theme={
         Object {
           "colors": Object {

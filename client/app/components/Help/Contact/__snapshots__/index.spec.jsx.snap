@@ -137,6 +137,7 @@ exports[`shallow render 1`] = `
       </div>
     </div>
   }
+  flexOptions=""
   horizontalPadding="20px"
   minHeight=""
   theme={

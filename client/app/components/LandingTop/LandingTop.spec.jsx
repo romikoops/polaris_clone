@@ -5,6 +5,7 @@ import { theme, user, identity, tenant } from '../../mocks'
 jest.mock('../Header/Header', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <header>{children}</header>)
+
 // eslint-disable-next-line
 import { LandingTop } from './LandingTop'
 
@@ -58,18 +59,42 @@ test('user.role_id is 1', () => {
   expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test('props.toggleShowLogin is called', () => {
+test('props.toAdmin is called', () => {
   const props = {
     ...propsBase,
     user: {
       ...user,
-      guest: true
+      role: {
+        name: 'admin'
+      }
     },
-    toggleShowLogin: jest.fn()
+    toAdmin: jest.fn()
   }
   const wrapper = mount(<LandingTop {...props} />)
-  const link = wrapper.find('a').first()
-  link.simulate('click')
+  const selector = 'div[className="layout-row flex-50"] button'
+  const button = wrapper.find(selector).first()
 
-  expect(props.toggleShowLogin).toHaveBeenCalled()
+  expect(props.toAdmin).not.toHaveBeenCalled()
+  button.simulate('click')
+  expect(props.toAdmin).toHaveBeenCalled()
+})
+
+test('props.goTo is called', () => {
+  const props = {
+    ...propsBase,
+    user: {
+      ...user,
+      role: {
+        name: 'shipper'
+      }
+    },
+    goTo: jest.fn()
+  }
+  const wrapper = mount(<LandingTop {...props} />)
+  const selector = 'div[className="layout-row flex-50"] button'
+  const button = wrapper.find(selector).last()
+
+  expect(props.goTo).not.toHaveBeenCalled()
+  button.simulate('click')
+  expect(props.goTo).toHaveBeenCalled()
 })

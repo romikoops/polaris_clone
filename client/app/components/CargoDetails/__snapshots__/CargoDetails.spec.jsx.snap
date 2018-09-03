@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`shallow render 1`] = `
+exports[`customs.import.unknown && customs.export.unknown 1`] = `
 <div
   className="flex-100 layout-row layout-wrap padd_top"
   name="cargoDetailsBox"
@@ -118,7 +118,7 @@ exports[`shallow render 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -326,7 +326,7 @@ exports[`shallow render 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -367,14 +367,25 @@ exports[`shallow render 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -473,14 +484,3264 @@ exports[`shallow render 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`customsData[target].unknown 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`fee && !fee.unknown && fee.total.value 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`scope.has_customs || scope.has_insurance 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="insurance_customs_sec flex-100 layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="flex-100 layout-row layout-align-center padd_top"
+    >
+      <div
+        className="flex-none content_width layout-row layout-wrap section_padding"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-start"
+        >
+          <div
+            className="flex-none layout-row layout-align-space-around-center"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Insurance"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-33 layout-row layout-align-space-around-center layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-wrap layout-align-end-center"
+            >
+              <div
+                className="flex-90 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none layout-align-start-center"
+                >
+                  Yes, I want undefined to quote insurance for my cargo
+                </p>
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-end-center"
+              >
+                <Checkbox
+                  checked={null}
+                  className=""
+                  disabled={false}
+                  onChange={[Function]}
+                  onClick={null}
+                  size={null}
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-90 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none"
+                  style={
+                    Object {
+                      "marginRight": "5px",
+                    }
+                  }
+                >
+                  No, I do not want undefined to quote insurance for my cargo
+                </p>
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-end-center"
+              >
+                <Checkbox
+                  checked={null}
+                  className=""
+                  disabled={false}
+                  onChange={[Function]}
+                  onClick={null}
+                  size={null}
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-60 margin_5"
+          >
+            <b>
+              Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-60 margin_5"
+          >
+            <b>
+              Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.
+            </b>
+          </p>
+        </div>
+        <div
+          className="flex-100 layout-row  box_content "
+        >
+          <div
+            className="flex-80 layout-row layout-wrap"
+          >
+            <p
+              className="flex-90"
+            >
+              <strong>
+                 
+                A cost effective and simple way to cover for physical loss or damage to goods in transit.
+              </strong>
+            </p>
+            <p
+              className="flex-90"
+            >
+              Please contact your local undefined office for more info.
+            </p>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={[Function]}
+          >
+            <p
+              className="flex-none pointy"
+            >
+              Read more...
+            </p>
+            <i
+              className="flex-none offset-5 fa fa-external-link"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center padd_top"
+    >
+      <div
+        className="flex-none content_width layout-row layout-wrap section_padding"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-start layout-wrap"
+        >
+          <div
+            className="flex-none layout-row layout-align-space-around-center"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Customs Handling"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-33 layout-wrap layout-row layout-align-space-around-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-90 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none"
+                  style={
+                    Object {
+                      "marginRight": "5px",
+                    }
+                  }
+                >
+                  Yes, I want undefined to handle my customs clearance
+                </p>
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-end-center"
+              >
+                <Checkbox
+                  checked={null}
+                  className=""
+                  disabled={false}
+                  onChange={[Function]}
+                  onClick={null}
+                  size={null}
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-end-center"
+            >
+              <div
+                className="flex-90 layout-row layout-align-start-center"
+              >
+                <p
+                  className="flex-none"
+                  style={
+                    Object {
+                      "marginRight": "5px",
+                    }
+                  }
+                >
+                  No, I do not want undefined to handle my customs
+                </p>
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-end-center"
+              >
+                <Checkbox
+                  checked={null}
+                  className=""
+                  disabled={false}
+                  onChange={[Function]}
+                  onClick={null}
+                  size={null}
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap customs_box  box_content hidden"
+        >
+          <div
+            className="flex-60 layout-row layout-wrap"
+          >
+            <p
+              className="flex-90 margin_5"
+            >
+              <strong>
+                 
+                When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT. You can either handle the customs on your own, or have Greencarrier handle it for you.
+              </strong>
+            </p>
+            <p
+              className="flex-90 margin_5"
+            >
+              To cover our costs when we present your goods to the customs authorities – and pay any customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee depends on the value of the goods you are shipping, and can be found here to the right.
+            </p>
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100 layout-row layout-align-start-center"
+                style={
+                  Object {
+                    "height": "36px",
+                  }
+                }
+              >
+                <p
+                  className="flex-none"
+                >
+                   
+                  I would like undefined to handle:
+                </p>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-center layout-wrap"
+                style={
+                  Object {
+                    "height": "36px",
+                  }
+                }
+              >
+                <div
+                  className="flex-45 layout-row layout-align-space-around-center"
+                  data-for="preCarriageTooltip"
+                  data-tip="Export Customs is not applicable for shipments without delivery to the port (pre-carriage)."
+                >
+                  <p
+                    className="faded_text flex-none"
+                  >
+                     Export Customs: 
+                  </p>
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    onChange={[Function]}
+                    onClick={null}
+                    size={null}
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+                <ReactTooltip
+                  className="tooltip_box"
+                  effect="solid"
+                  id="preCarriageTooltip"
+                  insecure={true}
+                  resizeHide={true}
+                  wrapper="div"
+                />
+                <div
+                  className="flex-45 layout-row layout-align-space-around-center"
+                  data-for="onCarriageTooltip"
+                  data-tip="Import Customs is not applicable for shipments without delivery from the port (on-carriage)."
+                >
+                  <p
+                    className="faded_text flex-none"
+                  >
+                     Import Customs
+                  </p>
+                  <Checkbox
+                    checked={true}
+                    className=""
+                    disabled={true}
+                    onChange={[Function]}
+                    onClick={null}
+                    size={null}
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                  <ReactTooltip
+                    className="tooltip_box"
+                    effect="solid"
+                    id="onCarriageTooltip"
+                    insecure={true}
+                    resizeHide={true}
+                    wrapper="div"
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 no_max layout-row layout-align-start-center"
+              >
+                <div
+                  className="flex-33 layout-row layout-wrap"
+                >
+                  <div
+                    className="flex-100"
+                  >
+                    <TextHeading
+                      Comp={
+                        <b
+                          style={
+                            Object {
+                              "fontSize": ".83em",
+                              "fontWeight": "normal",
+                            }
+                          }
+                        >
+                          (if applicable)
+                        </b>
+                      }
+                      color=""
+                      size={3}
+                      text="EORI"
+                      theme={
+                        Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="flex-100 input_box"
+                  >
+                    <input
+                      className="EORI_input"
+                      name="eori"
+                      onChange={[Function]}
+                      placeholder="Type in EORI number"
+                      type="text"
+                      value="FOO_EORI"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className=" prices flex-20 layout-row layout-wrap layout-align-start-start"
+          >
+            <div
+              className="customs_prices flex-100 layout-row  layout-align-end-center"
+            >
+              <p
+                className="flex-none"
+              >
+                Import
+              </p>
+              <h6
+                className="flex-none center"
+              >
+                 
+                Price subject to local regulations
+              </h6>
+            </div>
+            <div
+              className="customs_prices flex-100 layout-row  layout-align-end-center"
+            >
+              <p
+                className="flex-none"
+              >
+                Export
+              </p>
+              <h6
+                className="flex-none center"
+              >
+                 
+                100.00 EUR
+              </h6>
+            </div>
+            <div
+              className="customs_total flex-100 layout-row  layout-align-end-center"
+            >
+              <p
+                className="flex-none"
+              >
+                Total
+              </p>
+              <h6
+                className="flex-none center"
+              >
+                 
+                NaN EUR
+              </h6>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_box show"
+        >
+          <div
+            className="flex-60 layout-row layout-align-start-center layout-wrap"
+          >
+            <p
+              className="flex-100 margin_5"
+            >
+              <b>
+                A customs declaration is mandatory to pass a national border when exporting or
+              importing. If you choose to handle the customs clearance on your own, undefined
+              will need a copy of the customs declaration.
+              </b>
+            </p>
+            <p
+              className="flex-100 margin_5"
+            >
+              <b>
+                When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.
+              </b>
+            </p>
+          </div>
+          <div
+            className="flex-33 no_max layout-row layout-align-end-center"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center padd_top"
+    >
+      <div
+        className="flex-none content_width layout-row layout-wrap section_padding"
+      >
+        <CustomsExportPaper
+          addon={true}
+          tenant={
+            Object {
+              "data": Object {
+                "scope": Object {
+                  "customs_export_paper": true,
+                  "has_customs": true,
+                  "has_insurance": true,
+                },
+              },
+            }
+          }
+          toggleCustomAddon={[Function]}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shipment.has_pre_carriage ? 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -635,7 +3896,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -843,7 +4104,7 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -884,14 +4145,25 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -1019,14 +4291,25 @@ exports[`shipmentData.dangerousGoods is true 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -1181,7 +4464,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -1389,7 +4672,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -1430,14 +4713,25 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -1536,14 +4830,25 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>
@@ -1686,7 +4991,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.
@@ -1697,7 +5002,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.
@@ -1740,6 +5045,545 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
             <i
               className="flex-none offset-5 fa fa-external-link"
             />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`this.props.insurance.bool ? 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              color=""
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Formsy(FormsyInput)
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="totalGoodsValue"
+                  onBlur={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationError=""
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  value={11}
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            id="cargo_notes"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  color=""
+                  size={3}
+                  text="Description of goods"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="cargoNotes"
+                onBlur={[Function]}
+                required={true}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={
+                  Object {
+                    "isDefaultRequiredValue": "Must not be empty",
+                  }
+                }
+                validations={null}
+                value="FOO_CARGO_NOTES"
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none layout-row layout-wrap f_header"
+              >
+                 
+                <h4
+                  className="no_m flex-100"
+                >
+                  Incoterms
+                </h4>
+                <p
+                  className="flex-90"
+                >
+                  2010 by the International Chamber of Commerce (ICC) (Optional)
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
+                name="incotermText"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="packing_sheet"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <DocumentsForm
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                displayOnly={false}
+                doc={Object {}}
+                isRequired={true}
+                multiple={false}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                tooltip=""
+                type="commercial_invoice"
+                uploadFn={null}
+                viewer={false}
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    color=""
+                    size={3}
+                    text="Notes (Optional)"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
+                  name="notes"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
+                  value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <DocumentsMultiForm
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  documents={Array []}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  tooltip=""
+                  type="miscellaneous"
+                  uploadFn={null}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1866,7 +5710,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                   }
                   innerRef={[Function]}
                   name="totalGoodsValue"
-                  onChange={[Function]}
+                  onBlur={[Function]}
                   required={true}
                   submitAttempted={false}
                   type="number"
@@ -2074,7 +5918,7 @@ exports[`totalGoodsValue.value > 20000 1`] = `
                 }
                 innerRef={[Function]}
                 name="cargoNotes"
-                onChange={[Function]}
+                onBlur={[Function]}
                 required={true}
                 submitAttempted={false}
                 type="textarea"
@@ -2115,14 +5959,25 @@ exports[`totalGoodsValue.value > 20000 1`] = `
             <div
               className="flex-100 layout-row layout-align-start-start input_box_full"
             >
-              <textarea
-                className="textarea_incoterm"
-                cols="30"
-                id=""
+              <Formsy(FormsyTextarea)
+                className="flex-100 cargo_text_area "
+                errorMessageStyles={
+                  Object {
+                    "bottom": "-17px",
+                    "fontSize": "13px",
+                  }
+                }
+                innerRef={[Function]}
                 name="incotermText"
-                onChange={[Function]}
-                rows="6"
+                onBlur={[Function]}
+                required={false}
+                submitAttempted={false}
+                type="textarea"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
                 value=""
+                wrapperClassName="flex-100 wrapper_cargo_input"
               />
             </div>
           </div>
@@ -2221,14 +6076,25 @@ exports[`totalGoodsValue.value > 20000 1`] = `
               <div
                 className="flex-100 layout-row layout-align-start-start input_box_full"
               >
-                <textarea
-                  className="textarea_margin"
-                  cols="30"
-                  id=""
+                <Formsy(FormsyTextarea)
+                  className="flex-100 cargo_text_area "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  innerRef={[Function]}
                   name="notes"
-                  onChange={[Function]}
-                  rows="6"
+                  onBlur={[Function]}
+                  required={false}
+                  submitAttempted={false}
+                  type="textarea"
+                  validationError=""
+                  validationErrors={Object {}}
+                  validations={null}
                   value="FOO_NOTES"
+                  wrapperClassName="flex-100 wrapper_cargo_input"
                 />
               </div>
             </div>

@@ -5,17 +5,16 @@ class Admin::DashboardController < Admin::AdminBaseController
   before_action :initialize_variables, only: :index
 
   def index
-    response_handler(air:         @air_schedules,
-                     train:       @train_schedules,
-                     ocean:       @ocean_schedules,
-                     itineraries: @detailed_itineraries,
-                     hubs:        @hubs,
-                     shipments:   {
-                       requested: @requested_shipments,
-                       open:      @open_shipments,
-                       finished:  @finished_shipments
-                     },
-                     mapData:     @map_data)
+    response_handler(
+      itineraries: @detailed_itineraries,
+      hubs:        @hubs,
+      shipments:   {
+        requested: @requested_shipments,
+        open:      @open_shipments,
+        finished:  @finished_shipments
+      },
+      mapData:     @map_data
+    )
   end
 
   private
@@ -32,9 +31,6 @@ class Admin::DashboardController < Admin::AdminBaseController
     end
     @map_data = current_user.tenant.map_data
     @tenant = Tenant.find(current_user.tenant_id)
-    @train_schedules = flap_map_schedule_by_mot("rail")
-    @ocean_schedules = flap_map_schedule_by_mot("ocean")
-    @air_schedules = flap_map_schedule_by_mot("air")
   end
 
   def requested_shipments
@@ -53,8 +49,4 @@ class Admin::DashboardController < Admin::AdminBaseController
     Itinerary.for_tenant(current_user.tenant_id).limit(40).map(&:as_options_json)
   end
 
-  def flap_map_schedule_by_mot(mot)
-    @tenant.itineraries.where(mode_of_transport: mot).limit(10)
-      .flat_map { |it| it.prep_schedules(5) }
-  end
 end

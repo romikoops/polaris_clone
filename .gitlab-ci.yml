@@ -33,7 +33,7 @@ rspec:
       junit: rspec.xml
 
 jest:
-  stages: test
+  stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
 
   script:

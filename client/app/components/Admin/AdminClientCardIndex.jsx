@@ -5,7 +5,7 @@ import GreyBox from '../GreyBox/GreyBox'
 import styles from './AdminClientCardIndex.scss'
 import { gradientTextGenerator } from '../../helpers'
 
-function listClients (clients, theme) {
+function listClients (clients, theme, viewClient) {
   const gradientFontStyle =
     theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -14,7 +14,10 @@ function listClients (clients, theme) {
   return clients.length > 0 ? clients.map((client) => {
     const clientCard = (
 
-      <div className={`layout-row flex-100 layout-align-space-between-stretch ${styles.client_box}`}>
+      <div
+        className={`layout-row flex-100 layout-align-space-between-stretch ${styles.client_box}`}
+        onClick={() => viewClient(client.id)}
+      >
         <div className="layout-column flex-50 layout-align-center-stretch">
           <div className="layout-row flex-50 layout-align-start-center">
             <div className="flex-20 layout-row layout-align-center-center">
@@ -62,7 +65,7 @@ export class AdminClientCardIndex extends Component {
 
   render () {
     const {
-      clients, theme
+      clients, theme, viewClient
     } = this.props
 
     return (
@@ -71,7 +74,7 @@ export class AdminClientCardIndex extends Component {
           <span><b>Clients</b></span>
         </div>
         <div className={`layout-align-start-stretch ${styles.list} ${styles.scrolling}`}>
-          {listClients(clients, theme)}
+          {listClients(clients, theme, viewClient)}
         </div>
       </div>
     )
@@ -80,11 +83,13 @@ export class AdminClientCardIndex extends Component {
 
 AdminClientCardIndex.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.client),
+  viewClient: PropTypes.func,
   theme: PropTypes.theme
 }
 
 AdminClientCardIndex.defaultProps = {
   clients: [],
+  viewClient: null,
   theme: null
 }
 

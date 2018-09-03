@@ -61,13 +61,13 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, loggingIn
     } = this.props
     const textStyle1 =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
+    const loadingScreen = this.props.loading || loggingIn ? <Loading theme={theme} /> : ''
 
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
@@ -190,12 +190,14 @@ Landing.propTypes = {
   adminDispatch: PropTypes.shape({
     getDashboard: PropTypes.func
   }).isRequired,
+  loggingIn: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   authDispatch: PropTypes.any.isRequired
 }
 
 Landing.defaultProps = {
   loggedIn: false,
+  loggingIn: false,
   loading: false,
   theme: null,
   tenant: null,
@@ -210,10 +212,13 @@ function mapDispatchToProps (dispatch) {
   }
 }
 function mapStateToProps (state) {
-  const { users, authentication, tenant } = state
   const {
-    user, loggedIn, loggingIn, registering, loading, showModal
+    users, authentication, tenant, admin
+  } = state
+  const {
+    user, loggedIn, loggingIn, registering, showModal
   } = authentication
+  const loading = authentication.loading || admin.loading
 
   return {
     user,

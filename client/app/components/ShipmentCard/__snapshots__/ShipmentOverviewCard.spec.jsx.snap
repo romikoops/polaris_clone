@@ -2,7 +2,7 @@
 
 exports[`admin is true 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-start-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-stretch"
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
@@ -15,14 +15,16 @@ exports[`admin is true 1`] = `
   </div>
   <div
     className=" margin_box_right flex-100
-        layout-row layout-wrap layout-align-start-start padding_bottom"
+        layout-row layout-wrap padding_bottom"
   >
     <div
-      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+      className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
+        borderStyle=""
         content={
           <AdminShipmentCard
+            confirmShipmentData={Object {}}
             dispatches={
               Object {
                 "foo": [Function],
@@ -74,8 +76,15 @@ exports[`admin is true 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
         titleAction={false}
-        wrapperClassName="layout-row flex layout-align-center-center"
+        wrapperClassName="layout-row"
       />
     </div>
   </div>
@@ -84,7 +93,7 @@ exports[`admin is true 1`] = `
 
 exports[`shallow rendering 1`] = `
 <div
-  className="layout-wrap flex-100 layout-row layout-align-start-start"
+  className="layout-wrap flex-100 layout-row layout-align-start-stretch"
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
@@ -97,12 +106,13 @@ exports[`shallow rendering 1`] = `
   </div>
   <div
     className=" margin_box_right flex-100
-        layout-row layout-wrap layout-align-start-start padding_bottom"
+        layout-row layout-wrap padding_bottom"
   >
     <div
-      className="margin_bottom flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding"
+      className="flex-100 flex-lg-50 flex-gt-lg-33 layout-row card_padding card_lineup"
     >
       <GreyBox
+        borderStyle=""
         content={
           <UserShipmentCard
             dispatches={
@@ -110,7 +120,6 @@ exports[`shallow rendering 1`] = `
                 "foo": [Function],
               }
             }
-            hubs={Object {}}
             shipment={
               Object {
                 "clientName": "FOO_CLIENT_NAME",
@@ -138,8 +147,15 @@ exports[`shallow rendering 1`] = `
           />
         }
         contentClassName="layout-row flex-100"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
         titleAction={false}
-        wrapperClassName="layout-row flex layout-align-center-center"
+        wrapperClassName="layout-row"
       />
     </div>
   </div>
