@@ -24,7 +24,7 @@ const propsBase = {
   location
 }
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<AdminShipmentAction {...propsBase} />)).toMatchSnapshot()
 })
 
