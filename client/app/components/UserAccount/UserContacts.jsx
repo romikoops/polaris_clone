@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import Formsy from 'formsy-react'
 import MailCheck from 'react-mailcheck'
 import { bindActionCreators } from 'redux'
@@ -94,7 +95,7 @@ class UserContacts extends Component {
       newContact, newContactBool, submitAttempted
     } = this.state
     const {
-      theme, hubs, contactData, contactsData, userDispatch, loading, numPages
+      theme, hubs, contactData, contactsData, userDispatch, loading, numPages, t
     } = this.props
 
     const mailCheckCallback = suggestion => (
@@ -116,9 +117,9 @@ class UserContacts extends Component {
             matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
           }}
           validationErrors={{
-            isDefaultRequiredValue: 'Must not be blank',
-            minLength: 'Must be at least two characters long',
-            matchRegexp: 'Invalid email'
+            isDefaultRequiredValue: t('errors:notBlank'),
+            minLength: t('errors:twoChars'),
+            matchRegexp: t('errors:invalidEmail')
           }}
           required
         />
@@ -187,11 +188,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.firstName}
                         name="firstName"
-                        placeholder="First Name"
+                        placeholder={t('user:firstName')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                         required
                       />
@@ -203,11 +204,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.lastName}
                         name="lastName"
-                        placeholder="Last Name"
+                        placeholder={t('user:lastName')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                         required
                       />
@@ -219,11 +220,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.companyName}
                         name="companyName"
-                        placeholder="Company Name"
+                        placeholder={t('user:comapanyName')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                       />
                       <FormsyInput
@@ -234,11 +235,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.phone}
                         name="phone"
-                        placeholder="Phone"
+                        placeholder={t('user:phone')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                         required
                       />
@@ -253,11 +254,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.street}
                         name="street"
-                        placeholder="Street"
+                        placeholder={t('user:street')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                       />
                       <FormsyInput
@@ -268,11 +269,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.number}
                         name="number"
-                        placeholder="Street Number"
+                        placeholder={t('user:streetNumber')}
                         validations="minLength:1"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least one character long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:oneChar')
                         }}
                       />
                       <FormsyInput
@@ -283,11 +284,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.zipCode}
                         name="zipCode"
-                        placeholder="Postal Code"
+                        placeholder={t('user:postalCode')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                       />
                       <FormsyInput
@@ -298,11 +299,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.city}
                         name="city"
-                        placeholder="City"
+                        placeholder={t('user:city')}
                         validations="minLength:2"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least two characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:twoChars')
                         }}
                       />
                       <FormsyInput
@@ -313,11 +314,11 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.country}
                         name="country"
-                        placeholder="Country"
+                        placeholder={t('user:country')}
                         validations="minLength:4"
                         validationErrors={{
-                          isDefaultRequiredValue: 'Must not be blank',
-                          minLength: 'Must be at least four characters long'
+                          isDefaultRequiredValue: t('errors:notBlank'),
+                          minLength: t('errors:fourChars')
                         }}
                       />
                       <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
@@ -366,6 +367,7 @@ class UserContacts extends Component {
 UserContacts.propTypes = {
   theme: PropTypes.theme,
   numPages: PropTypes.number,
+  t: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
   contactsData: PropTypes.arrayOf(PropTypes.contact),
   dispatch: PropTypes.func.isRequired,
@@ -417,4 +419,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserContacts)
+export default translate(['user', 'errors'])(connect(mapStateToProps, mapDispatchToProps)(UserContacts))

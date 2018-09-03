@@ -242,7 +242,9 @@
         "phone": "Phone",
         "street": "Street",
         "number": "Number",
+        "streetNumber": "Street Number",
         "zipCode": "Zip Code",
+        "postalCode": "Postal Code",
         "city": "City",
         "country": "Country",
         "aliases": "Aliases",
@@ -256,6 +258,13 @@
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
         "imcCookies": "ItsMyCargo's use of cookies"
+      },
+      "errors": {
+        "notBlank": "Must not be blank",
+        "oneChar": "Must be at least one character long",
+        "twoChars": "Must be at least two characters longs",
+        "invalidEmail": "Invalid Email",
+        "fourChars": "Must be at least four characters long"
       }
     }
 }
