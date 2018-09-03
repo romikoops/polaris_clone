@@ -119,7 +119,8 @@
         "signOut": "Sign out",
         "loginPage": "LoginPage",
         "registrationPage": "RegistrationPage",
-        "account": "Account"
+        "account": "Account",
+        "searchAddress":"Search for Address"
       },
       "footer": {
         "about": "About Us",
