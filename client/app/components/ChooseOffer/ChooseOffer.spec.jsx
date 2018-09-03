@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, user, shipmentData, tenant, shipment } from '../../mocks'
-import { ChooseOffer } from './ChooseOffer'
+import { theme, identity, user, shipmentData, tenant, shipment, change } from '../../mocks'
+import ChooseOffer from './ChooseOffer'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -14,10 +14,18 @@ jest.mock('uuid', () => {
   return { v4 }
 })
 
+const editedShipmentData = change(
+  shipmentData,
+  'shipment.trucking',
+  {
+    pre_carriage: {}
+  }
+)
+
 const propsBase = {
   theme,
   user,
-  shipmentData,
+  shipmentData: editedShipmentData,
   chooseOffer: identity,
   messages: ['FOO_MESSAGE', 'BAR_MESSAGE'],
   req: {},
@@ -35,7 +43,7 @@ let originalDate
 const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
   originalDate = Date
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-global-assign
   Date = class extends Date {
     constructor () {
       return constantDate
@@ -44,25 +52,12 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-global-assign
   Date = originalDate
 })
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<ChooseOffer {...propsBase} />)).toMatchSnapshot()
-})
-
-test.skip('state.selectedMoT.ocean is false', () => {
-  const wrapper = shallow(<ChooseOffer {...propsBase} />)
-  wrapper.setState({
-    selectedMoT: {
-      ocean: false,
-      air: true,
-      truck: true,
-      rail: true
-    }
-  })
-  expect(wrapper).toMatchSnapshot()
 })
 
 test('shipmentData is falsy', () => {
@@ -74,12 +69,11 @@ test('shipmentData is falsy', () => {
 })
 
 test('shipmentData.schedules is falsy', () => {
-  const props = {
-    ...propsBase,
-    shipmentData: {
-      ...shipmentData,
-      schedules: null
-    }
-  }
+  const props = change(
+    propsBase,
+    'shipmentData.schedules',
+    null
+  )
+
   expect(shallow(<ChooseOffer {...props} />)).toMatchSnapshot()
 })

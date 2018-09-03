@@ -151,6 +151,7 @@ exports[`shallow rendering 1`] = `
         }
         innerRef={[Function]}
         name="email"
+        onBlur={[Function]}
         placeholder="Email"
         required={true}
         submitAttempted={false}

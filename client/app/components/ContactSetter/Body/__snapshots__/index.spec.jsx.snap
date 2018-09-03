@@ -10,78 +10,85 @@ exports[`shallow render 1`] = `
     <div
       className="flex-100 layout-row layout-wrap"
     >
-      <ShipmentContactsBoxMainContacts
-        consignee={
-          Object {
-            "city": "Hamburg",
-            "companyName": "FOO_COMPANY_NAME",
-            "country": "Germany",
-            "email": "FOO_EMAIL",
-            "firstName": "FOO_FIRST_NAME",
-            "lastName": "FOO_LAST_NAME",
-            "number": "9",
-            "phone": "FOO_PHONE",
-            "street": "FOO_STREET",
-            "zipCode": "21785",
-          }
-        }
-        direction="FOO_DIRECTION"
-        shipper={
-          Object {
-            "city": "Berlin",
-            "companyName": "FOO_SHIPPER_COMPANY_NAME",
-            "country": "Germany",
-            "email": "FOO_SHIPPER_EMAIL",
-            "firstName": "FOO_SHIPPER_FIRST_NAME",
-            "lastName": "FOO_SHIPPER_LAST_NAME",
-            "number": "17",
-            "phone": "FOO_SHIPPER_PHONE",
-            "street": "FOO_SHIPPER_STREET",
-            "zipCode": "27785",
-          }
-        }
-        showAddressBook={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
-    <div
-      className="flex-100 layout-row layout-wrap"
-    >
-      <ContactSetterBodyNotifyeeContacts
-        notifyees={
-          Array [
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <ShipmentContactsBoxMainContacts
+          consignee={
             Object {
-              "city": "Bremen",
-              "companyName": "FOO_NOTIFYEE_COMPANY_NAME",
+              "city": "Hamburg",
+              "companyName": "FOO_COMPANY_NAME",
               "country": "Germany",
-              "email": "FOO_NOTIFYEE_EMAIL",
-              "firstName": "FOO_NOTIFYEE_FIRST_NAME",
-              "lastName": "FOO_NOTIFYEE_LAST_NAME",
-              "number": "5",
-              "phone": "FOO_NOTIFYEE_PHONE",
-              "street": "FOO_NOTIFYEE_STREET",
-              "zipCode": "23785",
-            },
-          ]
-        }
-        removeFunc={[Function]}
-        showAddressBook={[Function]}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
+              "email": "FOO_EMAIL",
+              "firstName": "FOO_FIRST_NAME",
+              "lastName": "FOO_LAST_NAME",
+              "number": "9",
+              "phone": "FOO_PHONE",
+              "street": "FOO_STREET",
+              "zipCode": "21785",
+            }
           }
-        }
-      />
+          direction="FOO_DIRECTION"
+          handleClick={null}
+          shipper={
+            Object {
+              "city": "Berlin",
+              "companyName": "FOO_SHIPPER_COMPANY_NAME",
+              "country": "Germany",
+              "email": "FOO_SHIPPER_EMAIL",
+              "firstName": "FOO_SHIPPER_FIRST_NAME",
+              "lastName": "FOO_SHIPPER_LAST_NAME",
+              "number": "17",
+              "phone": "FOO_SHIPPER_PHONE",
+              "street": "FOO_SHIPPER_STREET",
+              "zipCode": "27785",
+            }
+          }
+          showAddressBook={[Function]}
+          showEditContact={null}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <ContactSetterBodyNotifyeeContacts
+          notifyees={
+            Array [
+              Object {
+                "city": "Bremen",
+                "companyName": "FOO_NOTIFYEE_COMPANY_NAME",
+                "country": "Germany",
+                "email": "FOO_NOTIFYEE_EMAIL",
+                "firstName": "FOO_NOTIFYEE_FIRST_NAME",
+                "lastName": "FOO_NOTIFYEE_LAST_NAME",
+                "number": "5",
+                "phone": "FOO_NOTIFYEE_PHONE",
+                "street": "FOO_NOTIFYEE_STREET",
+                "zipCode": "23785",
+              },
+            ]
+          }
+          removeFunc={[Function]}
+          showAddressBook={[Function]}
+          showEditContact={null}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
     </div>
   </div>
 </div>

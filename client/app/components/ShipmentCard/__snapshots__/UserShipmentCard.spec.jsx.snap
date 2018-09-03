@@ -2,128 +2,89 @@
 
 exports[`shallow rendering 1`] = `
 <div
-  className="layout-column flex-100 layout-align-start-stretch
-          container relative"
+  className="flex-100 layout-align-start-stretch
+          container"
   key="RANDOM_KEY_0"
 >
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
   <div
     className="card_link"
     onClick={[Function]}
   />
   <div
-    className="layout-row layout-wrap flex-10 layout-wrap layout-align-center-center"
-  >
-    <span
-      className="flex-100 ref_row_card"
-    >
-      Ref: 
-      <b>
-        FOO_IMC_REFERENCE
-      </b>
-    </span>
-  </div>
-  <div
-    className="layout-row flex-100 layout-align-space-between-stretch section"
-    onClick={[Function]}
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
   >
     <div
-      className="layout-row flex-55 layout-align-space-between-stretch relative"
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    />
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
     >
-      <GradientBorder
-        className="layout-column flex-100"
-        content={
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="layout-align-center-center flex-100"
-            >
-              <div
-                className="flex-100 layout-align-center-center hub_name"
-              >
-                <p
-                  className="layout-align-center-center flex-100"
-                >
-                  FOO_ORIGIN_HUB
-                </p>
-              </div>
-            </div>
-            <div
-              className="layout-column flex-100"
-            >
-              <span
-                className="flex-100"
-                style={
-                  Object {
-                    "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg\\")",
-                  }
-                }
-              />
-            </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "background": "black",
-          }
-        }
-        wrapperClassName="layout-column layout-align-end-stretch flex-50 city margin_right"
-      />
       <div
-        className="layout-row layout-align-center-center routeIcon"
-        style={
-          Object {
-            "background": "black",
-          }
-        }
-      />
-      <GradientBorder
-        className="layout-column flex-100"
-        content={
-          <div
-            className="layout-column flex-100"
-          >
-            <div
-              className="flex-100 layout-align-center-start hub_name"
-            >
-              <p>
-                FOO_DESTINATION_HUB
-              </p>
-            </div>
-            <div
-              className="layout-column flex-100"
-            >
-              <span
-                className="flex-100"
-                style={
-                  Object {
-                    "backgroundImage": "url(\\"https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg\\")",
-                  }
-                }
-              />
-            </div>
-          </div>
-        }
-        gradient={
-          Object {
-            "background": "black",
-          }
-        }
-        wrapperClassName="layout-column layout-align-end-stretch flex-50 city margin_left"
-      />
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From: 
+          <span />
+        </p>
+        <p>
+          To: 
+          <span />
+        </p>
+      </div>
     </div>
     <div
-      className="layout-column flex-40 user_info"
-      onClick={[Function]}
+      className="layout-row flex-20 layout-align-start-center ett"
+    >
+      <div>
+        <b>
+          17
+           days
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          Estimated Transit Time
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
     >
       <div
-        className="layout-column flex-50 layout-align-center-stretch"
+        className=" flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref: 
+          FOO_IMC_REFERENCE
+        </b>
+        <p>
+          Placed at 
+          19
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div
+      className="layout-row flex-60"
+    >
+      <div
+        className=" flex-100"
       >
         <div
-          className="layout-row flex-50 layout-align-start-start"
+          className="layout-row flex-50 layout-align-start-center"
         >
           <div
-            className="flex-20 layout-row layout-align-center-center"
+            className="flex-10 layout-row layout-align-center-center"
           >
             <i
               className="fa fa-user clip"
@@ -143,10 +104,10 @@ exports[`shallow rendering 1`] = `
           </div>
         </div>
         <div
-          className="layout-row flex-50 layout-align-start-stretch"
+          className="layout-row flex-50 layout-align-start-center"
         >
           <span
-            className="flex-20 layout-row layout-align-center-center"
+            className="flex-10 layout-row layout-align-center-center"
           >
             <i
               className="fa fa-building clip"
@@ -164,37 +125,20 @@ exports[`shallow rendering 1`] = `
           </span>
         </div>
       </div>
-      <div
-        className="layout-row flex-50 layout-align-end-end smallText"
-      >
-        <span
-          className="flex-80"
-        >
-          <b>
-            Booking placed at
-          </b>
-          <br />
-          <span
-            className="grey"
-          >
-            19
-          </span>
-        </span>
-      </div>
     </div>
   </div>
   <div
-    className="layout-row flex-40 layout-align-start-stretch
-            section separatorTop smallText"
+    className="layout-row flex-100 layout-align-start-center
+            middle_bottom_box smallText"
   >
     <div
-      className="layout-column flex-20"
+      className=" flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
       >
         <b>
-          Drop Off Date
+          Pick-up Date
         </b>
         <br />
         <span
@@ -205,7 +149,7 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className="layout-column flex-20"
+      className=" flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
@@ -222,7 +166,7 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className="layout-column flex-20"
+      className=" flex-20 layout-align-center-start"
     >
       <span
         className="flex-100"
@@ -239,41 +183,52 @@ exports[`shallow rendering 1`] = `
       </span>
     </div>
     <div
-      className="layout-column flex-40"
+      className=" flex-40 layout-align-start-end carriages"
     >
-      <span
-        className="flex-100"
+      <div
+        className="layout-row layout-align-start-start"
       >
-        <b>
-          Estimated Transit Time
-        </b>
-        <br />
-        <span
-          className="grey"
-        >
-          17
-           days
-        </span>
-      </span>
+        <i
+          className="fa fa-times"
+          style={
+            Object {
+              "color": "#E0E0E0",
+            }
+          }
+        />
+        <p>
+          Pre-carriage
+        </p>
+      </div>
+      <div
+        className="layout-row layout-align-start-start"
+      >
+        <i
+          className="fa fa-times"
+          style={
+            Object {
+              "color": "#E0E0E0",
+            }
+          }
+        />
+        <p>
+          On-carriage
+        </p>
+      </div>
     </div>
   </div>
   <div
-    className="layout-row flex-25 layout-align-space-between-center
-            sectionBottom separatorTop"
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
   >
     <div
-      className="layout-row flex-60 layout-align-start-center"
+      className="layout-row flex-65 layout-align-start-center"
     >
       <div
-        className="layout-row flex-15"
+        className="layout-row flex-10"
       >
         <div
-          className="layout-row layout-align-center-center green_icon"
-          style={
-            Object {
-              "background": "black",
-            }
-          }
+          className="layout-row layout-align-center-center"
         >
           <span
             className="smallText"
@@ -290,12 +245,12 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
       <span
-        className="flex-30"
+        className="flex-35"
       >
         Cargo item
       </span>
       <span
-        className="flex-30"
+        className="flex-25 layout-row"
       >
         <i
           className="fa fa-check-square clip"
@@ -311,12 +266,12 @@ exports[`shallow rendering 1`] = `
             }
           }
         />
-        <span>
-           pickup
-        </span>
+        <p>
+           Pick-up
+        </p>
       </span>
       <span
-        className="flex-30"
+        className="flex-25 layout row"
       >
         <i
           className="fa fa-check-square clip"
@@ -332,18 +287,19 @@ exports[`shallow rendering 1`] = `
             }
           }
         />
-        <span>
-           delivery
-        </span>
+        <p>
+           Delivery
+        </p>
       </span>
     </div>
     <div
-      className="layout-align-end-center"
+      className="layout-row flex layout-align-end-end"
     >
       <span
-        className="bigText"
+        className="bigText price_style"
       >
         <span>
+           
           DZD
            
         </span>

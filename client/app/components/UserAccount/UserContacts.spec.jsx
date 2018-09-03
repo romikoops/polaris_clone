@@ -14,7 +14,7 @@ const propsBase = {
   contacts: [],
   dispatch: identity,
   userDispatch: {
-    getContact: identity,
+    getContacts: identity,
     confirmShipment: identity
   },
   history,

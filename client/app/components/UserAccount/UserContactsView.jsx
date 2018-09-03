@@ -270,25 +270,7 @@ export class UserContactsView extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          {/* <p className={` ${styles.sec_title_text} flex-none clip`} style={textStyle}>
-            Overview
-          </p> */}
-          {/* <div className="flex-100 flex-gt-sm-25
-             layout-row layout-align-center-center button_padding"
-          >
-            <RoundButton
-              theme={theme}
-              handleNext={this.goBack}
-              active
-              size="small"
-              text="Back"
-              iconClass="fa-chevron-left"
-            />
-          </div> */}
-        </div>
+
         <div className={`flex-100 layout-row layout-align-start-stretch ${styles.username_title}`}>
           <span className="layout-row flex-none layout-align-start-center card_padding_right">
             <i className={`fa fa-user clip ${styles.bigProfile}`} style={textStyle} />
@@ -330,7 +312,8 @@ export class UserContactsView extends Component {
             hubs={hubs}
             shipments={shipArr}
             theme={theme}
-            handleClick={this.viewShipment}
+            dispatches={userDispatch}
+            userView
             handleShipmentAction={this.handleShipmentAction}
           />
         </div>
@@ -348,6 +331,7 @@ export class UserContactsView extends Component {
               address={location}
               theme={theme}
               client={contact}
+              showDelete={false}
               saveEdit={userDispatch.saveAddressEdit}
               deleteAddress={userDispatch.deleteContactAddress}
             />

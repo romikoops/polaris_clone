@@ -2,36 +2,8 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-start"
+  className="flex-100 layout-row layout-wrap layout-align-start-start padding_top"
 >
-  <div
-    className="flex-100 layout-row layout-align-space-between-center sec_title"
-  >
-    <div
-      className="flex-none layout-row"
-    >
-      <RoundButton
-        active={true}
-        back={false}
-        disabled={false}
-        handleDisabled={null}
-        handleNext={[Function]}
-        icon=""
-        iconClass="fa-plus"
-        inverse={false}
-        size="small"
-        text="New"
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    </div>
-  </div>
   <Switch
     className="flex"
   >

@@ -51,7 +51,7 @@ test('square is true', () => {
   expect(shallow(<FileUploader {...props} />)).toMatchSnapshot()
 })
 
-test.skip('state.error is true', () => {
+test('state.error is true', () => {
   const wrapper = shallow(<FileUploader {...propsBase} />)
   wrapper.setState({ error: true })
 

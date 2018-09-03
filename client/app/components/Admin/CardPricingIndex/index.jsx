@@ -30,19 +30,12 @@ export default class CardPricingIndex extends Component {
       rail: 'subway'
     }
   }
-  componentDidMount () {
-    this.prepPages()
-  }
 
   handleClick (id) {
     const { adminDispatch } = this.props
     adminDispatch.getItineraryPricings(id, true)
   }
-  prepPages () {
-    const { itineraries } = this.props
-    const numPages = Math.ceil(itineraries.length / 12)
-    this.setState({ numPages })
-  }
+
   generateViewType (mot) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
@@ -104,24 +97,29 @@ export default class CardPricingIndex extends Component {
   }
 
   deltaPage (val) {
-    const { adminDispatch, mot } = this.props
+    const { adminDispatch, mot, allNumPages } = this.props
+    const numPages = allNumPages[mot] || 1
     this.setState(
       (prevState) => {
         const newPageVal = prevState.page + val
-        const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+        const page = (newPageVal < 1 && newPageVal > numPages) ? 1 : newPageVal
 
         return { page }
       },
-      () => adminDispatch.getPricings(false, this.state.page, mot)
+      () => {
+        const newPagesNumbers = { ...allNumPages, [mot]: this.state.page }
+        adminDispatch.getPricings(false, newPagesNumbers)
+      }
     )
   }
 
   render () {
-    const { searchText, page, numPages } = this.state
+    const { searchText, page } = this.state
     const {
-      theme, scope, toggleCreator, mot
+      theme, scope, toggleCreator, mot, allNumPages
     } = this.props
     if (!scope) return ''
+    const numPages = allNumPages[mot] || 1
 
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
@@ -143,7 +141,7 @@ export default class CardPricingIndex extends Component {
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${page === 1 ? adminStyles.disabled : ''}
                     `}
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
@@ -156,7 +154,7 @@ export default class CardPricingIndex extends Component {
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${page < numPages ? '' : adminStyles.disabled}
                     `}
                 onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
@@ -241,6 +239,7 @@ CardPricingIndex.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
   toggleCreator: PropTypes.func,
+  allNumPages: PropTypes.objectOf(PropTypes.any),
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
     getRoutePricings: PropTypes.func
@@ -258,6 +257,7 @@ CardPricingIndex.defaultProps = {
   mot: '',
   hubs: [],
   itineraries: [],
+  allNumPages: {},
   scope: null,
   toggleCreator: null
 }

@@ -23,7 +23,9 @@ exports[`shallow render 1`] = `
         }
       }
       contactType="shipper"
+      handleClick={null}
       showAddressBook={[Function]}
+      showEditContact={null}
       theme={
         Object {
           "colors": Object {
@@ -57,7 +59,9 @@ exports[`shallow render 1`] = `
         }
       }
       contactType="consignee"
+      handleClick={null}
       showAddressBook={[Function]}
+      showEditContact={null}
       theme={
         Object {
           "colors": Object {
