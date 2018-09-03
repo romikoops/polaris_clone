@@ -56,7 +56,7 @@
           <mj-column width="100%" padding="0 2.5%">
             <mj-text>
               <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on
-                <a href="<%= @user.tenant.scope[" links "]["legal "]%>">
+                <a href="<%= @user.tenant.scope["links"]["legal"]%>">
                   <%= @user.tenant.scope["links"]["legal"]%>
                 </a>.
                 <p>
