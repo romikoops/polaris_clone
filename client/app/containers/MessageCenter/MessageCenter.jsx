@@ -25,6 +25,7 @@ class MessageCenter extends Component {
       default:
         break
     }
+
     return icon
   }
   constructor (props) {
@@ -39,13 +40,10 @@ class MessageCenter extends Component {
     this.setSelected = this.setSelected.bind(this)
   }
   componentWillMount () {
-    const { messageDispatch, conversations } = this.props
-    if (conversations) {
-      messageDispatch.getShipments(Object.keys(conversations))
-    }
+    const { messageDispatch } = this.props
+    messageDispatch.getShipments()
   }
   componentWillReceiveProps (nextProps) {
-    
     if (!nextProps.shipments && !nextProps.loading) {
       const { messageDispatch, conversations } = this.props
       messageDispatch.getShipments(Object.keys(conversations))
@@ -77,49 +75,33 @@ class MessageCenter extends Component {
   filterHubs (id) {
     const { hubs } = this.props.users
     const hub = hubs ? hubs.map(hbs => (hbs.data.id === parseInt(id, 10) ? hbs.data.name : '')) : []
+
     return hub.filter(name => name !== '')
   }
   filterShipments (convoKey) {
-    const { shipments, messageDispatch } = this.props
+    const { shipments } = this.props
     console.log(shipments)
     let tmpShipment = []
     let shipment = {}
     if (shipments && convoKey) {
-      if (shipments.requested && shipments.requested.length > 0) {
-        tmpShipment = shipments.requested.filter(shp => shp.imc_reference === convoKey)
-      }
-      if (shipments.open && shipments.open.length > 0) {
-        tmpShipment = shipments.open.filter(shp => shp.imc_reference === convoKey)
-      }
-      if (shipments.finished && shipments.finished.length > 0) {
-        tmpShipment = shipments.finished.filter(shp => shp.imc_reference === convoKey)
-      }
+      tmpShipment = shipments[convoKey]
     }
-    if (
-      shipments &&
-      shipments.requested &&
-      shipments.requested.length < 1 &&
-      shipments.open &&
-      shipments.finished &&
-      shipments.open.length < 1 &&
-      shipments.finished.length < 1
-    ) {
-      const ld = messageDispatch.getShipment(convoKey)
-    }
-    tmpShipment.length > 0
+
+    tmpShipment
       ? (shipment = {
         convoKey,
-        transportType: tmpShipment[0].mode_of_transport,
-        icon: MessageCenter.transportationIcon(tmpShipment[0].mode_of_transport),
-        origin: this.filterHubs(tmpShipment[0].origin_hub_id)[0],
-        destination: this.filterHubs(tmpShipment[0].destination_hub_id)[0],
+        transportType: tmpShipment.mode_of_transport,
+        icon: MessageCenter.transportationIcon(tmpShipment.mode_of_transport),
+        origin: this.filterHubs(tmpShipment.origin_hub_id)[0],
+        destination: this.filterHubs(tmpShipment.destination_hub_id)[0],
         eta: moment(tmpShipment.planned_eta).format('YYYY-MM-DD'),
         etd: moment(tmpShipment.planned_etd).format('YYYY-MM-DD'),
-        totalPrice: Number.parseFloat(tmpShipment[0].total_price, 10).toFixed(2),
-        status: tmpShipment[0].status
+        totalPrice: Number.parseFloat(tmpShipment.total_price, 10).toFixed(2),
+        status: tmpShipment.status
       })
       : (shipment = {})
     console.log(shipment)
+
     return shipment
   }
   render () {
@@ -150,6 +132,7 @@ class MessageCenter extends Component {
       .sort((a, b) => a.lastUpdated - b.lastUpdated)
       .map((cObj) => {
         const tileStyle = key === cObj.convoKey ? styles.selected : styles.unselected
+
         return (
           <ConvoTile
             key={v4()}
@@ -268,6 +251,7 @@ function mapStateToProps (state) {
     conversations, unread, shipment, loading, shipments
   } = messaging
   const { clients } = admin
+
   return {
     user,
     users,
