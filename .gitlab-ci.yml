@@ -40,4 +40,3 @@ jest:
     - cd client 
     - npm install
     - npm test
-

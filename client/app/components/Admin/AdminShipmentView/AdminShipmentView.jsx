@@ -190,6 +190,11 @@ export class AdminShipmentView extends Component {
   toggleEditTime () {
     this.setState({ showEditTime: !this.state.showEditTime })
   }
+
+  deleteDoc (file) {
+    const { adminDispatch } = this.props
+    adminDispatch.deleteDocument(file.id)
+  }
   prepCargoItemGroups (cargos) {
     const { theme, shipmentData } = this.props
     const { cargoItemTypes, hsCodes } = shipmentData
@@ -795,7 +800,7 @@ export class AdminShipmentView extends Component {
                                     : parseFloat(feeHash.export.total.value).toFixed(2)}
                                 </p>
                               </div>
-                                : ''}                             
+                                : ''}
                             </div>
                           </div>
                         </div>

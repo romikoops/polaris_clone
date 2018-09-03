@@ -274,11 +274,11 @@ class Shipment < ApplicationRecord
   end
 
   def has_customs?
-    !!customs
+    !!selected_offer.dig("customs")
   end
 
   def has_insurance?
-    !!insurance
+    !!selected_offer.dig("insurance")
   end
 
   def accept!

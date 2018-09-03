@@ -147,6 +147,7 @@ Rails.application.routes.draw do
       to: 'documents#download_redirect', as: :document_download
     get '/documents/delete/:document_id', to: 'documents#delete', as: :document_delete
     post '/admin/documents/action/:id', to: 'admin/shipments#document_action'
+    delete '/admin/documents/:id', to: 'admin/shipments#document_delete'
 
     get '/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading',
       controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
