@@ -228,7 +228,8 @@
         "estimatedTransitTime": "Estimated Transit Time",
         "seeMoreShipments": "See more shipments",
         "myShipmentAddresses": "My Shipment Addresses",
-        "noAddresses": "No addresses yet"
+        "noAddresses": "No addresses yet",
+        "locations": "Locations"
       },
       "user": {
         "newAlias": "New Alias",
@@ -247,7 +248,8 @@
         "savedLocations": "Saved Locations",
         "userPassword": "User Password",
         "addLocation": "Add location",
-        "userEmails": "UserEmails"
+        "userEmails": "UserEmails",
+        "company": "Company"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
