@@ -268,7 +268,7 @@ export class ShipmentDetails extends Component {
       return {
         [target]: address
       }
-    }, () => console.log(this.state.origin))
+    })
   }
 
   setAggregatedCargo (bool) {
