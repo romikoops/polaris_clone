@@ -1731,6 +1731,33 @@ function updateHubMandatoryCharges (id, charges) {
     )
   }
 }
+function uploadDocument (doc, type, url) {
+  function request (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST, payload: file }
+  }
+  function success (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS, payload: file.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadDocument(doc, type, url).then(
+      (data) => {
+        dispatch(alertActions.success('Uploading Document successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
@@ -1748,6 +1775,7 @@ function goTo (path) {
 export const adminActions = {
   getHubs,
   newHubImage,
+  uploadDocument,
   getItineraries,
   updateServiceCharge,
   updatePricing,

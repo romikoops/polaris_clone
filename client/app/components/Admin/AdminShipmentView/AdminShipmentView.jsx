@@ -27,6 +27,7 @@ import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import Tabs from '../../Tabs/Tabs'
 import Tab from '../../Tabs/Tab'
 
+
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
@@ -107,6 +108,7 @@ export class AdminShipmentView extends Component {
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
+    this.handleFinished = this.handleFinished.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
     this.toggleEditServicePrice = this.toggleEditServicePrice.bind(this)
     this.toggleEditTime = this.toggleEditTime.bind(this)
@@ -340,6 +342,13 @@ export class AdminShipmentView extends Component {
     const { value } = event.target
     this.setState({ newTotal: +value })
   }
+  fileFn (file) {
+    const { shipmentData, adminDispatch } = this.props
+    const { shipment } = shipmentData
+    const type = file.doc_type
+    const url = `/shipments/${shipment.id}/upload/${type}`
+    adminDispatch.uploadDocument(file, type, url)
+  }
   render () {
     const {
       theme, hubs, shipmentData, clients
@@ -568,6 +577,11 @@ export class AdminShipmentView extends Component {
           <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
             {shipment.status === 'requested' ? (
               <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />
+            ) : (
+              ''
+            )}
+            {shipment.status === 'confirmed' ? (
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
             ) : (
               ''
             )}
@@ -945,7 +959,7 @@ export class AdminShipmentView extends Component {
                                   </span>
                                   <input
                                     type="number"
-                                    onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                                    onChange={e => this.handlePriceChange('insurance', e.target.value)}
                                     value={Number(newPrices.insurance.value).toFixed(2)}
                                     className="layout-padding layout-row flex-70 flex-initial"
                                   />

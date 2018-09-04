@@ -41,6 +41,18 @@ function getAllHubs () {
   return fetch(`${BASE_URL}/admin/hubs/all/processed`, requestOptions)
     .then(handleResponse)
 }
+function uploadDocument (doc, type, url) {
+  const formData = new FormData()
+  formData.append('file', doc)
+  formData.append('type', type)
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+    body: formData
+  }
+
+  return fetch(BASE_URL + url, requestOptions).then(handleResponse)
+}
 
 function searchHubs (text, page, hubType, countryId, status) {
   const requestOptions = {
@@ -703,7 +715,8 @@ export const adminService = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
-  searchPricings
+  searchPricings,
+  uploadDocument
 }
 
 export default adminService
