@@ -291,7 +291,8 @@
         "Pre-carriage": "Pre-carriage :",
         "On-Carriage": "On-carriage :",
         "enterPickUp": "Enter Pick-up Address",
-        "enterDelivery": "Enter Delivery Address"
+        "enterDelivery": "Enter Delivery Address",
+        "addUnit": "Add unit"
       },
       "user": {
         "newAlias": "New Alias",
@@ -326,7 +327,9 @@
         "invalidEmail": "Invalid Email",
         "fourChars": "Must be at least four characters long",
         "noRoutes": "No routes from this address",
-        "noRoutesBetween": "No routes found between"
+        "noRoutesBetween": "No routes found between",
+        "maxValue": "Value must be less than",
+        "nonNegative": "Must be greater than 0"
       },
       "trucking": {
         "isNotAvailableLocal": " is not available in ",

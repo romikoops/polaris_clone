@@ -34,7 +34,7 @@ exports[`containers.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Container Size 
+               Container Size
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -69,7 +69,7 @@ exports[`containers.dangerous_goods is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             Cargo Gross Weight 
+            Cargo Gross Weight
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -111,7 +111,7 @@ exports[`containers.dangerous_goods is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             No. of Containers 
+            No. of Containers
           </p>
           <NamedSelect
             className="flex-95"
@@ -214,7 +214,7 @@ exports[`containers.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Dangerous Goods 
+              Dangerous Goods
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -262,7 +262,8 @@ exports[`containers.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-             Add unit   
+            Add unit
+              
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -302,7 +303,7 @@ exports[`containers.dangerous_goods is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Container Size 
+                 Container Size
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -332,7 +333,7 @@ exports[`containers.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Cargo Gross Weight 
+              Cargo Gross Weight
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -354,7 +355,7 @@ exports[`containers.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               No. of Containers 
+              No. of Containers
             </p>
             <NamedSelect
               className="flex-95"
@@ -457,7 +458,7 @@ exports[`containers.dangerous_goods is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Dangerous Goods 
+                Dangerous Goods
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -529,7 +530,7 @@ exports[`nextStageAttempt is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Container Size 
+               Container Size
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -564,7 +565,7 @@ exports[`nextStageAttempt is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             Cargo Gross Weight 
+            Cargo Gross Weight
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -606,7 +607,7 @@ exports[`nextStageAttempt is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             No. of Containers 
+            No. of Containers
           </p>
           <NamedSelect
             className="flex-95"
@@ -709,7 +710,7 @@ exports[`nextStageAttempt is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Dangerous Goods 
+              Dangerous Goods
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -757,7 +758,8 @@ exports[`nextStageAttempt is true 1`] = `
           onClick={[Function]}
         >
           <p>
-             Add unit   
+            Add unit
+              
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -797,7 +799,7 @@ exports[`nextStageAttempt is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Container Size 
+                 Container Size
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -827,7 +829,7 @@ exports[`nextStageAttempt is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Cargo Gross Weight 
+              Cargo Gross Weight
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -849,7 +851,7 @@ exports[`nextStageAttempt is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               No. of Containers 
+              No. of Containers
             </p>
             <NamedSelect
               className="flex-95"
@@ -952,7 +954,7 @@ exports[`nextStageAttempt is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Dangerous Goods 
+                Dangerous Goods
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -1024,7 +1026,7 @@ exports[`scope.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Container Size 
+               Container Size
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -1059,7 +1061,7 @@ exports[`scope.dangerous_goods is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             Cargo Gross Weight 
+            Cargo Gross Weight
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -1101,7 +1103,7 @@ exports[`scope.dangerous_goods is true 1`] = `
           <p
             className="input_label flex-none"
           >
-             No. of Containers 
+            No. of Containers
           </p>
           <NamedSelect
             className="flex-95"
@@ -1204,7 +1206,7 @@ exports[`scope.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Dangerous Goods 
+              Dangerous Goods
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -1252,7 +1254,8 @@ exports[`scope.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-             Add unit   
+            Add unit
+              
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1292,7 +1295,7 @@ exports[`scope.dangerous_goods is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Container Size 
+                 Container Size
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -1322,7 +1325,7 @@ exports[`scope.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               Cargo Gross Weight 
+              Cargo Gross Weight
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -1344,7 +1347,7 @@ exports[`scope.dangerous_goods is true 1`] = `
             <p
               className="input_label flex-none"
             >
-               No. of Containers 
+              No. of Containers
             </p>
             <NamedSelect
               className="flex-95"
@@ -1447,7 +1450,7 @@ exports[`scope.dangerous_goods is true 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Dangerous Goods 
+                Dangerous Goods
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -1519,7 +1522,7 @@ exports[`shallow rendering 1`] = `
             <p
               className="input_label flex-none"
             >
-               Container Size 
+               Container Size
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -1554,7 +1557,7 @@ exports[`shallow rendering 1`] = `
           <p
             className="input_label flex-none"
           >
-             Cargo Gross Weight 
+            Cargo Gross Weight
           </p>
           <div
             className="flex-95 layout-row input_box"
@@ -1596,7 +1599,7 @@ exports[`shallow rendering 1`] = `
           <p
             className="input_label flex-none"
           >
-             No. of Containers 
+            No. of Containers
           </p>
           <NamedSelect
             className="flex-95"
@@ -1699,7 +1702,7 @@ exports[`shallow rendering 1`] = `
             <p
               className="input_label flex-none"
             >
-               Dangerous Goods 
+              Dangerous Goods
             </p>
             <Tooltip
               icon="fa-info-circle"
@@ -1747,7 +1750,8 @@ exports[`shallow rendering 1`] = `
           onClick={[Function]}
         >
           <p>
-             Add unit   
+            Add unit
+              
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1787,7 +1791,7 @@ exports[`shallow rendering 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Container Size 
+                 Container Size
               </p>
               <Tooltip
                 icon="fa-info-circle"
@@ -1817,7 +1821,7 @@ exports[`shallow rendering 1`] = `
             <p
               className="input_label flex-none"
             >
-               Cargo Gross Weight 
+              Cargo Gross Weight
             </p>
             <div
               className="flex-95 layout-row input_box"
@@ -1839,7 +1843,7 @@ exports[`shallow rendering 1`] = `
             <p
               className="input_label flex-none"
             >
-               No. of Containers 
+              No. of Containers
             </p>
             <NamedSelect
               className="flex-95"
@@ -1942,7 +1946,7 @@ exports[`shallow rendering 1`] = `
               <p
                 className="input_label flex-none"
               >
-                 Dangerous Goods 
+                Dangerous Goods
               </p>
               <Tooltip
                 icon="fa-info-circle"
