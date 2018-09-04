@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 
@@ -18,40 +19,38 @@ function modalJSX (name, modal, theme, toggleFunc) {
   )
 }
 
-export default function getModals (props, toggleFunc) {
+function getModals (props, toggleFunc, t) {
   if (!props) return null
   const { user, tenant } = props
   if (!user || !tenant) return null
 
   const dangerousGoodsClasses = [
-    'Explosives',
-    'Gases',
-    'Flammable Liquids',
-    'Flammable Solids',
-    'Oxidizing Substances',
-    'Toxic & Infectious Substances',
-    'Radioactive Material',
-    'Corrosives',
-    'Miscellaneous Dangerous Goods',
-    'Cargo partly consisting of above can also be DGR'
+    t('dangerousGoods:explosives'),
+    t('dangerousGoods:gases'),
+    t('dangerousGoods:flammableLiquids'),
+    t('dangerousGoods:flammableSolids'),
+    t('dangerousGoods:oxidizingSubstances'),
+    t('dangerousGoods:toxicSubstances'),
+    t('dangerousGoods:radioactive'),
+    t('dangerousGoods:corrosives'),
+    t('dangerousGoods:miscellaneous'),
+    t('dangerousGoods:partlyDangerous')
   ]
   const modals = {
     noDangerousGoods: {
       message: (
         <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
           <span>
-            Hi {user.first_name} {user.last_name},<br />
-            We currently do not offer freight rates for hazardous cargo in our Web Shop. Please
-            contact our customer service departmentto place an order
-            for your dangerous cargo:<br />
+            {t('common:hi')} {user.first_name} {user.last_name},<br />
+            {t('dangerousGoods:noDangerousFirst')} {t('dangerousGoods:noDangerousSecond')}<br />
           </span>
           <br />
 
-          <span style={{ marginRight: '10px' }}> Contact via phone:</span>
+          <span style={{ marginRight: '10px' }}> {t('dangerousGoods:contactPhone')}:</span>
           <span>{tenant.data.phones.support}</span>
           <br />
 
-          <span style={{ marginRight: '20px' }}> Contact via mail: </span>
+          <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
           <br />
           <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - ocean freight: </span>
           <span>
@@ -120,3 +119,5 @@ export default function getModals (props, toggleFunc) {
 
   return modals
 }
+
+export default translate(['dangerousGoods', 'common'])(getModals)
