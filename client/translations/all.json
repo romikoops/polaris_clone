@@ -120,7 +120,7 @@
         "loginPage": "LoginPage",
         "registrationPage": "RegistrationPage",
         "account": "Account",
-        "searchAddress":"Search for Address"
+        "searchAddress":"Search for Address",
       },
       "footer": {
         "about": "About Us",
@@ -132,6 +132,10 @@
       },
       "doc": {
         "reject": "Reject document"
+      },
+      "account": {
+        "signInFirst": "Sign In First",
+        "unauthenticated": "Unauthenticated users can't access the account page."
       },
       "cargo": {
         "cargoDetails": "Cargo Details",

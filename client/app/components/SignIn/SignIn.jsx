@@ -1,17 +1,21 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { PageHeader } from 'react-bootstrap'
-
 import { EmailSignInForm } from 'redux-auth/bootstrap-theme'
 import { browserHistory } from 'react-router'
+import PropTypes from '../../prop-types'
 
-export function SignIn () {
+export function SignIn ({ t }) {
   return (
     <div>
-      <PageHeader>Sign In First</PageHeader>
-      <p>Unauthenticated users can't access the account page.</p>
+      <PageHeader>{t('account:signInFirst')}</PageHeader>
+      <p>{t('account:unauthenticated')}</p>
       <EmailSignInForm next={() => browserHistory.push('/account')} />
     </div>
   )
 }
 
-export default SignIn
+SignIn.propTypes = {
+  t: PropTypes.func.isRequired
+}
+export default translate('account')(SignIn)
