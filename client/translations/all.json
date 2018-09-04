@@ -106,7 +106,9 @@
         "getOffers": "Get Offers",
         "hi": "Hi",
         "oceanFreight": "Ocean Freight",
-        "airFreight": "Air Freight"
+        "airFreight": "Air Freight",
+        "add": "Add",
+        "set": "Set"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -325,6 +327,7 @@
         "oneChar": "Must be at least one character long",
         "twoChars": "Must be at least two characters longs",
         "invalidEmail": "Invalid Email",
+        "emailExists": "This email already exists",
         "fourChars": "Must be at least four characters long",
         "noRoutes": "No routes from this address",
         "noRoutesBetween": "No routes found between",
