@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import * as Scroll from 'react-scroll'
 import Toggle from 'react-toggle'
 import ReactTooltip from 'react-tooltip'
@@ -445,6 +446,7 @@ export class ShipmentDetails extends Component {
   }
 
   updatedExcessChargeableWeightText (cargoItems) {
+    const { t } = this.props
     const { maxAggregateDimensions } = this.props.shipmentData
     const { availableMotsForRoute } = this.state
     if (
@@ -461,8 +463,8 @@ export class ShipmentDetails extends Component {
     let excessChargeableWeightText = ''
     if (totalChargeableWeight > +maxAggregateDimensions.air.chargeableWeight) {
       excessChargeableWeightText = `
-        Please note that the total chargeable weight for Air Freight shipments
-        (${totalChargeableWeight.toFixed(1)} kg) excedes the maximum
+        ${t('cargo:excessChargeableWeight')}
+        (${totalChargeableWeight.toFixed(1)} kg) ${t('cargo:exceedsMaximum')}
         (${maxAggregateDimensions.air.chargeableWeight} kg).
       `
     } else {
@@ -713,7 +715,8 @@ export class ShipmentDetails extends Component {
       user,
       shipmentData,
       shipmentDispatch,
-      showRegistration
+      showRegistration,
+      t
     } = this.props
 
     const { modals, filteredRouteIndexes } = this.state
@@ -793,8 +796,8 @@ export class ShipmentDetails extends Component {
       ? 'planned_pickup_date'
       : 'planned_dropoff_date'
     const dayPickerText = this.state.has_pre_carriage
-      ? 'Cargo Ready Date'
-      : 'Available at appointed terminal'
+      ? t('cargo:cargoReadyDate')
+      : t('cargo:availableAtTerm')
 
     const nextStageAttempt = this.state.nextStageAttempts > 0
     const showDayPickerError = nextStageAttempt && !this.state.selectedDay
@@ -828,7 +831,7 @@ export class ShipmentDetails extends Component {
               dayPickerProps={dayPickerProps}
             />
             <span className={errorStyles.error_message}>
-              {showDayPickerError ? 'Must not be blank' : ''}
+              {showDayPickerError ? t('errors:notBlank') : ''}
             </span>
           </div>
         </div>
@@ -879,7 +882,7 @@ export class ShipmentDetails extends Component {
             handleAddressChange={this.handleAddressChange}
             shipmentData={shipmentData}
             routeIds={routeIds}
-            setNotesIds={(e, t) => this.setNotesIds(e, t)}
+            setNotesIds={(e, d) => this.setNotesIds(e, d)}
             shipmentDispatch={shipmentDispatch}
             prevRequest={this.state.prevRequest}
             handleSelectLocation={this.handleSelectLocation}
@@ -934,7 +937,7 @@ export class ShipmentDetails extends Component {
                   style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
                   onClick={() => this.setAggregatedCargo(false)}
                 >
-                  Cargo Units
+                  {t('cargo:cargoUnits')}
                 </h3>
                 <Toggle
                   className="flex-none aggregated_cargo"
@@ -948,7 +951,7 @@ export class ShipmentDetails extends Component {
                   style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
                   onClick={() => this.setAggregatedCargo(true)}
                 >
-                  Total Dimensions
+                  {t('cargo:totalDimensions')}
                 </h3>
               </div>
             </div>
@@ -993,11 +996,11 @@ export class ShipmentDetails extends Component {
                   </div>
                   <div className="flex">
                     <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
-                      I hereby confirm that my cargo consists of stackable items exclusively.
+                      {t('cargo:confirmStackable')}
                       <br />
                       <span style={{ fontSize: '11px', width: '100%' }}>
-                        (Should you wish to ship non-stackable cargo, please select{' '}
-                        {"'Cargo Units'"})
+                        ({t('cargo:nonStackable')}{' '}
+                        {t('cargo:cargoUnits')})
                       </span>
                     </p>
                   </div>
@@ -1028,12 +1031,12 @@ export class ShipmentDetails extends Component {
                   </div>
                   <div className="flex">
                     <p style={{ margin: 0, fontSize: '14px' }}>
-                        I hereby confirm that none of the specified cargo units contain{' '}
+                      {t('cargo:confirmSafe')}{' '}
                       <span
                         className="emulate_link blue_link"
                         onClick={() => this.toggleModal('dangerousGoodsInfo')}
                       >
-                          dangerous goods
+                        {t('common:dangerousGoods')}
                       </span>
                         .
                     </p>
@@ -1044,7 +1047,7 @@ export class ShipmentDetails extends Component {
             <div className="flex layout-row layout-wrap layout-align-end">
               <div className="flex-100 layout-row layout-align-end">
                 <RoundButton
-                  text="Get Offers"
+                  text={t('common:getOffers')}
                   handleNext={this.handleNextStage}
                   handleDisabled={() => this.handleNextStageDisabled()}
                   theme={theme}
@@ -1081,7 +1084,7 @@ export class ShipmentDetails extends Component {
                 }
               >
                 <RoundButton
-                  text="Back to Dashboard"
+                  text={t('common:back')}
                   handleNext={this.returnToDashboard}
                   iconClass="fa-angle-left"
                   theme={theme}
@@ -1099,6 +1102,7 @@ export class ShipmentDetails extends Component {
 
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
+  t: PropTypes.func.isRequired,
   getOffers: PropTypes.func.isRequired,
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
@@ -1129,4 +1133,4 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default ShipmentDetails
+export default translate(['errors', 'cargo', 'common'])(ShipmentDetails)

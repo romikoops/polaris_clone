@@ -102,7 +102,8 @@
         "next": "Next",
         "basicBack": "Back",
         "clear": "Clear",
-        "and": "and"
+        "and": "and",
+        "getOffers": "Get Offers"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -192,7 +193,16 @@
         "type": "Cargo type",
         "typeEORI":"Type in EORI number",
         "volume": "Volume",
-        "weightClass": "Weight Class"
+        "weightClass": "Weight Class",
+        "confirmStackable": "I hereby confirm that my cargo consists of stackable items exclusively.",
+        "nonStackable": "Should you wish to ship non-stackable cargo, please select",
+        "cargoUnits": "Cargo Units",
+        "confirmSafe": "I hereby confirm that none of the specified cargo units contain",
+        "totalDimensions": "Total Dimensions",
+        "cargoReadyDate": "Cargo Ready Date",
+        "availableAtTerm": "Available at appointed terminal",
+        "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
+        "exceedsMaximum": "exceeds the maximum"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
