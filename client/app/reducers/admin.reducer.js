@@ -527,6 +527,30 @@ export default function admin (state = {}, action) {
         loading: false
       }
 
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST:
+      return state
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS: {
+      const docs = state.shipment.documents.filter(x => x.id !== action.payload.id)
+      docs.push(action.payload)
+
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          documents: docs
+        },
+        loading: false
+      }
+    }
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          hubs: action.error
+        }
+      }
+
     case adminConstants.GET_SCHEDULES_REQUEST:
       return {
         ...state,
