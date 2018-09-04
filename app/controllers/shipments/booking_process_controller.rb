@@ -48,7 +48,6 @@ class Shipments::BookingProcessController < ApplicationController
     resp = ShippingTools.request_shipment(params, current_user)
     ShippingTools.tenant_notification_email(resp.user, resp)
     ShippingTools.shipper_notification_email(resp.user, resp)
-    # ShippingTools.agent_quotation_email(resp.user, resp)
     response_handler(shipment: resp)
   end
 end

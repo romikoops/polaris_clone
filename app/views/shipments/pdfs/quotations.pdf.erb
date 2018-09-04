@@ -7,10 +7,20 @@
     padding-left: 400px;
     padding-right: 400px;
   }
+  .wrapper .title {
+    padding: 400px !important;
+  }
   .wrapper .title h1 {
     font-size: 80px !important;
-    padding: 400px !important;
     font-weight: bold !important;
+  }
+  .wrapper .title p {
+    font-size: 40px !important;
+  }
+  .wrapper .title hr {
+    max-width: 250px;
+    border: 2px solid #e10f21;
+    margin: 40px auto;
   }
   .col-xs-12{
     padding: 0%;
@@ -113,10 +123,18 @@
     padding-bottom: 5px;
   }
   .logo {
-    height: 130px;
+    height: 430px;
+    width: 430px;
+    margin: 0 auto !important;
+    /* background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; */
   }
   .info {
-    padding: 20px 25px;
+    padding: 60px;
+    background: white;
+    border: 6px solid #E0E0E0;
+    border-bottom: none;
   }
   .info i {
     padding-top: 40px;
@@ -129,16 +147,6 @@
   .info p span {
     font-size: 60px;
     font-weight: bold;
-  }
-  .total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #F8F8F8;
-    border: 3px solid #BDBDBD;
-    min-height: 100%;
-    padding-top: 12px;
-    padding-bottom: 12px;
   }
   .total-price-single {
     padding-top: 30px;
@@ -174,6 +182,14 @@
     text-align: right;
     padding-right: 80px;
   }
+  .total-row {
+    background: #F8F8F8;
+    border: 3px solid #BDBDBD;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
   .total-row h4 {
     padding-top: 25px;
     font-style: italic;
@@ -187,71 +203,57 @@
     font-size: 76px;
     text-align: right;
   }
-  .info {
-    padding: 60px;
-    border: 6px solid #E0E0E0;
-  }
   .sub-prices {
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-left: 16px;
+    margin-right: 16px;
   }
-  .main-container {
-    margin-bottom: 80px
+  .all-row {
+    margin-bottom: 80px;
   }
 </style>
 
-<% cargo_units = shipment.cargo_items.empty? ? shipment.containers : shipment.cargo_items %>
-
 <div class="wrapper">
-  <%= image_tag shipment.tenant.theme["logoLarge"], class: 'logo' %>
+  <img src="<%= tenant.theme['logoLarge'] %>" class="logo">
+  <%# <div class="logo"></div> %>
   <div class="col-xs-12 title" style="font-size: 150%; text-align: center;">
     <h1>QUOTATIONS</h1>
+    <hr>
+    <p><%= tenant.name %></p>
   </div>
 
-  <div class="main-container container-fluid" > 
-    <!-- first segment  -->
-    <% quotes.map do |quote| %>
+  <div class="all-row">
+    <div class="main-container container-fluid">
       <div class="info row">
-        <% if quote["mode_of_transport"] == "ocean" %>
-          <i class="fas fa-anchor col-xs-1"></i>
-        <% end %>
-        <% if quote["mode_of_transport"] == "air" %>
-          <i class="fas fa-paper-plane col-xs-1"></i>
-        <% end %>
-        <div class="col-xs-11">
-          <p>From:&nbsp;<span><%= quote["origin_hub"]["name"] %></span></p>
-          <p>To:&nbsp;<span><%= quote["destination_hub"]["name"] %></span></p>
+        <% shipments.map do |shipment| %>
+          <% quotes.map do |quote| %>
+            <% if quote["mode_of_transport"] == "ocean" %>
+              <i class="fas fa-anchor col-xs-1"></i>
+            <% end %>
+            <% if quote["mode_of_transport"] == "air" %>
+              <i class="fas fa-paper-plane col-xs-1"></i>
+            <% end %>
+            <div class="col-xs-11">
+              <p>From:&nbsp;<span><%= shipment["origin_hub"]["name"] %></span></p>
+              <p>To:&nbsp;<span><%= shipment["destination_hub"]["name"] %></span></p>
+            </div>
+          <% end %>
         </div>
       </div>
-      
-    
+
       <div class="total-row row">
         <h4 class="col-xs-6">Total</h4>
-        <p class="quote col-xs-6"><%= quote["quote"]["total"]["value"].to_f.truncate(2) %>&nbsp;<%= quote["quote"]["total"]["currency"] %></p>
+        <p class="quote col-xs-6"><%= shipment["selected_offer"]["total"]["value"].to_f.truncate(2) %>&nbsp;<%= shipment["selected_offer"]["total"]["currency"] %></p>
       </div>
-        <% quote["quote"].each_pair do |k, v| %>
+
+        <% shipment["selected_offer"].each do |k, v| %>
           <div class="sub-prices row">
             <% if k != "total" && k != "edited_total" %>
               <div class="col-xs-12">
                 <div class="total-price-single row">
                   <h4 class="col-xs-6"><%= k %></h4>
-                  <h3 class="col-xs-6"><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
+                  <h3 class="col-xs-6"><%= v["value"].to_f.truncate(2) %>&nbsp;<%= v["currency"] %></h3>
                 </div>
               </div>
-              <% v.each_pair do |a, b| %>
-                <% if a != "total" && a != "edited_total" %>
-                  <div class="col-xs-12">
-                    <div class="subtotal-price-single row">
-                      <h4 class="col-xs-6"><%= a %></h4>
-                      <% if b["value"] %>
-                        <h3 class="col-xs-6"><%= b["value"] %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
-                      <% else %>
-                        <h3 class="col-xs-6"><%= b["total"]["value"] %>&nbsp;<%= quote["quote"]["total"]["currency"] %></h3>
-                      <% end %>
-                    </div>
-                  </div>
-                <% end %>
-              <% end %>
             <% end %>
           </div>
         <% end %>

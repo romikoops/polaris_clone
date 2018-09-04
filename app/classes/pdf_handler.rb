@@ -4,12 +4,13 @@ class PdfHandler
   attr_reader :name, :full_name, :pdf, :url, :path
 
   def initialize(args={})
-    @layout   = args[:layout]   || args["layout"]
-    @template = args[:template] || args["template"]
-    @margin   = args[:margin]   || args["margin"]
-    @shipment = args[:shipment] || args["shipment"]
-    @name     = args[:name]     || args["name"]
-    @quotes   = args[:quotes]   || args["quotes"]
+    @layout   = args[:layout]     || args["layout"]
+    @template = args[:template]   || args["template"]
+    @margin   = args[:margin]     || args["margin"]
+    @shipment = args[:shipment]   || args["shipment"]
+    @shipments = args[:shipments] || args["shipments"]
+    @name     = args[:name]       || args["name"]
+    @quotes   = args[:quotes]     || args["quotes"]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -18,9 +19,13 @@ class PdfHandler
     doc_erb = ErbTemplate.new(
       layout:   @layout,
       template: @template,
-      locals:   { shipment: @shipment, quotes: @quotes }
+      locals:   { 
+        shipment: @shipment.as_options_json,
+        shipments: @shipments.map(&:as_options_json),
+        quotes: @quotes,
+        tenant: @shipment.tenant
+      }
     )
-
     @raw_pdf_string = WickedPdf.new.pdf_from_string(
       doc_erb.render,
       margin: @margin
@@ -38,9 +43,9 @@ class PdfHandler
     self
   end
 
-  # def upload_quotes
-  #   @doc = Document.new_upload_backend_with_quotes(@pdf, @shipment, @quotes, @name, @shipment.user)
-  #   @url = @doc.get_signed_url
-  #   self
-  # end
+  def upload_quotes
+    @doc = Document.new_upload_backend_with_quotes(@pdf, @shipment, @shipments, @name, @shipment.user)
+    @url = @doc.get_signed_url
+    self
+  end
 end

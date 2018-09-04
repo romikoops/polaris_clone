@@ -40,6 +40,7 @@
     "lodash": "^4.17.4",
     "mailcheck": "^1.1.1",
     "mamacro": "0.0.3",
+    "mjml": "^4.1.2",
     "moment": "^2.19.2",
     "moment-range": "^4.0.1",
     "node-uuid": "^1.4.8",

@@ -519,6 +519,7 @@ module ShippingTools
 
   def self.save_and_send_quotes(shipment, quotes, email)
     main_quote = Quotation.create(user_id: shipment.user_id, target_email: email)
+    
     quotes.each do |quote|
       trip = Trip.find(quote["trip_id"])
       new_shipment = main_quote.shipments.create!(
@@ -531,18 +532,38 @@ module ShippingTools
         trip_id: trip.id,
         itinerary: trip.itinerary
       )
-      binding.pry
-      shipment.charge_breakdowns.each do |cb|
-        ncb = cb.as_json.except("id", "shipment_id")
-        new_shipment.charge_breakdowns.create!(ncb)
+      shipment.charge_breakdowns.each do |charge_breakdown|
+
+        # charges = charge_breakdown.charges.dup
+        new_charge_breakdown = charge_breakdown.dup
+        new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
+        new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
+        charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
+          new_charge = charge.dup
+          new_charge.update(parent: new_charge_breakdown_grand_total)
+          arr << new_charge
+          charge.children.each do |child|
+            new_child = child.dup
+            new_child.update(parent: new_charge)
+            arr << new_child
+            child.children.each do |grandchild|
+              new_grandchild = grandchild.dup
+              new_grandchild.update(parent: new_child)
+              arr << new_grandchild
+            end
+          end
+        end
+      
+        new_charge_breakdown.charges += charges
+        new_shipment.charge_breakdowns << new_charge_breakdown
       end
     end
-    ShippingTools.agent_quotation_email(shipment, quotes, email)
+    ShippingTools.agent_quotation_email(shipment, main_quote.shipments, quotes, email)
   end
 
-  def agent_quotation_email(shipment, quotes, email)
+  def self.agent_quotation_email(shipment, shipments, quotes, email)
     # if ENV['BETA'] != "true"
-      QuoteMailer.quotation_email(shipment, quotes, email).deliver_now
+      QuoteMailer.quotation_email(shipment, shipments, quotes, email).deliver_now
     # end
   end
 

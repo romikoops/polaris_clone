@@ -1,3 +1,14 @@
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
+      </mj-column>
+    </mj-section>
+    <mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>
+
  <mj-section full-width="full-width" padding="0px">
     <mj-column width="100%">
         <mj-text line-height="24px">
@@ -47,3 +58,8 @@
    </mj-text>
   </mj-column>
 </mj-section>
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>
