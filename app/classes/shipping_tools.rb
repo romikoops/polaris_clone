@@ -107,9 +107,9 @@ module ShippingTools
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
-    notifyees = shipment_data[:notifyees].try(:map) do |_resource|
-      contact_location = Location.create_and_geocode(contact_location_params(_resource))
-      contact_params = contact_params(_resource, contact_location.id)
+    notifyees = shipment_data[:notifyees].try(:map) do |resource|
+      contact_location = Location.create_and_geocode(contact_location_params(resource))
+      contact_params = contact_params(resource, contact_location.id)
       contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
       contact
