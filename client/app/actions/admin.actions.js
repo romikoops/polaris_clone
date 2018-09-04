@@ -970,7 +970,7 @@ function confirmShipment (id, action, redirect) {
           dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(false))
+          dispatch(getShipments(1,1,1,true))
         }
 
         if (redirect) {
