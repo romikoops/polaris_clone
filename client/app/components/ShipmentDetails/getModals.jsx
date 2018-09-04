@@ -52,14 +52,14 @@ function getModals (props, toggleFunc, t) {
 
           <span style={{ marginRight: '20px' }}> {t('dangerousGoods:contactEmail')} </span>
           <br />
-          <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - ocean freight: </span>
+          <span style={{ marginRight: '20px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:oceanFreight')}: </span>
           <span>
             <a href={`mailto:${tenant.data.emails.support.ocean}?subject=Dangerous Goods Request`}>
               {tenant.data.emails.support.ocean}
             </a>
           </span>
           <br />
-          <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - air freight: </span>
+          <span style={{ marginRight: '38px', marginLeft: '10px', fontSize: '12px' }}> - {t('common:airFreight')}: </span>
           <span>
             <a href={`mailto:${tenant.data.emails.support.air}?subject=Dangerous Goods Request`}>
               {tenant.data.emails.support.air}
@@ -73,33 +73,24 @@ function getModals (props, toggleFunc, t) {
     dangerousGoodsInfo: {
       message: (
         <div>
-          <h3>DANGEROUS GOODS</h3>
+          <h3>{t('dangerousGoods:dangerousCaps')}</h3>
           <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
-            {'\''}Dangerous goods{'\''} are materials or items with
-            hazardous properties which, if not properly controlled,
-            present a potential hazard to human health and safety,
-            infrastructure and/ or their means of transport.<br />
+            {'\''}{t('dangerousGoods:dangerousGoods')}{'\''} {t('dangerousGoods:dangerousGoodsOne')}
+            {t('dangerousGoods:dangerousGoodsTwo')}<br />
             <br />
-            The transportation of dangerous goods is controlled and
-            governed by a variety of different regulatory regimes,
-            operating at both the national and international levels.
-            Prominent regulatory frameworks for the transportation of
-            dangerous goods include the United Nations Recommendations on the
-            Transport of Dangerous Goods, ICAO’s Technical Instructions,
-            IATA’s Dangerous Goods Regulations and the IMO’s
-            International Maritime Dangerous Goods Code.<br />
+            {t('dangerousGoods:dangerousGoodsThree')} {t('dangerousGoods:dangerousGoodsFour')}
+            {t('dangerousGoods:dangerousGoodsFive')} {t('dangerousGoods:dangerousGoodsSix')}
+            {t('dangerousGoods:dangerousGoodsSeven')}<br />
             <br />
-            Collectively, these regulatory regimes mandate the means by which
-            dangerous goods are to be handled, packaged, labelled and transported.<br />
+            {t('dangerousGoods:dangerousGoodsEight')} {t('dangerousGoods:dangerousGoodsNine')}<br />
             <br />
-            Regulatory frameworks incorporate comprehensive classification systems
-            of hazards to provide a taxonomy of dangerous goods.
-            Classification of dangerous goods is broken down into nine classes
-            according to the type of danger materials or items present;<br />
+            {t('dangerousGoods:dangerousGoodsTen')}
+            {t('dangerousGoods:dangerousGoodsEleven')}
+            {t('dangerousGoods:dangerousGoodsTwelve')}<br />
             <br />
-            Batteries are dangerous goods;
-            batteries are used in many electronic devices such as
-            cameras, cell phones, laptop computers, medical equipment and power tools.<br />
+            {t('dangerousGoods:dangerousGoodsThirteen')}
+            {t('dangerousGoods:dangerousGoodsFourteen')}
+            {t('dangerousGoods:dangerousGoodsFifteen')}<br />
             <br />
           </p>
           <ol>
