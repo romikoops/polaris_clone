@@ -96,6 +96,7 @@
         "downloadAllData": "Download all data from ItsMyCargo",
         "optOut": "Opt Out",
         "yes": "Yes",
+        "no": "No"
         "noData": "NO DATA",
         "welcomeBack": "Welcome back,",
         "next":"Next",
@@ -262,7 +263,18 @@
         "noShipments":"No Shipments yet",
         "noShipmentExplaination":"As shipments are requested, they will appear here",
         "noAddresses": "No addresses yet",
-        "locations": "Locations"
+        "locations": "Locations",
+        "pickUpAddress": "Pick-up Address :",
+        "deliveryAddress": "Delivery Address :",
+        "totalPrice": "Total Price:",
+        "pickUpDate": "Pick-up Date :",
+        "dateOfDeparture": "Date of Departure :",
+        "etaTerminal": "ETA terminal :",
+        "shipmentType": "Shipment Type :",
+        "incoterm": "IncoTerm :",
+        "MoT": "MoT :",
+        "Pre-carriage": "Pre-carriage :",
+        "On-Carriage": "On-carriage :"
       },
       "user": {
         "newAlias": "New Alias",
