@@ -120,7 +120,7 @@
         "loginPage": "LoginPage",
         "registrationPage": "RegistrationPage",
         "account": "Account",
-        "searchAddress":"Search for Address",
+        "searchAddress":"Search for Address"
       },
       "footer": {
         "about": "About Us",
@@ -135,7 +135,18 @@
       },
       "account": {
         "signInFirst": "Sign In First",
-        "unauthenticated": "Unauthenticated users can't access the account page."
+        "unauthenticated": "Unauthenticated users can't access the account page.",
+        "dashboard": "Dashboard",
+        "shipments": "Shipments",
+        "profile": "Profile",
+        "contacts": "Contacts",
+        "hubs": "Hubs",
+        "pricing": "Pricing",
+        "schedules": "Schedules",
+        "clients": "Clients",
+        "routes": "Routes",
+        "currencies": "Currencies",
+        "superAdmin": "Super Admin"
       },
       "cargo": {
         "cargoDetails": "Cargo Details",
