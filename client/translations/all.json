@@ -30,6 +30,7 @@
         "itemsOrContainers": "Are you shipping cargo items or containers?",
         "importOrExport": "Are you importing or exporting?",
         "nextStep": "Next Step",
+        "previousStep": "Previous Step",
         "selectCurrency": "Select Currency",
         "closestDeparture": "This is the closest departure to the specified date",
         "earlierDepartures": "Show earlier departures",
@@ -120,7 +121,7 @@
         "loginPage": "LoginPage",
         "registrationPage": "RegistrationPage",
         "account": "Account",
-        "searchAddress":"Search for Address"
+        "searchAddress": "Search for Address"
       },
       "footer": {
         "about": "About Us",
