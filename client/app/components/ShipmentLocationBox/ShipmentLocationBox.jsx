@@ -545,7 +545,7 @@ export class ShipmentLocationBox extends Component {
 
   handleAuto (event) {
     const { name, value } = event.target
-    this.setState({ autoText: { [name]: value } })
+    this.setState({ autoText: { ...this.state.autoText, [name]: value } })
   }
 
   selectLocation (place, target) {
@@ -592,7 +592,10 @@ export class ShipmentLocationBox extends Component {
                 }
               })
               this.setState({
-                autoText: { [target]: '' }
+                autoText: {
+                  ...this.state.autoText,
+                  [target]: ''
+                }
               })
             }
             target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
@@ -629,7 +632,7 @@ export class ShipmentLocationBox extends Component {
     )
 
     this.setState({
-      autoText: { [target]: place.formatted_address }
+      autoText: { ...this.state.autoText, [target]: place.formatted_address }
     })
   }
 
@@ -774,11 +777,26 @@ export class ShipmentLocationBox extends Component {
       this.props.setTargetAddress('destination', { ...this.props.origin })
 
       // Autocomplete Text
-      const { autoText } = this.state
-      const prevOrigin = autoText.origin
-      autoText.origin = autoText.destination || ''
-      autoText.destination = prevOrigin || ''
-      this.setState({ autoText })
+      const {
+        autoText,
+        truckTypes,
+        originTruckingAvailable,
+        destinationTruckingAvailable
+      } = this.state
+      const newAutoText = {
+        destination: autoText.origin,
+        origin: autoText.destination
+      }
+      const newTruckTypes = {
+        destination: truckTypes.origin,
+        origin: truckTypes.destination
+      }
+      this.setState({
+        autoText: newAutoText,
+        truckTypes: newTruckTypes,
+        originTruckingAvailable: destinationTruckingAvailable,
+        destinationTruckingAvailable: originTruckingAvailable
+      })
 
       // Address Fields Errors
       const originFieldsHaveErrors = this.state.destinationFieldsHaveErrors
@@ -922,7 +940,7 @@ export class ShipmentLocationBox extends Component {
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
-    //
+
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
