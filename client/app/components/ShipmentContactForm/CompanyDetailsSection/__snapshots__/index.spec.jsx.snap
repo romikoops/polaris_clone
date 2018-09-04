@@ -41,8 +41,8 @@ exports[`shallow rendering 1`] = `
         validationError=""
         validationErrors={
           Object {
-            "isDefaultRequiredValue": "Minimum 2 characters",
-            "minLength": "Minimum 2 characters",
+            "isDefaultRequiredValue": "Must be at least two characters longs",
+            "minLength": "Must be at least two characters longs",
           }
         }
         validations="minLength:2"
@@ -88,8 +88,8 @@ exports[`shallow rendering 1`] = `
           validationError=""
           validationErrors={
             Object {
-              "isDefaultRequiredValue": "Minimum 2 characters",
-              "minLength": "Minimum 2 characters",
+              "isDefaultRequiredValue": "Must be at least two characters longs",
+              "minLength": "Must be at least two characters longs",
             }
           }
           validations="minLength:2"
@@ -113,8 +113,8 @@ exports[`shallow rendering 1`] = `
           validationError=""
           validationErrors={
             Object {
-              "isDefaultRequiredValue": "Minimum 2 characters",
-              "minLength": "Minimum 2 characters",
+              "isDefaultRequiredValue": "Must be at least two characters longs",
+              "minLength": "Must be at least two characters longs",
             }
           }
           validations="minLength:2"
@@ -160,7 +160,7 @@ exports[`shallow rendering 1`] = `
         validationErrors={
           Object {
             "isDefaultRequiredValue": "Must not be blank",
-            "matchRegexp": "Invalid email",
+            "matchRegexp": "Invalid Email",
           }
         }
         validations={
@@ -203,7 +203,7 @@ exports[`shallow rendering 1`] = `
         validationError=""
         validationErrors={
           Object {
-            "isDefaultRequiredValue": "Minimum 4 characters",
+            "isDefaultRequiredValue": "Must be at least four characters long",
             "minLength": "Minimum 4 characters",
           }
         }
