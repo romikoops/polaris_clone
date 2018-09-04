@@ -49,13 +49,10 @@ test('shipment.status === confirmed', () => {
   expect(shallow(<ConvoTile {...props} />)).toMatchSnapshot()
 })
 
-test('shipment.convoKey is truthy', () => {
+test('convoKey is truthy', () => {
   const props = {
     ...propsBase,
-    shipment: {
-      ...shipment,
-      convoKey: 'FOO_CONVO_KEY'
-    }
+    convoKey: 'FOO_CONVO_KEY'
   }
   expect(shallow(<ConvoTile {...props} />)).toMatchSnapshot()
 })
