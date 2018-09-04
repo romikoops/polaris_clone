@@ -96,7 +96,7 @@
         "downloadAllData": "Download all data from ItsMyCargo",
         "optOut": "Opt Out",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
         "noData": "NO DATA",
         "welcomeBack": "Welcome back,",
         "next":"Next",
@@ -308,6 +308,12 @@
         "twoChars": "Must be at least two characters longs",
         "invalidEmail": "Invalid Email",
         "fourChars": "Must be at least four characters long"
+      },
+      "trucking": {
+        "isNotAvailableLocal": " is not available in ",
+        "isMandatory": " is mandatory for ",
+        "isNotOffered": " is not offered for ",
+        "isNotAvailable": " is not available for any of these destinations"
       }
     }
 }
