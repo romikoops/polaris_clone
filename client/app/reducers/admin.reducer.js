@@ -255,11 +255,11 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
-      const reqShips = merge({}, state, {
-        loading: true
-      })
 
-      return reqShips
+      return {
+        ...state,
+        loading: true
+      }
     }
     case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
       return {
