@@ -119,8 +119,7 @@ export class AdminHubForm extends Component {
     const { hub, location } = this.state
     const preppedLocation = {}
     const preppedHub = {}
-    preppedLocation.street_number = location.number
-    preppedLocation.street_number = location.number
+    preppedLocation.street_number = location.street_number
     preppedLocation.street = location.street
     preppedLocation.zip_code = location.zipCode
     preppedLocation.city = location.city
