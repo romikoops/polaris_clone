@@ -316,7 +316,8 @@
         "userPassword": "User Password",
         "addLocation": "Add location",
         "userEmails": "UserEmails",
-        "company": "Company"
+        "company": "Company",
+        "addressDetails": "Address Details"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
@@ -325,7 +326,8 @@
       "errors": {
         "notBlank": "Must not be blank",
         "oneChar": "Must be at least one character long",
-        "twoChars": "Must be at least two characters longs",
+        "twoChars": "Must be at least two characters long",
+        "threeChars": "Must be at least three characters long",
         "invalidEmail": "Invalid Email",
         "emailExists": "This email already exists",
         "fourChars": "Must be at least four characters long",
