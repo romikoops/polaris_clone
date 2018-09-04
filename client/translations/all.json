@@ -99,8 +99,10 @@
         "no": "No",
         "noData": "NO DATA",
         "welcomeBack": "Welcome back,",
-        "next":"Next",
-        "basicBack":"Back"
+        "next": "Next",
+        "basicBack": "Back",
+        "clear": "Clear",
+        "and": "and"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -274,7 +276,9 @@
         "incoterm": "IncoTerm :",
         "MoT": "MoT :",
         "Pre-carriage": "Pre-carriage :",
-        "On-Carriage": "On-carriage :"
+        "On-Carriage": "On-carriage :",
+        "enterPickUp": "Enter Pick-up Address",
+        "enterDelivery": "Enter Delivery Address"
       },
       "user": {
         "newAlias": "New Alias",
@@ -307,7 +311,9 @@
         "oneChar": "Must be at least one character long",
         "twoChars": "Must be at least two characters longs",
         "invalidEmail": "Invalid Email",
-        "fourChars": "Must be at least four characters long"
+        "fourChars": "Must be at least four characters long",
+        "noRoutes": "No routes from this address",
+        "noRoutesBetween": "No routes found between"
       },
       "trucking": {
         "isNotAvailableLocal": " is not available in ",

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
 import styled from 'styled-components'
@@ -800,7 +801,7 @@ export class ShipmentLocationBox extends Component {
   prepForSelect (target) {
     this.setState((prevState) => {
       const {
-        truckingHubs, oSelect, dSelect
+        truckingHubs, oSelect, dSelect, t
       } = prevState
       const { filteredRouteIndexes, shipmentDispatch } = this.props
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
@@ -860,7 +861,7 @@ export class ShipmentLocationBox extends Component {
         const errors = [
           {
             type: 'error',
-            text: `No routes found between ${counterpartLocation.label} and ${targetLocation.label}`
+            text: `${t('errors:noRoutesBetween')} ${counterpartLocation.label} ${t('common:and')} ${targetLocation.label}`
           }
         ]
         shipmentDispatch.setError({ stage: 'stage2', errors })
@@ -903,7 +904,7 @@ export class ShipmentLocationBox extends Component {
 
   render () {
     const {
-      scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking
+      scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking, t
     } = this.props
 
     let originOptions = []
@@ -930,13 +931,13 @@ export class ShipmentLocationBox extends Component {
           name="origin-hub"
           className={styles.select}
           value={this.state.oSelect}
-          placeholder="Origin"
+          placeholder={t('shipment:origin')}
           options={originOptions}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
         />
         <span className={errorStyles.error_message} style={{ color: 'white' }}>
-          {showOriginError ? 'Must not be blank' : ''}
+          {showOriginError ? t('errors:notBlank') : ''}
         </span>
       </div>
     )
@@ -948,14 +949,14 @@ export class ShipmentLocationBox extends Component {
           name="destination-hub"
           className={styles.select}
           value={this.state.dSelect}
-          placeholder="Destination"
+          placeholder={t('shipment:destination')}
           options={destinationOptions}
           onChange={this.setDestNexus}
           backgroundColor={backgroundColor}
           nextStageAttempt={nextStageAttempts > 0}
         />
         <span className={errorStyles.error_message} style={{ color: 'white' }}>
-          {showDestinationError ? 'Must not be blank' : ''}
+          {showDestinationError ? t('errors:notBlank') : ''}
         </span>
       </div>
     )
@@ -980,7 +981,7 @@ export class ShipmentLocationBox extends Component {
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
-            <p className="flex-none">Enter Pick-up Address</p>
+            <p className="flex-none">{t('shipment:enterPickUp')}</p>
           </div>
 
           <input
@@ -994,7 +995,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={origin.street}
-            placeholder="Street"
+            placeholder={t('user:street')}
           />
           <input
             id="not-auto"
@@ -1008,7 +1009,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={origin.number}
-            placeholder="Number"
+            placeholder={t('user:number')}
           />
           <input
             name="origin-zipCode"
@@ -1021,7 +1022,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={origin.zipCode}
-            placeholder="Zip Code"
+            placeholder={t('user:postalCode')}
           />
           <input
             name="origin-city"
@@ -1034,7 +1035,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={origin.city}
-            placeholder="City"
+            placeholder={t('user:city')}
           />
           <input
             name="origin-country"
@@ -1047,7 +1048,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={origin.country}
-            placeholder="Country"
+            placeholder={t('user:country')}
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div
@@ -1077,10 +1078,10 @@ export class ShipmentLocationBox extends Component {
             type="string"
             onChange={this.handleAuto}
             value={this.state.autoText.origin}
-            placeholder="Search for address"
+            placeholder={t('nav:searchAddress')}
           />
           <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {originFieldsHaveErrors ? 'No routes from this address' : ''}
+            {originFieldsHaveErrors ? t('errors:noRoutes') : ''}
           </span>
         </div>
       </div>
@@ -1105,7 +1106,7 @@ export class ShipmentLocationBox extends Component {
           <div
             className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}
           >
-            <p className="flex-none">Enter Delivery Address</p>
+            <p className="flex-none">{t('shipment:enterDelivery')}</p>
           </div>
 
           <input
@@ -1118,7 +1119,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={destination.street}
-            placeholder="Street"
+            placeholder={t('user:street')}
           />
           <input
             name="destination-number"
@@ -1131,7 +1132,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={destination.number}
-            placeholder="Number"
+            placeholder={t('user:number')}
           />
           <input
             name="destination-zipCode"
@@ -1143,7 +1144,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={destination.zipCode}
-            placeholder="Zip Code"
+            placeholder={t('user:postalCode')}
           />
           <input
             name="destination-city"
@@ -1155,7 +1156,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={destination.city}
-            placeholder="City"
+            placeholder={t('user:city')}
           />
           <input
             name="destination-country"
@@ -1167,7 +1168,7 @@ export class ShipmentLocationBox extends Component {
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
             value={destination.country}
-            placeholder="Country"
+            placeholder={t('user:country')}
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div
@@ -1176,7 +1177,7 @@ export class ShipmentLocationBox extends Component {
             >
               <i className="fa fa-times flex-none" />
               <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                Clear
+                {t('common:clear')}
               </p>
             </div>
           </div>
@@ -1198,10 +1199,10 @@ export class ShipmentLocationBox extends Component {
             type="string"
             onChange={this.handleAuto}
             value={this.state.autoText.destination}
-            placeholder="Search for address"
+            placeholder={t('nav:searchAddress')}
           />
           <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {destinationFieldsHaveErrors ? 'No routes to this address' : ''}
+            {destinationFieldsHaveErrors ? t('errors:noRoutes') : ''}
           </span>
         </div>
       </div>
@@ -1304,10 +1305,10 @@ export class ShipmentLocationBox extends Component {
                       onChange={this.handleTrucking}
                     />
                     <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
-                    Pickup
+                      {t('shipment:pickUp')}
                     </label>
                     {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Pick-up:</p></div> }
+                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:pickUp')}:</p></div> }
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
@@ -1342,7 +1343,7 @@ export class ShipmentLocationBox extends Component {
                     />
 
                     <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
-                    Delivery
+                      {t('shipment:delivery')}
                     </label>
                     <Toggle
                       className="flex-none"
@@ -1352,7 +1353,7 @@ export class ShipmentLocationBox extends Component {
                       onChange={this.handleTrucking}
                     />
                     {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">Delivery:</p></div> }
+                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div> }
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
@@ -1373,6 +1374,7 @@ export class ShipmentLocationBox extends Component {
 
 ShipmentLocationBox.propTypes = {
   nextStageAttempts: PropTypes.integer,
+  t: PropTypes.func.isRequired,
   handleSelectLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
@@ -1421,4 +1423,4 @@ ShipmentLocationBox.defaultProps = {
   hideMap: false
 }
 
-export default ShipmentLocationBox
+export default translate(['errors', 'shipment', 'user', 'nav', 'common'])(ShipmentLocationBox)
