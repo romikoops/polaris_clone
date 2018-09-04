@@ -55,7 +55,7 @@ export class AdminPricingBox extends Component {
       edit: false,
       direction: 'import',
       selectedServiceLevel: false,
-      selectedCargoClass: props.charges.length > 0 ? props.charges[0].transport_category.cargo_class : 'lcl'
+      selectedCargoClass: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
@@ -71,7 +71,6 @@ export class AdminPricingBox extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { selectedCargoClass } = this.state
     if (nextProps.charges[0]) {
       nextProps.charges.forEach((charge) => {
         this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
@@ -79,16 +78,18 @@ export class AdminPricingBox extends Component {
     }
     if (this.state.charges !== nextProps.charges && nextProps.charges.length > 0) {
       this.setState({
-        charges: nextProps.charges,
-        selectedCargoClass: nextProps.charges[0].transport_category.cargo_class
+        charges: nextProps.charges
       })
     }
-    if (this.state.editor === {}) {
-      const charge = nextProps.charges
-        .filter(c => c.transport_category.cargo_class === selectedCargoClass)[0]
+    if (!this.state.editor.id && nextProps.charges.length > 0) {
+      const charge = nextProps.charges[0]
       const serviceLevel = nextProps.serviceLevels
         .filter(sl => sl.value === charge.transport_category.vehicle_id)[0]
-      this.setState({ editor: charge, selectedServiceLevel: serviceLevel })
+      this.setState({
+        editor: charge.pricing,
+        selectedServiceLevel: serviceLevel,
+        selectedCargoClass: charge.transport_category.cargo_class
+      })
     }
   }
 
@@ -127,11 +128,9 @@ export class AdminPricingBox extends Component {
         }
       })
     })
-    const editor = { ...pricing }
 
     this.setState(prevState => (
       {
-        editor,
         selectOptions: {
           ...prevState.selectOptions,
           [target]: {
@@ -153,6 +152,7 @@ export class AdminPricingBox extends Component {
       .filter(c => (c.transport_category.cargo_class === selectedCargoClass) &&
        (c.transport_category.vehicle_id === selectedServiceLevel.value ||
          !selectedServiceLevel))[0]
+
     this.setAllFromOptions(charge.pricing, 'charges', charge.transport_category.cargo_class)
   }
   isEditing () {
