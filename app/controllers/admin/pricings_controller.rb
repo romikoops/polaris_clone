@@ -143,6 +143,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   def update_price
     pricing_to_update = Pricing.find(params[:id])
     new_pricing_data = sanitzed_params
+    new_pricing_data.delete('cargo_class')
+    new_pricing_details = new_pricing_data.delete('data')
     pricing_to_update.update(new_pricing_data)
     update_pricing_details(pricing_to_update)
     update_pricing_exception_data(pricing_to_update)
@@ -239,7 +241,8 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def update_pricing_details(pricing_to_update)
-    sanitzed_params.each do |shipping_type, pricing_detail_data|
+    
+    sanitzed_params["data"].each do |shipping_type, pricing_detail_data|
       currency = pricing_detail_data.delete('currency')
       pricing_detail_params = pricing_detail_data.merge(
         shipping_type: shipping_type, tenant: current_user.tenant
@@ -254,7 +257,7 @@ class Admin::PricingsController < Admin::AdminBaseController
   end
 
   def update_pricing_exception_data(pricing_to_update)
-    sanitzed_params.each do |pricing_exception_data|
+    sanitzed_params['exceptions'].each do |pricing_exception_data|
       pricing_details = pricing_exception_data.delete('data')
       pricing_exception = pricing_to_update.pricing_exceptions.where(
         pricing_exception_data
@@ -272,14 +275,14 @@ class Admin::PricingsController < Admin::AdminBaseController
         ).first_or_create!(pricing_detail_params)
         pricing_detail.update!(range: range, currency_name: currency)
       end
-    end
+    end unless !sanitzed_params['exceptions']
   end
 
   def sanitzed_params
     new_pricing_data = params.as_json
     new_pricing_data.except(
       'controller', 'subdomain_id', 'action', 'id', 'created_at',
-      'updated_at', 'load_type', 'currency', 'data', 'exceptions'
+      'updated_at', 'load_type', 'currency', 'pricing', 'exceptions'
     )
   end
 

@@ -522,7 +522,6 @@ function updatePricing (id, req) {
     return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData }
   }
   function failure (error) {
