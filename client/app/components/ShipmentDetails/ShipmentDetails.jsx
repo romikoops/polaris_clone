@@ -178,7 +178,11 @@ export class ShipmentDetails extends Component {
   }
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.modals) {
-      this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
+      this.setState({
+        modals:  (nextProps, name) => {
+          return this.toggleModal(name)
+        }
+      })
     }
     if (
       shouldUpdateAvailableMotsForRoute(
