@@ -130,7 +130,7 @@
         "loginPage": "LoginPage",
         "registrationPage": "RegistrationPage",
         "account": "Account",
-        "searchAddress": "Search for Address"
+        "searchAddress": "Search for address"
       },
       "footer": {
         "about": "About Us",

@@ -36,7 +36,7 @@ jest.mock('../FormsyInput/FormsyInput', () => {
 })
 
 // eslint-disable-next-line
-import { ShipmentContactForm } from './ShipmentContactForm'
+import ShipmentContactForm from './ShipmentContactForm'
 
 const propsBase = {
   theme,

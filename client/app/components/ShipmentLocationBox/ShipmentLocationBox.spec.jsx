@@ -9,6 +9,9 @@ import {
   user
 } from '../../mocks'
 
+// eslint-disable-next-line import/first no-named-as-default
+import ShipmentLocationBox from './ShipmentLocationBox'
+
 jest.mock('../../constants', () => {
   const format = () => 19
   const add = () => ({ format })
@@ -73,9 +76,6 @@ jest.mock('../TextHeading/TextHeading', () => ({
   // eslint-disable-next-line react/prop-types
   TextHeading: ({ children }) => <div>{children}</div>
 }))
-
-// eslint-disable-next-line import/first
-import { ShipmentLocationBox } from './ShipmentLocationBox'
 
 const editedShipment = {
   ...shipment,

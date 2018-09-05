@@ -1,7 +1,7 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import styles from './AddressBookAddContactButton.scss'
-import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 
 export function AddressBookAddContactButton ({
@@ -20,7 +20,8 @@ export function AddressBookAddContactButton ({
 }
 
 AddressBookAddContactButton.propTypes = {
-  addContact: PropTypes.func.isRequired
+  addContact: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 
-export default translate(['common'])(AddressBookAddContactButton)
+export default translate('common')(AddressBookAddContactButton)

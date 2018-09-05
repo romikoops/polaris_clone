@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
@@ -73,7 +72,6 @@ class Landing extends Component {
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
 
-    // debugger // eslint-disable-line
     return (
       <div className={`${styles.wrapper_landing} layout-row flex-100 layout-wrap`}>
         <div className=" layout-row flex-100 layout-wrap" style={footerStyle}>
@@ -94,7 +92,7 @@ class Landing extends Component {
             <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>
               <h2 className="flex-none">
                 {' '}
-                {t('landing:title')}
+              Introducing Online Freight Booking Services {this.props.loggedIn}
               </h2>
             </div>
             <div className={`${styles.services_row} flex-100 layout-row layout-align-center`}>
@@ -105,25 +103,25 @@ class Landing extends Component {
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-bolt" aria-hidden="true" style={textStyle1} />
-                  <h3> {t('landing:instantIconText')} </h3>
+                  <h3> Instant Booking </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-edit" aria-hidden="true" style={textStyle1} />
-                  <h3> {t('landing:quoteIconText')} </h3>
+                  <h3> Real Time Quotes </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1} />
-                  <h3> {t('landing:transparencyIconText')} </h3>
+                  <h3> Full Transparency </h3>
                 </div>
                 <div
                   className={`flex-none layout-column layout-align-center-center ${styles.service}`}
                 >
                   <i className="fa fa-clock-o" aria-hidden="true" style={textStyle1} />
-                  <h3>{t('landing:realTimeIconText')} </h3>
+                  <h3>Updates in Real Time </h3>
                 </div>
               </div>
             </div>
@@ -134,28 +132,28 @@ class Landing extends Component {
             <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
               <div className="flex-90 layout-column layout-align-start-start height_100">
                 <div className="flex-20 layout-column layout-align-center-start">
-                  <h2> {t('landing:benefits')} </h2>
+                  <h2> There are tons of benefits of managing your logistics online: </h2>
                 </div>
                 <div className="flex-65 layout-column layout-align-start-start">
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> {t('landing:placeBooking')} </p>
+                    <p> Place bookings from wherever, whenever </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> {t('landing:offersOverview')} </p>
+                    <p> Get an instant overview of available offers </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> {t('landing:reuseShipments')} </p>
+                    <p> Reuse old shipments and store addresses </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> {t('landing:viewDocuments')} </p>
+                    <p> View or download documents when you need them </p>
                   </div>
                   <div className="flex layout-row layout-align-start-center">
                     <i className="fa fa-check" />
-                    <p> {t('landing:showStats')} </p>
+                    <p> Pull statistics and reports on your logistics </p>
                   </div>
                 </div>
                 <div className={
@@ -194,8 +192,7 @@ Landing.propTypes = {
   }).isRequired,
   loggingIn: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
-  authDispatch: PropTypes.any.isRequired,
-  t: PropTypes.func
+  authDispatch: PropTypes.any.isRequired
 }
 
 Landing.defaultProps = {
@@ -204,8 +201,7 @@ Landing.defaultProps = {
   loading: false,
   theme: null,
   tenant: null,
-  user: null,
-  t: null
+  user: null
 }
 
 function mapDispatchToProps (dispatch) {
@@ -236,4 +232,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default translate(['landing', 'common'])(withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing)))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Landing))

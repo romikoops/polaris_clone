@@ -7,15 +7,20 @@ import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
 import styles from './Shop.scss'
-import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
-import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
+// eslint-disable-next-line no-named-as-default
+import ShopStageView from '../../components/ShopStageView/ShopStageView'
+// eslint-disable-next-line no-named-as-default
+import ShipmentDetails from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
+// eslint-disable-next-line no-named-as-default
 import Loading from '../../components/Loading/Loading'
-import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
+// eslint-disable-next-line no-named-as-default
+import BookingDetails from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions, authenticationActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
-import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
+// eslint-disable-next-line no-named-as-default
+import ShipmentThankYou from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
 

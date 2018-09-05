@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { identity, tenant, theme } from '../../mocks'
-import { ShopStageView } from './ShopStageView'
+// eslint-disable-next-line no-named-as-default
+import ShopStageView from './ShopStageView'
 
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
 

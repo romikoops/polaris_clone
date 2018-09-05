@@ -5,9 +5,11 @@ import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
-import { EditLocation } from './EditLocation'
-import { gradientTextGenerator } from '../../helpers'
+// eslint-disable-next-line no-named-as-default
+import EditLocation from './EditLocation'
+// eslint-disable-next-line no-named-as-default
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
+import { gradientTextGenerator } from '../../helpers'
 
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols, t) => [
   <div
