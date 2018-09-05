@@ -42,23 +42,18 @@ export const change = (origin, pathRaw, rules) => {
       )
       continue
     }
-
     Object.keys(rule).filter(subruleKey => !isObject(rule[subruleKey])).map((subruleKey) => {
       const subrule = rule[subruleKey]
-
       set(
         willReturn,
         `${path}${ruleKey}.${subruleKey}`,
         subrule
       )
     })
-
     Object.keys(rule).filter(subruleKey => isObject(rule[subruleKey])).map((subruleKey) => {
       const subrule = rule[subruleKey]
-
       Object.keys(subrule).map((deepKey) => {
         const deep = rule[subruleKey][deepKey]
-
         set(
           willReturn,
           `${path}${ruleKey}.${subruleKey}.${deepKey}`,

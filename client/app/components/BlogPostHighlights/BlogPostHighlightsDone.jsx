@@ -6,11 +6,11 @@ import styles from './BlogPostHighlights.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { trim } from '../../classNames'
 
-const CONTAINER = trim(`
-  BLOG_POST_HIGHLIGHTS
-  ${styles.blog_post}
-  layout-column
-`)
+// const CONTAINER = trim(`
+//   BLOG_POST_HIGHLIGHTS
+//   ${styles.blog_post}
+//   layout-column
+// `)
 
 const dummyPosts = [
   {

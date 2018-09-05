@@ -97,8 +97,40 @@ exports[`theme has truthy properties 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "background": "green",
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                  "logoLarge": "FOO_LOGO_LARGE",
+                  "logoWhite": "FOO_LOGO_WHITE",
+                  "welcome_text": "FOO_WELCOME_TEXT",
+                }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
           >
             <div
               className="layout-row flex-50"
@@ -283,8 +315,36 @@ exports[`user.role_id is 1 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
           >
             <div
               className="layout-row flex-50"
@@ -461,8 +521,36 @@ exports[`user.role_id is 2 1`] = `
                in the market. Finally, shipping is as simple as it should be.
             </h3>
           </div>
+        </div>
+        <div
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
+        >
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row flex-50"
+          >
+            <SquareButton
+              active={true}
+              back={false}
+              border={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size="small"
+              text="Find Rates"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="layout-row flex-50"
           >
             <div
               className="layout-row flex-50"

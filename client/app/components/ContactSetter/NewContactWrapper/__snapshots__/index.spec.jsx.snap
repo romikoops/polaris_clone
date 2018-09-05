@@ -28,7 +28,6 @@ exports[`compName !== AddressBook 1`] = `
       selectedContact={Object {}}
       setContact={null}
       showEdit={false}
-      t={[Function]}
       theme={null}
     />
   </div>
@@ -63,7 +62,6 @@ exports[`contactType === notifyee && compName === ShipmentContactForm 1`] = `
       selectedContact={Object {}}
       setContact={null}
       showEdit={false}
-      t={[Function]}
       theme={null}
     />
   </div>

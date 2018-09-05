@@ -14,7 +14,7 @@ jest.mock('../../../../helpers', () => ({
     } else {
       num = number
     }
-  
+
     return num.toLocaleString('en', {
       minimumFractionDigits: decimals || 0,
       maximumFractionDigits: decimals || 0

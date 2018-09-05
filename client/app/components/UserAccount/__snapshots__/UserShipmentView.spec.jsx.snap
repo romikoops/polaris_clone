@@ -84,12 +84,11 @@ exports[`loading is true 1`] = `
                 <p
                   className=""
                 >
-                  Estimated Time Delivery
+                  Estimated time delivery
                 </p>
                 <h5>
                   17
-                   
-                  days
+                   days
                    
                 </h5>
               </div>
@@ -190,7 +189,7 @@ exports[`loading is true 1`] = `
                 className="layout-column flex-100"
               >
                 <h3>
-                  Estimated Time Delivery
+                  Freight, Duties & Carriage:
                 </h3>
                 <div
                   className="layout-wrap layout-row flex"
@@ -219,7 +218,7 @@ exports[`loading is true 1`] = `
                           }
                         />
                         <p>
-                          Pick-up
+                          Pickup
                         </p>
                       </div>
                     </div>
@@ -344,7 +343,7 @@ exports[`loading is true 1`] = `
                 className="flex-80"
               >
                 <h3>
-                  Freight
+                  Additional Services
                 </h3>
                 <div
                   className=""
@@ -540,8 +539,7 @@ exports[`loading is true 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        Total value of goods
-                        :
+                        Total Value of Goods:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -560,8 +558,7 @@ exports[`loading is true 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        EORI number
-                        :
+                        EORI number:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -579,8 +576,7 @@ exports[`loading is true 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-center-center layout-row"
                       >
-                        Incoterm
-                        :
+                        Incoterm:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
@@ -602,8 +598,7 @@ exports[`loading is true 1`] = `
                       <span
                         className="flex-30 layout-row"
                       >
-                        Description of goods
-                        :
+                        Description of Goods:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -621,8 +616,7 @@ exports[`loading is true 1`] = `
                       <span
                         className="flex-20 layout-row"
                       >
-                        Notes
-                        :
+                        Notes:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -684,7 +678,7 @@ exports[`loading is true 1`] = `
                     <p
                       className="sec_subheader_text flex-none letter_3"
                     >
-                      Upload a New Document
+                      Upload New Document
                     </p>
                     <Styled(Select)
                       className="select flex-50"
@@ -850,7 +844,7 @@ exports[`shallow render 1`] = `
       <p
         className="layout-align-center-center layout-row"
       >
-        Reuse Shipment
+        Reuse Shipment 
       </p>
     </div>
   </div>
@@ -898,12 +892,11 @@ exports[`shallow render 1`] = `
                 <p
                   className=""
                 >
-                  Estimated Time Delivery
+                  Estimated time delivery
                 </p>
                 <h5>
                   17
-                   
-                  days
+                   days
                    
                 </h5>
               </div>
@@ -1004,7 +997,7 @@ exports[`shallow render 1`] = `
                 className="layout-column flex-100"
               >
                 <h3>
-                  Estimated Time Delivery
+                  Freight, Duties & Carriage:
                 </h3>
                 <div
                   className="layout-wrap layout-row flex"
@@ -1033,7 +1026,7 @@ exports[`shallow render 1`] = `
                           }
                         />
                         <p>
-                          Pick-up
+                          Pickup
                         </p>
                       </div>
                     </div>
@@ -1158,7 +1151,7 @@ exports[`shallow render 1`] = `
                 className="flex-80"
               >
                 <h3>
-                  Freight
+                  Additional Services
                 </h3>
                 <div
                   className=""
@@ -1354,8 +1347,7 @@ exports[`shallow render 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        Total value of goods
-                        :
+                        Total Value of Goods:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -1374,8 +1366,7 @@ exports[`shallow render 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        EORI number
-                        :
+                        EORI number:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -1393,8 +1384,7 @@ exports[`shallow render 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-center-center layout-row"
                       >
-                        Incoterm
-                        :
+                        Incoterm:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
@@ -1416,8 +1406,7 @@ exports[`shallow render 1`] = `
                       <span
                         className="flex-30 layout-row"
                       >
-                        Description of goods
-                        :
+                        Description of Goods:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -1435,8 +1424,7 @@ exports[`shallow render 1`] = `
                       <span
                         className="flex-20 layout-row"
                       >
-                        Notes
-                        :
+                        Notes:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -1498,7 +1486,7 @@ exports[`shallow render 1`] = `
                     <p
                       className="sec_subheader_text flex-none letter_3"
                     >
-                      Upload a New Document
+                      Upload New Document
                     </p>
                     <Styled(Select)
                       className="select flex-50"
@@ -1712,12 +1700,11 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 <p
                   className=""
                 >
-                  Estimated Time Delivery
+                  Estimated time delivery
                 </p>
                 <h5>
                   17
-                   
-                  days
+                   days
                    
                 </h5>
               </div>
@@ -1818,7 +1805,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 className="layout-column flex-100"
               >
                 <h3>
-                  Estimated Time Delivery
+                  Freight, Duties & Carriage:
                 </h3>
                 <div
                   className="layout-wrap layout-row flex"
@@ -1847,7 +1834,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                           }
                         />
                         <p>
-                          Pick-up
+                          Pickup
                         </p>
                       </div>
                     </div>
@@ -1972,7 +1959,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                 className="flex-80"
               >
                 <h3>
-                  Freight
+                  Additional Services
                 </h3>
                 <div
                   className=""
@@ -2227,8 +2214,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        Total value of goods
-                        :
+                        Total Value of Goods:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -2247,8 +2233,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        EORI number
-                        :
+                        EORI number:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -2266,8 +2251,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-center-center layout-row"
                       >
-                        Incoterm
-                        :
+                        Incoterm:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
@@ -2289,8 +2273,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       <span
                         className="flex-30 layout-row"
                       >
-                        Description of goods
-                        :
+                        Description of Goods:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -2308,8 +2291,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                       <span
                         className="flex-20 layout-row"
                       >
-                        Notes
-                        :
+                        Notes:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -2371,7 +2353,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
                     <p
                       className="sec_subheader_text flex-none letter_3"
                     >
-                      Upload a New Document
+                      Upload New Document
                     </p>
                     <Styled(Select)
                       className="select flex-50"
@@ -2537,7 +2519,7 @@ exports[`shipmentData.contacts is present 1`] = `
       <p
         className="layout-align-center-center layout-row"
       >
-        Reuse Shipment
+        Reuse Shipment 
       </p>
     </div>
   </div>
@@ -2585,12 +2567,11 @@ exports[`shipmentData.contacts is present 1`] = `
                 <p
                   className=""
                 >
-                  Estimated Time Delivery
+                  Estimated time delivery
                 </p>
                 <h5>
                   17
-                   
-                  days
+                   days
                    
                 </h5>
               </div>
@@ -2691,7 +2672,7 @@ exports[`shipmentData.contacts is present 1`] = `
                 className="layout-column flex-100"
               >
                 <h3>
-                  Estimated Time Delivery
+                  Freight, Duties & Carriage:
                 </h3>
                 <div
                   className="layout-wrap layout-row flex"
@@ -2720,7 +2701,7 @@ exports[`shipmentData.contacts is present 1`] = `
                           }
                         />
                         <p>
-                          Pick-up
+                          Pickup
                         </p>
                       </div>
                     </div>
@@ -2845,7 +2826,7 @@ exports[`shipmentData.contacts is present 1`] = `
                 className="flex-80"
               >
                 <h3>
-                  Freight
+                  Additional Services
                 </h3>
                 <div
                   className=""
@@ -3089,8 +3070,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        Total value of goods
-                        :
+                        Total Value of Goods:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -3109,8 +3089,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        EORI number
-                        :
+                        EORI number:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -3128,8 +3107,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-center-center layout-row"
                       >
-                        Incoterm
-                        :
+                        Incoterm:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
@@ -3151,8 +3129,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       <span
                         className="flex-30 layout-row"
                       >
-                        Description of goods
-                        :
+                        Description of Goods:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -3170,8 +3147,7 @@ exports[`shipmentData.contacts is present 1`] = `
                       <span
                         className="flex-20 layout-row"
                       >
-                        Notes
-                        :
+                        Notes:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -3233,7 +3209,7 @@ exports[`shipmentData.contacts is present 1`] = `
                     <p
                       className="sec_subheader_text flex-none letter_3"
                     >
-                      Upload a New Document
+                      Upload New Document
                     </p>
                     <Styled(Select)
                       className="select flex-50"
@@ -3447,12 +3423,11 @@ exports[`shipmentData.documents is present 1`] = `
                 <p
                   className=""
                 >
-                  Estimated Time Delivery
+                  Estimated time delivery
                 </p>
                 <h5>
                   17
-                   
-                  days
+                   days
                    
                 </h5>
               </div>
@@ -3553,7 +3528,7 @@ exports[`shipmentData.documents is present 1`] = `
                 className="layout-column flex-100"
               >
                 <h3>
-                  Estimated Time Delivery
+                  Freight, Duties & Carriage:
                 </h3>
                 <div
                   className="layout-wrap layout-row flex"
@@ -3582,7 +3557,7 @@ exports[`shipmentData.documents is present 1`] = `
                           }
                         />
                         <p>
-                          Pick-up
+                          Pickup
                         </p>
                       </div>
                     </div>
@@ -3707,7 +3682,7 @@ exports[`shipmentData.documents is present 1`] = `
                 className="flex-80"
               >
                 <h3>
-                  Freight
+                  Additional Services
                 </h3>
                 <div
                   className=""
@@ -3903,8 +3878,7 @@ exports[`shipmentData.documents is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        Total value of goods
-                        :
+                        Total Value of Goods:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -3923,8 +3897,7 @@ exports[`shipmentData.documents is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row"
                       >
-                        EORI number
-                        :
+                        EORI number:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row info_values"
@@ -3942,8 +3915,7 @@ exports[`shipmentData.documents is present 1`] = `
                       <span
                         className="flex-40 flex-xs-100 layout-align-center-center layout-row"
                       >
-                        Incoterm
-                        :
+                        Incoterm:
                       </span>
                       <p
                         className="flex-60 flex-xs-100 layout-align-xs-start-center layout-row"
@@ -3965,8 +3937,7 @@ exports[`shipmentData.documents is present 1`] = `
                       <span
                         className="flex-30 layout-row"
                       >
-                        Description of goods
-                        :
+                        Description of Goods:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -3984,8 +3955,7 @@ exports[`shipmentData.documents is present 1`] = `
                       <span
                         className="flex-20 layout-row"
                       >
-                        Notes
-                        :
+                        Notes:
                       </span>
                       <p
                         className="flex-80 layout-padding layout-row"
@@ -4047,7 +4017,7 @@ exports[`shipmentData.documents is present 1`] = `
                     <p
                       className="sec_subheader_text flex-none letter_3"
                     >
-                      Upload a New Document
+                      Upload New Document
                     </p>
                     <Styled(Select)
                       className="select flex-50"

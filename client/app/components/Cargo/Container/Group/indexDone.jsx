@@ -42,59 +42,92 @@ export class CargoContainerGroup extends Component {
       theme,
       t
     } = this.props
+    const icon = `${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`
 
-    const gradientTextStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
+    const gradientTextStyle = gradientTextGeneratorFn(theme)
+    const unitArrContainer = `${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`
 
     const unitArr = (
       <div
         key={v4()}
-        className={`${
-          styles.detailed_row
-        } flex-100 layout-row layout-wrap layout-align-none-center`}
+        className={trim(`
+          ${styles.detailed_row}
+          ${WRAP_ROW(100)}
+          layout-align-none-center
+        `)}
       >
-        <div className="flex-10 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ fontSize: '10px' }}>
+        <div className={`${ROW(10)} ${ALIGN_CENTER}`}>
+          <p
+            className="flex-none"
+            style={{ fontSize: '10px' }}
+          >
             {t('cargo:singleItem')}
           </p>
         </div>
 
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+        <div className={trim(`
+            ${styles.unit_data_cell}
+            flex
+            layout-row
+            ${ALIGN_CENTER}
+          `)}
+        >
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               <span>{group.items[0].weight_class}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               {t('cargo:weightClass')}
             </p>
           </div>
         </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+
+        <div className={trim(`
+          ${styles.unit_data_cell} 
+          flex 
+          layout-row 
+          ${ALIGN_CENTER}
+        `)}
+        >
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               <span>{group.items[0].payload_in_kg}</span>&nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
+
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               {t('cargo:cargoGrossWeight')}
             </p>
           </div>
         </div>
 
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+        <div className={trim(`
+          ${styles.unit_data_cell} 
+          flex 
+          layout-row
+          ${ALIGN_CENTER}
+        `)}
+        >
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               <span>
                 {(group.items[0].gross_weight)}
               </span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               {t('cargo:grossWeight')}
             </p>
           </div>
         </div>
-        <div className={`${styles.unit_data_cell} flex layout-row layout-align-center-center`}>
+
+        <div className={trim(`
+          ${styles.unit_data_cell} 
+          flex 
+          layout-row
+          ${ALIGN_CENTER}
+        `)}
+        >
           <div className="layout-column">
-            <p className="flex-none layout-row layout-align-center-center"><span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg</p>
-            <p className="flex-none layout-row layout-align-center-center">
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
+              <span>{parseFloat(group.items[0].tare_weight)}</span> &nbsp;kg
+            </p>
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
               {t('cargo:tareWeight')}
             </p>
           </div>
@@ -204,6 +237,7 @@ export class CargoContainerGroup extends Component {
 }
 CargoContainerGroup.propTypes = {
   group: PropTypes.objectOf(PropTypes.any).isRequired,
+  t: PropTypes.func.isRequired,
   shipment: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.theme
 }
@@ -211,6 +245,12 @@ CargoContainerGroup.propTypes = {
 CargoContainerGroup.defaultProps = {
   shipment: {},
   theme: null
+}
+
+function gradientTextGeneratorFn (theme) {
+  return theme && theme.colors
+    ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+    : { color: '#E0E0E0' }
 }
 
 export default translate('cargo')(CargoContainerGroup)

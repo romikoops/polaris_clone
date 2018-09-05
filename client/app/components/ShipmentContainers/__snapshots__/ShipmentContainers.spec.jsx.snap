@@ -262,8 +262,7 @@ exports[`containers.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            Add unit
-              
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -758,8 +757,7 @@ exports[`nextStageAttempt is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            Add unit
-              
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1254,8 +1252,7 @@ exports[`scope.dangerous_goods is true 1`] = `
           onClick={[Function]}
         >
           <p>
-            Add unit
-              
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"
@@ -1750,8 +1747,7 @@ exports[`shallow rendering 1`] = `
           onClick={[Function]}
         >
           <p>
-            Add unit
-              
+             Add unit   
           </p>
           <i
             className="fa fa-plus-square-o clip"

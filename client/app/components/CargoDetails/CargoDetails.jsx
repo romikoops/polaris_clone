@@ -230,7 +230,7 @@ export class CargoDetails extends Component {
               {t('cargo:conditionFirst')}
             </strong>
           </p>
-          <p className="flex-90">
+          <p className="flex-90 margin_5">
             {t('cargo:conditionSecond')}
           </p>
           <div className="flex-100 layout-row layout-align-start-start layout-wrap">
