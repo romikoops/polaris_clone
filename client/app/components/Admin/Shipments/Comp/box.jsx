@@ -45,7 +45,8 @@ export class AdminShipmentsBox extends Component {
       handleSearchChange,
       numPages,
       shipments,
-      confirmShipmentData
+      confirmShipmentData,
+      searchText
     } = this.props
 
     return (
@@ -64,6 +65,7 @@ export class AdminShipmentsBox extends Component {
             <input
               type="text"
               name="search"
+              value={searchText}
               placeholder="Search Shipments"
               onChange={handleSearchChange}
             />
@@ -123,7 +125,8 @@ AdminShipmentsBox.propTypes = {
   nextPage: PropTypes.func,
   prevPage: PropTypes.func,
   handleSearchChange: PropTypes.func,
-  numPages: PropTypes.number
+  numPages: PropTypes.number,
+  searchText: PropTypes.string
 }
 
 AdminShipmentsBox.defaultProps = {
@@ -136,7 +139,8 @@ AdminShipmentsBox.defaultProps = {
   nextPage: null,
   prevPage: null,
   handleSearchChange: null,
-  numPages: 1
+  numPages: 1,
+  searchText: ''
 }
 
 export default AdminShipmentsBox

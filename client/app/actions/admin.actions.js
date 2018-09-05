@@ -522,7 +522,6 @@ function updatePricing (id, req) {
     return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -970,7 +969,7 @@ function confirmShipment (id, action, redirect) {
           dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(false))
+          dispatch(getShipments(1,1,1,true))
         }
 
         if (redirect) {
@@ -1361,6 +1360,32 @@ function documentAction (docId, action) {
     )
   }
 }
+function deleteDocument (docId) {
+  function request (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_REQUEST, payload: docData }
+  }
+  function success (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_SUCCESS, payload: docData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DOCUMENT_DELETE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteDocument(docId).then(
+      (data) => {
+        dispatch(alertActions.success('Document Action successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function saveNewHub (hub, location) {
   function request (hubData) {
@@ -1706,6 +1731,33 @@ function updateHubMandatoryCharges (id, charges) {
     )
   }
 }
+function uploadDocument (doc, type, url) {
+  function request (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST, payload: file }
+  }
+  function success (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS, payload: file.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadDocument(doc, type, url).then(
+      (data) => {
+        dispatch(alertActions.success('Uploading Document successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
@@ -1723,6 +1775,7 @@ function goTo (path) {
 export const adminActions = {
   getHubs,
   newHubImage,
+  uploadDocument,
   getItineraries,
   updateServiceCharge,
   updatePricing,
@@ -1782,6 +1835,7 @@ export const adminActions = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
+  deleteDocument,
   searchPricings
 }
 

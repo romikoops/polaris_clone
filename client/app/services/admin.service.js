@@ -41,6 +41,18 @@ function getAllHubs () {
   return fetch(`${BASE_URL}/admin/hubs/all/processed`, requestOptions)
     .then(handleResponse)
 }
+function uploadDocument (doc, type, url) {
+  const formData = new FormData()
+  formData.append('file', doc)
+  formData.append('type', type)
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+    body: formData
+  }
+
+  return fetch(BASE_URL + url, requestOptions).then(handleResponse)
+}
 
 function searchHubs (text, page, hubType, countryId, status) {
   const requestOptions = {
@@ -439,6 +451,15 @@ function documentAction (docId, action) {
     .then(handleResponse)
 }
 
+function deleteDocument (documentId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
+}
+
 function saveNewHub (hub, location) {
   const requestOptions = {
     method: 'POST',
@@ -640,6 +661,7 @@ export const adminService = {
   getHub,
   deleteTrip,
   getItineraries,
+  deleteDocument,
   editTruckingPrice,
   deleteItinerary,
   uploadTrucking,
@@ -693,7 +715,8 @@ export const adminService = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
-  searchPricings
+  searchPricings,
+  uploadDocument
 }
 
 export default adminService
