@@ -11,6 +11,7 @@ class PdfHandler
     @shipments = args[:shipments] || args["shipments"]
     @name     = args[:name]       || args["name"]
     @quotes   = args[:quotes]     || args["quotes"]
+    @quotes_info   = args[:quotes_info]     || args["quotes_info"]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -19,13 +20,15 @@ class PdfHandler
     doc_erb = ErbTemplate.new(
       layout:   @layout,
       template: @template,
-      locals:   { 
-        shipment: @shipment.as_options_json,
-        shipments: @shipments.map(&:as_options_json),
+      locals:   {
+        shipment: @shipment,
+        shipments: @shipments,
         quotes: @quotes,
+        quotes_info: @quotes_info,
         tenant: @shipment.tenant
       }
     )
+    binding.pry
     @raw_pdf_string = WickedPdf.new.pdf_from_string(
       doc_erb.render,
       margin: @margin

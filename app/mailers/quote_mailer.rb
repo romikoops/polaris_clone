@@ -7,9 +7,12 @@ class QuoteMailer < ApplicationMailer
 
   TESTING_EMAIL = "angelica.vanni@itsmycargo.com"
 
-  def quotation_email(shipment, shipments, quotes, email)
+  def quotation_email(shipment, shipments, schedules, email)
     @shipments = shipments
     @shipment = shipment
+    @quotes = @shipments.map do |quoted_shipment|
+      quoted_shipment.selected_offer
+    end
     @user = @shipment.user
     tenant = @user.tenant
     @email = email[/[^@]+/]
@@ -19,37 +22,44 @@ class QuoteMailer < ApplicationMailer
       when "development" then "http://localhost:8080/"
       when "test"        then "http://localhost:8080/"
       end
-
+    @quotes_info = {
+      mode_of_transport: schedules.last["last.mode_of_transport"],
+      origin_hub: schedules.last["origin_hub"],
+      destination_hub: schedules.last["destination_hub"]
+    }
+    
     # @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
       
-    generate_and_upload_quotation(quotes)
+    generate_and_upload_quotation(@quotes, @quotes_info)
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline[pdf_name] = File.read("tmp/" + pdf_name)
-    mail(
-      # to:      tenant.email_for(:sales, shipment.mode_of_transport),
-      # to: email,
-      # bcc:     "bookings@itsmycargo.com",
-      subject: "Quotation for #{@shipment.origin_hub.name} - #{@shipment.destination_hub.name}"
-    ) do |format|
-      format.html
-      format.mjml
-    end
+    binding.pry
+    # mail(
+    #   # to:      tenant.email_for(:sales, shipment.mode_of_transport),
+    #   # to: email,
+    #   # bcc:     "bookings@itsmycargo.com",
+    #   subject: "Quotation for #{@quotes_info.origin_hub.name} - #{@quotes_info.destination_hub.name}"
+    # ) do |format|
+    #   format.html
+    #   format.mjml
+    # end
   end
 
   private
 
-  def generate_and_upload_quotation(quotes)
+  def generate_and_upload_quotation(quotes, quotes_info)
     quotation = PdfHandler.new(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/quotations.pdf.erb",
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: @shipment,
-      shipments: @shipments,
-      quotes:   quotes,
-      name:     "quotation"
+      layout:      "pdfs/simple.pdf.html.erb",
+      template:    "shipments/pdfs/quotations.pdf.erb",
+      margin:      { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:    @shipment,
+      shipments:   @shipments,
+      quotes:      quotes,
+      quotes_info:   quotes_info,
+      name:        "quotation"
     )
-
+    binding.pry
     quotation.generate
     quotation.upload_quotes
   end

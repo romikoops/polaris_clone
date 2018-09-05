@@ -214,49 +214,17 @@
 
 <div class="wrapper">
   <img src="<%= tenant.theme['logoLarge'] %>" class="logo">
-  <%# <div class="logo"></div> %>
   <div class="col-xs-12 title" style="font-size: 150%; text-align: center;">
     <h1>QUOTATIONS</h1>
     <hr>
     <p><%= tenant.name %></p>
   </div>
 
+  <%= shipments %>
+
   <div class="all-row">
-    <div class="main-container container-fluid">
-      <div class="info row">
-        <% shipments.map do |shipment| %>
-          <% quotes.map do |quote| %>
-            <% if quote["mode_of_transport"] == "ocean" %>
-              <i class="fas fa-anchor col-xs-1"></i>
-            <% end %>
-            <% if quote["mode_of_transport"] == "air" %>
-              <i class="fas fa-paper-plane col-xs-1"></i>
-            <% end %>
-            <div class="col-xs-11">
-              <p>From:&nbsp;<span><%= shipment["origin_hub"]["name"] %></span></p>
-              <p>To:&nbsp;<span><%= shipment["destination_hub"]["name"] %></span></p>
-            </div>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="total-row row">
-        <h4 class="col-xs-6">Total</h4>
-        <p class="quote col-xs-6"><%= shipment["selected_offer"]["total"]["value"].to_f.truncate(2) %>&nbsp;<%= shipment["selected_offer"]["total"]["currency"] %></p>
-      </div>
-
-        <% shipment["selected_offer"].each do |k, v| %>
-          <div class="sub-prices row">
-            <% if k != "total" && k != "edited_total" %>
-              <div class="col-xs-12">
-                <div class="total-price-single row">
-                  <h4 class="col-xs-6"><%= k %></h4>
-                  <h3 class="col-xs-6"><%= v["value"].to_f.truncate(2) %>&nbsp;<%= v["currency"] %></h3>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
+    <% shipments.map do |s| %>
+      <h1><% s %></h1>
     <% end %>
   </div>
 </div>

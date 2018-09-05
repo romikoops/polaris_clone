@@ -517,18 +517,18 @@ module ShippingTools
     send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
   end
 
-  def self.save_and_send_quotes(shipment, quotes, email)
+  def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = Quotation.create(user_id: shipment.user_id, target_email: email)
     
-    quotes.each do |quote|
-      trip = Trip.find(quote["trip_id"])
+    schedules.each do |schedule|
+      trip = Trip.find(schedule["trip_id"])
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
         imc_reference: shipment.imc_reference,
-        origin_hub_id: quote["origin_hub"]["id"],
-        destination_hub_id: quote["destination_hub"]["id"],
-        quotation_id: quote["id"],
+        origin_hub_id: schedule["origin_hub"]["id"],
+        destination_hub_id: schedule["destination_hub"]["id"],
+        quotation_id: schedule["id"],
         trip_id: trip.id,
         itinerary: trip.itinerary
       )
@@ -558,12 +558,12 @@ module ShippingTools
         new_shipment.charge_breakdowns << new_charge_breakdown
       end
     end
-    ShippingTools.agent_quotation_email(shipment, main_quote.shipments, quotes, email)
+    ShippingTools.agent_quotation_email(shipment, main_quote.shipments, schedules, email)
   end
 
-  def self.agent_quotation_email(shipment, shipments, quotes, email)
+  def self.agent_quotation_email(shipment, shipments, schedules, email)
     # if ENV['BETA'] != "true"
-      QuoteMailer.quotation_email(shipment, shipments, quotes, email).deliver_now
+      QuoteMailer.quotation_email(shipment, shipments, schedules, email).deliver_now
     # end
   end
 
