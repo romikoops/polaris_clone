@@ -2442,7 +2442,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               </strong>
             </p>
             <p
-              className="flex-90"
+              className="flex-90 margin_5"
             >
               To cover our costs when we present your goods to the customs authorities – and pay any customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee depends on the value of the goods you are shipping, and can be found here to the right.
             </p>

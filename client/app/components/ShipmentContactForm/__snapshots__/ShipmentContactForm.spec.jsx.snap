@@ -25,6 +25,7 @@ exports[`shallow rendering 1`] = `
         handleInputChange={[Function]}
         setContactAttempted={false}
         showEdit={false}
+        t={[Function]}
         theme={
           Object {
             "colors": Object {
