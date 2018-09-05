@@ -27,7 +27,6 @@ class QuoteMailer < ApplicationMailer
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline[pdf_name] = File.read("tmp/" + pdf_name)
-    binding.pry
     mail(
       # to:      tenant.email_for(:sales, shipment.mode_of_transport),
       # to: email,

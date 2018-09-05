@@ -74,7 +74,13 @@ class QuoteCard extends PureComponent {
           <div className={`flex-100 layout-row layout-align-start-center ${styles.price_row}`}>
             <div className="flex-none layout-row layout-align-start-center" />
             <div className="flex-45 layout-row layout-align-start-center">
-              <span>{capitalize(key)}</span>
+              {key === 'trucking_pre' ? (
+                <span>Pick-up</span>
+              ) : ''}
+              {key === 'trucking_on' ? (
+                <span>Delivery</span>
+              ) : ''}
+              <span>{key === 'trucking_pre' || key === 'trucking_on' ? '' : capitalize(key)}</span>
             </div>
             <div className="flex-50 layout-row layout-align-end-center">
               <p>{numberSpacing(quote[`${key}`].total.value, 2)}&nbsp;{quote.total.currency}</p>
@@ -85,7 +91,7 @@ class QuoteCard extends PureComponent {
           .map(array => array.filter((value, index, arr) =>
             value !== 'total' && value !== 'edited_total'))
           .filter((value, index, arr) => value.length !== 1).map((price) => {
-            const pop = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
+            const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
                 <span>{price[0]}</span>
               </div>
@@ -94,7 +100,7 @@ class QuoteCard extends PureComponent {
               </div>
             </div>)
 
-            return pop
+            return subPrices
           })}
       />))
     ) : ''
