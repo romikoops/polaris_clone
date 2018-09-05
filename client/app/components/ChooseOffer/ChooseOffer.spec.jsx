@@ -43,7 +43,7 @@ let originalDate
 const constantDate = new Date('2017-06-13T04:41:20')
 beforeEach(() => {
   originalDate = Date
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-global-assign
   Date = class extends Date {
     constructor () {
       return constantDate
@@ -52,7 +52,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-global-assign
   Date = originalDate
 })
 

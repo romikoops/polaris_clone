@@ -1,4 +1,4 @@
-const SENDER_LOADED = 'i.fa-pencil-square-o'
+const SENDER_LOADED = 'i.fa-pencil'
 const RECEIVER_LOADED = { selector: SENDER_LOADED, count: 2 }
 const CHOOSE_SENDER = { selector: 'h3', index: 5 }
 const CHOOSE_RECEIVER = { selector: 'h3', index: 6 }
@@ -11,10 +11,11 @@ const SELECT_RECEIVER_SENDER = {
 export default async function chooseSenderReceiver (puppeteer) {
   const {
     click,
+    saveStep,
     waitFor,
     waitAndClick
   } = puppeteer
-  await puppeteer.saveStep('chooseSenderReceiver.0')
+  await saveStep('chooseSenderReceiver.0')
 
   /**
    * Click on 'Choose a sender' and select first sender
@@ -29,5 +30,5 @@ export default async function chooseSenderReceiver (puppeteer) {
   expect(await click(CHOOSE_RECEIVER)).toBeTruthy()
   expect(await waitAndClick(SELECT_RECEIVER_SENDER)).toBeTruthy()
   expect(await waitFor(RECEIVER_LOADED)).toBeTruthy()
-  await puppeteer.saveStep('chooseSenderReceiver.1')
+  await saveStep('chooseSenderReceiver.1')
 }

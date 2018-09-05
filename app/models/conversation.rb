@@ -16,4 +16,13 @@ class Conversation < ApplicationRecord
     self.last_updated = DateTime.now
     save!
   end
+
+  def self.clear_old_conversations
+    self.all.each do |convo|
+      if convo.shipment.nil?
+        convo.destroy
+      end
+    end
+  end
+
 end

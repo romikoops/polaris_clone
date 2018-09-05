@@ -3,6 +3,15 @@ import { translate } from 'react-i18next'
 import styles from './CargoItemDetails.scss'
 import PropTypes from '../../prop-types'
 import { HsCodeViewer } from '../HsCodes/HsCodeViewer'
+import { trim, WRAP_ROW } from '../../classNames'
+
+const CONTAINER = trim(`
+  CARGO_ITEM_DETAILS
+  ${styles.info} 
+  ${WRAP_ROW(100)} 
+  layout-align-center
+`)
+const LONG_ROW = 'flex-100 layout-row layout-align-space-between'
 
 export class CargoItemDetails extends Component {
   constructor (props) {
@@ -28,53 +37,82 @@ export class CargoItemDetails extends Component {
       viewHSCodes
     } = this.props
 
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${
-            theme.colors.primary
-          },${
-            theme.colors.secondary
-          })`
-          : 'black'
-    }
+    const textStyle = textStyleFn(theme)
+    // const HSCodes = () => {
+    //   if (!viewHSCodes) {
+    //     return ''
+    //   }
+
+    //   return (
+    //     <div className={WRAP_ROW(100)} onClick={this.viewHsCodes}>
+    //       <i className="fa fa-eye clip flex-none" style={textStyle} />
+    //       <p className="offset-5 flex-none">View Hs Codes</p>
+    //     </div>
+    //   )
+    // }
+    // const Viewer = () => {
+    //   if (!viewer) {
+    //     return ''
+    //   }
+
+    //   return (
+    //     <HsCodeViewer
+    //       item={item}
+    //       hsCodes={hsCodes}
+    //       theme={theme}
+    //       close={this.viewHsCodes}
+    //     />
+    //   )
+    // }
+
+    const dimensions = dimensionsFn(item)
 
     return (
-      <div className={`${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
+      <div className={CONTAINER}>
         <div className="flex-100">
-          <h4>{`${t('common:unit')} ${index + 1}`}</h4>
+          <h4>{t('common:unit')} {index + 1}</h4>
         </div>
+
         <hr />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:grossWeight')}</p>
           <p>{item.payload_in_kg} kg</p>
         </div>
+
         <hr className="flex-100" />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:length')}</p>
           <p>{item.dimension_y} cm</p>
         </div>
+
         <hr className="flex-100" />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:width')}</p>
           <p>{item.dimension_x} cm</p>
         </div>
+
         <hr className="flex-100" />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:height​​')}</p>
           <p>{item.dimension_z} cm</p>
         </div>
+
         <hr className="flex-100" />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:volume')}</p>
           <p>
-            {(item.dimension_y * item.dimension_x * item.dimension_y / 1000000).toFixed(2)} m<sup>
-              3
-            </sup>
+            {dimensions} m<sup>3</sup>
           </p>
         </div>
+
         <hr className="flex-100" />
-        <div className="flex-100 layout-row layout-align-space-between">
+
+        <div className={LONG_ROW}>
           <p>{t('common:chargeableWeight')}</p>
           <p>
             {(item.chargeable_weight).toFixed(2)} kg
@@ -98,20 +136,39 @@ export class CargoItemDetails extends Component {
     )
   }
 }
-
 CargoItemDetails.propTypes = {
-  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  index: PropTypes.number.isRequired,
-  theme: PropTypes.theme,
-  viewHSCodes: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   item: PropTypes.shape({
     hs_codes: PropTypes.array
-  }).isRequired
+  }).isRequired,
+  index: PropTypes.number.isRequired,
+  viewHSCodes: PropTypes.bool,
+  theme: PropTypes.theme,
+  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 CargoItemDetails.defaultProps = {
   viewHSCodes: false,
   theme: false
+}
+
+function textStyleFn (theme) {
+  return {
+    background:
+      theme && theme.colors
+        ? `-webkit-linear-gradient(left, ${
+          theme.colors.primary
+        },${
+          theme.colors.secondary
+        })`
+        : 'black'
+  }
+}
+
+function dimensionsFn (item) {
+  const dimensions = item.dimension_y * item.dimension_x * item.dimension_y
+
+  return (dimensions / 1000000).toFixed(2)
 }
 
 export default translate('common')(CargoItemDetails)

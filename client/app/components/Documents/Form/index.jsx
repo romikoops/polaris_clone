@@ -8,6 +8,7 @@ import PropTypes from '../../../prop-types'
 import { BASE_URL } from '../../../constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
+import AdminPromptConfirm from '../../Admin/Prompt/Confirm'
 
 class DocumentsForm extends React.Component {
   static handleResponse (response) {
@@ -92,13 +93,20 @@ class DocumentsForm extends React.Component {
     e.preventDefault()
     this.uploaderInput.click()
   }
-  deleteFile (file) {
+  confirmDelete (doc) {
+    this.setState({ docToDelete: doc, showConfirm: true })
+  }
+  toggleShowConfim () {
+    this.setState(prevState => ({ showConfirm: !prevState.showConfirm }))
+  }
+  deleteFile () {
     const { deleteFn } = this.props
+    const { docToDelete } = this.state
     if (this.uploaderInput.files.length) {
       this.uploaderInput.value = ''
     }
     this.setState({ file: null })
-    deleteFn(file)
+    deleteFn(docToDelete)
   }
   render () {
     const {
@@ -112,6 +120,7 @@ class DocumentsForm extends React.Component {
       multiple,
       viewer
     } = this.props
+    const { showConfirm } = this.state
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
     const fileName = doc ? (
@@ -148,12 +157,21 @@ class DocumentsForm extends React.Component {
       </p>
     )
     const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
+    const confirmModal = showConfirm
+      ? (<AdminPromptConfirm
+        theme={theme}
+        heading="Delete this document?"
+        text="Are you sure you wish to delete this docuemnt? It cannot be undone."
+        confirm={() => this.deleteFile()}
+        deny={() => this.toggleShowConfim()}
+      />) : ''
 
     return (
       <div
         className={`${styles.form} flex-100 layout-row
         layout-align-none-center layout-wrap`}
       >
+        {confirmModal}
         <div className="flex layout-row layout-wrap">
           <div className={`${styles.form_label} flex-40 layout-row
           layout-align-start-center`}
@@ -205,7 +223,7 @@ class DocumentsForm extends React.Component {
             <div
               className={`${styles.icon_btn} flex-none layout-row
               layout-align-center-center`}
-              onClick={() => this.deleteFile(doc)}
+              onClick={() => this.confirmDelete(doc)}
             >
               <i className="fa fa-trash" />
             </div>

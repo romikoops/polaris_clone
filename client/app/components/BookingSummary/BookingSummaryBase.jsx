@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom'
 import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
 import styles from './BookingSummary.scss'
-import { dashedGradient, switchIcon, numberSpacing } from '../../helpers'
+import { dashedGradient, switchIcon } from '../../helpers'
 
 function BookingSummary (props) {
   const {
@@ -80,7 +80,7 @@ function BookingSummary (props) {
       <div className="flex layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">Total Weight</h4>
         <p className="flex-50 layout-row layout-align-center-start">
-          { numberSpacing(totalWeight, 1) } kg
+          { totalWeight.toFixed(1) } kg
         </p>
       </div>
       {
@@ -88,7 +88,7 @@ function BookingSummary (props) {
           <div className="flex layout-column layout-align-stretch">
             <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
             <p className="flex-50 layout-row layout-align-center-start">
-              { numberSpacing(totalVolume, 3) } m³
+              { totalVolume.toFixed(3) } m³
             </p>
           </div>
         )

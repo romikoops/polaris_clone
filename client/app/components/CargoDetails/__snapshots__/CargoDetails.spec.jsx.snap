@@ -2262,7 +2262,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.
@@ -2273,7 +2273,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.
@@ -2401,7 +2401,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                     }
                   }
                 >
-                  Yes, I want undefined Yes, I want
+                  No, I do not want undefined to handle my customs clearance
                 </p>
               </div>
               <div
@@ -2431,10 +2431,10 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
           className="flex-100 layout-row layout-wrap customs_box  box_content hidden"
         >
           <div
-            className="flex-80 layout-row layout-wrap"
+            className="flex-60 layout-row layout-wrap"
           >
             <p
-              className="flex-90"
+              className="flex-90 margin_5"
             >
               <strong>
                  
@@ -2442,7 +2442,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               </strong>
             </p>
             <p
-              className="flex-90"
+              className="flex-90 margin_5"
             >
               To cover our costs when we present your goods to the customs authorities – and pay any customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee depends on the value of the goods you are shipping, and can be found here to the right.
             </p>
@@ -2650,17 +2650,17 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
           className="flex-100 layout-row layout-align-start-center layout-wrap no_customs_box show"
         >
           <div
-            className="flex-100 layout-row layout-align-start-center layout-wrap"
+            className="flex-60 layout-row layout-align-start-center layout-wrap"
           >
             <p
-              className="flex-100"
+              className="flex-100 margin_5"
             >
               <b>
                 A customs declaration is mandatory to pass a national border when exporting or importing. If you choose to handle the customs clearance on your own, undefined will need a copy of the customs declaration.
               </b>
             </p>
             <p
-              className="flex-100"
+              className="flex-100 margin_5"
             >
               <b>
                 When you ship goods from outside the European Union (EU), you may be charged customs duty and/or VAT according to local regulations.
@@ -4991,7 +4991,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.
@@ -5002,7 +5002,7 @@ exports[`tenant.data.scope.has_insurance is true 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <p
-            className="flex-100"
+            className="flex-60 margin_5"
           >
             <b>
               Insurance is a cost effective and simple way to cover for physical loss or damage to goods in transit.

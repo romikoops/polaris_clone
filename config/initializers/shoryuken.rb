@@ -39,7 +39,6 @@ Shoryuken.configure_server do |config|
   config.server_middleware do |chain|
     chain.add Shoryuken::Middleware::Server::RavenReporter
   end
-  # Shoryuken.add_queue("dev_mailers", 1)
   # For dynamically adding queues prefixed by Rails.env
   # %w(queue1 queue2).each do |name|
   #   Shoryuken.add_queue("#{Rails.env}_#{name}", 1)

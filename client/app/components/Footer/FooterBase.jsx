@@ -58,9 +58,27 @@ export function Footer ({
           </div>
         </div>
       }
-      <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
-        <div className="flex-100 layout-align-center">
-          <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-center-center`}>
+      <div className={`${isShop ? styles.footer_shop : styles.footer
+      } layout-row flex-100 layout-wrap`}
+      >
+        <div className={`flex-100 ${styles.button_row}
+         layout-row layout-align-end-center`}
+        >
+          <div className={`flex-50 ${styles.buttons}
+           layout-row layout-align-center-center`}
+          >
+            <div className="flex-50 layout-row layout-align-start-center">
+              <div className="flex-5" />
+              <p className="flex-none">powered by</p>
+              <div className="flex-5" />
+              <img
+                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                alt=""
+                className={`flex-none ${styles.powered_by_logo}`}
+              />
+            </div>
+          </div>
+          <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
               <a
                 target="_blank"
@@ -94,38 +112,28 @@ export function Footer ({
               </a>
             </div>
           </div>
-        </div>
-        <div className="flex-100 layout-align-center">
-          <div className={`flex-100
-          layout-row layout-align-space-between-center ${styles.lower_footer}`}
-          >
-            <div className="flex-20" />
-            <div className={`flex-60 ${styles.buttons}
-            layout-row layout-align-center-center`}
-            >
-              <div className="flex-45 layout-row layout-align-end-center">
-                <div className="flex-5" />
-                <p className="flex-none">Powered by</p>
-                <div className="flex-5" />
-              </div>
-              <div className="flex-55 layout-row layout-align-start-center">
-                <img
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  alt=""
-                  className={`flex-none ${styles.powered_by_logo}`}
-                />
-              </div>
+          { isShop
+            ? <div className={`flex-20 ${styles.copyright_shop}`}>
+              <p className="flex-none">
+                  Copyright © {moment().format('YYYY')} {tenantName}
+              </p>
             </div>
-            { isShop
-              ? <div className={`flex-20 layout-row layout-align-center ${styles.copyright_shop}`}>
-                <p className="flex-80">
-                    Copyright © {moment().format('YYYY')} {tenantName}
-                </p>
-              </div>
-              : <div className="flex-20" />
-            }
-          </div>
+            : <div className="flex-20" />
+          }
         </div>
+        { isShop
+          ? <div />
+          : <div className={`flex-100 layout-row 
+            ${styles.copyright}`}
+          >
+            <div className="flex-80 layout-row layout-align-end-center">
+              <p className="flex-none">
+                Copyright © {moment().format('YYYY')} {tenantName}
+              </p>
+            </div>
+            <div className="flex-20" />
+          </div>
+        }
       </div>
     </div>
   )

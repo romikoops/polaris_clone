@@ -94,6 +94,8 @@ test('props.addContainer is called', () => {
   clickableDiv.simulate('click')
 
   expect(props.addContainer).toHaveBeenCalled()
+
+  expect(wrapper.state().firstRenderInputs).toEqual(true)
 })
 
 test('props.deleteItem is called', () => {
@@ -107,4 +109,28 @@ test('props.deleteItem is called', () => {
   expect(props.deleteItem).not.toHaveBeenCalled()
   icon.simulate('click')
   expect(props.deleteItem).toHaveBeenCalled()
+})
+
+test('firstRenderInputs fn sets the state to the boolean that it is passed', () => {
+  const props = {
+    ...propsBase,
+    setFirstRenderInputs: jest.fn()
+  }
+  const wrapper = createWrapper(props)
+
+  wrapper.instance().setFirstRenderInputs(false)
+  expect(wrapper.state().firstRenderInputs).toEqual(false)
+})
+
+// not working yet
+test('handleContainerQ modifies Props', () => {
+  const props = {
+    ...propsBase,
+    handleContainerQ: jest.fn()
+  }
+
+  const wrapper = createWrapper(props)
+
+  wrapper.instance().handleContainerQ(identity)
+  expect(wrapper.props().handleDelta).toEqual(identity)
 })

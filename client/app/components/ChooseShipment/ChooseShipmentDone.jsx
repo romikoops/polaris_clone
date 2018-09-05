@@ -9,6 +9,14 @@ import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType } from '../../helpers'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { ALIGN_CENTER, trim, ROW, WRAP_ROW, COLUMN } from '../../classNames'
+
+const CONTAINER = trim(`
+  CHOOSE_SHIPMENT
+  ${styles.card_link_row} 
+  ${ROW(100)} 
+  layout-align-center
+`)
 
 export class ChooseShipment extends Component {
   constructor (props) {
@@ -16,11 +24,11 @@ export class ChooseShipment extends Component {
     this.state = {}
 
     this.cards = LOAD_TYPES.map(loadType => ({
-      name: humanizedMotAndLoadType(props.scope, loadType.code),
-      img: loadType.img,
       code: loadType.code,
-      options: { contained: true },
-      handleClick: () => this.setLoadType(loadType.code)
+      handleClick: () => this.setLoadType(loadType.code),
+      img: loadType.img,
+      name: humanizedMotAndLoadType(props.scope, loadType.code),
+      options: { contained: true }
     }))
     this.setLoadType = this.setLoadType.bind(this)
     this.setDirection = this.setDirection.bind(this)
@@ -37,11 +45,16 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
+    const { loadType, direction } = this.state
     const {
-      theme, messages, scope, t
+      messages,
+      scope,
+      theme,
+      t
     } = this.props
     const allowedCargoTypeCount = { cargo_item: 0, container: 0 }
     const allowedCargoTypes = { cargo_item: false, container: false }
+
     Object.keys(scope.modes_of_transport).forEach((mot) => {
       allowedCargoTypeCount.cargo_item += scope.modes_of_transport[mot].cargo_item
       allowedCargoTypeCount.container += scope.modes_of_transport[mot].container
@@ -52,7 +65,6 @@ export class ChooseShipment extends Component {
     if (allowedCargoTypeCount.cargo_item > 0) {
       allowedCargoTypes.cargo_item = true
     }
-    const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =
       theme && theme.colors
@@ -61,25 +73,28 @@ export class ChooseShipment extends Component {
     const directionButtons = ['export', 'import'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       const commercialAction = { import: 'Buying', export: 'Selling' }
+      const container = trim(`
+            ${styles.direction_card} 
+            ${buttonStyle}
+            ${ROW('none')}
+            ${ALIGN_CENTER} 
+          `)
+      const Icon = direction === dir
+        ? <i className="flex-none fa fa-check clip" style={gradientStyle} />
+        : ''
 
       return (
         <div
-          className={
-            `${styles.direction_card} ${buttonStyle} ` +
-            'flex-none layout-row layout-align-center-center'
-          }
+          className={container}
           onClick={() => this.setDirection(dir)}
         >
-          <div className="flex-80 layout-row layout-align-space-between-center">
+          <div className={`${ROW(80)} layout-align-space-between-center`}>
             <p className="flex-none">
               {' '}
               I am {commercialAction[dir]} ({capitalize(dir)})
             </p>
-            {direction === dir ? (
-              <i className="flex-none fa fa-check clip" style={gradientStyle} />
-            ) : (
-              ''
-            )}
+            {Icon}
+
           </div>
         </div>
       )
@@ -102,45 +117,52 @@ export class ChooseShipment extends Component {
         iconClass="fa-chevron-right"
       />
     )
+    const ItemsOrContainers = (<TextHeading
+      theme={theme}
+      size={4}
+      text={t('common:itemsOrContainers')}
+    />)
+    const CardLinkRowComponent = (<CardLinkRow
+      theme={theme}
+      cards={this.cards}
+      allowedCargoTypes={allowedCargoTypes}
+      selectedType={loadType}
+    />)
+    const ImportOrExport = (<TextHeading
+      theme={theme}
+      size={4}
+      text={t('common:importOrExport')}
+    />)
 
     return (
-      <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
+      <div className={CONTAINER}>
         {flash}
-        <div
-          className={
-            `flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`
-          }
+
+        <div className={trim(`
+          ${WRAP_ROW('none')}
+          ${defs.content_width} 
+          layout-align-start-center
+        `)}
         >
-          <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <TextHeading
-                theme={theme}
-                size={4}
-                text={t('common:importOrExport')}
-              />
+          <div className={`${WRAP_ROW(100)} layout-align-space-around-center`}>
+            <div className={`${ROW(100)} layout-align-start-center`}>
+              {ImportOrExport}
             </div>
             {directionButtons}
           </div>
-          <div
-            className={
-              `flex-100 layout-row layout-wrap ${styles.section} ` +
-              `${direction ? '' : styles.inactive}`
-            }
+
+          <div className={trim(`
+            ${WRAP_ROW(100)} 
+            ${styles.section}
+            ${direction ? '' : styles.inactive}
+          `)}
           >
-            <div className="flex-100 layout-row layout-align-start-center">
-              <TextHeading
-                theme={theme}
-                size={4}
-                text={t('common:itemsOrContainers')}
-              />
+            <div className={`${ROW(100)} layout-align-start-center`}>
+              {ItemsOrContainers}
             </div>
-            <CardLinkRow
-              theme={theme}
-              cards={this.cards}
-              allowedCargoTypes={allowedCargoTypes}
-              selectedType={loadType}
-            />
+            {CardLinkRowComponent}
           </div>
+
           <div
             className={
               `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
@@ -148,14 +170,14 @@ export class ChooseShipment extends Component {
             }
           >
             <div
-              className={`${styles.mot_sec} flex-80 layout-row layout-wrap layout-align-center`}
               style={{
                 color: `${theme && hexToRGB(theme.colors.primary, 0.8)}`
               }}
+              className={`${styles.mot_sec} ${WRAP_ROW(80)} layout-align-center`}
             >
-              <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
-                <div className="flex-none layout-column layout-align-center-center">
-                  <div className="flex-none layout-row layout-align-center-start">
+              <div className={`${styles.next_step_btn_sec} ${ROW(100)} layout-align-end`}>
+                <div className={`${COLUMN('none')} ${ALIGN_CENTER}`}>
+                  <div className={`${ROW('none')} layout-align-center-start`}>
                     <p className={styles.mot_note}>
                       {t('common:availabilitiesHead')}
                       <br />
@@ -175,6 +197,7 @@ export class ChooseShipment extends Component {
 
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
   selectLoadType: PropTypes.func.isRequired,
   scope: PropTypes.objectOf(PropTypes.any).isRequired

@@ -137,6 +137,7 @@ export class BestRoutesBox extends Component {
 }
 BestRoutesBox.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   shipmentData: PropTypes.shape({
     shipment: PropTypes.shipment,
     schedules: PropTypes.array

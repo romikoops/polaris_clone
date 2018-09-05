@@ -413,6 +413,7 @@ function uploadDocument (doc, type, url) {
     )
   }
 }
+
 function deleteDocument (id) {
   function request (deleteId) {
     return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST, payload: deleteId }

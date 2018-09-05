@@ -4,9 +4,14 @@ import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
+import { ROW, ALIGN_CENTER, trim } from '../../classNames'
+
+const CONTAINER = `FOOTER flex-100 layout-row layout-wrap ${styles.footer_wrapper}`
+const ENVELOPE_ICON = 'fa fa-envelope'
+const PHONE_ICON = 'fa fa-phone'
 
 export function Footer ({
-  theme, tenant, isShop, width, t
+  theme, tenant, isShop, t
 }) {
   const primaryColor = {
     color: theme && theme.colors ? theme.colors.primary : 'black'
@@ -22,46 +27,67 @@ export function Footer ({
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact'
   }
-  const widthStyle = width ? { width } : {}
 
   return (
-    <div
-      className={`flex-100 layout-row 
-      layout-wrap ${styles.footer_wrapper} layout-align-start`}
-      style={widthStyle}
-    >
+    <div className={CONTAINER} >
       {isShop
         ? <div />
-        : <div className={`${styles.contact_bar}
-         flex-100 layout-row layout-align-center-center`}
-        >
-          <div className={`flex-none ${defs.content_width} layout-row`}>
+        : <div className={`${styles.contact_bar} ${ROW(100)} ${ALIGN_CENTER}`}>
+          <div className={`${ROW('none')} ${defs.content_width}`}>
             <div className="flex-50 layout-row layout-align-start-center">
               <img src={logo} />
             </div>
+
             <div className="flex-50 layout-row layout-align-end-end">
               <a
-                className={`flex-none layout-row layout-align-center-center pointy ${
-                  styles.contact_elem
-                }`}
+                className={trim(`
+                  ${ROW('none')} 
+                  ${ALIGN_CENTER}
+                  pointy 
+                  ${styles.contact_elem}
+                `)}
                 href={`mailto:${supportEmail}`}
               >
-                <i className="fa fa-envelope" aria-hidden="true" style={primaryColor} />
+                <i className={ENVELOPE_ICON} aria-hidden="true" style={primaryColor} />
                 {supportEmail}
               </a>
-              <div className={`flex-none layout-row layout-align-center-end
-               ${styles.contact_elem}`}
+
+              <div className={trim(`
+                ${ROW('none')} 
+                layout-align-center-end
+               ${styles.contact_elem}
+               `)}
               >
-                <i className="fa fa-phone" aria-hidden="true" style={primaryColor} />
+                <i className={PHONE_ICON} aria-hidden="true" style={primaryColor} />
                 {supportNumber}
               </div>
             </div>
           </div>
         </div>
       }
-      <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
-        <div className="flex-100 layout-align-center">
-          <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-center-center`}>
+      <div className={`${isShop ? styles.footer_shop : styles.footer
+      } layout-row flex-100 layout-wrap`}
+      >
+        <div className={`flex-100 ${styles.button_row}
+         layout-row layout-align-end-center`}
+        >
+          <div className={`flex-50 ${styles.buttons}
+           layout-row layout-align-center-center`}
+          >
+            <div className="flex-50 layout-row layout-align-start-center">
+              <div className="flex-5" />
+              <p className="flex-none">
+                {t('footer:poweredBy')}
+              </p>
+              <div className="flex-5" />
+              <img
+                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                alt=""
+                className={`flex-none ${styles.powered_by_logo}`}
+              />
+            </div>
+          </div>
+          <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
             <div className="flex-25 layout-row layout-align-center-center">
               <a
                 target="_blank"
@@ -95,40 +121,28 @@ export function Footer ({
               </a>
             </div>
           </div>
-        </div>
-        <div className="flex-100 layout-align-center">
-          <div className={`flex-100
-          layout-row layout-align-space-between-center ${styles.lower_footer}`}
-          >
-            <div className="flex-20" />
-            <div className={`flex-60 ${styles.buttons}
-            layout-row layout-align-center-center`}
-            >
-              <div className="flex-45 layout-row layout-align-end-center">
-                <div className="flex-5" />
-                <p className="flex-none">
-                  {t('footer:poweredBy')}
-                </p>
-                <div className="flex-5" />
-              </div>
-              <div className="flex-55 layout-row layout-align-start-center">
-                <img
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  alt=""
-                  className={`flex-none ${styles.powered_by_logo}`}
-                />
-              </div>
+          { isShop
+            ? <div className={`flex-20 ${styles.copyright_shop}`}>
+              <p className="flex-none">
+                {t('footer:copyright')} © {moment().format('YYYY')} {tenantName}
+              </p>
             </div>
-            { isShop
-              ? <div className={`flex-20 layout-row layout-align-center ${styles.copyright_shop}`}>
-                <p className="flex-80">
-                  {`${t('footer:copyright')} © ${moment().format('YYYY')} ${tenantName}`}
-                </p>
-              </div>
-              : <div className="flex-20" />
-            }
-          </div>
+            : <div className="flex-20" />
+          }
         </div>
+        { isShop
+          ? <div />
+          : <div className={`flex-100 layout-row 
+            ${styles.copyright}`}
+          >
+            <div className="flex-80 layout-row layout-align-end-center">
+              <p className="flex-none">
+                {t('footer:copyright')} © {moment().format('YYYY')} {tenantName}
+              </p>
+            </div>
+            <div className="flex-20" />
+          </div>
+        }
       </div>
     </div>
   )
@@ -136,16 +150,15 @@ export function Footer ({
 
 Footer.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
-  isShop: PropTypes.bool,
-  width: PropTypes.number
+  isShop: PropTypes.bool
 }
 
 Footer.defaultProps = {
   theme: {},
   tenant: {},
-  isShop: false,
-  width: null
+  isShop: false
 }
 
 export default translate('footer')(Footer)

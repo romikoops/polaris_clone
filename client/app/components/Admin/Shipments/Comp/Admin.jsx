@@ -25,6 +25,11 @@ export class ShipmentsCompAdmin extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      search: {
+        open: '',
+        requested: '',
+        finished: ''
+      }
     }
     this.viewShipment = this.viewShipment.bind(this)
   }
@@ -106,8 +111,12 @@ export class ShipmentsCompAdmin extends Component {
 
   handleSearchQuery (e, target) {
     const { value } = e.target
-    console.log(value)
-    this.searchShipmentsFromPage(value, target, 1)
+    this.setState({
+      search: {
+        ...this.state.search,
+        [target]: value
+      }
+    }, () => this.searchShipmentsFromPage(value, target, 1))
   }
 
   render () {
@@ -121,6 +130,7 @@ export class ShipmentsCompAdmin extends Component {
       hubHash,
       adminDispatch
     } = this.props
+    const { search } = this.state
     const { pages } = shipments
     if (!shipments || !hubs || !clients) {
       return ''
@@ -141,6 +151,7 @@ export class ShipmentsCompAdmin extends Component {
         <Tabs>
           <Tab
             tabTitle="Requested"
+            extraClick={() => this.getTargetShipmentsFromPage('requested', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -151,6 +162,7 @@ export class ShipmentsCompAdmin extends Component {
               confirmShipmentData={confirmShipmentData}
               tooltip={adminTip.requested}
               page={pages.requested}
+              searchText={search.requested}
               numPages={numShipmentsPages.requested}
               prevPage={() => this.prevPage('requested')}
               nextPage={() => this.nextPage('requested')}
@@ -159,6 +171,7 @@ export class ShipmentsCompAdmin extends Component {
           </Tab>
           <Tab
             tabTitle="Open"
+            extraClick={() => this.getTargetShipmentsFromPage('open', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -167,6 +180,7 @@ export class ShipmentsCompAdmin extends Component {
               shipments={mergedOpenShipments}
               theme={theme}
               tooltip={adminTip.open}
+              searchText={search.open}
               page={pages.open}
               numPages={numShipmentsPages.open}
               prevPage={() => this.prevPage('open')}
@@ -176,6 +190,7 @@ export class ShipmentsCompAdmin extends Component {
           </Tab>
           <Tab
             tabTitle="Finished"
+            extraClick={() => this.getTargetShipmentsFromPage('finished', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -183,6 +198,7 @@ export class ShipmentsCompAdmin extends Component {
               dispatches={adminDispatch}
               shipments={mergedFinishedShipments}
               theme={theme}
+              searchText={search.finished}
               page={pages.finished}
               tooltip={adminTip.finished}
               seeAll={false}

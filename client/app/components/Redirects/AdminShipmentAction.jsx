@@ -4,15 +4,12 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../../components/Modal/Modal'
-import { adminActions } from '../../actions'
+import { adminActions, authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 
 class AdminShipmentAction extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      showLogin: false
-    }
     this.handleAction = this.handleAction.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
   }
@@ -44,19 +41,22 @@ class AdminShipmentAction extends Component {
     }
   }
   toggleShowLogin () {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
+    const { showModal, authenticationDispatch } = this.props
+    if (showModal) {
+      authenticationDispatch.closeLogin()
+    } else {
+      authenticationDispatch.showLogin({ noRedirect: true })
+    }
   }
   render () {
     const { theme, loading } = this.props
     const loginModal = (
       <Modal
-        component={<LoginPage theme={theme} noRedirect />}
+        component={<LoginPage theme={theme} />}
         parentToggle={this.toggleShowLogin}
       />
     )
-    return <div className="layout-fill">{this.state.showLogin && !loading ? loginModal : ''}</div>
+    return <div className="layout-fill">{this.props.showModal && !loading ? loginModal : ''}</div>
   }
 }
 
@@ -65,11 +65,13 @@ AdminShipmentAction.propTypes = {
   loading: PropTypes.bool,
   user: PropTypes.user.isRequired,
   loggedIn: PropTypes.bool,
+  showModal: PropTypes.bool,
   adminDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     confirmShipment: PropTypes.func,
     getShipment: PropTypes.func
   }).isRequired,
+  authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   match: PropTypes.match.isRequired,
   location: PropTypes.location.isRequired
 }
@@ -77,22 +79,25 @@ AdminShipmentAction.propTypes = {
 AdminShipmentAction.defaultProps = {
   theme: null,
   loading: false,
+  showModal: false,
   loggedIn: false
 }
 
 function mapStateToProps (state) {
   const { authentication, tenant } = state
-  const { user, loggedIn } = authentication
+  const { user, loggedIn, showModal } = authentication
   return {
     user,
     tenant,
     theme: tenant.data.theme,
-    loggedIn
+    loggedIn,
+    showModal
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
   }
 }
 
