@@ -2401,7 +2401,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                     }
                   }
                 >
-                  Yes, I want undefined Yes, I want
+                  No, I do not want undefined to handle my customs clearance
                 </p>
               </div>
               <div
