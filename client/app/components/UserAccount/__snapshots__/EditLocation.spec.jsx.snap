@@ -37,7 +37,7 @@ exports[`shallow render 1`] = `
         id="location"
         name="location"
         onChange={[Function]}
-        placeholder="Search for Address"
+        placeholder="Search for address"
         type="string"
         value=""
       />
