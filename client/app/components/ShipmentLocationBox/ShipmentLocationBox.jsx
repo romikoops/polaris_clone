@@ -564,7 +564,7 @@ export class ShipmentLocationBox extends Component {
     const loadType = shipment.load_type
 
     const prefix = target === 'origin' ? 'pre' : 'on'
-
+    debugger
     const availableHubIds = routeFilters.getHubIds(filteredRouteIndexes, lookupTablesForRoutes, routes, target)
     getRequests.findAvailability(
       lat,
@@ -574,6 +574,7 @@ export class ShipmentLocationBox extends Component {
       prefix,
       availableHubIds,
       (truckingAvailable, nexusIds, hubIds) => {
+        debugger
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
             const { direction } = this.props.shipmentData.shipment
@@ -771,22 +772,33 @@ export class ShipmentLocationBox extends Component {
           checked: has_on_carriage
         }
       })
-
-      // Origin/Destination
-      this.props.setTargetAddress('origin', { ...this.props.destination })
-      this.props.setTargetAddress('destination', { ...this.props.origin })
-
-      // Autocomplete Text
-      const {
-        autoText,
-        truckTypes,
-        originTruckingAvailable,
-        destinationTruckingAvailable
-      } = this.state
+      const { autoText } = this.state
       const newAutoText = {
         destination: autoText.origin,
         origin: autoText.destination
       }
+      debugger
+      if (autoText.origin) {
+        this.triggerPlaceChanged(autoText.origin, 'destination')
+      } else {
+        this.props.setTargetAddress('origin', { ...this.props.destination })
+      }
+      if (autoText.destination) {
+        this.triggerPlaceChanged(autoText.destination, 'origin')
+      } else {
+        this.props.setTargetAddress('destination', { ...this.props.origin })
+      }
+      // Origin/Destination
+      // 
+      // 
+
+      // // Autocomplete Text
+      const {
+        truckTypes,
+        originTruckingAvailable,
+        destinationTruckingAvailable
+      } = this.state
+      
       const newTruckTypes = {
         destination: truckTypes.origin,
         origin: truckTypes.destination

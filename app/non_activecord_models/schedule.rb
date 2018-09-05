@@ -87,7 +87,7 @@ class Schedule
         current_etd_in_search
       ]
     )
-
+    binding.pry
     ActiveRecord::Base.connection.exec_query(sanitized_query).map do |attributes|
       Schedule.new(attributes.merge(id: SecureRandom.uuid))
     end
