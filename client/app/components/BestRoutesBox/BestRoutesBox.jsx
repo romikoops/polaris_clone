@@ -21,6 +21,7 @@ export class BestRoutesBox extends Component {
         fastestFare = fees[schedKey].total
       }
     })
+
     return (
       <div
         className={`flex-none layout-row layout-wrap ${styles.best_card}`}
@@ -42,6 +43,7 @@ export class BestRoutesBox extends Component {
     schedules.forEach((sched) => {
       const schedKey = sched.hub_route_key
       if (!fees[schedKey]) {
+        // eslint-disable-next-line no-console
         console.log('err')
       }
       const fare = fees[schedKey].total
@@ -69,17 +71,18 @@ export class BestRoutesBox extends Component {
     const fareArray = schedules.sort((a, b) => {
       const aKey = a.hub_route_key
       const bKey = b.hub_route_key
+
       return fees[aKey] - fees[bKey]
     })
     const timeArray = schedules.sort((a, b) => moment(a.eta).diff(b.etd))
     const depArray = schedules.sort((a, b) => (
       moment(depDate).diff(a.etd) - moment(depDate).diff(b.etd)
     ))
-    
+
     let lowScore = 100
     let bestFare
     let bestOption
-    
+
     schedules.forEach((sched) => {
       const timeScore = timeArray.indexOf(sched)
       const fareScore = fareArray.indexOf(sched)
@@ -139,7 +142,8 @@ BestRoutesBox.propTypes = {
     schedules: PropTypes.array
   }),
   user: PropTypes.user.isRequired,
-  chooseResult: PropTypes.func.isRequired
+  chooseResult: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 
 BestRoutesBox.defaultProps = {
@@ -147,4 +151,4 @@ BestRoutesBox.defaultProps = {
   shipmentData: null
 }
 
-export default translate(['common'])(BestRoutesBox)
+export default translate('common')(BestRoutesBox)

@@ -1,12 +1,12 @@
 import React from 'react'
-// import {EmailSignInForm} from 'redux-auth/bootstrap-theme';
-import styles from './ActiveRoutes.scss'
 import { translate } from 'react-i18next'
+import styles from './ActiveRoutes.scss'
 import PropTypes from '../../prop-types'
 import { Carousel } from '../Carousel/Carousel'
 import { activeRoutesData } from '../../constants'
 
 const actRoutesData = activeRoutesData
+
 export function ActiveRoutes ({ theme, t }) {
   return (
     <div className={`layout-row flex-100 layout-wrap ${styles.active_routes}`}>
@@ -19,11 +19,12 @@ export function ActiveRoutes ({ theme, t }) {
 }
 
 ActiveRoutes.propTypes = {
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  t: PropTypes.func.isRequired
 }
 
 ActiveRoutes.defaultProps = {
   theme: null
 }
 
-export default translate(['common'])(ActiveRoutes)
+export default translate('common')(ActiveRoutes)

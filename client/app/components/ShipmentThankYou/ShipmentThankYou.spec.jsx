@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { user, shipmentData, identity, theme } from '../../mocks'
 
 // eslint-disable-next-line import/first
-import { ShipmentThankYou } from './ShipmentThankYou'
+import ShipmentThankYou from './ShipmentThankYou'
 
 const propsBase = {
   theme,

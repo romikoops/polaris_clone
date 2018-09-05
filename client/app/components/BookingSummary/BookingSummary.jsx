@@ -111,6 +111,7 @@ function BookingSummary (props) {
 BookingSummary.propTypes = {
   theme: PropTypes.theme,
   modeOfTransport: PropTypes.string,
+  t: PropTypes.func.isRequired,
   totalWeight: PropTypes.number,
   totalVolume: PropTypes.number,
   cities: PropTypes.shape({

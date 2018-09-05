@@ -5,7 +5,8 @@ import defs from '../../styles/default_classes.scss'
 import { Modal } from '../Modal/Modal'
 import ContactSetterBody from './Body'
 import ContactSetterNewContactWrapper from './NewContactWrapper'
-import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
+// eslint-disable-next-line no-named-as-default
+import ShipmentContactForm from '../ShipmentContactForm/ShipmentContactForm'
 
 export class ContactSetter extends Component {
   constructor (props) {

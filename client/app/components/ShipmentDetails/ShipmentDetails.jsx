@@ -13,8 +13,10 @@ import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
-import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
-import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
+// eslint-disable-next-line no-named-as-default
+import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
+// eslint-disable-next-line no-named-as-default
+import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'

@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { theme, identity } from '../../mocks'
+// eslint-disable-next-line import/first no-named-as-default
+import ShipmentContainers from './ShipmentContainers'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -24,8 +26,6 @@ jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
   Tooltip: ({ children }) => <div>{children}</div>
 }))
-// eslint-disable-next-line import/first
-import { ShipmentContainers } from './ShipmentContainers'
 
 const createWrapper = propsInput => mount(<ShipmentContainers {...propsInput} />)
 
