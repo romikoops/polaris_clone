@@ -38,7 +38,7 @@ export class AdminHubForm extends Component {
 
     place.address_components.forEach((ac) => {
       if (ac.types.includes('street_number')) {
-        tmpAddress.number = ac.long_name
+        tmpAddress.street_number = ac.long_name
       }
 
       if (ac.types.includes('route') || ac.types.includes('premise')) {
@@ -119,7 +119,7 @@ export class AdminHubForm extends Component {
     const { hub, location } = this.state
     const preppedLocation = {}
     const preppedHub = {}
-    preppedLocation.street_number = location.number
+    preppedLocation.street_number = location.street_number
     preppedLocation.street = location.street
     preppedLocation.zip_code = location.zipCode
     preppedLocation.city = location.city
@@ -178,12 +178,12 @@ export class AdminHubForm extends Component {
       <div className={`${styles.hub_form} layout-row flex-none layout-wrap layout-align-center`}>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div className="flex-5" />
-          <h2 className="flex-none clip letter_3" style={textStyle}>
+          <h2 className="flex-none clip letter_3 margin_5" style={textStyle}>
               Add a New Hub
           </h2>
         </div>
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center">
+        <div className={`flex-100 layout-row layout-align-start-center layout-wrap ${styles.map_padding}`}>
+          <div className="flex-100 layout-row layout-align-start-center margin_5">
             <p className="flex-none offset-5">1: Find the Hub (or nearest location) on the map</p>
           </div>
           <GmapsWrapper
@@ -226,11 +226,11 @@ export class AdminHubForm extends Component {
               <div className="flex-20 layout-row layout-align-center-center input_box_full">
                 <input
                   id="not-auto"
-                  name="location-number"
+                  name="location-street_number"
                   className={`flex-none ${styles.input}`}
                   type="string"
                   onChange={this.handleAddressChange}
-                  value={location.number}
+                  value={location.street_number}
                   placeholder="Number"
                 />
               </div>

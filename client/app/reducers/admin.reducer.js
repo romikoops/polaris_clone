@@ -255,11 +255,11 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
-      const reqShips = merge({}, state, {
-        loading: true
-      })
 
-      return reqShips
+      return {
+        ...state,
+        loading: true
+      }
     }
     case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
       return {
@@ -527,6 +527,30 @@ export default function admin (state = {}, action) {
         loading: false
       }
 
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST:
+      return state
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS: {
+      const docs = state.shipment.documents.filter(x => x.id !== action.payload.id)
+      docs.push(action.payload)
+
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          documents: docs
+        },
+        loading: false
+      }
+    }
+    case adminConstants.ADMIN_UPLOAD_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          hubs: action.error
+        }
+      }
+
     case adminConstants.GET_SCHEDULES_REQUEST:
       return {
         ...state,
@@ -769,19 +793,12 @@ export default function admin (state = {}, action) {
     case adminConstants.UPDATE_PRICING_REQUEST:
       return state
     case adminConstants.UPDATE_PRICING_SUCCESS: {
-      const exPricings = state.pricingData.pricings
-        .filter(pricing => pricing.id !== action.payload.pricing.id)
-      exPricings.push(action.payload)
       const exItineraryPricings = state.itineraryPricings.itineraryPricingData
         .filter(pricingObj => pricingObj.pricing.id !== action.payload.pricing.id)
       exItineraryPricings.push(action.payload)
 
       return {
         ...state,
-        pricingData: {
-          ...state.pricingData,
-          pricings: exPricings
-        },
         itineraryPricings: {
           ...state.itineraryPricings,
           itineraryPricingData: exItineraryPricings

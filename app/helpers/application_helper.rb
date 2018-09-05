@@ -27,6 +27,8 @@ module ApplicationHelper
       currency = args.first["currency"]
     end
 
+    return 'Price to be finalised on booking completion' if price.nil?
+    
     return format("%.2f", price) if currency.nil?
 
     number_to_currency(price, unit: currency, format: "%n %u")

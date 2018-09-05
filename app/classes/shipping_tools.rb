@@ -72,7 +72,16 @@ module ShippingTools
   end
 
   def create_document(file, shipment, type, user)
-    Document.new_upload(file, shipment, type, user)
+    if type != 'miscellaneous'
+      existing_document = shipment.documents.where(doc_type: type).first
+      if existing_document
+        existing_document.update_file(file, shipment, type, user)
+      else
+        Document.new_upload(file, shipment, type, user)
+      end
+    else
+      Document.new_upload(file, shipment, type, user)
+    end
   end
 
   def self.update_shipment(params, current_user)
@@ -107,7 +116,9 @@ module ShippingTools
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
-    notifyees = shipment_data[:notifyees].try(:map) do |_resource|
+    notifyees = shipment_data[:notifyees].try(:map) do |resource|
+      contact_location = Location.create_and_geocode(contact_location_params(resource))
+      contact_params = contact_params(resource, contact_location.id)
       contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
       contact
@@ -568,15 +579,15 @@ module ShippingTools
   end
 
   def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later if ENV['BETA'] != 'true'
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later if ENV['BETA'] != 'true'
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if ENV['BETA'] != 'true'
+    if Rails.env.production? && ENV['BETA'] != 'true'
       ShipmentMailer.shipper_confirmation(
         user,
         shipment

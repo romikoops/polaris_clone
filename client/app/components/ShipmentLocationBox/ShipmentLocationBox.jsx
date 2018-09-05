@@ -645,7 +645,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({
       autoText: { ...this.state.autoText, [target]: '' },
       [target]: tmpAddress
-    })
+    }, () => this.props.setTargetAddress(target, tmpAddress))
   }
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
@@ -993,7 +993,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.street}
+            value={origin.street || ''}
             autoComplete="off"
             placeholder="Street"
           />
@@ -1008,7 +1008,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.number}
+            value={origin.number || ''}
             autoComplete="off"
             placeholder="Number"
           />
@@ -1022,7 +1022,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.zipCode}
+            value={origin.zipCode || ''}
             autoComplete="off"
             placeholder="Zip Code"
           />
@@ -1036,7 +1036,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.city}
+            value={origin.city || ''}
             autoComplete="off"
             placeholder="City"
           />
@@ -1050,7 +1050,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.country}
+            value={origin.country || ''}
             autoComplete="off"
             placeholder="Country"
           />
@@ -1122,7 +1122,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.street}
+            value={destination.street || ''}
             autoComplete="off"
             placeholder="Street"
           />
@@ -1136,7 +1136,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.number}
+            value={destination.number || ''}
             autoComplete="off"
             placeholder="Number"
           />
@@ -1149,7 +1149,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.zipCode}
+            value={destination.zipCode || ''}
             autoComplete="off"
             placeholder="Zip Code"
           />
@@ -1162,7 +1162,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.city}
+            value={destination.city || ''}
             autoComplete="off"
             placeholder="City"
           />
@@ -1175,7 +1175,7 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.country}
+            value={destination.country || ''}
             autoComplete="off"
             placeholder="Country"
           />

@@ -21,6 +21,19 @@ class Document < ApplicationRecord
     )
   end
 
+  def update_file(file, shipment, type, user)
+    file_name = file.original_filename.gsub(/[^0-9A-Za-z.\-]/, "_")
+    obj_key = Document.obj_key(shipment, type, file_name)
+    upload(bucket: "imcdev", key: obj_key, file: file.tempfile, content_type: file.content_type, acl: "private")
+
+    self.update_attributes!(
+      url:         obj_key,
+      text:        file_name,
+      doc_type:    type
+    )
+    self
+  end
+
   def self.new_upload_backend(file, shipment, type, user)
     file_name = File.basename(file.path)
     obj_key = self.obj_key(shipment, type, file_name)
