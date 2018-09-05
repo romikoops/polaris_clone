@@ -136,6 +136,7 @@ export function Footer ({
 
 Footer.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   isShop: PropTypes.bool,
   width: PropTypes.number

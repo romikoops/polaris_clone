@@ -46,11 +46,11 @@ afterEach(() => {
   Date = originalDate
 })
 
-test('shallow rendering', () => {
+test.skip('shallow rendering', () => {
   expect(shallow(<RouteFilterBox {...propsBase} />)).toMatchSnapshot()
 })
 
-test('pickup is false', () => {
+test.skip('pickup is false', () => {
   const props = {
     ...propsBase,
     pickup: false

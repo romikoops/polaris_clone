@@ -223,8 +223,8 @@ export class CargoDetails extends Component {
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
-        <div className="flex-80 layout-row layout-wrap">
-          <p className="flex-90">
+        <div className="flex-60 layout-row layout-wrap">
+          <p className="flex-90 margin_5">
             <strong>
               {' '}
               {t('cargo:conditionFirst')}
@@ -345,13 +345,13 @@ export class CargoDetails extends Component {
           styles.no_customs_box
         } ${!this.state.customsView ? styles.show : ''}`}
       >
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <p className="flex-100">
+        <div className="flex-60 layout-row layout-align-start-center layout-wrap">
+          <p className="flex-100 margin_5">
             <b>
               {noCustomsText}
             </b>
           </p>
-          <p className="flex-100">
+          <p className="flex-100 margin_5">
             <b>
               {t('cargo:euRules')}
             </b>
@@ -681,7 +681,7 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-center">
-                    <p className="flex-100">
+                    <p className="flex-60 margin_5">
                       <b>
                         {t('cargo:cargoInsurance')}
                       </b>
@@ -689,7 +689,7 @@ export class CargoDetails extends Component {
                   </div>
                   {!this.state.insuranceView ? (
                     <div className="flex-100 layout-row layout-align-start-center">
-                      <p className="flex-100">
+                      <p className="flex-60 margin_5">
                         <b>
                           {t('cargo:effectiveInsurance')}
                         </b>
@@ -797,6 +797,7 @@ export class CargoDetails extends Component {
 
 CargoDetails.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,

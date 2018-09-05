@@ -28,7 +28,8 @@ exports[`shallow render 1`] = `
           <div
             className="welcome flex layout-row"
           >
-            Welcome back,  
+            Welcome back,
+              
             <b>
               John
             </b>

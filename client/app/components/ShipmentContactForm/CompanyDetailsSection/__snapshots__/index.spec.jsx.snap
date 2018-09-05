@@ -41,8 +41,8 @@ exports[`shallow rendering 1`] = `
         validationError=""
         validationErrors={
           Object {
-            "isDefaultRequiredValue": "Must be at least two characters longs",
-            "minLength": "Must be at least two characters longs",
+            "isDefaultRequiredValue": "Must be at least two characters long",
+            "minLength": "Must be at least two characters long",
           }
         }
         validations="minLength:2"
@@ -88,8 +88,8 @@ exports[`shallow rendering 1`] = `
           validationError=""
           validationErrors={
             Object {
-              "isDefaultRequiredValue": "Must be at least two characters longs",
-              "minLength": "Must be at least two characters longs",
+              "isDefaultRequiredValue": "Must be at least two characters long",
+              "minLength": "Must be at least two characters long",
             }
           }
           validations="minLength:2"
@@ -113,8 +113,8 @@ exports[`shallow rendering 1`] = `
           validationError=""
           validationErrors={
             Object {
-              "isDefaultRequiredValue": "Must be at least two characters longs",
-              "minLength": "Must be at least two characters longs",
+              "isDefaultRequiredValue": "Must be at least two characters long",
+              "minLength": "Must be at least two characters long",
             }
           }
           validations="minLength:2"

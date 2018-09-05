@@ -14,7 +14,6 @@ const isObject = (x) => {
 
   return Object.keys(x).length > 0
 }
-
 /* eslint-disable */
 /**
  * Used in unit test to modify specific properties
@@ -72,7 +71,6 @@ export const change = (origin, pathRaw, rules) => {
   return willReturn
 }
 /* eslint-enable */
-
 export const identity = input => input
 
 export const theme = {
@@ -140,6 +138,9 @@ export const shipmentInShipmentData = {
   total_goods_value: {
     value: 15,
     currency: 'USD'
+  },
+  trucking: {
+    pre_carriage: { trucking_time_in_seconds: 55 }
   },
   has_on_carriage: false,
   has_pre_carriage: false,

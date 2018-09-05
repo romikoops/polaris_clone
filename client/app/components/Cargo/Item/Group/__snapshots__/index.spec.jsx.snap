@@ -103,7 +103,7 @@ exports[`props.viewHSCodes is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_3"
+        key="RANDOM_KEY_1"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -125,14 +125,14 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="Group_5_4"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="RANDOM_KEY_0"
             data-tip="Length"
             src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="RANDOM_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -152,14 +152,14 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="Group_5"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="RANDOM_KEY_0"
             data-tip="Height"
             src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="RANDOM_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -179,14 +179,14 @@ exports[`props.viewHSCodes is true 1`] = `
           <img
             alt="Group_5_5"
             border="0"
-            data-for="RANDOM_KEY_2"
+            data-for="RANDOM_KEY_0"
             data-tip="Width"
             src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_2"
+            id="RANDOM_KEY_0"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -605,7 +605,7 @@ exports[`state.unitView is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_7"
+        key="RANDOM_KEY_5"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -627,14 +627,14 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="Group_5_4"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="RANDOM_KEY_4"
             data-tip="Length"
             src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="RANDOM_KEY_4"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -654,14 +654,14 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="Group_5"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="RANDOM_KEY_4"
             data-tip="Height"
             src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="RANDOM_KEY_4"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -681,14 +681,14 @@ exports[`state.unitView is true 1`] = `
           <img
             alt="Group_5_5"
             border="0"
-            data-for="RANDOM_KEY_6"
+            data-for="RANDOM_KEY_4"
             data-tip="Width"
             src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_6"
+            id="RANDOM_KEY_4"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -856,7 +856,7 @@ exports[`state.viewer is true 1`] = `
     >
       <div
         className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
-        key="RANDOM_KEY_11"
+        key="RANDOM_KEY_9"
       >
         <div
           className="flex-10 layout-row layout-align-center-center"
@@ -878,14 +878,14 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="Group_5_4"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="RANDOM_KEY_8"
             data-tip="Length"
             src="https://image.ibb.co/cdRkSy/Group_5_4.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="RANDOM_KEY_8"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -905,14 +905,14 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="Group_5"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="RANDOM_KEY_8"
             data-tip="Height"
             src="https://image.ibb.co/f9QR0J/Group_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="RANDOM_KEY_8"
             insecure={true}
             resizeHide={true}
             wrapper="div"
@@ -932,14 +932,14 @@ exports[`state.viewer is true 1`] = `
           <img
             alt="Group_5_5"
             border="0"
-            data-for="RANDOM_KEY_10"
+            data-for="RANDOM_KEY_8"
             data-tip="Width"
             src="https://image.ibb.co/edttEd/Group_5_5.png"
           />
           <ReactTooltip
             className="tooltip"
             effect="solid"
-            id="RANDOM_KEY_10"
+            id="RANDOM_KEY_8"
             insecure={true}
             resizeHide={true}
             wrapper="div"

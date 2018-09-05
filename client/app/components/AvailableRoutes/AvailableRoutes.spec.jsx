@@ -14,6 +14,6 @@ const propsBase = {
   routeSelected: identity
 }
 
-test('x', () => {
+test('shallow render', () => {
   expect(shallow(<AvailableRoutes {...propsBase} />)).toMatchSnapshot()
 })

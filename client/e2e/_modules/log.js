@@ -10,22 +10,21 @@ const options = {
   warning: { iconFn: warning, colorFn: chalk.yellow }
 }
 
-let counter = 0
 export function log (input, label) {
-  if (input === 'SEPARATOR') {
-    return console.log(gradient.passion('________________________________________'))
-  }
-  if (counter++ % 12 === 0) {
-    log('SEPARATOR')
-  }
   if (label === 'SELECTOR') {
+    const selector = typeof input.selector === 'string'
+      ? input.selector
+      : JSON.stringify(input.selector)
+
     return console.log(boxen(
-      `${input.type} ${input.selector}`,
-      { padding: 1, margin: 1, borderStyle: 'single' }
+      `${input.type} ${selector}`,
+      { padding: 0, margin: 0, borderStyle: 'double' }
     ))
   }
   if (label === undefined) {
     return console.log(chalk.green.bold(input))
+  } else if (label === 'gradient') {
+    return console.log(gradient.passion(input))
   }
   const { iconFn, colorFn } = options[label]
 

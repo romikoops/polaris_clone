@@ -79,10 +79,10 @@ export default async function orderExportLCL (puppeteer) {
   /**
    * Click review booking
    */
-  await clickReviewBooking(puppeteer, expect)
+  // await clickReviewBooking(puppeteer, expect)
 
   /**
    * Click review booking and complete the test
    */
-  await completeBooking(puppeteer, expect)
+  // await completeBooking(puppeteer, expect)
 }

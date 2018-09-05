@@ -522,7 +522,7 @@ export class UserShipmentView extends Component {
                             <div className="flex-none layout-row">
                               <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.has_pre_carriage ? selectedStyle : deselectedStyle} />
                               <p>
-                                {t('shipment:pickup')}
+                                {t('shipment:pickUp')}
                               </p>
                             </div>
                             {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
@@ -751,7 +751,7 @@ export class UserShipmentView extends Component {
                           {shipment.total_goods_value ? (
                             <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                               <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">
-                                {t('common:totalValue')}:
+                                {t('cargo:totalValue')}:
                               </span>
                               <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                                 {shipment.total_goods_value.value}
@@ -761,7 +761,7 @@ export class UserShipmentView extends Component {
                           ) : (
                             <div className="flex-100 layout-xs-column layout-row layout-align-start-start">
                               <span className="flex-40 flex-xs-100 layout-align-xs-start-center layout-row">
-                                {t('common:totalValue')}:
+                                {t('cargo:totalValue')}:
                               </span>
                               <p className={`flex-60 flex-xs-100 layout-align-xs-start-center layout-row ${styles.info_values}`}>
                         -
@@ -876,7 +876,7 @@ export class UserShipmentView extends Component {
                       <div className="flex-100 layout-row layout-wrap layout-align-start-center ">
                         <div className="flex-50 layout-align-start-center layout-row">
                           <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
-                            {t('shipment:uploadNewDocument')}
+                            {t('common:uploadNewDocument')}
                           </p>
                           <StyledSelect
                             name="file-type"

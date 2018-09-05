@@ -4,7 +4,7 @@ import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
 import { moment } from '../../constants'
 
-export function Footer ({
+export default function Footer ({
   theme, tenant, isShop, width
 }) {
   const primaryColor = {
@@ -144,5 +144,3 @@ Footer.defaultProps = {
   isShop: false,
   width: null
 }
-
-export default Footer

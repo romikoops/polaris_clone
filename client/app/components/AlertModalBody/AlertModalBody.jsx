@@ -6,6 +6,7 @@ export function AlertModalBody (props) {
   const {
     message, maxWidth, logo, toggleAlertModal
   } = props
+
   return (
     <div
       className="layout row layout-align-center"

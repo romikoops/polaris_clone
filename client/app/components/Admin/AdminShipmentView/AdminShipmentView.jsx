@@ -27,6 +27,7 @@ import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import Tabs from '../../Tabs/Tabs'
 import Tab from '../../Tabs/Tab'
 
+
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
@@ -107,6 +108,7 @@ export class AdminShipmentView extends Component {
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
+    this.handleFinished = this.handleFinished.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
     this.toggleEditServicePrice = this.toggleEditServicePrice.bind(this)
     this.toggleEditTime = this.toggleEditTime.bind(this)
@@ -189,6 +191,11 @@ export class AdminShipmentView extends Component {
   }
   toggleEditTime () {
     this.setState({ showEditTime: !this.state.showEditTime })
+  }
+
+  deleteDoc (file) {
+    const { adminDispatch } = this.props
+    adminDispatch.deleteDocument(file.id)
   }
   prepCargoItemGroups (cargos) {
     const { theme, shipmentData } = this.props
@@ -334,6 +341,13 @@ export class AdminShipmentView extends Component {
   handleNewTotalChange (event) {
     const { value } = event.target
     this.setState({ newTotal: +value })
+  }
+  fileFn (file) {
+    const { shipmentData, adminDispatch } = this.props
+    const { shipment } = shipmentData
+    const type = file.doc_type
+    const url = `/shipments/${shipment.id}/upload/${type}`
+    adminDispatch.uploadDocument(file, type, url)
   }
   render () {
     const {
@@ -566,6 +580,11 @@ export class AdminShipmentView extends Component {
             ) : (
               ''
             )}
+            {shipment.status === 'confirmed' ? (
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
+            ) : (
+              ''
+            )}
             <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
           </div>
         </div>
@@ -795,7 +814,7 @@ export class AdminShipmentView extends Component {
                                     : parseFloat(feeHash.export.total.value).toFixed(2)}
                                 </p>
                               </div>
-                                : ''}                             
+                                : ''}
                             </div>
                           </div>
                         </div>
@@ -940,7 +959,7 @@ export class AdminShipmentView extends Component {
                                   </span>
                                   <input
                                     type="number"
-                                    onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                                    onChange={e => this.handlePriceChange('insurance', e.target.value)}
                                     value={Number(newPrices.insurance.value).toFixed(2)}
                                     className="layout-padding layout-row flex-70 flex-initial"
                                   />

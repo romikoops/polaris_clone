@@ -4,7 +4,7 @@ const loginButton = 'layout-fill layout-row layout-align-space-around-center'
 
 const BUTTONS = 'button > div'
 const LOGIN_BUTTON = `div[class="${loginButton}"]`
-const LOGIN_LINK_HOME = 'div.flex-70 a'
+const LOGIN_LINK_HOME = '.pointy a'
 const PASSWORD = 'input[name="password"]'
 const USER = 'input[name="email"]'
 const ACCOUNT_PAGE_LOADED = `i.fa-tachometer`

@@ -1,5 +1,4 @@
 import React from 'react'
-import { translate } from 'react-i18next'
 import fetch from 'isomorphic-fetch'
 import { Link } from 'react-router-dom'
 import Truncate from 'react-truncate'
@@ -9,8 +8,15 @@ import { authHeader } from '../../helpers'
 import styles from './FileTile.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { BASE_URL, moment, documentTypes } from '../../constants'
+import { ROW, WRAP_ROW, trim, ALIGN_CENTER, ALIGN_END } from '../../classNames'
 
+const CONTAINER = `FILE_TILE ${WRAP_ROW('none')} layout-align-center-start ${styles.tile}`
+const CHECK_ICON = 'clip fa fa-check'
+const EYE_ICON = 'clip fa fa-eye'
+const PENCIL_ICON = 'fa fa-pencil clip'
+const TRASH_ICON = 'clip fa fa-trash'
 const docTypes = documentTypes
+
 class FileTile extends React.Component {
   static handleResponse (response) {
     if (!response.ok) {
@@ -22,21 +28,21 @@ class FileTile extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      file: null,
       denial: {},
+      file: null,
       showDenialDetails: false
     }
-    this.onFormSubmit = this.onFormSubmit.bind(this)
-    this.onChange = this.onChange.bind(this)
-    this.fileUpload = this.fileUpload.bind(this)
     this.deleteFile = this.deleteFile.bind(this)
-    this.toggleShowDenial = this.toggleShowDenial.bind(this)
-    this.handleDeny = this.handleDeny.bind(this)
+    this.fileUpload = this.fileUpload.bind(this)
     this.handleApprove = this.handleApprove.bind(this)
     this.handleDenialForm = this.handleDenialForm.bind(this)
+    this.handleDeny = this.handleDeny.bind(this)
+    this.onChange = this.onChange.bind(this)
+    this.onFormSubmit = this.onFormSubmit.bind(this)
+    this.toggleShowDenial = this.toggleShowDenial.bind(this)
   }
   onFormSubmit (e) {
-    e.preventDefault()
+    e.preventDefault() // Stop form submit
     this.fileUpload(this.state.file)
   }
   onChange (e) {
@@ -53,10 +59,11 @@ class FileTile extends React.Component {
   fileUpload (file) {
     const { type, dispatchFn, doc } = this.props
     const url = `/shipments/${doc.shipment_id}/upload/${doc.doc_type}`
-
     if (!file) return ''
-    if (dispatchFn) return dispatchFn(file)
 
+    if (dispatchFn) {
+      return dispatchFn(file)
+    }
     const formData = new window.FormData()
     formData.append('file', file)
     formData.append('type', type)
@@ -88,61 +95,47 @@ class FileTile extends React.Component {
   toggleShowDenial () {
     this.setState({ showDenialDetails: !this.state.showDenialDetails })
   }
+
   render () {
+    const { showDenialDetails, denial } = this.state
+    const {
+      theme,
+      type,
+      doc,
+      isAdmin
+    } = this.props
+
     const clickUploaderInput = () => {
       this.uploaderInput.click()
     }
-    const { showDenialDetails, denial } = this.state
-    const {
-      doc,
-      isAdmin,
-      t,
-      theme,
-      type
-    } = this.props
+    const textStyle = textStyleFn(theme)
+    const statusStyle = statusStyleFn(doc)
 
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
+    const LinkComponent = () => {
+      if (!doc.signed_url) return ''
+
+      return (
+        <Link
+          className={`${ROW('none')} ${ALIGN_CENTER}`}
+          target="_blank"
+          to={doc.signed_url}
+        >
+          <i className={EYE_ICON} style={textStyle} />
+        </Link>
+      )
     }
-
-    let statusStyle
-    if (doc.approved === 'approved') {
-      statusStyle = styles.approved
-    } else if (doc.approved === 'rejected') {
-      statusStyle = styles.rejected
-    } else if (doc.approved === null) {
-      statusStyle = styles.pending
-    }
-
-    const link = doc.signed_url ? (
-      <Link
-        to={doc.signed_url}
-        className="flex-none layout-row layout-align-center-center"
-        target="_blank"
-      >
-        <i className="clip fa fa-eye" style={textStyle} />
-      </Link>
-    ) : (
-      ''
-    )
 
     const denyDetails = (
-      <div className={`flex-none layout-row layout-align-center-center  ${styles.backdrop}`}>
+      <div className={`${ROW('none')} ${ALIGN_CENTER} ${styles.backdrop}`}>
         <div className={`flex-none ${styles.fade}`} onClick={this.toggleShowDenial} />
-        <div
-          className={`flex-none layout-row layout-wrap layout-align-center-start  ${
-            styles.content
-          }`}
-        >
-          <div className="flex-100 layout-row layout-align-start-center">
+        <div className={`${WRAP_ROW('none')} layout-align-center-start  ${styles.content}`}>
+          <div className={`${ROW(100)} layout-align-start-center`}>
             <h3 className="flex-none clip" style={textStyle}>
-              {t('doc:reject')}
+              Reject document
             </h3>
           </div>
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.input_box}`}>
+
+          <div className={`${ROW(100)} layout-align-start-center ${styles.input_box}`}>
             <textarea
               rows="4"
               className="flex-100"
@@ -150,12 +143,13 @@ class FileTile extends React.Component {
               onChange={this.handleDenialForm}
             />
           </div>
-          <div className="flex-100 layout-row layout-align-end-end">
-            <div className="flex-none layout-row" style={{ margin: '15px' }}>
+
+          <div className={`${ROW(100)} ${ALIGN_END}`}>
+            <div className={ROW('none')} style={{ margin: '15px' }}>
               <RoundButton
                 theme={theme}
                 size="small"
-                text={t('common:deny')}
+                text="Deny"
                 iconClass="fa-times"
                 handleNext={this.handleDeny}
               />
@@ -166,16 +160,14 @@ class FileTile extends React.Component {
     )
 
     const userRow = (
-      <div className="flex-100 layout-row layout-align-center-end">
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
+      <div className={`${ROW(100)} layout-align-center-end`}>
+        <div className={`${styles.upload_btn_wrapper} ${ROW(33)} ${ALIGN_CENTER}`}>
           <form
-            className="flex-none layout-row layout-align-center-center"
+            className={`${ROW('none')} ${ALIGN_CENTER}`}
             onSubmit={this.onFormSubmit}
           >
             <div className="flex-none" onClick={clickUploaderInput}>
-              <i className="fa fa-pencil clip" style={textStyle} />
+              <i className={PENCIL_ICON} style={textStyle} />
             </div>
             <input
               type="file"
@@ -187,97 +179,89 @@ class FileTile extends React.Component {
             />
           </form>
         </div>
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
+
+        <div className={`${styles.upload_btn_wrapper} ${ROW('33')} ${ALIGN_CENTER}`}>
           <div
-            className="flex-none layout-row layout-align-center-center"
+            className={`${ROW('none')} ${ALIGN_CENTER}`}
             onClick={this.deleteFile}
           >
-            <i className="clip fa fa-trash" style={textStyle} />
+            <i className={TRASH_ICON} style={textStyle} />
           </div>
         </div>
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
-          {link}
+        <div className={`${styles.upload_btn_wrapper} ${ROW(33)} ${ALIGN_CENTER}`}>
+          {LinkComponent()}
         </div>
       </div>
     )
 
     const adminRow = (
-      <div className="flex-100 layout-row layout-align-center-end">
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
+      <div className={`${ROW(100)} layout-align-center-end`}>
+        <div className={`${styles.upload_btn_wrapper} ${ROW(33)} ${ALIGN_CENTER}`}>
           <div
-            className="flex-none layout-row layout-align-center-center"
+            className={`${ROW('none')} ${ALIGN_CENTER}`}
             onClick={this.handleApprove}
           >
-            <i className="clip fa fa-check" style={textStyle} />
+            <i className={CHECK_ICON} style={textStyle} />
           </div>
         </div>
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
-          <div
-            className="flex-none layout-row layout-align-center-center"
-            onClick={this.toggleShowDenial}
-          >
-            <i className=" fa fa-times" style={{ color: 'red' }} />
+        <div className={`${styles.upload_btn_wrapper} ${ROW(33)} ${ALIGN_CENTER}`}>
+          <div className={`${ROW('none')} ${ALIGN_CENTER}`} onClick={this.toggleShowDenial}>
+            <i className="fa fa-times" style={{ color: 'red' }} />
           </div>
         </div>
-        <div
-          className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}
-        >
-          {link}
+        <div className={`${styles.upload_btn_wrapper} ${ROW(33)} ${ALIGN_CENTER}`}>
+          {LinkComponent()}
         </div>
       </div>
     )
-
     const bottomRow = isAdmin ? adminRow : userRow
 
     return (
-      <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} `}>
+      <div className={CONTAINER}>
         {showDenialDetails ? denyDetails : ''}
-        <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_header
-              }`}
+        <div className={`${WRAP_ROW(100)} ${ALIGN_CENTER}`}>
+          <div className={`${WRAP_ROW(100)} layout-align-center-start`}>
+            <div className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start 
+                ${styles.file_header}
+              `)}
             >
-              <p className="flex-100">
-                {t('common:title')}
-              </p>
+              <p className="flex-100">Title</p>
             </div>
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_text
-              }`}
+            <div className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start 
+                ${styles.file_text}
+              `)}
             >
               <p className="flex-100">
                 <Truncate lines={1}>{doc.text} </Truncate>
               </p>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_header
-              }`}
+
+          <div className={`${WRAP_ROW(100)} layout-align-center-start`}>
+            <div className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start 
+                ${styles.file_header}
+              `)}
             >
               <p className="flex-100">Type</p>
             </div>
+
             <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_text
-              }`}
+              className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start
+                ${styles.file_text}
+              `)}
             >
               <p className="flex-100">{docTypes[doc.doc_type]}</p>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+          <div className={`${WRAP_ROW(100)} layout-align-center-start`}>
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
                 styles.file_header
@@ -285,32 +269,28 @@ class FileTile extends React.Component {
             >
               <p className="flex-100">Uploaded</p>
             </div>
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_text
-              }`}
+            <div className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start 
+                ${styles.file_text}
+              `)}
             >
               <p className="flex-100">{moment(doc.created_at).format('lll')}</p>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_header
-              }`}
-            >
-              <p className="flex-100">
-                {t('common:status')}
-              </p>
+          <div className={`${WRAP_ROW(100)} layout-align-center-start`}>
+            <div className={`${WRAP_ROW(100)} layout-align-center-start ${styles.file_header}`}>
+              <p className="flex-100">Status</p>
             </div>
             <div
-              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-                styles.file_text
-              } ${statusStyle}`}
+              className={trim(`
+                ${WRAP_ROW(100)}
+                layout-align-center-start 
+                  ${styles.file_text}
+                ${statusStyle}
+              `)}
             >
-              <p className="flex-100">
-                {doc.approved ? doc.approved : t('common:pending')}
-              </p>
+              <p className="flex-100">{doc.approved ? doc.approved : 'Pending'}</p>
             </div>
           </div>
         </div>
@@ -339,4 +319,25 @@ FileTile.defaultProps = {
   isAdmin: false
 }
 
-export default translate(['common', 'doc'])(FileTile)
+function textStyleFn (theme) {
+  return {
+    background:
+      theme && theme.colors
+        ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
+        : 'black'
+  }
+}
+
+function statusStyleFn (doc) {
+  if (doc.approved === 'approved') {
+    return styles.approved
+  } else if (doc.approved === 'rejected') {
+    return styles.rejected
+  } else if (doc.approved === null) {
+    return styles.pending
+  }
+
+  return undefined
+}
+
+export default FileTile

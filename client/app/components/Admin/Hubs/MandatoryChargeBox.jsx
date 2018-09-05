@@ -48,6 +48,7 @@ class MandatoryChargeBox extends PureComponent {
     const {
       theme
     } = this.props
+    if (!mandatoryCharge.id) return ''
 
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
@@ -64,7 +65,7 @@ class MandatoryChargeBox extends PureComponent {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : 'black'
-    const editHasOccured = mandatoryCharge.import_charges !== this.props.mandatoryCharge.import_charges &&
+    const editHasOccured = mandatoryCharge.import_charges !== this.props.mandatoryCharge.import_charges ||
     mandatoryCharge.export_charges !== this.props.mandatoryCharge.export_charges
 
     return (

@@ -1,4 +1,3 @@
-/* eslint-disable */
 module.exports = function (wallaby) {
   return {
     files: [

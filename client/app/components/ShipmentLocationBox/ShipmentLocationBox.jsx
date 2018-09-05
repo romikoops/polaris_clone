@@ -646,7 +646,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({
       autoText: { ...this.state.autoText, [target]: '' },
       [target]: tmpAddress
-    })
+    }, () => this.props.setTargetAddress(target, tmpAddress))
   }
   handleAddressFormFocus (event) {
     const target = event.target.name.split('-')[0]
@@ -994,8 +994,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.street}
             placeholder={t('user:street')}
+            value={origin.street || ''}
+            autoComplete="off"
           />
           <input
             id="not-auto"
@@ -1008,8 +1009,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.number}
             placeholder={t('user:number')}
+            value={origin.number || ''}
+            autoComplete="off"
           />
           <input
             name="origin-zipCode"
@@ -1021,8 +1023,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.zipCode}
             placeholder={t('user:postalCode')}
+            value={origin.zipCode || ''}
+            autoComplete="off"
           />
           <input
             name="origin-city"
@@ -1034,8 +1037,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.city}
             placeholder={t('user:city')}
+            value={origin.city || ''}
+            autoComplete="off"
           />
           <input
             name="origin-country"
@@ -1047,8 +1051,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={origin.country}
             placeholder={t('user:country')}
+            value={origin.country || ''}
+            autoComplete="off"
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div
@@ -1118,8 +1123,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.street}
             placeholder={t('user:street')}
+            value={destination.street || ''}
+            autoComplete="off"
           />
           <input
             name="destination-number"
@@ -1131,8 +1137,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.number}
             placeholder={t('user:number')}
+            value={destination.number || ''}
+            autoComplete="off"
           />
           <input
             name="destination-zipCode"
@@ -1143,8 +1150,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.zipCode}
             placeholder={t('user:postalCode')}
+            value={destination.zipCode || ''}
+            autoComplete="off"
           />
           <input
             name="destination-city"
@@ -1155,8 +1163,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.city}
             placeholder={t('user:city')}
+            value={destination.city || ''}
+            autoComplete="off"
           />
           <input
             name="destination-country"
@@ -1167,8 +1176,9 @@ export class ShipmentLocationBox extends Component {
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
             onBlur={this.handleAddressFormFocus}
-            value={destination.country}
             placeholder={t('user:country')}
+            value={destination.country || ''}
+            autoComplete="off"
           />
           <div className="flex-100 layout-row layout-align-start-center">
             <div

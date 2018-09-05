@@ -323,7 +323,6 @@ export class ChooseOffer extends Component {
     )
   }
 }
-
 ChooseOffer.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,

@@ -37,7 +37,7 @@ exports[`shallow render 1`] = `
         id="location"
         name="location"
         onChange={[Function]}
-        placeholder="Search for address"
+        placeholder="Search for Address"
         type="string"
         value=""
       />
@@ -66,7 +66,7 @@ exports[`shallow render 1`] = `
         id="not-auto"
         name="location-number"
         onChange={[Function]}
-        placeholder="Number"
+        placeholder="Street Number"
         type="string"
         value={579}
       />
@@ -82,7 +82,7 @@ exports[`shallow render 1`] = `
         className="flex-none input"
         name="location-zipCode"
         onChange={[Function]}
-        placeholder="Zip Code"
+        placeholder="Postal Code"
         type="string"
         value="22456"
       />

@@ -7,14 +7,16 @@ import PropTypes from '../../../../prop-types'
 import CargoContainerGroupAggregated from './Aggregated'
 import { LOAD_TYPES, cargoGlossary } from '../../../../constants'
 import { gradientTextGenerator } from '../../../../helpers'
+import { trim, ROW, WRAP_ROW, ALIGN_CENTER } from '../../../../classNames'
 
+const CONTAINER = `CARGO_CONTAINER_GROUP ${styles.info}`
 export class CargoContainerGroup extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      viewer: false,
+      collapsed: false,
       unitView: false,
-      collapsed: false
+      viewer: false
     }
     this.handleCollapser = this.handleCollapser.bind(this)
     this.viewHsCodes = this.viewHsCodes.bind(this)
@@ -99,56 +101,100 @@ export class CargoContainerGroup extends Component {
         </div>
       </div>
     )
-    // const unitStyle = unitView ? styles.open_panel : styles.closed_panel
+
     const aggStyle = unitView ? styles.closed_panel : styles.open_panel
-    const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
-    const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
     const aggViewer = (
       <div
-        className={`${aggStyle} ${
-          styles.panel
-        } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
+        className={trim(`
+        ${aggStyle} 
+        ${styles.panel}
+        ${WRAP_ROW(100)}
+        layout-align-none-center
+      `)}
       >
         <CargoContainerGroupAggregated group={group} />
       </div>
     )
 
+    const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
+    const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
+    const CargoItem = shipment.load_type === 'cargo_item'
+      ? <div className={styles.icon_cargo_item} style={imgLCL} />
+      : <div className={styles.icon_cargo_item} style={imgFCL} />
+
     const cargoCategory = group.cargoType ? group.cargoType.category : cargoGlossary[group.size_class]
 
     return (
-      <div className={`${styles.info}`}>
-        <div className={`flex-100 layout-row layout-align-center-center ${styles.height_box} ${collapsed ? styles.height_box : styles.height_box}`}>
-          <div className={`flex-5 layout-row layout-align-center-center ${styles.side_border}`}>
-            <p className={`flex-none layout-row layout-align-center-center ${styles.cargo_unit}`}>{group.groupAlias}</p>
+      <div className={CONTAINER}>
+        <div className={trim(`
+          ${ROW(100)} 
+          ${ALIGN_CENTER} 
+          ${styles.height_box} 
+          ${collapsed ? styles.height_box : styles.height_box}
+        `)}
+        >
+          <div className={trim(`
+            ${ROW(5)} 
+            ${ALIGN_CENTER}
+            ${styles.side_border}
+          `)}
+          >
+            <p className={trim(`
+              ${ROW('none')} 
+              ${ALIGN_CENTER} 
+              ${styles.cargo_unit}
+            `)}
+            >
+              {group.groupAlias}
+            </p>
           </div>
-          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
-            <p className="flex-none layout-row layout-align-center-center">{`x ${group.items.length}`}</p>
-            {shipment.load_type === 'cargo_item' ? (
-              <div className={styles.icon_cargo_item} style={imgLCL} />
-            ) : (
-              <div className={styles.icon_cargo_item} style={imgFCL} />
-            )}
+
+          <div className={trim(`
+            ${ROW(20)}
+            ${ALIGN_CENTER}
+            ${styles.side_border}
+          `)}
+          >
+            <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
+              {`x ${group.items.length}`}
+            </p>
+            {CargoItem}
           </div>
-          <div className={`flex-20 layout-row layout-align-center-center ${styles.side_border}`}>
+
+          <div className={trim(`
+            ${ROW(20)}
+            ${ALIGN_CENTER} 
+            ${styles.side_border
+      }`)}
+          >
             <div className="layout-column">
-              <p className="flex-none layout-row layout-align-center-center"><span className={styles.cargo_type}>{cargoCategory}</span></p>
-              <p className="flex-none layout-row layout-align-center-center">Cargo type</p>
+              <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
+                <span className={styles.cargo_type}>
+                  {cargoCategory}
+                </span>
+              </p>
+
+              <p className={`${ROW('none')} ${ALIGN_CENTER}`}>
+                Cargo type
+              </p>
             </div>
           </div>
-          <div className="flex-55 layout-row">
+
+          <div className={ROW(55)}>
             {aggViewer}
           </div>
+
           <div
-            className="flex-5 layout-row layout-align-center-center"
+            className={`${ROW(5)} ${ALIGN_CENTER}`}
             onClick={this.handleCollapser}
             onChange={e => this.handleViewToggle(e)}
           >
-            <i className={`${collapsed ? styles.collapsed : ''} fa fa-chevron-down clip pointy`} style={gradientTextStyle} />
+            <i className={icon} style={gradientTextStyle} />
           </div>
         </div>
 
-        <div className={`${styles.unit_viewer} ${collapsed ? '' : styles.closed_panel}`}>
-          <div className="flex-100 layout-row layout-align-none-start layout-wrap">
+        <div className={unitArrContainer}>
+          <div className={`${WRAP_ROW(100)} layout-align-none-start`}>
             {unitArr}
           </div>
         </div>

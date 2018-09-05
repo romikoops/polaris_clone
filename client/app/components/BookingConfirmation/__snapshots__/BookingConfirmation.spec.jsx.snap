@@ -178,6 +178,11 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -1195,6 +1200,11 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -2270,6 +2280,11 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -3401,6 +3416,11 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -3574,6 +3594,1033 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 onCarriage={true}
                 originFees={false}
                 preCarriage={false}
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
+                            },
+                            "rail": Object {},
+                            "truck": Object {},
+                          },
+                        },
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Additional Services: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-wrap layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  CHF 0.00 
+                </h5>
+              </div>
+            </div>
+            <div
+              className="flex-none layout-row content_width_booking layout-align-center-center"
+            >
+              <IncotermExtras
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "scope": Object {
+                          "modes_of_transport": Object {
+                            "air": Object {},
+                            "ocean": Object {
+                              "OCEAN_LOAD_TYPE": true,
+                            },
+                            "rail": Object {},
+                            "truck": Object {},
+                          },
+                        },
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <div
+          className="flex-70 layout-row layout-align-start-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Shipment Total: 
+          </h3>
+        </div>
+        <div
+          className="flex-30 layout-row layout-wrap layout-align-end-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            Viel zu mehr MKD
+          </h3>
+          <div
+            className="flex-100 layout-row layout-align-end-center"
+          >
+            <p
+              className="flex-none center no_m"
+              style={
+                Object {
+                  "fontSize": "12px",
+                }
+              }
+            >
+               
+              ( incl. Quoted Additional Services )
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Contact Details"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="b_summ_top flex-100 layout-row layout-align-space-around-stretch"
+          >
+            <Contact
+              contactType="Shipper"
+              key="RANDOM_KEY_49"
+              textStyle="#333"
+            />
+            <Contact
+              contactType="Consignee"
+              key="RANDOM_KEY_50"
+              textStyle="#333"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
+          >
+             
+             
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Cargo Details"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Additional Information"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Total Value of Goods:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  USD 15.00
+                </p>
+              </div>
+              <div
+                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    EORI number:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  1234
+                </p>
+              </div>
+              <div
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Description of Goods:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  FOO_CARGO_NOTES
+                </p>
+              </div>
+              <div
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Notes:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  FOO_NOTES
+                </p>
+              </div>
+              <div
+                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
+              >
+                <p
+                  className="flex-100"
+                >
+                  <b>
+                    Incoterm:
+                  </b>
+                </p>
+                <p
+                  className="flex-100 no_m"
+                >
+                  FOO_INCOTERM_TEXT
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Documents"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          />
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY_51"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Packing Sheet: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+              key="RANDOM_KEY_52"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Commercial Invoice: Not Uploaded
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="heading_style flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "background": "#333",
+              "color": "white",
+            }
+          }
+        >
+          <TextHeading
+            color="white"
+            size={3}
+            text="Agree and Submit"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-65 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center-center"
+          >
+            <Checkbox
+              checked={false}
+              className=""
+              disabled={false}
+              onChange={[Function]}
+              onClick={null}
+              size={null}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-5"
+            />
+            <div
+              className="flex-95 layout-row layout-wrap layout-align-start-center"
+            >
+              <div
+                className="flex-100 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color=""
+                  size={4}
+                  text="By checking this box"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start"
+              >
+                <ul
+                  className="flex-80 terms_list"
+                >
+                  <li
+                    key="RANDOM_KEY_53"
+                  >
+                     
+                    FOO_TERM
+                  </li>
+                  <li
+                    key="RANDOM_KEY_54"
+                  >
+                     
+                    BAR_TERM
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-end-end height_100"
+          style={
+            Object {
+              "height": "150px",
+              "marginBottom": "15px",
+            }
+          }
+        >
+          <div>
+            <RoundButton
+              active={false}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              inverse={false}
+              size="full"
+              text="Finish Booking Request"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      className="sec_break flex-100"
+    />
+    <div
+      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none content-width layout-row layout-align-start-center"
+      >
+        <RoundButton
+          active={false}
+          back={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-angle-left"
+          inverse={false}
+          size=""
+          text="Back to dashboard"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
+<div
+  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <div
+    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+  >
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Overview"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <h4
+              className="flex-none"
+            >
+              Shipment Reference:
+            </h4>
+            <h4
+              className="clip flex-none offset-5"
+              style="#333"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <p
+              className="sec_subtitle_text_normal flex-none"
+            >
+              Status:
+            </p>
+            <p
+              className="sec_subtitle_text flex-none offset-5"
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <p
+              className="sec_subtitle_text_normal flex-none"
+            >
+              Created at:
+            </p>
+            <p
+              className="sec_subtitle_text flex-none offset-5"
+            >
+              19
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Itinerary"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <RouteHubBox
+            shipment={
+              Object {
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": true,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
+                  },
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
+                  },
+                },
+                "selected_offer": Object {
+                  "customs": Object {
+                    "val": 12,
+                  },
+                  "insurance": Object {
+                    "val": 5,
+                  },
+                  "total": Object {
+                    "value": 87,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
+              }
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+          <div
+            className="flex-100 layout-row layout-align-space-between-start"
+            style={
+              Object {
+                "paddingTop": "15px",
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              className="flex-40 layout-row layout-wrap layout-align-center-center"
+            >
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
+              >
+                <p
+                  className="flex-100 center"
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-100  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-center-center"
+              >
+                <address
+                  className="flex-none"
+                >
+                  7 FOO_STREET
+                  ,
+                  <br />
+                  FOO_CITY
+                  , 
+                  <br />
+                  21177
+                  , 
+                  <br />
+                  Germany
+                </address>
+              </div>
+            </div>
+            <div
+              className="flex-40 layout-row layout-wrap layout-align-center-center"
+            >
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start"
+              >
+                <p
+                  className="flex-100 center"
+                >
+                   Expected Time of Arrival:
+                </p>
+                <p
+                  className="flex-100 center"
+                >
+                  19
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Fares & Fees"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-center"
+            >
+              <div
+                className="flex-70 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color="white"
+                  size={4}
+                  text="Freight, Duties & Carriage: "
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-30 layout-row layout-align-end-center"
+              >
+                <h5
+                  className="flex-none letter_3"
+                >
+                  CHF 87.00
+                </h5>
+              </div>
+            </div>
+            <div
+              className="flex-none layout-row content_width_booking layout-align-center-center"
+            >
+              <IncotermRow
+                destinationFees={false}
+                feeHash={
+                  Object {
+                    "customs": Object {
+                      "val": 12,
+                    },
+                    "insurance": Object {
+                      "val": 5,
+                    },
+                    "total": Object {
+                      "value": 87,
+                    },
+                  }
+                }
+                onCarriage={false}
+                originFees={false}
+                preCarriage={true}
                 tenant={
                   Object {
                     "data": Object {
@@ -4252,1026 +5299,6 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
 </div>
 `;
 
-exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
-<div
-  className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
->
-  <div
-    className="flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
-  >
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Overview"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
-          >
-            <h4
-              className="flex-none"
-            >
-              Shipment Reference:
-            </h4>
-            <h4
-              className="clip flex-none offset-5"
-              style="#333"
-            />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
-          >
-            <p
-              className="sec_subtitle_text_normal flex-none"
-            >
-              Status:
-            </p>
-            <p
-              className="sec_subtitle_text flex-none offset-5"
-            />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
-          >
-            <p
-              className="sec_subtitle_text_normal flex-none"
-            >
-              Created at:
-            </p>
-            <p
-              className="sec_subtitle_text flex-none offset-5"
-            >
-              19
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card_itinerary flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Itinerary"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <RouteHubBox
-            shipment={
-              Object {
-                "cargo_notes": "FOO_CARGO_NOTES",
-                "eori": 1234,
-                "has_on_carriage": false,
-                "has_pre_carriage": true,
-                "incoterm_text": "FOO_INCOTERM_TEXT",
-                "load_type": "OCEAN_LOAD_TYPE",
-                "notes": "FOO_NOTES",
-                "schedules_charges": Object {
-                  "AIR_HUB_ROUTE_KEY": Object {
-                    "total": 200,
-                  },
-                  "OCEAN_HUB_ROUTE_KEY": Object {
-                    "total": 40,
-                  },
-                  "RAIL_HUB_ROUTE_KEY": Object {
-                    "total": 125,
-                  },
-                  "TRUCK_HUB_ROUTE_KEY": Object {
-                    "total": 75,
-                  },
-                },
-                "selected_offer": Object {
-                  "customs": Object {
-                    "val": 12,
-                  },
-                  "insurance": Object {
-                    "val": 5,
-                  },
-                  "total": Object {
-                    "value": 87,
-                  },
-                },
-                "total_goods_value": Object {
-                  "currency": "USD",
-                  "value": 15,
-                },
-                "total_price": Object {
-                  "currency": "USD",
-                  "value": 12,
-                },
-              }
-            }
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-          <div
-            className="flex-100 layout-row layout-align-space-between-center"
-            style={
-              Object {
-                "position": "relative",
-              }
-            }
-          >
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
-              >
-                <p
-                  className="flex-100 letter_3"
-                >
-                  Expected Time of Collection:
-                </p>
-                <p
-                  className="flex-90 offset-10 margin_5"
-                >
-                  19
-                </p>
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-start-start"
-              >
-                <address
-                  className="flex-none"
-                >
-                  7 FOO_STREET
-                  ,
-                  FOO_CITY
-                  ,
-                  21177
-                  ,
-                  Germany
-                </address>
-              </div>
-            </div>
-            <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
-            >
-              <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
-              >
-                <p
-                  className="flex-100 letter_3"
-                >
-                   Expected Time of Arrival:
-                </p>
-                <p
-                  className="flex-90 offset-10 margin_5"
-                >
-                  19
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Fares & Fees"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <div
-                className="flex-70 layout-row layout-align-start-center"
-              >
-                <TextHeading
-                  color="white"
-                  size={4}
-                  text="Freight, Duties & Carriage: "
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-              <div
-                className="flex-30 layout-row layout-align-end-center"
-              >
-                <h5
-                  className="flex-none letter_3"
-                >
-                  CHF 87.00
-                </h5>
-              </div>
-            </div>
-            <div
-              className="flex-none layout-row content_width_booking layout-align-center-center"
-            >
-              <IncotermRow
-                destinationFees={false}
-                feeHash={
-                  Object {
-                    "customs": Object {
-                      "val": 12,
-                    },
-                    "insurance": Object {
-                      "val": 5,
-                    },
-                    "total": Object {
-                      "value": 87,
-                    },
-                  }
-                }
-                onCarriage={false}
-                originFees={true}
-                preCarriage={true}
-                tenant={
-                  Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
-                      },
-                    },
-                  }
-                }
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-center"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <div
-                className="flex-70 layout-row layout-align-start-center"
-              >
-                <TextHeading
-                  color="white"
-                  size={4}
-                  text="Additional Services: "
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-              <div
-                className="flex-30 layout-row layout-wrap layout-align-end-center"
-              >
-                <h5
-                  className="flex-none letter_3"
-                >
-                  CHF 0.00 
-                </h5>
-              </div>
-            </div>
-            <div
-              className="flex-none layout-row content_width_booking layout-align-center-center"
-            >
-              <IncotermExtras
-                feeHash={
-                  Object {
-                    "customs": Object {
-                      "val": 12,
-                    },
-                    "insurance": Object {
-                      "val": 5,
-                    },
-                    "total": Object {
-                      "value": 87,
-                    },
-                  }
-                }
-                tenant={
-                  Object {
-                    "data": Object {
-                      "data": Object {
-                        "id": 123,
-                        "scope": Object {
-                          "modes_of_transport": Object {
-                            "air": Object {},
-                            "ocean": Object {
-                              "OCEAN_LOAD_TYPE": true,
-                            },
-                            "rail": Object {},
-                            "truck": Object {},
-                          },
-                        },
-                        "subdomain": "foosubdomain",
-                        "theme": Object {
-                          "colors": Object {
-                            "primary": "#333",
-                            "secondary": "#fafafa",
-                          },
-                        },
-                      },
-                      "scope": Object {
-                        "terms": Array [
-                          "FOO_TERM",
-                          "BAR_TERM",
-                        ],
-                      },
-                    },
-                  }
-                }
-                theme={
-                  Object {
-                    "colors": Object {
-                      "primary": "#333",
-                      "secondary": "#fafafa",
-                    },
-                  }
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
-      >
-        <div
-          className="flex-70 layout-row layout-align-start-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Shipment Total: 
-          </h3>
-        </div>
-        <div
-          className="flex-30 layout-row layout-wrap layout-align-end-center"
-        >
-          <h3
-            className="flex-none letter_3"
-          >
-            Viel zu mehr MKD
-          </h3>
-          <div
-            className="flex-100 layout-row layout-align-end-center"
-          >
-            <p
-              className="flex-none center no_m"
-              style={
-                Object {
-                  "fontSize": "12px",
-                }
-              }
-            >
-               
-              ( incl. Quoted Additional Services )
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Contact Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="b_summ_top flex-100 layout-row layout-align-space-around-stretch"
-          >
-            <Contact
-              contactType="Shipper"
-              key="RANDOM_KEY_43"
-              textStyle="#333"
-            />
-            <Contact
-              contactType="Consignee"
-              key="RANDOM_KEY_44"
-              textStyle="#333"
-            />
-          </div>
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-space-around-center"
-          >
-             
-             
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Cargo Details"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          />
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Additional Information"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <div
-              className="flex-100 layout-row layout-align-start-center"
-            >
-              <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
-              >
-                <p
-                  className="flex-100"
-                >
-                  <b>
-                    Total Value of Goods:
-                  </b>
-                </p>
-                <p
-                  className="flex-100 no_m"
-                >
-                  USD 15.00
-                </p>
-              </div>
-              <div
-                className="flex-45 layout-row layout-wrap offset-10 layout-align-start-start"
-              >
-                <p
-                  className="flex-100"
-                >
-                  <b>
-                    EORI number:
-                  </b>
-                </p>
-                <p
-                  className="flex-100 no_m"
-                >
-                  1234
-                </p>
-              </div>
-              <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
-              >
-                <p
-                  className="flex-100"
-                >
-                  <b>
-                    Description of Goods:
-                  </b>
-                </p>
-                <p
-                  className="flex-100 no_m"
-                >
-                  FOO_CARGO_NOTES
-                </p>
-              </div>
-              <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
-              >
-                <p
-                  className="flex-100"
-                >
-                  <b>
-                    Notes:
-                  </b>
-                </p>
-                <p
-                  className="flex-100 no_m"
-                >
-                  FOO_NOTES
-                </p>
-              </div>
-              <div
-                className="flex-45 layout-row layout-wrap offset-5 layout-align-start-start"
-              >
-                <p
-                  className="flex-100"
-                >
-                  <b>
-                    Incoterm:
-                  </b>
-                </p>
-                <p
-                  className="flex-100 no_m"
-                >
-                  FOO_INCOTERM_TEXT
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="heading_style flex-100 layout-row layout-align-space-between-center"
-        style={
-          Object {
-            "background": "#333",
-            "color": "white",
-          }
-        }
-      >
-        <TextHeading
-          color="white"
-          size={3}
-          text="Documents"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-        <div
-          className="flex-10 layout-row layout-align-center-center"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-chevron-up pointy"
-          />
-        </div>
-      </div>
-      <div
-        className=" main_panel"
-      >
-        <div
-          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
-        >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          />
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-start-center"
-          >
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_45"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Packing Sheet: Not Uploaded
-                </p>
-              </div>
-            </div>
-            <div
-              className="flex-25 layout-row layout-align-start-center no_doc"
-              key="RANDOM_KEY_46"
-            >
-              <div
-                className="flex-none layout-row layout-align-center-center"
-              >
-                <i
-                  className="flex-none fa fa-ban"
-                />
-              </div>
-              <div
-                className="flex layout-align-start-center layout-row"
-              >
-                <p
-                  className="flex-none"
-                >
-                  Commercial Invoice: Not Uploaded
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="shipment_card flex-100 layout-row layout-wrap layout-align-space-between-center"
-    >
-      <div
-        className="flex-100 layout-row layout-wrap layout-align-start-center"
-      >
-        <div
-          className="heading_style flex-100 layout-row layout-align-space-between-center"
-          style={
-            Object {
-              "background": "#333",
-              "color": "white",
-            }
-          }
-        >
-          <TextHeading
-            color="white"
-            size={3}
-            text="Agree and Submit"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <div
-          className="flex-65 layout-row layout-align-start-center"
-        >
-          <div
-            className="flex-15 layout-row layout-align-center-center"
-          >
-            <Checkbox
-              checked={false}
-              className=""
-              disabled={false}
-              onChange={[Function]}
-              onClick={null}
-              size={null}
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="flex layout-row layout-align-start-center"
-          >
-            <div
-              className="flex-5"
-            />
-            <div
-              className="flex-95 layout-row layout-wrap layout-align-start-center"
-            >
-              <div
-                className="flex-100 layout-row layout-align-start-center"
-              >
-                <TextHeading
-                  color=""
-                  size={4}
-                  text="By checking this box"
-                  theme={
-                    Object {
-                      "colors": Object {
-                        "primary": "#333",
-                        "secondary": "#fafafa",
-                      },
-                    }
-                  }
-                />
-              </div>
-              <div
-                className="flex-100 layout-row layout-align-start-start"
-              >
-                <ul
-                  className="flex-100 terms_list"
-                >
-                  <li
-                    key="RANDOM_KEY_47"
-                  >
-                     
-                    FOO_TERM
-                  </li>
-                  <li
-                    key="RANDOM_KEY_48"
-                  >
-                     
-                    BAR_TERM
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className="flex-33 layout-row layout-align-end-end height_100"
-          style={
-            Object {
-              "height": "150px",
-              "marginBottom": "15px",
-            }
-          }
-        >
-          <div
-            className="flex-none layout-row layout-align-end-end"
-          >
-            <RoundButton
-              active={false}
-              back={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              inverse={false}
-              size=""
-              text="Finish Booking Request"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr
-      className="sec_break flex-100"
-    />
-    <div
-      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
-    >
-      <div
-        className="content_width flex-none content-width layout-row layout-align-start-center"
-      >
-        <RoundButton
-          active={false}
-          back={true}
-          disabled={false}
-          handleDisabled={null}
-          handleNext={[Function]}
-          icon=""
-          iconClass="fa-angle-left"
-          inverse={false}
-          size=""
-          text="Back to dashboard"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
-        />
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`shallow render 1`] = `
 <div
   className="BOOKING_CONFIRMATION flex-100 layout-row layout-wrap layout-align-center-start"
@@ -5443,6 +5470,11 @@ exports[`shallow render 1`] = `
                 "total_price": Object {
                   "currency": "USD",
                   "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                 },
               }
             }
@@ -6448,6 +6480,11 @@ exports[`with cargo items 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -7011,6 +7048,11 @@ exports[`with cargo items 1`] = `
                     "currency": "USD",
                     "value": 12,
                   },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 }
               }
               theme={
@@ -7174,6 +7216,11 @@ exports[`with cargo items 1`] = `
                   "total_price": Object {
                     "currency": "USD",
                     "value": 12,
+                  },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                   },
                 }
               }
@@ -7755,6 +7802,11 @@ exports[`with containers 1`] = `
                   "currency": "USD",
                   "value": 12,
                 },
+                "trucking": Object {
+                  "pre_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
+                },
               }
             }
             theme={
@@ -8300,6 +8352,11 @@ exports[`with containers 1`] = `
                     "currency": "USD",
                     "value": 12,
                   },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
+                  },
                 }
               }
               theme={
@@ -8439,6 +8496,11 @@ exports[`with containers 1`] = `
                   "total_price": Object {
                     "currency": "USD",
                     "value": 12,
+                  },
+                  "trucking": Object {
+                    "pre_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                   },
                 }
               }
