@@ -21,6 +21,7 @@ export class BestRoutesBox extends Component {
         fastestFare = fees[schedKey].total
       }
     })
+
     return (
       <div
         className={`flex-none layout-row layout-wrap ${styles.best_card}`}
@@ -75,11 +76,9 @@ export class BestRoutesBox extends Component {
     const depArray = schedules.sort((a, b) => (
       moment(depDate).diff(a.etd) - moment(depDate).diff(b.etd)
     ))
-    
     let lowScore = 100
     let bestFare
     let bestOption
-    
     schedules.forEach((sched) => {
       const timeScore = timeArray.indexOf(sched)
       const fareScore = fareArray.indexOf(sched)
@@ -134,6 +133,7 @@ export class BestRoutesBox extends Component {
 }
 BestRoutesBox.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   shipmentData: PropTypes.shape({
     shipment: PropTypes.shipment,
     schedules: PropTypes.array
