@@ -1,13 +1,14 @@
 import i18n from 'i18next'
-// import FetchBackend from 'i18next-fetch-backend'
 import XHR from 'i18next-xhr-backend'
 import LngDetector from 'i18next-browser-languagedetector'
 import { reactI18nextModule } from 'react-i18next'
 
-// FetchBackend.type = 'backend'
+const loadPath = process.env.NODE_ENV === 'production' ?
+  '/{{lng}}/{{ns}}.json' :
+  'http://localhost:3004/{{lng}}/{{ns}}.json'
+
 i18n
   .use(XHR)
-  // .use(FetchBackend)
   .use(LngDetector)
   .use(reactI18nextModule)
   .init({
@@ -17,20 +18,12 @@ i18n
     ns: ['landing', 'common'],
     debug: true,
     backend: {
-      loadPath: 'http://localhost:3004/{{lng}}/{{ns}}.json',
-      // loadPath: 'https://translations.itsmycargo.com/{{lng}}/{{ns}}.json',
-      // init: {
-      //   mode: 'cors',
-      //   // credentials: 'same-origin',
-      //   cache: 'default'
-      // },
+      loadPath,
       crossDomain: true
     },
     interpolation: {
       escapeValue: false
     },
-    // . // if not using I18nextProvider
-    // react i18next special options (optional)
     react: {
       wait: true,
       bindI18n: 'languageChanged loaded',

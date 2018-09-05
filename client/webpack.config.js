@@ -6,6 +6,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const NodeEnvPlugin = require('node-env-webpack-plugin')
 const DotenvWebpack = require('dotenv-webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
   cacheDirectory: true,
@@ -92,6 +93,9 @@ module.exports = {
       filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.css' : '[name].css',
       chunkFilename: '[id].css'
     }),
+    new CopyWebpackPlugin([
+      { from: 'i18n/en/**/*', to: './en', flatten: true},
+    ]),
     NodeEnvPlugin.isProduction
       ? false
       : new BrowserSyncPlugin({
