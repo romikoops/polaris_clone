@@ -1,5 +1,4 @@
 import React from 'react'
-import { translate } from 'react-i18next'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 
@@ -19,7 +18,7 @@ function modalJSX (name, modal, theme, toggleFunc) {
   )
 }
 
-function getModals (props, toggleFunc, t) {
+export default function getModals (props, toggleFunc, t) {
   if (!props) return null
   const { user, tenant } = props
   if (!user || !tenant) return null
@@ -110,5 +109,3 @@ function getModals (props, toggleFunc, t) {
 
   return modals
 }
-
-export default translate(['dangerousGoods', 'common'])(getModals)
