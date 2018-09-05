@@ -13,9 +13,7 @@ import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
-// eslint-disable-next-line no-named-as-default
 import ShipmentLocationBox from '../ShipmentLocationBox/ShipmentLocationBox'
-// eslint-disable-next-line no-named-as-default
 import ShipmentContainers from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
 import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
@@ -178,11 +176,13 @@ export class ShipmentDetails extends Component {
   }
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.modals) {
-      this.setState({
-        modals:  (nextProps, name) => {
-          return this.toggleModal(name)
-        }
-      })
+      const modals = getModals(
+        nextProps,
+        name => this.toggleModal(name),
+        this.props.t
+      )
+
+      this.setState({ modals })
     }
     if (
       shouldUpdateAvailableMotsForRoute(
@@ -1139,4 +1139,4 @@ ShipmentDetails.defaultProps = {
   hideMap: false
 }
 
-export default translate(['errors', 'cargo', 'common'])(ShipmentDetails)
+export default translate(['errors', 'cargo', 'common', 'dangerousGoods'])(ShipmentDetails)
