@@ -9,29 +9,5 @@ exports[`loading is true 1`] = `
 exports[`shallow rendering 1`] = `
 <div
   className="layout-fill"
->
-  <Modal
-    component={
-      <LoginPage
-        loggingIn={false}
-        loginAttempt={false}
-        noRedirect={true}
-        req={null}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
-      />
-    }
-    flexOptions=""
-    horizontalPadding="20px"
-    minHeight=""
-    parentToggle={[Function]}
-    verticalPadding="20px"
-  />
-</div>
+/>
 `;

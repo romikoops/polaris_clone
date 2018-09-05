@@ -27,7 +27,6 @@ import { CargoContainerGroup } from '../../Cargo/Container/Group'
 import Tabs from '../../Tabs/Tabs'
 import Tab from '../../Tabs/Tab'
 
-
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
     let total = 0.0
