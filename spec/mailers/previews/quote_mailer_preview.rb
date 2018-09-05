@@ -1,10 +1,9 @@
 class QuoteMailerPreview < ActionMailer::Preview
   def quotation_email
-    @quotation = Quotation.last
-    @shipment = Shipment.where(status: 'quoted').last
-    @shipments = Shipment.where(quotation_id: @quotation.id)
-    @quotes = @shipments.map { |shipment| shipment.selected_offer }
+    quotation = Quotation.last
+    @shipment = Shipment.where(status: 'booking_process_started').last
+    @shipments = Shipment.where(quotation_id: quotation.id)
     @email = "demo@itsmycargo.com"
-    QuoteMailer.quotation_email(@shipment, @shipments, @quotes, @email)
+    QuoteMailer.quotation_email(@shipment, @shipments, @email)
   end
 end

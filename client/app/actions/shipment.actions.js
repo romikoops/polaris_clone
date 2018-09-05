@@ -191,10 +191,9 @@ function chooseQuotes (data) {
 
     shipmentService.chooseQuotes(data).then(
       (resp) => {
-        debugger // eslint-disable-line no-debugger
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/thank_you`))
+        // dispatch(push(`/booking/${shipmentData.shipment.id}/thank_you`))
         dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
@@ -540,33 +539,6 @@ function updateContact (req) {
     )
   }
 }
-function downloadQuotations (options, shipment) {
-  function request (downloadData) {
-    return { type: shipmentConstants.DOWNLOAD_QUOTATIONS_REQUEST, payload: downloadData }
-  }
-  function success (downloadData) {
-    return { type: shipmentConstants.DOWNLOAD_QUOTATIONS_SUCCESS, payload: downloadData.data }
-  }
-  function failure (error) {
-    return { type: shipmentConstants.DOWNLOAD_QUOTATIONS_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request())
-
-    shipmentService.downloadQuotations(options, shipment).then(
-      (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
-        dispatch(success(data))
-      },
-      (error) => {
-        // ;
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
 
 function toDashboard (id) {
   return (dispatch) => {
@@ -601,7 +573,6 @@ function goTo (path) {
 export const shipmentActions = {
   reuseShipment,
   newShipment,
-  downloadQuotations,
   chooseOffer,
   chooseQuotes,
   getOffers,

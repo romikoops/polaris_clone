@@ -171,7 +171,6 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
-        contacts: action.shipmentData.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData
@@ -193,6 +192,7 @@ export default function shipment (state = {}, action) {
 
       return {
         ...state,
+        modal: false,
         request: {
           ...state.request,
           stage3: action.shipmentData
@@ -202,49 +202,19 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_QUOTES_SUCCESS:
       return {
         ...state,
-        contacts: action.shipmentData.contacts,
+        modal: true,
         response: {
           ...state.response,
           stage3: action.shipmentData
         },
         currentStage: 'stage4',
-        loading: false,
-        activeShipment: action.shipmentData.shipment.id
+        loading: false
+        // activeShipment: action.shipmentData.shipment.id
       }
     case shipmentConstants.CHOOSE_QUOTES_FAILURE:
       return {
         ...state,
-        error: {
-          ...state.error,
-          stage3: [action.error]
-        },
-        loading: false
-      }
-    case shipmentConstants.DOWNLOAD_QUOTATIONS_REQUEST:
-
-      return {
-        ...state,
-        request: {
-          ...state.request,
-          stage3: action.shipmentData
-        },
-        loading: true
-      }
-    case shipmentConstants.DOWNLOAD_QUOTATIONS_SUCCESS:
-      return {
-        ...state,
-        contacts: action.shipmentData.contacts,
-        response: {
-          ...state.response,
-          stage3: action.shipmentData
-        },
-        currentStage: 'stage4',
-        loading: false,
-        activeShipment: action.shipmentData.shipment.id
-      }
-    case shipmentConstants.DOWNLOAD_QUOTATIONS_FAILURE:
-      return {
-        ...state,
+        modal: false,
         error: {
           ...state.error,
           stage3: [action.error]

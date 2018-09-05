@@ -13,7 +13,7 @@ import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
-import { shipmentActions, authenticationActions } from '../../actions'
+import { shipmentActions, authenticationActions, userActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
@@ -164,6 +164,7 @@ class Shop extends Component {
   render () {
     const {
       bookingData,
+      userDispatch,
       match,
       loading,
       tenant,
@@ -176,7 +177,7 @@ class Shop extends Component {
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const {
-      request, response, error, reusedShipment, contacts, originalSelectedDay
+      modal, request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req, showRegistration } = this.state
@@ -250,12 +251,14 @@ class Shop extends Component {
               {...props}
               chooseOffer={this.chooseOffer}
               theme={theme}
+              goTo={userDispatch.goTo}
               tenant={tenant}
               contacts={contacts}
               shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}
               user={user}
+              modal={modal}
               setStage={this.selectShipmentStage}
               messages={error ? error.stage3 : []}
               shipmentDispatch={shipmentDispatch}
@@ -359,6 +362,9 @@ Shop.propTypes = {
     chooseQuotes: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
+  userDispatch: PropTypes.shape({
+    goTo: PropTypes.func
+  }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({
     update: PropTypes.func
   }).isRequired,
@@ -386,7 +392,7 @@ function mapStateToProps (state) {
     user, loggedIn, loggingIn, registering
   } = authentication
   const { currencies } = app
-  const { loading } = bookingData
+  const { loading, modal } = bookingData
 
   return {
     user,
@@ -394,6 +400,7 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     bookingData,
+    modal,
     loggingIn,
     registering,
     loading,
@@ -403,8 +410,9 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    userDispatch: bindActionCreators(userActions, dispatch),
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, userActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }

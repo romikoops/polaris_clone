@@ -11,7 +11,6 @@ class PdfHandler
     @shipments = args[:shipments] || args["shipments"]
     @name     = args[:name]       || args["name"]
     @quotes   = args[:quotes]     || args["quotes"]
-    @quotes_info   = args[:quotes_info]     || args["quotes_info"]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -24,11 +23,9 @@ class PdfHandler
         shipment: @shipment,
         shipments: @shipments,
         quotes: @quotes,
-        quotes_info: @quotes_info,
         tenant: @shipment.tenant
       }
     )
-    binding.pry
     @raw_pdf_string = WickedPdf.new.pdf_from_string(
       doc_erb.render,
       margin: @margin
@@ -43,12 +40,10 @@ class PdfHandler
   def upload
     @doc = Document.new_upload_backend(@pdf, @shipment, @name, @shipment.user)
     @url = @doc.get_signed_url
-    self
   end
 
   def upload_quotes
     @doc = Document.new_upload_backend_with_quotes(@pdf, @shipment, @shipments, @name, @shipment.user)
     @url = @doc.get_signed_url
-    self
   end
 end

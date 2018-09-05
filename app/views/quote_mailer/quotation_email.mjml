@@ -47,8 +47,8 @@
       </mj-column>
       <mj-column>
         <mj-text line-height="16px" padding="0" margin-left="-40px" font-size="18px">
-          <p>From: <strong><%= @shipment.origin_hub.name %></strong></p>
-          <p>To: <strong><%= @shipment.destination_hub.name %></strong> </p>
+          <p>From: <strong><%= @shipments.first.origin_hub.name %></strong></p>
+          <p>To: <strong><%= @shipments.first.destination_hub.name %></strong> </p>
         </mj-text>
       </mj-column>
       <mj-column>

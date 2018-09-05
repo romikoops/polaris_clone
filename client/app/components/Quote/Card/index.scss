@@ -6,6 +6,9 @@
     .container {
       padding: 20px 25px;
     }
+    .dates_container {
+      padding: 0 25px 25px 25px;
+    }
   }
   .wrapper_gradient {
     position: relative;
@@ -22,6 +25,15 @@
     right: 0;
     background: white;
     z-index: 0;
+  }
+  .dates_row {
+    h4 {
+      font-size: 12px;
+      margin: 5px 0;
+    }
+    p {
+      font-size: 10px;
+    }
   }
   .gradient {
     top: -3px;

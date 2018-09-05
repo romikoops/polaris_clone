@@ -8,6 +8,49 @@ module ShippingTools
   extend MongoTools
   extend NotificationTools
 
+  def self.create_shipments_from_quotation(shipment, schedules)
+    main_quote = Quotation.create(user_id: shipment.user_id)
+    schedules.each do |schedule|
+      trip = Trip.find(schedule["trip_id"])
+      new_shipment = main_quote.shipments.create!(
+        status: 'quoted',
+        user_id: shipment.user_id,
+        imc_reference: shipment.imc_reference,
+        origin_hub_id: schedule["origin_hub"]["id"],
+        destination_hub_id: schedule["destination_hub"]["id"],
+        quotation_id: schedule["id"],
+        trip_id: trip.id,
+        itinerary: trip.itinerary
+      )
+      shipment.charge_breakdowns.each do |charge_breakdown|
+
+        # charges = charge_breakdown.charges.dup
+        new_charge_breakdown = charge_breakdown.dup
+        new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
+        new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
+        charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
+          new_charge = charge.dup
+          new_charge.update(parent: new_charge_breakdown_grand_total)
+          arr << new_charge
+          charge.children.each do |child|
+            new_child = child.dup
+            new_child.update(parent: new_charge)
+            arr << new_child
+            child.children.each do |grandchild|
+              new_grandchild = grandchild.dup
+              new_grandchild.update(parent: new_child)
+              arr << new_grandchild
+            end
+          end
+        end
+      
+        new_charge_breakdown.charges += charges
+        new_shipment.charge_breakdowns << new_charge_breakdown
+      end
+    end
+    return main_quote
+  end
+
   def self.create_shipment(details, current_user)
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
@@ -528,54 +571,30 @@ module ShippingTools
     send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
   end
 
-  def self.save_and_send_quotes(shipment, schedules, email)
-    main_quote = Quotation.create(user_id: shipment.user_id, target_email: email)
-    
-    schedules.each do |schedule|
-      trip = Trip.find(schedule["trip_id"])
-      new_shipment = main_quote.shipments.create!(
-        status: 'quoted',
-        user_id: shipment.user_id,
-        imc_reference: shipment.imc_reference,
-        origin_hub_id: schedule["origin_hub"]["id"],
-        destination_hub_id: schedule["destination_hub"]["id"],
-        quotation_id: schedule["id"],
-        trip_id: trip.id,
-        itinerary: trip.itinerary
-      )
-      shipment.charge_breakdowns.each do |charge_breakdown|
-
-        # charges = charge_breakdown.charges.dup
-        new_charge_breakdown = charge_breakdown.dup
-        new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
-        new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
-        charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
-          new_charge = charge.dup
-          new_charge.update(parent: new_charge_breakdown_grand_total)
-          arr << new_charge
-          charge.children.each do |child|
-            new_child = child.dup
-            new_child.update(parent: new_charge)
-            arr << new_child
-            child.children.each do |grandchild|
-              new_grandchild = grandchild.dup
-              new_grandchild.update(parent: new_child)
-              arr << new_grandchild
-            end
-          end
-        end
-      
-        new_charge_breakdown.charges += charges
-        new_shipment.charge_breakdowns << new_charge_breakdown
-      end
+  def self.save_pdf_quotes(shipment, schedules)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
+    @quotes = main_quote.shipments.map do |quoted_shipment|
+      quoted_shipment.selected_offer
     end
-    ShippingTools.agent_quotation_email(shipment, main_quote.shipments, schedules, email)
+
+    quotation = PdfHandler.new(
+      layout:      "pdfs/simple.pdf.html.erb",
+      template:    "shipments/pdfs/quotations.pdf.erb",
+      margin:      { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:    shipment,
+      shipments:   main_quote.shipments,
+      quotes:      @quotes,
+      name:        "quotation"
+    )
+    quotation.generate
+    quotation.upload_quotes
+
+    return shipment
   end
 
-  def self.agent_quotation_email(shipment, shipments, schedules, email)
-    # if ENV['BETA'] != "true"
-      QuoteMailer.quotation_email(shipment, shipments, schedules, email).deliver_now
-    # end
+  def self.save_and_send_quotes(shipment, schedules, email)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
+    QuoteMailer.quotation_email(shipment, main_quote.shipments, email).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.tenant_notification_email(user, shipment)

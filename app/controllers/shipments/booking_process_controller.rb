@@ -16,13 +16,14 @@ class Shipments::BookingProcessController < ApplicationController
   def choose_offer
     shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
+    
     response_handler(resp)
   end
 
   def choose_quotes
     shipment = Shipment.find(params[:shipment_id])
     ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email])
-    # response_handler(resp)
+    response_handler(params)
   end
 
   def update_shipment
@@ -32,16 +33,8 @@ class Shipments::BookingProcessController < ApplicationController
 
   def download_quotations
     shipment = Shipment.find(params[:shipment_id])
-    quotation = PdfHandler.new(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/quotations.pdf.erb",
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      quotes:   params[:options].fetch(:quote),
-      name:     "quotation"
-    )
-    quotation.generate
-    quotation.upload
+    url = ShippingTools.save_pdf_quotes(shipment, params[:options][:quotes])
+    response_handler({key: 'quotations', url: url})
   end
 
   def request_shipment
