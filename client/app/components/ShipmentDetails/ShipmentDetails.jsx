@@ -888,7 +888,7 @@ export class ShipmentDetails extends Component {
             handleAddressChange={this.handleAddressChange}
             shipmentData={shipmentData}
             routeIds={routeIds}
-            setNotesIds={(e, d) => this.setNotesIds(e, d)}
+            setNotesIds={(ids, target) => this.setNotesIds(ids, target)}
             shipmentDispatch={shipmentDispatch}
             prevRequest={this.state.prevRequest}
             handleSelectLocation={this.handleSelectLocation}
