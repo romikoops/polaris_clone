@@ -40,9 +40,17 @@ subdomains.each do |sub|
   req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  trucking = 'data/schryver/schryver__trucking_ftl__hamburg_port.xlsx'
+  req = { 'key' => trucking }
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Bremerhaven Port'
   hub = tenant.hubs.find_by_name('Bremerhaven Port')
   trucking = 'data/schryver/schryver__trucking_ltl__hamburg_port.xlsx'
+  req = { 'key' => trucking }
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  trucking = 'data/schryver/schryver__trucking_ftl__bremerhaven_port.xlsx'
   req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
