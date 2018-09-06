@@ -292,6 +292,43 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  handleSwap () {
+    this.setState((prevState) => {
+      let prevRequest = {}
+      const { routes } = this.props.shipmentData
+      if (prevState.prevRequest && prevRequest.shipment) {
+        prevRequest = {
+          ...prevState.prevRequest,
+          shipment: {
+            ...prevState.prevRequest.shipment,
+            origin: prevState.prevRequest.shipment.destination,
+            destination: prevState.prevRequest.shipment.origin,
+            has_on_carriage: !!prevState.prevRequest.shipment.trucking.pre_carriage.truck_type,
+            has_pre_carriage: !!prevState.prevRequest.shipment.trucking.on_carriage.truck_type,
+            trucking: {
+              pre_carriage: prevState.prevRequest.shipment.trucking.on_carriage,
+              on_carriage: prevState.prevRequest.shipment.trucking.pre_carriage
+            }
+          }
+        }
+      } else {
+        prevRequest = {
+          shipment: {
+            origin: prevState.destination,
+            destination: prevState.origin
+          }
+        }
+      }
+
+      return {
+        prevRequest,
+        filteredRouteIndexes: routes.map((_, i) => i),
+        origin: prevState.destination,
+        destination: prevState.origin
+      }
+    })
+  }
+
   presetMandatoryCarriage () {
     const { scope } = this.props.tenant.data
     Object.keys(scope.carriage_options).forEach((carriage) => {
@@ -874,6 +911,7 @@ export class ShipmentDetails extends Component {
             has_on_carriage={this.state.has_on_carriage}
             has_pre_carriage={this.state.has_pre_carriage}
             origin={this.state.origin}
+            handleSwap={() => this.handleSwap()}
             destination={this.state.destination}
             nextStageAttempts={this.state.nextStageAttempts}
             handleAddressChange={this.handleAddressChange}

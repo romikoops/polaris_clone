@@ -20,6 +20,10 @@ const propsBase = {
     confirmShipment: identity,
     getShipment: identity
   },
+  authenticationDispatch: {
+    showLogin: identity,
+    closeLogin: identity
+  },
   match,
   location
 }
