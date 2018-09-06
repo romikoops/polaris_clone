@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import { UserShipmentCard } from './UserShipmentCard'
@@ -20,7 +21,8 @@ export class ShipmentOverviewCard extends Component {
       dispatches,
       theme,
       confirmShipmentData,
-      hubs
+      hubs,
+      t
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
@@ -53,19 +55,20 @@ export class ShipmentOverviewCard extends Component {
         </div>
       )
     }) : (<span className={`${styles.wideelement}`}>
-      No shipments available
+      {t('shipment:noShipmentsAvailable')}
     </span>)
   }
 
   render () {
     const {
       shipments,
-      noTitle
+      noTitle,
+      t
     } = this.props
     const titleBox = (<div
       className="greyBg layout-padding flex-100 layout-align-start-center"
     >
-      <span><b>Requested Shipments</b></span>
+      <span><b>{t('shipment:requestedShipments')}</b></span>
     </div>)
 
     return (
@@ -84,6 +87,7 @@ export class ShipmentOverviewCard extends Component {
 
 ShipmentOverviewCard.propTypes = {
   admin: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme,
@@ -102,4 +106,4 @@ ShipmentOverviewCard.defaultProps = {
   noTitle: false
 }
 
-export default ShipmentOverviewCard
+export default translate('shipment')(ShipmentOverviewCard)

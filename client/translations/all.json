@@ -291,6 +291,7 @@
         "seeMoreShipments": "See more shipments",
         "myShipmentAddresses": "My Shipment Addresses",
         "noShipments":"No Shipments yet",
+        "noShipmentsAvailable": "No shipments available",
         "noShipmentExplaination":"As shipments are requested, they will appear here",
         "noAddresses": "No addresses yet",
         "locations": "Locations",
@@ -311,7 +312,8 @@
         "enterDelivery": "Enter Delivery Address",
         "addUnit": "Add unit",
         "placedAt": "Placed at",
-        "arrivedOn": "Arrived on"
+        "arrivedOn": "Arrived on",
+        "requestedShipments": "Requested Shipments"
       },
       "user": {
         "newAlias": "New Alias",
