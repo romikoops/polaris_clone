@@ -223,7 +223,7 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text={t('shipment:Pre-carriage')} />
+                <TextHeading theme={theme} size={4} text={t('shipment:preCarriage')} />
               </div>
               <p className="flex-none"> {shipment.has_pre_carriage ? t('common:yes') : t('common:no')} </p>
             </div>
@@ -231,7 +231,7 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text={t('shipment:On-carriage')} />
+                <TextHeading theme={theme} size={4} text={t('shipment:onCarriage')} />
               </div>
               <p className="flex-none"> {shipment.has_on_carriage ? t('common:yes') : t('common:no')} </p>
             </div>

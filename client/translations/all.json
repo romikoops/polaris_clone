@@ -83,6 +83,7 @@
         "withoutDelivery": "without Delivery",
         "withoutPickup": "without pick-up",
         "reference": "Reference",
+        "ref": "Ref",
         "status": "Status",
         "requiresAction": "Requires Action",
         "inProcess": "In Process",
@@ -218,7 +219,8 @@
         "widthDataTip": "Please note that the maximum width for items in Air Freight shipments is",
         "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
         "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
-        "lengthDataTipTwo": "Length is automatically set by 'Collie Type'"
+        "lengthDataTipTwo": "Length is automatically set by 'Collie Type'",
+        "cargoItem": "Cargo Item"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
@@ -301,11 +303,15 @@
         "shipmentType": "Shipment Type :",
         "incoterm": "IncoTerm :",
         "MoT": "MoT :",
-        "Pre-carriage": "Pre-carriage :",
-        "On-Carriage": "On-carriage :",
+        "preCarriage": "Pre-carriage :",
+        "onCarriage": "On-carriage :",
+        "preCarriageBase": "Pre-carriage",
+        "onCarriageBase": "On-carriage",
         "enterPickUp": "Enter Pick-up Address",
         "enterDelivery": "Enter Delivery Address",
-        "addUnit": "Add unit"
+        "addUnit": "Add unit",
+        "placedAt": "Placed at",
+        "arrivedOn": "Arrived on"
       },
       "user": {
         "newAlias": "New Alias",
