@@ -158,15 +158,15 @@ export class UserDashboard extends Component {
               'No addresses yet'
             ) : (
               <UserLocations
-              setNav={() => {}}
-              userDispatch={userDispatch}
-              locations={locations}
-              makePrimary={this.makePrimary}
-              theme={theme}
-              user={user}
-            />
+                setNav={() => {}}
+                userDispatch={userDispatch}
+                locations={locations}
+                makePrimary={this.makePrimary}
+                theme={theme}
+                user={user}
+              />
             )}
-            
+
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ class Admin extends Component {
     const { adminDispatch } = this.props
     adminDispatch.getClients(false)
     adminDispatch.getHubs(false)
-    adminDispatch.getShipments(false)
+    // adminDispatch.getShipments(false)
   }
   setUrl (target) {
     const { adminDispatch } = this.props

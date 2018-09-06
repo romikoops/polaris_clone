@@ -32,26 +32,46 @@ export class ShipmentsCompAdmin extends Component {
       }
     }
     this.viewShipment = this.viewShipment.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
 
   getShipmentsFromPage (open, requested, finished) {
     const { adminDispatch } = this.props
-    adminDispatch.getShipments(open, requested, finished, false)
+    const { perPage } = this.state
+    adminDispatch.getShipments(open, requested, finished, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { adminDispatch } = this.props
-    adminDispatch.deltaShipmentsPage(target, page)
+    const { perPage } = this.state
+    adminDispatch.deltaShipmentsPage(target, page, perPage)
   }
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
+  determinePerPage () {
+    const { perPage } = this.state
+    const { adminDispatch, shipments } = this.props
+    const { open, requested, finished } = shipments.pages
+    const width = window.innerWidth
+    const newPerPage = width >= 1920 ? 6 : 4
+    if (newPerPage !== perPage) {
+      adminDispatch.getShipments(open, requested, finished, newPerPage, false)
+    }
+    this.setState({ perPage: newPerPage })
+  }
 
   searchShipmentsFromPage (text, target, page) {
+    const { perPage } = this.state
     const { adminDispatch } = this.props
-    adminDispatch.searchShipments(text, target, page)
+    adminDispatch.searchShipments(text, target, page, perPage)
   }
 
   toggleExpander (key) {
@@ -86,15 +106,17 @@ export class ShipmentsCompAdmin extends Component {
   }
 
   handlePage (target, delta) {
+    const { perPage } = this.state
     const { pages } = this.props.shipments
     const nextPage = +pages[target] + (1 * delta)
     const realPage = nextPage > 0 ? nextPage : 1
-    this.getTargetShipmentsFromPage(target, realPage)
+    this.getTargetShipmentsFromPage(target, realPage, perPage)
   }
   handleFilters () {
     this.setState((prevState) => {
+      const { perPage } = this.state
       const { open, requested, finished } = this.props.shipments.pages
-      this.getShipmentsFromPage(open, requested, finished)
+      this.getShipmentsFromPage(open, requested, finished, perPage)
 
       return { page: prevState.page }
     })
@@ -230,7 +252,12 @@ export class ShipmentsCompAdmin extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">{listView}</div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+        ref={(ref) => { this.viewport = ref }}
+      >
+        {listView}
+      </div>
     )
   }
 }

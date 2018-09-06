@@ -114,7 +114,8 @@ class SideNav extends Component {
         tooltip: menuTip.currencies
       }
     ]
-
+    const width = window.innerWidth
+    this.perPage = width >= 1920 ? 6 : 4
     const { user } = props
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
@@ -176,7 +177,7 @@ class SideNav extends Component {
         adminDispatch.getTrucking(true)
         break
       case 'shipments':
-        adminDispatch.getShipments(1, 1, 1, true)
+        adminDispatch.getShipments(1, 1, 1, this.perPage, true)
         break
       case 'clients':
         adminDispatch.getClients(true)

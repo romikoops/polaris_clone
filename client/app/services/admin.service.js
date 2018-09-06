@@ -76,14 +76,14 @@ function searchHubs (text, page, hubType, countryId, status) {
   return fetch(`${BASE_URL}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   let query = ''
 
-  query += `query=${text}&page=${page || 1}`
+  query += `query=${text}&page=${page || 1}&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
@@ -211,7 +211,7 @@ function getServiceCharges () {
 
   return fetch(`${BASE_URL}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (requestedPage, openPage, finishedPage) {
+function getShipments (requestedPage, openPage, finishedPage, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -220,15 +220,16 @@ function getShipments (requestedPage, openPage, finishedPage) {
   query += `open_page=${openPage || 1}`
   query += `&requested_page=${requestedPage || 1}`
   query += `&finished_page=${finishedPage || 1}`
+  if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments?${query}`, requestOptions).then(handleResponse)
 }
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  const query = `page=${page || 1}&target=${target}`
+  const query = `page=${page || 1}&target=${target}&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
