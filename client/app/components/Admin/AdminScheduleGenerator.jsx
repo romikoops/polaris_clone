@@ -51,7 +51,7 @@ class AdminScheduleGenerator extends Component {
     this.getStopsForItinerary = this.getStopsForItinerary.bind(this)
   }
   componentWillMount () {
-    if (this.props.itinerary) {
+    if (this.props.itinerary.id) {
       const { itinerary } = this.props
       this.setItinerary({
         value: itinerary.id,
@@ -69,7 +69,9 @@ class AdminScheduleGenerator extends Component {
   }
 
   setItinerary (ev) {
+    const { adminDispatch } = this.props
     this.getStopsForItinerary(ev.value)
+    adminDispatch.getVehicleTypes(ev.value)
     this.setState({ itinerary: ev, mot: ev.mot })
   }
 
@@ -87,7 +89,6 @@ class AdminScheduleGenerator extends Component {
       })
       .then((promise) => {
         promise.json().then((response) => {
-          console.log(response.data)
           const stops = response.data
           this.setState({ stops })
         })
@@ -146,8 +147,7 @@ class AdminScheduleGenerator extends Component {
     const {
       theme,
       vehicleTypes,
-      itineraries,
-      itinerary
+      itineraries
     } = this.props
     const {
       weekdays,
@@ -225,15 +225,15 @@ class AdminScheduleGenerator extends Component {
     ) : (
       ''
     )
-
     const stopIntervalInputs = stops && stops.length > 0 ? (
+
       stops.map((s, i) =>
         (stops[i + 1] ? (
           <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none">{itinerary.stops[0].hub.name}</p>
+              <p className="flex-none">{stops[0].hub.name}</p>
               <p className="flex-none">-></p>
-              <p className="flex-none">{itinerary.stops[1].hub.name}</p>
+              <p className="flex-none">{stops[1].hub.name}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box_full">
               <input
@@ -283,6 +283,18 @@ class AdminScheduleGenerator extends Component {
               />
               <ReactTooltip className={styles.tooltip} id="autoGenTooltip" effect="solid" />
             </p>
+            <div className="flex-25 layout-row layout-align-end-center">
+              <RoundButton
+                text="Back"
+                className="flex-none"
+                handleNext={this.props.toggleNew}
+                iconClass="fa-chevron-left"
+                theme={theme}
+                size="small"
+                active
+              />
+            </div>
+
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div
@@ -493,6 +505,7 @@ AdminScheduleGenerator.propTypes = {
     getHubs: PropTypes.func
   }).isRequired,
   itinerary: PropTypes.objectOf(PropTypes.any),
+  toggleNew: PropTypes.func.isRequired,
   itineraries: PropTypes.arrayOf(PropTypes.any),
   vehicleTypes: PropTypes.arrayOf(PropTypes.vehicleType)
 }
