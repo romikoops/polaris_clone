@@ -3,12 +3,16 @@ variables:
 
 pronto:
   stage: test
+  tags:
+    - itsmycargo
   image: eu.gcr.io/itsmycargo-main/pronto:stable
   script:
     - scripts/pronto
 
 charge_calculator:
   stage: test
+  tags:
+    - itsmycargo
   image: ruby:2.5
   variables:
     SPEC_OPTS: "--format RspecJunitFormatter --out rspec.xml --format Fuubar --color"
@@ -20,6 +24,8 @@ charge_calculator:
 
 rspec:
   stage: test
+  tags:
+    - itsmycargo
   image: eu.gcr.io/itsmycargo-main/base:stable
   services:
     - mdillon/postgis
@@ -34,9 +40,11 @@ rspec:
 
 jest:
   stage: test
+  tags:
+    - itsmycargo
   image: eu.gcr.io/itsmycargo-main/base:stable
 
   script:
-    - cd client 
+    - cd client
     - npm install
     - npm test
