@@ -3,6 +3,10 @@ import XHR from 'i18next-xhr-backend'
 import LngDetector from 'i18next-browser-languagedetector'
 import { reactI18nextModule } from 'react-i18next'
 
+const loadPath = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:3004/{{lng}}/{{ns}}.json'
+  : '/{{lng}}/{{ns}}.json'
+
 i18n
   .use(XHR)
   .use(LngDetector)
@@ -14,7 +18,7 @@ i18n
     ns: ['landing', 'common'],
     debug: true,
     backend: {
-      loadPath: '/{{lng}}/{{ns}}.json',
+      loadPath,
       crossDomain: true
     },
     interpolation: {
