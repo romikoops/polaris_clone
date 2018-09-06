@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
@@ -88,7 +89,8 @@ export class ShipmentCargoItems extends Component {
       handleDelta,
       maxDimensions,
       availableCargoItemTypes,
-      availableMotsForRoute
+      availableMotsForRoute,
+      t
     } = this.props
     const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
@@ -151,7 +153,7 @@ export class ShipmentCargoItems extends Component {
               {inputs.grossWeight}
             </div>
             <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
-              Aditional Details
+              {t('common:additionalDetails')}
               <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
             </div>
           </div>
@@ -177,7 +179,7 @@ export class ShipmentCargoItems extends Component {
 
           {cargoItem ? (
             <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
-              Delete
+              {t('common:delete')}
               <i className="fa fa-trash" />
             </div>
           ) : (
@@ -214,7 +216,7 @@ export class ShipmentCargoItems extends Component {
                 onClick={this.addNewCargo}
               >
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
-                <p> Add Unit</p>
+                <p> {t('shipment:addUnit')}</p>
               </div>
             </div>
             <div className={`flex-100 ${styles.new_container_placeholder}`}>
@@ -248,6 +250,7 @@ export class ShipmentCargoItems extends Component {
 
 ShipmentCargoItems.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   cargoItems: PropTypes.arrayOf(PropTypes.shape({
     description: PropTypes.text,
@@ -283,4 +286,4 @@ ShipmentCargoItems.defaultProps = {
   availableMotsForRoute: []
 }
 
-export default ShipmentCargoItems
+export default translate(['shipment'])(ShipmentCargoItems)

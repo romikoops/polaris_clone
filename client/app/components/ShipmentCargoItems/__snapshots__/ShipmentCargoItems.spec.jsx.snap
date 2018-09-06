@@ -418,7 +418,7 @@ exports[`shallow rendering 1`] = `
             className="expandIcon"
             onClick={[Function]}
           >
-            Aditional Details
+            Additional Details
             <i
               className="rotated fa fa-chevron-right"
             />
@@ -531,7 +531,8 @@ exports[`shallow rendering 1`] = `
             }
           />
           <p>
-             Add Unit
+             
+            Add unit
           </p>
         </div>
       </div>
@@ -831,7 +832,7 @@ exports[`shallow rendering 1`] = `
               className="expandIcon"
               onClick={[Function]}
             >
-              Aditional Details
+              Additional Details
               <i
                 className="undefined fa fa-chevron-right"
               />

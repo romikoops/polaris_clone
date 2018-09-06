@@ -48,6 +48,7 @@
         "depth": "Depth",
         "accountTitle": "My Account",
         "additional": "Additional Information",
+        "additionalDetails": "Additional Details",
         "agree": "Agree and Submit",
         "availableDestinations": "Available Destinations",
         "back": "Back to dashboard",
@@ -108,7 +109,8 @@
         "oceanFreight": "Ocean Freight",
         "airFreight": "Air Freight",
         "add": "Add",
-        "set": "Set"
+        "set": "Set",
+        "delete": "Delete"
       },
       "itbox": {
         "component": "IncotermBox",
