@@ -152,6 +152,7 @@
   .total-price-single {
     padding-top: 30px;
     padding-bottom: 30px;
+    background: white;
     border-top: 3px solid #E0E0E0;
     border: 3px solid #E0E0E0;
   }
@@ -205,11 +206,14 @@
     text-align: right;
   }
   .sub-prices {
+    background: white;
     margin-left: 16px;
     margin-right: 16px;
   }
   .all-row {
-    margin-bottom: 80px;
+    margin-bottom: 120px;
+    page-break-inside: avoid;
+    position: relative;
   }
   .charge-icons {
     padding-bottom: 40px;
@@ -223,6 +227,11 @@
   }
   .flip {
     transform: scaleX(-1);
+  }
+  .oo {
+    max-height: 120px;
+    width: 100%;
+    opacity: 0;
   }
 </style>
 
@@ -240,64 +249,82 @@
     <p><%= tenant.name %></p>
   </div>
 
-  <div class="all-row">
+  
 
 
     <% shipments.map do |s| %>
       <% originfee = s.selected_offer["export"] ? primary_color : neutral_color %>
       <% destinationfee = s.selected_offer["import"] ? primary_color : neutral_color %>
-      <div class="main-container container-fluid">
-        <div class="info row">
-          <% if s.itinerary.mode_of_transport == "ocean" %>
-            <i class="fas fa-anchor col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
-          <% end %>
-          <% if s.itinerary.mode_of_transport == "air" %>
-            <i class="fas fa-paper-plane col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
-          <% end %>
-          <div class="col-xs-7">
-            <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
-            <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
-          </div>
-          <div class="col-xs-4">
-            <div class="row charge-icons">
-              <div class="col-xs-2"></div>
-              <div class="col-xs-2">
-                <i class="fa fa-truck flip" style="color: <%= precarriage %>"></i>
-              </div>
-              <div class="col-xs-2">
-                <i class="fa fa-file-alt" style="color: <%= originfee %>"></i>
-              </div>
-              <div class="col-xs-2">
-                <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
-              </div>
-              <div class="col-xs-2">
-                <i class="fa fa-file" style="color: <%= destinationfee %>"></i>
-              </div>
-              <div class="col-xs-2">
-                <i class="fa fa-truck" style="color: <%= oncarriage %>"></i>
-              </div>
+      <div class="all-row">
+        <div class="main-container container-fluid">
+          <div class="info row">
+            <% if s.itinerary.mode_of_transport == "ocean" %>
+              <i class="fas fa-anchor col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+            <% end %>
+            <% if s.itinerary.mode_of_transport == "air" %>
+              <i class="fas fa-paper-plane col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+            <% end %>
+            <div class="col-xs-7">
+              <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
+              <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
             </div>
-            <div class="row cargo-info">
-              <div class="col-xs-12">
-                <p>
-                  <strong>Kg:</strong>
-                  <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
-                </p>
+            <div class="col-xs-4">
+              <div class="row charge-icons">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck flip" style="color: <%= precarriage %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file-alt" style="color: <%= originfee %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file" style="color: <%= destinationfee %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck" style="color: <%= oncarriage %>"></i>
+                </div>
+              </div>
+              <div class="row cargo-info">
+                <div class="col-xs-12">
+                  <p>
+                    <strong>Kg:</strong>
+                    <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
       <% s.selected_offer.each do |k, v| %>
           <div class="sub-prices row">
             <% if k != "total" && k != "edited_total" %>
               <div class="col-xs-12">
                 <div class="total-price-single row">
-                  <h4 class="col-xs-6"><%= k %></h4>
-                  <h3 class="col-xs-6"><%= v["value"].to_f.truncate(2) %>&nbsp;<%= v["currency"] %></h3>
+                  <% if k == "trucking_pre" %>
+                    <h4 class="col-xs-6">Pick-up</h4>
+                  <% end %>
+                  <% if k == "trucking_on" %>
+                    <h4 class="col-xs-6">Delivery</h4>
+                  <% end %>
+                  <% if k != "trucking_on" && k != "trucking_pre" %>
+                    <h4 class="col-xs-6"><%= k %></h4>
+                  <% end %>
+                  <h3 class="col-xs-6"><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
                 </div>
               </div>
+              <div class="oo">oo</div>
+              <% v.each do |a, b| %>
+                <% if a != "total" && a != "edited_total" %>
+                  <div class="subtotal-price-single row">
+                    <h4 class="col-xs-6"><%= a %></h4>
+                    <h3 class="col-xs-6"> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
+                  </div>
+                <% end %>
+              <% end %>
             <% end %>
           </div>
         <% end %>
@@ -308,7 +335,7 @@
             &nbsp;<%= s.selected_offer["total"]["currency"] %>
           </p>
         </div>
-        
+      </div>
     <% end %>
-  </div>
+  
 </div>

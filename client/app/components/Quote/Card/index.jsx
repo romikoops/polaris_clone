@@ -31,8 +31,10 @@ class QuoteCard extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
-      expander: {}
+      expander: {},
+      isChecked: false
     }
+    this.handleClickChecked = this.handleClickChecked.bind(this)
   }
   toggleExpander (key) {
     this.setState({
@@ -42,6 +44,13 @@ class QuoteCard extends PureComponent {
       }
     })
   }
+  handleClickChecked (e, value) {
+    const { handleClick } = this.props
+    this.setState({
+      isChecked: e.target.checked
+    })
+    return handleClick(e, value)
+  }
   render () {
     const {
       theme,
@@ -49,8 +58,6 @@ class QuoteCard extends PureComponent {
       schedule,
       cargo,
       handleInputChange,
-      checked,
-      handleClick,
       pickup,
       truckingTime
     } = this.props
@@ -107,9 +114,9 @@ class QuoteCard extends PureComponent {
 
     return (
       <div
-        className={`flex-100 layout-row layout-wrap ${styles.wrapper} ${checked ? styles.wrapper_selected : ''}`}
+        className={`flex-100 layout-row layout-wrap ${styles.wrapper} ${this.state.isChecked ? styles.wrapper_selected : ''}`}
       >
-        {checked ? (
+        {this.state.isChecked ? (
           <div className={`${styles.wrapper_gradient}`}>
             <div className={`${styles.gradient}`} style={gradientStyle} />
           </div>
@@ -217,7 +224,7 @@ class QuoteCard extends PureComponent {
                 className="pointy"
                 name="checked"
                 type="checkbox"
-                onClick={handleClick}
+                onClick={e => this.handleClickChecked(e, schedule)}
                 onChange={handleInputChange}
               />
             </div>
@@ -235,9 +242,7 @@ QuoteCard.propTypes = {
   schedule: PropTypes.objectOf(PropTypes.any),
   cargo: PropTypes.arrayOf(PropTypes.any),
   handleInputChange: PropTypes.func,
-  checked: PropTypes.bool,
-  pickup: PropTypes.bool,
-  handleClick: PropTypes.func
+  pickup: PropTypes.bool
 }
 
 QuoteCard.defaultProps = {
@@ -247,9 +252,7 @@ QuoteCard.defaultProps = {
   schedule: {},
   cargo: [],
   handleInputChange: null,
-  checked: false,
-  pickup: false,
-  handleClick: null
+  pickup: false
 }
 
 export default QuoteCard

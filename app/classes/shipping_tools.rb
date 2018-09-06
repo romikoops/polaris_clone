@@ -589,7 +589,6 @@ module ShippingTools
     quotation.generate
     quotation.upload_quotes
 
-    return shipment
   end
 
   def self.save_and_send_quotes(shipment, schedules, email)

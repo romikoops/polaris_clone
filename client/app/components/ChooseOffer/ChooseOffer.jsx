@@ -59,7 +59,6 @@ export class ChooseOffer extends Component {
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
     this.emailValue = this.emailValue.bind(this)
-    // this.handleInputChange = this.handleInputChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
@@ -112,6 +111,11 @@ export class ChooseOffer extends Component {
     this.setState({
       isChecked: e.target.checked
     })
+  }
+  handleInputChange () {
+    this.setState(prevState => ({
+      isChecked: !prevState.isChecked
+    }))
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
@@ -199,7 +203,6 @@ export class ChooseOffer extends Component {
     mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
       scheduleObj[mk].sort((a, b) => Math.abs(moment(depDay).diff(a.closing_date)) - Math.abs(moment(depDay).diff(b.closing_date)))
-      // scheduleObj[mk].sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
     })
     motKeys.forEach((key) => {
       if (scheduleObj[key]) {
@@ -217,16 +220,17 @@ export class ChooseOffer extends Component {
     const focusRoutestoRender = focusRoutes
       .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
       .map(s => (tenant.data.subdomain === 'gateway' || 'saco' ? (
-        <QuoteCard
-          theme={theme}
-          tenant={tenant}
-          schedule={s}
-          pickup={shipment.has_pre_carriage}
-          checked={this.state.isChecked}
-          cargo={shipmentData.cargoUnits}
-          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-          handleClick={e => this.handleClick(e, s)}
-        />
+        <div className="margin_bottom">
+          <QuoteCard
+            theme={theme}
+            tenant={tenant}
+            pickup={shipment.has_pre_carriage}
+            schedule={s}
+            handleClick={e => this.handleClick(e, s)}
+            cargo={shipmentData.cargoUnits}
+            truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+          />
+        </div>
       ) : (
         <RouteResult
           key={v4()}
@@ -235,6 +239,7 @@ export class ChooseOffer extends Component {
           originHubs={originHubs}
           destinationHubs={destinationHubs}
           fees={shipment.schedules_charges}
+          checked={this.state.isChecked}
           schedule={s}
           user={user}
           pickup={shipment.has_pre_carriage}
@@ -246,16 +251,17 @@ export class ChooseOffer extends Component {
       ))
     const closestRoutestoRender = closestRoutes.map(s => (
       tenant.data.subdomain === 'gateway' || 'saco' ? (
-        <QuoteCard
-          theme={theme}
-          tenant={tenant}
-          pickup={shipment.has_pre_carriage}
-          schedule={s}
-          checked={this.state.isChecked}
-          cargo={shipmentData.cargoUnits}
-          handleClick={e => this.handleClick(e, s)}
-          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-        />
+        <div className="margin_bottom">
+          <QuoteCard
+            theme={theme}
+            tenant={tenant}
+            pickup={shipment.has_pre_carriage}
+            schedule={s}
+            handleClick={e => this.handleClick(e, s)}
+            cargo={shipmentData.cargoUnits}
+            truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+          />
+        </div>
       ) : (
         <RouteResult
           key={v4()}
@@ -376,11 +382,19 @@ export class ChooseOffer extends Component {
                 }`}
               >
                 <div className="flex-none">
-                  <TextHeading
-                    theme={theme}
-                    size={3}
-                    text="This is the closest departure to the specified date"
-                  />
+                  {tenant.data.subdomain === 'gateway' ? (
+                    <TextHeading
+                      theme={theme}
+                      size={3}
+                      text="These are best quotations for the specific route"
+                    />
+                  ) : (
+                    <TextHeading
+                      theme={theme}
+                      size={3}
+                      text="This is the closest departure to the specified date"
+                    />
+                  )}
                 </div>
                 <div className="flex-30 layout-row layout-align-end-center">
                   {scope.fixed_currency ? (
@@ -399,12 +413,16 @@ export class ChooseOffer extends Component {
               {closestRoutestoRender}
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                <div className="flex-none">
-                  <TextHeading theme={theme} size={3} text="Alternative departures" />
+              {tenant.data.subdomain === 'gateway' ? '' : (
+                <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
+                  <div className="flex-none">
+                    <TextHeading theme={theme} size={3} text="Alternative departures" />
+                  </div>
                 </div>
-              </div>
+              )}
+
               {focusRoutestoRender}
+
               <div className="flex-100 layout-row layout-align-center-center">
                 <div
                   className="flex-33 layout-row layout-align-space-around-center"
@@ -420,7 +438,7 @@ export class ChooseOffer extends Component {
 
             </div>
           </div>
-          {tenant.data.subdomain === 'gateway' ? (
+          {tenant.data.subdomain === 'gateway' || 'saco' ? (
             <div className={`flex-25 offset-5 layout-wrap ${styles.download_section}`}>
               <p className={`flex-100 layout-row ${styles.offer_title}`} >Selected Offers</p>
               {this.state.selectedOffers !== 0 ? (
