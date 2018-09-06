@@ -26,13 +26,11 @@ exports[`shallow rendering 1`] = `
         className="layout-column layout-align-center-start"
       >
         <p>
-          From
-          : 
+          From: 
           <span />
         </p>
         <p>
-          To
-          : 
+          To: 
           <span />
         </p>
       </div>
@@ -43,8 +41,7 @@ exports[`shallow rendering 1`] = `
       <div>
         <b>
           17
-           
-          days
+           days
         </b>
         <br />
         <span
@@ -67,13 +64,11 @@ exports[`shallow rendering 1`] = `
         <b
           className="ref_row_card"
         >
-          Ref
-          : 
+          Ref: 
           FOO_IMC_REFERENCE
         </b>
         <p>
-          Placed at
-           
+          Placed at 
           19
         </p>
       </div>
@@ -252,7 +247,7 @@ exports[`shallow rendering 1`] = `
       <span
         className="flex-35"
       >
-        Cargo Item
+        Cargo item
       </span>
       <span
         className="flex-25 layout-row"
@@ -272,7 +267,7 @@ exports[`shallow rendering 1`] = `
           }
         />
         <p>
-          Pick-up
+           Pick-up
         </p>
       </span>
       <span
@@ -293,7 +288,7 @@ exports[`shallow rendering 1`] = `
           }
         />
         <p>
-          Delivery
+           Delivery
         </p>
       </span>
     </div>

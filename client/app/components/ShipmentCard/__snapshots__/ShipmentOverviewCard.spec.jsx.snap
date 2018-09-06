@@ -136,7 +136,6 @@ exports[`shallow rendering 1`] = `
                 "status": "FOO_STATUS",
               }
             }
-            t={[Function]}
             theme={
               Object {
                 "colors": Object {
