@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
   // url = 'https://devapi.itsmycargo.com'
   // url = 'http://192.168.178.91:3000'
   // url = 'http://imc-beta.eu-central-1.elasticbeanstalk.com/'
-  // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';178
+  // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';
 }
 export const BASE_URL = `${url}/subdomain/${subdomainKey}`
 

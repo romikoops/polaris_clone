@@ -16,6 +16,17 @@ ActiveRecord::Schema.define(version: 2018_09_03_151217) do
   enable_extension "plpgsql"
   enable_extension "postgis"
 
+  create_table "addon_charges", force: :cascade do |t|
+    t.string "title"
+    t.string "text"
+    t.jsonb "rate"
+    t.string "input_type"
+    t.jsonb "conditions"
+    t.integer "addon_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "addons", force: :cascade do |t|
     t.string "title"
     t.jsonb "text", default: [], array: true
