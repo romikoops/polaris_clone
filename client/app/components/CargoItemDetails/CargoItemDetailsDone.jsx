@@ -38,33 +38,6 @@ export class CargoItemDetails extends Component {
     } = this.props
 
     const textStyle = textStyleFn(theme)
-    // const HSCodes = () => {
-    //   if (!viewHSCodes) {
-    //     return ''
-    //   }
-
-    //   return (
-    //     <div className={WRAP_ROW(100)} onClick={this.viewHsCodes}>
-    //       <i className="fa fa-eye clip flex-none" style={textStyle} />
-    //       <p className="offset-5 flex-none">View Hs Codes</p>
-    //     </div>
-    //   )
-    // }
-    // const Viewer = () => {
-    //   if (!viewer) {
-    //     return ''
-    //   }
-
-    //   return (
-    //     <HsCodeViewer
-    //       item={item}
-    //       hsCodes={hsCodes}
-    //       theme={theme}
-    //       close={this.viewHsCodes}
-    //     />
-    //   )
-    // }
-
     const dimensions = dimensionsFn(item)
 
     return (
