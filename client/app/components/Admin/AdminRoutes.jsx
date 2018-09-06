@@ -8,6 +8,7 @@ import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
 // import styles from './Admin.scss'
 
 import { adminActions } from '../../actions'
+import { Modal } from '../Modal/Modal'
 // import { TextHeading } from '../TextHeading/TextHeading'
 
 class AdminRoutes extends Component {
@@ -58,13 +59,21 @@ class AdminRoutes extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
         {this.state.newRoute ? (
-          <AdminRouteForm
-            theme={theme}
-            close={this.closeModal}
-            hubs={allHubs}
-            saveRoute={this.saveNewRoute}
-            adminDispatch={adminDispatch}
+          <Modal
+            component={
+              <AdminRouteForm
+                theme={theme}
+                close={this.closeModal}
+                hubs={allHubs}
+                saveRoute={this.saveNewRoute}
+                adminDispatch={adminDispatch}
+              />
+            }
+            verticalPadding="30px"
+            horizontalPadding="40px"
+            parentToggle={this.closeModal}
           />
+
         ) : (
           ''
         )}
