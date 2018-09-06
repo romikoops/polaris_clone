@@ -24,7 +24,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   end
 
   def stops
-    response_handler(itinerary_stops)
+    response_handler(itinerary_stops.map(&:as_options_json))
   end
 
   def edit_notes

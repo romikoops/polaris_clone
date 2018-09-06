@@ -164,7 +164,11 @@ class AdminSchedules extends Component {
     )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <AdminScheduleGenerator theme={theme} itineraries={itineraries} />
+        <AdminScheduleGenerator
+          theme={theme}
+          itineraries={itineraries}
+          toggleNew={this.toggleView}
+        />
       </div>
     )
 
