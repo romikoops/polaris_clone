@@ -12,8 +12,10 @@
         "netWeight": "Net Weight",
         "cargoGroup": "Cargo Group",
         "collapseSidebar": "Collapse sidebar",
-        "accept": "accept",
+        "accept": "Accept",
         "deny": "Deny",
+        "modify": "Modify",
+        "reject": "Reject",
         "title": "Title",
         "pending": "Pending",
         "decline": "decline",
@@ -115,7 +117,8 @@
         "total": "Total",
         "unavailable": "Unavailable",
         "nonStackable": "Non Stackable",
-        "selectColliType": "Select your colli type"
+        "selectColliType": "Select your colli type",
+        "areYouSure": "Are you sure?"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -313,7 +316,9 @@
         "addUnit": "Add unit",
         "placedAt": "Placed at",
         "arrivedOn": "Arrived on",
-        "requestedShipments": "Requested Shipments"
+        "requestedShipments": "Requested Shipments",
+        "rejectWarningHead": "This will reject the requested shipment",
+        "rejectWarningTail": "This shipment can still be recovered after being ignored"
       },
       "user": {
         "newAlias": "New Alias",
