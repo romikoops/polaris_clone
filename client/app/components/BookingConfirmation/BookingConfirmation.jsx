@@ -161,7 +161,7 @@ export class BookingConfirmation extends Component {
       shipmentData,
       shipmentDispatch,
       t,
-      tenant,
+      tenant
     } = this.props
 
     if (!shipmentData) return <h1>Loading</h1>
@@ -240,7 +240,7 @@ export class BookingConfirmation extends Component {
     const expectedTime = shipment.has_pre_carriage
       ? `${t('bookconf:expectedCollection')}:`
       : `${t('bookconf:expectedDeparture')}:`
-      
+
     const plannedTime = shipment.has_pre_carriage
       ? `${moment(shipment.closing_date)
         .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
@@ -764,7 +764,7 @@ function getDefaultTerms (tenant, t) {
   return [
     t('bookconf:termsFirst'),
     `${t('bookconf:termsSecond')} ${tenant.name}`,
-    t('bookconf:termsThird'),
+    t('bookconf:termsThird')
   ]
 }
 
@@ -854,10 +854,10 @@ function getTerms ({ theme, terms, t }) {
       <div className="flex-5" />
       <div className={`${WRAP_ROW(95)} ${ALIGN_START_CENTER}`}>
         <div className={`${ROW(100)} ${ALIGN_START_CENTER}`}>
-          <TextHeading 
-            theme={theme} 
-            text={t('common:checkBox')} 
-            size={4} 
+          <TextHeading
+            theme={theme}
+            text={t('common:checkBox')}
+            size={4}
           />
         </div>
         <div className={`${ROW(100)} ${ALIGN_START}`}>
@@ -954,4 +954,4 @@ function HeadingFactoryFn (theme) {
   )
 }
 
-export default translate(['bookconf','common'])(BookingConfirmation)
+export default translate(['bookconf', 'common'])(BookingConfirmation)
