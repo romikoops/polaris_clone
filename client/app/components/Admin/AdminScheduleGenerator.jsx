@@ -231,9 +231,9 @@ class AdminScheduleGenerator extends Component {
         (stops[i + 1] ? (
           <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none">{stops[0].hub.name}</p>
+              <p className="flex-none">{stops[i].hub.name}</p>
               <p className="flex-none">-></p>
-              <p className="flex-none">{stops[1].hub.name}</p>
+              <p className="flex-none">{stops[i + 1].hub.name}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box_full">
               <input
