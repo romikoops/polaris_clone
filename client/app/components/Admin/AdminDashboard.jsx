@@ -31,6 +31,10 @@ export class AdminDashboard extends Component {
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
   }
 
+  componentDidMount () {
+    this.props.setCurrentUrl(this.props.match.url)
+  }
+
   handleRouteHover (id) {
     this.setState((prevState) => {
       const { hoverId } = prevState
@@ -198,6 +202,7 @@ AdminDashboard.propTypes = {
   }),
   confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   handleClick: PropTypes.func,
+  setCurrentUrl: PropTypes.func.isRequired,
   clients: PropTypes.arrayOf(PropTypes.client),
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),

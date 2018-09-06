@@ -26,7 +26,7 @@ class AdminHubs extends Component {
   }
   componentDidMount () {
     const {
-      hubs, adminDispatch, loading, countries, appDispatch
+      hubs, adminDispatch, loading, countries, appDispatch, match
     } = this.props
     if (!hubs && !loading) {
       adminDispatch.getHubs(false)
@@ -34,6 +34,7 @@ class AdminHubs extends Component {
     if (!countries.length) {
       appDispatch.fetchCountries()
     }
+    this.props.setCurrentUrl(match.url)
   }
   getHubsFromPage (page, hubType, country, status) {
     const { adminDispatch } = this.props
@@ -158,6 +159,7 @@ AdminHubs.propTypes = {
   hubHash: PropTypes.objectOf(PropTypes.hub),
   hubs: PropTypes.arrayOf(PropTypes.hub),
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   tenant: PropTypes.tenant,
   loading: PropTypes.bool,
