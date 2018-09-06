@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
@@ -82,18 +83,19 @@ class Header extends Component {
   }
   render () {
     const {
-      user,
-      theme,
-      tenant,
+      component,
+      currentStage,
+      error,
       invert,
-      unread,
+      isLanding,
+      noMessages,
       req,
       scrollable,
-      noMessages,
-      component,
-      isLanding,
-      error,
-      currentStage
+      t,
+      tenant,
+      theme,
+      unread,
+      user
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -101,19 +103,19 @@ class Header extends Component {
       user && user.role && user.role.name === 'shipper'
         ? {
           url: '/account',
-          text: 'Account',
+          text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
         }
         : {
           url: '/admin/dashboard',
-          text: 'Account',
+          text: t('nav:account'),
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
         },
       {
         url: '/signout',
-        text: 'Sign out',
+        text: t('nav:signOut'),
         fontAwesomeIcon: 'fa-sign-out',
         key: 'signOut'
       }
@@ -162,6 +164,10 @@ class Header extends Component {
         {!noMessages ? mail : ''}
       </div>
     )
+    const registrationOrLogin = this.props.showRegistration
+      ? t('nav:registrationPage')
+      : t('nav:loginPage')
+
     const loginModal = (
       <Modal
         component={
@@ -173,7 +179,7 @@ class Header extends Component {
               req,
               user
             }}
-            initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
+            initialCompName={registrationOrLogin}
           />
         }
         verticalPadding="30px"
@@ -231,6 +237,7 @@ Header.propTypes = {
   loggingIn: PropTypes.bool,
   isLanding: PropTypes.bool,
   invert: PropTypes.bool,
+  t: PropTypes.func.isRequired,
   loginAttempt: PropTypes.bool,
   messageDispatch: PropTypes.shape({
     getUserConversations: PropTypes.func
@@ -299,6 +306,7 @@ function mapStateToProps (state) {
     currentStage
   }
 }
+
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
@@ -309,4 +317,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default translate('nav')(connect(mapStateToProps, mapDispatchToProps)(Header))
