@@ -110,7 +110,11 @@
         "airFreight": "Air Freight",
         "add": "Add",
         "set": "Set",
-        "delete": "Delete"
+        "delete": "Delete",
+        "total": "Total",
+        "unavailable": "Unavailable",
+        "nonStackable": "Non Stackable",
+        "selectColliType": "Select your colli type"
       },
       "itbox": {
         "component": "IncotermBox",
@@ -164,7 +168,7 @@
         "cargoDetails": "Cargo Details",
         "cargoGrossWeight": "Cargo Gross Weight",
         "cargoInsurance": "Cargo Insurance provides cover on all risk terms for physical loss or damage to cargo during transport by land, sea or air.",
-        "chargebleWeight": "Chargeble Weight",
+        "chargebleWeight": "Chargeable Weight",
         "clearanceHead": "Yes, I want",
         "clearanceNoHead": "No, I do not want",
         "clearanceNoTail": "to handle my customs clearance",
@@ -209,7 +213,12 @@
         "cargoReadyDate": "Cargo Ready Date",
         "availableAtTerm": "Available at appointed terminal",
         "excessChargeableWeight": "Please note that the total chargeable weight for Air Freight shipments",
-        "exceedsMaximum": "exceeds the maximum"
+        "exceedsMaximum": "exceeds the maximum",
+        "heightDataTip": "Please note that the maximum height for items in Air Freight shipments is",
+        "widthDataTip": "Please note that the maximum width for items in Air Freight shipments is",
+        "widthDataTipTwo": "Width is automatically set by 'Collie Type'",
+        "lengthDataTip": "Please note that the maximum length for items in Air Freight shipments is",
+        "lengthDataTipTwo": "Length is automatically set by 'Collie Type'"
       },
       "bookconf": {
         "_component": "BookingConfirmation",
@@ -336,7 +345,11 @@
         "noRoutes": "No routes from this address",
         "noRoutesBetween": "No routes found between",
         "maxValue": "Value must be less than",
-        "nonNegative": "Must be greater than 0"
+        "nonNegative": "Must be greater than 0",
+        "maxWeight": "Maximum weight is",
+        "maxHeight": "Maximum height is",
+        "maxLength": "Maximum length is",
+        "maxWidth": "Maximum width is"
       },
       "trucking": {
         "isNotAvailableLocal": " is not available in ",

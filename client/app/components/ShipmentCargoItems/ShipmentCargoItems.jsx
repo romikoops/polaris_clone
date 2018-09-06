@@ -286,4 +286,4 @@ ShipmentCargoItems.defaultProps = {
   availableMotsForRoute: []
 }
 
-export default translate(['shipment'])(ShipmentCargoItems)
+export default translate(['shipment', 'common', 'cargo', 'errors'])(ShipmentCargoItems)
