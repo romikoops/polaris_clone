@@ -208,6 +208,8 @@
         "type": "Cargo type",
         "typeEORI":"Type in EORI number",
         "volume": "Volume",
+        "totalVolume": "Total Volume",
+        "totalWeight": "Total Weight",
         "weightClass": "Weight Class",
         "confirmStackable": "I hereby confirm that my cargo consists of stackable items exclusively.",
         "nonStackable": "Should you wish to ship non-stackable cargo, please select",
