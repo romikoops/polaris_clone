@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 // import { UserShipmentRow } from './';
@@ -11,13 +10,13 @@ import { gradientTextGenerator } from '../../helpers'
 import GreyBox from '../GreyBox/GreyBox'
 
 const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme, t
+  user, handleChange, onSave, close, style, theme
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:company')}
+          Company
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -33,7 +32,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:firstName')}
+          First Name
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -49,7 +48,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:lastName')}
+          Last Name
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -65,7 +64,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:email')}
+          Email
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -81,7 +80,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:phone')}
+          Phone
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -120,7 +119,6 @@ const EditProfileBox = ({
 
 EditProfileBox.propTypes = {
   user: PropTypes.user.isRequired,
-  t: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
@@ -133,7 +131,7 @@ EditProfileBox.defaultProps = {
   style: {}
 }
 
-const ProfileBox = ({ user, style, edit, t }) => (
+const ProfileBox = ({ user, style, edit }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-15 layout-row layout-align-center-center" onClick={edit}>
@@ -143,7 +141,7 @@ const ProfileBox = ({ user, style, edit, t }) => (
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:company')}
+          Company
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -153,7 +151,7 @@ const ProfileBox = ({ user, style, edit, t }) => (
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:email')}
+          Email
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -163,7 +161,7 @@ const ProfileBox = ({ user, style, edit, t }) => (
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          {t('user:phone')}
+          Phone
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -175,7 +173,6 @@ const ProfileBox = ({ user, style, edit, t }) => (
 
 ProfileBox.propTypes = {
   user: PropTypes.user.isRequired,
-  t: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   style: PropTypes.objectOf(PropTypes.string)
 }
@@ -255,7 +252,7 @@ export class UserContactsView extends Component {
   }
   render () {
     const {
-      theme, contactData, hubs, userDispatch, t
+      theme, contactData, hubs, userDispatch
     } = this.props
     if (!contactData) {
       return ''
@@ -326,7 +323,7 @@ export class UserContactsView extends Component {
               <div
                 className="flex-100 layout-align-start-center greyBg"
               >
-                <span><b>{t('shipment:locations')}</b></span>
+                <span><b>Locations</b></span>
               </div>
             </div>
             <AdminAddressTile
@@ -351,7 +348,6 @@ UserContactsView.propTypes = {
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  t: PropTypes.func.isRequired,
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.arrayOf(PropTypes.object),
@@ -369,4 +365,4 @@ UserContactsView.defaultProps = {
   hubs: []
 }
 
-export default translate(['common', 'user', 'shipment'])(UserContactsView)
+export default UserContactsView

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { translate } from 'react-i18next'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import { v4 } from 'uuid'
@@ -78,8 +77,7 @@ export class AdminShipmentCard extends Component {
     const {
       shipment,
       theme,
-      confirmShipmentData,
-      t
+      confirmShipmentData
     } = this.props
 
     const gradientFontStyle =
@@ -94,9 +92,9 @@ export class AdminShipmentCard extends Component {
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
         theme={theme}
-        heading={t('common:areYouSure')}
-        text={`${t('shipment:rejectWarningHead')} ${shipment.imc_reference}.
-        ${t('shipment:rejectWarningTail')}`}
+        heading="Are you sure?"
+        text={`This will reject the requested shipment ${shipment.imc_reference}.
+        This shipment can be still be recovered after being ignored`}
         confirm={() => this.handleIgnore()}
         deny={() => this.closeConfirm()}
       />
@@ -108,11 +106,11 @@ export class AdminShipmentCard extends Component {
 
     const requestedLinks = ['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
       <div className={`layout-row layout-align-center-center ${styles.topRight}`}>
-        <p className={`${styles.check} pointy`} onClick={() => this.handleAccept()}>{t('common:accept')}</p>
+        <p className={`${styles.check} pointy`} onClick={() => this.handleAccept()}>Accept</p>
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        <p className={`${styles.edit} pointy`} onClick={() => this.handleEdit()}>{t('common:modify')}</p>
+        <p className={`${styles.edit} pointy`} onClick={() => this.handleEdit()}>Modify</p>
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        <p className={`${styles.trash} pointy`} onClick={() => this.confirmDelete()}>{t('common:reject')}</p>
+        <p className={`${styles.trash} pointy`} onClick={() => this.confirmDelete()}>Reject</p>
       </div>
     ) : ''
 
@@ -150,15 +148,15 @@ export class AdminShipmentCard extends Component {
           </div>
           <div className={`flex-60 layout-row layout-align-start-center ${styles.hub_name}`}>
             <div className="layout-column layout-align-center-start">
-              <p>{t('common:from')}:&nbsp;<span>{originHubObj.name}</span></p>
-              <p>{t('common:to')}:&nbsp;<span>{destinationHubObj.name}</span></p>
+              <p>From:&nbsp;<span>{originHubObj.name}</span></p>
+              <p>To:&nbsp;<span>{destinationHubObj.name}</span></p>
             </div>
           </div>
           <div className={`layout-row flex-20 layout-align-start-center ${styles.ett}`}>
             <div>
-              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} {t('common:days')}</b><br />
+              <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days</b><br />
               <span className={`${styles.grey}`}>
-                {t('shipment:estimatedTransitTime')}
+              Estimated Transit Time
               </span>
             </div>
           </div>
@@ -168,8 +166,8 @@ export class AdminShipmentCard extends Component {
         >
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
-              <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
+              <b className={styles.ref_row_card}>Ref:&nbsp;{shipment.imc_reference}</b>
+              <p>Placed at&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
             </div>
           </div>
 
@@ -203,21 +201,21 @@ export class AdminShipmentCard extends Component {
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
             <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:pickupDate')}</b><br />
+              <span className="flex-100"><b>Pick-up Date</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(plannedDate).format('DD/MM/YYYY')}
                 </span>
               </span>
             </div>
             <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:etd')}</b><br />
+              <span className="flex-100"><b>ETD</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(shipment.planned_etd).format('DD/MM/YYYY')}
                 </span>
               </span>
             </div>
             <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>{t('common:eta')}</b><br />
+              <span className="flex-100"><b>ETA</b><br />
                 <span className={`${styles.grey}`}>
                   {moment(shipment.planned_eta).format('DD/MM/YYYY')}
                 </span>
@@ -229,14 +227,14 @@ export class AdminShipmentCard extends Component {
                   className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
                   style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
                 />
-                <p>{t('shipment:preCarriageBase')}</p>
+                <p>Pre-carriage</p>
               </div>
               <div className="layout-row layout-align-end-end">
                 <i
                   className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
                   style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
                 />
-                <p>{t('shipment:onCarriageBase')}</p>
+                <p>On-carriage</p>
               </div>
             </div>
           </div>
@@ -244,7 +242,7 @@ export class AdminShipmentCard extends Component {
           <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >
-            <div className="flex-100 layout-row"><b>{t('shipment:arrivedOn')}:&nbsp;</b>
+            <div className="flex-100 layout-row"><b>Arrived on:&nbsp;</b>
               <span className={`${styles.grey}`}>
                 {moment(shipment.planned_eta).format('DD/MM/YYYY')}
               </span>
@@ -263,20 +261,20 @@ export class AdminShipmentCard extends Component {
                 </span>
               </div>
             </div>
-            <span className="flex-35">{t('cargo:cargoItem')}</span>
+            <span className="flex-35">Cargo item</span>
             <span className="flex-25 layout-row">
               <i
                 className="fa fa-check-square clip"
                 style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
               />
-              <p>{t('shipment:pickUp')}</p>
+              <p> Pick-up</p>
             </span>
             <span className="flex-25 layout row">
               <i
                 className="fa fa-check-square clip"
                 style={shipment.delivery_address ? gradientFontStyle : deselectedStyle}
               />
-              <p>{t('shipment:delivery')}</p>
+              <p> Delivery</p>
             </span>
           </div>
           <div className="layout-row flex layout-align-end-end">
@@ -295,7 +293,6 @@ export class AdminShipmentCard extends Component {
 
 AdminShipmentCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
-  t: PropTypes.func.isRequired,
   confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   dispatches: PropTypes.objectOf(PropTypes.func).isRequired,
   theme: PropTypes.theme
@@ -307,4 +304,4 @@ AdminShipmentCard.defaultProps = {
   theme: {}
 }
 
-export default translate(['common', 'shipment', 'cargo'])(AdminShipmentCard)
+export default AdminShipmentCard
