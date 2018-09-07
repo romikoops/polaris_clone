@@ -3,12 +3,13 @@
 require 'bundler/setup'
 
 require 'simplecov'
-if ENV['COVERAGE_DIR']
-  SimpleCov.coverage_dir(ENV['COVERAGE_DIR'])
-  SimpleCov.merge_timeout 3600
-  SimpleCov.command_name 'charge_calculator/rspec'
+SimpleCov.start do
+  if ENV['COVERAGE_DIR']
+    SimpleCov.coverage_dir(ENV['COVERAGE_DIR'])
+    SimpleCov.merge_timeout 3600
+    SimpleCov.command_name 'charge_calculator/rspec'
+  end
 end
-SimpleCov.start
 
 require 'charge_calculator'
 require 'support/json_schema_matcher'

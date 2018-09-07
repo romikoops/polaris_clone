@@ -17,13 +17,15 @@
 
 require 'simplecov'
 
-if ENV['COVERAGE_DIR']
-  SimpleCov.coverage_dir(ENV['COVERAGE_DIR'])
-  SimpleCov.merge_timeout 3600
-  SimpleCov.command_name 'api/rspec'
-end
+SimpleCov.start 'rails' do
+  add_group 'Validators', 'app/validators'
 
-SimpleCov.start
+  if ENV['COVERAGE_DIR']
+    SimpleCov.coverage_dir(ENV['COVERAGE_DIR'])
+    SimpleCov.merge_timeout 3600
+    SimpleCov.command_name 'api/rspec'
+  end
+end
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

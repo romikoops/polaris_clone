@@ -24,10 +24,10 @@ api:
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
   script:
     - scripts/test
+
+  coverage: '/\(\d+.\d+\%\) covered/'
   artifacts:
     paths:
-      - engines/*/coverage/
-      - lib/*/coverage/
       - coverage/
     expire_in: 1 week
     reports:
@@ -46,7 +46,12 @@ client:
     - cd client
     - npm install
     - npm run test:ci
+
+  coverage: '/^Statements\s*:\s*([^%]+)/'
   artifacts:
+    paths:
+      - client/coverage/lcov-report
+    expire_in: 1 week
     reports:
       junit:
         - client/junit.xml
