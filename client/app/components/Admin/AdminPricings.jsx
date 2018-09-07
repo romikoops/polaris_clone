@@ -27,10 +27,11 @@ class AdminPricings extends Component {
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
   componentDidMount () {
-    const { pricingData, loading, adminDispatch } = this.props
+    const { pricingData, loading, adminDispatch, match } = this.props
     if (!pricingData && !loading) {
       adminDispatch.getPricings(false)
     }
+    this.props.setCurrentUrl(match.url)
   }
   viewRoute (route) {
     const { adminDispatch } = this.props
@@ -200,6 +201,7 @@ AdminPricings.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
   adminDispatch: PropTypes.shape({

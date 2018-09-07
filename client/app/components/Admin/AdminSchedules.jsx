@@ -50,6 +50,7 @@ class AdminSchedules extends Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   getItinerary (sched) {
@@ -335,6 +336,7 @@ AdminSchedules.propTypes = {
   document: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   documentDispatch: PropTypes.objectOf(PropTypes.func),
   scope: PropTypes.objectOf(PropTypes.any)
 }

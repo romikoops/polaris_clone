@@ -24,10 +24,11 @@ class AdminRoutes extends Component {
     this.saveNewRoute = this.saveNewRoute.bind(this)
   }
   componentDidMount () {
-    const { adminDispatch, allHubs, loading } = this.props
+    const { adminDispatch, allHubs, loading, match } = this.props
     if (allHubs.length < 1 && !loading) {
       adminDispatch.getAllHubs()
     }
+    this.props.setCurrentUrl(match.url)
   }
 
   viewItinerary (itinerary) {
@@ -125,6 +126,7 @@ AdminRoutes.propTypes = {
     newRoute: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   route: PropTypes.route.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired,

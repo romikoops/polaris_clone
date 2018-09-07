@@ -45,6 +45,7 @@ class UserContacts extends Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   viewContact (contact) {
@@ -369,6 +370,7 @@ UserContacts.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.object),
   contactsData: PropTypes.arrayOf(PropTypes.contact),
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getContact: PropTypes.func,
     getContacts: PropTypes.func,

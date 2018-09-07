@@ -52,6 +52,9 @@ class AdminClients extends Component {
     this.handleClientAction = this.handleClientAction.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
   }
+  componentDidMount () {
+    this.props.setCurrentUrl(this.props.match.url)
+  }
   viewClient (client) {
     const { adminDispatch } = this.props
     adminDispatch.getClient(client.id, true)
@@ -480,6 +483,7 @@ AdminClients.propTypes = {
     getClient: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired
 }
 AdminClients.defaultProps = {
