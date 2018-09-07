@@ -19,17 +19,18 @@ module ExcelTool
       @zones = {}
       @all_ident_values_and_countries = {}
       @charges = {}
+      @missing_geos = []
     end
 
     def perform
       start_time = DateTime.now
       load_zones
       load_ident_values_and_countries
-      load_fees_and_charges
-      overwrite_zonal_trucking_rates_by_hub
-      end_time = DateTime.now
-      diff = (end_time - start_time) / 86_400
-
+      # load_fees_and_charges
+      # overwrite_zonal_trucking_rates_by_hub
+      # end_time = DateTime.now
+      # diff = (end_time - start_time) / 86_400
+      binding.pry
       { results: results, stats: stats }
     end
 
@@ -188,7 +189,8 @@ module ExcelTool
             stats[:trucking_destinations][:number_created] += 1
             # stats[:hub_truckings][:number_created] += 1
 
-            { ident: geometry.id, country: idents_and_country[:country] }
+            { ident: geometry&.id, country: idents_and_country[:country] }
+            # { ident: geometry.id, country: idents_and_country[:country] }
           else
             idents_and_country
           end
@@ -429,12 +431,13 @@ module ExcelTool
       )
 
       if geometry.nil?
-        geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
-        coordinates = geocoder_results.first.geometry["location"]
-        geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
+        @missing_geos << idents_and_country[:ident]
+        # geocoder_results = Geocoder.search(idents_and_country.values.join(" "))
+        # coordinates = geocoder_results.first.geometry["location"]
+        # geometry = Geometry.find_by_coordinates(coordinates["lat"], coordinates["lng"])
       end
 
-      raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
+      # raise "no geometry found for #{idents_and_country.values.join(', ')}" if geometry.nil?
 
       geometry
     end
