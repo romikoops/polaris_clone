@@ -12,7 +12,7 @@ class Admin::ItinerariesController < Admin::AdminBaseController
   def create
     itinerary = formated_itinerary
     if itinerary.save
-      response_handler(itinerary)
+      response_handler(itinerary.as_json)
     else
       response_handler(app_error(itinerary.errors.full_messages.join("\n")))
     end
