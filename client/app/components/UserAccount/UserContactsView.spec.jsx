@@ -29,7 +29,7 @@ jest.mock('../Admin/AdminSearchables', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { UserContactsView } from './UserContactsView'
+import UserContactsView from './UserContactsView'
 
 const shipment = {
   schedule_set: [{ hub_route_key: 'foo-bar' }]

@@ -10,7 +10,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { managerRoles, adminClientsTooltips as clientTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import AdminPromptConfirm from './Prompt/Confirm'
-import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminClientView extends Component {
   static prepShipment (baseShipment, client) {

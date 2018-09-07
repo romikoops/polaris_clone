@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment } from '../../mocks'
-import { UserShipmentCard } from './UserShipmentCard'
+import UserShipmentCard from './UserShipmentCard'
 
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,

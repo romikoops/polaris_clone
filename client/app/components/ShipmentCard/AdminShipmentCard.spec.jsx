@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment, identity, theme, hub } from '../../mocks'
-import { AdminShipmentCard } from './AdminShipmentCard'
+import AdminShipmentCard from './AdminShipmentCard'
 
 jest.mock('uuid', () => {
   let counter = -1

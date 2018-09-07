@@ -112,7 +112,7 @@ export function calcExtraTotals (feeHash) {
   return res1.toFixed(2)
 }
 
-export class BookingConfirmation extends Component {
+class BookingConfirmation extends Component {
   constructor (props) {
     super(props)
     this.state = {
