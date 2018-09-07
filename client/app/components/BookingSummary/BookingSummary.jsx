@@ -20,9 +20,6 @@ function BookingSummary (props) {
         : 'black',
     backgroundSize: '16px 2px, 100% 2px'
   }
-  // const modesOfTransport = Object.keys(scope.modes_of_transport)
-  //   .filter(mot => scope.modes_of_transport[mot])
-  // const icons = modesOfTransport.map(mot => switchIcon(mot))
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
 
   return (
