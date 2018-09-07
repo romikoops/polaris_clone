@@ -293,7 +293,7 @@ module TruckingTools
   end
 
   def calc_cargo_load_meterage_area(trucking_pricing, cargo_object, cargo)
-    load_meter_weight = ((cargo.dimension_x * cargo.dimension_y) / 24_000) * trucking_pricing.load_meterage['ratio']
+    load_meter_weight = ((cargo.dimension_x * cargo.dimension_y * cargo.quantity) / 24_000) * trucking_pricing.load_meterage['ratio']
     trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
     cargo_object['non_stackable']['weight'] += trucking_chargeable_weight * cargo.quantity
     cargo_object['non_stackable']['volume'] += cargo.volume * cargo.quantity
