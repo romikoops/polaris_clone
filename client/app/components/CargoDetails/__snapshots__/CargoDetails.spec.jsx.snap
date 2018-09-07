@@ -2401,7 +2401,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                     }
                   }
                 >
-                  No, I do not want undefined to handle my customs
+                  No, I do not want undefined to handle my customs clearance
                 </p>
               </div>
               <div
@@ -2562,7 +2562,9 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
                             }
                           }
                         >
-                          (if applicable)
+                          (
+                          if applicable
+                          )
                         </b>
                       }
                       color=""
@@ -2654,9 +2656,7 @@ exports[`scope.has_customs || scope.has_insurance 1`] = `
               className="flex-100 margin_5"
             >
               <b>
-                A customs declaration is mandatory to pass a national border when exporting or
-              importing. If you choose to handle the customs clearance on your own, undefined
-              will need a copy of the customs declaration.
+                A customs declaration is mandatory to pass a national border when exporting or importing. If you choose to handle the customs clearance on your own, undefined will need a copy of the customs declaration.
               </b>
             </p>
             <p

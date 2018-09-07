@@ -101,13 +101,13 @@ exports[`shallow render 1`] = `
         <p
           className=" sec_subheader_text flex-none"
         >
-           No Shipments yet
+          No Shipments yet
         </p>
       </div>
       <p
         className="flex-none"
       >
-         As shipments are requested, they will appear here
+        As shipments are requested, they will appear here
       </p>
     </div>
   </div>

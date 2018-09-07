@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './ShipmentThankYou.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -12,13 +13,14 @@ export class ShipmentThankYou extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, user, tenant
+      theme, shipmentData, shipmentDispatch, user, tenant, t
     } = this.props
-    if (!shipmentData) return <h1>Loading</h1>
+    if (!shipmentData) return <h1>{t('bookconf:loading')}</h1>
     const {
       shipment
     } = shipmentData
-    if (!shipment) return <h1> Loading</h1>
+    if (!shipment) return <h1> {t('bookconf:loading')}</h1>
+
     return (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center">
@@ -26,35 +28,33 @@ export class ShipmentThankYou extends Component {
             <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
               <div className={` ${styles.thank_you} flex-100 layout-row layout-align-start`}>
                 <p className="flex-100">
-                  Thank you for your booking request.
+                  {t('bookconf:thankYou')}
                 </p>
               </div>
               <div className={`${styles.b_ref} flex-100 layout-row layout-align-start`}>
-                Booking Reference: {shipment.imc_reference}
+                {t('bookconf:bookingReference')}: {shipment.imc_reference}
               </div>
               <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
                 <p className="flex-100">
-                  Booking request confirmation has been sent to your account email address.
+                  {t('bookconf:requestEmailFirst')}
                   <br />
-                  Please note that the rates can be changed without prior notice.
+                  {t('bookconf:requestEmailSecond')}
                   <br />
-                  Your booking will be confirmed after a review.
+                  {t('bookconf:requestEmailThird')}
                   <br />
                   {
                     shipment.status === 'requested_by_unconfirmed_account' && (
                       <span>
                         <br />
-                        Please <b> confirm your email </b> to complete your booking request. <br />
-                        { `${tenant.name} will not confirm your order until the ` }
-                        email associated with this account is validated. <br />
-                        To confirm your email, please follow the link sent via email
-                        upon registration. <br />
+                        {t('bookconf:emailPlease')}<b> {t('bookconf:confirmEmail')} </b> {t('bookconf:completeRequest')} <br />
+                        { `${tenant.name}` } {t('bookconf:tenantWillNot')}
+                        {t('bookconf:emailAssociated')} <br />
+                        {t('bookconf:followLink')} <br />
                         <br />
                       </span>
                     )
                   }
-                  Do not hesitate to contact us either through the
-                  message center or your account manager
+                  {t('bookconf:contactUs')}
                 </p>
               </div>
             </div>
@@ -79,6 +79,7 @@ export class ShipmentThankYou extends Component {
 }
 ShipmentThankYou.propTypes = {
   theme: PropTypes.objectOf(PropTypes.any),
+  t: PropTypes.func.isRequired,
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
@@ -92,4 +93,4 @@ ShipmentThankYou.defaultProps = {
   user: {},
   tenant: null
 }
-export default ShipmentThankYou
+export default translate('bookconf')(ShipmentThankYou)

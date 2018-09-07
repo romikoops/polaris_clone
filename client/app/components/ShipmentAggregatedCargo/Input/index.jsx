@@ -1,9 +1,10 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import { ValidatedInput } from '../../ValidatedInput/ValidatedInput'
 
-export default function ShipmentAggregatedCargoInput ({
-  value, name, handleDelta, nextStageAttempt, maxValue
+function ShipmentAggregatedCargoInput ({
+  value, name, handleDelta, nextStageAttempt, maxValue, t
 }) {
   return (
     <ValidatedInput
@@ -25,9 +26,9 @@ export default function ShipmentAggregatedCargoInput ({
         maxValue: (values, _value) => _value < maxValue
       }}
       validationErrors={{
-        isDefaultRequiredValue: 'Must be greater than 0',
-        nonNegative: 'Must be greater than 0',
-        maxValue: `Must be less than ${maxValue}`
+        isDefaultRequiredValue: t('common:greaterZero'),
+        nonNegative: t('common:greaterZero'),
+        maxValue: `${t('errors:maxValue')} ${maxValue}`
       }}
       required
     />
@@ -36,6 +37,7 @@ export default function ShipmentAggregatedCargoInput ({
 
 ShipmentAggregatedCargoInput.propTypes = {
   value: PropTypes.number,
+  t: PropTypes.func.isRequired,
   name: PropTypes.string,
   handleDelta: PropTypes.func.isRequired,
   nextStageAttempt: PropTypes.bool,
@@ -47,3 +49,5 @@ ShipmentAggregatedCargoInput.defaultProps = {
   name: '',
   nextStageAttempt: false
 }
+
+export default translate(['common', 'errors'])(ShipmentAggregatedCargoInput)

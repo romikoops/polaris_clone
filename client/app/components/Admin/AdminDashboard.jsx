@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
-import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { AdminHubCard } from './AdminHubCard'
 import { AdminClientCardIndex } from './AdminClientCardIndex'
 import { AdminRouteList } from './AdminRouteList'

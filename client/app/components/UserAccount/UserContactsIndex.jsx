@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -45,7 +46,8 @@ export class UserContactsIndex extends Component {
       viewContact,
       toggleNewContact,
       newContactBox,
-      numPages
+      numPages,
+      t
     } = this.props
 
     return (
@@ -70,7 +72,7 @@ export class UserContactsIndex extends Component {
               >
                 {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                 <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
               </div>
               {}
               <p>{this.state.page}</p>
@@ -81,7 +83,7 @@ export class UserContactsIndex extends Component {
             `}
                 onClick={this.state.page < numPages ? this.nextPage : null}
               >
-                <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />
               </div>
             </div>
@@ -118,6 +120,7 @@ export class UserContactsIndex extends Component {
 UserContactsIndex.propTypes = {
   theme: PropTypes.theme,
   numPages: PropTypes.number,
+  t: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(PropTypes.object),
   userDispatch: PropTypes.func.isRequired,
   viewContact: PropTypes.func.isRequired,
@@ -133,4 +136,4 @@ UserContactsIndex.defaultProps = {
   newContactBox: {}
 }
 
-export default UserContactsIndex
+export default translate('common')(UserContactsIndex)

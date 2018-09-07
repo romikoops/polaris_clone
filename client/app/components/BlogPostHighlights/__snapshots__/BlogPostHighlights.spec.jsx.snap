@@ -18,7 +18,7 @@ exports[`shallow render 1`] = `
   >
     <div
       className="blog_post layout-column"
-      key="0"
+      key="RANDOM_KEY_0"
     >
       <div
         className="bp_image flex-33"
@@ -74,7 +74,10 @@ exports[`shallow render 1`] = `
                 lines={4}
                 trimWhitespace={false}
               >
-                With the sheer amount of freight crossing the globe on a daily basis, our means of co-ordinating the massive flow of information ahs had to continuously evolve and adapt. Digitalisation has allowed companies, big and small to keep up with the ever
+                With the sheer amount of freight crossing the globe on a daily basis, 
+      our means of co-ordinating the massive flow of information ahs had to continuously
+       evolve and adapt. Digitalisation has allowed companies, big and small to keep up
+        with the ever
                  
               </Truncate>
             </p>
@@ -101,7 +104,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="1"
+      key="RANDOM_KEY_1"
     >
       <div
         className="bp_image flex-33"
@@ -157,7 +160,9 @@ exports[`shallow render 1`] = `
                 lines={4}
                 trimWhitespace={false}
               >
-                With the global freight market under pressure from both supply and demand sides, it has become increasingly important to eek out every last bit of productivity from your existing resources
+                With the global freight market under pressure from both supply and demand sides,
+       it has become increasingly important to eek out every last bit of productivity
+        from your existing resources
                  
               </Truncate>
             </p>
@@ -184,7 +189,7 @@ exports[`shallow render 1`] = `
     </div>
     <div
       className="blog_post layout-column"
-      key="2"
+      key="RANDOM_KEY_2"
     >
       <div
         className="bp_image flex-33"
@@ -240,7 +245,10 @@ exports[`shallow render 1`] = `
                 lines={4}
                 trimWhitespace={false}
               >
-                The global shipping industry is the backbone upon which the modern world is built. However, fraud, theft and other problems continue to drive up prices for consumers around the world. A small group  of companies are working to bring the power and protection of blockchain technologies to the wolrd of freight
+                The global shipping industry is the backbone upon which the modern world is built. 
+      However, fraud, theft and other problems continue to drive up prices for consumers 
+      around the world. A small group  of companies are working to bring the power and 
+      protection of blockchain technologies to the wolrd of freight
                  
               </Truncate>
             </p>

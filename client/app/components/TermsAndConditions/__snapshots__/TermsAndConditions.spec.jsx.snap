@@ -6,6 +6,7 @@ exports[`shallow rendering when props.size is small 1`] = `
 >
   <Connect(Header)
     noMessages={true}
+    t={[Function]}
     theme={
       Object {
         "colors": Object {

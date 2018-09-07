@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { tenant, user, shipment, identity } from '../../mocks'
+// eslint-disable-next-line import/first no-named-as-default
+import ShipmentDetails from './ShipmentDetails'
 
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -20,9 +22,6 @@ jest.mock('../../helpers', () => ({
   isEmpty: () => true,
   camelize: x => x
 }))
-
-// eslint-disable-next-line import/first
-import { ShipmentDetails } from './ShipmentDetails'
 
 const editedShipment = {
   ...shipment,
@@ -94,13 +93,6 @@ afterEach(() => {
   Date = originalDate
 })
 
-/**
- * The component is too big
- * Test will be fixed and test coverage will increase,
- * once the refactoring is started
- */
 test.skip('shallow rendering', () => {
-  const wrapper = shallow(<ShipmentDetails {...propsBase} />)
-  wrapper.setState({ filteredRouteIndexes: [{}] })
-  expect(wrapper).toMatchSnapshot()
+  expect(shallow(<ShipmentDetails {...propsBase} />)).toMatchSnapshot()
 })

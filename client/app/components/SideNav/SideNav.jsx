@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
@@ -18,32 +19,33 @@ class SideNav extends Component {
       linkVisibility: [],
       activeIndex: -1
     }
+    const { t } = this.props
     this.userLinks = [
       {
         key: v4(),
         icon: 'fa-tachometer',
-        text: 'Dashboard',
         url: '/account',
+        text: t('account:dashboard'),
         target: 'dashboard'
       },
       {
         key: v4(),
         icon: 'fa-ship',
-        text: 'Shipments',
+        text: t('account:shipments'),
         url: '/account/shipments',
         target: 'shipments'
       },
       {
         key: v4(),
         icon: 'fa-user',
-        text: 'Profile',
+        text: t('account:profile'),
         url: '/account/profile',
         target: 'profile'
       },
       {
         key: v4(),
         icon: 'fa-address-card',
-        text: 'Contacts',
+        text: t('account:contacts'),
         url: '/account/contacts',
         target: 'contacts'
       }
@@ -52,7 +54,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-tachometer',
-        text: 'Dashboard',
+        text: t('account:dashboard'),
         url: '/admin/dashboard',
         target: 'dashboard',
         tooltip: menuTip.dashboard
@@ -60,7 +62,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-ship',
-        text: 'Shipments',
+        text: t('account:shipments'),
         url: '/admin/shipments',
         target: 'shipments',
         tooltip: menuTip.shipments
@@ -68,7 +70,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-building-o',
-        text: 'Hubs',
+        text: t('account:hubs'),
         url: '/admin/hubs',
         target: 'hubs',
         tooltip: menuTip.hubs
@@ -76,15 +78,15 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-area-chart',
-        text: 'Pricing',
         url: '/admin/pricings',
+        text: t('account:pricing'),
         target: 'pricing',
         tooltip: menuTip.pricing
       },
       {
         key: v4(),
         icon: 'fa-list',
-        text: 'Schedules',
+        text: t('account:schedules'),
         url: '/admin/schedules',
         target: 'schedules',
         tooltip: menuTip.schedules
@@ -92,7 +94,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-users',
-        text: 'Clients',
+        text: t('account:clients'),
         url: '/admin/clients',
         target: 'clients',
         tooltip: menuTip.clients
@@ -100,7 +102,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-map-signs',
-        text: 'Routes',
+        text: t('account:routes'),
         url: '/admin/routes',
         target: 'routes',
         tooltip: menuTip.routes
@@ -108,7 +110,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-money',
-        text: 'Currencies',
+        text: t('account:currencies'),
         url: '/admin/currencies',
         target: 'currencies',
         tooltip: menuTip.currencies
@@ -124,7 +126,7 @@ class SideNav extends Component {
     const superAdminLink = {
       key: 'super-admin',
       icon: 'fa-star',
-      text: 'SuperAdmin',
+      text: t('account:superAdmin'),
       url: '/admin/superadmin',
       target: 'superadmin'
     }
@@ -331,6 +333,7 @@ class SideNav extends Component {
 SideNav.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
+  t: PropTypes.func.isRequired,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
@@ -384,4 +387,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav))
+export default translate('account')(withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav)))

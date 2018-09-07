@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
-import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
 
@@ -76,10 +77,11 @@ export class UserDashboard extends Component {
       theme,
       dashboard,
       user,
-      userDispatch
+      userDispatch,
+      t
     } = this.props
     if (!user || !dashboard) {
-      return <h1>NO DATA</h1>
+      return <h1>{t('common:noData')}</h1>
     }
     const { perPage } = this.state
     const {
@@ -124,7 +126,7 @@ export class UserDashboard extends Component {
                   />
                 </div>
                 <div className={`${ustyles.welcome} flex layout-row`}>
-                Welcome back,&nbsp; <b>{user.first_name}</b>
+                  {t('common:welcomeBack')}&nbsp; <b>{user.first_name}</b>
                 </div>
               </div>
               <SquareButton
@@ -144,7 +146,7 @@ export class UserDashboard extends Component {
             theme={theme}
           />  <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
-              <u><b>See more shipments</b></u>
+              <u><b>{t('shipment:seeMoreShipments')}</b></u>
             </span>
             <div className={`flex-85 ${ustyles.separator}`} />
           </div>
@@ -173,11 +175,11 @@ export class UserDashboard extends Component {
               <div
                 className="flex-100 layout-align-start-center greyBg"
               >
-                <span><b>My Shipment Addresses</b></span>
+                <span><b>{t('shipment:myShipmentAddresses')}</b></span>
               </div>
             </div>
             {locations.length === 0 ? (
-              'No addresses yet'
+              t('shipment:noAddresses')
             ) : (
               <UserLocations
                 setNav={() => {}}
@@ -188,7 +190,6 @@ export class UserDashboard extends Component {
                 user={user}
               />
             )}
-
           </div>
         </div>
       </div>
@@ -198,6 +199,7 @@ export class UserDashboard extends Component {
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
   setCurrentUrl: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
@@ -219,4 +221,4 @@ UserDashboard.defaultProps = {
   theme: null
 }
 
-export default UserDashboard
+export default translate(['common', 'user', 'shipment'])(UserDashboard)

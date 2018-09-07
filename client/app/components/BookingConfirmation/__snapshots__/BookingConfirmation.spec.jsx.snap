@@ -195,10 +195,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -210,12 +209,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -228,12 +227,12 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -689,7 +688,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -935,7 +934,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_26"
@@ -963,7 +962,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -973,7 +974,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -1218,10 +1219,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -1233,12 +1233,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -1251,12 +1251,12 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -1704,7 +1704,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -2021,7 +2021,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_32"
@@ -2049,7 +2049,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -2059,7 +2061,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -2298,10 +2300,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -2313,12 +2314,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -2331,12 +2332,12 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -2910,7 +2911,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -3156,7 +3157,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_41"
@@ -3184,7 +3185,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -3194,7 +3197,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -3433,10 +3436,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -3448,12 +3450,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -3466,12 +3468,12 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -3938,7 +3940,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -4184,7 +4186,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_53"
@@ -4212,7 +4214,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -4222,7 +4226,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -4461,10 +4465,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -4476,12 +4479,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Collection:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -4512,12 +4515,12 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -4965,7 +4968,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -5211,7 +5214,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_47"
@@ -5239,7 +5242,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -5249,7 +5254,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -5488,10 +5493,9 @@ exports[`shallow render 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -5503,12 +5507,12 @@ exports[`shallow render 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -5521,12 +5525,12 @@ exports[`shallow render 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -5974,7 +5978,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -6220,7 +6224,7 @@ exports[`shallow render 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_4"
@@ -6248,7 +6252,9 @@ exports[`shallow render 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -6258,7 +6264,7 @@ exports[`shallow render 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -6497,10 +6503,9 @@ exports[`with cargo items 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -6512,12 +6517,12 @@ exports[`with cargo items 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -6530,12 +6535,12 @@ exports[`with cargo items 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -7002,7 +7007,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 1000,
                   "quantity": 5,
-                  "volume": 0.12,
+                  "volume": 0.18,
                 }
               }
               key="RANDOM_KEY_14"
@@ -7171,7 +7176,7 @@ exports[`with cargo items 1`] = `
                   ],
                   "payload_in_kg": 700,
                   "quantity": 7,
-                  "volume": 2.4499999999999997,
+                  "volume": 1.75,
                 }
               }
               key="RANDOM_KEY_15"
@@ -7296,7 +7301,7 @@ exports[`with cargo items 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -7542,7 +7547,7 @@ exports[`with cargo items 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_20"
@@ -7570,7 +7575,9 @@ exports[`with cargo items 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -7580,7 +7587,7 @@ exports[`with cargo items 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {
@@ -7819,10 +7826,9 @@ exports[`with containers 1`] = `
             }
           />
           <div
-            className="flex-100 layout-row layout-align-space-between-start"
+            className="flex-100 layout-row layout-align-space-between-center"
             style={
               Object {
-                "paddingTop": "15px",
                 "position": "relative",
               }
             }
@@ -7834,12 +7840,12 @@ exports[`with containers 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                   Expected Time of Departure:
                 </p>
                 <p
-                  className="flex-100  center"
+                  className="flex-90 offset-10  center"
                 >
                   19
                 </p>
@@ -7852,12 +7858,12 @@ exports[`with containers 1`] = `
                 className="flex-80 layout-row layout-wrap layout-align-start-start"
               >
                 <p
-                  className="flex-100 center"
+                  className="flex-100 letter_3"
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-100 center"
+                  className="flex-90 offset-10 center"
                 >
                   19
                 </p>
@@ -8576,7 +8582,7 @@ exports[`with containers 1`] = `
                 <p
                   className="flex-100 no_m"
                 >
-                  USD 15
+                  USD 15.00
                 </p>
               </div>
               <div
@@ -8822,7 +8828,7 @@ exports[`with containers 1`] = `
                 className="flex-100 layout-row layout-align-start-start"
               >
                 <ul
-                  className="flex-80 terms_list"
+                  className="flex-100 terms_list"
                 >
                   <li
                     key="RANDOM_KEY_12"
@@ -8850,7 +8856,9 @@ exports[`with containers 1`] = `
             }
           }
         >
-          <div>
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
             <RoundButton
               active={false}
               back={false}
@@ -8860,7 +8868,7 @@ exports[`with containers 1`] = `
               icon=""
               iconClass=""
               inverse={false}
-              size="full"
+              size=""
               text="Finish Booking Request"
               theme={
                 Object {

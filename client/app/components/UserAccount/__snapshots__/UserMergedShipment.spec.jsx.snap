@@ -43,7 +43,7 @@ exports[`shallow render 1`] = `
     <p
       className="flex-none"
     >
-       Yes 
+      Yes
     </p>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentSummaryBox.scss'
 import { moment } from '../../constants'
@@ -45,7 +46,7 @@ export class ShipmentSummaryBox extends Component {
   }
   render () {
     const {
-      theme, shipment, hubs, route, user, total, locations
+      theme, shipment, hubs, route, user, total, locations, t
     } = this.props
     const { startHub, endHub } = hubs
     const gradientFontStyle =
@@ -71,7 +72,7 @@ export class ShipmentSummaryBox extends Component {
       layout-wrap layout-row layout-align-space-between-center"
       >
         <div className="flex-100 layout-row">
-          <TextHeading theme={theme} size={4} text="Pick-up Address :" />
+          <TextHeading theme={theme} size={4} text={t('shipment:pickUpAddress')} />
         </div>
         <address className="flex-100 layout-row layout-wrap">
           {locations.origin.street_number} {locations.origin.street} <br />
@@ -86,7 +87,7 @@ export class ShipmentSummaryBox extends Component {
       layout-wrap layout-row layout-align-space-between-center"
       >
         <div className="flex-100 layout-row">
-          <TextHeading theme={theme} size={4} text="Delivery Address :" />
+          <TextHeading theme={theme} size={4} text={t('shipment:deliveryAddress')} />
         </div>
         <address className="flex-100 layout-row layout-wrap">
           {locations.destination.street_number} {locations.destination.street} <br />
@@ -96,6 +97,7 @@ export class ShipmentSummaryBox extends Component {
         </address>
       </div>
     )
+
     return (
       <div
         className={`flex-100 layout-row layout-wrap layout-align-center-start ${
@@ -139,7 +141,7 @@ export class ShipmentSummaryBox extends Component {
                 } flex-none layout-row layout-align-space-between-center`}
                 style={brightGradientStyle}
               >
-                <p>Total Price:</p>{' '}
+                <p>{t('shipment:totalPrice')}</p>{' '}
                 <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
                 <Price value={total} currency={user.currency} />
               </div>
@@ -148,7 +150,7 @@ export class ShipmentSummaryBox extends Component {
           <div className="flex-100 layout-row layout-align-start-center">
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="Pick-up Date :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:pickUpDate')} />
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -163,7 +165,7 @@ export class ShipmentSummaryBox extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="Date of Departure :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:dateOfDeparture')} />
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -178,7 +180,7 @@ export class ShipmentSummaryBox extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="ETA terminal :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:etaTerminal')} />
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -195,7 +197,7 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="Shipment Type :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:shipmentType')} />
               </div>
               <p className="flex-none"> {shipment.load_type === 'cargo_item' ? 'LCL' : 'FCL'} </p>
             </div>
@@ -205,7 +207,7 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="IncoTerm :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:incoterm')} />
               </div>
               <p className="flex-none"> {shipment.incoterm} </p>
             </div>
@@ -213,7 +215,7 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="MoT :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:MoT')} />
               </div>
               <p className="flex-none"> {capitalize(route[0].mode_of_transport)} </p>
             </div>
@@ -221,17 +223,17 @@ export class ShipmentSummaryBox extends Component {
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="Pre-carriage :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:preCarriage')} />
               </div>
-              <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
+              <p className="flex-none"> {shipment.has_pre_carriage ? t('common:yes') : t('common:no')} </p>
             </div>
             <div className="flex-100 flex-gt-sm-25
             layout-wrap layout-row layout-align-space-between-center"
             >
               <div className="flex-100 layout-row">
-                <TextHeading theme={theme} size={4} text="On-carriage :" />
+                <TextHeading theme={theme} size={4} text={t('shipment:onCarriage')} />
               </div>
-              <p className="flex-none"> {shipment.has_on_carriage ? 'Yes' : 'No'} </p>
+              <p className="flex-none"> {shipment.has_on_carriage ? t('common:yes') : t('common:no')} </p>
             </div>
             {shipment.has_pre_carriage ? originAddress : ''}
             {shipment.has_on_carriage ? destinationAddress : ''}
@@ -246,6 +248,7 @@ ShipmentSummaryBox.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   pickupDate: PropTypes.number.isRequired,
+  t: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   shipment: PropTypes.shipment,
   hubs: PropTypes.arrayOf(PropTypes.hub),
@@ -265,4 +268,4 @@ ShipmentSummaryBox.defaultProps = {
   total: 0
 }
 
-export default ShipmentSummaryBox
+export default translate(['shipment', 'common'])(ShipmentSummaryBox)

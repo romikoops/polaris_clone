@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentLocationBox.scss'
@@ -8,8 +9,8 @@ function showTooltip (truckingOption, directionConstraint, hubName, truckingBool
   return ['mandatory', 'disabled'].includes(directionConstraint) || (!truckingOption && hubName) || (truckingBoolean)
 }
 
-export default function TruckingTooltip ({
-  truckingOptions, carriage, hubName, direction, scope, truckingBoolean
+function TruckingTooltip ({
+  truckingOptions, carriage, hubName, direction, scope, truckingBoolean, t
 }) {
   const directionConstraints = {
     onCarriage: scope.carriage_options.on_carriage[direction],
@@ -21,13 +22,13 @@ export default function TruckingTooltip ({
   let dataTip
   const carriageText = capitalizeAndDashifyCamelCase(carriage)
   if (!truckingOptions[carriage]) {
-    dataTip = `${carriageText} is not available in ${hubName}`
+    dataTip = `${carriageText}${t('trucking:isNotAvailableLocal')}${hubName}`
   } else if (directionConstraints[carriage] === 'mandatory') {
-    dataTip = `${carriageText} is mandatory for ${direction}`
+    dataTip = `${carriageText}${t('trucking:isMandatory')}${direction}`
   } else if (directionConstraints[carriage] === 'disabled') {
-    dataTip = `${carriageText} is not offered for ${direction}`
+    dataTip = `${carriageText}${t('trucking:isNotOffered')}${direction}`
   } else if (truckingBoolean) {
-    dataTip = `${carriageText} is not available for any of these destinations.`
+    dataTip = `${carriageText}${t('trucking:isNotAvailable')}`
   }
 
   return (
@@ -43,6 +44,7 @@ export default function TruckingTooltip ({
 
 TruckingTooltip.propTypes = {
   truckingOptions: PropTypes.objectOf(PropTypes.bool).isRequired,
+  t: PropTypes.func.isRequired,
   scope: PropTypes.scope.isRequired,
   carriage: PropTypes.string.isRequired,
   hubName: PropTypes.string,
@@ -54,3 +56,5 @@ TruckingTooltip.defaultProps = {
   hubName: '',
   direction: ''
 }
+
+export default translate('trucking')(TruckingTooltip)

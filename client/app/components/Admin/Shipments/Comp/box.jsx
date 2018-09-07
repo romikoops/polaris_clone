@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import { v4 } from 'uuid'
 import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
-import { ShipmentOverviewCard } from '../../../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminShipmentsBox extends Component {
   constructor (props) {

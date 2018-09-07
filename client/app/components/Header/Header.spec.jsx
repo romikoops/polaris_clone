@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { req, identity, tenant, theme, user } from '../../mocks'
+// eslint-disable-next-line import/no-named-as-default
+import Header from './Header'
 
 jest.mock('react-redux', () => ({
   connect: (x, y) => Component => Component
 }))
-// eslint-disable-next-line
-import Header from './Header'
 
 const propsBase = {
   tenant,
@@ -31,6 +31,14 @@ const propsBase = {
 
 test('shallow render', () => {
   expect(shallow(<Header {...propsBase} />)).toMatchSnapshot()
+})
+
+test('checkIsTop method', () => {
+  const wrapper = shallow(<Header {...propsBase} />)
+  wrapper.setState({ isTop: false })
+  wrapper.instance().checkIsTop()
+
+  expect(wrapper.state().isTop).toBe(true)
 })
 
 test('noMessages is true', () => {
@@ -72,6 +80,14 @@ test('showRegistration is true', () => {
   const props = {
     ...propsBase,
     showRegistration: true
+  }
+  expect(shallow(<Header {...props} />)).toMatchSnapshot()
+})
+
+test('showModal is true', () => {
+  const props = {
+    ...propsBase,
+    showModal: false
   }
   expect(shallow(<Header {...props} />)).toMatchSnapshot()
 })

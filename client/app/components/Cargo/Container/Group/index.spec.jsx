@@ -13,7 +13,7 @@ jest.mock('uuid', () => {
   return { v4 }
 })
 // eslint-disable-next-line
-import { CargoContainerGroup } from './'
+import CargoContainerGroup from './'
 
 const group = {
   quantity: 'FOO_QUANTITY',

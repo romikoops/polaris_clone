@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import '../../styles/select-css-custom.css'
@@ -85,7 +86,7 @@ export class ShipmentContainers extends Component {
 
   render () {
     const {
-      containers, handleDelta, theme, scope, toggleModal
+      containers, handleDelta, theme, scope, toggleModal, t
     } = this.props
     const { selectors } = this.state
 
@@ -139,7 +140,7 @@ export class ShipmentContainers extends Component {
         >
           <div className="layout-row flex layout-wrap layout-align-start-center">
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}> Container Size </p>
+              <p className={`${styles.input_label} flex-none`}>{t('common:containerSize')}</p>
               <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
             </div>
             <NamedSelect
@@ -152,7 +153,7 @@ export class ShipmentContainers extends Component {
             />
           </div>
           <div className="layout-row flex layout-wrap layout-align-start-center">
-            <p className={`${styles.input_label} flex-none`}> Cargo Gross Weight </p>
+            <p className={`${styles.input_label} flex-none`}>{t('cargo:cargoGrossWeight')}</p>
             <div className={`flex-95 layout-row ${styles.input_box}`}>
               {container ? (
                 <ValidatedInput
@@ -169,9 +170,9 @@ export class ShipmentContainers extends Component {
                     maxValue: (values, _value) => _value <= maxValue
                   }}
                   validationErrors={{
-                    maxValue: `Value must be less than ${maxValue} kg`,
-                    nonNegative: 'Must be greater than 0',
-                    isDefaultRequiredValue: 'Must not be blank'
+                    maxValue: `${t('errors:maxValue')} ${maxValue} kg`,
+                    nonNegative: t('errors:nonNegative'),
+                    isDefaultRequiredValue: t('errors:notBlank')
                   }}
 
                   required={!!container}
@@ -183,7 +184,7 @@ export class ShipmentContainers extends Component {
             </div>
           </div>
           <div className="layout-row flex layout-wrap layout-align-start-center">
-            <p className={`${styles.input_label} flex-none`}> No. of Containers </p>
+            <p className={`${styles.input_label} flex-none`}>{t('common:numberContainers')}</p>
             <NamedSelect
               placeholder={container ? container.quantity : ''}
               className="flex-95"
@@ -195,7 +196,7 @@ export class ShipmentContainers extends Component {
           </div>
           <div className="layout-row flex layout-wrap layout-align-start-center">
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+              <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
               <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
             </div>
             <Checkbox
@@ -253,7 +254,7 @@ export class ShipmentContainers extends Component {
                 className="layout-row flex-none layout-align-start-center"
                 onClick={this.addContainer}
               >
-                <p> Add unit &nbsp;&nbsp;</p>
+                <p>{t('shipment:addUnit')}&nbsp;&nbsp;</p>
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
               </div>
             </div>
@@ -271,6 +272,7 @@ export class ShipmentContainers extends Component {
 ShipmentContainers.propTypes = {
   theme: PropTypes.theme,
   addContainer: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
   containers: PropTypes.arrayOf(PropTypes.shape({
     dangerous_goods: PropTypes.bool
   })),
@@ -290,4 +292,4 @@ ShipmentContainers.defaultProps = {
   containers: []
 }
 
-export default ShipmentContainers
+export default translate(['common', 'cargo', 'shipment', 'errors'])(ShipmentContainers)
