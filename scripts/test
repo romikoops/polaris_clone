@@ -5,11 +5,15 @@ require 'bundler'
 require 'fileutils'
 require 'pathname'
 
+# path to your application root.
+APP_ROOT = Pathname.new(File.expand_path('..', __dir__))
+
 # Set up environment
-ENV['RAILS_ENV'] ||= 'test'
-ENV['COVERAGE']  ||= 'true'
-ENV['CI']        ||= nil
-ENV['SPEC_OPTS'] ||= ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml --format Fuubar --color' : ''
+ENV['RAILS_ENV']    ||= 'test'
+ENV['COVERAGE']     ||= 'true'
+ENV['CI']           ||= nil
+ENV['SPEC_OPTS']    ||= ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml --format Fuubar --color' : ''
+ENV['COVERAGE_DIR'] ||= APP_ROOT.join('coverage').to_s
 
 # Set up coloring
 def red(msg)
@@ -46,9 +50,6 @@ def runner(dir:, name:)
   end
 end
 
-# path to your application root.
-APP_ROOT = Pathname.new File.expand_path('..', __dir__)
-
 def system!(*args)
   system(*args) || abort("\n== Command #{args} failed ==")
 end
@@ -70,6 +71,7 @@ puts " Environment: #{ENV['RAILS_ENV']}"
 puts "    Coverage: #{ENV['COVERAGE']}"
 puts "          CI: #{ENV['CI']}"
 puts "Spec Options: #{ENV['SPEC_OPTS']}"
+puts "Coverage Dir: #{ENV['COVERAGE_DIR']}"
 
 puts yellow('*** Preparing test environment ***')
 system('bundle check') || system!('bundle install')
