@@ -27,11 +27,13 @@ import NavBar from '../Nav'
 class UserAccount extends Component {
   constructor (props) {
     super(props)
+    this.state = { currentUrl: '/account' }
 
     this.getLocations = this.getLocations.bind(this)
     this.destroyLocation = this.destroyLocation.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.setUrl = this.setUrl.bind(this)
+    this.setCurrentUrl = this.setCurrentUrl.bind(this)
     this.setNavLink = this.setNavLink.bind(this)
   }
   componentDidMount () {
@@ -63,6 +65,9 @@ class UserAccount extends Component {
   getLocations () {
     const { userDispatch, user } = this.props
     userDispatch.getLocations(user.id)
+  }
+  setCurrentUrl (url) {
+    this.setState({ currentUrl: url })
   }
 
   setUrl (target) {
@@ -137,7 +142,7 @@ class UserAccount extends Component {
     }
 
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
-    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
+    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} currentUrl={this.state.currentUrl} />
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }
 
@@ -167,6 +172,7 @@ class UserAccount extends Component {
                       theme={theme}
                       {...props}
                       user={user}
+                      setCurrentUrl={this.setCurrentUrl}
                       dashboard={dashboard}
                       hubs={hubHash}
                       navFn={this.setUrl}
@@ -180,6 +186,7 @@ class UserAccount extends Component {
                     <UserLocations
                       setNav={this.setNavLink}
                       theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
                       {...props}
                       locations={users.dashboard.locations}
                       getLocations={this.getLocations}
@@ -194,6 +201,7 @@ class UserAccount extends Component {
                     <UserLocations
                       setNav={this.setNavLink}
                       theme={theme}
+                      setCurrentUrl={this.setCurrentUrl}
                       {...props}
                       user={user}
                       locations={users.dashboard.locations}
@@ -210,6 +218,7 @@ class UserAccount extends Component {
                       appDispatch={appDispatch}
                       setNav={this.setNavLink}
                       currencies={currencies}
+                      setCurrentUrl={this.setCurrentUrl}
                       theme={theme}
                       user={user}
                       tenant={tenant}
@@ -226,6 +235,7 @@ class UserAccount extends Component {
                   render={props => (
                     <UserContacts
                       setNav={this.setNavLink}
+                      setCurrentUrl={this.setCurrentUrl}
                       theme={theme}
                       user={user}
                       aliases={dashboard.aliases}
@@ -248,6 +258,7 @@ class UserAccount extends Component {
                   render={props => (
                     <UserShipments
                       setNav={this.setNavLink}
+                      setCurrentUrl={this.setCurrentUrl}
                       theme={theme}
                       hubs={hubHash}
                       tenant={tenant}
@@ -263,6 +274,7 @@ class UserAccount extends Component {
                   render={props => (
                     <UserShipmentView
                       setNav={this.setNavLink}
+                      setCurrentUrl={this.setCurrentUrl}
                       theme={theme}
                       hubs={hubs}
                       user={user}

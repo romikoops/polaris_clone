@@ -8,6 +8,7 @@ import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
 // import styles from './Admin.scss'
 
 import { adminActions } from '../../actions'
+import { Modal } from '../Modal/Modal'
 // import { TextHeading } from '../TextHeading/TextHeading'
 
 class AdminRoutes extends Component {
@@ -23,10 +24,11 @@ class AdminRoutes extends Component {
     this.saveNewRoute = this.saveNewRoute.bind(this)
   }
   componentDidMount () {
-    const { adminDispatch, allHubs, loading } = this.props
+    const { adminDispatch, allHubs, loading, match } = this.props
     if (allHubs.length < 1 && !loading) {
       adminDispatch.getAllHubs()
     }
+    this.props.setCurrentUrl(match.url)
   }
 
   viewItinerary (itinerary) {
@@ -58,13 +60,21 @@ class AdminRoutes extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
         {this.state.newRoute ? (
-          <AdminRouteForm
-            theme={theme}
-            close={this.closeModal}
-            hubs={allHubs}
-            saveRoute={this.saveNewRoute}
-            adminDispatch={adminDispatch}
+          <Modal
+            component={
+              <AdminRouteForm
+                theme={theme}
+                close={this.closeModal}
+                hubs={allHubs}
+                saveRoute={this.saveNewRoute}
+                adminDispatch={adminDispatch}
+              />
+            }
+            verticalPadding="30px"
+            horizontalPadding="40px"
+            parentToggle={this.closeModal}
           />
+
         ) : (
           ''
         )}
@@ -116,6 +126,7 @@ AdminRoutes.propTypes = {
     newRoute: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   route: PropTypes.route.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired,

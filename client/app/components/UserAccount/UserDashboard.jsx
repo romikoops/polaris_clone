@@ -32,6 +32,7 @@ export class UserDashboard extends Component {
   componentDidMount () {
     this.props.setNav('dashboard')
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(this.props.match.url)
   }
   viewShipment (shipment) {
     const { userDispatch } = this.props
@@ -158,15 +159,15 @@ export class UserDashboard extends Component {
               'No addresses yet'
             ) : (
               <UserLocations
-              setNav={() => {}}
-              userDispatch={userDispatch}
-              locations={locations}
-              makePrimary={this.makePrimary}
-              theme={theme}
-              user={user}
-            />
+                setNav={() => {}}
+                userDispatch={userDispatch}
+                locations={locations}
+                makePrimary={this.makePrimary}
+                theme={theme}
+                user={user}
+              />
             )}
-            
+
           </div>
         </div>
       </div>
@@ -175,6 +176,7 @@ export class UserDashboard extends Component {
 }
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func

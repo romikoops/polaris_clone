@@ -50,6 +50,7 @@ class AdminSchedules extends Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   getItinerary (sched) {
@@ -164,7 +165,11 @@ class AdminSchedules extends Component {
     )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <AdminScheduleGenerator theme={theme} itineraries={itineraries} />
+        <AdminScheduleGenerator
+          theme={theme}
+          itineraries={itineraries}
+          toggleNew={this.toggleView}
+        />
       </div>
     )
 
@@ -331,6 +336,7 @@ AdminSchedules.propTypes = {
   document: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   documentDispatch: PropTypes.objectOf(PropTypes.func),
   scope: PropTypes.objectOf(PropTypes.any)
 }

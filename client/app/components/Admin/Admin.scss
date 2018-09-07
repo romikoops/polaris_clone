@@ -509,17 +509,16 @@
   }
   .route_form {
     width: 600px;
-    height: 700px;
+    // height: 500px;
+    padding: 25px;
     z-index: 52;
     background: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
 
   }
   .form_padding {
     padding: 0 15px;
   }
-  .map_padding {
+  .form_row, .map_padding {
     padding: 15px 0;
   }
 

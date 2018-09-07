@@ -23,7 +23,7 @@ class SideNav extends Component {
         key: v4(),
         icon: 'fa-tachometer',
         text: 'Dashboard',
-        url: '/account/dashboard',
+        url: '/account',
         target: 'dashboard'
       },
       {
@@ -77,7 +77,7 @@ class SideNav extends Component {
         key: v4(),
         icon: 'fa-area-chart',
         text: 'Pricing',
-        url: '/admin/pricing',
+        url: '/admin/pricings',
         target: 'pricing',
         tooltip: menuTip.pricing
       },
@@ -149,7 +149,11 @@ class SideNav extends Component {
         }
       }, 200)
     }
+    if (nextProps.currentUrl !== this.props.currentUrl) {
+      this.updateActiveIndex(nextProps.currentUrl)
+    }
   }
+
   setAdminUrl (target) {
     const { adminDispatch, tenant } = this.props
     const { scope } = tenant.data
@@ -238,6 +242,17 @@ class SideNav extends Component {
   }
   toggleActiveIndex (index) {
     this.setState({ activeIndex: index })
+  }
+  updateActiveIndex (currentUrl) {
+    const { user } = this.props
+    const isAdmin = user && user.role && user.role.name.includes('admin')
+    const newActiveLink = isAdmin
+      ? this.adminLinks.filter(li => li.url === currentUrl)[0]
+      : this.userLinks.filter(li => li.url === currentUrl)[0]
+    const newActiveIndex = isAdmin
+      ? this.adminLinks.indexOf(newActiveLink)
+      : this.userLinks.indexOf(newActiveLink)
+    this.toggleActiveIndex(newActiveIndex)
   }
   handleClickAction (li, i, isAdmin) {
     if (!this.state.linkVisibility[i] && !this.props.expand) return
@@ -335,13 +350,15 @@ SideNav.propTypes = {
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
   }).isRequired,
-  expand: PropTypes.bool
+  expand: PropTypes.bool,
+  currentUrl: PropTypes.string
 }
 
 SideNav.defaultProps = {
   theme: null,
   tenant: null,
-  expand: false
+  expand: false,
+  currentUrl: ''
 }
 
 function mapStateToProps (state) {
