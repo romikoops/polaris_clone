@@ -6,6 +6,7 @@ export class UserShipments extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.props.setNav('shipments')
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   render () {
@@ -21,7 +22,8 @@ export class UserShipments extends Component {
 }
 
 UserShipments.propTypes = {
-  setNav: PropTypes.func.isRequired
+  setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired
 }
 
 UserShipments.defaultProps = {

@@ -52,6 +52,7 @@ const propsBase = {
   },
   match,
   setNav: identity,
+  setCurrentUrl: identity,
   tenant
 }
 

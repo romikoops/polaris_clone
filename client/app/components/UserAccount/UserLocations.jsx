@@ -198,6 +198,7 @@ export class UserLocations extends Component {
 UserLocations.propTypes = {
   user: PropTypes.user.isRequired,
   setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   userDispatch: PropTypes.shape({
     makePrimary: PropTypes.func,

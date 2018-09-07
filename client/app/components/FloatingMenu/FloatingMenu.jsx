@@ -50,7 +50,7 @@ class FloatingMenu extends Component {
     }
   }
   render () {
-    const { Comp, theme, user } = this.props
+    const { Comp, theme, user, currentUrl } = this.props
     const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
     const currentStyle = this.state.expand ? styles.open : styles.closed
 
@@ -66,7 +66,7 @@ class FloatingMenu extends Component {
           style={this.state.overflowOverwrite}
         >
           <div className={`flex-none layout-row ${styles.menu_content} ${currentStyle}`}>
-            {<Comp theme={theme} user={user} expand={this.state.expand} />}
+            {<Comp theme={theme} user={user} expand={this.state.expand} currentUrl={currentUrl} />}
           </div>
           <div>
             <hr style={this.state.collapsePromptHrWidthOverwrite} />
@@ -89,13 +89,15 @@ class FloatingMenu extends Component {
 FloatingMenu.propTypes = {
   Comp: PropTypes.node,
   theme: PropTypes.theme,
-  user: PropTypes.user
+  user: PropTypes.user,
+  currentUrl: PropTypes.string
 }
 
 FloatingMenu.defaultProps = {
   theme: null,
   Comp: null,
-  user: null
+  user: null,
+  currentUrl: ''
 }
 
 export default FloatingMenu

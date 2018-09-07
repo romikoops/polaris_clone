@@ -37,6 +37,7 @@ export class UserDashboard extends Component {
     window.scrollTo(0, 0)
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
+    this.props.setCurrentUrl(this.props.match.url)
   }
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
@@ -196,6 +197,7 @@ export class UserDashboard extends Component {
 }
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
