@@ -45,4 +45,8 @@ client:
   script:
     - cd client
     - npm install
-    - npm test
+    - npm run test:ci
+  artifacts:
+    reports:
+      junit:
+        - client/junit.xml

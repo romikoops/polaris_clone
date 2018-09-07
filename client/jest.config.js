@@ -11,5 +11,6 @@ module.exports = {
   unmockedModulePathPatterns: [],
   moduleNameMapper: {
     '\\.s?css$': 'identity-obj-proxy'
-  }
+  },
+  reporters: ['default', 'jest-junit']
 }

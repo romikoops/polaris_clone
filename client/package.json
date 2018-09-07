@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --reporters=default --reporters=jest-junit",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "dev": "webpack-dev-server --mode development ./app/index.jsx --progress --colors",
@@ -139,6 +140,7 @@
     "image-webpack-loader": "^4.3.0",
     "jest": "^23.1.0",
     "jest-enzyme": "^6.0.1",
+    "jest-junit": "^5.1.0",
     "jest-tobetype": "^1.1.0",
     "json-loader": "^0.5.4",
     "mini-css-extract-plugin": "^0.4.0",
