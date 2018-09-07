@@ -211,7 +211,7 @@ class SideNav extends Component {
         userDispatch.getPricings(user.id, true)
         break
       case 'shipments':
-        userDispatch.getShipments(1, 1, 1, true)
+        userDispatch.getShipments(1, 1, 1, this.perPage, true)
         break
       case 'contacts':
         userDispatch.getContacts(true, 1)

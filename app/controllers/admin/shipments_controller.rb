@@ -9,7 +9,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     r_shipments = requested_shipments
     o_shipments = open_shipments
     f_shipments = finished_shipments
-    per_page = params[:per_page].to_f || 4.to_f
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     num_pages = {
       finished:  (f_shipments.count / per_page).ceil,
       requested: (r_shipments.count / per_page).ceil,
@@ -40,7 +40,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     when 'finished'
       shipment_association = tenant_shipment.finished
     end
-    per_page = params[:per_page].to_f || 4.to_f
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association.order(:booking_placed_at).paginate(page: params[:page], per_page: per_page)
       .map(&:with_address_options_json)
     response_handler(
@@ -86,9 +86,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       ],
       sanitize_params:   true
     )) || return
-    per_page = params[:per_page].to_f || 4.to_f
-    shipments = filterrific.find.page(params[:page], per_page: per_page)
-      .map(&:with_address_options_json)
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
       num_shipment_pages: (filterrific.find.count / per_page).ceil,

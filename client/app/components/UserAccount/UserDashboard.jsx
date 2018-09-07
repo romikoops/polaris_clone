@@ -4,9 +4,10 @@ import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
-import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+// import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
+import { AdminShipmentsComp } from '../Admin/Shipments/Comp'
 
 export class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -58,20 +59,28 @@ export class UserDashboard extends Component {
   }
   render () {
     const {
-      theme, hubs, dashboard, user, userDispatch
+      theme,
+      // hubs,
+      dashboard,
+      user,
+      userDispatch
     } = this.props
     if (!user || !dashboard) {
       return <h1>NO DATA</h1>
     }
-    const { shipments, contacts, locations } = dashboard
+    const {
+      // shipments,
+      contacts,
+      locations
+    } = dashboard
 
-    const mergedRequestedShipments =
-      shipments && shipments.requested
-        ? shipments.requested
-          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .slice(0, 4)
-          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
-        : false
+    // const mergedRequestedShipments =
+    //   shipments && shipments.requested
+    //     ? shipments.requested
+    //       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+    //       .slice(0, 4)
+    //       .map(sh => UserDashboard.prepShipment(sh, user, hubs))
+    //     : false
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -115,17 +124,22 @@ export class UserDashboard extends Component {
               />
             </div>
           </div>
-          <ShipmentOverviewCard
+          <div
+            className="layout-row flex-100 layout-wrap layout-align-center-center"
+            style={{ marginTop: '50px' }}
+          >
+            <AdminShipmentsComp isUser />
+          </div>
+          {/* <ShipmentOverviewCard
             dispatches={userDispatch}
             shipments={mergedRequestedShipments}
             theme={theme}
-          />
-          <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
+          />  <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
               <u><b>See more shipments</b></u>
             </span>
             <div className={`flex-85 ${ustyles.separator}`} />
-          </div>
+          </div> */}
         </div>
         <div
           className="layout-row flex-100 layout-wrap layout-align-center-center"
@@ -182,7 +196,7 @@ UserDashboard.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
-  hubs: PropTypes.objectOf(PropTypes.object),
+  // hubs: PropTypes.objectOf(PropTypes.object),
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,
     pricings: PropTypes.objectOf(PropTypes.string),
@@ -193,7 +207,7 @@ UserDashboard.propTypes = {
 
 UserDashboard.defaultProps = {
   seeAll: null,
-  hubs: null,
+  // hubs: null,
   dashboard: null,
   theme: null
 }

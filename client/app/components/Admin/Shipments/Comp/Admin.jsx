@@ -133,12 +133,14 @@ export class ShipmentsCompAdmin extends Component {
 
   handleSearchQuery (e, target) {
     const { value } = e.target
+    const { perPage } = this.state
+
     this.setState({
       search: {
         ...this.state.search,
         [target]: value
       }
-    }, () => this.searchShipmentsFromPage(value, target, 1))
+    }, () => this.searchShipmentsFromPage(value, target, 1, perPage))
   }
 
   render () {
