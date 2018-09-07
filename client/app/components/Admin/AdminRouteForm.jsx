@@ -107,11 +107,12 @@ export class AdminRouteForm extends Component {
         results = filteredHubs
         break
     }
+
     return results.map(h => ({ label: h.data.name, value: h.data.id }))
   }
 
   render () {
-    const { theme, close, hubs } = this.props
+    const { theme, hubs } = this.props
     const { route, selectValues } = this.state
     const filteredHubs = hubs ? this.excludeHubs(hubs) : []
     const StyledSelect = styled(NamedSelect)`
@@ -158,82 +159,80 @@ export class AdminRouteForm extends Component {
         </div>
       </div>
     ))
+
     return (
-      <div className={`flex-none layout-align-center-center layout-row ${styles.editor_backdrop}`}>
-        <div className={`flex-none ${styles.editor_fade}`} onClick={() => close()} />
+
+      <div
+        className={`${styles.route_form} layout-row flex-none layout-wrap layout-align-center`}
+      >
         <div
-          className={`${styles.route_form} layout-row flex-none layout-wrap layout-align-center`}
+          className={`flex-100 layout-row layout-wrap layout-align-start-start ${
+            styles.form_padding
+          }`}
         >
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <h2 className="flex-none clip letter_3" style={textStyle}>
+                Add a New Route
+            </h2>
+          </div>
           <div
-            className={`flex-100 layout-row layout-wrap layout-align-start-start ${
-              styles.form_padding
+            className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+              styles.form_row
             }`}
           >
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <h2 className="flex-none clip letter_3" style={textStyle}>
-                Add a New Route
-              </h2>
+            <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
+              <p className="flex-none">Mode of Transport</p>
             </div>
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-start-center ${
-                styles.form_row
-              }`}
-            >
-              <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-                <p className="flex-none">Mode of Transport</p>
-              </div>
-              <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
-                <StyledSelect
-                  placeholder="Mode of Transport"
-                  className={styles.select}
-                  name="mot"
-                  value={selectValues.mot}
-                  options={moTOptions}
-                  onChange={this.handleMotChange}
-                />
-              </div>
-            </div>
-            {hubInputs}
-            <div className="flex-100 layout-align-end-center layout-row">
-              <div
-                className="flex-none layout-row layout-align-cetner-center"
-                onClick={this.addStop}
-              >
-                <i className="fa fa-plus-cicle-o" />
-                <p className="flex-none no_m">Add Stop</p>
-              </div>
-            </div>
-            <div
-              className={`flex-100 layout-row layout-wrap layout-align-start-center ${
-                styles.form_row
-              }`}
-            >
-              <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-                <p className="flex-none">Name</p>
-              </div>
-              <div className="flex-100 flex-gt-sm-50 layout-align-end-center input_box_full">
-                <input
-                  type="text"
-                  value={route.name}
-                  onChange={this.handleNameChange}
-                  name="name"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-end-center">
-            <div className="flex-none layout-row">
-              <RoundButton
-                theme={theme}
-                size="small"
-                text="Save Route"
-                active
-                handleNext={this.saveNewRoute}
-                iconClass="fa-floppy"
+            <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
+              <StyledSelect
+                placeholder="Mode of Transport"
+                className={styles.select}
+                name="mot"
+                value={selectValues.mot}
+                options={moTOptions}
+                onChange={this.handleMotChange}
               />
             </div>
-            <div className="flex-5" />
           </div>
+          {hubInputs}
+          <div className="flex-100 layout-align-end-center layout-row">
+            <div
+              className="flex-none layout-row layout-align-cetner-center"
+              onClick={this.addStop}
+            >
+              <i className="fa fa-plus-cicle-o" />
+              <p className="flex-none no_m">Add Stop</p>
+            </div>
+          </div>
+          <div
+            className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+              styles.form_row
+            }`}
+          >
+            <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
+              <p className="flex-none">Name</p>
+            </div>
+            <div className="flex-100 flex-gt-sm-50 layout-align-end-center input_box_full">
+              <input
+                type="text"
+                value={route.name}
+                onChange={this.handleNameChange}
+                name="name"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+          <RoundButton
+            className="flex-none"
+            theme={theme}
+            size="small"
+            text="Save Route"
+            active
+            handleNext={this.saveNewRoute}
+            iconClass="fa-floppy"
+          />
+          <div className="flex-5" />
         </div>
       </div>
     )

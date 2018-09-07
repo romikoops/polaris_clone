@@ -59,6 +59,7 @@ class AdminSchedulesRoute extends Component {
     ) {
       this.prepFilters()
     }
+    this.props.setCurrentUrl('/admin/schedules')
   }
   componentDidMount () {
     window.scrollTo(0, 0)
@@ -409,6 +410,7 @@ AdminSchedulesRoute.propTypes = {
   }),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   limit: PropTypes.number,
   document: PropTypes.objectOf(PropTypes.any),
   documentDispatch: PropTypes.objectOf(PropTypes.func)

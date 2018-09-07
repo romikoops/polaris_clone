@@ -88,7 +88,7 @@ function searchHubs (text, page, hubType, country, status) {
     )
   }
 }
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   function request (hubData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
   }
@@ -102,7 +102,7 @@ function searchShipments (text, target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.searchShipments(text, target, page).then(
+    adminService.searchShipments(text, target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
@@ -632,7 +632,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, redirect) {
+function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -646,7 +646,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments(requestedPage, openPage, finishedPage).then(
+    adminService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -663,7 +663,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   }
 }
 
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
@@ -677,7 +677,7 @@ function deltaShipmentsPage (target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.deltaShipmentsPage(target, page).then(
+    adminService.deltaShipmentsPage(target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -969,7 +969,7 @@ function confirmShipment (id, action, redirect) {
           dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(1,1,1,true))
+          dispatch(getShipments(1, 1, 1, true))
         }
 
         if (redirect) {

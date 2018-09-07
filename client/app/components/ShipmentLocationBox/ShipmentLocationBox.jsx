@@ -97,6 +97,7 @@ export class ShipmentLocationBox extends Component {
     this.setNexusesFromRoute = this.setNexusesFromRoute.bind(this)
     this.resetAuto = this.resetAuto.bind(this)
     this.setMarker = this.setMarker.bind(this)
+    this.swapMarkers = this.swapMarkers.bind(this)
     this.handleAuto = this.handleAuto.bind(this)
     this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
@@ -112,7 +113,7 @@ export class ShipmentLocationBox extends Component {
     if (this.props.reusedShipment && this.props.reusedShipment.shipment) {
       this.loadReusedShipment()
     } else if (this.props.prevRequest && this.props.prevRequest.shipment) {
-      this.loadPrevReq()
+      this.loadPrevReq(this.props)
     }
 
     if (this.props.scope) {
@@ -146,6 +147,9 @@ export class ShipmentLocationBox extends Component {
       const speciality = determineSpecialism(nextProps.scope.modes_of_transport)
       this.setState({ speciality })
     }
+    if (nextProps.prevRequest !== this.props.prevRequest && nextProps.prevRequest.shipment) {
+      this.loadPrevReq(nextProps)
+    }
   }
 
   componentWillUnmount () {
@@ -164,7 +168,9 @@ export class ShipmentLocationBox extends Component {
       const lng = event.value.longitude
       const dSelect = event
       this.props.setNotesIds([event.value.id], 'destination')
-      this.props.setTargetAddress('destination', destination)
+      if (this.props.destination.nexus_id !== destination.nexus_id) {
+        this.props.setTargetAddress('destination', destination)
+      }
       this.setMarker({ lat, lng }, destination.nexus_name, 'destination')
 
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
@@ -178,7 +184,9 @@ export class ShipmentLocationBox extends Component {
       }, () => this.prepForSelect('destination'))
       this.props.setNotesIds(null, 'destination')
       this.state.markers.destination.setMap(null)
-      this.props.setTargetAddress('destination', {})
+      if (this.props.destination !== {}) {
+        this.props.setTargetAddress('destination', {})
+      }
     }
   }
 
@@ -252,8 +260,9 @@ export class ShipmentLocationBox extends Component {
       const lat = event.value.latitude
       const lng = event.value.longitude
       const oSelect = event
-
-      this.props.setTargetAddress('origin', origin)
+      if (this.props.origin.nexus_id !== origin.nexus_id) {
+        this.props.setTargetAddress('origin', origin)
+      }
       this.setMarker({ lat, lng }, origin.nexus_name, 'origin')
       this.setState({ oSelect }, () => this.prepForSelect('origin'))
       this.props.setNotesIds([event.value.id], 'origin')
@@ -267,7 +276,9 @@ export class ShipmentLocationBox extends Component {
       }, () => this.prepForSelect('origin'))
       this.props.setNotesIds(false, 'origin')
       this.state.markers.origin.setMap(null)
-      this.props.setTargetAddress('origin', {})
+      if (this.props.origin !== {}) {
+        this.props.setTargetAddress('origin', {})
+      }
     }
   }
 
@@ -545,7 +556,7 @@ export class ShipmentLocationBox extends Component {
 
   handleAuto (event) {
     const { name, value } = event.target
-    this.setState({ autoText: { [name]: value } })
+    this.setState({ autoText: { ...this.state.autoText, [name]: value } })
   }
 
   selectLocation (place, target) {
@@ -592,7 +603,10 @@ export class ShipmentLocationBox extends Component {
                 }
               })
               this.setState({
-                autoText: { [target]: '' }
+                autoText: {
+                  ...this.state.autoText,
+                  [target]: ''
+                }
               })
             }
             target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
@@ -629,7 +643,7 @@ export class ShipmentLocationBox extends Component {
     )
 
     this.setState({
-      autoText: { [target]: place.formatted_address }
+      autoText: { ...this.state.autoText, [target]: place.formatted_address }
     })
   }
 
@@ -662,16 +676,16 @@ export class ShipmentLocationBox extends Component {
     this.setState({ showModal: !this.state.showModal })
   }
 
-  loadPrevReq () {
-    const { prevRequest, shipmentData } = this.props
+  loadPrevReq (props) {
+    const { prevRequest, shipmentData, shipmentDispatch } = props
     const { routes } = shipmentData
-    if (!prevRequest.shipment) {
+    if (!prevRequest || (prevRequest && !prevRequest.shipment)) {
       return
     }
 
     const { shipment } = prevRequest
     const newState = {}
-    if (!this.props.has_pre_carriage) {
+    if (!props.has_pre_carriage) {
       const newStateOrigin = routes.find(o => (
         o.origin.nexusId === shipment.origin.nexus_id
       ))
@@ -680,7 +694,7 @@ export class ShipmentLocationBox extends Component {
         ? routeHelpers.routeOption(newStateOrigin.origin)
         : {}
     }
-    if (!this.props.has_on_carriage) {
+    if (!props.has_on_carriage) {
       const newStateDestination = routes.find(d => (
         d.destination.nexusId === shipment.destination.nexus_id
       ))
@@ -692,14 +706,14 @@ export class ShipmentLocationBox extends Component {
       origin: shipment.origin.fullAddress || '',
       destination: shipment.destination.fullAddress || ''
     }
-    if (shipment.origin.nexus_id) {
+    if (newState.oSelect && newState.oSelect.label && shipment.origin.nexus_id) {
       this.state.map
         ? this.setOriginNexus(newState.oSelect)
         : setTimeout(() => {
           this.setOriginNexus(newState.oSelect)
         }, 500)
     }
-    if (shipment.destination.nexus_id) {
+    if (newState.dSelect && newState.dSelect.label && shipment.destination.nexus_id) {
       this.state.map
         ? this.setDestNexus(newState.dSelect)
         : setTimeout(() => {
@@ -707,7 +721,23 @@ export class ShipmentLocationBox extends Component {
         }, 500)
     }
 
-    this.setState(newState)
+    if (
+      (!newState.oSelect || (newState.oSelect && !newState.oSelect.label)) ||
+      (!newState.dSelect || (newState.dSelect && !newState.dSelect.label))
+    ) {
+      const errors = [
+        {
+          type: 'error',
+          text: `No routes found between ${shipment.origin.nexus_name} and ${shipment.destination.nexus_name}`
+        }
+      ]
+      shipmentDispatch.setError({ stage: 'stage2', errors })
+    }
+
+    this.setState(newState, () => {
+      this.prepForSelect('destination')
+      this.prepForSelect('origin')
+    })
   }
   loadReusedShipment () {
     const { reusedShipment, shipmentData } = this.props
@@ -769,32 +799,72 @@ export class ShipmentLocationBox extends Component {
         }
       })
 
-      // Origin/Destination
-      this.props.setTargetAddress('origin', { ...this.props.destination })
-      this.props.setTargetAddress('destination', { ...this.props.origin })
+      const {
+        truckingHubs,
+        truckTypes,
+        originTruckingAvailable,
+        destinationTruckingAvailable
+      } = this.state
 
-      // Autocomplete Text
-      const { autoText } = this.state
-      const prevOrigin = autoText.origin
-      autoText.origin = autoText.destination || ''
-      autoText.destination = prevOrigin || ''
-      this.setState({ autoText })
+      const newTruckTypes = {
+        destination: truckTypes.origin,
+        origin: truckTypes.destination
+      }
+      const newTruckingHubs = {
+        destination: truckingHubs.origin,
+        origin: truckingHubs.destination
+      }
+      this.swapMarkers()
+      this.setState({
+        truckingHubs: newTruckingHubs,
+        truckTypes: newTruckTypes,
+        originTruckingAvailable: destinationTruckingAvailable,
+        destinationTruckingAvailable: originTruckingAvailable
+      }, this.props.handleSwap())
 
       // Address Fields Errors
       const originFieldsHaveErrors = this.state.destinationFieldsHaveErrors
       const destinationFieldsHaveErrors = this.state.originFieldsHaveErrors
       this.setState({ originFieldsHaveErrors, destinationFieldsHaveErrors })
-    }
-
-    // Origin/Destination without trucking
-    if (!has_on_carriage) {
-      this.setOriginNexus(this.state.dSelect)
-    }
-    if (!has_pre_carriage) {
-      this.setDestNexus(this.state.oSelect)
+    } else {
+      this.props.handleSwap()
     }
 
     /* eslint-enable camelcase */
+  }
+  clearAddressFields (target) {
+    const targets = target ? [target] : ['origin', 'destination']
+    targets.forEach((t) => {
+      const selectKey = t === 'origin' ? 'oSelect' : 'dSelect'
+      this.setState(prevState => ({
+        truckingHubs: {
+          ...prevState.truckingHubs,
+          [t]: {}
+        },
+        autoText: {
+          ...prevState.autoText,
+          [t]: ''
+        },
+        [selectKey]: {}
+      }), () => this.props.setTargetAddress(t, {}))
+    })
+  }
+  swapMarkers () {
+    const { markers } = this.state
+    const newMarkers = {
+      origin: markers.destination,
+      destination: markers.origin
+    }
+    this.setState({ markers: { origin: {}, destination: {} } }, () => {
+      if (newMarkers.origin.title !== undefined) {
+        markers.destination.setMap(null)
+        this.setMarker(newMarkers.origin.position, newMarkers.origin.title, 'origin')
+      }
+      if (newMarkers.destination.title !== undefined) {
+        markers.origin.setMap(null)
+        this.setMarker(newMarkers.destination.position, newMarkers.destination.title, 'destination')
+      }
+    })
   }
 
   prepForSelect (target) {
@@ -809,7 +879,6 @@ export class ShipmentLocationBox extends Component {
       const counterpart = target === 'origin' ? 'destination' : 'origin'
       const counterpartLocation = target === 'origin' ? dSelect : oSelect
       const counterpartTrucking = truckingHubs[counterpart]
-
       let indexes = filteredRouteIndexes.slice()
       if (targetLocation.label) {
         indexes = routeFilters.selectFromLookupTable(
@@ -922,7 +991,7 @@ export class ShipmentLocationBox extends Component {
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
-    //
+
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
@@ -1391,6 +1460,7 @@ ShipmentLocationBox.propTypes = {
   shipmentDispatch: PropTypes.objectOf(PropTypes.func),
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
+  handleSwap: PropTypes.func.isRequired,
   handleCarriageChange: PropTypes.func.isRequired,
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,

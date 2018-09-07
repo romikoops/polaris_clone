@@ -22,16 +22,25 @@ export class UserDashboard extends Component {
   }
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      perPage: 3
+    }
     this.viewShipment = this.viewShipment.bind(this)
     this.viewClient = this.viewClient.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.startBooking = this.startBooking.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
     this.seeAll = this.seeAll.bind(this)
   }
   componentDidMount () {
     this.props.setNav('dashboard')
     window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+    this.props.setCurrentUrl(this.props.match.url)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
   viewShipment (shipment) {
     const { userDispatch } = this.props
@@ -41,6 +50,12 @@ export class UserDashboard extends Component {
     const { userDispatch } = this.props
     userDispatch.getContact(client.id, true)
   }
+  determinePerPage () {
+    const width = window.innerWidth
+    const perPage = width >= 1920 ? 3 : 2
+    this.setState({ perPage })
+  }
+
   startBooking () {
     this.props.userDispatch.goTo('/booking')
   }
@@ -58,19 +73,27 @@ export class UserDashboard extends Component {
   }
   render () {
     const {
-      theme, hubs, dashboard, user, userDispatch
+      theme,
+      dashboard,
+      user,
+      userDispatch
     } = this.props
     if (!user || !dashboard) {
       return <h1>NO DATA</h1>
     }
-    const { shipments, contacts, locations } = dashboard
+    const { perPage } = this.state
+    const {
+      shipments,
+      contacts,
+      locations
+    } = dashboard
 
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
           .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .slice(0, 4)
-          .map(sh => UserDashboard.prepShipment(sh, user, hubs))
+          .slice(0, perPage)
+          .map(sh => UserDashboard.prepShipment(sh, user))
         : false
     const gradientFontStyle =
       theme && theme.colors
@@ -119,8 +142,7 @@ export class UserDashboard extends Component {
             dispatches={userDispatch}
             shipments={mergedRequestedShipments}
             theme={theme}
-          />
-          <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
+          />  <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
               <u><b>See more shipments</b></u>
             </span>
@@ -158,15 +180,15 @@ export class UserDashboard extends Component {
               'No addresses yet'
             ) : (
               <UserLocations
-              setNav={() => {}}
-              userDispatch={userDispatch}
-              locations={locations}
-              makePrimary={this.makePrimary}
-              theme={theme}
-              user={user}
-            />
+                setNav={() => {}}
+                userDispatch={userDispatch}
+                locations={locations}
+                makePrimary={this.makePrimary}
+                theme={theme}
+                user={user}
+              />
             )}
-            
+
           </div>
         </div>
       </div>
@@ -175,6 +197,7 @@ export class UserDashboard extends Component {
 }
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
@@ -182,7 +205,6 @@ UserDashboard.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
-  hubs: PropTypes.objectOf(PropTypes.object),
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,
     pricings: PropTypes.objectOf(PropTypes.string),
@@ -193,7 +215,6 @@ UserDashboard.propTypes = {
 
 UserDashboard.defaultProps = {
   seeAll: null,
-  hubs: null,
   dashboard: null,
   theme: null
 }

@@ -58,7 +58,7 @@ function _delete (id) {
   }
 }
 
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   function request (hubData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
   }
@@ -72,13 +72,12 @@ function searchShipments (text, target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.searchShipments(text, target, page).then(
+    userService.searchShipments(text, target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -204,7 +203,7 @@ function makePrimary (userId, locationId, redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, redirect) {
+function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -218,7 +217,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getShipments(requestedPage, openPage, finishedPage).then(
+    userService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -227,7 +226,6 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -235,7 +233,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   }
 }
 
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
@@ -249,13 +247,12 @@ function deltaShipmentsPage (target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.deltaShipmentsPage(target, page).then(
+    userService.deltaShipmentsPage(target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -284,7 +281,6 @@ function getHubs (id) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -350,7 +346,6 @@ function getDashboard (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -378,7 +373,6 @@ function deleteDocument (id) {
         dispatch(success(id))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -406,7 +400,6 @@ function uploadDocument (doc, type, url) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -438,7 +431,6 @@ function getContact (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -468,7 +460,6 @@ function getContacts (redirect, page) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
