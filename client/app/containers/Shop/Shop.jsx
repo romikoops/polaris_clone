@@ -103,9 +103,7 @@ class Shop extends Component {
   }
 
   hideRegistration () {
-    this.setState({
-      showRegistration: false
-    })
+    this.props.authenticationDispatch.closeLogin()
   }
 
   toggleShowMessages () {
@@ -179,7 +177,7 @@ class Shop extends Component {
       request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
-    const { req, showRegistration } = this.state
+    const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
@@ -191,7 +189,6 @@ class Shop extends Component {
           component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
-          req={req}
           noMessages
           scrollable
           noRedirect
@@ -363,7 +360,8 @@ Shop.propTypes = {
     update: PropTypes.func
   }).isRequired,
   authenticationDispatch: PropTypes.shape({
-    showLogin: PropTypes.func
+    showLogin: PropTypes.func,
+    closeLogin: PropTypes.func
   }).isRequired
 }
 
