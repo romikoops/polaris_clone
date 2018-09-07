@@ -38,9 +38,9 @@ api:
 
 client:
   stage: test
-  tags:
-    - itsmycargo
-  image: eu.gcr.io/itsmycargo-main/base:stable
+  # tags:
+  #   - itsmycargo
+  image: node:8
 
   script:
     - cd client

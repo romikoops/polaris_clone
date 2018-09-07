@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --reporters=default --reporters=jest-junit",
+    "test:ci": "jest --reporters=default --reporters=jest-junit --forceExit --detectOpenHandles --no-watchman",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "dev": "webpack-dev-server --mode development ./app/index.jsx --progress --colors",
