@@ -27,7 +27,6 @@ function getHubs (redirect, page, hubType, country, status) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -54,7 +53,6 @@ function getAllHubs () {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -81,7 +79,6 @@ function searchHubs (text, page, hubType, country, status) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -108,7 +105,6 @@ function searchShipments (text, target, page, perPage) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -139,7 +135,6 @@ function getHub (id, redirect) {
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -166,7 +161,6 @@ function editHub (id, object) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -194,7 +188,6 @@ function wizardHubs (file) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -222,7 +215,6 @@ function wizardSCharge (file) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -250,7 +242,6 @@ function wizardPricings (file) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -278,7 +269,6 @@ function wizardTrucking (type, file) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -306,7 +296,6 @@ function wizardOpenPricings (file) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -393,7 +382,6 @@ function searchPricings (text, page, mot) {
         dispatch(success(response.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -477,7 +465,6 @@ function getClientPricings (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -509,7 +496,6 @@ function getItineraryPricings (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -624,7 +610,6 @@ function getTrucking (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -632,7 +617,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
+function getShipments (pages, perPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -646,7 +631,7 @@ function getShipments (requestedPage, openPage, finishedPage, perPage, redirect)
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
+    adminService.getShipments(pages, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -655,7 +640,6 @@ function getShipments (requestedPage, openPage, finishedPage, perPage, redirect)
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -683,7 +667,6 @@ function deltaShipmentsPage (target, page, perPage) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -710,7 +693,6 @@ function getDashShipments () {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -741,7 +723,6 @@ function getShipment (id, redirect) {
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -773,7 +754,6 @@ function getClients (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -805,7 +785,6 @@ function getClient (id, redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -833,7 +812,6 @@ function getVehicleTypes (itineraryId) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -864,7 +842,6 @@ function getDashboard (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -892,7 +869,6 @@ function editTruckingPrice (price) {
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -921,7 +897,6 @@ function autoGenSchedules (data) {
         dispatch(documentActions.setStats(schedData.data.stats))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1008,7 +983,6 @@ function getItineraries (redirect) {
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1036,7 +1010,6 @@ function getLayovers (itineraryId, target) {
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1062,7 +1035,6 @@ function saveItineraryNotes (itineraryId, notes) {
         dispatch(success(data.data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1093,7 +1065,6 @@ function getItinerary (id, redirect) {
         }
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1121,7 +1092,6 @@ function newRoute (data) {
         dispatch(success(newData))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1151,7 +1121,6 @@ function updateServiceCharge (id, req) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1751,7 +1720,6 @@ function uploadDocument (doc, type, url) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }

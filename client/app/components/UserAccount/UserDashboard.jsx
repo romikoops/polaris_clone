@@ -76,7 +76,8 @@ export class UserDashboard extends Component {
       theme,
       dashboard,
       user,
-      userDispatch
+      userDispatch,
+      scope
     } = this.props
     if (!user || !dashboard) {
       return <h1>NO DATA</h1>
@@ -88,13 +89,11 @@ export class UserDashboard extends Component {
       locations
     } = dashboard
 
-    const mergedRequestedShipments =
-      shipments && shipments.requested
-        ? shipments.requested
-          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-          .slice(0, perPage)
-          .map(sh => UserDashboard.prepShipment(sh, user))
-        : false
+    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
+    const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
+    const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
+      .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+      .map(s => UserDashboard.prepShipment(s, user)) : []
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -141,11 +140,16 @@ export class UserDashboard extends Component {
 
             </div>
           </div>
+          <div className="layout-padding flex-100 layout-align-start-center greyBg">
+          <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+        </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
-            shipments={mergedRequestedShipments}
+            noTitle
+            shipments={preppedShipments}
             theme={theme}
-          />  <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
+          />  
+          <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
               <u><b>See more shipments</b></u>
             </span>
@@ -200,6 +204,7 @@ export class UserDashboard extends Component {
 }
 UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
+  scope: PropTypes.objectOf(PropTypes.bool),
   setCurrentUrl: PropTypes.func.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
@@ -221,6 +226,7 @@ UserDashboard.propTypes = {
 
 UserDashboard.defaultProps = {
   seeAll: null,
+  scope: null,
   dashboard: null,
   theme: null
 }

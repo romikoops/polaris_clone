@@ -6,29 +6,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   include NotificationTools
 
   def index
-    r_shipments = requested_shipments
-    o_shipments = open_shipments
-    f_shipments = finished_shipments
-    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-    num_pages = {
-      finished:  (f_shipments.count / per_page).ceil,
-      requested: (r_shipments.count / per_page).ceil,
-      open:      (o_shipments.count / per_page).ceil
-    }
-    response_handler(
-      requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
-        .map(&:with_address_options_json),
-      open:               open_shipments.order(:booking_placed_at).paginate(page: params[:open_page], per_page: per_page)
-        .map(&:with_address_options_json),
-      finished:           finished_shipments.order(:booking_placed_at).paginate(page: params[:finished_page], per_page: per_page)
-        .map(&:with_address_options_json),
-      pages:              {
-        open:      params[:open_page],
-        finished:  params[:finished_page],
-        requested: params[:requested_page]
-      },
-      num_shipment_pages: num_pages
-    )
+    current_user.tenant.quotation_tool ? get_quote_index : get_booking_index
   end
 
   def delta_page_handler
@@ -164,6 +142,50 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       rejected_document_message
       add_message_to_convo(@user, message, true)
     end
+  end
+
+  def get_booking_index
+    r_shipments = requested_shipments
+    o_shipments = open_shipments
+    f_shipments = finished_shipments
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    num_pages = {
+      finished:  (f_shipments.count / per_page).ceil,
+      requested: (r_shipments.count / per_page).ceil,
+      open:      (o_shipments.count / per_page).ceil
+    }
+    response_handler(
+      requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      open:               open_shipments.order(:booking_placed_at).paginate(page: params[:open_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      finished:           finished_shipments.order(:booking_placed_at).paginate(page: params[:finished_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      pages:              {
+        open:      params[:open_page],
+        finished:  params[:finished_page],
+        requested: params[:requested_page]
+      },
+      num_shipment_pages: num_pages
+    )
+  end
+
+  def get_quote_index
+    q_shipments = quoted_shipments
+    
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    num_pages = {
+      quoted:  (q_shipments.count / per_page).ceil
+    }
+    response_handler(
+      quoted:          q_shipments.order(:updated_at)
+        .paginate(page: params[:quoted_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      pages:              {
+        quoted:      params[:quoted_page]
+      },
+      num_shipment_pages: num_pages
+    )
   end
 
   def resp_error
@@ -333,6 +355,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def open_shipments
     @open_shipments ||= tenant_shipment.open
+  end
+
+  def quoted_shipments
+    @quoted_shipments ||= current_user.shipments.quoted
   end
 
   def finished_shipments

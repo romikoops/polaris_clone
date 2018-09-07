@@ -124,6 +124,67 @@ export class AdminShipmentCard extends Component {
         </div>
       </div>
     )
+    const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
+    ? (<div className={`layout-row flex-100 layout-align-start-center
+    ${styles.middle_bottom_box} ${styles.smallText}`}
+      >
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>Pick-up Date</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(plannedDate).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>ETD</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(shipment.planned_etd).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className="flex-20 layout-align-center-start">
+          <span className="flex-100"><b>ETA</b><br />
+            <span className={`${styles.grey}`}>
+              {moment(shipment.planned_eta).format('DD/MM/YYYY')}
+            </span>
+          </span>
+        </div>
+        <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
+          <div className="layout-row layout-align-end-end">
+            <i
+              className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>Pre-carriage</p>
+          </div>
+          <div className="layout-row layout-align-end-end">
+            <i
+              className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>On-carriage</p>
+          </div>
+        </div>
+      </div>) : (
+        <div className={`layout-row flex-100 layout-align-start-center
+      ${styles.middle_bottom_box} ${styles.smallText}`}
+        >
+          <div className="layout-row flex-50 layout-align-center-center">
+            <i
+              className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>Pre-carriage</p>
+          </div>
+          <div className="layout-row flex-50 layout-align-center-center">
+            <i
+              className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
+              style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
+            />
+            <p>On-carriage</p>
+          </div>
+        </div>
+      )
 
     return (
       <div
@@ -153,12 +214,12 @@ export class AdminShipmentCard extends Component {
             </div>
           </div>
           <div className={`layout-row flex-20 layout-align-start-center ${styles.ett}`}>
-            <div>
+            { shipment.planned_eta ? <div>
               <b>{moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')} days</b><br />
               <span className={`${styles.grey}`}>
               Estimated Transit Time
               </span>
-            </div>
+            </div> : '' }
           </div>
         </div>
         <div
@@ -196,49 +257,7 @@ export class AdminShipmentCard extends Component {
 
         </div>
 
-        {shipment.status !== 'finished' ? (
-          <div className={`layout-row flex-100 layout-align-start-center
-            ${styles.middle_bottom_box} ${styles.smallText}`}
-          >
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>Pick-up Date</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(plannedDate).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>ETD</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_etd).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className="flex-20 layout-align-center-start">
-              <span className="flex-100"><b>ETA</b><br />
-                <span className={`${styles.grey}`}>
-                  {moment(shipment.planned_eta).format('DD/MM/YYYY')}
-                </span>
-              </span>
-            </div>
-            <div className={`flex-40 layout-align-start-end ${styles.carriages}`}>
-              <div className="layout-row layout-align-end-end">
-                <i
-                  className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-                  style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-                />
-                <p>Pre-carriage</p>
-              </div>
-              <div className="layout-row layout-align-end-end">
-                <i
-                  className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'}
-                  style={shipment.has_on_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
-                />
-                <p>On-carriage</p>
-              </div>
-            </div>
-          </div>
-        ) : (
+        {shipment.status !== 'finished' ? timeRow : (
           <div className={`layout-row flex-40 layout-align-start-stretch
             ${styles.middle_bottom_box} ${styles.smallText}`}
           >

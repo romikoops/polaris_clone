@@ -90,6 +90,7 @@ class Shipment < ApplicationRecord
   scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
+  scope :quoted, -> { where(status: "quoted") }
 
   scope :user_name, lambda { |query| 
     user_ids = User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%").ids
