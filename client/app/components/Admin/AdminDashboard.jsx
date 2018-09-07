@@ -28,7 +28,16 @@ export class AdminDashboard extends Component {
       hoverId: false
     }
     this.handleClick = this.handleClick.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
 
   handleRouteHover (id) {
@@ -65,6 +74,11 @@ export class AdminDashboard extends Component {
       adminDispatch.getShipment(shipment.id, true)
     }
   }
+  determinePerPage () {
+    const width = window.innerWidth
+    const perPage = width >= 1920 ? 3 : 2
+    this.setState({ perPage })
+  }
 
   render () {
     const {
@@ -77,7 +91,7 @@ export class AdminDashboard extends Component {
       adminDispatch,
       theme
     } = this.props
-    const { hoverId } = this.state
+    const { hoverId, perPage } = this.state
 
     if (!dashData) return ''
     const { itineraries, mapData } = dashData
@@ -94,7 +108,7 @@ export class AdminDashboard extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
 
-    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, 4)
+    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, perPage)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
     const mapComponent = (

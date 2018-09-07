@@ -4,10 +4,9 @@ import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
-// import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
-import { AdminShipmentsComp } from '../Admin/Shipments/Comp'
 
 export class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -23,16 +22,24 @@ export class UserDashboard extends Component {
   }
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      perPage: 3
+    }
     this.viewShipment = this.viewShipment.bind(this)
     this.viewClient = this.viewClient.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.startBooking = this.startBooking.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
     this.seeAll = this.seeAll.bind(this)
   }
   componentDidMount () {
     this.props.setNav('dashboard')
     window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
   viewShipment (shipment) {
     const { userDispatch } = this.props
@@ -42,6 +49,12 @@ export class UserDashboard extends Component {
     const { userDispatch } = this.props
     userDispatch.getContact(client.id, true)
   }
+  determinePerPage () {
+    const width = window.innerWidth
+    const perPage = width >= 1920 ? 3 : 2
+    this.setState({ perPage })
+  }
+
   startBooking () {
     this.props.userDispatch.goTo('/booking')
   }
@@ -60,7 +73,6 @@ export class UserDashboard extends Component {
   render () {
     const {
       theme,
-      // hubs,
       dashboard,
       user,
       userDispatch
@@ -68,19 +80,20 @@ export class UserDashboard extends Component {
     if (!user || !dashboard) {
       return <h1>NO DATA</h1>
     }
+    const { perPage } = this.state
     const {
-      // shipments,
+      shipments,
       contacts,
       locations
     } = dashboard
 
-    // const mergedRequestedShipments =
-    //   shipments && shipments.requested
-    //     ? shipments.requested
-    //       .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
-    //       .slice(0, 4)
-    //       .map(sh => UserDashboard.prepShipment(sh, user, hubs))
-    //     : false
+    const mergedRequestedShipments =
+      shipments && shipments.requested
+        ? shipments.requested
+          .sort((a, b) => new Date(b.booking_placed_at) - new Date(a.booking_placed_at))
+          .slice(0, perPage)
+          .map(sh => UserDashboard.prepShipment(sh, user))
+        : false
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -124,13 +137,7 @@ export class UserDashboard extends Component {
               />
             </div>
           </div>
-          <div
-            className="layout-row flex-100 layout-wrap layout-align-center-center"
-            style={{ marginTop: '50px' }}
-          >
-            <AdminShipmentsComp isUser />
-          </div>
-          {/* <ShipmentOverviewCard
+          <ShipmentOverviewCard
             dispatches={userDispatch}
             shipments={mergedRequestedShipments}
             theme={theme}
@@ -139,7 +146,7 @@ export class UserDashboard extends Component {
               <u><b>See more shipments</b></u>
             </span>
             <div className={`flex-85 ${ustyles.separator}`} />
-          </div> */}
+          </div>
         </div>
         <div
           className="layout-row flex-100 layout-wrap layout-align-center-center"
@@ -196,7 +203,6 @@ UserDashboard.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
-  // hubs: PropTypes.objectOf(PropTypes.object),
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,
     pricings: PropTypes.objectOf(PropTypes.string),
@@ -207,7 +213,6 @@ UserDashboard.propTypes = {
 
 UserDashboard.defaultProps = {
   seeAll: null,
-  // hubs: null,
   dashboard: null,
   theme: null
 }
