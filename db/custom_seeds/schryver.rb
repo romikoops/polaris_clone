@@ -34,6 +34,13 @@ subdomains.each do |sub|
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
 
+  path = 'data/schryver/ftl_rates.xlsx'
+  ftl_data = DataParser::Schryver::FtlParser.new(path: path,
+                                                 _user: shipper).perform
+
+  ftl_results = DataInserter::Schryver::FtlInserter.new(rates: ftl_data,
+                                                        _user: shipper,
+                                                        tenant: tenant).perform
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
   trucking = 'data/schryver/schryver__trucking_ltl__hamburg_port.xlsx'
@@ -44,16 +51,20 @@ subdomains.each do |sub|
   req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # trucking = 'data/schryver/schryver__trucking_ftl__hamburg_port.xlsx'
+  # req = { 'key' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Bremerhaven Port'
   hub = tenant.hubs.find_by_name('Bremerhaven Port')
   trucking = 'data/schryver/schryver__trucking_ltl__hamburg_port.xlsx'
   req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
-  trucking = 'data/schryver/schryver__trucking_ftl__bremerhaven_port.xlsx'
-  req = { 'key' => trucking }
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # trucking = 'data/schryver/schryver__trucking_ftl__bremerhaven_port.xlsx'
+  # req = { 'key' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   users = [
     {
       role: Role.find_by_name('shipper'),
