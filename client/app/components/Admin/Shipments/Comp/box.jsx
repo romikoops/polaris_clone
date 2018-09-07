@@ -11,11 +11,6 @@ export class AdminShipmentsBox extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  componentDidUpdate (prevProps) {
-    // if (prevProps.shipments !== this.props.shipments) {
-    //   this.handleSearchChange({ target: { value: '' } })
-    // }
-  }
   seeAll () {
     const { seeAll, dispatches } = this.props
     if (seeAll) {

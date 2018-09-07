@@ -9,16 +9,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     r_shipments = requested_shipments
     o_shipments = open_shipments
     f_shipments = finished_shipments
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     num_pages = {
-      finished:  (f_shipments.count / 6.0).ceil,
-      requested: (r_shipments.count / 6.0).ceil,
-      open:      (o_shipments.count / 6.0).ceil
+      finished:  (f_shipments.count / per_page).ceil,
+      requested: (r_shipments.count / per_page).ceil,
+      open:      (o_shipments.count / per_page).ceil
     }
-
     response_handler(
-      requested:          requested_shipments.paginate(page: params[:requested_page]).map(&:with_address_options_json),
-      open:               open_shipments.paginate(page: params[:open_page]).map(&:with_address_options_json),
-      finished:           finished_shipments.paginate(page: params[:finished_page]).map(&:with_address_options_json),
+      requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      open:               open_shipments.order(:booking_placed_at).paginate(page: params[:open_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      finished:           finished_shipments.order(:booking_placed_at).paginate(page: params[:finished_page], per_page: per_page)
+        .map(&:with_address_options_json),
       pages:              {
         open:      params[:open_page],
         finished:  params[:finished_page],
@@ -30,17 +33,19 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def delta_page_handler
     case params[:target]
-    when "requested"
+    when 'requested'
       shipment_association = tenant_shipment.requested
-    when "open"
+    when 'open'
       shipment_association = tenant_shipment.open
-    when "finished"
+    when 'finished'
       shipment_association = tenant_shipment.finished
     end
-    shipments = shipment_association.paginate(page: params[:page]).map(&:with_address_options_json)
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    shipments = shipment_association.order(:booking_placed_at).paginate(page: params[:page], per_page: per_page)
+      .map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
-      num_shipment_pages: (shipment_association.count / 6.0).ceil,
+      num_shipment_pages: (shipment_association.count / per_page).ceil,
       target:             params[:target],
       page:               params[:page]
     )
@@ -66,11 +71,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       user_search: params[:query]
     }
     case params[:target]
-    when "requested"
+    when 'requested'
       shipment_association = requested_shipments
-    when "open"
+    when 'open'
       shipment_association = open_shipments
-    when "finished"
+    when 'finished'
       shipment_association = finished_shipments
     end
     (filterrific = initialize_filterrific(
@@ -81,10 +86,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       ],
       sanitize_params:   true
     )) || return
-    shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
-      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
+      num_shipment_pages: (filterrific.find.count / per_page).ceil,
       target:             params[:target],
       page:               params[:page]
     )
@@ -98,7 +104,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   def edit_service_price
     @shipment = Shipment.find(params[:id])
     new_price = Price.new(price_params)
-    charge = edit_service_charge_breakdown.charge(params["charge_category"])
+    charge = edit_service_charge_breakdown.charge(params['charge_category'])
     charge.edited_price = new_price
 
     if charge.save
@@ -131,29 +137,29 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @user = @document.user
     decide_document_action
     tmp = @document.as_json
-    tmp["signed_url"] = @document.get_signed_url
+    tmp['signed_url'] = @document.get_signed_url
 
     response_handler(tmp)
   end
-  
+
   def document_delete
     @document = Document.find(params[:id])
     @document.destroy
 
-    response_handler({id: params[:id]})
+    response_handler(id: params[:id])
   end
 
   private
 
   def decide_document_action
     case params[:type]
-    when "approve"
-      @document.approved = "approved"
+    when 'approve'
+      @document.approved = 'approved'
       @document.save!
       approved_document_message
       add_message_to_convo(@user, message, true)
-    when "reject"
-      @document.approved = "rejected"
+    when 'reject'
+      @document.approved = 'rejected'
       @document.save!
       rejected_document_message
       add_message_to_convo(@user, message, true)
@@ -181,23 +187,23 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def shipment_action
     case params[:shipment_action]
-    when "accept"
+    when 'accept'
       @shipment.accept!
       ShippingTools.shipper_confirmation_email(@shipment.user, @shipment)
       add_message_to_convo(@shipment.user, booking_accepted_message, true)
       response_handler(@shipment.with_address_options_json)
-    when "decline"
+    when 'decline'
       @shipment.decline!
       add_message_to_convo(@shipment.user, booking_declined_message, true)
       response_handler(@shipment.with_address_options_json)
-    when "ignore"
+    when 'ignore'
       @shipment.ignore!
       response_handler({})
-    when "finished"
+    when 'finished'
       @shipment.finish!
       response_handler(@shipment.with_address_options_json)
     else
-      raise "Unknown action!"
+      raise 'Unknown action!'
     end
   end
 
@@ -214,11 +220,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def new_etd
-    DateTime.parse(params[:timeObj]["newEtd"])
+    DateTime.parse(params[:timeObj]['newEtd'])
   end
 
   def new_eta
-    DateTime.parse(params[:timeObj]["newEta"])
+    DateTime.parse(params[:timeObj]['newEta'])
   end
 
   def update_shipment
@@ -226,7 +232,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       @shipment
     else
       shipment = Shipment.find(params[:id])
-      shipment.total_price = { value: params[:priceObj]["value"], currency: params[:priceObj]["currency"] }
+      shipment.total_price = { value: params[:priceObj]['value'], currency: params[:priceObj]['currency'] }
       shipment.save!
       @shipment = shipment
     end
@@ -264,7 +270,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
-      tmp["signed_url"] = doc.get_signed_url
+      tmp['signed_url'] = doc.get_signed_url
       @documents << tmp
     end
   end
@@ -335,9 +341,9 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def documents
     @documents ||= {
-      "requested_shipments" => Document.get_documents_for_array(tenant_shipment.requested),
-      "open_shipments"      => Document.get_documents_for_array(tenant_shipment.open),
-      "finished_shipments"  => Document.get_documents_for_array(tenant_shipment.finished)
+      'requested_shipments' => Document.get_documents_for_array(tenant_shipment.requested),
+      'open_shipments'      => Document.get_documents_for_array(tenant_shipment.open),
+      'finished_shipments'  => Document.get_documents_for_array(tenant_shipment.finished)
     }
   end
 
@@ -351,7 +357,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def approved_document_message
     {
-      title:       "Document Approved",
+      title:       'Document Approved',
       message:     "Your document #{@document.text} was approved",
       shipmentRef: @document.shipment.imc_reference
     }
@@ -359,7 +365,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def rejected_document_message
     {
-      title:       "Document Rejected",
+      title:       'Document Rejected',
       message:     "Your document #{@document.text} was rejected: #{params[:text]}",
       shipmentRef: @document.shipment.imc_reference
     }
@@ -367,7 +373,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def price_message
     {
-      title:       "Shipment Price Change",
+      title:       'Shipment Price Change',
       message:     "Your shipment #{update_shipment.imc_reference} has an updated price. \
         Your new total is #{params[:priceObj]['currency']} #{params[:priceObj]['value']}. \
         For any issues, please contact your support agent.",
@@ -377,7 +383,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def schedule_message
     {
-      title:       "Shipment Schedule Updated",
+      title:       'Shipment Schedule Updated',
       message:     "Your shipment #{update_schedule_shipment.imc_reference} has an updated schedule. \
         Your new estimated departure is #{params[:timeObj]['newEtd']}, estimated to \
         arrive at #{params[:timeObj]['newEta']}. For any issues, please contact your \
@@ -388,7 +394,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def booking_accepted_message
     {
-      title:       "Booking Accepted",
+      title:       'Booking Accepted',
       message:     "Your booking has been accepted! If you have any further questions or \
         edits to your booking please contact the support department.",
       shipmentRef: @shipment.imc_reference
@@ -397,7 +403,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def booking_declined_message
     {
-      title:       "Booking Declined",
+      title:       'Booking Declined',
       message:     "Your booking has been declined! This could be due to a number of \
         reasons including cargo size/weight and goods type. For more info contact \
         us through the support channels.",

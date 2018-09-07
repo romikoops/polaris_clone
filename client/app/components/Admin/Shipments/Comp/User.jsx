@@ -25,28 +25,50 @@ export class ShipmentsCompUser extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      perPage: 4,
+      search: {}
     }
     this.viewShipment = this.viewShipment.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
 
   getShipmentsFromPage (open, requested, finished) {
+    const { perPage } = this.state
     const { userDispatch } = this.props
-    userDispatch.getShipments(open, requested, finished, false)
+    userDispatch.getShipments(open, requested, finished, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
+    const { perPage } = this.state
     const { userDispatch } = this.props
-    userDispatch.deltaShipmentsPage(target, page)
+    userDispatch.deltaShipmentsPage(target, page, perPage)
+  }
+  determinePerPage () {
+    const { perPage } = this.state
+    const { userDispatch, shipments } = this.props
+    const { open, requested, finished } = shipments.pages
+    const width = window.innerWidth
+    const newPerPage = width >= 1920 ? 6 : 4
+    if (newPerPage !== perPage) {
+      userDispatch.getShipments(open, requested, finished, newPerPage, false)
+    }
+    this.setState({ perPage: newPerPage })
   }
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
 
   searchShipmentsFromPage (text, target, page) {
+    const { perPage } = this.state
     const { userDispatch } = this.props
-    userDispatch.searchShipments(text, target, page)
+    userDispatch.searchShipments(text, target, page, perPage)
   }
 
   toggleExpander (key) {
@@ -81,15 +103,17 @@ export class ShipmentsCompUser extends Component {
   }
 
   handlePage (target, delta) {
+    const { perPage } = this.state
     const { pages } = this.props.shipments
     const nextPage = +pages[target] + (1 * delta)
     const realPage = nextPage > 0 ? nextPage : 1
-    this.getTargetShipmentsFromPage(target, realPage)
+    this.getTargetShipmentsFromPage(target, realPage, perPage)
   }
   handleFilters () {
     this.setState((prevState) => {
+      const { perPage } = this.state
       const { open, requested, finished } = this.props.shipments.pages
-      this.getShipmentsFromPage(open, requested, finished)
+      this.getShipmentsFromPage(open, requested, finished, perPage)
 
       return { page: prevState.page }
     })
@@ -106,8 +130,14 @@ export class ShipmentsCompUser extends Component {
 
   handleSearchQuery (e, target) {
     const { value } = e.target
-    console.log(value)
-    this.searchShipmentsFromPage(value, target, 1)
+    const { perPage } = this.state
+
+    this.setState({
+      search: {
+        ...this.state.search,
+        [target]: value
+      }
+    }, () => this.searchShipmentsFromPage(value, target, 1, perPage))
   }
 
   render () {
@@ -121,6 +151,7 @@ export class ShipmentsCompUser extends Component {
       userDispatch
     } = this.props
     const { pages } = shipments
+    const { search } = this.state
     if (!shipments || !hubs || !clients) {
       return ''
     }
@@ -148,6 +179,7 @@ export class ShipmentsCompUser extends Component {
               shipments={mergedReqShipments}
               theme={theme}
               userView
+              searchText={search.requested}
               tooltip={adminTip.requested}
               page={pages.requested}
               numPages={numShipmentsPages.requested}
@@ -166,6 +198,7 @@ export class ShipmentsCompUser extends Component {
               shipments={mergedOpenShipments}
               theme={theme}
               userView
+              searchText={search.open}
               tooltip={adminTip.open}
               page={pages.open}
               numPages={numShipmentsPages.open}
@@ -184,6 +217,7 @@ export class ShipmentsCompUser extends Component {
               shipments={mergedFinishedShipments}
               theme={theme}
               userView
+              searchText={search.finished}
               page={pages.finished}
               tooltip={adminTip.finished}
               seeAll={false}
