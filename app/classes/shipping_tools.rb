@@ -68,7 +68,8 @@ module ShippingTools
       # TBD - Create custom errors (ApplicationError)
       shipment.save!
     end
-    if tenant.scope['quotation_tool']
+    # if tenant.scope['quotation_tool']
+    if false
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
         Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
@@ -580,6 +581,7 @@ module ShippingTools
     quotation = PdfHandler.new(
       layout:      "pdfs/simple.pdf.html.erb",
       template:    "shipments/pdfs/quotations.pdf.erb",
+      # footer:      "shipments/pdfs/quotations_footer.pdf.html.erb",
       margin:      { top: 10, bottom: 5, left: 8, right: 8 },
       shipment:    shipment,
       shipments:   main_quote.shipments,

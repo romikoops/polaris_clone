@@ -9,6 +9,7 @@ class ErbTemplate
   def initialize(args)
     @template = find_file args[:template]
     @layout   = find_file args[:layout], layout: true
+    # @footer   = find_file args[:footer][:html][:template]
 
     set_locals args[:locals] if args[:locals].is_a? Hash
 

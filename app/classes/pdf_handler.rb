@@ -4,13 +4,14 @@ class PdfHandler
   attr_reader :name, :full_name, :pdf, :url, :path
 
   def initialize(args={})
-    @layout   = args[:layout]     || args["layout"]
-    @template = args[:template]   || args["template"]
-    @margin   = args[:margin]     || args["margin"]
-    @shipment = args[:shipment]   || args["shipment"]
-    @shipments = args[:shipments] || args["shipments"]
-    @name     = args[:name]       || args["name"]
-    @quotes   = args[:quotes]     || args["quotes"]
+    @layout     = args[:layout]    || args["layout"]
+    @template   = args[:template]  || args["template"]
+    @footer     = args[:footer]    || args["footer"]
+    @margin     = args[:margin]    || args["margin"]
+    @shipment   = args[:shipment]  || args["shipment"]
+    @shipments  = args[:shipments] || args["shipments"]
+    @name       = args[:name]      || args["name"]
+    @quotes     = args[:quotes]    || args["quotes"]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
