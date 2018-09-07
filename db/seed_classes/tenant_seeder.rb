@@ -1946,8 +1946,8 @@ class TenantSeeder
         colors: {
           primary: "#e10f21",
           secondary: "#1d1d1b",
-          brightPrimary: "#ffffff",
-          brightSecondary: "#9d9d9c"
+          brightPrimary: "#e10f21",
+          brightSecondary: "#1d1d1b"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
         logoSmall: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",

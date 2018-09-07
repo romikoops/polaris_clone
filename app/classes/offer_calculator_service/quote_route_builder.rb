@@ -15,7 +15,7 @@ module OfferCalculatorService
         @route = route
         @itinerary = Itinerary.find(@route.itinerary_id)
         tenant_vehicle_ids = @itinerary.pricings.pluck(:tenant_vehicle_id).uniq
-        tenant_vehicle_ids.each {|id| @schedules << Schedule.new(attributes(id).merge(id: SecureRandom.uuid))}
+        tenant_vehicle_ids.each { |id| @schedules << Schedule.new(attributes(id).merge(id: SecureRandom.uuid)) }
       end
       @schedules
     end
@@ -34,9 +34,9 @@ module OfferCalculatorService
         closing_date: nil,
         trip_id: faux_trip.id,
         mode_of_transport: @route.mode_of_transport,
-        vehicle_name:      'standard'
+        vehicle_name:      faux_trip.tenant_vehicle.name,
+        carrier_name:      faux_trip.tenant_vehicle&.carrier&.name
       }
     end
-
   end
 end

@@ -35,13 +35,10 @@ export class AdminDashboard extends Component {
     window.scrollTo(0, 0)
     this.determinePerPage()
     window.addEventListener('resize', this.determinePerPage)
+    this.props.setCurrentUrl(this.props.match.url)
   }
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
-  }
-
-  componentDidMount () {
-    this.props.setCurrentUrl(this.props.match.url)
   }
 
   handleRouteHover (id) {

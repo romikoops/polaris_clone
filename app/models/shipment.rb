@@ -432,10 +432,6 @@ class Shipment < ApplicationRecord
     self.tenant_id ||= user.tenant_id
   end
 
-  def self.shipment_from_quote
-
-  end
-
   def sync_nexuses
     %w(origin destination).each do |target|
       next if self["#{target}_hub"].nil?

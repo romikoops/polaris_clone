@@ -178,7 +178,7 @@ export class ChooseOffer extends Component {
     if (!shipmentData) return ''
     const { scope } = tenant.data
     const { currentCurrency } = this.state
-
+    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool
     const {
       shipment, originHubs, destinationHubs, schedules, lastTripDate
     } = shipmentData
@@ -219,8 +219,8 @@ export class ChooseOffer extends Component {
     })
     const focusRoutestoRender = focusRoutes
       .sort((a, b) => new Date(a.closing_date) - new Date(b.closing_date))
-      .map(s => (tenant.data.subdomain === 'gateway' || 'saco' ? (
-        <div className="margin_bottom">
+      .map(s => (isQuotationTool ? (
+        <div className="margin_bottom flex-100">
           <QuoteCard
             theme={theme}
             tenant={tenant}
@@ -250,8 +250,8 @@ export class ChooseOffer extends Component {
       )
       ))
     const closestRoutestoRender = closestRoutes.map(s => (
-      tenant.data.subdomain === 'gateway' || 'saco' ? (
-        <div className="margin_bottom">
+      isQuotationTool ? (
+        <div className="margin_bottom flex-100">
           <QuoteCard
             theme={theme}
             tenant={tenant}
@@ -284,6 +284,7 @@ export class ChooseOffer extends Component {
     const showLaterDepButton = Math.abs(moment(lastTripDate).diff(lastResultDate, 'days')) > 5
     const showEarlierDepButton = Math.abs(moment().diff(firstResultDate, 'days')) > 10
 
+    // const centralFlex = scope.open_quotation_tool || scope.closed_quotation_tool ? 'flex-50'
     return (
       <div
         className="flex-100 layout-row layout-align-center-start layout-wrap"
@@ -343,7 +344,7 @@ export class ChooseOffer extends Component {
               setDepartureDate={this.setDepartureDate}
             />
           </div>
-          <div className="flex-75  offset-5 layout-row layout-wrap">
+          <div className="flex  offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center">
                 <div
@@ -382,7 +383,7 @@ export class ChooseOffer extends Component {
                 }`}
               >
                 <div className="flex-none">
-                  {tenant.data.subdomain === 'gateway' ? (
+                  {isQuotationTool ? (
                     <TextHeading
                       theme={theme}
                       size={3}
@@ -413,7 +414,7 @@ export class ChooseOffer extends Component {
               {closestRoutestoRender}
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              {tenant.data.subdomain === 'gateway' ? '' : (
+              {isQuotationTool ? '' : (
                 <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                   <div className="flex-none">
                     <TextHeading theme={theme} size={3} text="Alternative departures" />
@@ -438,8 +439,8 @@ export class ChooseOffer extends Component {
 
             </div>
           </div>
-          {tenant.data.subdomain === 'gateway' || 'saco' ? (
-            <div className={`flex-25 offset-5 layout-wrap ${styles.download_section}`}>
+          {isQuotationTool ? (
+            <div className={`flex-20 offset-5  layout-wrap layout-align-center-start ${styles.download_section}`}>
               <p className={`flex-100 layout-row ${styles.offer_title}`} >Selected Offers</p>
               {this.state.selectedOffers !== 0 ? (
                 this.state.selectedOffers.map(offer =>

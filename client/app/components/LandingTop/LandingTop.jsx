@@ -26,8 +26,12 @@ export class LandingTop extends Component {
   toAccount () {
     this.props.goTo('/account')
   }
-  toAdmin (target) {
+  toAdmin () {
     this.props.toAdmin(true)
+  }
+  showLogin () {
+    const { authDispatch } = this.props
+    authDispatch.showLogin()
   }
   render () {
     const {
@@ -60,6 +64,7 @@ export class LandingTop extends Component {
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
+    const isClosed = tenant.data.scope.closed_quotation_tool
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -68,8 +73,17 @@ export class LandingTop extends Component {
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
-    const loginLink = ''
-
+    const loginLink = (
+      <div className="layout-row flex-50">
+        <SquareButton
+          text="Login / Register"
+          theme={theme}
+          handleNext={() => this.showLogin()}
+          size="small"
+          active
+        />
+      </div>
+    )
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -108,8 +122,9 @@ export class LandingTop extends Component {
                   (
                     user &&
                   user.role &&
+                  !isClosed &&
                   ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
-                  ) || !user) &&
+                  ) || (!isClosed && !user)) &&
                   findRates}
                 {(!user || user.guest) && loginLink}
                 {
@@ -150,7 +165,8 @@ LandingTop.propTypes = {
   toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
   tenant: PropTypes.tenant,
-  bookNow: PropTypes.func
+  bookNow: PropTypes.func,
+  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 LandingTop.defaultProps = {

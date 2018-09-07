@@ -8,7 +8,7 @@
     padding-right: 400px;
   }
   .wrapper .title {
-    padding: 400px !important;
+    padding: 320px 0 !important;
   }
   .wrapper .title h1 {
     font-size: 80px !important;
@@ -18,10 +18,10 @@
     font-size: 40px !important;
   }
   .wrapper .title hr {
-    max-width: 250px;
+    max-width: 530px;
     border-style: solid;
     border-width: 2px;
-    margin: 40px auto;
+    margin: 40px 0;
   }
   .col-xs-12{
     padding: 0%;
@@ -106,6 +106,11 @@
   .quote {
     font-size: 45px;
   }
+  .notes {
+    margin-top: 20px;
+    font-size: 25px;
+    width: 80%;
+  }
   .wrapper-vertical {
     transform: rotate(-90deg);
     -webkit-transform: rotate(-90deg);
@@ -125,12 +130,8 @@
     padding-bottom: 5px;
   }
   .logo {
-    height: 430px;
-    width: 430px;
+    height: 230px;
     margin: 0 auto !important;
-    /* background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover; */
   }
   .info {
     padding: 60px;
@@ -149,13 +150,6 @@
     font-size: 60px;
     font-weight: bold;
   }
-  .total-price-single {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    background: white;
-    border-top: 3px solid #E0E0E0;
-    border: 3px solid #E0E0E0;
-  }
   .subtotal-price-single {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -163,18 +157,25 @@
     border-bottom: 3px solid #E0E0E0;
   }
   .subtotal-price-single h3 {
-    padding-right: 40px;
+    padding-right: 105px;
     font-size: 32px;
     text-align: right;
     font-weight: bold;
   }
   .subtotal-price-single h4 {
-    padding-left: 40px;
+    padding-left: 90px;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 30px;
+  }
+  .total-price-single {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: white;
+    border-top: 3px solid #E0E0E0;
+    border: 3px solid #E0E0E0;
   }
   .total-price-single h4 {
-    font-size: 38px;
+    font-size: 50px;
     padding-left: 40px;
     text-transform: capitalize;
   }
@@ -182,7 +183,7 @@
     font-size: 50px;
     font-weight: bold;
     text-align: right;
-    padding-right: 80px;
+    padding-right: 40px;
   }
   .total-row {
     background: #F8F8F8;
@@ -241,9 +242,12 @@
   <% tenant_logo = tenant.theme["logoLarge"] %>
   <% precarriage = shipment.has_pre_carriage ? primary_color : neutral_color %>
   <% oncarriage = shipment.has_on_carriage ? primary_color : neutral_color %>
-  
-  <img src="<%= tenant_logo %>" class="logo">
-  <div class="col-xs-12 title" style="font-size: 150%; text-align: center;">
+  <div class="row logo">
+    <div class="col-xs-12 col-xs-offset-12 logo">
+      <%= image_tag embed_remote_image(tenant_logo, 'image/png' ), class: "logo" %>
+    </div>
+  </div>
+  <div class="col-xs-12 title" style="font-size: 150%; text-align: left;">
     <h1>QUOTATIONS</h1>
     <hr style="border-color: <%= primary_color %>">
     <p><%= tenant.name %></p>
@@ -320,7 +324,18 @@
               <% v.each do |a, b| %>
                 <% if a != "total" && a != "edited_total" %>
                   <div class="subtotal-price-single row">
+                  <% if a == "trucking_lcl" %>
+                    <h4 class="col-xs-6">Lcl</h4>
+                  <% end %>
+                  <% if a == "trucking_fcl" %>
+                    <h4 class="col-xs-6">Fcl</h4>
+                  <% end %>
+                  <% if k == "cargo" %>
+                    <h4 class="col-xs-6">Cargo</h4>
+                  <% end %>
+                  <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
                     <h4 class="col-xs-6"><%= a %></h4>
+                  <% end %>
                     <h3 class="col-xs-6"> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
                   </div>
                 <% end %>
@@ -335,7 +350,13 @@
             &nbsp;<%= s.selected_offer["total"]["currency"] %>
           </p>
         </div>
+        <p class="notes">1) Prices subject to change 
+  2) All fees are converted at the time of quotation 
+  using that day's European Central bank exchange rates and are an approximation 
+  of the final amount ot be paid. The amount paid at the time of settlement 
+  will reflect the exchange rates of the day.</p>
       </div>
+      
     <% end %>
   
 </div>

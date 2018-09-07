@@ -135,7 +135,6 @@ class Shop extends Component {
         break
     }
   }
-
   chooseOffer (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
     const { schedule, total } = obj
@@ -169,8 +168,7 @@ class Shop extends Component {
       user,
       shipmentDispatch,
       bookingSummaryDispatch,
-      currencies,
-      dashboard
+      currencies
     } = this.props
     const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
@@ -226,7 +224,6 @@ class Shop extends Component {
               {...props}
               tenant={tenant}
               user={user}
-              dashboard={dashboard}
               shipmentData={shipmentData}
               prevRequest={request && request.stage2 ? request.stage2 : {}}
               req={request && request.stage1 ? request.stage1 : {}}
@@ -410,7 +407,7 @@ function mapDispatchToProps (dispatch) {
   return {
     userDispatch: bindActionCreators(userActions, dispatch),
     shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    authenticationDispatch: bindActionCreators(authenticationActions, userActions, dispatch),
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch),
     bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }

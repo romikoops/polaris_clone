@@ -45,6 +45,12 @@ module ApplicationHelper
     truncate(text, length: 50, separator: /\w/, omission: "...")
   end
 
+  def embed_remote_image(url, content_type)
+    asset = open(url, "r:UTF-8") { |f| f.read }
+    base64 = Base64.encode64(asset.to_s).gsub(/\s+/, "")
+    "data:#{content_type};base64,#{Rack::Utils.escape(base64)}"
+  end
+
   def line_wrap(text, col=40)
     s = text.gsub(/(.{1,#{col}})( +|$\n?)|(.{1,#{col}})/, "\\1\\3\n")
     truncate(s, length: 120, separator: /\w/, omission: "...")

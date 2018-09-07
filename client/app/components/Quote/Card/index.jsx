@@ -28,6 +28,15 @@ class QuoteCard extends PureComponent {
 
     return hubType
   }
+  static determineSubKey (key) {
+    switch (key) {
+      case 'trucking_lcl' || 'trucking_fcl':
+        return 'Trucking Rate'
+
+      default:
+        return key
+    }
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -49,8 +58,11 @@ class QuoteCard extends PureComponent {
     this.setState({
       isChecked: e.target.checked
     })
+
     return handleClick(e, value)
   }
+
+
   render () {
     const {
       theme,
@@ -66,6 +78,7 @@ class QuoteCard extends PureComponent {
     } = schedule
     const originHub = schedule.origin_hub
     const destinationHub = schedule.destination_hub
+    const hasDates = !(!schedule.eta && !schedule.etd && !schedule.closing_date)
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
@@ -95,12 +108,12 @@ class QuoteCard extends PureComponent {
           </div>
         )}
         content={Object.entries(quote[`${key}`])
-          .map(array => array.filter((value, index, arr) =>
+          .map(array => array.filter(value =>
             value !== 'total' && value !== 'edited_total'))
-          .filter((value, index, arr) => value.length !== 1).map((price) => {
+          .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${styles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{price[0]}</span>
+                <span>{key === 'cargo' ? 'Freight rate' : QuoteCard.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{quote.total.currency}</p>
@@ -149,7 +162,7 @@ class QuoteCard extends PureComponent {
             </div>
           </div>
         </div>
-        {tenant.data.subdomain === 'saco' ? (
+        {hasDates ? (
           <div className={`flex-100 layout-row layout-align-start-center ${styles.dates_container}`}>
             <div className={`flex-75 layout-row ${styles.dates_row}`}>
               <div className="flex-25 layout-wrap layout-row layout-align-center-center">
@@ -200,7 +213,7 @@ class QuoteCard extends PureComponent {
                 </div>
               </div>
             </div>
-            <div className="flex-25 layout-row" style={{ textAlign: 'right' }}>
+            <div className="flex-25 layout-row layout-wrap" style={{ textAlign: 'right' }}>
               { schedule.carrier_name ? <div className="flex-100 layout-row layout-align-end-center">
                 <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
                 <p className="layout-row layout-align-end-center no_m">{schedule.carrier_name}</p>
@@ -211,7 +224,18 @@ class QuoteCard extends PureComponent {
               </div> : '' }
             </div>
           </div>
-        ) : ''}
+        ) : (
+          <div className="flex-100 layout-row layout-align-space-around-center">
+
+            { schedule.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
+              <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
+              <p className="layout-row layout-align-end-center margin_5">{`Carrier: ${schedule.carrier_name}`}</p>
+            </div> : '' }
+            { schedule.vehicle_name ? <div className="flex-50 layout-row layout-align-center-center">
+              <i className="flex-none fa fa-bell-o" style={{ paddingRight: '7px' }} />
+              <p className="layout-row layout-align-end-center margin_5">{`Service: ${capitalize(schedule.vehicle_name)}`}</p>
+            </div> : '' }
+          </div>)}
         {pricesArr}
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-start-stretch ${styles.total_row}`}>
@@ -242,6 +266,7 @@ QuoteCard.propTypes = {
   schedule: PropTypes.objectOf(PropTypes.any),
   cargo: PropTypes.arrayOf(PropTypes.any),
   handleInputChange: PropTypes.func,
+  handleClick: PropTypes.func,
   pickup: PropTypes.bool
 }
 
@@ -252,6 +277,7 @@ QuoteCard.defaultProps = {
   schedule: {},
   cargo: [],
   handleInputChange: null,
+  handleClick: null,
   pickup: false
 }
 

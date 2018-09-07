@@ -127,15 +127,18 @@ export class UserDashboard extends Component {
                 Welcome back,&nbsp; <b>{user.first_name}</b>
                 </div>
               </div>
-              <SquareButton
-                theme={theme}
-                handleNext={this.startBooking}
-                active
-                border
-                size="large"
-                text="Find Rates"
-                iconClass="fa-archive"
-              />
+              <div className="flex-40 layout-row layout-align-end-center">
+                <SquareButton
+                  theme={theme}
+                  handleNext={this.startBooking}
+                  active
+                  border
+                  size="large"
+                  text="Find Rates"
+                  iconClass="fa-archive"
+                />
+              </div>
+
             </div>
           </div>
           <ShipmentOverviewCard
@@ -201,6 +204,9 @@ UserDashboard.propTypes = {
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
+  }).isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string
   }).isRequired,
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
