@@ -13,6 +13,7 @@ exports[`shallow render 1`] = `
       className="flex-none layout-row menu_content closed"
     >
       <Comp
+        currentUrl=""
         expand={false}
         theme={
           Object {
@@ -82,6 +83,7 @@ exports[`theme is falsy 1`] = `
       className="flex-none layout-row menu_content closed"
     >
       <Comp
+        currentUrl=""
         expand={false}
         theme={null}
         user={

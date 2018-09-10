@@ -369,6 +369,7 @@ UserContacts.propTypes = {
   theme: PropTypes.theme,
   numPages: PropTypes.number,
   t: PropTypes.func.isRequired,
+  match: PropTypes.match.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
   contactsData: PropTypes.arrayOf(PropTypes.contact),
   dispatch: PropTypes.func.isRequired,

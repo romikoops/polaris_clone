@@ -116,3 +116,4 @@ blank.html
 .rspec_status
 lib/*/Gemfile.lock
 rspec.xml
+/client/junit.xml

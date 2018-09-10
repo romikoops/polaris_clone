@@ -34,6 +34,8 @@ const propsBase = {
     getShipment: identity,
     goTo: identity
   },
+  setCurrentUrl: jest.fn(),
+  match: { url: 'google.com' },
   seeAll: identity,
   user,
   hubs: {},

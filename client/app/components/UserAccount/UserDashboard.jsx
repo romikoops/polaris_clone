@@ -200,6 +200,7 @@ UserDashboard.propTypes = {
   setNav: PropTypes.func.isRequired,
   setCurrentUrl: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
+  match: PropTypes.match.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
