@@ -31,7 +31,7 @@ exports[`shallow render 1`] = `
     <h3
       className="flex-none"
     >
-       Reference 
+      Reference
     </h3>
   </div>
   <div
@@ -40,7 +40,7 @@ exports[`shallow render 1`] = `
     <h3
       className="flex-none"
     >
-      Status 
+      Status
     </h3>
   </div>
   <div
@@ -52,7 +52,7 @@ exports[`shallow render 1`] = `
     <h3
       className="flex-none"
     >
-      Requires Action 
+      Requires Action
     </h3>
   </div>
 </div>

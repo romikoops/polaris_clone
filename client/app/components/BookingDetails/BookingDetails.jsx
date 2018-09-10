@@ -2,9 +2,11 @@
 import * as Scroll from 'react-scroll'
 import Formsy from 'formsy-react'
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import defaults from '../../styles/default_classes.scss'
 import styles from './BookingDetails.scss'
-import { CargoDetails } from '../CargoDetails/CargoDetails'
+// eslint-disable-next-line no-named-as-default
+import CargoDetails from '../CargoDetails/CargoDetails'
 import { ContactSetter } from '../ContactSetter/ContactSetter'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
@@ -114,6 +116,7 @@ export class BookingDetails extends Component {
     if (type === 'notifyee') {
       const { notifyees } = this.state
       notifyees[index] = contactData
+
       return this.setState({ notifyees })
     }
     this.setState({ [type]: contactData })
@@ -305,7 +308,13 @@ export class BookingDetails extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, currencies, user, tenant
+      theme,
+      shipmentData,
+      shipmentDispatch,
+      currencies,
+      user,
+      t,
+      tenant
     } = this.props
     if (!shipmentData) return ''
 
@@ -319,7 +328,12 @@ export class BookingDetails extends Component {
     if (!shipment || !hubs) return ''
 
     const {
-      consignee, shipper, notifyees, customs, customsCredit, eori
+      consignee,
+      customs,
+      customsCredit,
+      eori,
+      notifyees,
+      shipper
     } = this.state
 
     const maybeRouteHubBox = shipment && theme && hubs
@@ -379,7 +393,11 @@ export class BookingDetails extends Component {
           <div className={`${ALIGN_START_CENTER}`} />
           <div className={`${ALIGN_END_CENTER}`}>
             <div className="flex-none layout-row">
-              <RoundButton theme={theme} text="Review Booking Request" active />
+              <RoundButton
+                active
+                theme={theme}
+                text={t('common:reviewBookingRequest')}
+              />
             </div>
           </div>
         </div>
@@ -389,17 +407,17 @@ export class BookingDetails extends Component {
     const BackButtonComponent = (
       <div className={`${styles.back_to_dash_sec} ${WRAP_ROW(100)} layout-align-center`}>
         <div className={trim(`
-              ${defaults.content_width}
-              content-width
-              ${ROW('none')}
-              ${ALIGN_START_CENTER}
-            `)}
+          ${defaults.content_width}
+          content-width
+          ${ROW('none')}
+          ${ALIGN_START_CENTER}
+        `)}
         >
           <RoundButton
             back
             handleNext={e => this.backToDashboard(e)}
             iconClass="fa-angle-left"
-            text="Back to dashboard"
+            text={t('common:back')}
             theme={theme}
           />
         </div>
@@ -439,4 +457,4 @@ function scrollTo (target, offset) {
   })
 }
 
-export default BookingDetails
+export default translate('common')(BookingDetails)

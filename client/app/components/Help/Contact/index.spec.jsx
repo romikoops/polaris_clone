@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../../mocks'
-// eslint-disable-next-line
+// eslint-disable-next-line import/no-named-as-default
 import HelpContact from './'
 
 const tenantBase = {

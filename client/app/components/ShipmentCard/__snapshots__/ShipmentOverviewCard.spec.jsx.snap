@@ -65,6 +65,7 @@ exports[`admin is true 1`] = `
                 "status": "FOO_STATUS",
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -136,6 +137,7 @@ exports[`shallow rendering 1`] = `
                 "status": "FOO_STATUS",
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {

@@ -4,6 +4,7 @@ module.exports = function (wallaby) {
       { pattern: 'jest.init.js', load: false, instrument: false },
       { pattern: 'package.json', load: false, instrument: false },
       { pattern: 'app/components/**/*.snap', load: false, instrument: false },
+      { pattern: 'app/components/**/*Base.jsx', load: false, instrument: false },
       'app/**/*.js?(x)',
       '!app/components/**/*.spec.jsx'
     ],
@@ -29,8 +30,9 @@ module.exports = function (wallaby) {
       run: 1000
     },
     ignoreFileLoadingDependencyTracking: true,
-    slowTestThreshold: 1000,
-    maxConsoleMessagesPerTest: 5,
+    slowTestThreshold: 500,
+    maxConsoleMessagesPerTest: 500,
     debug: true
   }
 }
+/* eslint-enable */

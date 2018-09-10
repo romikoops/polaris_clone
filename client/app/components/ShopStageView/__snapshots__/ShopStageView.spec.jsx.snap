@@ -209,7 +209,7 @@ exports[`shallow rendering 1`] = `
       <p
         className="flex-none"
       >
-        Need Help
+        Need help?
       </p>
       <i
         className="fa fa-question-circle"

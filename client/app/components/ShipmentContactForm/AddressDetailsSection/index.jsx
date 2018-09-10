@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import GmapsWrapper from '../../../hocs/GmapsWrapper'
 import FormsyInput from '../../FormsyInput/FormsyInput'
@@ -56,14 +57,15 @@ class AddressDetailsSection extends PureComponent {
     const {
       theme,
       setContactAttempted,
-      setContactBtn
+      setContactBtn,
+      t
     } = this.props
     const { contactData } = this.state
 
     return (
       <div className="flex offset-5 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-wrap">
-          <h3 className="flex-40">Address Details</h3>
+          <h3 className="flex-40">{t('user:addressDetails')}</h3>
           <div className="offset-5 flex-55">
             <GmapsWrapper
               theme={theme}
@@ -89,7 +91,7 @@ class AddressDetailsSection extends PureComponent {
                 type="text"
                 value={contactData.location.street}
                 name="location-street"
-                placeholder="Street"
+                placeholder={t('user:street')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
                   fontSize: '12px',
@@ -97,8 +99,8 @@ class AddressDetailsSection extends PureComponent {
                 }}
                 validations="minLength:2"
                 validationErrors={{
-                  isDefaultRequiredValue: 'Minimum 2 characters',
-                  minLength: 'Minimum 2 characters'
+                  isDefaultRequiredValue: t('errors:twoChars'),
+                  minLength: t('errors:twoChars')
                 }}
                 required
               />
@@ -108,14 +110,14 @@ class AddressDetailsSection extends PureComponent {
                 type="text"
                 value={contactData.location.streetNumber}
                 name="location-streetNumber"
-                placeholder="Number"
+                placeholder={t('user:number')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
                   fontSize: '12px',
                   bottom: '-19px'
                 }}
                 validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank'
+                  isDefaultRequiredValue: t('errors:notBlank')
                 }}
                 required
               />
@@ -127,7 +129,7 @@ class AddressDetailsSection extends PureComponent {
                 type="text"
                 value={contactData.location.city}
                 name="location-city"
-                placeholder="City"
+                placeholder={t('user:city')}
                 submitAttempted={setContactAttempted}
                 errorMessageStyles={{
                   fontSize: '12px',
@@ -135,8 +137,8 @@ class AddressDetailsSection extends PureComponent {
                 }}
                 validations="minLength:2"
                 validationErrors={{
-                  isDefaultRequiredValue: 'Minimum 2 characters',
-                  minLength: 'Minimum 2 characters'
+                  isDefaultRequiredValue: t('errors:twoChars'),
+                  minLength: t('errors:twoChars')
                 }}
                 required
               />
@@ -156,8 +158,8 @@ class AddressDetailsSection extends PureComponent {
                 }}
                 validations="minLength:4"
                 validationErrors={{
-                  isDefaultRequiredValue: 'Minimum 4 characters',
-                  minLength: 'Minimum 4 characters'
+                  isDefaultRequiredValue: t('errors:fourChars'),
+                  minLength: t('errors:fourChars')
                 }}
                 required
               />
@@ -175,8 +177,8 @@ class AddressDetailsSection extends PureComponent {
                 }}
                 validations="minLength:3"
                 validationErrors={{
-                  isDefaultRequiredValue: 'Minimum 3 characters',
-                  minLength: 'Minimum 3 characters'
+                  isDefaultRequiredValue: t('errors:threeChars'),
+                  minLength: t('errors:threeChars')
                 }}
                 required
               />
@@ -201,10 +203,9 @@ class AddressDetailsSection extends PureComponent {
   }
 }
 
-export default AddressDetailsSection
-
 AddressDetailsSection.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   contactData: PropTypes.objectOf(PropTypes.any).isRequired,
   setContactAttempted: PropTypes.bool,
   setContactBtn: PropTypes.node
@@ -215,3 +216,5 @@ AddressDetailsSection.defaultProps = {
   setContactAttempted: false,
   setContactBtn: null
 }
+
+export default translate(['errors', 'user'])(AddressDetailsSection)

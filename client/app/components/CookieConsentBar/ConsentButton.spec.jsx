@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme'
 
 import { theme, identity } from '../../mocks'
 
-// eslint-disable-next-line
 import ConsentButton from './ConsentButton'
 
 const propsBase = {

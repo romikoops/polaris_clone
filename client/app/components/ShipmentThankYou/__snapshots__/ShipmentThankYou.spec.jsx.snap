@@ -25,7 +25,8 @@ exports[`shallow rendering 1`] = `
         <div
           className="b_ref flex-100 layout-row layout-align-start"
         >
-          Booking Reference: 
+          Booking Reference
+          : 
         </div>
         <div
           className="flex-100 layout-row layout-align-start layout-wrap thank_details"

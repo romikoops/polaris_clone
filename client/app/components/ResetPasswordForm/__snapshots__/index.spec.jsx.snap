@@ -6,6 +6,7 @@ exports[`shallow rendering 1`] = `
 >
   <Connect(Header)
     noMessages={true}
+    t={[Function]}
     theme={
       Object {
         "colors": Object {
@@ -197,6 +198,7 @@ exports[`state.focus.password_confirmation is truthy 1`] = `
 >
   <Connect(Header)
     noMessages={true}
+    t={[Function]}
     theme={
       Object {
         "colors": Object {
@@ -402,6 +404,7 @@ exports[`state.settingPassword is true 1`] = `
 >
   <Connect(Header)
     noMessages={true}
+    t={[Function]}
     theme={
       Object {
         "colors": Object {
@@ -597,6 +600,7 @@ exports[`theme is falsy 1`] = `
 >
   <Connect(Header)
     noMessages={true}
+    t={[Function]}
     theme={null}
     user={
       Object {

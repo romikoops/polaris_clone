@@ -12,6 +12,8 @@ const propsBase = {
   theme,
   hubs: [],
   contacts: [],
+  setCurrentUrl: jest.fn(),
+  match: { url: 'google.com' },
   dispatch: identity,
   userDispatch: {
     getContacts: identity,

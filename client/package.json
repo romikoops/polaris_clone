@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --reporters=default --reporters=jest-junit --forceExit --detectOpenHandles --no-watchman",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "dev": "webpack-dev-server --mode development ./app/index.jsx --progress --colors",
@@ -15,7 +16,8 @@
     "eslint:watch": "esw -w --report-unused-disable-directives --cache --ext .js --ext .jsx --ext .json",
     "eslint-file": "eslint",
     "deploy": "npm run build && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'",
-    "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'"
+    "deploy-dev": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'",
+    "json": "json-server --watch translations/all.json --port 3004 --static ./i18n"
   },
   "keywords": [
     "es6",
@@ -36,6 +38,10 @@
     "formsy-react": "^1.1.1",
     "fuse.js": "^3.2.0",
     "history": "^4.7.2",
+    "i18next": "^11.3.6",
+    "i18next-browser-languagedetector": "^2.2.2",
+    "i18next-fetch-backend": "^0.1.0",
+    "i18next-xhr-backend": "^1.5.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
     "mailcheck": "^1.1.1",
@@ -55,6 +61,7 @@
     "react-dom": "^16.0.0",
     "react-google-maps-loader": "^4.1.0",
     "react-hot-loader": "^4.2.0",
+    "react-i18next": "^7.11.0",
     "react-mailcheck": "^1.2.0",
     "react-pdf": "^3.0.5",
     "react-redux": "^5.0.7",
@@ -105,6 +112,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "browser-sync": "^2.24.5",
     "browser-sync-webpack-plugin": "^2.0.1",
+    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
@@ -133,6 +141,7 @@
     "image-webpack-loader": "^4.3.0",
     "jest": "^23.1.0",
     "jest-enzyme": "^6.0.1",
+    "jest-junit": "^5.1.0",
     "jest-tobetype": "^1.1.0",
     "json-loader": "^0.5.4",
     "mini-css-extract-plugin": "^0.4.0",

@@ -39,7 +39,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('../GradientBorder', x => x)
 
 // eslint-disable-next-line import/first
-import { UserShipmentView } from './UserShipmentView'
+import { UserShipmentView } from './UserShipmentViewDone'
 
 const propsBase = {
   theme,

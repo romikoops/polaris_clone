@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 // import { UserShipmentRow } from './';
@@ -9,14 +10,14 @@ import { AdminSearchableShipments } from '../Admin/AdminSearchables'
 import { gradientTextGenerator } from '../../helpers'
 import GreyBox from '../GreyBox/GreyBox'
 
-const EditProfileBox = ({
-  user, handleChange, onSave, close, style, theme
+const UntranslatedEditProfileBox = ({
+  user, handleChange, onSave, close, style, theme, t
 }) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Company
+          {t('user:company')}
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -32,7 +33,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          First Name
+          {t('user:firstName')}
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -48,7 +49,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Last Name
+          {t('user:lastName')}
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -64,7 +65,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Email
+          {t('user:email')}
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -80,7 +81,7 @@ const EditProfileBox = ({
     <div className={`flex-50 layout-row layout-align-start-start layout-wrap ${styles.input_box}`}>
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Phone
+          {t('user:phone')}
         </sup>
       </div>
       <div className="input_box_full flex-100 layout-row layout-align-start-center ">
@@ -117,8 +118,9 @@ const EditProfileBox = ({
   </div>
 )
 
-EditProfileBox.propTypes = {
+UntranslatedEditProfileBox.propTypes = {
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
@@ -126,12 +128,16 @@ EditProfileBox.propTypes = {
   theme: PropTypes.theme
 }
 
-EditProfileBox.defaultProps = {
+UntranslatedEditProfileBox.defaultProps = {
   theme: null,
   style: {}
 }
 
-const ProfileBox = ({ user, style, edit }) => (
+const EditProfileBox = translate('user')(UntranslatedEditProfileBox)
+
+const UntranslatedProfileBox = ({
+  user, style, edit, t
+}) => (
   <div className={`flex-100 layout-row layout-align-start-start layout-wrap section_padding ${styles.content_details}`}>
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-15 layout-row layout-align-center-center" onClick={edit}>
@@ -141,7 +147,7 @@ const ProfileBox = ({ user, style, edit }) => (
     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Company
+          {t('user:company')}
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -151,7 +157,7 @@ const ProfileBox = ({ user, style, edit }) => (
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Email
+          {t('user:email')}
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -161,7 +167,7 @@ const ProfileBox = ({ user, style, edit }) => (
     <div className="flex-50 layout-row layout-align-start-start layout-wrap">
       <div className="flex-100 layout-row layout-align-start-start ">
         <sup style={style} className="clip flex-none">
-          Phone
+          {t('user:phone')}
         </sup>
       </div>
       <div className="flex-100 layout-row layout-align-start-center ">
@@ -171,17 +177,20 @@ const ProfileBox = ({ user, style, edit }) => (
   </div>
 )
 
-ProfileBox.propTypes = {
+UntranslatedProfileBox.propTypes = {
   user: PropTypes.user.isRequired,
+  t: PropTypes.func.isRequired,
   edit: PropTypes.func.isRequired,
   style: PropTypes.objectOf(PropTypes.string)
 }
 
-ProfileBox.defaultProps = {
+UntranslatedProfileBox.defaultProps = {
   style: {}
 }
 
-export class UserContactsView extends Component {
+const ProfileBox = translate('user')(UntranslatedProfileBox)
+
+class UserContactsView extends Component {
   static prepShipment (baseShipment, user, hubsObj) {
     const shipment = Object.assign({}, baseShipment)
     shipment.clientName = user ? `${user.first_name} ${user.last_name}` : ''
@@ -252,7 +261,7 @@ export class UserContactsView extends Component {
   }
   render () {
     const {
-      theme, contactData, hubs, userDispatch
+      theme, contactData, hubs, userDispatch, t
     } = this.props
     if (!contactData) {
       return ''
@@ -297,7 +306,7 @@ export class UserContactsView extends Component {
                     close={this.closeEdit}
                   />
                 ) : (
-                  <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile} />
+                  <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
                 )}
               </div>
             )}
@@ -323,7 +332,7 @@ export class UserContactsView extends Component {
               <div
                 className="flex-100 layout-align-start-center greyBg"
               >
-                <span><b>Locations</b></span>
+                <span><b>{t('shipment:locations')}</b></span>
               </div>
             </div>
             <AdminAddressTile
@@ -348,6 +357,7 @@ UserContactsView.propTypes = {
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
+  t: PropTypes.func.isRequired,
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.arrayOf(PropTypes.object),
@@ -365,4 +375,4 @@ UserContactsView.defaultProps = {
   hubs: []
 }
 
-export default UserContactsView
+export default translate(['common', 'user', 'shipment'])(UserContactsView)
