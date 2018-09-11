@@ -217,8 +217,10 @@ function getShipments (pages, perPage) {
     headers: authHeader()
   }
   let query = ''
-  Object.keys(pages).forEach((status) => {
+  const queryKeys = Object.keys(pages)
+  queryKeys.forEach((status, i) => {
     query += `${status}_page=${pages[status] || 1}`
+    if (i > 0 && i < queryKeys.length - 1) query += '&'
   })
   if (perPage) query += `&per_page=${perPage}`
 

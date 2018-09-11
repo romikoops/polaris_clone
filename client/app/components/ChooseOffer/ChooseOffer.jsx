@@ -51,7 +51,8 @@ export class ChooseOffer extends Component {
       outerLimit: 20,
       selectedOffers: [],
       isChecked: false,
-      email: ''
+      email: '',
+      showModal: false
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.selectQuotes = this.selectQuotes.bind(this)
@@ -73,6 +74,11 @@ export class ChooseOffer extends Component {
 
   shouldComponentUpdate () {
     return !!(this.props.shipmentData && this.props.shipmentData.shipment)
+  }
+  componentWillUnmount () {
+    this.setState({
+      showModal: false
+    })
   }
 
   setDuration (val) {
@@ -169,11 +175,15 @@ export class ChooseOffer extends Component {
       shipmentDispatch
     } = this.props
 
+    this.setState({
+      showModal: this.props.modal
+    })
+
     shipmentDispatch.chooseQuotes({ shipment, quotes, email })
   }
   render () {
     const {
-      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay, modal
+      shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay
     } = this.props
     if (!shipmentData) return ''
     const { scope } = tenant.data
@@ -290,7 +300,7 @@ export class ChooseOffer extends Component {
         className="flex-100 layout-row layout-align-center-start layout-wrap"
         style={{ marginTop: '62px', marginBottom: '166px' }}
       >
-        {modal ? (
+        {this.state.showModal ? (
           <Modal
             component={(
               <div className={styles.mail_modal}>
@@ -530,7 +540,6 @@ ChooseOffer.defaultProps = {
   req: {},
   tenant: {},
   modal: false,
-  // modalSuccess: false,
   originalSelectedDay: false
 }
 

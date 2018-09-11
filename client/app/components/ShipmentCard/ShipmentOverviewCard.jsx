@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
 import UserShipmentCard from './UserShipmentCard'
 import AdminShipmentCard from './AdminShipmentCard'
+import { UserShipmentQuotationCard } from './UserShipmentQuotationCard'
+import { AdminShipmentQuotationCard } from './AdminShipmentQuotationCard'
 import styles from './ShipmentOverviewCard.scss'
 import adminStyles from '../Admin/Admin.scss'
 
@@ -26,6 +28,21 @@ class ShipmentOverviewCard extends Component {
     } = this.props
 
     return shipments.length > 0 ? shipments.map((shipment) => {
+      const QuoteCard = this.state.admin ? (
+        <AdminShipmentQuotationCard
+          shipment={shipment}
+          dispatches={dispatches}
+          confirmShipmentData={confirmShipmentData}
+          theme={theme}
+          hubs={hubs}
+        />
+      ) : (
+        <UserShipmentQuotationCard
+          shipment={shipment}
+          dispatches={dispatches}
+          theme={theme}
+        />
+      )
       const ShipCard = this.state.admin ? (
         <AdminShipmentCard
           shipment={shipment}
@@ -50,7 +67,7 @@ class ShipmentOverviewCard extends Component {
           <GreyBox
             wrapperClassName="layout-row"
             contentClassName="layout-row flex-100"
-            content={ShipCard}
+            content={shipment.status !== 'quoted' ? ShipCard : QuoteCard}
           />
         </div>
       )
