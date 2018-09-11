@@ -53,3 +53,106 @@ exports[`shallow render 1`] = `
   />
 </div>
 `;
+
+exports[`state.showModal is true 1`] = `
+<div
+  className="cookie_flex "
+  style={
+    Object {
+      "background": "#fafafa",
+      "filter": "grayscale(60%)",
+    }
+  }
+>
+  <Modal
+    component={
+      <div
+        className="cookie_modal"
+      >
+        <p>
+          We use cookies to enhance your user experience. 
+          <br />
+          <br />
+          The consent is not mandatory but necessary to continue using our website. Are you sure you want to decline the usage of cookies?
+        </p>
+        <ConsentButton
+          active={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          text="ok, accept"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <ConsentButton
+          active={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          text="cookies policy"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    }
+    flexOptions=""
+    horizontalPadding="40px"
+    minHeight=""
+    parentToggle={[Function]}
+    verticalPadding="30px"
+  />
+  <p
+    className="cookie_text"
+  >
+    This website uses cookies to enhance your user experience. 
+    <a
+      href="https://www.itsmycargo.com/en/privacy"
+      target="_blank"
+    >
+      Learn more
+    </a>
+  </p>
+  <ConsentButton
+    active={true}
+    disabled={false}
+    handleDisabled={null}
+    handleNext={[Function]}
+    text="accept"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <ConsentButton
+    active={true}
+    disabled={false}
+    handleDisabled={null}
+    handleNext={[Function]}
+    text="decline"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;

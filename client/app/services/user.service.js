@@ -6,7 +6,6 @@ const { fetch, FormData } = window
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
 
-// FIXME: console.log(cookieKey)
 function handleResponse (response) {
   if (!response.ok) {
     return Promise.reject(response.statusText)
@@ -33,7 +32,7 @@ function destroyLocation (userId, locationId) {
   return fetch(`${BASE_URL}/users/${userId}/locations/${locationId}`, requestOptions).then(handleResponse)
 }
 
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -41,6 +40,7 @@ function searchShipments (text, target, page) {
   let query = ''
 
   query += `query=${text}&page=${page || 1}`
+  if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
@@ -228,7 +228,7 @@ function newAlias (data) {
   return fetch(`${BASE_URL}/contacts/new_alias`, requestOptions).then(handleResponse)
 }
 
-function getShipments (requestedPage, openPage, finishedPage) {
+function getShipments (requestedPage, openPage, finishedPage, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -237,16 +237,18 @@ function getShipments (requestedPage, openPage, finishedPage) {
   query += `open_page=${openPage || 1}`
   query += `&requested_page=${requestedPage || 1}`
   query += `&finished_page=${finishedPage || 1}`
+  if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/shipments?${query}`, requestOptions).then(handleResponse)
 }
 
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  const query = `page=${page || 1}&target=${target}`
+  let query = `page=${page || 1}&target=${target}`
+  if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }

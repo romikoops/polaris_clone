@@ -1,25 +1,21 @@
 variables:
   BUNDLE_GITLAB__COM: "gitlab-ci-token:${CI_JOB_TOKEN}"
 
-pronto:
+stages:
+  - test
+
+code_quality:
   stage: test
+  tags:
+    - itsmycargo
   image: eu.gcr.io/itsmycargo-main/pronto:stable
   script:
     - scripts/pronto
 
-charge_calculator:
+api:
   stage: test
-  image: ruby:2.5
-  variables:
-    SPEC_OPTS: "--format RspecJunitFormatter --out rspec.xml --format Fuubar --color"
-  script:
-    - "cd lib/charge_calculator; bundle; bundle exec rspec"
-  artifacts:
-    reports:
-      junit: lib/charge_calculator/rspec.xml
-
-rspec:
-  stage: test
+  tags:
+    - itsmycargo
   image: eu.gcr.io/itsmycargo-main/base:stable
   services:
     - mdillon/postgis
@@ -27,16 +23,35 @@ rspec:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
   script:
-    - scripts/ci-build.sh bin/rspec
-  artifacts:
-    reports:
-      junit: rspec.xml
+    - scripts/test
 
-jest:
+  coverage: '/\(\d+.\d+\%\) covered/'
+  artifacts:
+    paths:
+      - coverage/
+    expire_in: 1 week
+    reports:
+      junit:
+        - engines/*/rspec.xml
+        - lib/*/rspec.xml
+        - rspec.xml
+
+client:
   stage: test
-  image: eu.gcr.io/itsmycargo-main/base:stable
+  # tags:
+  #   - itsmycargo
+  image: node:8
 
   script:
-    - cd client 
+    - cd client
     - npm install
-    - npm test
+    - npm run test:ci
+
+  coverage: '/^Statements\s*:\s*([^%]+)/'
+  artifacts:
+    paths:
+      - client/coverage/lcov-report
+    expire_in: 1 week
+    reports:
+      junit:
+        - client/junit.xml

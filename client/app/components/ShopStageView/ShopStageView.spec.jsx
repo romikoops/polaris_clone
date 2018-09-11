@@ -1,17 +1,18 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { identity, theme, tenant } from '../../mocks'
-import { ShopStageView } from './ShopStageView'
+import { identity, tenant, theme } from '../../mocks'
+// eslint-disable-next-line no-named-as-default
+import ShopStageView from './ShopStageView'
 
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)
 
 const propsBase = {
   theme,
+  tenant,
   setStage: identity,
   currentStage: 1,
   shopType: 'FOO_SHOP_TYPE',
-  disabledClick: false,
-  tenant
+  disabledClick: false
 }
 
 test('shallow rendering', () => {

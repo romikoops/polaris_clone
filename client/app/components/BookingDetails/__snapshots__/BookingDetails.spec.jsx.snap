@@ -272,6 +272,7 @@ exports[`shallow render 1`] = `
           "toDashboard": [Function],
         }
       }
+      t={[Function]}
       tenant={
         Object {
           "data": Object {
@@ -590,6 +591,7 @@ exports[`theme is falsy 1`] = `
           "toDashboard": [Function],
         }
       }
+      t={[Function]}
       tenant={
         Object {
           "data": Object {

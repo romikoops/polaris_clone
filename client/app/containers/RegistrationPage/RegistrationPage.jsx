@@ -264,10 +264,11 @@ RegistrationPage.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { registering, registrationAttempt } = state.authentication
+  const { registering, registrationAttempt, req } = state.authentication
   return {
     registering,
-    registrationAttempt
+    registrationAttempt,
+    req
   }
 }
 

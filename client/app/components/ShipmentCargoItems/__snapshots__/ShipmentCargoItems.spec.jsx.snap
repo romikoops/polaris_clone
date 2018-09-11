@@ -84,7 +84,7 @@ exports[`shallow rendering 1`] = `
                 <p
                   className="input_label flex-none"
                 >
-                   Non Stackable 
+                  Non Stackable
                 </p>
                 <Tooltip
                   color=""
@@ -129,7 +129,7 @@ exports[`shallow rendering 1`] = `
                 <p
                   className="input_label flex-none"
                 >
-                   Dangerous Goods 
+                  Dangerous Goods
                 </p>
                 <Tooltip
                   color=""
@@ -360,7 +360,7 @@ exports[`shallow rendering 1`] = `
                 <div
                   className="flex-40 layout-row layout-align-center-center"
                 >
-                  Weight
+                  Gross Weight
                 </div>
                 <ValidatedInput
                   errorStyles={
@@ -418,7 +418,7 @@ exports[`shallow rendering 1`] = `
             className="expandIcon"
             onClick={[Function]}
           >
-            Aditional Details
+            Additional Details
             <i
               className="rotated fa fa-chevron-right"
             />
@@ -439,7 +439,8 @@ exports[`shallow rendering 1`] = `
                 <p
                   className="input_label flex-none"
                 >
-                   Total: 
+                  Total
+                  :
                 </p>
               </div>
             </div>
@@ -455,7 +456,8 @@ exports[`shallow rendering 1`] = `
                   <p
                     className="input_label flex-none"
                   >
-                     Volume: 
+                    Volume
+                    : 
                   </p>
                 </div>
                 <div
@@ -491,7 +493,8 @@ exports[`shallow rendering 1`] = `
                   <p
                     className="input_label flex-none"
                   >
-                     Chargeable Weight: 
+                    Chargeable Weight
+                    : 
                   </p>
                 </div>
                 <div
@@ -531,7 +534,8 @@ exports[`shallow rendering 1`] = `
             }
           />
           <p>
-             Add Unit
+             
+            Add unit
           </p>
         </div>
       </div>
@@ -603,7 +607,7 @@ exports[`shallow rendering 1`] = `
                   <p
                     className="input_label flex-none"
                   >
-                     Non Stackable 
+                    Non Stackable
                   </p>
                   <Tooltip
                     color=""
@@ -648,7 +652,7 @@ exports[`shallow rendering 1`] = `
                   <p
                     className="input_label flex-none"
                   >
-                     Dangerous Goods 
+                    Dangerous Goods
                   </p>
                   <Tooltip
                     color=""
@@ -798,7 +802,7 @@ exports[`shallow rendering 1`] = `
                   <div
                     className="flex-40 layout-row layout-align-center-center"
                   >
-                    Weight
+                    Gross Weight
                   </div>
                   <input
                     className="flex-80"
@@ -831,7 +835,7 @@ exports[`shallow rendering 1`] = `
               className="expandIcon"
               onClick={[Function]}
             >
-              Aditional Details
+              Additional Details
               <i
                 className="undefined fa fa-chevron-right"
               />
@@ -852,7 +856,8 @@ exports[`shallow rendering 1`] = `
                   <p
                     className="input_label flex-none"
                   >
-                     Total: 
+                    Total
+                    :
                   </p>
                 </div>
               </div>
@@ -868,7 +873,8 @@ exports[`shallow rendering 1`] = `
                     <p
                       className="input_label flex-none"
                     >
-                       Volume: 
+                      Volume
+                      : 
                     </p>
                   </div>
                   <div
@@ -903,7 +909,8 @@ exports[`shallow rendering 1`] = `
                     <p
                       className="input_label flex-none"
                     >
-                       Chargeable Weight: 
+                      Chargeable Weight
+                      : 
                     </p>
                   </div>
                   <div

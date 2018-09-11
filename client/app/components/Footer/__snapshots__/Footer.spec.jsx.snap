@@ -152,3 +152,156 @@ exports[`shallow render 1`] = `
   </div>
 </div>
 `;
+
+exports[`theme is falsy 1`] = `
+<div
+  className="flex-100 layout-row 
+      layout-wrap footer_wrapper layout-align-start"
+  style={Object {}}
+>
+  <div
+    className="contact_bar
+         flex-100 layout-row layout-align-center-center"
+  >
+    <div
+      className="flex-none content_width layout-row"
+    >
+      <div
+        className="flex-50 layout-row layout-align-start-center"
+      >
+        <img
+          src=""
+        />
+      </div>
+      <div
+        className="flex-50 layout-row layout-align-end-end"
+      >
+        <a
+          className="flex-none layout-row layout-align-center-center pointy contact_elem"
+          href="mailto:"
+        >
+          <i
+            aria-hidden="true"
+            className="fa fa-envelope"
+            style={
+              Object {
+                "color": "black",
+              }
+            }
+          />
+        </a>
+        <div
+          className="flex-none layout-row layout-align-center-end
+               contact_elem"
+        >
+          <i
+            aria-hidden="true"
+            className="fa fa-phone"
+            style={
+              Object {
+                "color": "black",
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="footer_shop layout-row flex-100 layout-wrap"
+  >
+    <div
+      className="flex-100 layout-align-center"
+    >
+      <div
+        className="flex-100 buttons upper_footer layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-25 layout-row layout-align-center-center"
+        >
+          <a
+            href="https://www.itsmycargo.com/en/ourstory"
+            target="_blank"
+          >
+            About Us
+          </a>
+        </div>
+        <div
+          className="flex-25 layout-row layout-align-center-center"
+        >
+          <a
+            href="https://itsmycargo.com/en/privacy"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+        </div>
+        <div
+          className="flex-25 layout-row layout-align-center-center"
+        >
+          <a
+            href="https://undefined.itsmycargo.com/terms_and_conditions"
+            target="_blank"
+          >
+            Terms and Conditions
+          </a>
+        </div>
+        <div
+          className="flex-25 layout-row layout-align-center-center"
+        >
+          <a
+            href="https://www.itsmycargo.com/en/contact"
+            target="_blank"
+          >
+            Legal
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-align-center"
+    >
+      <div
+        className="flex-100
+          layout-row layout-align-space-between-center lower_footer"
+      >
+        <div
+          className="flex-20"
+        />
+        <div
+          className="flex-60 buttons
+            layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-45 layout-row layout-align-end-center"
+          >
+            <div
+              className="flex-5"
+            />
+            <p
+              className="flex-none"
+            >
+              Powered by
+            </p>
+            <div
+              className="flex-5"
+            />
+          </div>
+          <div
+            className="flex-55 layout-row layout-align-start-center"
+          >
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
+          </div>
+        </div>
+        <div
+          className="flex-20"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

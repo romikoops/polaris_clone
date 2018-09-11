@@ -20,11 +20,12 @@ class AdminShipments extends Component {
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
   }
   componentDidMount () {
-    const { shipments, loading, adminDispatch } = this.props
+    const { shipments, loading, adminDispatch, match } = this.props
     if (!shipments && !loading) {
       adminDispatch.getShipments(false)
     }
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(match.url)
   }
   viewShipment (shipment) {
     const { adminDispatch } = this.props
@@ -181,6 +182,7 @@ AdminShipments.propTypes = {
     getShipments: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   history: PropTypes.history.isRequired,
   user: PropTypes.user

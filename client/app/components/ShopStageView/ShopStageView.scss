@@ -18,13 +18,21 @@
   }
   .shop_banner {
     height: 124px;
-    // background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
     background-image: url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg');
     background-size: cover;
     background-position: 0% 15%;
     background-repeat: no-repeat;
     position: relative;
     text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
+    @media screen and (max-width: 1620px) {
+      height: 100px;
+      background-image: url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg');
+      background-size: cover;
+      background-position: 0% 15%;
+      background-repeat: no-repeat;
+      position: relative;
+      text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
+    }
   }
   .shop_banner h3 {
     height: 41px;

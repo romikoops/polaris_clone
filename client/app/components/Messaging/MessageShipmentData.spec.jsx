@@ -4,8 +4,8 @@ import { theme, shipmentData, user, identity } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
   switchIcon: x => x,
-  totalPrice: x => x,
-  priceSpacing: x => x
+  priceSpacing: x => x,
+  totalPrice: x => x
 }))
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -63,9 +63,8 @@ test('props.closeInfo is called', () => {
   }
   const wrapper = mount(<MessageShipmentData {...props} />)
   const selector = 'div[className="flex-33 layout-row layout-align-space-around-center"]'
-
   const clickableDiv = wrapper.find(selector).last()
-
   clickableDiv.simulate('click')
+
   expect(props.closeInfo).toHaveBeenCalled()
 })

@@ -1,12 +1,12 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../../prop-types'
 import FormsyInput from '../../FormsyInput/FormsyInput'
 import styles from '../ShipmentContactForm.scss'
 import IconLable from '../IconLable'
-import { invalid } from 'moment';
 
-export default function CompanyDetailsSection ({
-  theme, contactData, setContactAttempted, checkValid
+export function CompanyDetailsSection ({
+  theme, contactData, setContactAttempted, checkValid, t
 }) {
   return (
     <div className="flex-100 layout-row layout-wrap">
@@ -20,7 +20,7 @@ export default function CompanyDetailsSection ({
             type="text"
             value={contactData.contact.companyName}
             name="companyName"
-            placeholder="Company Name"
+            placeholder={t('user:companyName')}
             submitAttempted={setContactAttempted}
             errorMessageStyles={{
               fontSize: '12px',
@@ -28,8 +28,8 @@ export default function CompanyDetailsSection ({
             }}
             validations="minLength:2"
             validationErrors={{
-              isDefaultRequiredValue: 'Minimum 2 characters',
-              minLength: 'Minimum 2 characters'
+              isDefaultRequiredValue: t('errors:twoChars'),
+              minLength: t('errors:twoChars')
             }}
             required
           />
@@ -45,7 +45,7 @@ export default function CompanyDetailsSection ({
               type="text"
               value={contactData.contact.firstName}
               name="firstName"
-              placeholder="First Name"
+              placeholder={t('user:firstName')}
               submitAttempted={setContactAttempted}
               errorMessageStyles={{
                 fontSize: '12px',
@@ -53,8 +53,8 @@ export default function CompanyDetailsSection ({
               }}
               validations="minLength:2"
               validationErrors={{
-                isDefaultRequiredValue: 'Minimum 2 characters',
-                minLength: 'Minimum 2 characters'
+                isDefaultRequiredValue: t('errors:twoChars'),
+                minLength: t('errors:twoChars')
               }}
               required
             />
@@ -64,7 +64,7 @@ export default function CompanyDetailsSection ({
               type="text"
               value={contactData.contact.lastName}
               name="lastName"
-              placeholder="Last Name"
+              placeholder={t('user:lastName')}
               submitAttempted={setContactAttempted}
               errorMessageStyles={{
                 fontSize: '12px',
@@ -72,8 +72,8 @@ export default function CompanyDetailsSection ({
               }}
               validations="minLength:2"
               validationErrors={{
-                isDefaultRequiredValue: 'Minimum 2 characters',
-                minLength: 'Minimum 2 characters'
+                isDefaultRequiredValue: t('errors:twoChars'),
+                minLength: t('errors:twoChars')
               }}
               required
             />
@@ -89,7 +89,7 @@ export default function CompanyDetailsSection ({
             type="text"
             value={contactData.contact.email}
             name="email"
-            placeholder="Email"
+            placeholder={t('user:email')}
             onBlur={() => checkValid('email')}
             submitAttempted={setContactAttempted}
             errorMessageStyles={{
@@ -97,11 +97,11 @@ export default function CompanyDetailsSection ({
               bottom: '-19px'
             }}
             validations={{
-              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
+              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
             }}
             validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              matchRegexp: 'Invalid email',
+              isDefaultRequiredValue: t('errors:notBlank'),
+              matchRegexp: t('errors:invalidEmail')
             }}
             required
           />
@@ -114,7 +114,7 @@ export default function CompanyDetailsSection ({
             type="text"
             value={contactData.contact.phone}
             name="phone"
-            placeholder="Phone"
+            placeholder={t('user:phone')}
             submitAttempted={setContactAttempted}
             errorMessageStyles={{
               fontSize: '12px',
@@ -122,7 +122,7 @@ export default function CompanyDetailsSection ({
             }}
             validations="minLength:4"
             validationErrors={{
-              isDefaultRequiredValue: 'Minimum 4 characters',
+              isDefaultRequiredValue: t('errors:fourChars'),
               minLength: 'Minimum 4 characters'
             }}
             required
@@ -135,6 +135,7 @@ export default function CompanyDetailsSection ({
 
 CompanyDetailsSection.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   contactData: PropTypes.objectOf(PropTypes.any).isRequired,
   setContactAttempted: PropTypes.bool,
   checkValid: PropTypes.func.isRequired
@@ -142,5 +143,7 @@ CompanyDetailsSection.propTypes = {
 
 CompanyDetailsSection.defaultProps = {
   theme: null,
-  setContactAttempted: false,
+  setContactAttempted: false
 }
+
+export default translate(['errors', 'user'])(CompanyDetailsSection)

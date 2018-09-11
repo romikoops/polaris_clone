@@ -8,6 +8,7 @@ class ShipmentsController < ApplicationController
 
   def index
     @shipper = current_user
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     requested_shipments = @shipper.shipments.where(
       status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
@@ -22,20 +23,20 @@ class ShipmentsController < ApplicationController
     o_shipments = open_shipments
     f_shipments = finished_shipments
     num_pages = {
-      finished: (f_shipments.count / 4.0).ceil,
-      requested: (r_shipments.count / 4.0).ceil,
-      open: (o_shipments.count / 4.0).ceil
+      finished: (f_shipments.count / per_page).ceil,
+      requested: (r_shipments.count / per_page).ceil,
+      open: (o_shipments.count / per_page).ceil
     }
-
+    
     response_handler(
       requested:          requested_shipments
-        .paginate(page: params[:requested_page])
+        .paginate(page: params[:requested_page], per_page: per_page)
         .map(&:with_address_options_json),
       open:               open_shipments
-        .paginate(page: params[:open_page])
+        .paginate(page: params[:open_page], per_page: per_page)
         .map(&:with_address_options_json),
       finished:           finished_shipments
-        .paginate(page: params[:finished_page])
+        .paginate(page: params[:finished_page], per_page: per_page)
         .map(&:with_address_options_json),
       pages:              {
         open:      params[:open_page],
@@ -55,8 +56,9 @@ class ShipmentsController < ApplicationController
     when "finished"
       shipment_association = current_user.shipments.finished
     end
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association
-      .paginate(page: params[:page])
+      .paginate(page: params[:page], per_page: per_page)
       .map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
@@ -87,18 +89,17 @@ class ShipmentsController < ApplicationController
     when "finished"
       shipment_association = current_user.shipments.finished
     end
-
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     (filterrific = initialize_filterrific(
       shipment_association,
       filterific_params,
       available_filters: filters,
       sanitize_params:   true
     )) || return
-    shipments = filterrific.find.page(params[:page]).map(&:with_address_options_json)
-
+    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
-      num_shipment_pages: (filterrific.find.count / 6.0).ceil,
+      num_shipment_pages: (filterrific.find.count / per_page).ceil,
       target:             params[:target],
       page:               params[:page]
     )

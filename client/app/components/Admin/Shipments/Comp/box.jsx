@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import { v4 } from 'uuid'
 import PropTypes from '../../../../prop-types'
 import styles from '../../Admin.scss'
-import { ShipmentOverviewCard } from '../../../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../../../ShipmentCard/ShipmentOverviewCard'
 
 export class AdminShipmentsBox extends Component {
   constructor (props) {
@@ -11,11 +11,6 @@ export class AdminShipmentsBox extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
-  componentDidUpdate (prevProps) {
-    // if (prevProps.shipments !== this.props.shipments) {
-    //   this.handleSearchChange({ target: { value: '' } })
-    // }
-  }
   seeAll () {
     const { seeAll, dispatches } = this.props
     if (seeAll) {

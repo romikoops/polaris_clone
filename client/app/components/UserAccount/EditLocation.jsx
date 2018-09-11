@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 // import defaults from '../../styles/default_classes.scss';
@@ -139,6 +140,7 @@ export class EditLocation extends Component {
       const place = autocomplete.getPlace()
       if (!place.geometry) {
         window.alert(`No details available for input: '${place.name}'`)
+
         return
       }
 
@@ -224,6 +226,7 @@ export class EditLocation extends Component {
   }
 
   render () {
+    const { t } = this.props
     const originFields = (
       <div className="flex-80 layout-row layout-wrap layout-align-end-space-around">
         <input
@@ -233,7 +236,7 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAddressChange}
           value={this.state.location.number}
-          placeholder="Number"
+          placeholder={t('user:streetNumber')}
         />
         <input
           name="location-street"
@@ -241,7 +244,7 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAddressChange}
           value={this.state.location.street}
-          placeholder="Street"
+          placeholder={t('user:street')}
         />
         <input
           name="location-zipCode"
@@ -249,7 +252,7 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAddressChange}
           value={this.state.location.zipCode}
-          placeholder="Zip Code"
+          placeholder={t('user:postalCode')}
         />
         <input
           name="location-city"
@@ -257,7 +260,7 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAddressChange}
           value={this.state.location.city}
-          placeholder="City"
+          placeholder={t('user:city')}
         />
         <input
           name="location-country"
@@ -265,7 +268,7 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAddressChange}
           value={this.state.location.country}
-          placeholder="Country"
+          placeholder={t('user:country')}
         />
         <div className="flex-100 layout-row layout-align-start-center">
           <div
@@ -296,10 +299,11 @@ export class EditLocation extends Component {
           type="string"
           onChange={this.handleAuto}
           value={this.state.autoText.location}
-          placeholder="Search for address"
+          placeholder={t('nav:searchAddress')}
         />
       </div>
     )
+
     return (
       <div className="layout-row flex-100 layout-wrap">
         <h1
@@ -312,7 +316,7 @@ export class EditLocation extends Component {
             onClick={() => this.props.toggleActiveView('allLocations')}
           >
             <i className="flex-none fa fa-checvron-left" />
-            <p className="flex-none">Back</p>
+            <p className="flex-none">{t('common:basicBack')}</p>
           </div>
         </div>
         <div
@@ -339,6 +343,7 @@ export class EditLocation extends Component {
 
 EditLocation.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   toggleActiveView: PropTypes.func.isRequired,
   saveLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
@@ -352,4 +357,4 @@ EditLocation.defaultProps = {
   location: {}
 }
 
-export default EditLocation
+export default translate(['user', 'common', 'nav'])(EditLocation)

@@ -1,9 +1,10 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import styles from './UserAccount.scss'
 import { capitalize } from '../../helpers'
 
-export function UserMergedShipment ({ ship, viewShipment }) {
+export function UserMergedShipment ({ ship, viewShipment, t }) {
   return (
     <div
       className={`flex-100 layout-row layout-align-start-center pointy ${styles.ship_row}`}
@@ -24,7 +25,9 @@ export function UserMergedShipment ({ ship, viewShipment }) {
         {/* <p className="flex-none">{ship.incoterm}</p> */}
       </div>
       <div className={`flex-15 layout-row layout-align-start-center ${styles.ship_row_cell}`}>
-        <p className="flex-none"> Yes </p>
+        <p className="flex-none">
+          {t('common:yes')}
+        </p>
       </div>
     </div>
   )
@@ -32,6 +35,7 @@ export function UserMergedShipment ({ ship, viewShipment }) {
 
 UserMergedShipment.propTypes = {
   viewShipment: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
   ship: PropTypes.shape({
     originHub: PropTypes.string,
     destinationHub: PropTypes.string,
@@ -41,4 +45,4 @@ UserMergedShipment.propTypes = {
   }).isRequired
 }
 
-export default UserMergedShipment
+export default translate('common')(UserMergedShipment)

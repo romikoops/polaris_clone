@@ -7,15 +7,20 @@ import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
 import styles from './Shop.scss'
-import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
-import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
+// eslint-disable-next-line no-named-as-default
+import ShopStageView from '../../components/ShopStageView/ShopStageView'
+// eslint-disable-next-line no-named-as-default
+import ShipmentDetails from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
+// eslint-disable-next-line no-named-as-default
 import Loading from '../../components/Loading/Loading'
-import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
-import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
+// eslint-disable-next-line no-named-as-default
+import BookingDetails from '../../components/BookingDetails/BookingDetails'
+import BookingConfirmation from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions, authenticationActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
-import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
+// eslint-disable-next-line no-named-as-default
+import ShipmentThankYou from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
 
@@ -103,9 +108,7 @@ class Shop extends Component {
   }
 
   hideRegistration () {
-    this.setState({
-      showRegistration: false
-    })
+    this.props.authenticationDispatch.closeLogin()
   }
 
   toggleShowMessages () {
@@ -179,7 +182,7 @@ class Shop extends Component {
       request, response, error, reusedShipment, contacts, originalSelectedDay
     } = bookingData
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
-    const { req, showRegistration } = this.state
+    const { showRegistration } = this.state
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
@@ -191,7 +194,6 @@ class Shop extends Component {
           component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
-          req={req}
           noMessages
           scrollable
           noRedirect
@@ -363,7 +365,8 @@ Shop.propTypes = {
     update: PropTypes.func
   }).isRequired,
   authenticationDispatch: PropTypes.shape({
-    showLogin: PropTypes.func
+    showLogin: PropTypes.func,
+    closeLogin: PropTypes.func
   }).isRequired
 }
 

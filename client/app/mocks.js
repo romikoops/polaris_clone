@@ -27,9 +27,11 @@ export const change = (origin, pathRaw, rules) => {
   
   if (!isObject(rules)) {
     set(willReturn, pathRaw, rules)
+
     return willReturn
   }
   const path = pathRaw === '' ? '' : `${pathRaw}.`
+
   for (const ruleKey of Object.keys(rules)) {
     const rule = rules[ruleKey]
     if (!isObject(rule)) {

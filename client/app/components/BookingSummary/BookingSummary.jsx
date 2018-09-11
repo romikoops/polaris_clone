@@ -20,10 +20,8 @@ function BookingSummary (props) {
         : 'black',
     backgroundSize: '16px 2px, 100% 2px'
   }
-  // const modesOfTransport = Object.keys(scope.modes_of_transport)
-  //   .filter(mot => scope.modes_of_transport[mot])
-  // const icons = modesOfTransport.map(mot => switchIcon(mot))
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
+
   return (
     <div className={`${styles.booking_summary} flex-50 layout-row`}>
       <div className={`${styles.route_sec} flex-40 layout-column layout-align-stretch`}>
@@ -139,6 +137,7 @@ BookingSummary.defaultProps = {
 function mapStateToProps (state) {
   const { tenant, bookingSummary } = state
   const { theme } = tenant.data
+
   return { ...bookingSummary, theme }
 }
 

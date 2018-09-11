@@ -8,6 +8,8 @@ import {
   identity,
   theme
 } from '../../mocks'
+// eslint-disable-next-line import/first no-named-as-default
+import ShipmentSummaryBox from './ShipmentSummaryBox'
 
 jest.mock('../../constants', () => {
   const format = () => 19
@@ -38,8 +40,6 @@ jest.mock('../TextHeading/TextHeading', () => ({
   // eslint-disable-next-line react/prop-types
   TextHeading: ({ children }) => <div>{children}</div>
 }))
-// eslint-disable-next-line import/first
-import { ShipmentSummaryBox } from './ShipmentSummaryBox'
 
 const edittedShipment = {
   ...shipment,

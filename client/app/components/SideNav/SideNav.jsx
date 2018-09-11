@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
@@ -18,32 +19,33 @@ class SideNav extends Component {
       linkVisibility: [],
       activeIndex: -1
     }
+    const { t } = this.props
     this.userLinks = [
       {
         key: v4(),
         icon: 'fa-tachometer',
-        text: 'Dashboard',
-        url: '/account/dashboard',
+        url: '/account',
+        text: t('account:dashboard'),
         target: 'dashboard'
       },
       {
         key: v4(),
         icon: 'fa-ship',
-        text: 'Shipments',
+        text: t('account:shipments'),
         url: '/account/shipments',
         target: 'shipments'
       },
       {
         key: v4(),
         icon: 'fa-user',
-        text: 'Profile',
+        text: t('account:profile'),
         url: '/account/profile',
         target: 'profile'
       },
       {
         key: v4(),
         icon: 'fa-address-card',
-        text: 'Contacts',
+        text: t('account:contacts'),
         url: '/account/contacts',
         target: 'contacts'
       }
@@ -52,7 +54,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-tachometer',
-        text: 'Dashboard',
+        text: t('account:dashboard'),
         url: '/admin/dashboard',
         target: 'dashboard',
         tooltip: menuTip.dashboard
@@ -60,7 +62,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-ship',
-        text: 'Shipments',
+        text: t('account:shipments'),
         url: '/admin/shipments',
         target: 'shipments',
         tooltip: menuTip.shipments
@@ -68,7 +70,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-building-o',
-        text: 'Hubs',
+        text: t('account:hubs'),
         url: '/admin/hubs',
         target: 'hubs',
         tooltip: menuTip.hubs
@@ -76,15 +78,15 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-area-chart',
-        text: 'Pricing',
-        url: '/admin/pricing',
+        url: '/admin/pricings',
+        text: t('account:pricing'),
         target: 'pricing',
         tooltip: menuTip.pricing
       },
       {
         key: v4(),
         icon: 'fa-list',
-        text: 'Schedules',
+        text: t('account:schedules'),
         url: '/admin/schedules',
         target: 'schedules',
         tooltip: menuTip.schedules
@@ -92,7 +94,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-users',
-        text: 'Clients',
+        text: t('account:clients'),
         url: '/admin/clients',
         target: 'clients',
         tooltip: menuTip.clients
@@ -100,7 +102,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-map-signs',
-        text: 'Routes',
+        text: t('account:routes'),
         url: '/admin/routes',
         target: 'routes',
         tooltip: menuTip.routes
@@ -108,13 +110,14 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-money',
-        text: 'Currencies',
+        text: t('account:currencies'),
         url: '/admin/currencies',
         target: 'currencies',
         tooltip: menuTip.currencies
       }
     ]
-
+    const width = window.innerWidth
+    this.perPage = width >= 1920 ? 6 : 4
     const { user } = props
     const isAdmin = (user.role && user.role.name === 'admin') ||
       (user.role && user.role.name === 'super_admin') ||
@@ -123,7 +126,7 @@ class SideNav extends Component {
     const superAdminLink = {
       key: 'super-admin',
       icon: 'fa-star',
-      text: 'SuperAdmin',
+      text: t('account:superAdmin'),
       url: '/admin/superadmin',
       target: 'superadmin'
     }
@@ -149,7 +152,11 @@ class SideNav extends Component {
         }
       }, 200)
     }
+    if (nextProps.currentUrl !== this.props.currentUrl) {
+      this.updateActiveIndex(nextProps.currentUrl)
+    }
   }
+
   setAdminUrl (target) {
     const { adminDispatch, tenant } = this.props
     const { scope } = tenant.data
@@ -176,7 +183,7 @@ class SideNav extends Component {
         adminDispatch.getTrucking(true)
         break
       case 'shipments':
-        adminDispatch.getShipments(1, 1, 1, true)
+        adminDispatch.getShipments(1, 1, 1, this.perPage, true)
         break
       case 'clients':
         adminDispatch.getClients(true)
@@ -210,7 +217,7 @@ class SideNav extends Component {
         userDispatch.getPricings(user.id, true)
         break
       case 'shipments':
-        userDispatch.getShipments(1, 1, 1, true)
+        userDispatch.getShipments(1, 1, 1, this.perPage, true)
         break
       case 'contacts':
         userDispatch.getContacts(true, 1)
@@ -238,6 +245,17 @@ class SideNav extends Component {
   }
   toggleActiveIndex (index) {
     this.setState({ activeIndex: index })
+  }
+  updateActiveIndex (currentUrl) {
+    const { user } = this.props
+    const isAdmin = user && user.role && user.role.name.includes('admin')
+    const newActiveLink = isAdmin
+      ? this.adminLinks.filter(li => li.url === currentUrl)[0]
+      : this.userLinks.filter(li => li.url === currentUrl)[0]
+    const newActiveIndex = isAdmin
+      ? this.adminLinks.indexOf(newActiveLink)
+      : this.userLinks.indexOf(newActiveLink)
+    this.toggleActiveIndex(newActiveIndex)
   }
   handleClickAction (li, i, isAdmin) {
     if (!this.state.linkVisibility[i] && !this.props.expand) return
@@ -315,6 +333,7 @@ class SideNav extends Component {
 SideNav.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
+  t: PropTypes.func.isRequired,
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
@@ -335,13 +354,15 @@ SideNav.propTypes = {
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
   }).isRequired,
-  expand: PropTypes.bool
+  expand: PropTypes.bool,
+  currentUrl: PropTypes.string
 }
 
 SideNav.defaultProps = {
   theme: null,
   tenant: null,
-  expand: false
+  expand: false,
+  currentUrl: ''
 }
 
 function mapStateToProps (state) {
@@ -366,4 +387,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav))
+export default translate('account')(withRouter(connect(mapStateToProps, mapDispatchToProps)(SideNav)))

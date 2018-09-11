@@ -177,6 +177,101 @@ exports[`shallow render 1`] = `
 </div>
 `;
 
+exports[`showModal is true 1`] = `
+<div
+  className="header layout-row flex-100 layout-wrap layout-align-center   "
+  style={
+    Object {
+      "color": "black",
+    }
+  }
+>
+  <div
+    className="flex-100 layout-row"
+    style={
+      Object {
+        "padding": "0 15px",
+      }
+    }
+  >
+    <div
+      className="layout-row flex layout-align-start-center"
+    >
+      <img
+        alt=""
+        onClick={[Function]}
+        src=""
+        style={
+          Object {
+            "display": "block",
+          }
+        }
+      />
+    </div>
+    <div>
+      FooComponent
+    </div>
+    <div
+      className="flex layout-row layout-align-end-center"
+    >
+      <div
+        className="layout-row layout-align-space-around-center"
+      >
+        <NavDropdown
+          dropDownText="John Doe"
+          invert={false}
+          isLanding={false}
+          linkOptions={
+            Array [
+              Object {
+                "fontAwesomeIcon": "fa-cog",
+                "key": "settings",
+                "text": "Account",
+                "url": "/account",
+              },
+              Object {
+                "fontAwesomeIcon": "fa-sign-out",
+                "key": "signOut",
+                "text": "Sign out",
+                "url": "/signout",
+              },
+            ]
+          }
+          toggleShowLogin={[Function]}
+          user={
+            Object {
+              "company_name": "FOO_COMPANY",
+              "currency": "EUR",
+              "email": "foo@bar.baz",
+              "first_name": "John",
+              "guest": false,
+              "last_name": "Doe",
+              "phone": "6345789",
+              "role": Object {
+                "name": "shipper",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-none layout-row layout-align-center-center mail_box"
+          onClick={[Function]}
+        >
+          <span
+            className="all_read flex-none"
+          >
+            0
+          </span>
+          <i
+            className="fa fa-envelope-o"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`showRegistration is true 1`] = `
 <div
   className="header layout-row flex-100 layout-wrap layout-align-center   "

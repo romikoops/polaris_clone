@@ -28,7 +28,8 @@ exports[`shallow render 1`] = `
           <div
             className="welcome flex layout-row"
           >
-            Welcome back,  
+            Welcome back,
+              
             <b>
               John
             </b>
@@ -68,6 +69,7 @@ exports[`shallow render 1`] = `
       hubs={Object {}}
       noTitle={false}
       shipments={Array []}
+      t={[Function]}
       theme={
         Object {
           "colors": Object {
@@ -77,6 +79,7 @@ exports[`shallow render 1`] = `
         }
       }
     />
+      
     <div
       className="layout-row flex-100 layout-align-center-center space"
     >

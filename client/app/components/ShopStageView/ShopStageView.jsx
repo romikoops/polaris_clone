@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
@@ -96,7 +97,12 @@ export class ShopStageView extends Component {
     )
   }
   render () {
-    const { theme, hasNextStage, tenant } = this.props
+    const {
+      theme,
+      hasNextStage,
+      tenant,
+      t
+    } = this.props
     const { showHelp } = this.state
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
@@ -123,7 +129,9 @@ export class ShopStageView extends Component {
           </div>
           <div style={gradientCircle} className={styles.shop_stage_current_border} />
         </div>
-        <p className={`flex-none ${styles.stage_text}`}>Previous Step</p>
+        <p className={`flex-none ${styles.stage_text}`}>
+          {t('common:previousStep')}
+        </p>
       </div>
     )
     const help = (
@@ -131,7 +139,9 @@ export class ShopStageView extends Component {
         className="flex-none layout-row layout-align-center-center pointy"
         onClick={() => this.showContactHelp()}
       >
-        <p className="flex-none">Need Help</p>
+        <p className="flex-none">
+          {t('help:needHelp')}
+        </p>
         <i className="fa fa-question-circle" />
       </div>
     )
@@ -151,7 +161,9 @@ export class ShopStageView extends Component {
           </div>
           <div style={gradientCircle} className={styles.shop_stage_current_border} />
         </div>
-        <p className={`flex-none ${styles.stage_text}`}>Next Step</p>
+        <p className={`flex-none ${styles.stage_text}`}>
+          {t('common:nextStep')}
+        </p>
       </div>
     ) : (
       <div className={`${styles.stage_box} flex-none layout-column layout-align-start-center`} />
@@ -193,6 +205,7 @@ export class ShopStageView extends Component {
 ShopStageView.propTypes = {
   theme: PropTypes.theme,
   tenant: PropTypes.tenant,
+  t: PropTypes.func.isRequired,
   setStage: PropTypes.func.isRequired,
   currentStage: PropTypes.number,
   shopType: PropTypes.string.isRequired,
@@ -210,4 +223,4 @@ ShopStageView.defaultProps = {
   goForward: null
 }
 
-export default ShopStageView
+export default translate(['common', 'help'])(ShopStageView)

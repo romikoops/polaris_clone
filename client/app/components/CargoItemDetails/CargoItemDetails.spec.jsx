@@ -2,8 +2,8 @@ import * as React from 'react'
 import { shallow } from 'enzyme'
 import { theme } from '../../mocks'
 
-// eslint-disable-next-line import/first
-import { CargoItemDetails } from './CargoItemDetails'
+// eslint-disable-next-line
+import CargoItemDetails from './CargoItemDetails'
 
 const propsBase = {
   item: {
