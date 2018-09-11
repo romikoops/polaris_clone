@@ -2,20 +2,43 @@
 
 require 'rails_helper'
 
-# Allow outbound HTTP requests.
-WebMock.allow_net_connect!
-
 describe Country, type: :model do
-	context 'class methods' do
-		context '.geo_find_by_name' do
-			it 'returns nil if no country was found' do      		
-		  	expect(described_class.geo_find_by_name("asdfas")).to be_nil
-			end
+  before(:all) do
+    Geocoder.configure(lookup: :test)
+    Geocoder::Lookup::Test.add_stub(
+      { country: 'asdfas' }, []
+    )
+    Geocoder::Lookup::Test.add_stub(
+      { country: 'sweden' }, [
+        {
+          'address_components' => [{ 'long_name' => 'Sweden', 'short_name' => 'SE', 'types' => %w(country political) }],
+          'formatted_address' => 'Sweden',
+          'geometry' =>
+          { 'bounds' => { 
+            'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 },
+            'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } },
+            'location' => { 
+              'lat' => 60.12816100000001, 'lng' => 18.643501 },
+            'location_type' => 'APPROXIMATE',
+            'viewport' => { 
+              'northeast' => { 'lat' => 69.0599709, 'lng' => 24.1773101 },
+              'southwest' => { 'lat' => 55.0059799, 'lng' => 10.5798 } } },
+          'partial_match' => true,
+          'place_id' => 'ChIJ8fA1bTmyXEYRYm-tjaLruCI',
+          'types' => %w(country political)
+        }
+      ]
+    )
+  end
+  
+  context '.geo_find_by_name' do
+    it 'returns nil if no country was found' do
+      expect(described_class.geo_find_by_name('asdfas')).to be_nil
+    end
 
-			it 'returns the correct country' do
-				country = create(:country)
-		  	expect(described_class.geo_find_by_name("sweden")).to eq(country)
-			end
-		end
-	end
+    it 'returns the correct country' do
+      country = create(:country)
+      expect(described_class.geo_find_by_name('sweden')).to eq(country)
+    end
+  end
 end
