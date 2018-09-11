@@ -169,41 +169,6 @@ function chooseOffer (data) {
   }
 }
 
-function chooseQuotes (data) {
-  function request (shipmentData) {
-    return {
-      type: shipmentConstants.CHOOSE_QUOTES_REQUEST,
-      shipmentData
-    }
-  }
-  function success (shipmentData) {
-    return {
-      type: shipmentConstants.CHOOSE_QUOTES_SUCCESS,
-      shipmentData
-    }
-  }
-  function failure (error) {
-    return { type: shipmentConstants.CHOOSE_QUOTES_FAILURE, error }
-  }
-
-  return (dispatch) => {
-    dispatch(request(data))
-
-    shipmentService.chooseQuotes(data).then(
-      (resp) => {
-        const shipmentData = resp.data
-        dispatch(success(shipmentData))
-        // dispatch(push(`/booking/${shipmentData.shipment.id}/thank_you`))
-        dispatch(alertActions.success('Set Shipment Route successful'))
-      },
-      (error) => {
-        dispatch(failure(error))
-        dispatch(alertActions.error(error))
-      }
-    )
-  }
-}
-
 function setShipmentContacts (data) {
   function request (shipmentData) {
     return {
@@ -574,7 +539,6 @@ export const shipmentActions = {
   reuseShipment,
   newShipment,
   chooseOffer,
-  chooseQuotes,
   getOffers,
   setShipmentContacts,
   fetchShipment,

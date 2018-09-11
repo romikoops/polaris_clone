@@ -127,7 +127,7 @@ class Shop extends Component {
         shipmentDispatch.getOffers(req, tenant.data.subdomain, true)
         break
       case 3:
-        shipmentDispatch.chooseOffer(req) || shipmentDispatch.chooseQuotes(req)
+        shipmentDispatch.chooseOffer(req)
         break
       case 4:
         shipmentDispatch.setShipmentContacts(req)
@@ -357,7 +357,6 @@ Shop.propTypes = {
     updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
-    chooseQuotes: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   userDispatch: PropTypes.shape({
