@@ -106,6 +106,7 @@ export class ShopStageView extends Component {
       t
     } = this.props
     const { showHelp } = this.state
+    const isQuote = (tenant && tenant.data && tenant.data.scope) && (tenant.data.scope.closed_quotation_tool || tenant.data.scope.open_quotation_tool)
     const stageBoxes = this.applicableStages.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
@@ -191,7 +192,7 @@ export class ShopStageView extends Component {
             <div
               className={`${styles.line_box} layout-row layout-align-center flex-none`}
             >
-              <div className={`${styles.line} flex-none`} />
+              <div className={`${isQuote ? styles.quote_line : styles.line} flex-none`} />
               {stageBoxes}
             </div>
           </div>

@@ -13,6 +13,16 @@ module ShippingTools
     schedules.each do |schedule|
       trip = Trip.find(schedule["trip_id"])
       binding.pry
+      on_carriage_hash = !!schedule["quote"]["trucking_on"] ? 
+      {
+        truck_type: "",
+        location_id: Location.geocoded_location(shipment.delivery_address).id
+      } : nil
+      pre_carriage_hash = !!schedule["quote"]["trucking_pre"] ? 
+      {
+        truck_type: "",
+        location_id: Location.geocoded_location(shipment.pickup_address).id
+      } : nil
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
@@ -26,15 +36,13 @@ module ShippingTools
         planned_eta: shipment.planned_eta,
         planned_etd: shipment.planned_etd,
         trucking: { 
-          has_pre_carriage: !!schedule["quote"]["trucking_pre"],
-          has_on_carriage: !!schedule["quote"]["trucking_on"]
+          has_pre_carriage: pre_carriage_hash,
+          has_on_carriage: on_carriage_hash
         },
         load_type: shipment.load_type,
         itinerary: trip.itinerary
       )
       new_shipment.cargo_items = shipment.cargo_items
-      new_shipment.pickup_address = shipment.pickup_address
-      new_shipment.delivery_address = shipment.delivery_address
       shipment.charge_breakdowns.each do |charge_breakdown|
 
         # charges = charge_breakdown.charges.dup
