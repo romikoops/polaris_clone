@@ -37,11 +37,11 @@
         bottom: 0;
         left: 0;
         right: 0;
-        cursor: not-allowed;
+        // cursor: not-allowed;
         z-index: 20;
       }
       &.disabled {
-        opacity: 0.4;
+        cursor: not-allowed;
       }
     }
     .carriage_sec {

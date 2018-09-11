@@ -297,54 +297,18 @@ export class ChooseOffer extends Component {
 
               <div className="flex-100 layout-row layout-align-center-center">
                 <div
-                  className="flex-33 layout-row layout-align-space-around-center"
+                  className="flex-33 pointy layout-row layout-align-space-around-center"
                   onClick={() => this.showMore()}
                 >
                   <i className="flex-none fa fa-angle-double-down" />
                   <div className="flex-5" />
-                  <p className="flex-none">More</p>
+                  <p className="flex-none">More Departures</p>
                   <div className="flex-5" />
                   <i className="flex-none fa fa-angle-double-down" />
                 </div>
               </div>
 
             </div>
-            {/* <div className="flex-100 layout-row layout-wrap">
-              <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                <div className="flex-none">
-                  <TextHeading theme={theme} size={3} text="Alternative modes of transport" />
-                </div>
-              </div>
-               {altRoutestoRender}
-              {limitedAlts.length !== altRoutes.length ? (
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <div
-                    className="flex-33 layout-row layout-align-space-around-center"
-                    onClick={() => this.toggleLimits('alt')}
-                  >
-                    {limits.alt ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                    <div className="flex-5" />
-                    {limits.alt ? (
-                      <p className="flex-none">More</p>
-                    ) : (
-                      <p className="flex-none">Less</p>
-                    )}
-                    <div className="flex-5" />
-                    {limits.alt ? (
-                      <i className="flex-none fa fa-angle-double-down" />
-                    ) : (
-                      <i className="flex-none fa fa-angle-double-up" />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                ''
-              )}
-            </div> */}
           </div>
         </div>
 
