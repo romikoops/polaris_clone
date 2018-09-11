@@ -48,9 +48,11 @@ class Geometry < ApplicationRecord
     results["contains"]
   end
 
+
   private
 
   def self.cascading_find_by_two_names(raw_name_1, raw_name_2)
+    binding.pry
     name_1 = raw_name_1.split.map(&:capitalize).join(" ")
     name_2 = raw_name_2.split.map(&:capitalize).join(" ")
 
@@ -69,7 +71,7 @@ class Geometry < ApplicationRecord
     name = raw_name.split.map(&:capitalize).join(" ")
 
     (1..4).to_a.reverse.each do |i|
-      result = where("name_#{i}" => name).first
+      result = where("name_#{i} ILIKE ?", name).first
       return result unless result.nil?
     end
 
