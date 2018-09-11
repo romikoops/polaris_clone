@@ -66,14 +66,28 @@ export class AdminShipmentsBox extends Component {
             />
           </div>
         </div>
-        <ShipmentOverviewCard
-          dispatches={dispatches}
-          noTitle
-          confirmShipmentData={confirmShipmentData}
-          shipments={shipments}
-          admin={!userView}
-          theme={theme}
-        />
+
+        {shipments.length === 0 ? (
+          <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_subheader
+              }`}
+            >
+              <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
+            </div>
+            <p className="flex-none"> As shipments are requested, they will appear here</p>
+          </div>
+        ) : (
+          <ShipmentOverviewCard
+            dispatches={dispatches}
+            noTitle
+            confirmShipmentData={confirmShipmentData}
+            shipments={shipments}
+            admin={!userView}
+            theme={theme}
+          />
+        )}
         <div className="flex-95 layout-row layout-align-center-center margin_bottom">
           <div
             className={`

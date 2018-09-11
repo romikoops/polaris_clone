@@ -10,24 +10,20 @@ module OfferCalculatorService
     private
 
     def build_route_objs
+      @schedules = []
       @routes.map do |route|
         @route = route
-        Schedule.new(attributes.merge(id: SecureRandom.uuid))
+        @itinerary = Itinerary.find(@route.itinerary_id)
+        tenant_vehicle_ids = @itinerary.pricings.pluck(:tenant_vehicle_id).uniq
+        tenant_vehicle_ids.each { |id| @schedules << Schedule.new(attributes(id).merge(id: SecureRandom.uuid)) }
       end
+      @schedules
     end
 
-    def attributes
-      oute_obj = @route.as_json
-      origin_hub = hub = Stop.find(@route.origin_stop_id).hub
-      destination_hub = hub = Stop.find(@route.destination_stop_id).hub
-      itinerary = Itinerary.find(@route.itinerary_id)
-      tenant_vehicle = TenantVehicle.find_by(
-        name: "standard",
-        mode_of_transport: @route.mode_of_transport,
-        tenant_id: itinerary.tenant_id
-      )
-      
-      faux_trip = itinerary.trips.create!(tenant_vehicle_id: tenant_vehicle.id)
+    def attributes(tenant_vehicle_id)
+      origin_hub = Stop.find(@route.origin_stop_id).hub
+      destination_hub = Stop.find(@route.destination_stop_id).hub
+      faux_trip = @itinerary.trips.find_or_create_by!(tenant_vehicle_id: tenant_vehicle_id)
       {
         origin_hub_id: origin_hub.id,
         destination_hub_id: destination_hub.id,
@@ -38,9 +34,9 @@ module OfferCalculatorService
         closing_date: nil,
         trip_id: faux_trip.id,
         mode_of_transport: @route.mode_of_transport,
-        vehicle_name:      'standard'
+        vehicle_name:      faux_trip.tenant_vehicle.name,
+        carrier_name:      faux_trip.tenant_vehicle&.carrier&.name
       }
     end
-
   end
 end

@@ -1,9 +1,22 @@
-<mj-section full-width="full-width" padding="0px">
-  <mj-column width="100%">
-      <mj-text line-height="24px">
-        <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
-      </mj-text>
-  </mj-column>
+<% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-image width="300px" src="<%= @user.tenant.theme["logoLarge"] %>" />
+      </mj-column>
+    </mj-section>
+    <mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>
+
+ <mj-section full-width="full-width" padding="0px">
+    <mj-column width="100%">
+        <mj-text line-height="24px">
+          <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
+        </mj-text>
+    </mj-column>
+    
 </mj-section>
 <%= render "details_body" %>
 <mj-section full-width="full-width" padding="0px">
@@ -46,3 +59,8 @@
    </mj-text>
   </mj-column>
 </mj-section>
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>

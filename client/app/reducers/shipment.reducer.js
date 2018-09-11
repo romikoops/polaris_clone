@@ -171,7 +171,6 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
-        contacts: action.shipmentData.contacts,
         response: {
           ...state.response,
           stage3: action.shipmentData

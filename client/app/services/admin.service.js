@@ -211,15 +211,17 @@ function getServiceCharges () {
 
   return fetch(`${BASE_URL}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (requestedPage, openPage, finishedPage, perPage) {
+function getShipments (pages, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   let query = ''
-  query += `open_page=${openPage || 1}`
-  query += `&requested_page=${requestedPage || 1}`
-  query += `&finished_page=${finishedPage || 1}`
+  const queryKeys = Object.keys(pages)
+  queryKeys.forEach((status, i) => {
+    query += `${status}_page=${pages[status] || 1}`
+    if (i > 0 && i < queryKeys.length - 1) query += '&'
+  })
   if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments?${query}`, requestOptions).then(handleResponse)

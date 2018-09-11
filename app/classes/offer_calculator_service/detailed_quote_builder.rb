@@ -17,6 +17,7 @@ module OfferCalculatorService
 
         schedule.total_price = grand_total_charge.price.as_json(only: %i(value currency))
         detailed_schedule = schedule.to_detailed_hash
+        detailed_schedule[:quote] = grand_total_charge.deconstruct_tree_into_schedule_charge
         next if detailed_schedule.dig(:total_price, "value").zero?
 
         detailed_schedule

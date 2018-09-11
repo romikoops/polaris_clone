@@ -1,0 +1,362 @@
+<style media="screen" type="text/css">
+  body{
+    color: #4F4F4F;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .wrapper {
+    padding-left: 400px;
+    padding-right: 400px;
+  }
+  .wrapper .title {
+    padding: 320px 0 !important;
+  }
+  .wrapper .title h1 {
+    font-size: 80px !important;
+    font-weight: bold !important;
+  }
+  .wrapper .title p {
+    font-size: 40px !important;
+  }
+  .wrapper .title hr {
+    max-width: 530px;
+    border-style: solid;
+    border-width: 2px;
+    margin: 40px 0;
+  }
+  .col-xs-12{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word; 
+  }
+
+  .col-xs-6{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-2{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-1{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-5{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-3{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-7{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+    padding-top: 35px;
+  }
+  .col-xs-8{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-9{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+  .col-xs-4{
+    padding: 0%;
+    margin: 0%;
+    word-wrap: break-word;
+  }
+
+  .hr-right{
+    border-right: 1px solid #096CAF;
+  }
+  .hr-bottom{
+    border-bottom: 1px solid #096CAF;
+  }
+  .hr-top{
+    border-top: 1px solid #096CAF;
+  }
+  .hr-left{
+    border-left: 1px solid #096CAF;
+  }
+  .no-padding{
+    padding: 0%;
+  }
+  .watermark {
+    color: #6699ff;
+    font-size: 100pt;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    position: absolute;
+    z-index: -1;
+    left:200px;
+    top:550px;
+    text-align: center;
+    opacity: 0.1;
+  }
+  .quote {
+    font-size: 45px;
+  }
+  .notes {
+    margin-top: 20px;
+    font-size: 25px;
+    width: 80%;
+  }
+  .wrapper-vertical {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    text-align: center;
+    height: 25mm;
+    width: 25mm;
+  }
+  .vertical {
+    white-space: nowrap;
+    margin: 0; 
+    font-size: 90%;
+  }
+  .text{
+    padding-left: 2px;
+  }
+  br{
+    padding-bottom: 5px;
+  }
+  .logo {
+    height: 230px;
+    margin: 0 auto !important;
+  }
+  .info {
+    padding: 60px;
+    background: white;
+    border: 6px solid #E0E0E0;
+    border-bottom: none;
+  }
+  .info i {
+    padding-top: 40px;
+    font-size: 80px;
+  }
+  .info p {
+    font-size: 50px;
+  }
+  .info p span {
+    font-size: 60px;
+    font-weight: bold;
+  }
+  .subtotal-price-single {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: #F8F8F8;
+    border-bottom: 3px solid #E0E0E0;
+  }
+  .subtotal-price-single h3 {
+    padding-right: 105px;
+    font-size: 32px;
+    text-align: right;
+    font-weight: bold;
+  }
+  .subtotal-price-single h4 {
+    padding-left: 90px;
+    font-weight: bold;
+    font-size: 30px;
+  }
+  .total-price-single {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: white;
+    border-top: 3px solid #E0E0E0;
+    border: 3px solid #E0E0E0;
+  }
+  .total-price-single h4 {
+    font-size: 50px;
+    padding-left: 40px;
+    text-transform: capitalize;
+  }
+  .total-price-single h3 {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 40px;
+  }
+  .total-row {
+    background: #F8F8F8;
+    border: 3px solid #BDBDBD;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .total-row h4 {
+    padding-top: 25px;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 60px;
+    padding-left: 40px;
+  }
+  .total-row p {
+    font-weight: bold;
+    padding-right: 40px;
+    font-size: 76px;
+    text-align: right;
+  }
+  .sub-prices {
+    background: white;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .all-row {
+    margin-bottom: 120px;
+    page-break-inside: avoid;
+    position: relative;
+  }
+  .charge-icons {
+    padding-bottom: 40px;
+  }
+  .charge-icons .col-xs-2 i {
+    font-size: 60px !important;
+  }
+  .cargo-info .col-xs-12 p {
+    text-align: right;
+    padding-right: 30px;
+  }
+  .flip {
+    transform: scaleX(-1);
+  }
+  .oo {
+    max-height: 120px;
+    width: 100%;
+    opacity: 0;
+  }
+</style>
+
+<div class="wrapper">
+  <% primary_color = tenant.theme["colors"]["primary"] %>
+  <% neutral_color = '#C4C4C4' %>
+  <% tenant_logo = tenant.theme["logoLarge"] %>
+  <% precarriage = shipment.has_pre_carriage ? primary_color : neutral_color %>
+  <% oncarriage = shipment.has_on_carriage ? primary_color : neutral_color %>
+  <div class="row logo">
+    <div class="col-xs-12 col-xs-offset-12 logo">
+      <%= image_tag embed_remote_image(tenant_logo, 'image/png' ), class: "logo" %>
+    </div>
+  </div>
+  <div class="col-xs-12 title" style="font-size: 150%; text-align: left;">
+    <h1>QUOTATIONS</h1>
+    <hr style="border-color: <%= primary_color %>">
+    <p><%= tenant.name %></p>
+  </div>
+
+  
+
+
+    <% shipments.map do |s| %>
+      <% originfee = s.selected_offer["export"] ? primary_color : neutral_color %>
+      <% destinationfee = s.selected_offer["import"] ? primary_color : neutral_color %>
+      <div class="all-row">
+        <div class="main-container container-fluid">
+          <div class="info row">
+            <% if s.itinerary.mode_of_transport == "ocean" %>
+              <i class="fas fa-anchor col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+            <% end %>
+            <% if s.itinerary.mode_of_transport == "air" %>
+              <i class="fas fa-paper-plane col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+            <% end %>
+            <div class="col-xs-7">
+              <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
+              <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
+            </div>
+            <div class="col-xs-4">
+              <div class="row charge-icons">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck flip" style="color: <%= precarriage %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file-alt" style="color: <%= originfee %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file" style="color: <%= destinationfee %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck" style="color: <%= oncarriage %>"></i>
+                </div>
+              </div>
+              <div class="row cargo-info">
+                <div class="col-xs-12">
+                  <p>
+                    <strong>Kg:</strong>
+                    <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <% s.selected_offer.each do |k, v| %>
+          <div class="sub-prices row">
+            <% if k != "total" && k != "edited_total" %>
+              <div class="col-xs-12">
+                <div class="total-price-single row">
+                  <% if k == "trucking_pre" %>
+                    <h4 class="col-xs-6">Pick-up</h4>
+                  <% end %>
+                  <% if k == "trucking_on" %>
+                    <h4 class="col-xs-6">Delivery</h4>
+                  <% end %>
+                  <% if k != "trucking_on" && k != "trucking_pre" %>
+                    <h4 class="col-xs-6"><%= k %></h4>
+                  <% end %>
+                  <h3 class="col-xs-6"><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
+                </div>
+              </div>
+              <div class="oo">oo</div>
+              <% v.each do |a, b| %>
+                <% if a != "total" && a != "edited_total" %>
+                  <div class="subtotal-price-single row">
+                  <% if a == "trucking_lcl" %>
+                    <h4 class="col-xs-6">Lcl</h4>
+                  <% end %>
+                  <% if a == "trucking_fcl" %>
+                    <h4 class="col-xs-6">Fcl</h4>
+                  <% end %>
+                  <% if k == "cargo" %>
+                    <h4 class="col-xs-6">Cargo</h4>
+                  <% end %>
+                  <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
+                    <h4 class="col-xs-6"><%= a %></h4>
+                  <% end %>
+                    <h3 class="col-xs-6"> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="total-row row">
+          <h4 class="col-xs-6">Total</h4>
+          <p class="quote col-xs-6"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
+            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+          </p>
+        </div>
+        <p class="notes">1) Prices subject to change 
+  2) All fees are converted at the time of quotation 
+  using that day's European Central bank exchange rates and are an approximation 
+  of the final amount ot be paid. The amount paid at the time of settlement 
+  will reflect the exchange rates of the day.</p>
+      </div>
+      
+    <% end %>
+  
+</div>

@@ -14,13 +14,21 @@ class Shipments::BookingProcessController < ApplicationController
   end
 
   def choose_offer
+    shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
+    
     response_handler(resp)
   end
 
   def update_shipment
     resp = ShippingTools.update_shipment(params, current_user)
     response_handler(resp)
+  end
+
+  def download_quotations
+    shipment = Shipment.find(params[:shipment_id])
+    url = ShippingTools.save_pdf_quotes(shipment, params[:options][:quotes])
+    response_handler({key: 'quotations', url: url})
   end
 
   def request_shipment

@@ -9,21 +9,27 @@ subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.shipper.first
-  tenant.itineraries.destroy_all
-  tenant.local_charges.destroy_all
-  tenant.customs_fees.destroy_all
+  # tenant.itineraries.destroy_all
+  # tenant.local_charges.destroy_all
+  # tenant.customs_fees.destroy_all
   # tenant.trucking_pricings.delete_all
-  tenant.hubs.destroy_all
-  tenant.nexuses.destroy_all
+  # tenant.hubs.destroy_all
+  # tenant.nexuses.destroy_all
+  tenant.users.agent.destroy_all
+  tenant.users.agency_manager.destroy_all
+  tenant.agencies.destroy_all
+  agents = 'data/saco/saco__agents.xlsx'
+  req = { 'key' => agents }
+  ExcelTool::AgentsOverwriter.new(params: req, _user: shipper).perform
   # # # #   # # # # #Overwrite hubs from excel sheet
-  puts '# Overwrite hubs from excel sheet'
-  hubs = 'data/saco/saco__hubs.xlsx'
-  req = { 'key' => hubs }
-  ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
-  puts '# Overwrite pricings and rates from excel sheet'
-  public_pricings = 'data/saco/saco__freight_rates.xlsx'
-  req = { 'key' => public_pricings }
-  ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
+  # puts '# Overwrite hubs from excel sheet'
+  # hubs = 'data/saco/saco__hubs.xlsx'
+  # req = { 'key' => hubs }
+  # ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
+  # puts '# Overwrite pricings and rates from excel sheet'
+  # public_pricings = 'data/saco/saco__freight_rates.xlsx'
+  # req = { 'key' => public_pricings }
+  # ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: false).perform
 
   # # # # # # # #   # # # # # Overwrite public pricings from excel sheet
 

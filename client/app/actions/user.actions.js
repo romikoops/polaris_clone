@@ -203,7 +203,7 @@ function makePrimary (userId, locationId, redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
+function getShipments (pages, perPage, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -217,7 +217,7 @@ function getShipments (requestedPage, openPage, finishedPage, perPage, redirect)
   return (dispatch) => {
     dispatch(request())
 
-    userService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
+    userService.getShipments(pages, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))

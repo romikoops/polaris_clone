@@ -8,11 +8,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     response_handler(
       itineraries: @detailed_itineraries,
       hubs:        @hubs,
-      shipments:   {
-        requested: @requested_shipments,
-        open:      @open_shipments,
-        finished:  @finished_shipments
-      },
+      shipments:   shipments_hash,
       mapData:     @map_data
     )
   end
@@ -23,6 +19,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     @shipments = Shipment.where(tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments
     @open_shipments = open_shipments
+    @quoted_shipments = quoted_shipments
     @finished_shipments = finished_shipments
     @detailed_itineraries = detailed_itin_json
     hubs = current_user.tenant.hubs
@@ -33,12 +30,27 @@ class Admin::DashboardController < Admin::AdminBaseController
     @tenant = Tenant.find(current_user.tenant_id)
   end
 
+  def shipments_hash
+    current_user.tenant.quotation_tool ? 
+    {
+      quoted:   @quoted_shipments
+    } : {
+      requested: @requested_shipments,
+      open:      @open_shipments,
+      finished:  @finished_shipments
+    }
+  end
+
   def requested_shipments
     @shipments.requested.order_booking_desc.map(&:with_address_options_json)
   end
 
   def open_shipments
     @shipments.open.order_booking_desc.map(&:with_address_options_json)
+  end
+
+  def quoted_shipments
+    @shipments.quoted.order_booking_desc.map(&:with_address_options_json)
   end
 
   def finished_shipments

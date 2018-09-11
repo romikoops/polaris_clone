@@ -172,6 +172,7 @@ class UserAccount extends Component {
                       theme={theme}
                       {...props}
                       user={user}
+                      scope={tenant.data.scope}
                       setCurrentUrl={this.setCurrentUrl}
                       dashboard={dashboard}
                       hubs={hubHash}

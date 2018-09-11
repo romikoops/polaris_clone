@@ -53,7 +53,7 @@ function reuseShipment (shipment) {
   }
 }
 
-function getOffers (data, redirect) {
+function getOffers (data, tenant, redirect) {
   function request (shipmentData) {
     return {
       type: shipmentConstants.GET_OFFERS_REQUEST,

@@ -26,8 +26,12 @@ export class LandingTop extends Component {
   toAccount () {
     this.props.goTo('/account')
   }
-  toAdmin (target) {
+  toAdmin () {
     this.props.toAdmin(true)
+  }
+  showLogin () {
+    const { authDispatch } = this.props
+    authDispatch.showLogin()
   }
   render () {
     const {
@@ -60,6 +64,7 @@ export class LandingTop extends Component {
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
+    const isClosed = tenant.data.scope.closed_quotation_tool
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -68,8 +73,17 @@ export class LandingTop extends Component {
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
-    const loginLink = ''
-
+    const loginLink = (
+      <div className="layout-row flex-50">
+        <SquareButton
+          text="Login / Register"
+          theme={theme}
+          handleNext={() => this.showLogin()}
+          size="small"
+          active
+        />
+      </div>
+    )
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -98,27 +112,43 @@ export class LandingTop extends Component {
                     Finally, shipping is as simple as it should be.
                   </h3>
                 </div>
-                <div
-                  className={
-                    `layout-row layout-md-column layout-sm-column layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
-                  }
-                >
-                  {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
-                  {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                  {user && user.role && user.role.name === 'admin' && toAdmin}
-                  <div className={`flex layout-row flex-md-100 ${styles.banner_text}`}>
-                    <div className="flex-none layout-row layout-align-start-center">
-                      <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
-                      <div className="flex-5" />
-                      <a href="https://www.itsmycargo.com/" target="_blank">
-                        <img
-                          src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                          alt=""
-                          className={`flex-none pointy ${styles.powered_by_logo}`}
-                        />
-                      </a>
-                    </div>
-                  </div>
+              </div>
+              <div
+                className={
+                  `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
+                }
+              >
+                {(
+                  (
+                    user &&
+                  user.role &&
+                  !isClosed &&
+                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
+                  ) || (!isClosed && !user)) &&
+                  findRates}
+                {(!user || user.guest) && loginLink}
+                {
+                  user &&
+                  !user.guest &&
+                  user.role &&
+                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
+                  myAccount
+                }
+                {
+                  user &&
+                  user.role &&
+                  ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) &&
+                  toAdmin}
+              </div>
+              <div className={`flex-70 ${styles.banner_text}`}>
+                <div className="flex-none layout-row layout-align-start-center">
+                  <h4 className="flex-none">powered by</h4>
+                  <div className="flex-5" />
+                  <img
+                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                    alt=""
+                    className={`flex-none ${styles.powered_by_logo}`}
+                  />
                 </div>
               </div>
             </div>
@@ -135,7 +165,8 @@ LandingTop.propTypes = {
   toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
   tenant: PropTypes.tenant,
-  bookNow: PropTypes.func
+  bookNow: PropTypes.func,
+  authDispatch: PropTypes.objectOf(PropTypes.func).isRequired
 }
 
 LandingTop.defaultProps = {

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import adminStyles from '../../Admin.scss'
 import { adminDashboard as adminTip } from '../../../../constants'
-import { filters } from '../../../../helpers'
+import { filters, capitalize } from '../../../../helpers'
 import Tabs from '../../../Tabs/Tabs'
 import Tab from '../../../Tabs/Tab'
 import { adminActions, appActions } from '../../../../actions'
@@ -43,10 +43,10 @@ export class ShipmentsCompAdmin extends Component {
     window.removeEventListener('resize', this.determinePerPage)
   }
 
-  getShipmentsFromPage (open, requested, finished) {
+  getShipmentsFromPage (pages) {
     const { adminDispatch } = this.props
     const { perPage } = this.state
-    adminDispatch.getShipments(open, requested, finished, perPage, false)
+    adminDispatch.getShipments(pages, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { adminDispatch } = this.props
@@ -59,11 +59,11 @@ export class ShipmentsCompAdmin extends Component {
   determinePerPage () {
     const { perPage } = this.state
     const { adminDispatch, shipments } = this.props
-    const { open, requested, finished } = shipments.pages
+    const { pages } = shipments
     const width = window.innerWidth
     const newPerPage = width >= 1920 ? 6 : 4
     if (newPerPage !== perPage) {
-      adminDispatch.getShipments(open, requested, finished, newPerPage, false)
+      adminDispatch.getShipments(pages, newPerPage, false)
     }
     this.setState({ perPage: newPerPage })
   }
@@ -115,8 +115,8 @@ export class ShipmentsCompAdmin extends Component {
   handleFilters () {
     this.setState((prevState) => {
       const { perPage } = this.state
-      const { open, requested, finished } = this.props.shipments.pages
-      this.getShipmentsFromPage(open, requested, finished, perPage)
+      const { pages } = this.props.shipments
+      this.getShipmentsFromPage(pages, perPage)
 
       return { page: prevState.page }
     })
@@ -155,101 +155,45 @@ export class ShipmentsCompAdmin extends Component {
       adminDispatch
     } = this.props
     const { search } = this.state
-    const { pages } = shipments
+
     if (!shipments || !hubs || !clients) {
       return ''
     }
+    const { pages } = shipments
     const clientHash = {}
     clients.forEach((cl) => {
       clientHash[cl.id] = cl
     })
-    const mergedOpenShipments = filters.sortByDate(shipments.open, 'booking_placed_at')
-      .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
-    const mergedReqShipments = filters.sortByDate(shipments.requested, 'booking_placed_at')
-      .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
-    const mergedFinishedShipments = filters.sortByDate(shipments.finished, 'booking_placed_at')
-      .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
 
+    const statusKeys = Object.keys(pages)
+    const mergedShipments = {}
+    statusKeys.forEach((status) => {
+      mergedShipments[status] = filters.sortByDate(shipments[status], 'booking_placed_at')
+        .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
+    })
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          <Tab
-            tabTitle="Requested"
-            extraClick={() => this.getTargetShipmentsFromPage('requested', 1)}
+          {statusKeys.map(status => (<Tab
+            tabTitle={capitalize(status)}
             theme={theme}
           >
             <AdminShipmentsBox
               handleClick={this.viewShipment}
               dispatches={adminDispatch}
-              shipments={mergedReqShipments}
+              shipments={mergedShipments[status]}
               theme={theme}
               confirmShipmentData={confirmShipmentData}
-              tooltip={adminTip.requested}
-              page={pages.requested}
-              searchText={search.requested}
-              numPages={numShipmentsPages.requested}
-              prevPage={() => this.prevPage('requested')}
-              nextPage={() => this.nextPage('requested')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'requested')}
+              searchText={search[status]}
+              tooltip={adminTip[status]}
+              page={pages[status]}
+              numPages={numShipmentsPages[status]}
+              prevPage={() => this.prevPage(status)}
+              nextPage={() => this.nextPage(status)}
+              handleSearchChange={e => this.handleSearchQuery(e, status)}
             />
-          </Tab>
-          <Tab
-            tabTitle="Open"
-            extraClick={() => this.getTargetShipmentsFromPage('open', 1)}
-            theme={theme}
-          >
-            <AdminShipmentsBox
-              handleClick={this.viewShipment}
-              dispatches={adminDispatch}
-              shipments={mergedOpenShipments}
-              theme={theme}
-              tooltip={adminTip.open}
-              searchText={search.open}
-              page={pages.open}
-              numPages={numShipmentsPages.open}
-              prevPage={() => this.prevPage('open')}
-              nextPage={() => this.nextPage('open')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'open')}
-            />
-          </Tab>
-          <Tab
-            tabTitle="Finished"
-            extraClick={() => this.getTargetShipmentsFromPage('finished', 1)}
-            theme={theme}
-          >
-            <AdminShipmentsBox
-              handleClick={this.viewShipment}
-              dispatches={adminDispatch}
-              shipments={mergedFinishedShipments}
-              theme={theme}
-              searchText={search.finished}
-              page={pages.finished}
-              tooltip={adminTip.finished}
-              seeAll={false}
-              numPages={numShipmentsPages.finished}
-              prevPage={() => this.prevPage('finished')}
-              nextPage={() => this.nextPage('finished')}
-              handleSearchChange={e => this.handleSearchQuery(e, 'finished')}
-            />
-          </Tab>
+          </Tab>))}
         </Tabs>
-
-        {mergedOpenShipments.length === 0 &&
-          mergedReqShipments.length === 0 &&
-          mergedFinishedShipments.length === 0 ? (
-            <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  adminStyles.sec_subheader
-                }`}
-              >
-                <p className={` ${adminStyles.sec_subheader_text} flex-none`}> No Shipments yet</p>
-              </div>
-              <p className="flex-none"> As shipments are requested, they will appear here</p>
-            </div>
-          ) : (
-            ''
-          )}
       </div>
     )
 
