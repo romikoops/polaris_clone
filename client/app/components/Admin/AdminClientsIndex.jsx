@@ -205,7 +205,7 @@ class AdminClientsIndex extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
         {/* {uploadStatus} */}
-        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+        <div className="flex-80 layout-row layout-align-start-start">
           <Tabs
             wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
           >
@@ -230,10 +230,10 @@ class AdminClientsIndex extends Component {
 
           </Tabs>
         </div>
-        <div className="layout-column flex-20 show-gt-sm hide-xs" style={sideBoxStyle}>
+        <div className="flex-20 layout-wrap layout-row layout-align-end-end">
           <SideOptionsBox
             header="Filters"
-            flexOptions="layout-column flex-auto"
+            flexOptions="flex-100"
             content={
               <div>
 
@@ -265,7 +265,7 @@ class AdminClientsIndex extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions="layout-column flex-auto"
+            flexOptions="flex-100"
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <CollapsingBar
@@ -280,7 +280,7 @@ class AdminClientsIndex extends Component {
                     <div
                       className={`${
                         styles.action_section
-                      } flex-100 layout-row layout-wrap`}
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
                     >
                       {newButton}
                     </div>
