@@ -55,6 +55,8 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = open_shipments
     when 'finished'
       shipment_association = finished_shipments
+    when 'quoted'
+      shipment_association = quoted_shipments
     end
     (filterrific = initialize_filterrific(
       shipment_association,

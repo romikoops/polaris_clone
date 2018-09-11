@@ -51,6 +51,8 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.open
     when "finished"
       shipment_association = current_user.shipments.finished
+    when "quoted"
+      shipment_association = current_user.shipments.quoted
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     (filterrific = initialize_filterrific(
