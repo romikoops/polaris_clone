@@ -203,7 +203,10 @@ class AdminClientsIndex extends Component {
     }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left"
+        style={{ marginTop: '50px' }}
+      >
         {/* {uploadStatus} */}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <Tabs
