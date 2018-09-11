@@ -358,6 +358,7 @@ Shop.propTypes = {
     updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
+    chooseQuotes: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   userDispatch: PropTypes.shape({

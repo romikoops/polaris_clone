@@ -189,6 +189,39 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
+    case shipmentConstants.CHOOSE_QUOTES_REQUEST:
+
+      return {
+        ...state,
+        modal: false,
+        request: {
+          ...state.request,
+          stage3: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.CHOOSE_QUOTES_SUCCESS:
+      return {
+        ...state,
+        modal: true,
+        response: {
+          ...state.response,
+          stage3: action.shipmentData
+        },
+        currentStage: 'stage4',
+        loading: false
+        // activeShipment: action.shipmentData.shipment.id
+      }
+    case shipmentConstants.CHOOSE_QUOTES_FAILURE:
+      return {
+        ...state,
+        modal: false,
+        error: {
+          ...state.error,
+          stage3: [action.error]
+        },
+        loading: false
+      }
     case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
       return {
         ...state,
