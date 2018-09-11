@@ -29,7 +29,6 @@ module ExcelTool
       overwrite_zonal_trucking_rates_by_hub
       end_time = DateTime.now
       diff = (end_time - start_time) / 86_400
-
       { results: results, stats: stats }
     end
 
@@ -186,9 +185,8 @@ module ExcelTool
           elsif identifier_type == "geometry_id"
             geometry = find_geometry(idents_and_country)
             stats[:trucking_destinations][:number_created] += 1
-            # stats[:hub_truckings][:number_created] += 1
 
-            { ident: geometry.id, country: idents_and_country[:country] }
+            { ident: geometry&.id, country: idents_and_country[:country] }
           else
             idents_and_country
           end
