@@ -62,7 +62,6 @@ class QuoteCard extends PureComponent {
     return handleClick(e, value)
   }
 
-
   render () {
     const {
       theme,

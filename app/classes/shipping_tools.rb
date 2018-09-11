@@ -20,8 +20,20 @@ module ShippingTools
         destination_hub_id: schedule["destination_hub"]["id"],
         quotation_id: schedule["id"],
         trip_id: trip.id,
+        booking_placed_at: shipment.booking_placed_at,
+        closing_date: shipment.closing_date,
+        planned_eta: shipment.planned_eta,
+        planned_etd: shipment.planned_etd,
+        trucking: { 
+          has_pre_carriage: !!schedule["quote"]["trucking_pre"],
+          has_on_carriage: !!schedule["quote"]["trucking_on"]
+        },
+        load_type: shipment.load_type,
         itinerary: trip.itinerary
       )
+      new_shipment.cargo_items = shipment.cargo_items
+      new_shipment.pickup_address = shipment.pickup_address
+      new_shipment.delivery_address = shipment.delivery_address
       shipment.charge_breakdowns.each do |charge_breakdown|
 
         # charges = charge_breakdown.charges.dup
@@ -71,8 +83,7 @@ module ShippingTools
     if tenant.scope['closed_quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-        dedicated_bool = Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
-        open_bool = Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     else
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|

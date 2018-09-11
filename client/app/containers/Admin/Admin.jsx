@@ -241,6 +241,7 @@ class Admin extends Component {
                       theme={theme}
                       {...props}
                       hubs={hubs}
+                      setCurrentUrl={this.setCurrentUrl}
                       hubHash={hubHash}
                       shipments={shipments}
                       clients={clients}
