@@ -138,6 +138,9 @@ group :test do
 end
 
 group :development, :staging do
+  gem 'google-api-client', '~> 0.23.7'
+  gem 'google-cloud-storage'
+
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
