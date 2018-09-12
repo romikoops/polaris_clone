@@ -1,6 +1,5 @@
 export { default as UserBilling } from './UserBilling'
 export { default as UserEmails } from './UserEmails'
-// export { default as UserLocations } from './UserLocations'
 export { default as UserPassword } from './UserPassword'
 export { default as UserProfile } from './UserProfile'
 export { default as UserDashboard } from './UserDashboard'
