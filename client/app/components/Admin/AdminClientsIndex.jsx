@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-// import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminClientsTooltips as clientTip } from '../../constants'
-// import DocumentsDownloader from '../../components/Documents/Downloader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { filters, capitalize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -118,7 +116,6 @@ class AdminClientsIndex extends Component {
     } = this.state
     const sliceStartIndex = (page - 1) * numPerPage
     const sliceEndIndex = (page * numPerPage)
-    // const hubUrl = '/admin/clients/process_csv'
     const newButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -195,17 +192,13 @@ class AdminClientsIndex extends Component {
         </div>
       </div>
     )
-    const sideBoxStyle = {
-      position: 'fixed',
-      top: '120px',
-      right: '0px',
-      minWidth: '200px'
-    }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
-        {/* {uploadStatus} */}
-        <div className="flex-80 layout-row layout-align-start-start">
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-space-between-start
+        extra_padding_left header_buffer"
+      >
+        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <Tabs
             wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
           >

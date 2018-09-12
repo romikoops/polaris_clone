@@ -3,7 +3,7 @@
 module DataParser
   class BaseParser
     attr_reader :results, :stats, :hub, :tenant, :path, :hub_id
-
+    include AwsConfig
     def initialize(args={ _user: current_user })
       params = args[:params]
       @stats = _stats
@@ -12,7 +12,9 @@ module DataParser
         @hub_id = args[:hub_id]
         @hub = Hub.find(@hub_id)
       end
-      @xlsx = open_file(args[:path])
+      
+      signed_url = get_file_url(args[:path], "assets.itsmycargo.com")
+      @xlsx = open_file(signed_url)
       post_initialize(args)
     end
 
@@ -45,8 +47,7 @@ module DataParser
     end
 
     def open_file(path)
-      file = File.open(path)
-      Roo::Spreadsheet.open(file)
+      Roo::Spreadsheet.open(path)
     end
 
     def uuid
