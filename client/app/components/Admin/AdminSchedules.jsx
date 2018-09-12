@@ -302,9 +302,10 @@ class AdminSchedules extends Component {
       </div>
     </Tab>)
     const listView = (
-      <div className="flex-100 layout-row layout-align-center-start header_buffer">
+      <div className="flex-100 layout-row layout-align-center-start">
         <Tabs
           wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+          paddingFixes
         >
           {motTabs}
 

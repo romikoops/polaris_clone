@@ -6,7 +6,7 @@ import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
-import { capitalize, gradientTextGenerator, switchIcon } from '../../helpers'
+import { capitalize } from '../../helpers'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
@@ -86,18 +86,13 @@ export class AdminPricingsIndex extends Component {
       itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
-    const truckIcon = <i className="fa fa-truck clip flex-none" style={gradientFontStyle} />
 
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
-      icon={switchIcon(mot, gradientFontStyle)}
+      mot={mot}
     >
       <CardPricingIndex
         itineraries={detailedItineraries[mot]}
@@ -127,7 +122,7 @@ export class AdminPricingsIndex extends Component {
     motTabs.push(<Tab
       tabTitle="Trucking"
       theme={theme}
-      icon={truckIcon}
+      mot="truck"
     >
       <AdminTrucking
         theme={theme}
@@ -140,6 +135,7 @@ export class AdminPricingsIndex extends Component {
 
         <Tabs
           wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
+          paddingFixes
         >
           {motTabs}
 
