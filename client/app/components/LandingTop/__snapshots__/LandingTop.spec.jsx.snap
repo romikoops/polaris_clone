@@ -102,7 +102,7 @@ exports[`theme has truthy properties 1`] = `
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
+            className="layout-row flex-50"
           >
             <SquareButton
               active={true}
@@ -134,31 +134,21 @@ exports[`theme has truthy properties 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex layout-row flex-100 banner_text"
+            className="flex-none layout-row layout-align-start-center"
           >
-            <div
-              className="flex-none layout-row layout-align-start-center"
+            <h4
+              className="flex-none"
             >
-              <h4
-                className="flex-none"
-              >
-                powered by      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>
@@ -265,7 +255,7 @@ exports[`user.role_id is 1 1`] = `
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
+            className="layout-row flex-50"
           >
             <SquareButton
               active={true}
@@ -293,31 +283,21 @@ exports[`user.role_id is 1 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex layout-row flex-100 banner_text"
+            className="flex-none layout-row layout-align-start-center"
           >
-            <div
-              className="flex-none layout-row layout-align-start-center"
+            <h4
+              className="flex-none"
             >
-              <h4
-                className="flex-none"
-              >
-                powered by      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>
@@ -424,7 +404,7 @@ exports[`user.role_id is 2 1`] = `
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
+            className="layout-row flex-50"
           >
             <SquareButton
               active={true}
@@ -452,31 +432,21 @@ exports[`user.role_id is 2 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex layout-row flex-100 banner_text"
+            className="flex-none layout-row layout-align-start-center"
           >
-            <div
-              className="flex-none layout-row layout-align-start-center"
+            <h4
+              className="flex-none"
             >
-              <h4
-                className="flex-none"
-              >
-                powered by      
-              </h4>
-              <div
-                className="flex-5"
-              />
-              <a
-                className="layout-row layout-align-center-center"
-                href="https://www.itsmycargo.com/"
-                target="_blank"
-              >
-                <img
-                  alt=""
-                  className="flex-none pointy powered_by_logo"
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                />
-              </a>
-            </div>
+              powered by
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <img
+              alt=""
+              className="flex-none powered_by_logo"
+              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+            />
           </div>
         </div>
       </div>
