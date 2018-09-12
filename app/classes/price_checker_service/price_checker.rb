@@ -10,7 +10,7 @@ module PriceCheckerService
       @destination_hub    = @itinerary.last_stop.hub 
       @shipment_data = shipment_data
       @user          = user
-      @trucking_data = {}
+      @trucking_data = shipment_data[:trucking] || {}
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
     end
 
