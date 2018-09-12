@@ -84,6 +84,7 @@ export class LandingTop extends Component {
         />
       </div>
     )
+
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">

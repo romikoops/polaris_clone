@@ -12,6 +12,10 @@ import { LandingTop } from './LandingTop'
 const editedTenant = {
   data: {
     ...tenant,
+    scope: {
+      ...tenant.scope,
+      closed_quotation_tool: true
+    },
     name: 'FOO_NAME'
   }
 }
