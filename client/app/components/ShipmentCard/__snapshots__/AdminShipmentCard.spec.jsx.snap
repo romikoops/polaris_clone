@@ -53,6 +53,7 @@ exports[`shallow rendering 1`] = `
           Estimated Transit Time
         </span>
       </div>
+       : '' }
     </div>
   </div>
   <div
