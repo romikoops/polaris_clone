@@ -192,12 +192,6 @@ class AdminClientsIndex extends Component {
         </div>
       </div>
     )
-    const sideBoxStyle = {
-      position: 'fixed',
-      top: '120px',
-      right: '0px',
-      minWidth: '200px'
-    }
 
     return (
       <div
@@ -229,10 +223,10 @@ class AdminClientsIndex extends Component {
 
           </Tabs>
         </div>
-        <div className="layout-column flex-20 show-gt-sm hide-xs" style={sideBoxStyle}>
+        <div className="flex-20 layout-wrap layout-row layout-align-end-end">
           <SideOptionsBox
             header="Filters"
-            flexOptions="layout-column flex-auto"
+            flexOptions="flex-100"
             content={
               <div>
 
@@ -264,7 +258,7 @@ class AdminClientsIndex extends Component {
           />
           <SideOptionsBox
             header="Data manager"
-            flexOptions="layout-column flex-auto"
+            flexOptions="flex-100"
             content={
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <CollapsingBar
@@ -279,7 +273,7 @@ class AdminClientsIndex extends Component {
                     <div
                       className={`${
                         styles.action_section
-                      } flex-100 layout-row layout-wrap`}
+                      } flex-100 layout-row layout-align-center-center layout-wrap`}
                     >
                       {newButton}
                     </div>
