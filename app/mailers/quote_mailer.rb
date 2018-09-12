@@ -5,8 +5,6 @@ class QuoteMailer < ApplicationMailer
   layout "mailer"
   add_template_helper(ApplicationHelper)
 
-  TESTING_EMAIL = "angelica.vanni@itsmycargo.com"
-
   def quotation_email(shipment, shipments, email)
     @shipments = shipments
     @shipment = shipment
@@ -15,23 +13,16 @@ class QuoteMailer < ApplicationMailer
     end
     @user = @shipment.user
     tenant = @user.tenant
+    @theme = tenant.theme
     @email = email[/[^@]+/]
-    base_url =
-      case Rails.env
-      when "production"  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
-      when "development" then "http://localhost:8080/"
-      when "test"        then "http://localhost:8080/"
-      end
           
     generate_and_upload_quotation(@quotes)
     pdf_name = "quotation_#{@shipment.imc_reference}.pdf"
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline[pdf_name] = File.read("tmp/" + pdf_name)
     mail(
-      # to:      tenant.email_for(:sales, shipment.mode_of_transport),
-      # to: email,
-      # bcc:     "bookings@itsmycargo.com",
-      subject: "Quotation for #{@shipments.first.origin_hub.name} - #{@shipments.first.destination_hub.name}"
+      to: email,
+      subject: "Quotation for #{@shipment.imc_reference}"
     ) do |format|
       format.html
       format.mjml
