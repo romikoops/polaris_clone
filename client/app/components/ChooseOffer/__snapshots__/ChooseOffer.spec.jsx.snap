@@ -11,7 +11,7 @@ exports[`shallow render 1`] = `
   }
 >
   <div
-    className="flex-none content_width layout-row layout-wrap"
+    className="flex-none content_width layout-row"
   >
     <div
       className="flex-20 layout-row layout-wrap"
@@ -22,6 +22,7 @@ exports[`shallow render 1`] = `
             "ocean": true,
           }
         }
+        cargos={Array []}
         departureDate={0}
         durationFilter={40}
         lastTripDate=""
@@ -90,7 +91,7 @@ exports[`shallow render 1`] = `
       />
     </div>
     <div
-      className="flex-75 offset-5 layout-row layout-wrap"
+      className="flex  offset-5 layout-row layout-wrap"
     >
       <div
         className="flex-100 layout-row layout-wrap"

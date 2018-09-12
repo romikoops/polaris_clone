@@ -88,6 +88,7 @@ exports[`shallow render 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
+      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}
@@ -414,6 +415,7 @@ exports[`theme is falsy 1`] = `
   >
     <ContactSetter
       consignee={Object {}}
+      contacts={Array []}
       finishBookingAttempted={false}
       notifyees={Array []}
       removeNotifyee={[Function]}

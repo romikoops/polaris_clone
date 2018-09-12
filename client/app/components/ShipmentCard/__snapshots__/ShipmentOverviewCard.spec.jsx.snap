@@ -23,7 +23,7 @@ exports[`admin is true 1`] = `
       <GreyBox
         borderStyle=""
         content={
-          <AdminShipmentCard
+          <UNDEFINED
             confirmShipmentData={Object {}}
             dispatches={
               Object {
@@ -65,7 +65,6 @@ exports[`admin is true 1`] = `
                 "status": "FOO_STATUS",
               }
             }
-            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -115,7 +114,7 @@ exports[`shallow rendering 1`] = `
       <GreyBox
         borderStyle=""
         content={
-          <UserShipmentCard
+          <UNDEFINED
             dispatches={
               Object {
                 "foo": [Function],
@@ -137,7 +136,6 @@ exports[`shallow rendering 1`] = `
                 "status": "FOO_STATUS",
               }
             }
-            t={[Function]}
             theme={
               Object {
                 "colors": Object {
