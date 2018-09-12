@@ -53,6 +53,7 @@ exports[`shallow rendering 1`] = `
           Estimated Transit Time
         </span>
       </div>
+       : '' }
     </div>
   </div>
   <div
@@ -126,92 +127,37 @@ exports[`shallow rendering 1`] = `
   </div>
   <div
     className="layout-row flex-100 layout-align-start-center
-            middle_bottom_box smallText"
+      middle_bottom_box smallText"
   >
     <div
-      className="flex-20 layout-align-center-start"
+      className="layout-row flex-50 layout-align-center-center"
     >
-      <span
-        className="flex-100"
-      >
-        <b>
-          Pick-up Date
-        </b>
-        <br />
-        <span
-          className="grey"
-        >
-          19
-        </span>
-      </span>
-    </div>
-    <div
-      className="flex-20 layout-align-center-start"
-    >
-      <span
-        className="flex-100"
-      >
-        <b>
-          ETD
-        </b>
-        <br />
-        <span
-          className="grey"
-        >
-          19
-        </span>
-      </span>
-    </div>
-    <div
-      className="flex-20 layout-align-center-start"
-    >
-      <span
-        className="flex-100"
-      >
-        <b>
-          ETA
-        </b>
-        <br />
-        <span
-          className="grey"
-        >
-          19
-        </span>
-      </span>
-    </div>
-    <div
-      className="flex-40 layout-align-start-end carriages"
-    >
-      <div
-        className="layout-row layout-align-end-end"
-      >
-        <i
-          className="fa fa-times"
-          style={
-            Object {
-              "color": "#E0E0E0",
-            }
+      <i
+        className="fa fa-times"
+        style={
+          Object {
+            "color": "#E0E0E0",
           }
-        />
-        <p>
-          Pre-carriage
-        </p>
-      </div>
-      <div
-        className="layout-row layout-align-end-end"
-      >
-        <i
-          className="fa fa-times"
-          style={
-            Object {
-              "color": "#E0E0E0",
-            }
+        }
+      />
+      <p>
+        On-carriage
+      </p>
+    </div>
+    <div
+      className="layout-row flex-50 layout-align-center-center"
+    >
+      <i
+        className="fa fa-times"
+        style={
+          Object {
+            "color": "#E0E0E0",
           }
-        />
-        <p>
-          On-carriage
-        </p>
-      </div>
+        }
+      />
+      <p>
+        On-carriage
+      </p>
     </div>
   </div>
   <div
