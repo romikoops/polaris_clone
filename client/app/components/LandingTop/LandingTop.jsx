@@ -45,7 +45,7 @@ export class LandingTop extends Component {
       </div>
     )
     const toAdmin = (
-      <div className="layout-row flex-50 flex-md-100 margin_bototm">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="Admin Dashboard"
           theme={theme}
