@@ -21,7 +21,7 @@ jest.mock('./EditLocation', () => ({
   EditLocation: ({ children }) => <div>{children}</div>
 }))
 // eslint-disable-next-line import/first
-import { UserLocations } from './UserLocations'
+import UserLocations from './UserLocations'
 
 const createWrapper = propsInput => mount(<UserLocations {...propsInput} />)
 
