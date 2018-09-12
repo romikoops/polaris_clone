@@ -45,6 +45,7 @@ exports[`loading is true 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      paddingFixes=""
       wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
@@ -859,6 +860,7 @@ exports[`shallow render 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      paddingFixes=""
       wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
@@ -1673,6 +1675,7 @@ exports[`shipmentData.cargoItems is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      paddingFixes=""
       wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
@@ -2546,6 +2549,7 @@ exports[`shipmentData.contacts is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      paddingFixes=""
       wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
@@ -3408,6 +3412,7 @@ exports[`shipmentData.documents is present 1`] = `
   >
     <Tabs
       defaultActiveTabIndex={0}
+      paddingFixes=""
       wrapperTabs="layout-row flex-100 margin_bottom"
     >
       <Tab
