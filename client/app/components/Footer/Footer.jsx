@@ -60,8 +60,21 @@ export function Footer ({
       }
       <div className={`${styles.footer_shop} layout-row flex-100 layout-wrap`}>
         <div className="flex-100 layout-align-center">
-          <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-center-center`}>
-            <div className="flex-25 layout-row layout-align-center-center">
+          <div className={`flex-100 ${styles.buttons} ${styles.upper_footer} layout-row layout-align-space-around-center`}>
+            <div className="flex-35 layout-row layout-align-center-center">
+              <div className="flex-none layout-row layout-align-center-center">
+                <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                <div className="flex-5" />
+                <a href="https://www.itsmycargo.com/" target="_blank">
+                  <img
+                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                    alt=""
+                    className={`flex-none pointy ${styles.powered_by_logo}`}
+                  />
+                </a>
+              </div>
+            </div>
+            <div className="flex-15 layout-row layout-align-center-center">
               <a
                 target="_blank"
                 href={links && links.about ? links.about : defaultLinks.about}
@@ -69,7 +82,7 @@ export function Footer ({
                 About Us
               </a>
             </div>
-            <div className="flex-25 layout-row layout-align-center-center">
+            <div className="flex-15 layout-row layout-align-center-center">
               <a
                 target="_blank"
                 href={links && links.privacy ? links.privacy : defaultLinks.privacy}
@@ -77,7 +90,7 @@ export function Footer ({
                 Privacy Policy
               </a>
             </div>
-            <div className="flex-25 layout-row layout-align-center-center">
+            <div className="flex-15 layout-row layout-align-center-center">
               <a
                 target="_blank"
                 href={`https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions`}
@@ -85,7 +98,7 @@ export function Footer ({
                 Terms and Conditions
               </a>
             </div>
-            <div className="flex-25 layout-row layout-align-center-center">
+            <div className="flex-15 layout-row layout-align-center-center">
               <a
                 target="_blank"
                 href={links && links.legal ? links.legal : defaultLinks.legal}
@@ -93,37 +106,6 @@ export function Footer ({
                 Legal
               </a>
             </div>
-          </div>
-        </div>
-        <div className="flex-100 layout-align-center">
-          <div className={`flex-100
-          layout-row layout-align-space-between-center ${styles.lower_footer}`}
-          >
-            <div className="flex-20" />
-            <div className={`flex-60 ${styles.buttons}
-            layout-row layout-align-center-center`}
-            >
-              <div className="flex-45 layout-row layout-align-end-center">
-                <div className="flex-5" />
-                <p className="flex-none">Powered by</p>
-                <div className="flex-5" />
-              </div>
-              <div className="flex-55 layout-row layout-align-start-center">
-                <img
-                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  alt=""
-                  className={`flex-none ${styles.powered_by_logo}`}
-                />
-              </div>
-            </div>
-            { isShop
-              ? <div className={`flex-20 layout-row layout-align-center ${styles.copyright_shop}`}>
-                <p className="flex-80">
-                    Copyright © {moment().format('YYYY')} {tenantName}
-                </p>
-              </div>
-              : <div className="flex-20" />
-            }
           </div>
         </div>
       </div>
