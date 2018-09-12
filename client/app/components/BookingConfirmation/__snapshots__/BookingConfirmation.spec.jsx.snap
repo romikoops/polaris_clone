@@ -342,6 +342,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -435,6 +436,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -1366,6 +1368,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -1459,6 +1462,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -2447,6 +2451,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -2540,6 +2545,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -3602,6 +3608,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -3695,6 +3702,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -4630,6 +4638,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -4723,6 +4732,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -5640,6 +5650,7 @@ exports[`shallow render 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -5733,6 +5744,7 @@ exports[`shallow render 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -6650,6 +6662,7 @@ exports[`with cargo items 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -6743,6 +6756,7 @@ exports[`with cargo items 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -7973,6 +7987,7 @@ exports[`with containers 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
@@ -8066,6 +8081,7 @@ exports[`with containers 1`] = `
                       "data": Object {
                         "id": 123,
                         "scope": Object {
+                          "closed_quotation_tool": true,
                           "modes_of_transport": Object {
                             "air": Object {},
                             "ocean": Object {
