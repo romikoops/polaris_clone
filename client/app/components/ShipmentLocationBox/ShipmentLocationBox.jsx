@@ -50,7 +50,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-export class ShipmentLocationBox extends Component {
+class ShipmentLocationBox extends Component {
   constructor (props) {
     super(props)
     this.state = {

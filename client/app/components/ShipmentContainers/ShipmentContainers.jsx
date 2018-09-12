@@ -14,7 +14,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 const containerDescriptions = CONTAINER_DESCRIPTIONS
 const containerTareWeights = CONTAINER_TARE_WEIGHTS
 
-export class ShipmentContainers extends Component {
+class ShipmentContainers extends Component {
   constructor (props) {
     super(props)
     this.state = {

@@ -48,6 +48,18 @@ export class ShipmentDetails extends Component {
   static errorsAt (errorsObjects) {
     return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
+  static handleCollectiveWeightChange (cargoItem, suffixName, value) {
+    const cargo = cargoItem
+    const prevCollectiveWeight = cargo.payload_in_kg * cargo.quantity
+    if (suffixName === 'quantity') {
+      cargo.payload_in_kg = prevCollectiveWeight / value
+      cargo.quantity = value
+    } else {
+      cargo.payload_in_kg = value / cargo.quantity
+    }
+
+    return cargo
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -525,6 +537,8 @@ export class ShipmentDetails extends Component {
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
+    } else if (['collectiveWeight', 'quantity'].includes(suffixName)) {
+      cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
