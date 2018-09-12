@@ -155,7 +155,7 @@ exports[`shallow render 1`] = `
             <TextHeading
               color=""
               size={3}
-              text="This is the closest departure to the specified date"
+              text="These are best quotations for the specific route"
               theme={
                 Object {
                   "colors": Object {
@@ -308,82 +308,60 @@ exports[`shallow render 1`] = `
             />
           </div>
         </div>
-        <RouteResult
-          fees={
-            Object {
-              "AIR_HUB_ROUTE_KEY": Object {
-                "total": 200,
-              },
-              "OCEAN_HUB_ROUTE_KEY": Object {
-                "total": 40,
-              },
-              "RAIL_HUB_ROUTE_KEY": Object {
-                "total": 125,
-              },
-              "TRUCK_HUB_ROUTE_KEY": Object {
-                "total": 75,
-              },
+        <div
+          className="margin_bottom flex-100"
+        >
+          <QuoteCard
+            cargo={Array []}
+            handleClick={[Function]}
+            handleInputChange={null}
+            pickup={false}
+            schedule={
+              Object {
+                "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
+                "mode_of_transport": "ocean",
+              }
             }
-          }
-          key="RANDOM_KEY_0"
-          loadType="OCEAN_LOAD_TYPE"
-          pickup={false}
-          schedule={
-            Object {
-              "hub_route_key": "OCEAN_HUB_ROUTE_KEY",
-              "mode_of_transport": "ocean",
+            tenant={
+              Object {
+                "data": Object {
+                  "id": 123,
+                  "scope": Object {
+                    "closed_quotation_tool": true,
+                    "modes_of_transport": Object {
+                      "air": Object {},
+                      "ocean": Object {
+                        "OCEAN_LOAD_TYPE": true,
+                      },
+                      "rail": Object {},
+                      "truck": Object {},
+                    },
+                  },
+                  "subdomain": "foosubdomain",
+                  "theme": Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  },
+                },
+              }
             }
-          }
-          selectResult={[Function]}
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
             }
-          }
-          truckingTime={0}
-          user={
-            Object {
-              "company_name": "FOO_COMPANY",
-              "currency": "EUR",
-              "email": "foo@bar.baz",
-              "first_name": "John",
-              "guest": false,
-              "last_name": "Doe",
-              "phone": "6345789",
-              "role": Object {
-                "name": "shipper",
-              },
-            }
-          }
-        />
+            truckingTime={0}
+          />
+        </div>
       </div>
       <div
         className="flex-100 layout-row layout-wrap"
       >
-        <div
-          className="flex-100 layout-row layout-align-start route_header"
-        >
-          <div
-            className="flex-none"
-          >
-            <TextHeading
-              color=""
-              size={3}
-              text="Alternative departures"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
         <div
           className="flex-100 layout-row layout-align-center-center"
         >
@@ -408,6 +386,193 @@ exports[`shallow render 1`] = `
             <i
               className="flex-none fa fa-angle-double-down"
             />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-20 offset-5  layout-wrap layout-align-center-start download_section"
+    >
+      <p
+        className="flex-100 layout-row offer_title"
+      >
+        Selected Offers
+      </p>
+      <div
+        className="flex-100 layout-row layout-align-center-center download_button"
+      >
+        <div
+          className="flex-90 layout-row layout-align-center-center layout-wrap"
+        >
+          <Connect(DocumentsDownloader)
+            options={
+              Object {
+                "quotes": Array [],
+                "shipment": Object {
+                  "cargo_notes": "FOO_CARGO_NOTES",
+                  "eori": 1234,
+                  "has_on_carriage": false,
+                  "has_pre_carriage": false,
+                  "incoterm_text": "FOO_INCOTERM_TEXT",
+                  "load_type": "OCEAN_LOAD_TYPE",
+                  "notes": "FOO_NOTES",
+                  "schedules_charges": Object {
+                    "AIR_HUB_ROUTE_KEY": Object {
+                      "total": 200,
+                    },
+                    "OCEAN_HUB_ROUTE_KEY": Object {
+                      "total": 40,
+                    },
+                    "RAIL_HUB_ROUTE_KEY": Object {
+                      "total": 125,
+                    },
+                    "TRUCK_HUB_ROUTE_KEY": Object {
+                      "total": 75,
+                    },
+                  },
+                  "selected_offer": Object {
+                    "cargo": Object {},
+                    "total": Object {
+                      "value": 77,
+                    },
+                  },
+                  "total_goods_value": Object {
+                    "currency": "USD",
+                    "value": 15,
+                  },
+                  "total_price": Object {
+                    "currency": "USD",
+                    "value": 12,
+                  },
+                  "trucking": Object {
+                    "pre_carriage": Object {},
+                  },
+                },
+              }
+            }
+            shipment={
+              Object {
+                "cargo_notes": "FOO_CARGO_NOTES",
+                "eori": 1234,
+                "has_on_carriage": false,
+                "has_pre_carriage": false,
+                "incoterm_text": "FOO_INCOTERM_TEXT",
+                "load_type": "OCEAN_LOAD_TYPE",
+                "notes": "FOO_NOTES",
+                "schedules_charges": Object {
+                  "AIR_HUB_ROUTE_KEY": Object {
+                    "total": 200,
+                  },
+                  "OCEAN_HUB_ROUTE_KEY": Object {
+                    "total": 40,
+                  },
+                  "RAIL_HUB_ROUTE_KEY": Object {
+                    "total": 125,
+                  },
+                  "TRUCK_HUB_ROUTE_KEY": Object {
+                    "total": 75,
+                  },
+                },
+                "selected_offer": Object {
+                  "cargo": Object {},
+                  "total": Object {
+                    "value": 77,
+                  },
+                },
+                "total_goods_value": Object {
+                  "currency": "USD",
+                  "value": 15,
+                },
+                "total_price": Object {
+                  "currency": "USD",
+                  "value": 12,
+                },
+                "trucking": Object {
+                  "pre_carriage": Object {},
+                },
+              }
+            }
+            shipmentDispatch={
+              Object {
+                "goTo": [Function],
+              }
+            }
+            size="full"
+            target="quotations"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+          <div
+            className="send_email"
+          >
+            <Formsy
+              disabled={false}
+              getErrorMessage={[Function]}
+              getErrorMessages={[Function]}
+              getValue={[Function]}
+              hasValue={[Function]}
+              isFormDisabled={[Function]}
+              isFormSubmitted={[Function]}
+              isPristine={[Function]}
+              isRequired={[Function]}
+              isValid={[Function]}
+              isValidValue={[Function]}
+              mapping={null}
+              onChange={[Function]}
+              onError={[Function]}
+              onInvalid={[Function]}
+              onInvalidSubmit={[Function]}
+              onReset={[Function]}
+              onSubmit={[Function]}
+              onValid={[Function]}
+              onValidSubmit={[Function]}
+              preventExternalInvalidation={false}
+              resetValue={[Function]}
+              setValidations={[Function]}
+              setValue={[Function]}
+              showError={[Function]}
+              showRequired={[Function]}
+              validationErrors={null}
+            >
+              <Formsy(FormsyInput)
+                innerRef={[Function]}
+                name="quotation_email"
+                onChange={[Function]}
+                placeholder="bob@gateway.com"
+                required={false}
+                type="email"
+                validationError=""
+                validationErrors={Object {}}
+                validations={null}
+                value=""
+              />
+              <RoundButton
+                active={true}
+                back={false}
+                disabled={false}
+                handleDisabled={null}
+                handleNext={[Function]}
+                icon=""
+                iconClass=""
+                inverse={false}
+                size="full"
+                text="Send via email"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </Formsy>
           </div>
         </div>
       </div>
