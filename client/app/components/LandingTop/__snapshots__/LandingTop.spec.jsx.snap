@@ -171,6 +171,7 @@ exports[`theme has truthy properties 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >
@@ -349,6 +350,7 @@ exports[`user.role_id is 1 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >
@@ -527,6 +529,7 @@ exports[`user.role_id is 2 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >
