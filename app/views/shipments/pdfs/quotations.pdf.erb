@@ -8,6 +8,7 @@
     padding-right: 400px;
   }
   .wrapper .title {
+    text-align: center;
     padding: 320px 0 !important;
   }
   .wrapper .title h1 {
@@ -240,13 +241,8 @@
   <% primary_color = tenant.theme["colors"]["primary"] %>
   <% neutral_color = '#C4C4C4' %>
   <% tenant_logo = tenant.theme["logoLarge"] %>
-  <% precarriage = shipment.has_pre_carriage ? primary_color : neutral_color %>
-  <% oncarriage = shipment.has_on_carriage ? primary_color : neutral_color %>
-  <div class="row logo">
-    <div class="col-xs-12 col-xs-offset-12 logo">
-      <%= image_tag embed_remote_image(tenant_logo, 'image/png' ), class: "logo" %>
-    </div>
-  </div>
+  <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
+  <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
   <div class="col-xs-12 title" style="font-size: 150%; text-align: left;">
     <h1>QUOTATIONS</h1>
     <hr style="border-color: <%= primary_color %>">
@@ -257,17 +253,19 @@
 
 
     <% shipments.map do |s| %>
-      <% originfee = s.selected_offer["export"] ? primary_color : neutral_color %>
-      <% destinationfee = s.selected_offer["import"] ? primary_color : neutral_color %>
+      <% origin_fee_color = s.selected_offer["export"] ? primary_color : neutral_color %>
+      <% destination_fee_color = s.selected_offer["import"] ? primary_color : neutral_color %>
       <div class="all-row">
         <div class="main-container container-fluid">
           <div class="info row">
             <% if s.itinerary.mode_of_transport == "ocean" %>
-              <i class="fas fa-anchor col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+              <% mot = "anchor" %>
+            <% elsif s.itinerary.mode_of_transport == "air" %>
+              <% mot = "paper-plane" %>
+            <% else %>
+              <% mot = "truck" %>
             <% end %>
-            <% if s.itinerary.mode_of_transport == "air" %>
-              <i class="fas fa-paper-plane col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
-            <% end %>
+            <i class="fas fa-<%= mot %> col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
             <div class="col-xs-7">
               <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
               <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
@@ -276,19 +274,19 @@
               <div class="row charge-icons">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-2">
-                  <i class="fa fa-truck flip" style="color: <%= precarriage %>"></i>
+                  <i class="fa fa-truck flip" style="color: <%= precarriage_color %>"></i>
                 </div>
                 <div class="col-xs-2">
-                  <i class="fa fa-file-alt" style="color: <%= originfee %>"></i>
+                  <i class="fa fa-file-alt" style="color: <%= origin_fee_color %>"></i>
                 </div>
                 <div class="col-xs-2">
                   <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
                 </div>
                 <div class="col-xs-2">
-                  <i class="fa fa-file" style="color: <%= destinationfee %>"></i>
+                  <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
                 </div>
                 <div class="col-xs-2">
-                  <i class="fa fa-truck" style="color: <%= oncarriage %>"></i>
+                  <i class="fa fa-truck" style="color: <%= oncarriage_color %>"></i>
                 </div>
               </div>
               <div class="row cargo-info">
@@ -350,11 +348,13 @@
             &nbsp;<%= s.selected_offer["total"]["currency"] %>
           </p>
         </div>
-        <p class="notes">1) Prices subject to change 
-  2) All fees are converted at the time of quotation 
-  using that day's European Central bank exchange rates and are an approximation 
-  of the final amount ot be paid. The amount paid at the time of settlement 
-  will reflect the exchange rates of the day.</p>
+        <p class="notes">
+          1) Prices subject to change 
+          2) All fees are converted at the time of quotation 
+          using that day's European Central bank exchange rates and are an approximation 
+          of the final amount ot be paid. The amount paid at the time of settlement 
+          will reflect the exchange rates of the day.
+        </p>
       </div>
       
     <% end %>

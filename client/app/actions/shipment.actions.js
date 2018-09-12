@@ -193,7 +193,6 @@ function chooseQuotes (data) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        // dispatch(push(`/booking/${shipmentData.shipment.id}/thank_you`))
         dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {

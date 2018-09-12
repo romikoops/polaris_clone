@@ -12,7 +12,6 @@ module ShippingTools
     main_quote = Quotation.create(user_id: shipment.user_id)
     schedules.each do |schedule|
       trip = Trip.find(schedule["trip_id"])
-      binding.pry
       on_carriage_hash = !!schedule["quote"]["trucking_on"] ? 
       {
         truck_type: "",
