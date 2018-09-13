@@ -5,10 +5,12 @@ stages:
   - test
   - build
   - review
+  - cleanup
 
 code_quality:
   stage: test
   image: eu.gcr.io/itsmycargo-main/pronto:stable
+  retry: 1
   tags:
     - itsmycargo
   except:
@@ -21,6 +23,7 @@ code_quality:
 danger-review:
   stage: test
   image: eu.gcr.io/itsmycargo-main/danger:latest
+  retry: 1
   tags:
     - itsmycargo
   allow_failure: true
@@ -40,6 +43,7 @@ danger-review:
 api:
   stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
+  retry: 1
   tags:
     - itsmycargo
   services:
@@ -64,6 +68,7 @@ api:
 client:
   stage: test
   image: node:10-alpine
+  retry: 1
   tags:
     - itsmycargo
 
@@ -92,6 +97,7 @@ client:
 docker:
   stage: build
   image: docker:stable
+  retry: 1
   tags:
     - itsmycargo
   before_script:
@@ -113,15 +119,49 @@ docker:
     - master
     - dev
 
-deploy:
+review:
   stage: review
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
-  script:
-    - echo "Deploy a review app"
+
+  script: |
+    helm upgrade --install \
+      --wait \
+      --set backend.image.tag="$CI_COMMIT_SHA" \
+      --set frontend.image.tag="$CI_COMMIT_SHA" \
+      --set service.url="$CI_ENVIRONMENT_URL" \
+      --namespace=default \
+      --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
+      "$CI_ENVIRONMENT_SLUG" \
+      chart/
+
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: https://$CI_ENVIRONMENT_SLUG.itsmycargo.tech
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+    - dev
+
+stop_review:
+  stage: cleanup
+  variables:
+    GIT_STRATEGY: none
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  tags:
+    - itsmycargo
+
+  script: |
+    helm delete --purge "$CI_ENVIRONMENT_SLUG"
+    kubectl delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql"
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  allow_failure: true
   only:
     - branches
   except:
