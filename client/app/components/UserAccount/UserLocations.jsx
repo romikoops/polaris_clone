@@ -11,89 +11,11 @@ import EditLocation from './EditLocation'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 import { gradientTextGenerator } from '../../helpers'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols, t) => [
-  <div
-    key="addLocationButton"
-    className={`${defaults.pointy} ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
-    onClick={() => toggleActiveView('newLocation')}
-  >
-    <div
-      className={`${styles['location-box']} ${
-        styles['new-address']
-      } layout-row layout-align-center-center layout-wrap`}
-    >
-      <div className="layout-row layout-align-center flex-100">
-        <div className={`${styles['plus-icon']}`} />
-      </div>
-
-      <div className="layout-row layout-align-center flex-100">
-        <h3>
-          {t('user:addLocation')}
-        </h3>
-      </div>
-    </div>
-  </div>,
-  locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
-    <div
-      key={v4()}
-      className={`${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
-    >
-      <div className={`${styles['location-box']} flex-100 layout-column`}>
-        <div className={`${styles.header} layout-row layout-align-end-center`}>
-          {op.user.primary ? (
-            <i className={`fa fa-star clip ${styles.icon_primary}`} style={gradient} />
-          ) : (
-            <div className={`layout-row ${styles.icon_primary}`}>
-              <div className="layout-row">
-                <div
-                  className={`${styles.makePrimary} pointy`}
-                  onClick={() => makePrimary(op.location.id)}
-                >
-                  <i className="fa fa-star-o clip" style={gradient} />
-                </div>
-              </div>
-            </div>
-          )}
-          <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
-            <i className="fa fa-pencil" />
-          </span>
-          <span
-            className={`${defaults.emulate_link}`}
-            onClick={() =>
-              destroyLocation(op.location.id)
-            }
-          >
-            <i className={`fa fa-trash ${styles.icon_trash}`} />
-          </span>
-        </div>
-        <div className={`layout-row flex-100 ${styles.location_address}`}>
-          <i className="flex-10 fa fa-map-marker clip" style={gradient} />
-          <div className={`${styles.content} flex layout-wrap layout-align-space-between`}>
-            {op && op.location.street_number && op.location.street ? (
-              <p className="flex-100">{op.location.street_number} {op.location.street} </p>
-            ) : ''}
-            {op.location.city ? (
-              <p className="flex-100"><strong>{op.location.city}</strong></p>
-            ) : ''}
-            {op.location.zip_code ? (
-              <p className="flex-100">{op.location.zip_code}</p>
-            ) : ''}
-            {op.location.country ? (
-              <p className="flex-100"> <Truncate lines={2}>{op.location.country} </Truncate></p>
-            ) : ''}
-          </div>
-        </div>
-      </div>
-    </div>
-  ))
-]
-
 export class UserLocations extends Component {
   constructor (props) {
     super(props)
     this.state = {
       activeView: 'allLocations'
-      // activeView: 'editLocation'
     }
     this.saveLocation = this.saveLocation.bind(this)
     this.toggleActiveView = this.toggleActiveView.bind(this)
@@ -145,6 +67,85 @@ export class UserLocations extends Component {
   render () {
     const { theme, cols, t } = this.props
     const locInfo = this.props.locations
+
+
+    const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
+      <div
+        key="addLocationButton"
+        className={`${defaults.pointy} ${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding`}
+        onClick={() => toggleActiveView('newLocation')}
+      >
+        <div
+          className={`${styles['location-box']} ${
+            styles['new-address']
+          } layout-row layout-align-center-center layout-wrap`}
+        >
+          <div className="layout-row layout-align-center flex-100">
+            <div className={`${styles['plus-icon']}`} />
+          </div>
+
+          <div className="layout-row layout-align-center flex-100">
+            <h3>
+              {t('user:addLocation')}
+            </h3>
+          </div>
+        </div>
+      </div>,
+      locInfo.sort((a, b) => b.user.primary - a.user.primary).map(op => (
+        <div
+          key={v4()}
+          className={`${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
+        >
+          <div className={`${styles['location-box']} flex-100 layout-column`}>
+            <div className={`${styles.header} layout-row layout-align-end-center`}>
+              {op.user.primary ? (
+                <i className={`fa fa-star clip ${styles.icon_primary}`} style={gradient} />
+              ) : (
+                <div className={`layout-row ${styles.icon_primary}`}>
+                  <div className="layout-row">
+                    <div
+                      className={`${styles.makePrimary} pointy`}
+                      onClick={() => makePrimary(op.location.id)}
+                    >
+                      <i className="fa fa-star-o clip" style={gradient} />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
+                <i className="fa fa-pencil" />
+              </span>
+              <span
+                className={`${defaults.emulate_link}`}
+                onClick={() =>
+                  destroyLocation(op.location.id)
+                }
+              >
+                <i className={`fa fa-trash ${styles.icon_trash}`} />
+              </span>
+            </div>
+            <div className={`layout-row flex-100 ${styles.location_address}`}>
+              <i className="flex-10 fa fa-map-marker clip" style={gradient} />
+              <div className={`${styles.content} flex layout-wrap layout-align-space-between`}>
+                {op && op.location.street_number && op.location.street ? (
+                  <p className="flex-100">{op.location.street_number} {op.location.street} </p>
+                ) : ''}
+                {op.location.city ? (
+                  <p className="flex-100"><strong>{op.location.city}</strong></p>
+                ) : ''}
+                {op.location.zip_code ? (
+                  <p className="flex-100">{op.location.zip_code}</p>
+                ) : ''}
+                {op.location.country ? (
+                  <p className="flex-100"> <Truncate lines={2}>{op.location.country} </Truncate></p>
+                ) : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    ]
+
     const gradientFontStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)

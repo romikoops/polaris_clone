@@ -115,6 +115,7 @@ export class AdminRoutesIndex extends Component {
         <div className={`${styles.component_view} flex layout-row layout-align-start-start`}>
           <Tabs
             wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+            paddingFixes
           >
             {motTabs}
 

@@ -11,7 +11,7 @@ import CompanyDetailsSection from './CompanyDetailsSection'
 
 const { fetch, FormData } = window
 
-export class ShipmentContactForm extends Component {
+class ShipmentContactForm extends Component {
   static mapInputs (inputs) {
     const location = {}
     const contact = {}

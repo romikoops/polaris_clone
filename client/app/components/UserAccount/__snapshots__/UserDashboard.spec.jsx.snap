@@ -153,6 +153,7 @@ exports[`shallow render 1`] = `
         </div>
       </div>
       <UserLocations
+        cols={3}
         locations={
           Array [
             Object {
@@ -171,6 +172,7 @@ exports[`shallow render 1`] = `
         }
         makePrimary={[Function]}
         setNav={[Function]}
+        t={[Function]}
         theme={
           Object {
             "colors": Object {

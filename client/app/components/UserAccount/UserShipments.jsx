@@ -13,7 +13,7 @@ export class UserShipments extends Component {
     return (
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-start
-        extra_padding header_buffer"
+        extra_padding"
       >
         <AdminShipmentsComp isUser />
       </div>

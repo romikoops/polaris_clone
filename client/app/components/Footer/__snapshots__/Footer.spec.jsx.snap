@@ -61,10 +61,36 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-align-center"
     >
       <div
-        className="flex-100 buttons upper_footer layout-row layout-align-center-center"
+        className="flex-100 buttons upper_footer layout-row layout-align-space-around-center"
       >
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-35 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <h4
+              className="flex-none"
+            >
+              powered by      
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <a
+              href="https://www.itsmycargo.com/"
+              target="_blank"
+            >
+              <img
+                alt=""
+                className="flex-none pointy powered_by_logo"
+                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+              />
+            </a>
+          </div>
+        </div>
+        <div
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://www.itsmycargo.com/en/ourstory"
@@ -74,7 +100,7 @@ exports[`shallow render 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://itsmycargo.com/en/privacy"
@@ -84,7 +110,7 @@ exports[`shallow render 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://undefined.itsmycargo.com/terms_and_conditions"
@@ -94,7 +120,7 @@ exports[`shallow render 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://www.itsmycargo.com/en/contact"
@@ -103,50 +129,6 @@ exports[`shallow render 1`] = `
             Legal
           </a>
         </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-align-center"
-    >
-      <div
-        className="flex-100
-          layout-row layout-align-space-between-center lower_footer"
-      >
-        <div
-          className="flex-20"
-        />
-        <div
-          className="flex-60 buttons
-            layout-row layout-align-center-center"
-        >
-          <div
-            className="flex-45 layout-row layout-align-end-center"
-          >
-            <div
-              className="flex-5"
-            />
-            <p
-              className="flex-none"
-            >
-              Powered by
-            </p>
-            <div
-              className="flex-5"
-            />
-          </div>
-          <div
-            className="flex-55 layout-row layout-align-start-center"
-          >
-            <img
-              alt=""
-              className="flex-none powered_by_logo"
-              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-20"
-        />
       </div>
     </div>
   </div>
@@ -214,10 +196,36 @@ exports[`theme is falsy 1`] = `
       className="flex-100 layout-align-center"
     >
       <div
-        className="flex-100 buttons upper_footer layout-row layout-align-center-center"
+        className="flex-100 buttons upper_footer layout-row layout-align-space-around-center"
       >
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-35 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <h4
+              className="flex-none"
+            >
+              powered by      
+            </h4>
+            <div
+              className="flex-5"
+            />
+            <a
+              href="https://www.itsmycargo.com/"
+              target="_blank"
+            >
+              <img
+                alt=""
+                className="flex-none pointy powered_by_logo"
+                src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+              />
+            </a>
+          </div>
+        </div>
+        <div
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://www.itsmycargo.com/en/ourstory"
@@ -227,7 +235,7 @@ exports[`theme is falsy 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://itsmycargo.com/en/privacy"
@@ -237,7 +245,7 @@ exports[`theme is falsy 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://undefined.itsmycargo.com/terms_and_conditions"
@@ -247,7 +255,7 @@ exports[`theme is falsy 1`] = `
           </a>
         </div>
         <div
-          className="flex-25 layout-row layout-align-center-center"
+          className="flex-15 layout-row layout-align-center-center"
         >
           <a
             href="https://www.itsmycargo.com/en/contact"
@@ -256,50 +264,6 @@ exports[`theme is falsy 1`] = `
             Legal
           </a>
         </div>
-      </div>
-    </div>
-    <div
-      className="flex-100 layout-align-center"
-    >
-      <div
-        className="flex-100
-          layout-row layout-align-space-between-center lower_footer"
-      >
-        <div
-          className="flex-20"
-        />
-        <div
-          className="flex-60 buttons
-            layout-row layout-align-center-center"
-        >
-          <div
-            className="flex-45 layout-row layout-align-end-center"
-          >
-            <div
-              className="flex-5"
-            />
-            <p
-              className="flex-none"
-            >
-              Powered by
-            </p>
-            <div
-              className="flex-5"
-            />
-          </div>
-          <div
-            className="flex-55 layout-row layout-align-start-center"
-          >
-            <img
-              alt=""
-              className="flex-none powered_by_logo"
-              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-            />
-          </div>
-        </div>
-        <div
-          className="flex-20"
-        />
       </div>
     </div>
   </div>

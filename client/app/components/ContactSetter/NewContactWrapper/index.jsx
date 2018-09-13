@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from '../../../prop-types'
 import styles from './NewContactWrapper.scss'
 import ContactSetterNewContactWrapperTitle from './Title'
-import { ShipmentContactForm } from '../../ShipmentContactForm/ShipmentContactForm'
+import ShipmentContactForm from '../../ShipmentContactForm/ShipmentContactForm'
 import AddressBook from '../../AddressBook/AddressBook'
 
 export default class ContactSetterNewContactWrapper extends PureComponent {
