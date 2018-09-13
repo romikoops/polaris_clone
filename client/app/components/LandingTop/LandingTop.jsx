@@ -74,7 +74,7 @@ export class LandingTop extends Component {
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
     const loginLink = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="Login / Register"
           theme={theme}
