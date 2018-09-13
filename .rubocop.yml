@@ -3,6 +3,7 @@ AllCops:
   Exclude:
     - 'bin/*'
     - 'client/**/*'
+    - 'db/schema.rb'
     - 'lib/*/bin/*'
     - Rakefile
 
@@ -28,6 +29,10 @@ Metrics/MethodLength:
   Exclude:
     - db/migrate/*.rb
     - spec/**/*_spec.rb
+
+Naming/FileName:
+  Exclude:
+    - config/initializers/*.rb
 
 Style/Documentation:
   Enabled: false
