@@ -73,7 +73,17 @@ export class LandingTop extends Component {
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
-    const loginLink = ''
+    const loginLink = (
+      <div className="layout-row flex-50">
+        <SquareButton
+          text="Login / Register"
+          theme={theme}
+          handleNext={() => this.showLogin()}
+          size="small"
+          active
+        />
+      </div>
+    )
 
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
