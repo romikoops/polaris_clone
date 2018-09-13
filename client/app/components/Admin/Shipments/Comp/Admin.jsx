@@ -172,7 +172,9 @@ export class ShipmentsCompAdmin extends Component {
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <Tabs>
+        <Tabs
+          paddingFixes="padding_top"
+        >
           <Tab
             tabTitle="Requested"
             extraClick={() => this.getTargetShipmentsFromPage('requested', 1)}

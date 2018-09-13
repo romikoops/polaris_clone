@@ -174,7 +174,6 @@ class AdminClientsIndex extends Component {
               `}
           onClick={page > 1 ? () => this.deltaPage(-1) : null}
         >
-          {/* style={page === 1 ? { display: 'none' } : {}} */}
           <i className="fa fa-chevron-left" />
           <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
         </div>
@@ -196,11 +195,12 @@ class AdminClientsIndex extends Component {
     return (
       <div
         className="flex-100 layout-row layout-wrap layout-align-space-between-start
-        extra_padding_left header_buffer"
+        extra_padding_left"
       >
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <Tabs
             wrapperTabs="layout-row flex-25 flex-sm-40 flex-xs-80"
+            paddingFixes
           >
             <Tab
               tabTitle="Open"

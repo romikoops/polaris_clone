@@ -109,7 +109,7 @@ export class LandingTop extends Component {
                     <div className="flex-none layout-row layout-align-start-center">
                       <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                       <div className="flex-5" />
-                      <a href="https://www.itsmycargo.com/" target="_blank">
+                      <a className="layout-row layout-align-center-center" href="https://www.itsmycargo.com/" target="_blank">
                         <img
                           src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                           alt=""
