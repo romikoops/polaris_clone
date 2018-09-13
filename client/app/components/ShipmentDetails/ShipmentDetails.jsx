@@ -45,9 +45,11 @@ export class ShipmentDetails extends Component {
       offset: -180
     })
   }
+
   static errorsAt (errorsObjects) {
     return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
+
   static handleCollectiveWeightChange (cargoItem, suffixName, value) {
     const cargo = cargoItem
     const prevCollectiveWeight = cargo.payload_in_kg * cargo.quantity
@@ -60,6 +62,7 @@ export class ShipmentDetails extends Component {
 
     return cargo
   }
+  
   constructor (props) {
     super(props)
     this.state = {
