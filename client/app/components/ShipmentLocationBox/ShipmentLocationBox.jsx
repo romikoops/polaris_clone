@@ -17,6 +17,7 @@ import routeFilters from './routeFilters'
 import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
+import Autocomplete from './Autocomplete'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -399,21 +400,21 @@ export class ShipmentLocationBox extends Component {
       map,
       directionsService,
       directionsDisplay
+    }, () => {
+      if (this.props.has_pre_carriage) {
+        this.initAutocomplete(this.state.map, 'origin')
+        setTimeout(() => {
+          this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
+        }, 1000)
+      }
+
+      if (this.props.has_on_carriage) {
+        this.initAutocomplete(this.state.map, 'destination')
+        setTimeout(() => {
+          this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
+        }, 1000)
+      }
     })
-
-    if (this.props.has_pre_carriage) {
-      this.initAutocomplete(map, 'origin')
-      setTimeout(() => {
-        this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
-      }, 750)
-    }
-
-    if (this.props.has_on_carriage) {
-      this.initAutocomplete(map, 'destination')
-      setTimeout(() => {
-        this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
-      }, 750)
-    }
   }
 
   initAutocomplete (map, target) {
@@ -432,9 +433,9 @@ export class ShipmentLocationBox extends Component {
 
   postToggleAutocomplete (target) {
     const { map } = this.state
-
-    if (target === 'origin' || target === 'destination') {
-      setTimeout(() => this.initAutocomplete(map, target), 1000)
+    if ( target === 'destination') {
+      const timeout = map ? 1000 : 2000
+      setTimeout(() => this.initAutocomplete(map, target), timeout)
     }
   }
 
@@ -1141,7 +1142,15 @@ export class ShipmentLocationBox extends Component {
 
     const originAuto = (
       <div className="flex-100 layout-row layout-wrap">
-        <div className={styles.input_wrapper}>
+        <Autocomplete
+          gMaps={this.props.gMaps}
+          theme={this.props.theme}
+          t={t}
+          map={this.state.map}
+          input={this.state.autoText.origin}
+          handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
+        />
+        {/* <div className={styles.input_wrapper}>
           <input
             id="origin"
             name="origin"
@@ -1157,7 +1166,7 @@ export class ShipmentLocationBox extends Component {
           <span className={errorStyles.error_message} style={{ color: 'white' }}>
             {originFieldsHaveErrors ? t('errors:noRoutes') : ''}
           </span>
-        </div>
+        </div> */}
       </div>
     )
 

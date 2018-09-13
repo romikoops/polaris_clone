@@ -199,4 +199,37 @@
     line-height: 18px;
     font-size: 20px;
   }
+  .show_results {
+    position: absolute;
+    width: 100%;
+    top: 50px;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    background: #FFFFFF;
+  }
+  .hide_results {
+    height: 0;
+    display: none;
+  }
+  .autocomplete_container {
+    position: relative;
+  }
+  .autocomplete_container .autocomplete_input{
+    background: #FFFFFF;
+    font-size: 12px;
+  }
+  .autocomplete_card {
+    height: 50px;
+    background: #FFFFFF;
+    padding: 5px 2px;
+    margin: 2px 0;
+    border-bottom: 1px solid grey;
+  }
+  .autocomplete_card.highlighted {
+    height: 50px;
+    background: #FFFFFF;
+    margin: 2px 0;
+    border-bottom: 1px solid rgb(15, 0, 219);
+  }
 }
