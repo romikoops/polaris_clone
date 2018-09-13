@@ -41,6 +41,8 @@
   }
   .content {
     z-index: 1;
+    min-height: 55px;
+    width: 100%;
     a {
       padding-bottom: 10px;
     }

@@ -172,7 +172,9 @@ export class ShipmentsCompAdmin extends Component {
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <Tabs>
+        <Tabs
+          paddingFixes="padding_top"
+        >
           <Tab
             tabTitle="Requested"
             extraClick={() => this.getTargetShipmentsFromPage('requested', 1)}
@@ -233,23 +235,6 @@ export class ShipmentsCompAdmin extends Component {
             />
           </Tab>
         </Tabs>
-
-        {mergedOpenShipments.length === 0 &&
-          mergedReqShipments.length === 0 &&
-          mergedFinishedShipments.length === 0 ? (
-            <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  adminStyles.sec_subheader
-                }`}
-              >
-                <p className={` ${adminStyles.sec_subheader_text} flex-none`}> No Shipments yet</p>
-              </div>
-              <p className="flex-none"> As shipments are requested, they will appear here</p>
-            </div>
-          ) : (
-            ''
-          )}
       </div>
     )
 

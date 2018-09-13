@@ -98,10 +98,10 @@ exports[`theme has truthy properties 1`] = `
             </h3>
           </div>
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row layout-wrap layout-align-start-start wrapper_btns flex-md-100 flex-75 "
           >
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -129,7 +129,7 @@ exports[`theme has truthy properties 1`] = `
               />
             </div>
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -157,7 +157,7 @@ exports[`theme has truthy properties 1`] = `
               />
             </div>
             <div
-              className="flex layout-row flex-md-100 banner_text"
+              className="flex layout-row flex-100 banner_text"
             >
               <div
                 className="flex-none layout-row layout-align-start-center"
@@ -171,6 +171,7 @@ exports[`theme has truthy properties 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >
@@ -284,10 +285,10 @@ exports[`user.role_id is 1 1`] = `
             </h3>
           </div>
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row layout-wrap layout-align-start-start wrapper_btns flex-md-100 flex-75 "
           >
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -311,7 +312,7 @@ exports[`user.role_id is 1 1`] = `
               />
             </div>
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -335,7 +336,7 @@ exports[`user.role_id is 1 1`] = `
               />
             </div>
             <div
-              className="flex layout-row flex-md-100 banner_text"
+              className="flex layout-row flex-100 banner_text"
             >
               <div
                 className="flex-none layout-row layout-align-start-center"
@@ -349,6 +350,7 @@ exports[`user.role_id is 1 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >
@@ -462,10 +464,10 @@ exports[`user.role_id is 2 1`] = `
             </h3>
           </div>
           <div
-            className="layout-row layout-md-column layout-sm-column layout-align-start-start wrapper_btns flex-md-100 flex-75 "
+            className="layout-row layout-wrap layout-align-start-start wrapper_btns flex-md-100 flex-75 "
           >
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -489,7 +491,7 @@ exports[`user.role_id is 2 1`] = `
               />
             </div>
             <div
-              className="layout-row flex-50"
+              className="layout-row flex-50 flex-md-100 margin_bottom"
             >
               <SquareButton
                 active={true}
@@ -513,7 +515,7 @@ exports[`user.role_id is 2 1`] = `
               />
             </div>
             <div
-              className="flex layout-row flex-md-100 banner_text"
+              className="flex layout-row flex-100 banner_text"
             >
               <div
                 className="flex-none layout-row layout-align-start-center"
@@ -527,6 +529,7 @@ exports[`user.role_id is 2 1`] = `
                   className="flex-5"
                 />
                 <a
+                  className="layout-row layout-align-center-center"
                   href="https://www.itsmycargo.com/"
                   target="_blank"
                 >

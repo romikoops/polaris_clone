@@ -57,7 +57,7 @@ export function NavDropdown ({
         </div>
       ) : (
         <div className={`pointy layout-row layout-align-center-center ${styles.dropbtn}`}>
-          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#333333' }}>Log In / Register</a>
+          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#4F4F4F' }}>Log In / Register</a>
         </div>
       )}
     </div>

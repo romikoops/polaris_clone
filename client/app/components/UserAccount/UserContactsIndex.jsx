@@ -50,6 +50,19 @@ export class UserContactsIndex extends Component {
       t
     } = this.props
 
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="New Contact"
+          active
+          handleNext={toggleNewContact}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
         <div className="flex-80 flex-sm-95 flex-xs-95 layout-row layout-align-start-start">
@@ -94,18 +107,14 @@ export class UserContactsIndex extends Component {
           <div className={`layout-column  hide-xs layout-align-end-end ${styles.side_box_style}`}>
             <SideOptionsBox
               header="Data Manager"
-              flexOptions="layout-row layout-wrap flex-20 flex-md-15 flex-sm-10 "
               content={
-                <div className="layout-row flex-100 layout-align-center-center">
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <RoundButton
-                      theme={theme}
-                      size="full"
-                      text="New Contact"
-                      active
-                      handleNext={toggleNewContact}
-                      iconClass="fa-plus"
-                    />
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    {newButton}
                   </div>
                 </div>
               }

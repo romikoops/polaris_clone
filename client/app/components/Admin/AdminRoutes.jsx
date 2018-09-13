@@ -3,13 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-
 import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
-// import styles from './Admin.scss'
-
 import { adminActions } from '../../actions'
 import { Modal } from '../Modal/Modal'
-// import { TextHeading } from '../TextHeading/TextHeading'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -58,7 +54,7 @@ class AdminRoutes extends Component {
     } = this.props
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {this.state.newRoute ? (
           <Modal
             component={
@@ -85,7 +81,6 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRoutesIndex
                 theme={theme}
-                // hubs={hubs}
                 hubHash={hubHash}
                 itineraries={itineraries}
                 adminDispatch={adminDispatch}
@@ -104,7 +99,6 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRouteView
                 theme={theme}
-                // hubs={hubs}
                 hubHash={hubHash}
                 itineraryData={itinerary}
                 adminDispatch={adminDispatch}
