@@ -993,6 +993,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    strong_migrations (0.2.3)
+      activerecord (>= 3.2.0)
     table_print (1.5.6)
     thor (0.20.0)
     thread_safe (0.3.6)
@@ -1088,6 +1090,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   sprockets-rails
+  strong_migrations
   table_print
   timecop
   tzinfo-data

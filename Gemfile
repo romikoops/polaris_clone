@@ -13,6 +13,8 @@ gem 'pg', '~> 0.21'
 gem 'puma', '~> 3.11'
 # Use activerecord-import for bulk insertion
 gem 'activerecord-import'
+# Strong Migrations - Prevent Non Zero-Down time Migrations
+gem 'strong_migrations'
 
 # Setup RailsConfig for easier secret management
 gem 'config'
