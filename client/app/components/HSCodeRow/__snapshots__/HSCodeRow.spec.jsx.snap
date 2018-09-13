@@ -43,7 +43,6 @@ exports[`cargoItems is falsy 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -210,7 +209,6 @@ exports[`cont.dangerousGoods is true 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -531,7 +529,6 @@ exports[`containers is falsy 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -740,7 +737,6 @@ exports[`shallow render 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -1061,7 +1057,6 @@ exports[`state.showPaste is true 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -1381,7 +1376,6 @@ exports[`theme is falsy 1`] = `
           text="hs_code"
           theme={null}
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div
@@ -1702,7 +1696,6 @@ exports[`variable textInputBool is true 1`] = `
             }
           }
           toolText=""
-          wrapperClassName=""
         />
       </div>
       <div

@@ -64,7 +64,7 @@ class AdminShipments extends Component {
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.margin_header} ${styles.sec_title}`}
         >
           {/* <TextHeading theme={theme} size={1} text="Shipments" /> */}
         </div>

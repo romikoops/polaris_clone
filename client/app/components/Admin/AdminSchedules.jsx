@@ -16,6 +16,7 @@ import CardRoutesIndex from './CardRouteIndex'
 import { WorldMap } from './DashboardMap/WorldMap'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
+import { RoundButton } from '../RoundButton/RoundButton';
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -163,6 +164,18 @@ class AdminSchedules extends Component {
     ) : (
       ''
     )
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="New"
+          active
+          handleNext={this.toggleView}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <AdminScheduleGenerator
@@ -266,6 +279,23 @@ class AdminSchedules extends Component {
                 </div>
               )}
             />
+            <CollapsingBar
+              showArrow
+              collapsed={!expander.new}
+              theme={theme}
+              handleCollapser={() => this.toggleExpander('new')}
+              text="Create new schedules"
+              faClass="fa fa-plus-circle"
+              content={(
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  {newButton}
+                </div>
+              )}
+            />
           </div>
         )}
       />)
@@ -280,9 +310,7 @@ class AdminSchedules extends Component {
         theme={theme}
         scope={scope}
         mot={mot}
-        newText="New Schedule/s"
         adminDispatch={adminDispatch}
-        toggleNew={this.toggleView}
         sideMenuNodes={sideMenuNodes}
         handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
       />

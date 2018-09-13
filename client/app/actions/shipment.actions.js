@@ -49,7 +49,7 @@ function reuseShipment (shipment) {
 
   return (dispatch) => {
     dispatch(request(shipment))
-    dispatch(newShipment(newShipmentRequest))
+    dispatch(newShipment(newShipmentRequest, true))
   }
 }
 
