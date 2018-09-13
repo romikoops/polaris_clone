@@ -249,7 +249,7 @@ export class AdminTruckingView extends Component {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center five_p">
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-stretch five_p">
               <GreyBox
                 isBox
                 padding
@@ -320,7 +320,7 @@ export class AdminTruckingView extends Component {
       </div>) : ''
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
         {uploadStatus}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -354,7 +354,7 @@ export class AdminTruckingView extends Component {
               { currentTruckingPricing ? backBtn : ''}
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-              <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+              <div className="flex-100 layout-row layout-align-start-stretch layout-wrap">
                 {truckView}
               </div>
             </div>

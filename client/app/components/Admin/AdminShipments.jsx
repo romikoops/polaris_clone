@@ -31,12 +31,10 @@ class AdminShipments extends Component {
   viewShipment (shipment) {
     const { adminDispatch } = this.props
     adminDispatch.getShipment(shipment.id, true)
-    // this.setState({ selectedShipment: true })
   }
 
   backToIndex () {
     const { dispatch, history } = this.props
-    // this.setState({ selectedShipment: false })
     dispatch(history.push('/admin/shipments'))
   }
   handleShipmentAction (id, action) {

@@ -35,7 +35,7 @@ import {
 } from '../../classNames'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 
-const ACCEPT = `${ROW(33)} ${ALIGN_END} height_100`
+const ACCEPT = `${ROW(33)} height_100`
 
 const AFTER_CONTAINER =
   `${WRAP_ROW('NONE')} ${ALIGN_CENTER_START} content_width_booking`

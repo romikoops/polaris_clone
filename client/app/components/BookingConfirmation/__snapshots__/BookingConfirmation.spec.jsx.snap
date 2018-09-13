@@ -954,7 +954,7 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -2041,7 +2041,7 @@ exports[`props.shipmentData.documents is truthy 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -3177,7 +3177,7 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -4206,7 +4206,7 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -5234,7 +5234,7 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -6244,7 +6244,7 @@ exports[`shallow render 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -7567,7 +7567,7 @@ exports[`with cargo items 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",
@@ -8848,7 +8848,7 @@ exports[`with containers 1`] = `
           </div>
         </div>
         <div
-          className="flex-33 layout-row layout-align-end-end height_100"
+          className="flex-33 layout-row height_100"
           style={
             Object {
               "height": "150px",

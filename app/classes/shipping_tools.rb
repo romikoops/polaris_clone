@@ -117,8 +117,8 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      contact_location = Location.create_and_geocode(contact_location_params(resource))
-      contact_params = contact_params(resource, contact_location.id)
+      
+      contact_params = contact_params(resource, nil)
       contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
       contact

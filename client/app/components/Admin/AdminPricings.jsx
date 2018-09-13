@@ -93,7 +93,7 @@ class AdminPricings extends Component {
     const { nexuses } = trucking
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         {selectedPricing ? backButton : ''}
 
