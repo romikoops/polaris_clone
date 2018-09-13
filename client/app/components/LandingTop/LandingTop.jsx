@@ -142,9 +142,6 @@ export class LandingTop extends Component {
                   toAdmin}
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
-                {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
-                {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
-                {user && user.role && user.role.name === 'admin' && toAdmin}
                 <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
                   <div className="flex-none layout-row layout-align-start-center">
                     <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>

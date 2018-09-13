@@ -134,39 +134,30 @@ exports[`theme has truthy properties 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex-none layout-row layout-align-start-center"
+            className="flex layout-row flex-100 banner_text"
           >
-            <h4
-              className="flex-none"
-            >
-              powered by
-            </h4>
             <div
-              className="flex layout-row flex-100 banner_text"
+              className="flex-none layout-row layout-align-start-center"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
+              <h4
+                className="flex-none"
               >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
+                powered by      
+              </h4>
+              <div
+                className="flex-5"
+              />
+              <a
+                className="layout-row layout-align-center-center"
+                href="https://www.itsmycargo.com/"
+                target="_blank"
+              >
+                <img
+                  alt=""
+                  className="flex-none pointy powered_by_logo"
+                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                 />
-                <a
-                  className="layout-row layout-align-center-center"
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -302,39 +293,30 @@ exports[`user.role_id is 1 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex-none layout-row layout-align-start-center"
+            className="flex layout-row flex-100 banner_text"
           >
-            <h4
-              className="flex-none"
-            >
-              powered by
-            </h4>
             <div
-              className="flex layout-row flex-100 banner_text"
+              className="flex-none layout-row layout-align-start-center"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
+              <h4
+                className="flex-none"
               >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
+                powered by      
+              </h4>
+              <div
+                className="flex-5"
+              />
+              <a
+                className="layout-row layout-align-center-center"
+                href="https://www.itsmycargo.com/"
+                target="_blank"
+              >
+                <img
+                  alt=""
+                  className="flex-none pointy powered_by_logo"
+                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                 />
-                <a
-                  className="layout-row layout-align-center-center"
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -470,39 +452,30 @@ exports[`user.role_id is 2 1`] = `
           className="flex-70 banner_text"
         >
           <div
-            className="flex-none layout-row layout-align-start-center"
+            className="flex layout-row flex-100 banner_text"
           >
-            <h4
-              className="flex-none"
-            >
-              powered by
-            </h4>
             <div
-              className="flex layout-row flex-100 banner_text"
+              className="flex-none layout-row layout-align-start-center"
             >
-              <div
-                className="flex-none layout-row layout-align-start-center"
+              <h4
+                className="flex-none"
               >
-                <h4
-                  className="flex-none"
-                >
-                  powered by      
-                </h4>
-                <div
-                  className="flex-5"
+                powered by      
+              </h4>
+              <div
+                className="flex-5"
+              />
+              <a
+                className="layout-row layout-align-center-center"
+                href="https://www.itsmycargo.com/"
+                target="_blank"
+              >
+                <img
+                  alt=""
+                  className="flex-none pointy powered_by_logo"
+                  src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
                 />
-                <a
-                  className="layout-row layout-align-center-center"
-                  href="https://www.itsmycargo.com/"
-                  target="_blank"
-                >
-                  <img
-                    alt=""
-                    className="flex-none pointy powered_by_logo"
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                  />
-                </a>
-              </div>
+              </a>
             </div>
           </div>
         </div>
