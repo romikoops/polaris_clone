@@ -606,7 +606,10 @@ export class AdminShipmentView extends Component {
                       <div className="layout-row flex-100">
                         <ShipmentOverviewShowCard
                           et={etdJSX}
+                          text="ETD"
+                          theme={theme}
                           hub={shipment.origin_hub}
+                          shipment={shipment}
                           bg={bg1}
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
@@ -634,8 +637,11 @@ export class AdminShipmentView extends Component {
                       <div className="layout-row flex-100">
                         <ShipmentOverviewShowCard
                           et={etaJSX}
+                          text="ETA"
+                          theme={theme}
                           hub={shipment.destination_hub}
                           bg={bg2}
+                          shipment={shipment}
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
                           toggleEditTime={this.toggleEditTime}
@@ -644,54 +650,6 @@ export class AdminShipmentView extends Component {
                       </div>
                     )}
                   />
-                </div>
-
-                <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-                  <div className="flex-60 layout-align-center-stretch">
-                    <div className="layout-row flex-100 layout-align-start-center">
-                      <div className="flex-100 layout-row layout-align-start-center">
-                        <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                          {shipment.pickup_address
-                            ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                              .format('DD/MM/YYYY')}`
-                            : ''}
-                        </h4>
-                      </div>
-                    </div>
-                    {shipment.pickup_address ? (
-                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                        <p>{shipment.pickup_address.street} &nbsp;
-                          {shipment.pickup_address.street_number},&nbsp;
-                          <strong>{shipment.pickup_address.city},&nbsp;
-                            {shipment.pickup_address.country.name} </strong>
-                        </p>
-                      </div>
-                    ) : ''}
-                  </div>
-
-                  <div className="flex-40 layout-align-center-stretch">
-                    <div className="layout-row flex-100 layout-align-start-center">
-                      <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                        {shipment.delivery_address
-                          ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                            .format('DD/MM/YYYY')}`
-                          : ''}
-                      </h4>
-                    </div>
-                    {shipment.delivery_address ? (
-                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                        <p>{shipment.delivery_address.street}&nbsp;
-                          {shipment.delivery_address.street_number},&nbsp;
-                          <strong>{shipment.delivery_address.city},&nbsp;
-                            {shipment.delivery_address.country.name} </strong>
-
-                        </p>
-                      </div>
-                    ) : ''}
-
-                  </div>
                 </div>
               </div>
             </Tab>
