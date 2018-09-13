@@ -189,7 +189,6 @@ function chooseQuotes (data) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
         dispatch(failure(error))

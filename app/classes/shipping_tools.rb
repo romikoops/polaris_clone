@@ -628,7 +628,7 @@ module ShippingTools
 
   def self.save_and_send_quotes(shipment, schedules, email)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
-    QuoteMailer.quotation_email(shipment, main_quote.shipments, email).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+    QuoteMailer.quotation_email(shipment, main_quote.shipments, email, main_quote).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.tenant_notification_email(user, shipment)
