@@ -177,6 +177,7 @@ export class ShipmentsCompAdmin extends Component {
           {statusKeys.map(status => (<Tab
             tabTitle={capitalize(status)}
             theme={theme}
+            paddingFixes
           >
             <AdminShipmentsBox
               handleClick={this.viewShipment}

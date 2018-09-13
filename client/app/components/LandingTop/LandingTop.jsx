@@ -142,14 +142,21 @@ export class LandingTop extends Component {
                   toAdmin}
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
-                <div className="flex-none layout-row layout-align-start-center">
-                  <h4 className="flex-none">powered by</h4>
-                  <div className="flex-5" />
-                  <img
-                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-                    alt=""
-                    className={`flex-none ${styles.powered_by_logo}`}
-                  />
+                {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
+                {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
+                {user && user.role && user.role.name === 'admin' && toAdmin}
+                <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
+                  <div className="flex-none layout-row layout-align-start-center">
+                    <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
+                    <div className="flex-5" />
+                    <a className="layout-row layout-align-center-center" href="https://www.itsmycargo.com/" target="_blank">
+                      <img
+                        src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                        alt=""
+                        className={`flex-none pointy ${styles.powered_by_logo}`}
+                      />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

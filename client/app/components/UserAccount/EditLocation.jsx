@@ -16,7 +16,7 @@ const mapStyle = {
   boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 }
 
-export class EditLocation extends Component {
+class EditLocation extends Component {
   constructor (props) {
     super(props)
 

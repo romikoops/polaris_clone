@@ -142,13 +142,32 @@ exports[`theme has truthy properties 1`] = `
               powered by
             </h4>
             <div
-              className="flex-5"
-            />
-            <img
-              alt=""
-              className="flex-none powered_by_logo"
-              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-            />
+              className="flex layout-row flex-100 banner_text"
+            >
+              <div
+                className="flex-none layout-row layout-align-start-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                  powered by      
+                </h4>
+                <div
+                  className="flex-5"
+                />
+                <a
+                  className="layout-row layout-align-center-center"
+                  href="https://www.itsmycargo.com/"
+                  target="_blank"
+                >
+                  <img
+                    alt=""
+                    className="flex-none pointy powered_by_logo"
+                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                  />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -291,13 +310,32 @@ exports[`user.role_id is 1 1`] = `
               powered by
             </h4>
             <div
-              className="flex-5"
-            />
-            <img
-              alt=""
-              className="flex-none powered_by_logo"
-              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-            />
+              className="flex layout-row flex-100 banner_text"
+            >
+              <div
+                className="flex-none layout-row layout-align-start-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                  powered by      
+                </h4>
+                <div
+                  className="flex-5"
+                />
+                <a
+                  className="layout-row layout-align-center-center"
+                  href="https://www.itsmycargo.com/"
+                  target="_blank"
+                >
+                  <img
+                    alt=""
+                    className="flex-none pointy powered_by_logo"
+                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                  />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -440,13 +478,32 @@ exports[`user.role_id is 2 1`] = `
               powered by
             </h4>
             <div
-              className="flex-5"
-            />
-            <img
-              alt=""
-              className="flex-none powered_by_logo"
-              src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
-            />
+              className="flex layout-row flex-100 banner_text"
+            >
+              <div
+                className="flex-none layout-row layout-align-start-center"
+              >
+                <h4
+                  className="flex-none"
+                >
+                  powered by      
+                </h4>
+                <div
+                  className="flex-5"
+                />
+                <a
+                  className="layout-row layout-align-center-center"
+                  href="https://www.itsmycargo.com/"
+                  target="_blank"
+                >
+                  <img
+                    alt=""
+                    className="flex-none pointy powered_by_logo"
+                    src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"
+                  />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
