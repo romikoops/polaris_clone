@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'bigdecimal'
 class Container < ApplicationRecord
   # The following Constants are currently being stored directly
   # in the Front End, but may be needed in future refactoring.
