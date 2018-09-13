@@ -55,7 +55,7 @@ export class AdminHubEdit extends Component {
 
     place.address_components.forEach((ac) => {
       if (ac.types.includes('street_number')) {
-        tmpAddress.number = ac.long_name
+        tmpAddress.street_number = ac.long_name
       }
 
       if (ac.types.includes('route') || ac.types.includes('premise')) {
@@ -92,7 +92,6 @@ export class AdminHubEdit extends Component {
     const key1 = eventKeys[0]
     const key2 = eventKeys[1]
     const val = event.target.value
-
     this.setState({
       [key1]: {
         ...this.state[key1],
@@ -104,7 +103,6 @@ export class AdminHubEdit extends Component {
     const { adminDispatch, hub } = this.props
     const file = e.target.files[0]
     adminDispatch.newHubImage(hub.id, file)
-    this.toggleEdit()
   }
 
   clickUploaderInput (e) {
@@ -220,7 +218,7 @@ export class AdminHubEdit extends Component {
                   >
                     <p className="flex-100">Latitude</p>
                     <input
-                      name="location-latitdue"
+                      name="location-latitude"
                       className="flex-none"
                       type="string"
                       onChange={this.handleAddressChange}
@@ -276,7 +274,7 @@ export class AdminHubEdit extends Component {
                   <p className="flex-100">No.</p>
                   <input
                     id="not-auto"
-                    name="location-number"
+                    name="location-street_number"
                     className="flex-none"
                     type="string"
                     onChange={this.handleAddressChange}

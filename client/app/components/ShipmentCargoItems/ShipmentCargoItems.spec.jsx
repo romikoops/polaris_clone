@@ -19,7 +19,7 @@ jest.mock('../QuantityInput/QuantityInput', () => {
   }
 })
 // eslint-disable-next-line import/first
-import { ShipmentCargoItems } from './ShipmentCargoItems'
+import ShipmentCargoItems from './ShipmentCargoItems'
 
 const propsBase = {
   theme,

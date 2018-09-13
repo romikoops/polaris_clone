@@ -249,11 +249,11 @@ export class AdminTruckingView extends Component {
           const idenitfierKey = Object.keys(tp).filter(key => key !== 'truckingPricing' && key !== 'countryCode')[0]
 
           return (
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center">
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-stretch five_p">
               <GreyBox
                 isBox
                 padding
-                component={(
+                content={(
                   <div
                     className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
                       styles.trucking_display_cell
@@ -262,14 +262,14 @@ export class AdminTruckingView extends Component {
                     onClick={() => this.selectTruckingPricing(tp)}
                   >
                     {loadTypeBool
-                      ? <div className="flex-70 layout-row layout-align-center-center">
+                      ? <div className="flex-66 layout-row layout-align-center-center">
                         <p className="flex-50">{nameToDisplay(tp.truckingPricing.cargo_class)}</p>
                         <p className={`flex-50 ${styles.truck_type_border}`}>{nameToDisplay(tp.truckingPricing.truck_type)}</p>
                       </div>
                       : ''
                     }
                     {idenitfierKey === 'distance' ? (
-                      <div className="flex-30 layout-column layout-wrap layout-align-center-center">
+                      <div className="flex-33 layout-column layout-wrap layout-align-center-center">
                         <p className="flex-90">{capitalize(idenitfierKey)}</p>
                         <p className="flex-90"> {getTruckingPricingKey(tp)}</p>
                       </div>
@@ -324,18 +324,9 @@ export class AdminTruckingView extends Component {
         {uploadStatus}
         <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            {/* <div
-              className={`flex-100 layout-row layout-align-space-between-center ${
-                styles.sec_title
-              }`}
-            >
-              <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-                {hub.name}
-              </p>
-            </div> */}
             <div
               className={`
-                flex-95 layout-row layout-align-center-center
+                flex-100 layout-row layout-align-center-center
                 ${currentTruckingPricing ? 'margin_bottom' : ''}
                 ${hubStyles.hub_title}
               `}
@@ -363,7 +354,7 @@ export class AdminTruckingView extends Component {
               { currentTruckingPricing ? backBtn : ''}
             </div>
             <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-              <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+              <div className="flex-100 layout-row layout-align-start-stretch layout-wrap">
                 {truckView}
               </div>
             </div>

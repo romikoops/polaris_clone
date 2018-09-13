@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -45,8 +46,22 @@ export class UserContactsIndex extends Component {
       viewContact,
       toggleNewContact,
       newContactBox,
-      numPages
+      numPages,
+      t
     } = this.props
+
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="New Contact"
+          active
+          handleNext={toggleNewContact}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
@@ -70,7 +85,7 @@ export class UserContactsIndex extends Component {
               >
                 {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
                 <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
               </div>
               {}
               <p>{this.state.page}</p>
@@ -81,7 +96,7 @@ export class UserContactsIndex extends Component {
             `}
                 onClick={this.state.page < numPages ? this.nextPage : null}
               >
-                <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
                 <i className="fa fa-chevron-right" />
               </div>
             </div>
@@ -92,18 +107,14 @@ export class UserContactsIndex extends Component {
           <div className={`layout-column  hide-xs layout-align-end-end ${styles.side_box_style}`}>
             <SideOptionsBox
               header="Data Manager"
-              flexOptions="layout-row layout-wrap flex-20 flex-md-15 flex-sm-10 "
               content={
-                <div className="layout-row flex-100 layout-align-center-center">
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <RoundButton
-                      theme={theme}
-                      size="full"
-                      text="New Contact"
-                      active
-                      handleNext={toggleNewContact}
-                      iconClass="fa-plus"
-                    />
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <div
+                    className={`${
+                      styles.action_section
+                    } flex-100 layout-row layout-align-center-center layout-wrap`}
+                  >
+                    {newButton}
                   </div>
                 </div>
               }
@@ -118,6 +129,7 @@ export class UserContactsIndex extends Component {
 UserContactsIndex.propTypes = {
   theme: PropTypes.theme,
   numPages: PropTypes.number,
+  t: PropTypes.func.isRequired,
   contacts: PropTypes.arrayOf(PropTypes.object),
   userDispatch: PropTypes.func.isRequired,
   viewContact: PropTypes.func.isRequired,
@@ -133,4 +145,4 @@ UserContactsIndex.defaultProps = {
   newContactBox: {}
 }
 
-export default UserContactsIndex
+export default translate('common')(UserContactsIndex)

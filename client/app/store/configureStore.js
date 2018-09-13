@@ -40,7 +40,8 @@ export function configureStore () {
       saveState({
         bookingData: bData,
         tenant: oldState.tenant,
-        admin: oldState.admin
+        admin: oldState.admin,
+        bookingSummary: oldState.bookingSummary
       })
     }),
     1000

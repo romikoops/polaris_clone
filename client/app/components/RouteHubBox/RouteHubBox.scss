@@ -13,7 +13,6 @@
   .hub_card h6 {
     margin: 22px 0 0 0;
     color: #FFFFFF;
-    // font-family: ".SF NS Display";
     font-size: 21px;
     line-height: 24px;
   }
@@ -23,7 +22,6 @@
     height: 78px;
     width: 171px;
     color: #FFFFFF;
-    // font-family: ".SF NS Display";
     font-size: 18px;
     line-height: 26px;
   }
@@ -72,5 +70,8 @@
     position: absolute;
     z-index: 12;
     // background: rgba(0,10,4,0.16);
+  }
+  .address_padding {
+    padding-top: 50px;
   }
 }

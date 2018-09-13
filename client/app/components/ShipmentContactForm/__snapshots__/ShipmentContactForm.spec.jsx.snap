@@ -20,13 +20,12 @@ exports[`shallow rendering 1`] = `
       className="flex layout-row"
     >
       <CompanyDetailsSection
-        contactData={
-          Object {
-            "contact": Object {},
-            "location": Object {},
-          }
-        }
+        checkValid={[Function]}
+        contactData={Object {}}
+        handleInputChange={[Function]}
         setContactAttempted={false}
+        showEdit={false}
+        t={[Function]}
         theme={
           Object {
             "colors": Object {
@@ -38,13 +37,9 @@ exports[`shallow rendering 1`] = `
       />
     </div>
     <AddressDetailsSection
-      contactData={
-        Object {
-          "contact": Object {},
-          "location": Object {},
-        }
-      }
+      contactData={Object {}}
       handlePlaceChange={[Function]}
+      newLocation={Object {}}
       setContactAttempted={false}
       setContactBtn={
         <RoundButton
@@ -68,6 +63,7 @@ exports[`shallow rendering 1`] = `
           }
         />
       }
+      t={[Function]}
       theme={
         Object {
           "colors": Object {

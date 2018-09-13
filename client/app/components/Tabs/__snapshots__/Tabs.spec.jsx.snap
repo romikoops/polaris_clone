@@ -2,10 +2,10 @@
 
 exports[`shallow rendering 1`] = `
 <div
-  className="layout-column flex-100"
+  className="layout-column flex-100 width_100"
 >
   <div
-    className="layout-row flex-100"
+    className="layout-row flex-100 "
   >
     <div
       className="layout-row flex-40"

@@ -12,9 +12,11 @@ const propsBase = {
   theme,
   hubs: [],
   contacts: [],
+  setCurrentUrl: jest.fn(),
+  match: { url: 'google.com' },
   dispatch: identity,
   userDispatch: {
-    getContact: identity,
+    getContacts: identity,
     confirmShipment: identity
   },
   history,

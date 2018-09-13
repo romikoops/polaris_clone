@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 import { shipment, identity, hub, theme } from '../../mocks'
-import { ShipmentOverviewCard } from './ShipmentOverviewCard'
+import ShipmentOverviewCard from './ShipmentOverviewCard'
 
 const propsBase = {
   admin: false,

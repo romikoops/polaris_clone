@@ -3,7 +3,7 @@
 include ExcelTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w[schryver schryver-sandbox]
+subdomains = %w(schryver schryver-sandbox)
 subdomains.each do |sub|
   # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -18,34 +18,53 @@ subdomains.each do |sub|
 
   # #   # # # # #Overwrite hubs from excel sheet
   puts '# Overwrite hubs from excel sheet'
-  hubs = File.open("#{Rails.root}/db/dummydata/schryver/schryver__hubs.xlsx")
-  req = { 'xlsx' => hubs }
+  hubs = 'data/schryver/schryver__hubs.xlsx'
+  req = { 'key' => hubs }
   ExcelTool::HubsOverwriter.new(params: req, _user: shipper).perform
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/schryver/schryver__freight_rates.xlsx")
-  req = { 'xlsx' => public_pricings }
+  public_pricings = 'data/schryver/schryver__freight_rates.xlsx'
+  req = { 'key' => public_pricings }
   ExcelTool::FreightRatesOverwriter.new(params: req, _user: shipper, generate: true).perform
 
   # # # # #   # # # # # Overwrite public pricings from excel sheet
 
   # puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/schryver/schryver__local_charges.xlsx")
-  req = { 'xlsx' => local_charges }
+  local_charges = 'data/schryver/schryver__local_charges.xlsx'
+  req = { 'key' => local_charges }
   ExcelTool::OverwriteLocalCharges.new(params: req, user: shipper).perform
   # #   # # # # # # Overwrite trucking data from excel sheet
 
+  path = 'data/schryver/ftl_rates.xlsx'
+  ftl_data = DataParser::Schryver::FtlParser.new(path: path,
+                                                 _user: shipper).perform
+
+  ftl_results = DataInserter::Schryver::FtlInserter.new(rates: ftl_data,
+                                                        _user: shipper,
+                                                        tenant: tenant).perform
   puts 'Hamburg Port'
   hub = tenant.hubs.find_by_name('Hamburg Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/schryver/schryver__trucking_ltl__hamburg_port.xlsx")
-  req = { 'xlsx' => trucking }
+  trucking = 'data/schryver/schryver__trucking_ltl__hamburg_port.xlsx'
+  req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  trucking = 'data/schryver/schryver__trucking_ftl__hamburg_port.xlsx'
+  req = { 'key' => trucking }
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # trucking = 'data/schryver/schryver__trucking_ftl__hamburg_port.xlsx'
+  # req = { 'key' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   puts 'Bremerhaven Port'
   hub = tenant.hubs.find_by_name('Bremerhaven Port')
-  trucking = File.open("#{Rails.root}/db/dummydata/schryver/schryver__trucking_ltl__hamburg_port.xlsx")
-  req = { 'xlsx' => trucking }
+  trucking = 'data/schryver/schryver__trucking_ltl__hamburg_port.xlsx'
+  req = { 'key' => trucking }
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
+  # trucking = 'data/schryver/schryver__trucking_ftl__bremerhaven_port.xlsx'
+  # req = { 'key' => trucking }
+  # # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # ExcelTool::OverrideTruckingRateByHub.new(params: req, _user: shipper, hub_id: hub.id).perform
   users = [
     {
       role: Role.find_by_name('shipper'),
@@ -53,7 +72,7 @@ subdomains.each do |sub|
       first_name: 'Admin',
       last_name: 'Schryver',
       phone: '+59322900621',
-      email: "quito@schryver.com",
+      email: 'quito@schryver.com',
       password: 'schryver@quito',
       password_confirmation: 'schryver@quito',
       confirmed_at: DateTime.new(2017, 1, 20)
@@ -64,7 +83,7 @@ subdomains.each do |sub|
       first_name: 'Admin',
       last_name: 'Schryver',
       phone: '+528186255250',
-      email: "monterrey@schryver.com",
+      email: 'monterrey@schryver.com',
       password: 'schryver@monterrey',
       password_confirmation: 'schryver@monterrey',
       confirmed_at: DateTime.new(2017, 1, 20)
@@ -75,29 +94,26 @@ subdomains.each do |sub|
       first_name: 'Admin',
       last_name: 'Schryver',
       phone: '+4940236330',
-      email: "info@schryver.com",
+      email: 'info@schryver.com',
       password: 'schryver@admin',
       password_confirmation: 'schryver@admin',
       confirmed_at: DateTime.new(2017, 1, 20)
     },
-     {
+    {
       role: Role.find_by_name('shipper'),
       company_name: 'REMA TIP TOP AG',
       first_name: 'Admin',
       last_name: 'Schryver',
       phone: '+49 8121 707-10362',
-      email: "Doris.Wiechers@tiptop.de",
+      email: 'Doris.Wiechers@tiptop.de',
       password: 'schryver@tiptop',
       password_confirmation: 'schryver@tiptop',
       confirmed_at: DateTime.new(2017, 1, 20)
-     }
+    }
   ]
 
   users.each do |user_data|
     existing_user = tenant.users.find_by_email(user_data[:email])
-    if !existing_user
-      tenant.users.create!(user_data)
-    end
+    tenant.users.create!(user_data) unless existing_user
   end
- 
 end

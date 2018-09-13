@@ -75,7 +75,7 @@ export class RouteHubBox extends Component {
         }
     const originAddress =
       shipment.pickup_address ? (
-        <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+        <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Pickup From:</p>
           </div>
@@ -91,7 +91,7 @@ export class RouteHubBox extends Component {
       )
     const destinationAddress =
       shipment.delivery_address ? (
-        <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+        <div className={`flex-100 layout-row layout-align-center-start layout-wrap ${styles.address_padding}`}>
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Delivery To:</p>
           </div>

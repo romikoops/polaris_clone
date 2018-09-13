@@ -24,6 +24,9 @@ export class ChooseShipment extends Component {
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
   }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
   setLoadType (loadType) {
     this.setState({ loadType })
   }

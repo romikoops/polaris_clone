@@ -41,6 +41,18 @@ function getAllHubs () {
   return fetch(`${BASE_URL}/admin/hubs/all/processed`, requestOptions)
     .then(handleResponse)
 }
+function uploadDocument (doc, type, url) {
+  const formData = new FormData()
+  formData.append('file', doc)
+  formData.append('type', type)
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+    body: formData
+  }
+
+  return fetch(BASE_URL + url, requestOptions).then(handleResponse)
+}
 
 function searchHubs (text, page, hubType, countryId, status) {
   const requestOptions = {
@@ -64,14 +76,14 @@ function searchHubs (text, page, hubType, countryId, status) {
   return fetch(`${BASE_URL}/admin/search/hubs?page=${page || 1}${query}`, requestOptions)
     .then(handleResponse)
 }
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   let query = ''
 
-  query += `query=${text}&page=${page || 1}`
+  query += `query=${text}&page=${page || 1}&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
@@ -199,7 +211,7 @@ function getServiceCharges () {
 
   return fetch(`${BASE_URL}/admin/local_charges`, requestOptions).then(handleResponse)
 }
-function getShipments (requestedPage, openPage, finishedPage) {
+function getShipments (requestedPage, openPage, finishedPage, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -208,15 +220,16 @@ function getShipments (requestedPage, openPage, finishedPage) {
   query += `open_page=${openPage || 1}`
   query += `&requested_page=${requestedPage || 1}`
   query += `&finished_page=${finishedPage || 1}`
+  if (perPage) query += `&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments?${query}`, requestOptions).then(handleResponse)
 }
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
-  const query = `page=${page || 1}&target=${target}`
+  const query = `page=${page || 1}&target=${target}&per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments/pages/delta_page_handler?${query}`, requestOptions).then(handleResponse)
 }
@@ -260,13 +273,20 @@ function confirmShipment (id, action) {
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function getPricings (page, mot) {
+function getPricings (pages) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  let pageQuery = ''
+  if (pages) {
+    Object.keys(pages).forEach((key) => {
+      pageQuery += `${key}=${pages[key]}&`
+    })
+    pageQuery = pageQuery.slice(0, -1)
+  }
 
-  return fetch(`${BASE_URL}/admin/pricings?page=${page || 1}&mot=${mot}`, requestOptions)
+  return fetch(`${BASE_URL}/admin/pricings?${pageQuery}`, requestOptions)
     .then(handleResponse)
 }
 
@@ -430,6 +450,15 @@ function documentAction (docId, action) {
 
   return fetch(`${BASE_URL}/admin/documents/action/${docId}`, requestOptions)
     .then(handleResponse)
+}
+
+function deleteDocument (documentId) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function saveNewHub (hub, location) {
@@ -633,6 +662,7 @@ export const adminService = {
   getHub,
   deleteTrip,
   getItineraries,
+  deleteDocument,
   editTruckingPrice,
   deleteItinerary,
   uploadTrucking,
@@ -686,7 +716,8 @@ export const adminService = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
-  searchPricings
+  searchPricings,
+  uploadDocument
 }
 
 export default adminService

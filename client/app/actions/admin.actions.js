@@ -88,7 +88,7 @@ function searchHubs (text, page, hubType, country, status) {
     )
   }
 }
-function searchShipments (text, target, page) {
+function searchShipments (text, target, page, perPage) {
   function request (hubData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: hubData }
   }
@@ -102,7 +102,7 @@ function searchShipments (text, target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.searchShipments(text, target, page).then(
+    adminService.searchShipments(text, target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
@@ -343,7 +343,7 @@ function getServiceCharges (redirect) {
     )
   }
 }
-function getPricings (redirect, page, mot) {
+function getPricings (redirect, pages) {
   function request (prData) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
@@ -357,13 +357,13 @@ function getPricings (redirect, page, mot) {
   return (dispatch) => {
     dispatch(request())
     dispatch(getTrucking())
-    adminService.getPricings(page, mot).then(
-      (data) => {
+    adminService.getPricings(pages).then(
+      (response) => {
         dispatch(alertActions.success('Fetching Prices successful'))
         if (redirect) {
           dispatch(push('/admin/pricings'))
         }
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         dispatch(failure(error))
@@ -375,22 +375,22 @@ function getPricings (redirect, page, mot) {
 
 function searchPricings (text, page, mot) {
   function request (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_REQUEST, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_REQUEST, payload: pricingData }
   }
   function success (pricingData) {
-    return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: pricingData }
+    return { type: adminConstants.SEARCH_PRICINGS_SUCCESS, payload: pricingData }
   }
   function failure (error) {
-    return { type: adminConstants.GET_PRICINGS_FAILURE, error }
+    return { type: adminConstants.SEARCH_PRICINGS_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request())
 
     adminService.searchPricings(text, page, mot).then(
-      (data) => {
+      (response) => {
         dispatch(alertActions.success('Pricings Search successful'))
-        dispatch(success(data))
+        dispatch(success(response.data))
       },
       (error) => {
         // ;
@@ -522,7 +522,6 @@ function updatePricing (id, req) {
     return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -633,7 +632,7 @@ function getTrucking (redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, redirect) {
+function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -647,7 +646,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.getShipments(requestedPage, openPage, finishedPage).then(
+    adminService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -664,7 +663,7 @@ function getShipments (requestedPage, openPage, finishedPage, redirect) {
   }
 }
 
-function deltaShipmentsPage (target, page) {
+function deltaShipmentsPage (target, page, perPage) {
   function request (shipmentData) {
     return { type: adminConstants.ADMIN_GET_SHIPMENTS_PAGE_REQUEST, payload: shipmentData }
   }
@@ -678,7 +677,7 @@ function deltaShipmentsPage (target, page) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.deltaShipmentsPage(target, page).then(
+    adminService.deltaShipmentsPage(target, page, perPage).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
@@ -843,8 +842,8 @@ function getVehicleTypes (itineraryId) {
 }
 
 function getDashboard (redirect) {
-  function request (dashData) {
-    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: dashData }
+  function request (showLoading) {
+    return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: showLoading }
   }
   function success (dashData) {
     return { type: adminConstants.GET_DASHBOARD_SUCCESS, payload: dashData }
@@ -854,7 +853,7 @@ function getDashboard (redirect) {
   }
 
   return (dispatch) => {
-    dispatch(request())
+    dispatch(request(redirect))
 
     adminService.getDashboard().then(
       (data) => {
@@ -970,7 +969,7 @@ function confirmShipment (id, action, redirect) {
           dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(false))
+          dispatch(getShipments(1, 1, 1, true))
         }
 
         if (redirect) {
@@ -1361,6 +1360,32 @@ function documentAction (docId, action) {
     )
   }
 }
+function deleteDocument (docId) {
+  function request (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_REQUEST, payload: docData }
+  }
+  function success (docData) {
+    return { type: adminConstants.DOCUMENT_DELETE_SUCCESS, payload: docData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DOCUMENT_DELETE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteDocument(docId).then(
+      (data) => {
+        dispatch(alertActions.success('Document Action successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function saveNewHub (hub, location) {
   function request (hubData) {
@@ -1706,6 +1731,33 @@ function updateHubMandatoryCharges (id, charges) {
     )
   }
 }
+function uploadDocument (doc, type, url) {
+  function request (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_REQUEST, payload: file }
+  }
+  function success (file) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_SUCCESS, payload: file.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.ADMIN_UPLOAD_DOCUMENT_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadDocument(doc, type, url).then(
+      (data) => {
+        dispatch(alertActions.success('Uploading Document successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
@@ -1723,6 +1775,7 @@ function goTo (path) {
 export const adminActions = {
   getHubs,
   newHubImage,
+  uploadDocument,
   getItineraries,
   updateServiceCharge,
   updatePricing,
@@ -1782,6 +1835,7 @@ export const adminActions = {
   getPricingsTest,
   searchShipments,
   deltaShipmentsPage,
+  deleteDocument,
   searchPricings
 }
 

@@ -233,7 +233,7 @@ describe TruckingPricing, type: :model do
       end
 
       context 'zipcode identifier' do
-        it 'finds the correct pricing and destinations', pending: 'Broken Spec' do
+        it 'finds the correct pricing and destinations', pending: 'broken tests' do
           create_list(:trucking_destination, 100, :zipcode_sequence).each do |trucking_destination|
             create(:hub_trucking,
               hub:                  hub,
@@ -253,7 +253,7 @@ describe TruckingPricing, type: :model do
           ])
         end
 
-        it 'finds the correct pricing and destinations for multiple range groups per zone', pending: 'Broken Spec' do
+        it 'finds the correct pricing and destinations for multiple range groups per zone', pending: 'broken tests' do
           create_list(:trucking_destination, 100, :zipcode_broken_sequence).each do |trucking_destination|
             create(:hub_trucking,
               hub:                  hub,
@@ -275,7 +275,7 @@ describe TruckingPricing, type: :model do
       end
 
       context 'geometry identifier' do
-        it 'finds the correct pricing and destinations', pending: 'Broken Spec' do
+        it 'finds the correct pricing and destinations', pending: 'broken tests' do
           create(:hub_trucking,
             hub:                  hub,
             trucking_destination: create(:trucking_destination, :with_geometry),

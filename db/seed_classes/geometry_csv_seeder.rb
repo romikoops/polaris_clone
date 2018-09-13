@@ -6,15 +6,15 @@ class GeometryCsvSeeder
   def self.perform
     puts "Reading from csv..."
 
-    Zlib::GzipReader.open(Rails.root.join("db/dummydata/germany.csv.gz")) do |gz|
+    Zlib::GzipReader.open(Rails.root.join("db/dummydata/locations.csv.gz")) do |gz|
       csv = CSV.new(gz, headers: true)
       csv.each do |row|
         geometry_data = {
-          name_1: "#{row['city']} #{row['name']}",
-          name_2: "#{row['city']} #{row['name']}",
-          name_3: "#{row['city']} #{row['name']}",
-          name_4: "#{row['city']} #{row['name']}",
-          data:   RGeo::GeoJSON.decode(row["geojson"])
+          name_1: row['name'],
+          name_2: row['name_1'],
+          name_3: row['name_2'],
+          name_4: row['name_3'],
+          data:   row["geojson"]
         }
 
         Geometry.import([geometry_data],

@@ -25,28 +25,53 @@ export class ShipmentsCompAdmin extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      search: {
+        open: '',
+        requested: '',
+        finished: ''
+      }
     }
     this.viewShipment = this.viewShipment.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
   }
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
   }
 
   getShipmentsFromPage (open, requested, finished) {
     const { adminDispatch } = this.props
-    adminDispatch.getShipments(open, requested, finished, false)
+    const { perPage } = this.state
+    adminDispatch.getShipments(open, requested, finished, perPage, false)
   }
   getTargetShipmentsFromPage (target, page) {
     const { adminDispatch } = this.props
-    adminDispatch.deltaShipmentsPage(target, page)
+    const { perPage } = this.state
+    adminDispatch.deltaShipmentsPage(target, page, perPage)
   }
   viewShipment (shipment) {
     this.props.viewShipment(shipment)
   }
+  determinePerPage () {
+    const { perPage } = this.state
+    const { adminDispatch, shipments } = this.props
+    const { open, requested, finished } = shipments.pages
+    const width = window.innerWidth
+    const newPerPage = width >= 1920 ? 6 : 4
+    if (newPerPage !== perPage) {
+      adminDispatch.getShipments(open, requested, finished, newPerPage, false)
+    }
+    this.setState({ perPage: newPerPage })
+  }
 
   searchShipmentsFromPage (text, target, page) {
+    const { perPage } = this.state
     const { adminDispatch } = this.props
-    adminDispatch.searchShipments(text, target, page)
+    adminDispatch.searchShipments(text, target, page, perPage)
   }
 
   toggleExpander (key) {
@@ -81,15 +106,17 @@ export class ShipmentsCompAdmin extends Component {
   }
 
   handlePage (target, delta) {
+    const { perPage } = this.state
     const { pages } = this.props.shipments
     const nextPage = +pages[target] + (1 * delta)
     const realPage = nextPage > 0 ? nextPage : 1
-    this.getTargetShipmentsFromPage(target, realPage)
+    this.getTargetShipmentsFromPage(target, realPage, perPage)
   }
   handleFilters () {
     this.setState((prevState) => {
+      const { perPage } = this.state
       const { open, requested, finished } = this.props.shipments.pages
-      this.getShipmentsFromPage(open, requested, finished)
+      this.getShipmentsFromPage(open, requested, finished, perPage)
 
       return { page: prevState.page }
     })
@@ -106,8 +133,14 @@ export class ShipmentsCompAdmin extends Component {
 
   handleSearchQuery (e, target) {
     const { value } = e.target
-    console.log(value)
-    this.searchShipmentsFromPage(value, target, 1)
+    const { perPage } = this.state
+
+    this.setState({
+      search: {
+        ...this.state.search,
+        [target]: value
+      }
+    }, () => this.searchShipmentsFromPage(value, target, 1, perPage))
   }
 
   render () {
@@ -121,6 +154,7 @@ export class ShipmentsCompAdmin extends Component {
       hubHash,
       adminDispatch
     } = this.props
+    const { search } = this.state
     const { pages } = shipments
     if (!shipments || !hubs || !clients) {
       return ''
@@ -138,9 +172,12 @@ export class ShipmentsCompAdmin extends Component {
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <Tabs>
+        <Tabs
+          paddingFixes="padding_top"
+        >
           <Tab
             tabTitle="Requested"
+            extraClick={() => this.getTargetShipmentsFromPage('requested', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -151,6 +188,7 @@ export class ShipmentsCompAdmin extends Component {
               confirmShipmentData={confirmShipmentData}
               tooltip={adminTip.requested}
               page={pages.requested}
+              searchText={search.requested}
               numPages={numShipmentsPages.requested}
               prevPage={() => this.prevPage('requested')}
               nextPage={() => this.nextPage('requested')}
@@ -159,6 +197,7 @@ export class ShipmentsCompAdmin extends Component {
           </Tab>
           <Tab
             tabTitle="Open"
+            extraClick={() => this.getTargetShipmentsFromPage('open', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -167,6 +206,7 @@ export class ShipmentsCompAdmin extends Component {
               shipments={mergedOpenShipments}
               theme={theme}
               tooltip={adminTip.open}
+              searchText={search.open}
               page={pages.open}
               numPages={numShipmentsPages.open}
               prevPage={() => this.prevPage('open')}
@@ -176,6 +216,7 @@ export class ShipmentsCompAdmin extends Component {
           </Tab>
           <Tab
             tabTitle="Finished"
+            extraClick={() => this.getTargetShipmentsFromPage('finished', 1)}
             theme={theme}
           >
             <AdminShipmentsBox
@@ -183,6 +224,7 @@ export class ShipmentsCompAdmin extends Component {
               dispatches={adminDispatch}
               shipments={mergedFinishedShipments}
               theme={theme}
+              searchText={search.finished}
               page={pages.finished}
               tooltip={adminTip.finished}
               seeAll={false}
@@ -193,28 +235,16 @@ export class ShipmentsCompAdmin extends Component {
             />
           </Tab>
         </Tabs>
-
-        {mergedOpenShipments.length === 0 &&
-          mergedReqShipments.length === 0 &&
-          mergedFinishedShipments.length === 0 ? (
-            <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  adminStyles.sec_subheader
-                }`}
-              >
-                <p className={` ${adminStyles.sec_subheader_text} flex-none`}> No Shipments yet</p>
-              </div>
-              <p className="flex-none"> As shipments are requested, they will appear here</p>
-            </div>
-          ) : (
-            ''
-          )}
       </div>
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">{listView}</div>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+        ref={(ref) => { this.viewport = ref }}
+      >
+        {listView}
+      </div>
     )
   }
 }

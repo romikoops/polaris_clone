@@ -16,6 +16,7 @@ import CardRoutesIndex from './CardRouteIndex'
 import { WorldMap } from './DashboardMap/WorldMap'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
+import { RoundButton } from '../RoundButton/RoundButton';
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -50,6 +51,7 @@ class AdminSchedules extends Component {
 
   componentDidMount () {
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   getItinerary (sched) {
@@ -162,9 +164,25 @@ class AdminSchedules extends Component {
     ) : (
       ''
     )
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="New"
+          active
+          handleNext={this.toggleView}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <AdminScheduleGenerator theme={theme} itineraries={itineraries} />
+        <AdminScheduleGenerator
+          theme={theme}
+          itineraries={itineraries}
+          toggleNew={this.toggleView}
+        />
       </div>
     )
 
@@ -261,6 +279,23 @@ class AdminSchedules extends Component {
                 </div>
               )}
             />
+            <CollapsingBar
+              showArrow
+              collapsed={!expander.new}
+              theme={theme}
+              handleCollapser={() => this.toggleExpander('new')}
+              text="Create new schedules"
+              faClass="fa fa-plus-circle"
+              content={(
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  {newButton}
+                </div>
+              )}
+            />
           </div>
         )}
       />)
@@ -275,9 +310,7 @@ class AdminSchedules extends Component {
         theme={theme}
         scope={scope}
         mot={mot}
-        newText="New Schedule/s"
         adminDispatch={adminDispatch}
-        toggleNew={this.toggleView}
         sideMenuNodes={sideMenuNodes}
         handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
       />
@@ -297,9 +330,10 @@ class AdminSchedules extends Component {
       </div>
     </Tab>)
     const listView = (
-      <div className="flex-100 layout-row layout-align-center-start header_buffer">
+      <div className="flex-100 layout-row layout-align-center-start">
         <Tabs
           wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80"
+          paddingFixes
         >
           {motTabs}
 
@@ -331,6 +365,7 @@ AdminSchedules.propTypes = {
   document: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   documentDispatch: PropTypes.objectOf(PropTypes.func),
   scope: PropTypes.objectOf(PropTypes.any)
 }

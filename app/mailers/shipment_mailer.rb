@@ -25,11 +25,10 @@ class ShipmentMailer < ApplicationMailer
     mail(
       to:      tenant.email_for(:sales, shipment.mode_of_transport),
       # to: TESTING_EMAIL,
-      bcc:     "bookings@itsmycargo.com",
+      bcc:     "warwick@itsmycargo.com",
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
     end
   end
 
@@ -44,11 +43,10 @@ class ShipmentMailer < ApplicationMailer
     mail(
       to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
       # to: TESTING_EMAIL,
-      bcc:     "bookings@itsmycargo.com",
+      bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
     end
   end
 
@@ -68,11 +66,10 @@ class ShipmentMailer < ApplicationMailer
     mail(
       to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
       # to: TESTING_EMAIL,
-      bcc:     "bookings@itsmycargo.com",
+      bcc:     ["bookingemails@itsmycargo.com", "warwick@itsmycargo.com"],
       subject: "Your booking through ItsMyCargo"
     ) do |format|
       format.html
-      format.mjml
     end
   end
 

@@ -49,7 +49,7 @@ function reuseShipment (shipment) {
 
   return (dispatch) => {
     dispatch(request(shipment))
-    dispatch(newShipment(newShipmentRequest))
+    dispatch(newShipment(newShipmentRequest, true))
   }
 }
 
@@ -413,6 +413,7 @@ function uploadDocument (doc, type, url) {
     )
   }
 }
+
 function deleteDocument (id) {
   function request (deleteId) {
     return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST, payload: deleteId }
@@ -513,6 +514,9 @@ function toDashboard (id) {
 function clearLoading () {
   return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
+function setError (payload) {
+  return { type: shipmentConstants.SET_ERROR, payload }
+}
 
 function clearErrors (stage) {
   return { type: shipmentConstants.CLEAR_ERRORS, payload: stage }
@@ -555,7 +559,8 @@ export const shipmentActions = {
   getOffersForNewDate,
   updateContact,
   delete: _delete,
-  clearErrors
+  clearErrors,
+  setError
 }
 
 export default shipmentActions

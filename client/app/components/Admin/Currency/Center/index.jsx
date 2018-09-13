@@ -130,6 +130,7 @@ class AdminCurrencyCenter extends Component {
       const baseCurrency = this.props.currencies.filter(currency => currency.rate === 1)[0]
       this.setState({ currentBase: { value: baseCurrency.key, label: baseCurrency.key } })
     }
+    this.props.setCurrentUrl('/admin/currencies')
   }
   componentWillReceiveProps (nextProps) {
     if (!this.state.currentBase.label && nextProps.currencies.length > 0) {
@@ -359,6 +360,7 @@ class AdminCurrencyCenter extends Component {
 
 AdminCurrencyCenter.propTypes = {
   tenant: PropTypes.tenant,
+  setCurrentUrl: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.any),
   appDispatch: PropTypes.objectOf(PropTypes.func)
 }

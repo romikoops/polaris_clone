@@ -1,10 +1,11 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentAggregatedCargo.scss'
 import ShipmentAggregatedCargoInput from './Input'
 
-export default function ShipmentAggregatedCargo ({
-  theme, aggregatedCargo, handleDelta, nextStageAttempt
+function ShipmentAggregatedCargo ({
+  theme, aggregatedCargo, handleDelta, nextStageAttempt, t
 }) {
   const sharedProps = { handleDelta, nextStageAttempt }
 
@@ -15,7 +16,7 @@ export default function ShipmentAggregatedCargo ({
     >
       <div className={`${styles.input_box} flex-45 layout-row`}>
         <div className="flex-25 layout-row layout-align-center-center">
-          Total Volume
+          {t('cargo:totalVolume')}
         </div>
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.volume}
@@ -29,7 +30,7 @@ export default function ShipmentAggregatedCargo ({
       </div>
       <div className={`${styles.input_box} flex-45 offset-10 layout-row`}>
         <div className="flex-25 layout-row layout-align-center-center">
-          Total Weight
+          {t('cargo:totalWeight')}
         </div>
         <ShipmentAggregatedCargoInput
           value={aggregatedCargo.weight}
@@ -47,6 +48,7 @@ export default function ShipmentAggregatedCargo ({
 
 ShipmentAggregatedCargo.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   aggregatedCargo: PropTypes.shape({
     volume: PropTypes.number,
     weight: PropTypes.number
@@ -65,3 +67,5 @@ ShipmentAggregatedCargo.defaultProps = {
   nextStageAttempt: false
   // stackeableGoodsConfirmed: false
 }
+
+export default translate('cargo')(ShipmentAggregatedCargo)

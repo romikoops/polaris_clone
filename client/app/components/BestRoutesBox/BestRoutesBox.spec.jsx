@@ -3,7 +3,8 @@ import { shallow, mount } from 'enzyme'
 import { theme, identity, user, shipmentData } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x
+  gradientGenerator: x => x,
+  priceSpacing: x => x
 }))
 jest.mock('../../constants', () => {
   const moment = x => ({
@@ -26,9 +27,6 @@ test('shallow render', () => {
   expect(shallow(<BestRoutesBox {...propsBase} />)).toMatchSnapshot()
 })
 
-/**
- * Three cases as `chooseResult` is used in three places
- */
 test('chooseResult is called | case 0', () => {
   const props = {
     ...propsBase,

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
@@ -10,7 +11,7 @@ import CompanyDetailsSection from './CompanyDetailsSection'
 
 const { fetch, FormData } = window
 
-export class ShipmentContactForm extends Component {
+class ShipmentContactForm extends Component {
   static mapInputs (inputs) {
     const location = {}
     const contact = {}
@@ -144,12 +145,13 @@ export class ShipmentContactForm extends Component {
   }
 
   checkValid () {
+    const { t } = this.props
     const input = this.contactForm.inputs.filter(x => x.props.name === 'email')[0].state.value
 
     function isEmailValid (data) {
       if (data.email === true) {
         this.contactForm.updateInputsWithError({
-          email: 'This email already exists'
+          email: t('errors:invalidEmail')
         })
       }
     }
@@ -159,13 +161,13 @@ export class ShipmentContactForm extends Component {
 
   render () {
     const {
-      theme, contactType, showEdit
+      theme, contactType, showEdit, t
     } = this.props
 
     const setContactBtn = (
       <RoundButton
         text={
-          `${contactType === 'notifyee' && !showEdit ? 'Add' : 'Set'} ` +
+          `${contactType === 'notifyee' && !showEdit ? t('common:add') : t('common:set')} ` +
           `${nameToDisplay(contactType)}`
         }
         theme={theme}
@@ -227,6 +229,7 @@ export class ShipmentContactForm extends Component {
 
 ShipmentContactForm.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   setContact: PropTypes.func,
   contactType: PropTypes.string,
   showEdit: PropTypes.bool,
@@ -244,4 +247,4 @@ ShipmentContactForm.defaultProps = {
   showEdit: false
 }
 
-export default ShipmentContactForm
+export default translate(['common', 'errors'])(ShipmentContactForm)

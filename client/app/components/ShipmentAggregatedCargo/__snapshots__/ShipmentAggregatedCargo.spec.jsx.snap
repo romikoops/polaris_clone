@@ -19,8 +19,10 @@ exports[`shallow rendering 1`] = `
     </div>
     <ShipmentAggregatedCargoInput
       handleDelta={[Function]}
+      maxValue={15}
       name="volume"
       nextStageAttempt={false}
+      t={[Function]}
       value={10}
     />
     <div
@@ -39,8 +41,10 @@ exports[`shallow rendering 1`] = `
     </div>
     <ShipmentAggregatedCargoInput
       handleDelta={[Function]}
+      maxValue={35000}
       name="weight"
       nextStageAttempt={false}
+      t={[Function]}
       value={100}
     />
     <div

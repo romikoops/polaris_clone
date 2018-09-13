@@ -28,7 +28,7 @@ class Admin::HubsController < Admin::AdminBaseController
     paginated_hub_hashes = hubs.paginate(page: params[:page]).map do |hub|
       { data: hub, location: hub.location.to_custom_hash }
     end
-    response_handler(hubs: paginated_hub_hashes, num_pages: hubs.count / 9)
+    response_handler(hubs: paginated_hub_hashes, num_pages: (hubs.count / 9.0).ceil)
   end
 
   def permitted_params
@@ -165,6 +165,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def create_hub
+    hub[:mandatory_charge_id] = MandatoryCharge.falsified unless hub_hash[:mandatory_charge_id]
     Hub.create!(hub_hash)
   end
 

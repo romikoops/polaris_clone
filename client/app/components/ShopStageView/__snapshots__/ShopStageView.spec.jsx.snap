@@ -68,11 +68,9 @@ exports[`shallow rendering 1`] = `
         Previous Step
       </p>
     </div>
-    <div
-      className="layout-row layout-align-start-center"
-    >
+    <div>
       <div
-        className="line_box layout-row layout-wrap layout-align-center flex-none"
+        className="line_box layout-row layout-align-center flex-none"
       >
         <div
           className="line flex-none"
@@ -205,13 +203,13 @@ exports[`shallow rendering 1`] = `
       className="stage_box flex-none layout-column layout-align-start-center"
     />
     <div
-      className="help_btn flex-none layout-row layout-align-center-center pointy"
+      className="flex-none layout-row layout-align-center-center pointy"
       onClick={[Function]}
     >
       <p
         className="flex-none"
       >
-        Need Help
+        Need help?
       </p>
       <i
         className="fa fa-question-circle"

@@ -10,7 +10,7 @@ import {
   user
 } from '../../mocks'
 
-import { BookingDetails } from './BookingDetails'
+import BookingDetails from './BookingDetails'
 
 const editedShipmentData = {
   ...shipmentData,

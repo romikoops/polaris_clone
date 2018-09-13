@@ -107,6 +107,7 @@ export class AdminShipmentView extends Component {
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
+    this.handleFinished = this.handleFinished.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
     this.toggleEditServicePrice = this.toggleEditServicePrice.bind(this)
     this.toggleEditTime = this.toggleEditTime.bind(this)
@@ -189,6 +190,11 @@ export class AdminShipmentView extends Component {
   }
   toggleEditTime () {
     this.setState({ showEditTime: !this.state.showEditTime })
+  }
+
+  deleteDoc (file) {
+    const { adminDispatch } = this.props
+    adminDispatch.deleteDocument(file.id)
   }
   prepCargoItemGroups (cargos) {
     const { theme, shipmentData } = this.props
@@ -334,6 +340,13 @@ export class AdminShipmentView extends Component {
   handleNewTotalChange (event) {
     const { value } = event.target
     this.setState({ newTotal: +value })
+  }
+  fileFn (file) {
+    const { shipmentData, adminDispatch } = this.props
+    const { shipment } = shipmentData
+    const type = file.doc_type
+    const url = `/shipments/${shipment.id}/upload/${type}`
+    adminDispatch.uploadDocument(file, type, url)
   }
   render () {
     const {
@@ -566,6 +579,11 @@ export class AdminShipmentView extends Component {
             ) : (
               ''
             )}
+            {shipment.status === 'confirmed' ? (
+              <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleFinished} />
+            ) : (
+              ''
+            )}
             <i className={`fa fa-trash ${styles.light_red}`} onClick={this.handleDeny} />
           </div>
         </div>
@@ -588,7 +606,10 @@ export class AdminShipmentView extends Component {
                       <div className="layout-row flex-100">
                         <ShipmentOverviewShowCard
                           et={etdJSX}
+                          text="ETD"
+                          theme={theme}
                           hub={shipment.origin_hub}
+                          shipment={shipment}
                           bg={bg1}
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
@@ -616,8 +637,11 @@ export class AdminShipmentView extends Component {
                       <div className="layout-row flex-100">
                         <ShipmentOverviewShowCard
                           et={etaJSX}
+                          text="ETA"
+                          theme={theme}
                           hub={shipment.destination_hub}
                           bg={bg2}
+                          shipment={shipment}
                           editTime={this.state.showEditTime}
                           handleSaveTime={this.saveNewTime}
                           toggleEditTime={this.toggleEditTime}
@@ -626,54 +650,6 @@ export class AdminShipmentView extends Component {
                       </div>
                     )}
                   />
-                </div>
-
-                <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-                  <div className="flex-60 layout-align-center-stretch">
-                    <div className="layout-row flex-100 layout-align-start-center">
-                      <div className="flex-100 layout-row layout-align-start-center">
-                        <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                        <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                          {shipment.pickup_address
-                            ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                              .format('DD/MM/YYYY')}`
-                            : ''}
-                        </h4>
-                      </div>
-                    </div>
-                    {shipment.pickup_address ? (
-                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                        <p>{shipment.pickup_address.street} &nbsp;
-                          {shipment.pickup_address.street_number},&nbsp;
-                          <strong>{shipment.pickup_address.city},&nbsp;
-                            {shipment.pickup_address.country.name} </strong>
-                        </p>
-                      </div>
-                    ) : ''}
-                  </div>
-
-                  <div className="flex-40 layout-align-center-stretch">
-                    <div className="layout-row flex-100 layout-align-start-center">
-                      <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-                      <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                        {shipment.delivery_address
-                          ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                            .format('DD/MM/YYYY')}`
-                          : ''}
-                      </h4>
-                    </div>
-                    {shipment.delivery_address ? (
-                      <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                        <p>{shipment.delivery_address.street}&nbsp;
-                          {shipment.delivery_address.street_number},&nbsp;
-                          <strong>{shipment.delivery_address.city},&nbsp;
-                            {shipment.delivery_address.country.name} </strong>
-
-                        </p>
-                      </div>
-                    ) : ''}
-
-                  </div>
                 </div>
               </div>
             </Tab>
@@ -795,7 +771,7 @@ export class AdminShipmentView extends Component {
                                     : parseFloat(feeHash.export.total.value).toFixed(2)}
                                 </p>
                               </div>
-                                : ''}                             
+                                : ''}
                             </div>
                           </div>
                         </div>
@@ -940,7 +916,7 @@ export class AdminShipmentView extends Component {
                                   </span>
                                   <input
                                     type="number"
-                                    onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                                    onChange={e => this.handlePriceChange('insurance', e.target.value)}
                                     value={Number(newPrices.insurance.value).toFixed(2)}
                                     className="layout-padding layout-row flex-70 flex-initial"
                                   />

@@ -2,24 +2,24 @@
 
 exports[`props.aliases is truthy 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
-    className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
-      <span
-        className="layout-row flex-20 layout-align-center-center"
+      <div
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
           style="#333"
         />
-      </span>
+      </div>
       <div
-        className="layout-align-center-center layout-row flex"
+        className="layout-align-start-center layout-row flex"
       >
         <p>
           Hello, 
@@ -38,9 +38,10 @@ exports[`props.aliases is truthy 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row flex-100"
@@ -99,10 +100,18 @@ exports[`props.aliases is truthy 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
+        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
       />
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row layout-wrap conditions_box"
@@ -111,7 +120,7 @@ exports[`props.aliases is truthy 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -120,7 +129,7 @@ exports[`props.aliases is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <Unknown
                   options={
@@ -128,6 +137,7 @@ exports[`props.aliases is truthy 1`] = `
                       "userId": undefined,
                     }
                   }
+                  size="full"
                   target="gdpr"
                   theme={
                     Object {
@@ -144,7 +154,7 @@ exports[`props.aliases is truthy 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -153,7 +163,7 @@ exports[`props.aliases is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -164,7 +174,7 @@ exports[`props.aliases is truthy 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -181,7 +191,7 @@ exports[`props.aliases is truthy 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -190,7 +200,7 @@ exports[`props.aliases is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -201,7 +211,7 @@ exports[`props.aliases is truthy 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -218,7 +228,7 @@ exports[`props.aliases is truthy 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -227,7 +237,7 @@ exports[`props.aliases is truthy 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -238,7 +248,7 @@ exports[`props.aliases is truthy 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -254,9 +264,15 @@ exports[`props.aliases is truthy 1`] = `
           </div>
         }
         contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
         title="GDPR - Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
       />
     </div>
   </div>
@@ -276,10 +292,10 @@ exports[`props.aliases is truthy 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -310,7 +326,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
-          flexClasses="flex-30 flex-md-45 flex-lg-45"
+          flexClasses="flex-45"
           theme={
             Object {
               "colors": Object {
@@ -328,7 +344,7 @@ exports[`props.aliases is truthy 1`] = `
           }
           deleteFn={[Function]}
           deleteable={true}
-          flexClasses="flex-30 flex-md-45 flex-lg-45"
+          flexClasses="flex-45"
           theme={
             Object {
               "colors": Object {
@@ -353,6 +369,7 @@ exports[`props.aliases is truthy 1`] = `
         </span>
       </div>
       <UserLocations
+        cols={2}
         locations={Array []}
         makePrimary={[Function]}
         setNav={[Function]}
@@ -395,24 +412,24 @@ exports[`props.user is falsy 1`] = `""`;
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
-    className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
   >
     <div
       className="flex-100 layout-row layout-align-start-stretch username_title"
     >
-      <span
-        className="layout-row flex-20 layout-align-center-center"
+      <div
+        className="layout-row flex-none layout-align-center-center"
       >
         <i
           className="fa fa-user clip bigProfile"
           style="#333"
         />
-      </span>
+      </div>
       <div
-        className="layout-align-center-center layout-row flex"
+        className="layout-align-start-center layout-row flex"
       >
         <p>
           Hello, 
@@ -431,9 +448,10 @@ exports[`shallow render 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row flex-100"
@@ -492,10 +510,18 @@ exports[`shallow render 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
+        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
       />
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row layout-wrap conditions_box"
@@ -504,7 +530,7 @@ exports[`shallow render 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -513,7 +539,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <Unknown
                   options={
@@ -521,6 +547,7 @@ exports[`shallow render 1`] = `
                       "userId": undefined,
                     }
                   }
+                  size="full"
                   target="gdpr"
                   theme={
                     Object {
@@ -537,7 +564,7 @@ exports[`shallow render 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -546,7 +573,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -557,7 +584,7 @@ exports[`shallow render 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -574,7 +601,7 @@ exports[`shallow render 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -583,7 +610,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -594,7 +621,7 @@ exports[`shallow render 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -611,7 +638,7 @@ exports[`shallow render 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -620,7 +647,7 @@ exports[`shallow render 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -631,7 +658,7 @@ exports[`shallow render 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -647,9 +674,15 @@ exports[`shallow render 1`] = `
           </div>
         }
         contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
         title="GDPR - Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
       />
     </div>
   </div>
@@ -669,10 +702,10 @@ exports[`shallow render 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -710,6 +743,7 @@ exports[`shallow render 1`] = `
         </span>
       </div>
       <UserLocations
+        cols={2}
         locations={Array []}
         makePrimary={[Function]}
         setNav={[Function]}
@@ -750,13 +784,14 @@ exports[`shallow render 1`] = `
 
 exports[`state.editBool is true 1`] = `
 <div
-  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  className="flex-100 layout-row layout-wrap layout-align-start-center extra_padding"
 >
   <div
-    className="flex-gt-sm-40 flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
+    className="flex-100 layout-row layout-wrap layout-align-start-center section_padding layout-padding"
   >
     <EditNameBox
       handleChange={[Function]}
+      handlePasswordChange={[Function]}
       user={Object {}}
     />
   </div>
@@ -764,9 +799,10 @@ exports[`state.editBool is true 1`] = `
     className="flex-100 layout-row layout-wrap layout-align-start-center section "
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-stretch"
+      className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
     >
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row flex-100"
@@ -774,7 +810,10 @@ exports[`state.editBool is true 1`] = `
             <EditProfileBox
               close={[Function]}
               handleChange={[Function]}
+              handlePasswordChange={[Function]}
               onSave={[Function]}
+              passwordResetRequested={false}
+              passwordResetSent={false}
               style="#333"
               theme={
                 Object {
@@ -814,10 +853,18 @@ exports[`state.editBool is true 1`] = `
           </div>
         }
         contentClassName="layout-row flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
+        title=""
         titleAction={false}
-        wrapperClassName="flex-gt-sm-66 flex-100 layout-row layout-align-start-center "
+        wrapperClassName="flex-gt-sm-60 flex-100 layout-row layout-align-start-center "
       />
       <GreyBox
+        borderStyle=""
         content={
           <div
             className="layout-row layout-wrap conditions_box"
@@ -826,7 +873,7 @@ exports[`state.editBool is true 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -835,7 +882,7 @@ exports[`state.editBool is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <Unknown
                   options={
@@ -843,6 +890,7 @@ exports[`state.editBool is true 1`] = `
                       "userId": undefined,
                     }
                   }
+                  size="full"
                   target="gdpr"
                   theme={
                     Object {
@@ -859,7 +907,7 @@ exports[`state.editBool is true 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -868,7 +916,7 @@ exports[`state.editBool is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -879,7 +927,7 @@ exports[`state.editBool is true 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -896,7 +944,7 @@ exports[`state.editBool is true 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -905,7 +953,7 @@ exports[`state.editBool is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -916,7 +964,7 @@ exports[`state.editBool is true 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -933,7 +981,7 @@ exports[`state.editBool is true 1`] = `
               className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center"
             >
               <div
-                className="flex-70 layout-row layout-align-start-center"
+                className="flex-66 layout-row layout-align-start-center"
               >
                 <p
                   className="flex-none"
@@ -942,7 +990,7 @@ exports[`state.editBool is true 1`] = `
                 </p>
               </div>
               <div
-                className="flex-30 layout-row layout-align-center-center "
+                className="flex-33 layout-row layout-align-center-center "
               >
                 <RoundButton
                   active={true}
@@ -953,7 +1001,7 @@ exports[`state.editBool is true 1`] = `
                   icon=""
                   iconClass=""
                   inverse={false}
-                  size="small"
+                  size="full"
                   text="Opt Out"
                   theme={
                     Object {
@@ -969,9 +1017,15 @@ exports[`state.editBool is true 1`] = `
           </div>
         }
         contentClassName="layout-column flex"
+        flex={0}
+        flexGtLg={0}
+        flexMd={0}
+        fullWidth={false}
+        isBox={false}
+        padding={false}
         title="GDPR - Your Data"
         titleAction={false}
-        wrapperClassName="flex-gt-sm-30 flex-100 layout-row layout-align-start-start"
+        wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
       />
     </div>
   </div>
@@ -991,10 +1045,10 @@ exports[`state.editBool is true 1`] = `
         </span>
       </div>
       <div
-        className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        className="flex-100 layout-row layout-wrap layout-align-space-between-stretch"
       >
         <div
-          className="pointy tile_padding flex-30 flex-md-45 flex-lg-45 "
+          className="pointy tile_padding layout-row layout-align-center-stretch flex-45 margin_bottom"
           key="addNewAliasButton"
           onClick={[Function]}
         >
@@ -1032,6 +1086,7 @@ exports[`state.editBool is true 1`] = `
         </span>
       </div>
       <UserLocations
+        cols={2}
         locations={Array []}
         makePrimary={[Function]}
         setNav={[Function]}

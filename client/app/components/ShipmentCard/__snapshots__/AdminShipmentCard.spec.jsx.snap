@@ -1,0 +1,310 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-align-start-stretch
+          container"
+  key="RANDOM_KEY_0"
+>
+  <hr
+    className="flex-100 layout-row hr_divider"
+  />
+  <div
+    className="card_link"
+    onClick={[Function]}
+  />
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch top_box"
+  >
+    <div
+      className="layout-row flex-10 layout-align-center-center routeIcon"
+    />
+    <div
+      className="flex-60 layout-row layout-align-start-center hub_name"
+    >
+      <div
+        className="layout-column layout-align-center-start"
+      >
+        <p>
+          From
+          : 
+          <span />
+        </p>
+        <p>
+          To
+          : 
+          <span />
+        </p>
+      </div>
+    </div>
+    <div
+      className="layout-row flex-20 layout-align-start-center ett"
+    >
+      <div>
+        <b>
+          18
+           
+          days
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          Estimated Transit Time
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-stretch middle_top_box"
+  >
+    <div
+      className="layout-row flex-35 layout-align-center-center"
+    >
+      <div
+        className="flex-100"
+      >
+        <b
+          className="ref_row_card"
+        >
+          Ref
+          : 
+          FOO_IMC_REFERENCE
+        </b>
+        <p>
+          Placed at
+           
+          19
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div
+      className="layout-row flex-60 layout-align-center-center"
+    >
+      <div
+        className="flex-100"
+      >
+        <div
+          className="layout-row flex-100 layout-align-start-center"
+        >
+          <div
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-user clip"
+              style="#333"
+            />
+          </div>
+          <div
+            className="flex-80 layout-row layout-align-start-start"
+          >
+            <h4>
+              FOO_CLIENT_NAME
+            </h4>
+          </div>
+        </div>
+        <div
+          className="layout-row flex-100 layout-align-start-center"
+        >
+          <span
+            className="flex-10 layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-building clip"
+              style="#333"
+            />
+          </span>
+          <span
+            className="flex-80 layout-row layout-align-start-center grey"
+          >
+            <p />
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-start-center
+            middle_bottom_box smallText"
+  >
+    <div
+      className="flex-20 layout-align-center-start"
+    >
+      <span
+        className="flex-100"
+      >
+        <b>
+          Pick-up Date
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          19
+        </span>
+      </span>
+    </div>
+    <div
+      className="flex-20 layout-align-center-start"
+    >
+      <span
+        className="flex-100"
+      >
+        <b>
+          ETD
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          19
+        </span>
+      </span>
+    </div>
+    <div
+      className="flex-20 layout-align-center-start"
+    >
+      <span
+        className="flex-100"
+      >
+        <b>
+          ETA
+        </b>
+        <br />
+        <span
+          className="grey"
+        >
+          19
+        </span>
+      </span>
+    </div>
+    <div
+      className="flex-40 layout-align-start-end carriages"
+    >
+      <div
+        className="layout-row layout-align-end-end"
+      >
+        <i
+          className="fa fa-times"
+          style={
+            Object {
+              "color": "#E0E0E0",
+            }
+          }
+        />
+        <p>
+          Pre-carriage
+        </p>
+      </div>
+      <div
+        className="layout-row layout-align-end-end"
+      >
+        <i
+          className="fa fa-times"
+          style={
+            Object {
+              "color": "#E0E0E0",
+            }
+          }
+        />
+        <p>
+          On-carriage
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-align-space-between-center
+            bottom_box"
+  >
+    <div
+      className="layout-row flex-65 layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-10"
+      >
+        <div
+          className="layout-row layout-align-center-center"
+        >
+          <span
+            className="smallText"
+          >
+            <b>
+              x
+            </b>
+            <span
+              className="bigText"
+            >
+              1
+            </span>
+          </span>
+        </div>
+      </div>
+      <span
+        className="flex-35"
+      >
+        Cargo Item
+      </span>
+      <span
+        className="flex-25 layout-row"
+      >
+        <i
+          className="fa fa-check-square clip"
+          style={
+            Object {
+              "0": "#",
+              "1": "D",
+              "2": "C",
+              "3": "D",
+              "4": "B",
+              "5": "D",
+              "6": "C",
+            }
+          }
+        />
+        <p>
+          Pick-up
+        </p>
+      </span>
+      <span
+        className="flex-25 layout row"
+      >
+        <i
+          className="fa fa-check-square clip"
+          style={
+            Object {
+              "0": "#",
+              "1": "D",
+              "2": "C",
+              "3": "D",
+              "4": "B",
+              "5": "D",
+              "6": "C",
+            }
+          }
+        />
+        <p>
+          Delivery
+        </p>
+      </span>
+    </div>
+    <div
+      className="layout-row flex layout-align-end-end"
+    >
+      <span
+        className="bigText price_style"
+      >
+        <span>
+           
+          CNY
+           
+        </span>
+        <span>
+          1034
+        </span>
+      </span>
+    </div>
+  </div>
+</div>
+`;

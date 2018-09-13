@@ -14,7 +14,10 @@ const editedTenant = {
   data: {
     ...tenant.data,
     scope: {
-      detailed_billing: true
+      detailed_billing: true,
+      has_customs: true,
+      has_insurance: true,
+      customs_export_paper: true
     }
   }
 }

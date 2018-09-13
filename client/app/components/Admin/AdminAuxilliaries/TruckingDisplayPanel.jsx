@@ -74,19 +74,23 @@ export class TruckingDisplayPanel extends Component {
   }
   static feeCellDisplayGenerator (fee) {
     const cells = []
-    const dnrKeys = ['currency', 'rate_basis', 'range', 'key', 'base']
+    const dnrKeys = ['currency', 'rate_basis', 'range', 'key', 'base', 'name']
     Object.keys(fee).forEach((chargeKey) => {
       if (dnrKeys.indexOf(chargeKey) < 0) {
-        cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-          <p className="flex-none">{chargeGlossary[chargeKey]}</p>
-          <p className="flex">
+        cells.push(<div className={`flex-25 layout-wrap layout-row layout-align-none-center ${styles.price_cell}`}>
+          <p className="flex-100">{chargeGlossary[chargeKey]}:</p>
+          <p className="flex-100">
             {fee[chargeKey]} {fee.currency}
           </p>
         </div>)
       } else if (chargeKey === 'rate_basis') {
-        cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-          <p className="flex-none">{chargeGlossary[chargeKey]}</p>
-          <p className="flex">{chargeGlossary[fee[chargeKey]]}</p>
+        cells.push(<div className={`flex-25 layout-row layout-wrap layout-align-none-center ${styles.price_cell}`}>
+          <p className="flex-100 center">{chargeGlossary[chargeKey]}:</p>
+          <p className="flex-100 center">{chargeGlossary[fee[chargeKey]]}</p>
+        </div>)
+      } else if (chargeKey === 'name') {
+        cells.push(<div className={`flex-25 layout-row layout-wrap layout-align-none-center ${styles.price_cell}`}>
+          <p className="flex-100 center">{chargeGlossary[fee[chargeKey]]}</p>
         </div>)
       }
     })
@@ -525,7 +529,7 @@ export class TruckingDisplayPanel extends Component {
 
       return truckingPricing.rates[modKey][0] ? (
         <div
-          className={`flex-70 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >
@@ -574,7 +578,7 @@ export class TruckingDisplayPanel extends Component {
 
       return (
         <div
-          className={`flex-70 layout-row layout-wrap layout-align-start-center ${
+          className={`flex-90 layout-row layout-wrap layout-align-start-center ${
             styles.trucking_cell
           }`}
         >

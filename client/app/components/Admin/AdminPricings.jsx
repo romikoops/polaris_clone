@@ -10,7 +10,6 @@ import {
   AdminPricingsClientIndex,
   AdminPricingsRouteIndex
 } from './'
-import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions, documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
@@ -27,10 +26,13 @@ class AdminPricings extends Component {
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
   componentDidMount () {
-    const { pricingData, loading, adminDispatch } = this.props
+    const {
+      pricingData, loading, adminDispatch, match
+    } = this.props
     if (!pricingData && !loading) {
       adminDispatch.getPricings(false)
     }
+    this.props.setCurrentUrl(match.url)
   }
   viewRoute (route) {
     const { adminDispatch } = this.props
@@ -88,18 +90,12 @@ class AdminPricings extends Component {
     ) : (
       ''
     )
-    // const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
     const { nexuses } = trucking
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          {/* <TextHeading theme={theme} size={1} text={title} /> */}
-          {selectedPricing ? backButton : ''}
-        </div>
+        {selectedPricing ? backButton : ''}
 
         <Switch className="flex">
           <Route
@@ -200,6 +196,7 @@ AdminPricings.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
   adminDispatch: PropTypes.shape({

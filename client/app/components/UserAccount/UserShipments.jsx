@@ -6,13 +6,14 @@ export class UserShipments extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
     this.props.setNav('shipments')
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   render () {
     return (
       <div
         className="flex-100 layout-row layout-wrap layout-align-start-start
-        extra_padding header_buffer"
+        extra_padding"
       >
         <AdminShipmentsComp isUser />
       </div>
@@ -21,7 +22,8 @@ export class UserShipments extends Component {
 }
 
 UserShipments.propTypes = {
-  setNav: PropTypes.func.isRequired
+  setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired
 }
 
 UserShipments.defaultProps = {

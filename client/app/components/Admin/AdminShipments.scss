@@ -25,7 +25,9 @@
       width: 110px;
     }
   }
-  
+  .carriage_row {
+    padding-left: 15px;
+  }
   .status_box {
     p {
       font-size: 12px;
@@ -145,14 +147,14 @@
       line-height: 16px;
       font-size: 15px;
       letter-spacing: 0.02em;
-      color: #333333;
+      color: #4F4F4F;
     }
     span {
       font-weight: bold;
       line-height: 16px;
       font-size: 12px;
       letter-spacing: 0.02em;
-      color: #333333;
+      color: #4F4F4F;
     }
   }
   .no_border_top {
@@ -216,7 +218,7 @@
     p:first-child {
       font-size: 20px;
       letter-spacing: 0.02em;
-      color: #333333;
+      color: #4F4F4F;
     }
     p:last-child {
       font-size: 15px;

@@ -113,8 +113,7 @@
   .address {
     height: 92px;
     width: 118px;
-    color: #212121;
-    // font-family: ".SF NS Display";
+    color: #4F4F4F;
     font-size: 16px;
     line-height: 23px;
     font-style: normal;
@@ -195,7 +194,7 @@
     border: 0;
     border-radius: 3px;
     background-color: transparent;
-    margin-top: -60px;
+    margin-top: -52px;
     margin-bottom: 40px;
   }
   .inpu_box_right_margin {
@@ -331,6 +330,9 @@
     overflow-y: hidden;
     height: 250px;
 
+  }
+  .margin_header {
+    margin-top: 25px;
   }
   .slider_inner {
     margin-right: 15px;
@@ -506,15 +508,17 @@
   }
   .route_form {
     width: 600px;
-    height: 700px;
+    // height: 500px;
+    padding: 25px;
     z-index: 52;
     background: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
 
   }
   .form_padding {
     padding: 0 15px;
+  }
+  .form_row, .map_padding {
+    padding: 15px 0;
   }
 
   .input {
@@ -918,7 +922,7 @@
    }
    .title_grey {
      background: #E0E0E0;
-     color: #212121;
+     color: #4F4F4F;
      height: 38px;
      &:first-child {
       padding-left: 15px;
@@ -930,7 +934,7 @@
    }
    .title_shipment_grey {
     background: #E0E0E0;
-    color: #212121;
+    color: #4F4F4F;
     height: 38px;
     p:first-child {
       padding-left: 15px;
@@ -951,7 +955,7 @@
   }
    .title_grey_with_button {
     background: #E0E0E0;
-    color: #212121;
+    color: #4F4F4F;
     // height: 38px;
     &:first-child {
      padding-left: 15px;

@@ -4,8 +4,7 @@ import PropTypes from '../../../prop-types'
 import styles from './Card.scss'
 import adminStyles from '../Admin.scss'
 import SideOptionsBox from '../SideOptions/SideOptionsBox'
-import { CardRoutesPricing, PricingButton } from './SubComponents'
-// import { RoundButton } from '../../RoundButton/RoundButton'
+import { CardRoutesPricing } from './SubComponents'
 import FileUploader from '../../FileUploader/FileUploader'
 import DocumentsDownloader from '../../Documents/Downloader'
 import { adminPricing as priceTip } from '../../../constants'
@@ -14,6 +13,8 @@ import {
   filters,
   capitalize
 } from '../../../helpers'
+import CollapsingBar from '../../CollapsingBar/CollapsingBar'
+import { RoundButton } from '../../RoundButton/RoundButton'
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
@@ -30,19 +31,12 @@ export default class CardPricingIndex extends Component {
       rail: 'subway'
     }
   }
-  componentDidMount () {
-    this.prepPages()
-  }
 
   handleClick (id) {
     const { adminDispatch } = this.props
     adminDispatch.getItineraryPricings(id, true)
   }
-  prepPages () {
-    const { itineraries } = this.props
-    const numPages = Math.ceil(itineraries.length / 12)
-    this.setState({ numPages })
-  }
+
   generateViewType (mot) {
     return (
       <div className="layout-row flex-100 layout-align-start-center ">
@@ -104,24 +98,43 @@ export default class CardPricingIndex extends Component {
   }
 
   deltaPage (val) {
-    const { adminDispatch, mot } = this.props
+    const { adminDispatch, mot, allNumPages } = this.props
+    const numPages = allNumPages[mot] || 1
     this.setState(
       (prevState) => {
         const newPageVal = prevState.page + val
-        const page = (newPageVal < 1 && newPageVal > prevState.numPages) ? 1 : newPageVal
+        const page = (newPageVal < 1 && newPageVal > numPages) ? 1 : newPageVal
 
         return { page }
       },
-      () => adminDispatch.getPricings(false, this.state.page, mot)
+      () => {
+        const newPagesNumbers = { ...allNumPages, [mot]: this.state.page }
+        adminDispatch.getPricings(false, newPagesNumbers)
+      }
     )
   }
 
   render () {
-    const { searchText, page, numPages } = this.state
+    const { searchText, page, expander } = this.state
     const {
-      theme, scope, toggleCreator, mot
+      theme, scope, toggleCreator, mot, allNumPages
     } = this.props
+
+    const newButton = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="New"
+          active
+          handleNext={toggleCreator}
+          iconClass="fa-plus"
+        />
+      </div>
+    )
+
     if (!scope) return ''
+    const numPages = allNumPages[mot] || 1
 
     return (
       <div className="flex-100 layout-row layout-align-md-space-between-start layout-align-space-around-start">
@@ -143,7 +156,7 @@ export default class CardPricingIndex extends Component {
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page === 1 ? styles.disabled : ''}
+                      ${styles.navigation_button} ${page === 1 ? adminStyles.disabled : ''}
                     `}
                 onClick={page > 1 ? () => this.deltaPage(-1) : null}
               >
@@ -156,7 +169,7 @@ export default class CardPricingIndex extends Component {
               <div
                 className={`
                       flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${page < numPages ? '' : styles.disabled}
+                      ${styles.navigation_button} ${page < numPages ? '' : adminStyles.disabled}
                     `}
                 onClick={page < numPages ? () => this.deltaPage(1) : null}
               >
@@ -176,60 +189,91 @@ export default class CardPricingIndex extends Component {
               target={mot}
             />
             <SideOptionsBox
-              header="Uploads"
+              header="Data manager"
               flexOptions="flex-100"
               content={
-                <div
-                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
-                    <FileUploader
-                      theme={theme}
-                      dispatchFn={e => this.lclUpload(e)}
-                      tooltip={priceTip.upload_lcl}
-                      type="xlsx"
-                      size="full"
-                      text="Dedicated Pricings .xlsx"
-                    />
+                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.upload}
+                    theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    handleCollapser={() => this.toggleExpander('upload')}
+                    text="Upload Data"
+                    faClass="fa fa-cloud-upload"
+                    content={(
+                      <div
+                        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+                      >
+                        <div
+                          className={`${
+                            adminStyles.action_section
+                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                        >
+                          <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
+                          <FileUploader
+                            theme={theme}
+                            dispatchFn={e => this.lclUpload(e)}
+                            tooltip={priceTip.upload_lcl}
+                            type="xlsx"
+                            size="full"
+                            text="Dedicated Pricings .xlsx"
+                          />
 
-                  </div>
+                        </div>
 
+                      </div>
+                    )}
+                  />
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.download}
+                    theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    handleCollapser={() => this.toggleExpander('download')}
+                    text="Download Data"
+                    faClass="fa fa-cloud-download"
+                    content={(
+                      <div
+                        className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
+                      >
+                        <div
+                          className={`${
+                            adminStyles.action_section
+                          } flex-100 layout-row layout-wrap layout-align-center-center`}
+                        >
+                          <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
+                          <DocumentsDownloader
+                            theme={theme}
+                            target="pricing"
+                            options={{ mot }}
+                            size="full"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  />
+                  <CollapsingBar
+                    showArrow
+                    collapsed={!expander.new}
+                    theme={theme}
+                    styleHeader={{ background: '#E0E0E0', color: '#4F4F4F' }}
+                    handleCollapser={() => this.toggleExpander('new')}
+                    text="Create New Client"
+                    faClass="fa fa-plus-circle"
+                    content={(
+                      <div
+                        className={`${
+                          styles.action_section
+                        } flex-100 layout-row layout-align-center-center layout-wrap`}
+                      >
+                        {newButton}
+                      </div>
+                    )}
+                  />
                 </div>
               }
             />
-            <SideOptionsBox
-              header="Downloads"
-              flexOptions="flex-100"
-              content={
-                <div
-                  className={`${adminStyles.open_filter} flex-100 layout-row layout-wrap layout-align-center-start`}
-                >
-                  <div
-                    className={`${
-                      adminStyles.action_section
-                    } flex-100 layout-row layout-wrap layout-align-center-center`}
-                  >
-                    <p className="flex-100">{`Download ${capitalize(mot)} Pricings Sheet`}</p>
-                    <DocumentsDownloader
-                      theme={theme}
-                      target="pricing"
-                      options={{ mot }}
-                      size="full"
-                    />
-                  </div>
-                </div>
-              }
-            />
-            <PricingButton
-              onClick={toggleCreator}
-              onDisabledClick={() => console.log('this button is disabled')}
-            />
-
           </div>
         </div>
       </div>
@@ -241,6 +285,7 @@ CardPricingIndex.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub),
   itineraries: PropTypes.arrayOf(PropTypes.itinerary),
   toggleCreator: PropTypes.func,
+  allNumPages: PropTypes.objectOf(PropTypes.any),
   adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
     getRoutePricings: PropTypes.func
@@ -258,6 +303,7 @@ CardPricingIndex.defaultProps = {
   mot: '',
   hubs: [],
   itineraries: [],
+  allNumPages: {},
   scope: null,
   toggleCreator: null
 }

@@ -10,11 +10,11 @@ module ShippingTools
 
   def self.create_shipment(details, current_user)
     tenant = current_user.tenant
-    load_type = details["loadType"].underscore
-    direction = details["direction"]
+    load_type = details['loadType'].underscore
+    direction = details['direction']
     shipment = Shipment.new(
       user_id:   current_user.id,
-      status:    "booking_process_started",
+      status:    'booking_process_started',
       load_type: load_type,
       direction: direction,
       tenant_id: tenant.id
@@ -25,7 +25,7 @@ module ShippingTools
       # TBD - Create custom errors (ApplicationError)
       shipment.save!
     end
-    if tenant.scope["quotation_tool"]
+    if tenant.scope['quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
         Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
@@ -56,7 +56,7 @@ module ShippingTools
   def self.get_offers(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
     offer_calculator = OfferCalculator.new(shipment, params, current_user)
-    
+
     offer_calculator.perform
 
     offer_calculator.shipment.save!
@@ -72,7 +72,16 @@ module ShippingTools
   end
 
   def create_document(file, shipment, type, user)
-    Document.new_upload(file, shipment, type, user)
+    if type != 'miscellaneous'
+      existing_document = shipment.documents.where(doc_type: type).first
+      if existing_document
+        existing_document.update_file(file, shipment, type, user)
+      else
+        Document.new_upload(file, shipment, type, user)
+      end
+    else
+      Document.new_upload(file, shipment, type, user)
+    end
   end
 
   def self.update_shipment(params, current_user)
@@ -86,7 +95,6 @@ module ShippingTools
       total_goods_value: shipment_data[:totalGoodsValue],
       cargo_notes:       shipment_data[:cargoNotes]
     )
-    
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
 
     # Shipper
@@ -94,7 +102,7 @@ module ShippingTools
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact_params = contact_params(resource, contact_location.id)
     contact = search_contacts(contact_params, current_user)
-    shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: "shipper")
+    shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
     shipper = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
@@ -103,30 +111,28 @@ module ShippingTools
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact_params = contact_params(resource, contact_location.id)
     contact = search_contacts(contact_params, current_user)
-    shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "consignee")
+    shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
     consignee = { data: contact, location: contact_location.to_custom_hash }
     # NOT CORRECT: UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
+      
+      contact_params = contact_params(resource, nil)
       contact = search_contacts(contact_params, current_user)
-      shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: "notifyee")
+      shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
       contact
     end || []
 
     charge_breakdown = shipment.charge_breakdowns.selected
     existing_insurance_charge = charge_breakdown.charge('insurance')
-    if existing_insurance_charge
-      existing_insurance_charge.destroy
-    end
+    existing_insurance_charge&.destroy
     existing_customs_charge = charge_breakdown.charge('customs')
-    if existing_customs_charge
-      existing_customs_charge.destroy
-    end
+    existing_customs_charge&.destroy
     # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
       @insurance_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code("insurance"),
+        children_charge_category: ChargeCategory.from_code('insurance'),
         charge_category:          ChargeCategory.grand_total,
         charge_breakdown:         charge_breakdown,
         price:                    Price.create(currency: shipment.user.currency, value: shipment_data[:insurance][:value]),
@@ -135,68 +141,68 @@ module ShippingTools
     end
     if shipment_data[:customs][:total][:val].to_d > 0 || shipment_data[:customs][:total][:hasUnknown]
       @customs_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code("customs"),
+        children_charge_category: ChargeCategory.from_code('customs'),
         charge_category:          ChargeCategory.grand_total,
         charge_breakdown:         charge_breakdown,
         price:                    Price.create(
-                                    currency: shipment_data[:customs][:total][:currency],
-                                    value: shipment_data[:customs][:total][:val]
-                                  ),
+          currency: shipment_data[:customs][:total][:currency],
+          value: shipment_data[:customs][:total][:val]
+        ),
         parent:                   charge_breakdown.charge('grand_total')
       )
       if shipment_data[:customs][:import][:bool]
         @import_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code("import_customs"),
+          children_charge_category: ChargeCategory.from_code('import_customs'),
           charge_category:          ChargeCategory.grand_total,
           charge_breakdown:         charge_breakdown,
           price:                    Price.create(
-                                      currency: shipment_data[:customs][:import][:currency],
-                                      value: shipment_data[:customs][:import][:val]
-                                    ),
+            currency: shipment_data[:customs][:import][:currency],
+            value: shipment_data[:customs][:import][:val]
+          ),
           parent:                   @customs_charge
         )
       end
       if shipment_data[:customs][:export][:bool]
         @export_customs_charge = Charge.create(
-          children_charge_category: ChargeCategory.from_code("export_customs"),
+          children_charge_category: ChargeCategory.from_code('export_customs'),
           charge_category:          ChargeCategory.grand_total,
           charge_breakdown:         charge_breakdown,
           price:                    Price.create(
-                                      currency: shipment_data[:customs][:total][:currency],
-                                      value: shipment_data[:customs][:export][:val]
-                                    ),
+            currency: shipment_data[:customs][:total][:currency],
+            value: shipment_data[:customs][:export][:val]
+          ),
           parent:                   @customs_charge
         )
       end
-      
+
       @customs_charge.update_price!
     end
     if shipment_data[:addons][:customs_export_paper]
       @addons_charge = Charge.create(
-        children_charge_category: ChargeCategory.from_code("addons"),
+        children_charge_category: ChargeCategory.from_code('addons'),
         charge_category:          ChargeCategory.grand_total,
         charge_breakdown:         charge_breakdown,
         price:                    Price.create(
           currency: shipment_data[:addons][:customs_export_paper][:currency],
           value: shipment_data[:addons][:customs_export_paper][:value]
-                                  ),
+        ),
         parent:                   charge_breakdown.charge('grand_total')
       )
       @customs_export_paper = Charge.create(
-        children_charge_category: ChargeCategory.from_code("customs_export_paper"),
+        children_charge_category: ChargeCategory.from_code('customs_export_paper'),
         charge_category:          ChargeCategory.grand_total,
         charge_breakdown:         charge_breakdown,
         price:                    Price.create(
-                                    currency: shipment_data[:addons][:customs_export_paper][:currency],
-                                    value: shipment_data[:addons][:customs_export_paper][:value]
-                                  ),
+          currency: shipment_data[:addons][:customs_export_paper][:currency],
+          value: shipment_data[:addons][:customs_export_paper][:value]
+        ),
         parent:                   @addons_charge
       )
       @addons_charge.update_price!
     end
     charge_breakdown.charge('grand_total').update_price!
     shipment.customs_credit = shipment_data[:customsCredit]
-    shipment.notes = shipment_data["notes"]
+    shipment.notes = shipment_data['notes']
 
     cargo_item_types = {}
     if shipment.cargo_items
@@ -204,7 +210,7 @@ module ShippingTools
         hs_code_hashes = hsCodes[cargo_item.id.to_s]
 
         if hs_code_hashes
-          cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash['value'] }
           cargo_item.save!
         end
         hs_text = hsTexts[cargo_item.id.to_s]
@@ -225,7 +231,7 @@ module ShippingTools
         hs_code_hashes = hsCodes[container.id.to_s]
 
         if hs_code_hashes
-          container.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          container.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash['value'] }
           container.save!
         end
         hs_text = hsTexts[container.id.to_s]
@@ -244,13 +250,12 @@ module ShippingTools
 
     documents = shipment.documents.map do |doc|
       tmp = doc.as_json
-      tmp["signed_url"] = doc.get_signed_url
+      tmp['signed_url'] = doc.get_signed_url
       tmp
     end
 
-   
     shipment.save!
-    
+
     origin_hub      = shipment.origin_hub
     destination_hub = shipment.destination_hub
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
@@ -279,7 +284,7 @@ module ShippingTools
 
   def self.request_shipment(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
-    shipment.status = current_user.confirmed? ? "requested" : "requested_by_unconfirmed_account"
+    shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
     message = build_request_shipment_message(current_user, shipment)
@@ -302,7 +307,7 @@ module ShippingTools
     end
 
     {
-      title:       "Booking Received",
+      title:       'Booking Received',
       message:     message,
       shipmentRef: shipment.imc_reference
     }
@@ -310,15 +315,15 @@ module ShippingTools
 
   def self.contact_location_params(resource)
     resource.require(:location)
-      .permit(:street, :streetNumber, :zipCode, :city, :country)
-      .to_h.deep_transform_keys(&:underscore)
+            .permit(:street, :streetNumber, :zipCode, :city, :country)
+            .to_h.deep_transform_keys(&:underscore)
   end
 
-  def self.contact_params(resource, location_id=nil)
+  def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
-      .permit(:companyName, :firstName, :lastName, :email, :phone)
-      .to_h.deep_transform_keys(&:underscore)
-      .merge(location_id: location_id)
+            .permit(:companyName, :firstName, :lastName, :email, :phone)
+            .to_h.deep_transform_keys(&:underscore)
+            .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
@@ -327,30 +332,30 @@ module ShippingTools
     shipment.user_id =        params[:user_id]
     shipment.customs_credit = params[:customs_credit]
 
-    shipment.trip_id =      params[:schedule]["trip_id"]
+    shipment.trip_id =      params[:schedule]['trip_id']
     @schedule =             params[:schedule].as_json
 
-    shipment.itinerary = Trip.find(@schedule["trip_id"]).itinerary
+    shipment.itinerary = Trip.find(@schedule['trip_id']).itinerary
     case shipment.load_type
-    when "cargo_item"
+    when 'cargo_item'
       @dangerous = false
       res = shipment.cargo_items.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
-    when "container"
+    when 'container'
       @dangerous = false
       res = shipment.containers.where(dangerous_goods: true)
       @dangerous = true unless res.empty?
     end
-    @origin_hub      = Hub.find(@schedule["origin_hub"]["id"])
-    @destination_hub = Hub.find(@schedule["destination_hub"]["id"])
+    @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
+    @destination_hub = Hub.find(@schedule['destination_hub']['id'])
 
     shipment.origin_hub        = @origin_hub
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
     shipment.destination_nexus = @destination_hub.nexus
-    shipment.closing_date      = @schedule["closing_date"]
-    shipment.planned_etd       = @schedule["etd"]
-    shipment.planned_eta       = @schedule["eta"]
+    shipment.closing_date      = @schedule['closing_date']
+    shipment.planned_etd       = @schedule['etd']
+    shipment.planned_eta       = @schedule['eta']
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -369,44 +374,44 @@ module ShippingTools
         contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-    
-    hub_route = @schedule["hub_route_id"]
+
+    hub_route = @schedule['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers
     if containers.present?
       cargoKey = containers.first.size_class.dup
       customsKey = cargoKey.dup
-      customsKey.slice! customsKey.rindex("f")
+      customsKey.slice! customsKey.rindex('f')
       cargos = containers
     else
-      cargoKey = "lcl"
-      customsKey = "lcl"
+      cargoKey = 'lcl'
+      customsKey = 'lcl'
       cargos = cargo_items
     end
 
-    shipment.transport_category = shipment.trip.vehicle.transport_categories.find_by(name: "any", cargo_class: cargoKey)
+    shipment.transport_category = shipment.trip.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey)
     shipment.save!
     origin_customs_fee = @origin_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
-      "export",
+      'export',
       shipment.trip.tenant_vehicle_id,
       shipment.destination_hub_id
     )
     destination_customs_fee = @destination_hub.get_customs(
       customsKey,
       shipment.mode_of_transport,
-      "import",
+      'import',
       shipment.trip.tenant_vehicle_id,
       shipment.origin_hub_id
     )
     addons = Addon.prepare_addons(@origin_hub, @destination_hub, cargoKey, shipment.trip.tenant_vehicle_id, shipment.mode_of_transport, cargos, current_user)
-   
-    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
-    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["fees"], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee['fees'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee['fees'], cargos, shipment.load_type, current_user, shipment.mode_of_transport) : { unknown: true }
     total_fees = { total: { value: 0, currency: current_user.currency } }
-    total_fees[:total][:value] += import_fees["total"][:value] if import_fees["total"] && import_fees["total"][:value]
-    total_fees[:total][:value] += export_fees["total"][:value] if export_fees["total"] && export_fees["total"][:value]
+    total_fees[:total][:value] += import_fees['total'][:value] if import_fees['total'] && import_fees['total'][:value]
+    total_fees[:total][:value] += export_fees['total'][:value] if export_fees['total'] && export_fees['total'][:value]
 
     customs_fee = {
       import: destination_customs_fee ? import_fees : { unknown: true },
@@ -417,7 +422,7 @@ module ShippingTools
       startHub: { data: @origin_hub,      location: @origin_hub.nexus },
       endHub:   { data: @destination_hub, location: @destination_hub.nexus }
     }
-    options = {methods: [:selected_offer, :mode_of_transport], include:[ { destination_nexus: {}},{ origin_nexus: {}}, { destination_hub: {}}, { origin_hub: {}} ]}
+    options = { methods: %i(selected_offer mode_of_transport), include: [{ destination_nexus: {} }, { origin_nexus: {} }, { destination_hub: {} }, { origin_hub: {} }] }
     origin      = shipment.has_pre_carriage ? shipment.pickup_address   : shipment.origin_nexus
     destination = shipment.has_on_carriage  ? shipment.delivery_address : shipment.destination_nexus
     shipment_as_json = shipment.as_json(options).merge(
@@ -443,9 +448,9 @@ module ShippingTools
     }
   end
 
-  def self.reuse_booking_data(id, user)
+  def self.reuse_booking_data(id, _user)
     old_shipment = Shipment.find(id)
-    new_shipment_json = old_shipment.clone().as_json
+    new_shipment_json = old_shipment.clone.as_json
     ids_to_remove = %w(has_pre_carriage has_on_carriage id selected_day)
     ids_to_remove.each do |rid|
       new_shipment_json.delete(rid)
@@ -493,7 +498,7 @@ module ShippingTools
 
   def self.reuse_cargo_units(shipment, cargo_units)
     cargo_units.each do |cargo_unit|
-      cargo_json = cargo_unit.clone().as_json
+      cargo_json = cargo_unit.clone.as_json
       cargo_json.delete('id')
       cargo_json.delete('shipment_id')
       shipment.cargo_units.create!(cargo_json)
@@ -502,7 +507,7 @@ module ShippingTools
 
   def self.reuse_contacts(old_shipment, new_shipment)
     old_shipment.shipment_contacts.each do |old_contact|
-      new_contact_json = old_contact.clone().as_json
+      new_contact_json = old_contact.clone.as_json
       new_contact_json.delete('id')
       new_contact_json.delete('shipment_id')
       new_shipment.shipment_contacts.create!(new_contact_json)
@@ -510,7 +515,7 @@ module ShippingTools
   end
 
   def self.reuse_aggregrated_cargo(shipment, aggregated_cargo)
-    aggregated_cargo_json = aggregated_cargo.clone().as_json
+    aggregated_cargo_json = aggregated_cargo.clone.as_json
     aggregated_cargo_json.delete('id')
     aggregated_cargo_json.delete('shipment_id')
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
@@ -518,25 +523,21 @@ module ShippingTools
 
   def get_shipment_pdf(params)
     shipment = Shipment.find_by_id(params[:shipment_id])
-    pdf_string = render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_shipper.pdf", locals: { shipment: shipment })
+    pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
     shipper_pdf = WickedPdf.new.pdf_from_string(pdf_string, margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
+    send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
   end
 
   def self.tenant_notification_email(user, shipment)
-    if ENV['BETA'] != "true"
-      ShipmentMailer.tenant_notification(user, shipment).deliver_later
-    end
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_notification_email(user, shipment)
-    if ENV['BETA'] != "true"
-      ShipmentMailer.shipper_notification(user, shipment).deliver_later
-    end
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
 
   def self.shipper_confirmation_email(user, shipment)
-    if ENV['BETA'] != "true"
+    if Rails.env.production? && ENV['BETA'] != 'true'
       ShipmentMailer.shipper_confirmation(
         user,
         shipment
@@ -562,8 +563,8 @@ module ShippingTools
 
     doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
 
-    File.open("tmp/" + doc_name, "wb") { |file| file.write(doc_string) }
-    doc_pdf = File.open("tmp/" + doc_name)
+    File.open('tmp/' + doc_name, 'wb') { |file| file.write(doc_string) }
+    doc_pdf = File.open('tmp/' + doc_name)
 
     doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
     doc_url = doc.get_signed_url
@@ -572,25 +573,25 @@ module ShippingTools
   end
 
   def send_booking_emails(shipment)
-    if ENV['BETA'] != "true"
-      shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_shipper.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_trucker.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_consolidator.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: "pdfs/booking.pdf", template: "shipments/pdfs/booking_receiver.pdf", locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
-      ShipmentMailer.summary_mail_shipper(shipment, "Booking_" + shipment.imc_reference + ".pdf", shipper_pdf).deliver_now
-      ShipmentMailer.summary_mail_trucker(shipment, "Booking_" + shipment.imc_reference + ".pdf", trucker_pdf).deliver_now
-      ShipmentMailer.summary_mail_consolidator(shipment, "Booking_" + shipment.imc_reference + ".pdf", consolidator_pdf).deliver_now
-      ShipmentMailer.summary_mail_receiver(shipment, "Booking_" + shipment.imc_reference + ".pdf", receiver_pdf).deliver_now
+    if ENV['BETA'] != 'true'
+      shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      trucker_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_trucker.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      consolidator_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_consolidator.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      receiver_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_receiver.pdf', locals: { shipment: shipment }), margin: { top: 10, bottom: 5, left: 20, right: 20 })
+      ShipmentMailer.summary_mail_shipper(shipment, 'Booking_' + shipment.imc_reference + '.pdf', shipper_pdf).deliver_now
+      ShipmentMailer.summary_mail_trucker(shipment, 'Booking_' + shipment.imc_reference + '.pdf', trucker_pdf).deliver_now
+      ShipmentMailer.summary_mail_consolidator(shipment, 'Booking_' + shipment.imc_reference + '.pdf', consolidator_pdf).deliver_now
+      ShipmentMailer.summary_mail_receiver(shipment, 'Booking_' + shipment.imc_reference + '.pdf', receiver_pdf).deliver_now
     end
     # TBD - Set up flash message
   end
 
   def get_hs_code_hash(codes)
-    resp = get_items_by_key_values(false, "hsCodes", "_id", codes)
+    resp = get_items_by_key_values(false, 'hsCodes', '_id', codes)
     results = {}
 
     resp.each do |hs|
-      results[hs["_id"]] = hs
+      results[hs['_id']] = hs
     end
     results
   end

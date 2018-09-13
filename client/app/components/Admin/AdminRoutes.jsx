@@ -3,12 +3,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-
 import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
-// import styles from './Admin.scss'
-
 import { adminActions } from '../../actions'
-// import { TextHeading } from '../TextHeading/TextHeading'
+import { Modal } from '../Modal/Modal'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -23,10 +20,11 @@ class AdminRoutes extends Component {
     this.saveNewRoute = this.saveNewRoute.bind(this)
   }
   componentDidMount () {
-    const { adminDispatch, allHubs, loading } = this.props
+    const { adminDispatch, allHubs, loading, match } = this.props
     if (allHubs.length < 1 && !loading) {
       adminDispatch.getAllHubs()
     }
+    this.props.setCurrentUrl(match.url)
   }
 
   viewItinerary (itinerary) {
@@ -56,15 +54,23 @@ class AdminRoutes extends Component {
     } = this.props
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start header_buffer">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {this.state.newRoute ? (
-          <AdminRouteForm
-            theme={theme}
-            close={this.closeModal}
-            hubs={allHubs}
-            saveRoute={this.saveNewRoute}
-            adminDispatch={adminDispatch}
+          <Modal
+            component={
+              <AdminRouteForm
+                theme={theme}
+                close={this.closeModal}
+                hubs={allHubs}
+                saveRoute={this.saveNewRoute}
+                adminDispatch={adminDispatch}
+              />
+            }
+            verticalPadding="30px"
+            horizontalPadding="40px"
+            parentToggle={this.closeModal}
           />
+
         ) : (
           ''
         )}
@@ -75,7 +81,6 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRoutesIndex
                 theme={theme}
-                // hubs={hubs}
                 hubHash={hubHash}
                 itineraries={itineraries}
                 adminDispatch={adminDispatch}
@@ -94,7 +99,6 @@ class AdminRoutes extends Component {
             render={props => (
               <AdminRouteView
                 theme={theme}
-                // hubs={hubs}
                 hubHash={hubHash}
                 itineraryData={itinerary}
                 adminDispatch={adminDispatch}
@@ -116,6 +120,7 @@ AdminRoutes.propTypes = {
     newRoute: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   history: PropTypes.history.isRequired,
   route: PropTypes.route.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired,

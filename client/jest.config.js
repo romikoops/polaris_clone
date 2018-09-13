@@ -1,8 +1,10 @@
 module.exports = {
   // if true stops test after first failure
   bail: true,
-  testRegex: '.spec.jsx$',
-  collectCoverageFrom: ['app/components/**/*.(jsx|js)'],
+  testRegex: '.spec.(jsx|js)$',
+  collectCoverage: true,
+  collectCoverageFrom: ['app/**/*.(jsx|js)'],
+  coverageReporters: ['lcov', 'text-summary'],
   verbose: true,
   setupFiles: ['./jest.init.js'],
   setupTestFrameworkScriptFile: './node_modules/jest-enzyme/lib/index.js',
@@ -11,5 +13,6 @@ module.exports = {
   unmockedModulePathPatterns: [],
   moduleNameMapper: {
     '\\.s?css$': 'identity-obj-proxy'
-  }
+  },
+  reporters: ['default', 'jest-junit']
 }

@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
-import styles from './Admin.scss'
 import { AdminShipmentsIndex } from './'
 import { AdminShipmentView } from './AdminShipmentView/AdminShipmentView'
 import { adminActions } from '../../actions'
@@ -20,21 +19,22 @@ class AdminShipments extends Component {
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
   }
   componentDidMount () {
-    const { shipments, loading, adminDispatch } = this.props
+    const {
+      shipments, loading, adminDispatch, match
+    } = this.props
     if (!shipments && !loading) {
       adminDispatch.getShipments(false)
     }
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl(match.url)
   }
   viewShipment (shipment) {
     const { adminDispatch } = this.props
     adminDispatch.getShipment(shipment.id, true)
-    // this.setState({ selectedShipment: true })
   }
 
   backToIndex () {
     const { dispatch, history } = this.props
-    // this.setState({ selectedShipment: false })
     dispatch(history.push('/admin/shipments'))
   }
   handleShipmentAction (id, action) {
@@ -62,11 +62,6 @@ class AdminShipments extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          {/* <TextHeading theme={theme} size={1} text="Shipments" /> */}
-        </div>
         <Switch className="flex">
           <Route
             exact
@@ -181,6 +176,7 @@ AdminShipments.propTypes = {
     getShipments: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   tenant: PropTypes.tenant,
   history: PropTypes.history.isRequired,
   user: PropTypes.user

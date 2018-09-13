@@ -99,6 +99,7 @@ export class UserShipmentView extends Component {
       userDispatch.getShipment(parseInt(match.params.id, 10), false)
     }
     window.scrollTo(0, 0)
+    this.props.setCurrentUrl('/account/shipments')
   }
   setFileType (ev) {
     const shipmentId = this.props.shipmentData.shipment.id
@@ -881,6 +882,7 @@ UserShipmentView.propTypes = {
   }).isRequired,
   match: PropTypes.match.isRequired,
   setNav: PropTypes.func.isRequired,
+  setCurrentUrl: PropTypes.func.isRequired,
   tenant: PropTypes.tenant
 }
 

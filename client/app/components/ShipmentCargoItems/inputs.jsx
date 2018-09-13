@@ -43,7 +43,7 @@ export default function getInputs (
   maxDimensions,
   availableMotsForRoute
 ) {
-  const { handleDelta } = this.props
+  const { handleDelta, t } = this.props
   const placeholderInput = (
     <input
       className="flex-80"
@@ -63,7 +63,7 @@ export default function getInputs (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
       <div style={{ width: '95%' }}>
         <NamedSelect
-          placeholder="Select your colli type"
+          placeholder={t('common:selectColliType')}
           className={styles.select_100}
           showErrors={showColliTypeErrors}
           name={`${i}-colliType`}
@@ -79,7 +79,7 @@ export default function getInputs (
     <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
       <div className={`flex-85 layout-row ${styles.input_box}`}>
         <div className="flex-40 layout-row layout-align-center-center">
-          Weight
+          {t('common:grossWeight')}
         </div>
         {
           cargoItem ? (
@@ -101,9 +101,9 @@ export default function getInputs (
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
               }}
               validationErrors={{
-                isDefaultRequiredValue: 'Must be greater than 0',
-                nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum weight is ${maxDimensionsToApply.payloadInKg}`
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
               }}
               required
             />
@@ -120,7 +120,7 @@ export default function getInputs (
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">
       <div className="layout-row flex-40 layout-align-center" >
-        <p className={`${styles.input_label} flex-none`}> Volume: </p>
+        <p className={`${styles.input_label} flex-none`}>{t('common:volume')}: </p>
       </div>
 
       <div className="flex">
@@ -136,7 +136,7 @@ export default function getInputs (
   inputs.total = (
     <div className={`${styles.total} flex-10 layout-row layout-wrap layout-align-center-stretch`}>
       <div className={`${styles.cargo_item_box} layout-row flex-100 layout-align-center-center`}>
-        <p className={`${styles.input_label} flex-none`}> Total: </p>
+        <p className={`${styles.input_label} flex-none`}>{t('common:total')}:</p>
       </div>
     </div>
   )
@@ -161,7 +161,7 @@ export default function getInputs (
         <div className="flex-33 layout-row">
           { switchIcon(mot) }
           <p className={`${styles.chargeable_weight_value}`}>
-           Unavailable
+            {t('common:unavailable')}
           </p>
         </div>
       )
@@ -183,7 +183,7 @@ export default function getInputs (
     }
     >
       <div className="layout-row flex-35 layout-wrap layout-align-start-center" >
-        <p className={`${styles.input_label} flex-none`}> Chargeable Weight: </p>
+        <p className={`${styles.input_label} flex-none`}>{t('cargo:chargebleWeight')}: </p>
       </div>
       <div className={
         `${styles.chargeable_weight_values} flex ` +
@@ -207,8 +207,7 @@ export default function getInputs (
     +cargoItem.dimension_z > +maxDimensions.air.dimensionZ
   ) {
     heightDataTip = `
-      Please note that the maximum height for items in
-      Air Freight shipments is ${maxDimensions.air.dimensionZ} cm
+      ${t('cargo:heightDataTip')} ${maxDimensions.air.dimensionZ} cm
     `
   }
 
@@ -225,7 +224,7 @@ export default function getInputs (
         onBlur={() => ReactTooltip.hide(heightRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
-          H
+          {t('common:height').charAt(0)}
         </div>
         {
           cargoItem ? (
@@ -249,9 +248,9 @@ export default function getInputs (
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionZ
               }}
               validationErrors={{
-                isDefaultRequiredValue: 'Must be greater than 0',
-                nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum height is ${maxDimensionsToApply.dimensionZ}`
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxHeight')} ${maxDimensionsToApply.dimensionZ}`
               }}
               required
             />
@@ -267,15 +266,14 @@ export default function getInputs (
   let lengthDataTip = ''
   if (cargoItem) {
     if (cargoItemTypes[i] && cargoItemTypes[i].dimension_x) {
-      lengthDataTip = 'Length is automatically set by \'Collie Type\''
+      lengthDataTip = t('cargo:lengthDataTipTwo')
     } else if (
       maxDimensions.air &&
       +cargoItem.dimension_x < +maxDimensionsToApply.dimensionX &&
       +cargoItem.dimension_x > +maxDimensions.air.dimensionX
     ) {
       lengthDataTip = `
-        Please note that the maximum length for items in
-        Air Freight shipments is ${maxDimensions.air.dimensionX} cm
+        ${t('cargo:lengthDataTip')} ${maxDimensions.air.dimensionX} cm
       `
     }
   }
@@ -293,7 +291,7 @@ export default function getInputs (
         onBlur={() => ReactTooltip.hide(lengthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
-          L
+          {t('common:length').charAt(0)}
         </div>
 
         {
@@ -318,9 +316,9 @@ export default function getInputs (
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionX
               }}
               validationErrors={{
-                isDefaultRequiredValue: 'Must be greater than 0',
-                nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum length is ${maxDimensionsToApply.dimensionX}`
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxLength')} ${maxDimensionsToApply.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -337,15 +335,14 @@ export default function getInputs (
   let widthDataTip = ''
   if (cargoItem) {
     if (cargoItemTypes[i] && cargoItemTypes[i].dimension_y) {
-      widthDataTip = 'Width is automatically set by \'Collie Type\''
+      widthDataTip = t('cargo:widthDataTipTwo')
     } else if (
       maxDimensions.air &&
       +cargoItem.dimension_y < +maxDimensionsToApply.dimensionY &&
       +cargoItem.dimension_y > +maxDimensions.air.dimensionY
     ) {
       widthDataTip = `
-        Please note that the maximum width for items in
-        Air Freight shipments is ${maxDimensions.air.dimensionY} cm
+        ${t('cargo:widthDataTip')} ${maxDimensions.air.dimensionY} cm
       `
     }
   }
@@ -364,7 +361,7 @@ export default function getInputs (
         onBlur={() => ReactTooltip.hide(widthRef)}
       >
         <div className="flex-20 layout-row layout-align-center-center">
-          W
+          {t('common:width').charAt(0)}
         </div>
         {
           cargoItem ? (
@@ -388,9 +385,9 @@ export default function getInputs (
                 maxDimension: (values, value) => value <= +maxDimensionsToApply.dimensionY
               }}
               validationErrors={{
-                isDefaultRequiredValue: 'Must be greater than 0',
-                nonNegative: 'Must be greater than 0',
-                maxDimension: `Maximum width is ${maxDimensionsToApply.dimensionY}`
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxWidth')} ${maxDimensionsToApply.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required
@@ -408,7 +405,7 @@ export default function getInputs (
       className="layout-row flex layout-wrap layout-align-start-center"
     >
       <div className="layout-row flex-75 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+        <p className={`${styles.input_label} flex-none`}>{t('common:dangerousGoods')}</p>
         <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
       </div>
       <Checkbox
@@ -427,7 +424,7 @@ export default function getInputs (
       className="layout-row flex layout-wrap layout-align-start-center"
     >
       <div className="layout-row flex-65 layout-wrap layout-align-start-center">
-        <p className={`${styles.input_label} flex-none`}> Non Stackable </p>
+        <p className={`${styles.input_label} flex-none`}>{t('common:nonStackable')}</p>
         <Tooltip theme={theme} icon="fa-info-circle" text="non_stackable" />
       </div>
       <Checkbox

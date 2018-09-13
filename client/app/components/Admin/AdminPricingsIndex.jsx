@@ -6,7 +6,7 @@ import CardPricingIndex from './CardPricingIndex'
 import Tabs from '../Tabs/Tabs'
 import Tab from '../Tabs/Tab'
 import AdminTrucking from './AdminTrucking'
-import { capitalize, gradientTextGenerator, switchIcon } from '../../helpers'
+import { capitalize } from '../../helpers'
 
 export class AdminPricingsIndex extends Component {
   constructor (props) {
@@ -25,9 +25,15 @@ export class AdminPricingsIndex extends Component {
   componentDidMount () {
     window.scrollTo(0, 0)
   }
-  getInitialPricingPage (mot) {
-    const { adminDispatch } = this.props
-    adminDispatch.getPricings(false, 1, mot)
+  getInitialPricingPage () {
+    const { adminDispatch, scope } = this.props
+    const pages = {}
+    Object.keys(scope.modes_of_transport).forEach((mot) => {
+      if (Object.values(scope.modes_of_transport[mot]) > 0) {
+        pages[mot] = 1
+      }
+    })
+    adminDispatch.getPricings(false, pages)
   }
   toggleCreator (mot) {
     this.setState(prevState => ({
@@ -77,25 +83,20 @@ export class AdminPricingsIndex extends Component {
     }
 
     const {
-      itineraries, detailedItineraries, transportCategories, lastUpdate
+      itineraries, detailedItineraries, transportCategories, lastUpdate, numItineraryPages
     } = pricingData
     const modesOfTransport = scope.modes_of_transport
-    const gradientFontStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: '#E0E0E0' }
     const modeOfTransportNames = Object.keys(modesOfTransport).filter(modeOfTransportName =>
       Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool))
-    const truckIcon = <i className="fa fa-truck clip flex-none" style={gradientFontStyle} />
 
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
       theme={theme}
-      extraClick={() => this.getInitialPricingPage(mot)}
-      icon={switchIcon(mot, gradientFontStyle)}
+      mot={mot}
     >
       <CardPricingIndex
-        itineraries={detailedItineraries.filter(itin => itin.mode_of_transport === mot)}
+        itineraries={detailedItineraries[mot]}
+        numPages={numItineraryPages}
         theme={theme}
         scope={scope}
         mot={mot}
@@ -121,7 +122,7 @@ export class AdminPricingsIndex extends Component {
     motTabs.push(<Tab
       tabTitle="Trucking"
       theme={theme}
-      icon={truckIcon}
+      mot="truck"
     >
       <AdminTrucking
         theme={theme}
@@ -130,10 +131,11 @@ export class AdminPricingsIndex extends Component {
     </Tab>)
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start extra_padding_left">
 
         <Tabs
           wrapperTabs="layout-row flex-45 flex-sm-40 flex-xs-80 margin_bottom"
+          paddingFixes
         >
           {motTabs}
 

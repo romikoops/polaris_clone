@@ -19,6 +19,7 @@ jest.mock('uuid', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
+  numberSpacing: x => `${x}.00`,
   totalPrice: () => ({
     currency: 'CHF'
   }),
@@ -54,7 +55,7 @@ jest.mock('../../constants', () => {
   return { moment, shipmentStatii, documentTypes }
 })
 // eslint-disable-next-line
-import { BookingConfirmation } from './BookingConfirmation'
+import BookingConfirmation from './BookingConfirmation'
 
 const cargoItemTypes = { foo: 'FOO_TYPE', bar: 'BAR_TYPE' }
 
@@ -224,7 +225,7 @@ test('props.shipmentData.notifyees is truthy', () => {
   expect(shallow(<BookingConfirmation {...props} />)).toMatchSnapshot()
 })
 
-test.skip('props.shipmentData.shipment.has_pre_carriage is true', () => {
+test('props.shipmentData.shipment.has_pre_carriage is true', () => {
   const props = {
     ...propsBase,
     shipmentData: {

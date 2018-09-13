@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
-import { theme, identity, user, location } from '../../mocks'
+import { theme, identity, user, location, change } from '../../mocks'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -21,7 +21,7 @@ jest.mock('./EditLocation', () => ({
   EditLocation: ({ children }) => <div>{children}</div>
 }))
 // eslint-disable-next-line import/first
-import { UserLocations } from './UserLocations'
+import UserLocations from './UserLocations'
 
 const createWrapper = propsInput => mount(<UserLocations {...propsInput} />)
 
@@ -68,18 +68,15 @@ test('props.setNav is called', () => {
 })
 
 test('props.userDispatch.makePrimary is called', () => {
-  const props = {
-    ...propsBase,
-    userDispatch: {
-      ...propsBase,
-      makePrimary: jest.fn()
-    }
-  }
-  const selector = 'div[className="layout-row flex-20 layout-align-end"] > div'
-
+  const props = change(
+    propsBase,
+    'userDispatch.makePrimary',
+    jest.fn()
+  )
+  const selector = '.icon_primary > div > div'
   const wrapper = createWrapper(props)
   const clickableDiv = wrapper.find(selector).first()
-
   clickableDiv.simulate('click')
+
   expect(props.userDispatch.makePrimary).toHaveBeenCalled()
 })

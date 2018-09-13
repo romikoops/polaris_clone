@@ -2,7 +2,7 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="layout row layout-align-center"
+  className="ALERT_MODAL_BODY layout row layout-align-center"
   style={
     Object {
       "maxWidth": "1000",

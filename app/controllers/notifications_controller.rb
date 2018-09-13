@@ -60,23 +60,11 @@ class NotificationsController < ApplicationController
 
   def shipments_data
     results = {
-      requested: [],
-      open:      [],
-      finished:  [],
-      ignored:   []
     }
-    params[:keys].each do |k|
+    shipment_keys = params[:keys] || current_user.shipments.pluck(:imc_reference)
+    shipment_keys.each do |k|
       shipment = Shipment.find_by_imc_reference(k)
-      case shipment.status
-      when "requested"
-        results[:requested] << shipment
-      when "accepted" || "in_progress"
-        results[:open] << shipment
-      when "declined" || "finished"
-        results[:finished] << shipment
-      when "ignored"
-        results[:ignored] << shipment
-      end
+      results[k] = shipment
     end
     response_handler(results)
   end

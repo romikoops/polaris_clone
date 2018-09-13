@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { theme, identity } from '../../mocks'
+// eslint-disable-next-line import/first no-named-as-default
+import ShipmentContainers from './ShipmentContainers'
 
 jest.mock('uuid', () => {
   let counter = -1
@@ -24,8 +26,6 @@ jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
   Tooltip: ({ children }) => <div>{children}</div>
 }))
-// eslint-disable-next-line import/first
-import { ShipmentContainers } from './ShipmentContainers'
 
 const createWrapper = propsInput => mount(<ShipmentContainers {...propsInput} />)
 
@@ -55,7 +55,7 @@ test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })
 
-test('props.nextStageAttempt is true', () => {
+test('nextStageAttempt is true', () => {
   const props = {
     ...propsBase,
     nextStageAttempt: true
@@ -63,7 +63,7 @@ test('props.nextStageAttempt is true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test('props.scope.dangerous_goods is true', () => {
+test('scope.dangerous_goods is true', () => {
   const props = {
     ...propsBase,
     scope: {
@@ -73,7 +73,7 @@ test('props.scope.dangerous_goods is true', () => {
   expect(createShallow(props)).toMatchSnapshot()
 })
 
-test('props.containers has dangerous_goods as true', () => {
+test('containers.dangerous_goods is true', () => {
   const props = {
     ...propsBase,
     containers: [{
@@ -90,11 +90,12 @@ test('props.addContainer is called', () => {
     addContainer: jest.fn()
   }
   const wrapper = createWrapper(props)
-  const clickableDiv = wrapper.find('.add_unit').first()
-
-  expect(props.addContainer).not.toHaveBeenCalled()
+  const clickableDiv = wrapper.find('.add_unit_wrapper > div').first()
   clickableDiv.simulate('click')
+
   expect(props.addContainer).toHaveBeenCalled()
+
+  expect(wrapper.state().firstRenderInputs).toEqual(true)
 })
 
 test('props.deleteItem is called', () => {
@@ -108,4 +109,28 @@ test('props.deleteItem is called', () => {
   expect(props.deleteItem).not.toHaveBeenCalled()
   icon.simulate('click')
   expect(props.deleteItem).toHaveBeenCalled()
+})
+
+test('firstRenderInputs fn sets the state to the boolean that it is passed', () => {
+  const props = {
+    ...propsBase,
+    setFirstRenderInputs: jest.fn()
+  }
+  const wrapper = createWrapper(props)
+
+  wrapper.instance().setFirstRenderInputs(false)
+  expect(wrapper.state().firstRenderInputs).toEqual(false)
+})
+
+// not working yet
+test('handleContainerQ modifies Props', () => {
+  const props = {
+    ...propsBase,
+    handleContainerQ: jest.fn()
+  }
+
+  const wrapper = createWrapper(props)
+
+  wrapper.instance().handleContainerQ(identity)
+  expect(wrapper.props().handleDelta).toEqual(identity)
 })

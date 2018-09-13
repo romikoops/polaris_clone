@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import GreyBox from '../GreyBox/GreyBox'
-import { ShipmentOverviewCard } from '../ShipmentCard/ShipmentOverviewCard'
+import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { AdminHubCard } from './AdminHubCard'
 import { AdminClientCardIndex } from './AdminClientCardIndex'
 import { AdminRouteList } from './AdminRouteList'
@@ -28,7 +28,20 @@ export class AdminDashboard extends Component {
       hoverId: false
     }
     this.handleClick = this.handleClick.bind(this)
+    this.determinePerPage = this.determinePerPage.bind(this)
     this.handleShipmentAction = this.handleShipmentAction.bind(this)
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+    this.determinePerPage()
+    window.addEventListener('resize', this.determinePerPage)
+  }
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.determinePerPage)
+  }
+
+  componentDidMount () {
+    this.props.setCurrentUrl(this.props.match.url)
   }
 
   handleRouteHover (id) {
@@ -65,6 +78,11 @@ export class AdminDashboard extends Component {
       adminDispatch.getShipment(shipment.id, true)
     }
   }
+  determinePerPage () {
+    const width = window.innerWidth
+    const perPage = width >= 1920 ? 3 : 2
+    this.setState({ perPage })
+  }
 
   render () {
     const {
@@ -77,7 +95,7 @@ export class AdminDashboard extends Component {
       adminDispatch,
       theme
     } = this.props
-    const { hoverId } = this.state
+    const { hoverId, perPage } = this.state
 
     if (!dashData) return ''
     const { itineraries, mapData } = dashData
@@ -94,7 +112,7 @@ export class AdminDashboard extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
 
-    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, 4)
+    const preparedRequestedShipments = shipments.requested ? shipments.requested.slice(0, perPage)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
 
     const mapComponent = (
@@ -175,6 +193,7 @@ export class AdminDashboard extends Component {
           <div className="flex-gt-md-35 flex-100">
             <AdminClientCardIndex
               clients={clients}
+              viewClient={id => adminDispatch.getClient(id, true)}
               theme={theme}
             />
             <div className={`layout-row flex-100 layout-align-center-center ${styles.space}`}>
@@ -197,6 +216,7 @@ AdminDashboard.propTypes = {
   }),
   confirmShipmentData: PropTypes.objectOf(PropTypes.any),
   handleClick: PropTypes.func,
+  setCurrentUrl: PropTypes.func.isRequired,
   clients: PropTypes.arrayOf(PropTypes.client),
   shipments: PropTypes.shape({
     open: PropTypes.arrayOf(PropTypes.shipment),

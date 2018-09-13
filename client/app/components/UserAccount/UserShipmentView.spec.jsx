@@ -20,6 +20,7 @@ jest.mock('uuid', () => {
 jest.mock('../../constants', () => {
   const moment = () => ({
     format: () => 19,
+    subtract: () => ({ format: () => 20 }),
     diff: () => 17
   })
   const documentTypes = x => x
@@ -28,28 +29,17 @@ jest.mock('../../constants', () => {
 })
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x,
+  checkPreCarriage: x => x,
   switchIcon: x => x,
-
-  /**
-   * Use of different currency from
-   * the currency used in `mocks.js`,
-   * so we distinct easier between different `jest.mock` declarations
-   */
   totalPrice: () => ({ currency: 'BGN' }),
-
-  /**
-   * On purpose we are using Philippines's currency,
-   * as if `PHP` is missing in snapshots,
-   * then we know our test.skip is incomplete.
-   */
   formattedPriceValue: () => ({ currency: 'PHP' }),
   gradientGenerator: x => x,
   gradientBorderGenerator: x => x
 }))
 jest.mock('../GradientBorder', x => x)
 
-// eslint-disable-next-line import/first
-import { UserShipmentView } from './UserShipmentView'
+// eslint-disable-next-line
+import UserShipmentView from './UserShipmentViewDone'
 
 const propsBase = {
   theme,
@@ -62,14 +52,15 @@ const propsBase = {
   },
   match,
   setNav: identity,
+  setCurrentUrl: identity,
   tenant
 }
 
-test.skip('shallow render', () => {
+test('shallow render', () => {
   expect(shallow(<UserShipmentView {...propsBase} />)).toMatchSnapshot()
 })
 
-test.skip('loading is true', () => {
+test('loading is true', () => {
   const props = {
     ...propsBase,
     loading: true
@@ -86,7 +77,7 @@ test('hubs is false', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('shipmentData.documents is present', () => {
+test('shipmentData.documents is present', () => {
   const documents = [
     { id: 0, doc_type: 'foo' },
     { id: 1, doc_type: 'bar' }
@@ -104,7 +95,7 @@ test.skip('shipmentData.documents is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('shipmentData.cargoItems is present', () => {
+test('shipmentData.cargoItems is present', () => {
   const cargoItems = [
     { id: 0, cargo_item_type_id: 'foo' },
     { id: 1, cargo_item_type_id: 'bar' }
@@ -124,7 +115,7 @@ test.skip('shipmentData.cargoItems is present', () => {
   expect(shallow(<UserShipmentView {...props} />)).toMatchSnapshot()
 })
 
-test.skip('shipmentData.contacts is present', () => {
+test('shipmentData.contacts is present', () => {
   const contacts = [
     {
       type: 'notifyee',
