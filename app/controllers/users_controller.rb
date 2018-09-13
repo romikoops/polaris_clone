@@ -11,17 +11,9 @@ class UsersController < ApplicationController
     requested_shipments = @shipper.shipments.where(
       status:    %w(requested requested_by_unconfirmed_account),
       tenant_id: current_user.tenant_id
-    ).order(booking_placed_at: :desc)
-    open_shipments = @shipper.shipments.where(
-      status:    %w(in_progress confirmed),
-      tenant_id: current_user.tenant_id
-    ).order(booking_placed_at: :desc)
-    finished_shipments = @shipper.shipments
-      .where(status: "finished", tenant_id: current_user.tenant_id)
-      .order(booking_placed_at: :desc)
+    ).order(booking_placed_at: :desc).limit(3)
+    
     @requested_shipments = requested_shipments.map(&:with_address_options_json)
-    @open_shipments = open_shipments.map(&:with_address_options_json)
-    @finished_shipments = finished_shipments.map(&:with_address_options_json)
 
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false).map do |contact|
@@ -38,9 +30,7 @@ class UsersController < ApplicationController
 
     resp = {
       shipments:         {
-        requested: @requested_shipments,
-        open:      @open_shipments,
-        finished:  @finished_shipments
+        requested: @requested_shipments
       },
       pricings:          @pricings,
       contacts:          @contacts,

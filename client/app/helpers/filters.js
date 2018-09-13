@@ -8,18 +8,17 @@ function handleSearchChange (query, searchKeys, array) {
     const options = {
       shouldSort: true,
       tokenize: true,
-      threshold: 0.2,
+      threshold: 0.4,
       location: 0,
       distance: 50,
       maxPatternLength: 32,
-      minMatchCharLength: 5,
+      minMatchCharLength: 2,
       keys
     }
     const fuse = new Fuse(array, options)
 
     return fuse.search(query)
   }
-
   const filteredResults = search(searchKeys)
 
   return filteredResults

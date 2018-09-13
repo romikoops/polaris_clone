@@ -74,30 +74,24 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     switch (target) {
       case 'pricing':
-        // this.setState({ activeLink: target })
         userDispatch.getPricings(user.id, true)
         break
       case 'chooseRoutes':
         this.toggleModal()
         break
       case 'shipments':
-        // this.setState({ activeLink: target })
         userDispatch.getShipments(true)
         break
       case 'contacts':
-        // this.setState({ activeLink: target })
         userDispatch.getContacts(true, 1)
         break
       case 'dashboard':
-        // this.setState({ activeLink: target })
         userDispatch.getDashboard(user.id, true)
         break
       case 'locations':
-        // this.setState({ activeLink: target })
         userDispatch.getLocations(user.id, true)
         break
       case 'profile':
-        // this.setState({ activeLink: target })
         userDispatch.goTo('/account/profile')
         break
       default:
@@ -125,13 +119,13 @@ class UserAccount extends Component {
       tenant
     } = this.props
     if (!users || !user) {
-      return ''
+      return <Loading theme={theme} text="loading..." />
     }
     const {
       shipments, hubs, shipment, dashboard, loading
     } = users
     if (!dashboard) {
-      return ''
+      return <Loading theme={theme} text="loading..." />
     }
 
     const hubHash = {}

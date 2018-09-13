@@ -58,7 +58,15 @@ class App extends Component {
   }
   render () {
     const {
-      tenant, isFetching, user, loggedIn, showMessages, sending, authDispatch
+      tenant,
+      isFetching,
+      user,
+      loggedIn,
+      showMessages,
+      sending,
+      authDispatch,
+      loading,
+      loggingIn
     } = this.props
     if (!tenant || (tenant && !tenant.data)) {
       return <Loading theme={defaultTheme} text="loading..." />
@@ -76,7 +84,7 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
+          {isFetching || loading || loggingIn ? <Loading theme={theme} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
@@ -165,24 +173,25 @@ App.defaultProps = {
 
 function mapStateToProps (state) {
   const {
-    selectedSubdomain, tenant, authentication, messaging
+    selectedSubdomain, tenant, authentication, messaging, admin, users
   } = state
   const { showMessages, sending } = messaging
-  const { user, loggedIn } = authentication
-  // const { currencies } = app;
+  const { user, loggedIn, loggingIn } = authentication
   const { isFetching } = tenant || {
     isFetching: true
   }
+  const loading = admin.loading || users.loading
 
   return {
     selectedSubdomain,
     tenant,
     user,
     loggedIn,
+    loggingIn,
     isFetching,
     showMessages,
-    sending
-    // currencies
+    sending,
+    loading
   }
 }
 function mapDispatchToProps (dispatch) {
