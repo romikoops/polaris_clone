@@ -199,7 +199,7 @@ class MessageCenter extends Component {
               {convos}
             </div>
             <div
-              className={`flex-70 layout-column layout-align-start-start ${styles.message_list}`}
+              className={`flex-70 layout-row layout-wrap layout-align-start ${styles.message_list}`}
             >
               {messageView}
             </div>
