@@ -64,7 +64,7 @@ export class LandingTop extends Component {
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
-    const isClosed = tenant.data.scope.closed_quotation_tool
+    // const isClosed = tenant.data.scope.closed_quotation_tool
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -112,9 +112,8 @@ export class LandingTop extends Component {
                   (
                     user &&
                   user.role &&
-                  !isClosed &&
                   ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
-                  ) || (!isClosed && !user)) &&
+                  ) || (!user)) &&
                   findRates}
                 {
                   user &&
@@ -129,6 +128,7 @@ export class LandingTop extends Component {
                   ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) &&
                   toAdmin}
               </div>
+              {console.log(tenant.data.scope.closed_quotation_tool)}
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
                   <div className="flex-none layout-row layout-align-start-center">

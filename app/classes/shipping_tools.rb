@@ -11,30 +11,30 @@ module ShippingTools
   def self.create_shipments_from_quotation(shipment, schedules)
     main_quote = Quotation.create(user_id: shipment.user_id)
     schedules.each do |schedule|
-      trip = Trip.find(schedule["trip_id"])
-      on_carriage_hash = !!schedule["quote"]["trucking_on"] ? 
+      trip = Trip.find(schedule['trip_id'])
+      on_carriage_hash = !!schedule['quote']['trucking_on'] ?
       {
-        truck_type: "",
+        truck_type: '',
         location_id: Location.geocoded_location(shipment.delivery_address).id
       } : nil
-      pre_carriage_hash = !!schedule["quote"]["trucking_pre"] ? 
+      pre_carriage_hash = !!schedule['quote']['trucking_pre'] ?
       {
-        truck_type: "",
+        truck_type: '',
         location_id: Location.geocoded_location(shipment.pickup_address).id
       } : nil
       new_shipment = main_quote.shipments.create!(
         status: 'quoted',
         user_id: shipment.user_id,
         imc_reference: shipment.imc_reference,
-        origin_hub_id: schedule["origin_hub"]["id"],
-        destination_hub_id: schedule["destination_hub"]["id"],
-        quotation_id: schedule["id"],
+        origin_hub_id: schedule['origin_hub']['id'],
+        destination_hub_id: schedule['destination_hub']['id'],
+        quotation_id: schedule['id'],
         trip_id: trip.id,
         booking_placed_at: shipment.booking_placed_at,
         closing_date: shipment.closing_date,
         planned_eta: shipment.planned_eta,
         planned_etd: shipment.planned_etd,
-        trucking: { 
+        trucking: {
           has_pre_carriage: pre_carriage_hash,
           has_on_carriage: on_carriage_hash
         },
@@ -43,8 +43,6 @@ module ShippingTools
       )
       new_shipment.cargo_items = shipment.cargo_items
       shipment.charge_breakdowns.each do |charge_breakdown|
-
-        # charges = charge_breakdown.charges.dup
         new_charge_breakdown = charge_breakdown.dup
         new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
         new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
@@ -63,12 +61,12 @@ module ShippingTools
             end
           end
         end
-      
+
         new_charge_breakdown.charges += charges
         new_shipment.charge_breakdowns << new_charge_breakdown
       end
     end
-    return main_quote
+    main_quote
   end
 
   def self.create_shipment(details, current_user)
@@ -91,7 +89,7 @@ module ShippingTools
     if tenant.scope['closed_quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
+        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
       end
     else
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
@@ -180,7 +178,6 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      
       contact_params = contact_params(resource, nil)
       contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
@@ -593,23 +590,20 @@ module ShippingTools
 
   def self.save_pdf_quotes(shipment, schedules)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
-    @quotes = main_quote.shipments.map do |quoted_shipment|
-      quoted_shipment.selected_offer
-    end
+    @quotes = main_quote.shipments.map(&:selected_offer)
 
     quotation = PdfHandler.new(
-      layout:      "pdfs/simple.pdf.html.erb",
-      template:    "shipments/pdfs/quotations.pdf.erb",
+      layout:      'pdfs/simple.pdf.html.erb',
+      template:    'shipments/pdfs/quotations.pdf.erb',
       # footer:      "shipments/pdfs/quotations_footer.pdf.html.erb",
       margin:      { top: 10, bottom: 5, left: 8, right: 8 },
       shipment:    shipment,
       shipments:   main_quote.shipments,
       quotes:      @quotes,
-      name:        "quotation"
+      name:        'quotation'
     )
     quotation.generate
     quotation.upload_quotes
-
   end
 
   def self.last_trip(user)

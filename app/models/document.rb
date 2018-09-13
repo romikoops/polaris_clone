@@ -34,9 +34,11 @@ class Document < ApplicationRecord
     self
   end
 
+  # This method is business logic, nor model. Move this code away from models.
   def self.new_upload_backend(file, shipment, type, user)
     file_name = File.basename(file.path)
     obj_key = self.obj_key(shipment, type, file_name)
+    # No hardcoded buckets values
     upload(bucket: "imcdev", key: obj_key, file: file, content_type: "application/pdf", acl: "private")
 
     Document.create!(
