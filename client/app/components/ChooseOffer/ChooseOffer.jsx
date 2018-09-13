@@ -436,12 +436,12 @@ export class ChooseOffer extends Component {
 
               <div className="flex-100 layout-row layout-align-center-center">
                 <div
-                  className="flex-33 layout-row layout-align-space-around-center"
+                  className="flex-33 pointy layout-row layout-align-space-around-center"
                   onClick={() => this.showMore()}
                 >
                   <i className="flex-none fa fa-angle-double-down" />
                   <div className="flex-5" />
-                  <p className="flex-none">More</p>
+                  <p className="flex-none">More Departures</p>
                   <div className="flex-5" />
                   <i className="flex-none fa fa-angle-double-down" />
                 </div>

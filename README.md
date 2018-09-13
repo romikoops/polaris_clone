@@ -7,6 +7,19 @@ Frontend code is deployed by manually via `npm deploy` script in `client/` direc
 
 ## Development Setup
 
+
+### Initial Database
+
+To seed initial development database, we have nightly database dump of production system that is anonymised and cleaned
+for development usage. To download and seed local database with this seed file, please ask from the colleague the
+service account JSON credentials and save the file as `$HOME/.gcloud_developer.json`. Alternatively you can point
+rake task to use any other service account JSON credentials file that has required permissions by setting environment
+variable `GOOGLE_CLOUD_KEYFILE` to pointing correct filename.
+
+After this, simply run rake task:
+
+    $ bin/rake db:drop db:import
+
 ### Overcommit
 
 We use [overcommit](https://github.com/brigade/overcommit) to maintain our git hooks. Currently only commit message format

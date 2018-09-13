@@ -38,7 +38,7 @@ export class LandingTop extends Component {
       theme, user, tenant, bookNow
     } = this.props
     const myAccount = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="My Account"
           theme={theme}
@@ -49,7 +49,7 @@ export class LandingTop extends Component {
       </div>
     )
     const toAdmin = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="Admin Dashboard"
           theme={theme}
@@ -60,7 +60,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
@@ -84,6 +84,7 @@ export class LandingTop extends Component {
         />
       </div>
     )
+
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">

@@ -75,7 +75,7 @@ test('props.toAdmin is called', () => {
     toAdmin: jest.fn()
   }
   const wrapper = mount(<LandingTop {...props} />)
-  const selector = 'div[className="layout-row flex-50"] button'
+  const selector = 'div[className="layout-row flex-50 flex-md-100 margin_bottom"] button'
   const button = wrapper.find(selector).first()
 
   expect(props.toAdmin).not.toHaveBeenCalled()
@@ -95,7 +95,7 @@ test('props.goTo is called', () => {
     goTo: jest.fn()
   }
   const wrapper = mount(<LandingTop {...props} />)
-  const selector = 'div[className="layout-row flex-50"] button'
+  const selector = 'div[className="layout-row flex-50 flex-md-100 margin_bottom"] button'
   const button = wrapper.find(selector).last()
 
   expect(props.goTo).not.toHaveBeenCalled()
