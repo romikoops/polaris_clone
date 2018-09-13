@@ -102,7 +102,11 @@ exports[`theme has truthy properties 1`] = `
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
+<<<<<<< HEAD
             className="layout-row flex-50"
+=======
+            className="layout-row flex-50 flex-md-100 margin_bottom"
+>>>>>>> CHORE pipeline fixed
           >
             <SquareButton
               active={true}
@@ -255,7 +259,11 @@ exports[`user.role_id is 1 1`] = `
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
+<<<<<<< HEAD
             className="layout-row flex-50"
+=======
+            className="layout-row flex-50 flex-md-100 margin_bottom"
+>>>>>>> CHORE pipeline fixed
           >
             <SquareButton
               active={true}
