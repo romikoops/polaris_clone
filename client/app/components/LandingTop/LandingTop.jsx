@@ -64,7 +64,7 @@ export class LandingTop extends Component {
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
-    // const isClosed = tenant.data.scope.closed_quotation_tool
+    const isClosed = tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -112,8 +112,9 @@ export class LandingTop extends Component {
                   (
                     user &&
                   user.role &&
+                  isClosed &&
                   ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
-                  ) || (!user)) &&
+                  ) || (isClosed && !user)) &&
                   findRates}
                 {
                   user &&

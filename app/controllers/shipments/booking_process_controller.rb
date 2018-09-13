@@ -27,7 +27,7 @@ class Shipments::BookingProcessController < ApplicationController
 
   def download_quotations
     shipment = Shipment.find(params[:shipment_id])
-    url = ShippingTools.save_pdf_quotes(shipment, params[:options][:quotes])
+    url = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, params[:options][:quotes])
     response_handler({key: 'quotations', url: url})
   end
 

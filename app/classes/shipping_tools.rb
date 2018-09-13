@@ -89,7 +89,7 @@ module ShippingTools
     if tenant.scope['closed_quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
-        Pricing.where(itinerary_id: id).for_load_type(load_type).empty?
+        Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
       end
     else
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
@@ -581,6 +581,23 @@ module ShippingTools
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
+  def self.tenant_notification_email(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+  end
+
+  def self.shipper_notification_email(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+  end
+
+  def self.shipper_confirmation_email(user, shipment)
+    if Rails.env.production? && ENV['BETA'] != 'true'
+      ShipmentMailer.shipper_confirmation(
+        user,
+        shipment
+      ).deliver_later
+    end
+  end
+
   def get_shipment_pdf(params)
     shipment = Shipment.find_by_id(params[:shipment_id])
     pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
@@ -588,18 +605,21 @@ module ShippingTools
     send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
   end
 
-  def self.save_pdf_quotes(shipment, schedules)
+  def self.save_pdf_quotes(shipment, tenant, schedules)
     main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
     @quotes = main_quote.shipments.map(&:selected_offer)
+
+    logo = Base64.encode64(HTTP.get(tenant.theme['logoLarge']).body)
 
     quotation = PdfHandler.new(
       layout:      'pdfs/simple.pdf.html.erb',
       template:    'shipments/pdfs/quotations.pdf.erb',
-      # footer:      "shipments/pdfs/quotations_footer.pdf.html.erb",
       margin:      { top: 10, bottom: 5, left: 8, right: 8 },
       shipment:    shipment,
       shipments:   main_quote.shipments,
       quotes:      @quotes,
+      logo:        logo,
+      quotation:   main_quote,
       name:        'quotation'
     )
     quotation.generate
@@ -627,7 +647,7 @@ module ShippingTools
     File.open('tmp/' + doc_name, 'wb') { |file| file.write(doc_string) }
     doc_pdf = File.open('tmp/' + doc_name)
 
-    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
+    doc = DocumentTools.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
     doc_url = doc.get_signed_url
 
     { name: doc_name, url: doc_url }

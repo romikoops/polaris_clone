@@ -98,7 +98,6 @@ function register (user, target) {
     authenticationService.register(user).then(
       (response) => {
         dispatch(success(response))
-        dispatch(alertActions.success('Registration successful'))
         if (user.guest) {
           target && dispatch(push(target))
         } else if (response.data.role.name === 'admin') {
@@ -139,9 +138,6 @@ function updateUser (user, req, shipmentReq) {
         dispatch(success(response))
         if (shipmentReq) {
           dispatch(shipmentActions.chooseOffer(shipmentReq))
-          dispatch(alertActions.success('Registration successful'))
-        } else {
-          dispatch(alertActions.success('Update successful'))
         }
       },
       (error) => {

@@ -124,7 +124,7 @@ class Shop extends Component {
         shipmentDispatch.newShipment(req)
         break
       case 2:
-        shipmentDispatch.getOffers(req, tenant.data.subdomain, true)
+        shipmentDispatch.getOffers(req, true)
         break
       case 3:
         shipmentDispatch.chooseOffer(req)
@@ -231,7 +231,7 @@ class Shop extends Component {
               shipmentData={shipmentData}
               prevRequest={request && request.stage2 ? request.stage2 : {}}
               req={request && request.stage1 ? request.stage1 : {}}
-              getOffers={data => shipmentDispatch.getOffers(data, tenant.data.subdomain, true)}
+              getOffers={data => shipmentDispatch.getOffers(data, true)}
               setStage={this.selectShipmentStage}
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
