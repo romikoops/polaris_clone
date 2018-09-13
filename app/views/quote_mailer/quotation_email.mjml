@@ -9,7 +9,7 @@
       </mj-text>
     </mj-column>
     <mj-column>
-        <mj-image width="200px" src="<%= @user.tenant.theme["logoLarge"] %>" />
+        <mj-image width="200px" src="<%= @shipment.tenant.theme["logoLarge"] %>" />
       </mj-column>
   </mj-section>
   <mj-spacer height="25px" />
@@ -43,7 +43,7 @@
         </mj-text>
       </mj-column>
       <mj-column>
-        <mj-image width="30px" src="https://image.ibb.co/fRmXxz/Rectangle.png"></mj-image>        
+        <mj-image width="30px" src=""></mj-image>        
       </mj-column>
       </mj-group>
   </mj-section>
