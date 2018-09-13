@@ -34,7 +34,7 @@ export class LandingTop extends Component {
       theme, user, tenant, bookNow
     } = this.props
     const myAccount = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="My Account"
           theme={theme}
@@ -45,7 +45,7 @@ export class LandingTop extends Component {
       </div>
     )
     const toAdmin = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton
           text="Admin Dashboard"
           theme={theme}
@@ -56,7 +56,7 @@ export class LandingTop extends Component {
       </div>
     )
     const findRates = (
-      <div className="layout-row flex-50">
+      <div className="layout-row flex-50 flex-md-100 margin_bottom">
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
@@ -68,7 +68,6 @@ export class LandingTop extends Component {
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
     const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
-    const loginLink = ''
 
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
@@ -100,13 +99,13 @@ export class LandingTop extends Component {
                 </div>
                 <div
                   className={
-                    `layout-row layout-md-column layout-sm-column layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
+                    `layout-row layout-wrap layout-align-start-start ${styles.wrapper_btns} flex-md-100 flex-75 `
                   }
                 >
                   {((user && user.role && user.role.name === 'shipper') || !user) && findRates}
                   {user && !user.guest && user.role && user.role.name === 'shipper' && myAccount}
                   {user && user.role && user.role.name === 'admin' && toAdmin}
-                  <div className={`flex layout-row flex-md-100 ${styles.banner_text}`}>
+                  <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
                     <div className="flex-none layout-row layout-align-start-center">
                       <h4 className="flex-none">powered by&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h4>
                       <div className="flex-5" />

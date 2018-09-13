@@ -24,6 +24,7 @@ export default function TruckingDetails (props) {
   function formGroup (carriage, truckType) {
     const disabled = !truckTypes.includes(truckType)
     const disabledClass = disabled ? styles.disabled : ''
+
     return (
       <div className={`${styles.form_group} ${disabledClass} flex-50 layout-row layout-align-start-end`}>
         <div className={disabled ? styles.overlay : ''} />
@@ -36,7 +37,7 @@ export default function TruckingDetails (props) {
           onChange={handleTruckingDetailsChange}
         />
         <label htmlFor={`${carriage}-${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
-        { tooltip(truckType, theme) }
+        {tooltip(truckType)}
       </div>
     )
   }
