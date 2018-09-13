@@ -23,6 +23,7 @@ class ShipmentsController < ApplicationController
     shipments = shipment_association
       .paginate(page: params[:page], per_page: per_page)
       .map(&:with_address_options_json)
+      
     response_handler(
       shipments:          shipments,
       num_shipment_pages: (shipment_association.count / 6.0).ceil,
@@ -55,6 +56,7 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.quoted
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+
     (filterrific = initialize_filterrific(
       shipment_association,
       filterific_params,
@@ -62,6 +64,7 @@ class ShipmentsController < ApplicationController
       sanitize_params:   true
     )) || return
     shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:with_address_options_json)
+
     response_handler(
       shipments:          shipments,
       num_shipment_pages: (filterrific.find.count / per_page).ceil,
@@ -79,6 +82,7 @@ class ShipmentsController < ApplicationController
       tmp = @doc.as_json
       tmp["signed_url"] = @doc.get_signed_url
     end
+
     response_handler(tmp)
   end
 
@@ -100,6 +104,7 @@ class ShipmentsController < ApplicationController
     end
 
     shipment_as_json = shipment.with_address_options_json
+
     response_handler(
       shipment:        shipment_as_json,
       cargoItems:      shipment.cargo_items,
@@ -125,6 +130,7 @@ class ShipmentsController < ApplicationController
       requested: (r_shipments.count / per_page).ceil,
       open:      (o_shipments.count / per_page).ceil
     }
+
     response_handler(
       requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
         .map(&:with_address_options_json),
@@ -148,6 +154,7 @@ class ShipmentsController < ApplicationController
     num_pages = {
       quotes:  (q_shipments.count / per_page).ceil
     }
+
     response_handler(
       quoted:          q_shipments.order(:updated_at)
         .paginate(page: params[:quoted_page], per_page: per_page)

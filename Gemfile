@@ -63,6 +63,7 @@ gem 'os'
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.12.4'
+# gem 'wkhtmltopdf-binary-edge', '~> 0.12.5.0'
 
 # MongoDB gems
 gem 'mongo', '~> 2.4'
@@ -103,7 +104,7 @@ gem 'google-cloud-translate'
 gem 'googleauth'
 gem 'signet'
 # New email gem
-gem 'mjml-rails', '>= 4.1'
+gem 'mjml-rails', '~> 4.1'
 
 gem 'pry-rails'
 

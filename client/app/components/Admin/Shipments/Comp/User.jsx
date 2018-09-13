@@ -150,7 +150,7 @@ export class ShipmentsCompUser extends Component {
       user,
       userDispatch
     } = this.props
-    
+
     const { search } = this.state
     if (!shipments || !hubs || !clients) {
       return ''
