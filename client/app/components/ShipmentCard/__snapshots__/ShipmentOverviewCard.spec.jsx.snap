@@ -6,13 +6,7 @@ exports[`admin is true 1`] = `
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
-  >
-    <span>
-      <b>
-        Requested Shipments
-      </b>
-    </span>
-  </div>
+  />
   <div
     className=" margin_box_right flex-100
         layout-row layout-wrap padding_bottom"
@@ -23,7 +17,7 @@ exports[`admin is true 1`] = `
       <GreyBox
         borderStyle=""
         content={
-          <UNDEFINED
+          <AdminShipmentCard
             confirmShipmentData={Object {}}
             dispatches={
               Object {
@@ -65,6 +59,7 @@ exports[`admin is true 1`] = `
                 "status": "FOO_STATUS",
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
@@ -97,13 +92,7 @@ exports[`shallow rendering 1`] = `
 >
   <div
     className="greyBg layout-padding flex-100 layout-align-start-center"
-  >
-    <span>
-      <b>
-        Requested Shipments
-      </b>
-    </span>
-  </div>
+  />
   <div
     className=" margin_box_right flex-100
         layout-row layout-wrap padding_bottom"
@@ -114,7 +103,7 @@ exports[`shallow rendering 1`] = `
       <GreyBox
         borderStyle=""
         content={
-          <UNDEFINED
+          <UserShipmentCard
             dispatches={
               Object {
                 "foo": [Function],
@@ -136,6 +125,7 @@ exports[`shallow rendering 1`] = `
                 "status": "FOO_STATUS",
               }
             }
+            t={[Function]}
             theme={
               Object {
                 "colors": Object {
