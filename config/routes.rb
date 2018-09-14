@@ -125,6 +125,7 @@ Rails.application.routes.draw do
         post action, controller: 'shipments/booking_process', action: action
       end
       post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
+      post 'shipment/download', controller: 'shipments/booking_process', action: 'download_shipment'
     end
 
     resources :trucking_availability, only: [:index]

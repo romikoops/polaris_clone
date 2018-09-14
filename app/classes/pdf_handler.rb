@@ -24,6 +24,7 @@ class PdfHandler
     doc_erb = ErbTemplate.new(
       layout:   @layout,
       template: @template,
+      show_as_html: true,
       locals:   {
         shipment: @shipment,
         shipments: @shipments,
@@ -31,7 +32,7 @@ class PdfHandler
         logo: @logo,
         tenant: @shipment.tenant
       }
-    )
+      )
     @raw_pdf_string = WickedPdf.new.pdf_from_string(
       doc_erb.render,
       margin: @margin

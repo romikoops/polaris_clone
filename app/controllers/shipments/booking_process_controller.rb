@@ -37,6 +37,12 @@ class Shipments::BookingProcessController < ApplicationController
     response_handler({key: 'quotations', url: url})
   end
 
+  def download_shipment
+    shipment = Shipment.find(params[:shipment_id])
+    url = ShippingTools.save_pdf_shipment(shipment)
+    response_handler({key: 'shipment_recap', url: url})
+  end
+
   def request_shipment
     resp = ShippingTools.request_shipment(params, current_user)
     ShippingTools.tenant_notification_email(resp.user, resp)

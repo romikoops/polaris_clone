@@ -106,6 +106,16 @@ function downloadQuotations (options) {
   return fetch(`${getApiHost()}/shipments/${options.shipment.id}/quotations/download`, requestOptions).then(handleResponse)
 }
 
+function downloadShipment (options) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ options })
+  }
+
+  return fetch(`${BASE_URL}/shipments/${options.shipment.id}/shipment/download`, requestOptions).then(handleResponse)
+}
+
 function downloadHubs () {
   const requestOptions = {
     method: 'GET',
@@ -156,6 +166,7 @@ export const documentService = {
   uploadItinerarySchedules,
   downloadTrucking,
   downloadGdpr,
+  downloadShipment,
   downloadQuotations
 }
 

@@ -587,21 +587,6 @@ module ShippingTools
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
-  def self.tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_later
-  end
-
-  def self.shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_later
-  end
-
-  def self.shipper_confirmation_email(user, shipment)
-    ShipmentMailer.shipper_confirmation(
-      user,
-      shipment
-    ).deliver_later
-  end
-
   def get_shipment_pdf(params)
     shipment = Shipment.find_by_id(params[:shipment_id])
     pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
@@ -650,6 +635,11 @@ module ShippingTools
         shipment
       ).deliver_later
     end
+  end
+
+  def self.save_pdf_shipment(shipment)
+    logo = Base64.encode64(HTTP.get(shipment.tenant.theme['logoLarge']).body)
+    ShipmentMailer.generate_and_upload_shipment_pdf(shipment)
   end
 
   def self.last_trip(user)

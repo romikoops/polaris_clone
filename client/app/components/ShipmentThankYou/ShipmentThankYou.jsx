@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import styles from './ShipmentThankYou.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
+import DocumentsDownloader from '../Documents/Downloader'
 
 export class ShipmentThankYou extends Component {
   componentDidMount () {
@@ -56,6 +57,14 @@ export class ShipmentThankYou extends Component {
                   }
                   {t('bookconf:contactUs')}
                 </p>
+                <DocumentsDownloader
+                  theme={theme}
+                  target="shipment_recap"
+                  options={{ shipment }}
+                  size="full"
+                  shipment={shipment}
+                  shipmentDispatch={shipmentDispatch}
+                />
               </div>
             </div>
 

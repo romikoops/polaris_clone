@@ -87,4 +87,17 @@ class ShipmentMailer < ApplicationMailer
     bill_of_lading.generate
     bill_of_lading.upload
   end
+
+  def self.generate_and_upload_shipment_pdf(shipment)
+    shipment_recap = PdfHandler.new(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/shipment_recap.pdf.html.erb",
+      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
+      name:     "shipment_recap"
+    )
+
+    shipment_recap.generate
+    shipment_recap.upload
+  end
 end
