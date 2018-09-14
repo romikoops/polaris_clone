@@ -13,9 +13,9 @@ class ErrorBoundary extends Component {
 
   componentDidCatch (error, info) {
     // Display fallback UI
-    this.setState({ hasError: true })
+    this.setState({ hasError: true, error })
     // You can also log the error to an error reporting service
-    ErrorBoundary.logErrorToMyService(error, info)
+    Raven.captureException(error, { extra: info })
   }
 
   render () {
