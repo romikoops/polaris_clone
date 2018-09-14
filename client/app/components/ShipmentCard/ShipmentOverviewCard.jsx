@@ -63,7 +63,7 @@ class ShipmentOverviewCard extends Component {
         </div>
       )
     }) : (<span className={`${styles.wideelement}`}>
-      {/* {t('shipment:noShipmentsAvailable')} */}
+      {t('shipment:noShipmentsAvailable')}
     </span>)
   }
 
@@ -76,7 +76,7 @@ class ShipmentOverviewCard extends Component {
     const titleBox = (<div
       className="greyBg layout-padding flex-100 layout-align-start-center"
     >
-      {/* <span><b>{t('shipment:requestedShipments')}</b></span> */}
+      <span><b>{t('shipment:requestedShipments')}</b></span>
     </div>)
 
     return (
