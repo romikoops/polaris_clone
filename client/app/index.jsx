@@ -3,11 +3,15 @@ import React from 'react'
 import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { I18nextProvider } from 'react-i18next'
+import Raven from 'raven-js'
 import i18n from './i18next'
 import { configureStore, history } from './store/configureStore'
 import Root from './containers/Root'
 import './index.scss'
 
+Raven
+  .config(window.keel.sentryUrl)
+  .install()
 const store = configureStore()
 
 render(
