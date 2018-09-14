@@ -11,7 +11,7 @@ import EditLocation from './EditLocation'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 import { gradientTextGenerator } from '../../helpers'
 
-export class UserLocations extends Component {
+class UserLocations extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -67,7 +67,6 @@ export class UserLocations extends Component {
   render () {
     const { theme, cols, t } = this.props
     const locInfo = this.props.locations
-
 
     const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation, gradient, cols) => [
       <div
@@ -206,7 +205,6 @@ UserLocations.propTypes = {
   user: PropTypes.user.isRequired,
   t: PropTypes.func.isRequired,
   setNav: PropTypes.func.isRequired,
-  setCurrentUrl: PropTypes.func.isRequired,
   theme: PropTypes.theme,
   userDispatch: PropTypes.shape({
     makePrimary: PropTypes.func,
