@@ -73,7 +73,7 @@ exports[`shallow rendering 1`] = `
         className="line_box layout-row layout-align-center flex-none"
       >
         <div
-          className="line flex-none"
+          className="quote_line flex-none"
         />
         <div
           className="stage_box flex-none layout-column layout-align-start-center"
@@ -152,49 +152,7 @@ exports[`shallow rendering 1`] = `
           <p
             className="flex-none stage_text"
           >
-            Choose Offer
-          </p>
-        </div>
-        <div
-          className="stage_box flex-none layout-column layout-align-start-center"
-          key="4"
-        >
-          <div
-            className="shop_stage_yet layout-column layout-align-center-center"
-          >
-            <h3
-              className="flex-none"
-            >
-               
-              4
-               
-            </h3>
-          </div>
-          <p
-            className="flex-none stage_text"
-          >
-            Final Details
-          </p>
-        </div>
-        <div
-          className="stage_box flex-none layout-column layout-align-start-center"
-          key="5"
-        >
-          <div
-            className="shop_stage_yet layout-column layout-align-center-center"
-          >
-            <h3
-              className="flex-none"
-            >
-               
-              5
-               
-            </h3>
-          </div>
-          <p
-            className="flex-none stage_text"
-          >
-            Booking Confirmation
+            View Quotes
           </p>
         </div>
       </div>

@@ -43,7 +43,8 @@ FactoryBot.define do
             export: 'mandatory'
           }
         },
-        quotation_tool: true
+        open_quotation_tool: true,
+        closed_quotation_tool: true
       }
     end
 

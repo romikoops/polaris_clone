@@ -182,9 +182,11 @@ class SideNav extends Component {
       case 'trucking':
         adminDispatch.getTrucking(true)
         break
-      case 'shipments':
-        adminDispatch.getShipments(1, 1, 1, this.perPage, true)
-        break
+      case 'shipments': {
+        const shipPages = scope.closed_quotation_tool || scope.open_quotation_tool
+          ? { quoted: 1 } : { requested: 1, open: 1, finished: 1 }
+        adminDispatch.getShipments(shipPages, this.perPage, true)
+        break }
       case 'clients':
         adminDispatch.getClients(true)
         break
@@ -211,14 +213,17 @@ class SideNav extends Component {
     }
   }
   setUserUrl (target) {
-    const { userDispatch, user } = this.props
+    const { userDispatch, user, tenant } = this.props
+    const { scope } = tenant.data
     switch (target) {
       case 'pricing':
         userDispatch.getPricings(user.id, true)
         break
-      case 'shipments':
-        userDispatch.getShipments(1, 1, 1, this.perPage, true)
-        break
+      case 'shipments': {
+        const shipPages = scope.closed_quotation_tool || scope.open_quotation_tool
+          ? { quoted: 1 } : { requested: 1, open: 1, finished: 1 }
+        userDispatch.getShipments(shipPages, this.perPage, true)
+        break }
       case 'contacts':
         userDispatch.getContacts(true, 1)
         break

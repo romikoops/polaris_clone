@@ -1,21 +1,6 @@
 <mjml>
-  <mj-body width="800px">
+  <mj-body width="800px" padding-top="40px">
     <% primary_color = @user.tenant.theme["colors"]["primary"] %>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-image width="100px" src="<%= @user.tenant.theme["logoLarge"] %>" />
-      </mj-column>
-    </mj-section>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
      <%= yield %>
-    <mj-section full-width="full-width">
-      <mj-column>
-        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
-      </mj-column>
-    </mj-section>
   </mj-body>
 </mjml>

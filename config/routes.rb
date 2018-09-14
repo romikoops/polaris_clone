@@ -123,6 +123,7 @@ Rails.application.routes.draw do
       %w(choose_offer get_offers update_shipment request_shipment).each do |action|
         post action, controller: 'shipments/booking_process', action: action
       end
+      post 'quotations/download', controller: 'shipments/booking_process', action: 'download_quotations'
     end
 
     resources :trucking_availability, only: [:index]

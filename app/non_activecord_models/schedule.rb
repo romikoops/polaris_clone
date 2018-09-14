@@ -4,8 +4,8 @@ class Schedule
   include ActiveModel::Model
 
   attr_accessor :id, :origin_hub_id, :destination_hub_id,
-    :origin_hub_name, :destination_hub_name, :mode_of_transport,
-    :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id, :carrier_name
+                :origin_hub_name, :destination_hub_name, :mode_of_transport,
+                :total_price, :eta, :etd, :closing_date, :vehicle_name, :trip_id, :quote, :carrier_name
 
   def origin_hub
     Hub.find origin_hub_id
@@ -16,8 +16,8 @@ class Schedule
   end
 
   def hub_for_carriage(carriage)
-    return origin_hub      if carriage == "pre"
-    return destination_hub if carriage == "on"
+    return origin_hub      if carriage == 'pre'
+    return destination_hub if carriage == 'on'
 
     raise ArgumentError, "carriage must be 'pre' or 'on'"
   end
@@ -44,7 +44,7 @@ class Schedule
 
   def self.from_routes(routes, current_etd_in_search, delay_in_days)
     grouped_data_from_routes = Route.group_data_by_attribute(routes)
-    
+
     raw_query = "
       SELECT DISTINCT
         origin_hubs.id                AS origin_hub_id,

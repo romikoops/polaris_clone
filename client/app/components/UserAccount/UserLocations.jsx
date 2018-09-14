@@ -152,4 +152,4 @@ UserLocations.defaultProps = {
   cols: 3
 }
 
-export default translate('common')(UserLocations)
+export default translate(['common', 'user'])(UserLocations)

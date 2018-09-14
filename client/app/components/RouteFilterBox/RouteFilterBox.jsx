@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-// import styled from 'styled-components'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.css'
-import { moment } from '../../constants'
-import { switchIcon, capitalize } from '../../helpers'
+import { moment, LOAD_TYPES } from '../../constants'
+import { switchIcon, capitalize, gradientTextGenerator } from '../../helpers'
 import styles from './RouteFilterBox.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -46,22 +45,8 @@ export class RouteFilterBox extends Component {
   }
   render () {
     const {
-      theme, pickup, shipment, availableMotKeys, lastTripDate
+      theme, pickup, shipment, availableMotKeys, cargos, lastTripDate
     } = this.props
-    // const StyledRange = styled.div`
-    //   input[type='range']::-webkit-slider-runnable-track {
-    //     width: 100%;
-    //     height: 12px;
-    //     cursor: pointer;
-    //     background: -webkit-linear-gradient(
-    //       left,
-    //       ${theme.colors.primary},
-    //       ${theme.colors.secondary}
-    //     ) !important;
-    //     border-radius: 1.3px;
-    //     opacity: 0.9;
-    //   }
-    // `
     const dayPickerProps = {
       disabledDays: {
         before: new Date(moment()
@@ -95,12 +80,33 @@ export class RouteFilterBox extends Component {
         </label>
       </div>
     ))
+    const imgLCL = { backgroundImage: `url(${LOAD_TYPES[0].img})` }
+    const imgFCL = { backgroundImage: `url(${LOAD_TYPES[1].img})` }
+    const textStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
 
     return (
       <div className={styles.filterbox}>
+        <div className={styles.shipment_summary}>
+          <div>
+            <TextHeading theme={theme} size={4} text="Shipment Summary" />
+          </div>
+          <div className={`flex-100 layou-wrap ${styles.dpb}`}>
+            <div className="layout-row flex-100">
+              <i className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_pre_carriage ? textStyle : { color: '#E0E0E0' }} />
+              <span>Pre-carriage</span>
+            </div>
+            <div className="layout-row flex-100">
+              <i className={shipment.has_on_carriage ? 'fa fa-check clip' : 'fa fa-times'} style={shipment.has_on_carriage ? textStyle : { color: '#E0E0E0' }} />
+              <span>On-carriage</span>
+            </div>
+          </div>
+        </div>
         <div className={styles.pickup_date}>
           <div>
-            <TextHeading theme={theme} size={4} text={pickup ? 'Pickup Date' : 'Closing Date'} />
+            <TextHeading theme={theme} size={4} text={pickup ? 'Pick-up Date' : 'Closing Date'} />
           </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
@@ -118,43 +124,25 @@ export class RouteFilterBox extends Component {
             />
           </div>
         </div>
-        <div className={styles.haulage}>
-          <div>
-            <TextHeading theme={theme} size={4} text="Haulage" />
-          </div>
-          <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
-            <div className="flex-100 layout-row layout-align-space-between-center">
-              <p className="flex-none five_m">Pickup</p>
-              <p className="flex-none five_m">{shipment.has_pre_carriage ? 'Yes' : 'No'}</p>
-            </div>
-          </div>
-          <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
-            <div className="flex-100 layout-row layout-align-space-between-center">
-              <p className="flex-none five_m">Delivery</p>
-              <p className="flex-none five_m">{shipment.has_on_carriage ? 'Yes' : 'No'}</p>
-            </div>
-          </div>
-        </div>
         <div className={styles.mode_of_transport}>
           <div>
             <TextHeading theme={theme} size={4} text="Mode of transport" />
           </div>
           {motCheckBoxes}
         </div>
+        <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.cargos_recap}`}>
+          {cargos.map(cargo => (
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div>x{cargo.quantity}</div>
+              <div className={styles.cargo_img} style={shipment.load_type === 'cargo_item' ? imgLCL : imgFCL} />
+            </div>
+          ))}
+        </div>
         <div>
           <p style={{ fontSize: '10px', marginTop: '0' }}>* Transit time (T/T) not guaranteed</p>
           <p style={{ fontSize: '10px', marginTop: '0' }}>** You will be invoiced in local currency based on the exchange rate valid at the time</p>
 
         </div>
-        {/* <StyledRange className={styles.transit_time}>
-          <TextHeading theme={theme} size={4} text="Estimated Transit Time" />
-          <
-          <input type="range" value={this.props.durationFilter} onChange={this.setFilterDuration} />
-          <div className={styles.transit_time_labels}>
-            <p>20 days</p>
-            <p>100 days</p>
-          </div>
-        </StyledRange> */}
       </div>
     )
   }
@@ -162,10 +150,10 @@ export class RouteFilterBox extends Component {
 RouteFilterBox.propTypes = {
   departureDate: PropTypes.number,
   theme: PropTypes.theme,
+  cargos: PropTypes.arrayOf(PropTypes.any),
   setDurationFilter: PropTypes.func.isRequired,
   setMoT: PropTypes.func.isRequired,
   setDepartureDate: PropTypes.func.isRequired,
-  // durationFilter: PropTypes.number.isRequired,
   pickup: PropTypes.bool,
   shipment: PropTypes.objectOf(PropTypes.any),
   availableMotKeys: PropTypes.objectOf(PropTypes.bool),
@@ -176,6 +164,7 @@ RouteFilterBox.defaultProps = {
   departureDate: 0,
   theme: 0,
   pickup: false,
+  cargos: [],
   shipment: {},
   availableMotKeys: {},
   lastTripDate: ''

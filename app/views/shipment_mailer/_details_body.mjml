@@ -1,4 +1,4 @@
-
+<% primary_color = @user.tenant.theme["colors"]["primary"] %>
 
 <mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0 5%">
@@ -25,7 +25,7 @@
               <% end %>  
             <% end %>  
           <% else %>
-            <span><%= @shipment.origin_nexus.city_country %></span>
+            <span><%= @shipment.origin_hub.name %></span>
           <% end %>
         </p>
       </mj-text>
@@ -41,7 +41,7 @@
                 <% end %>  
               <% end %>  
             <% else %>
-              <span><%= @shipment.destination_nexus.city_country %></span>
+              <span><%= @shipment.destination_hub.name %></span>
             <% end %>
           </p>
         </mj-text>
@@ -219,3 +219,8 @@
       </mj-column>
     </mj-section>
 </mj-wrapper>
+<mj-section full-width="full-width">
+      <mj-column>
+        <mj-divider border-width="4px" border-style="solid" border-color="<%= primary_color %>" />
+      </mj-column>
+    </mj-section>

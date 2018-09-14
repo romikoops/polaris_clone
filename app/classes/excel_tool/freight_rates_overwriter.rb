@@ -355,9 +355,9 @@ module ExcelTool
           user = aux_data[it_key][:customer]
           next unless itinerary.id
           pricing = itinerary.pricings.find_or_create_by!(
-            transport_category: transport_category, 
-            tenant: tenant, 
-            user: user, 
+            transport_category: transport_category,
+            tenant: tenant,
+            user: user,
             tenant_vehicle_id: aux_data[it_key][:tenant_vehicle].id
           )
           pricing_details = new_pricing_data.delete(:data)

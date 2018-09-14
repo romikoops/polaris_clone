@@ -9,14 +9,13 @@ export default function CollapsingHeading ({
   handleCollapser,
   faClass,
   contentHeader,
-  styleHeader,
-  optClassName,
+  mainWrapperStyle,
   showArrow,
   headerWrapClasses
 }) {
   return (
     <div
-      style={{ background: '#E0E0E0', color: '#4F4F4F' }}
+      style={text ? { background: '#E0E0E0', color: '#4F4F4F' } : mainWrapperStyle}
       className={`${styles.heading} pointy flex-100 layout-row layout-align-space-between-center`}
       onClick={handleCollapser}
     >
@@ -49,14 +48,13 @@ export default function CollapsingHeading ({
 CollapsingHeading.propTypes = {
   text: Proptypes.string,
   collapsed: Proptypes.bool,
+  mainWrapperStyle: Proptypes.objectOf(Proptypes.any),
   theme: Proptypes.theme,
   handleCollapser: Proptypes.func,
   faClass: Proptypes.string,
   contentHeader: Proptypes.node.isRequired,
-  optClassName: Proptypes.string,
   showArrow: Proptypes.bool,
-  headerWrapClasses: Proptypes.string,
-  styleHeader: Proptypes.objectOf(Proptypes.string)
+  headerWrapClasses: Proptypes.string
 }
 
 CollapsingHeading.defaultProps = {
@@ -66,7 +64,6 @@ CollapsingHeading.defaultProps = {
   handleCollapser: null,
   faClass: '',
   headerWrapClasses: '',
-  optClassName: '',
-  styleHeader: {},
+  mainWrapperStyle: {},
   showArrow: false
 }

@@ -2,11 +2,11 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+  className="flex-100 layout-row layout-wrap layout-align-start-start convo_wrapper"
 >
   <div
     className="summary_wrapper
-          flex-15 layout-row layout-wrap layout-align-start-center "
+          flex-100 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
     <div
@@ -43,14 +43,14 @@ exports[`shallow render 1`] = `
     </div>
   </div>
   <div
-    className="flex-90 layout-column layout-align-start-start messageView"
+    className="flex-100 layout-row layout-wrap layout-align-start-start messageView"
   >
     <div
-      className="flex-100 layout-column layout-align-start-start"
+      className="flex-100 layout-row layout-wrap layout-align-start-start"
     >
       <div
         className="message_scroll
-          flex-70 layout-row layout-align-start-start layout-wrap "
+          flex-100 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
         <div
@@ -65,6 +65,7 @@ exports[`shallow render 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -117,6 +118,7 @@ exports[`shallow render 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -166,7 +168,7 @@ exports[`shallow render 1`] = `
         />
       </div>
       <form
-        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        className="msg_form border_divider flex-100  layout-row layout-align-start-center"
         onSubmit={[Function]}
       >
         <div
@@ -225,11 +227,11 @@ exports[`shallow render 1`] = `
 
 exports[`state.showDetails is true 1`] = `
 <div
-  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+  className="flex-100 layout-row layout-wrap layout-align-start-start convo_wrapper"
 >
   <div
     className="summary_wrapper
-          flex-15 layout-row layout-wrap layout-align-start-center "
+          flex-100 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
     <div
@@ -266,7 +268,7 @@ exports[`state.showDetails is true 1`] = `
     </div>
   </div>
   <div
-    className="flex-90 layout-column layout-align-start-start messageView"
+    className="flex-100 layout-row layout-wrap layout-align-start-start messageView"
   >
     <MessageShipmentData
       closeInfo={[Function]}
@@ -318,11 +320,11 @@ exports[`state.showDetails is true 1`] = `
 
 exports[`theme is falsy 1`] = `
 <div
-  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+  className="flex-100 layout-row layout-wrap layout-align-start-start convo_wrapper"
 >
   <div
     className="summary_wrapper
-          flex-15 layout-row layout-wrap layout-align-start-center "
+          flex-100 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
     <div
@@ -359,14 +361,14 @@ exports[`theme is falsy 1`] = `
     </div>
   </div>
   <div
-    className="flex-90 layout-column layout-align-start-start messageView"
+    className="flex-100 layout-row layout-wrap layout-align-start-start messageView"
   >
     <div
-      className="flex-100 layout-column layout-align-start-start"
+      className="flex-100 layout-row layout-wrap layout-align-start-start"
     >
       <div
         className="message_scroll
-          flex-70 layout-row layout-align-start-start layout-wrap "
+          flex-100 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
         <div
@@ -381,6 +383,7 @@ exports[`theme is falsy 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -426,6 +429,7 @@ exports[`theme is falsy 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -468,7 +472,7 @@ exports[`theme is falsy 1`] = `
         />
       </div>
       <form
-        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        className="msg_form border_divider flex-100  layout-row layout-align-start-center"
         onSubmit={[Function]}
       >
         <div
@@ -527,11 +531,11 @@ exports[`theme is falsy 1`] = `
 
 exports[`with admin user 1`] = `
 <div
-  className="flex-100 layout-column layout-align-start-start convo_wrapper"
+  className="flex-100 layout-row layout-wrap layout-align-start-start convo_wrapper"
 >
   <div
     className="summary_wrapper
-          flex-15 layout-row layout-wrap layout-align-start-center "
+          flex-100 layout-row layout-wrap layout-align-start-center "
     onClick={[Function]}
   >
     <div
@@ -568,14 +572,14 @@ exports[`with admin user 1`] = `
     </div>
   </div>
   <div
-    className="flex-90 layout-column layout-align-start-start messageView"
+    className="flex-100 layout-row layout-wrap layout-align-start-start messageView"
   >
     <div
-      className="flex-100 layout-column layout-align-start-start"
+      className="flex-100 layout-row layout-wrap layout-align-start-start"
     >
       <div
         className="message_scroll
-          flex-70 layout-row layout-align-start-start layout-wrap "
+          flex-100 layout-row layout-align-start-start layout-wrap "
         id="messageList"
       >
         <div
@@ -590,6 +594,7 @@ exports[`with admin user 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -642,6 +647,7 @@ exports[`with admin user 1`] = `
                 "data": Object {
                   "id": 123,
                   "scope": Object {
+                    "closed_quotation_tool": true,
                     "modes_of_transport": Object {
                       "air": Object {},
                       "ocean": Object {
@@ -691,7 +697,7 @@ exports[`with admin user 1`] = `
         />
       </div>
       <form
-        className="msg_form border_divider flex-30 width_100 layout-row layout-align-start-center"
+        className="msg_form border_divider flex-100  layout-row layout-align-start-center"
         onSubmit={[Function]}
       >
         <div

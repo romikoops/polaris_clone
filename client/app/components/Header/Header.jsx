@@ -164,9 +164,6 @@ class Header extends Component {
         {!noMessages ? mail : ''}
       </div>
     )
-    const registrationOrLogin = this.props.showRegistration
-      ? t('nav:registrationPage')
-      : t('nav:loginPage')
 
     const loginModal = (
       <Modal
@@ -179,7 +176,7 @@ class Header extends Component {
               req,
               user
             }}
-            initialCompName={registrationOrLogin}
+            initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
           />
         }
         verticalPadding="30px"
