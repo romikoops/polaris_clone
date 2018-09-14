@@ -29,8 +29,8 @@ module DocumentService
         destination_aux_data  = location_and_aux_data(pricing, 1, "id")
         current_destination   = destination_aux_data[:location]
         carrier               = carrier(pricing)
-        key_origin = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"]
-        key_destination = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"]
+        key_origin = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 0, "id")
+        key_destination = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", 1, "id")
         unless aux_data[:transit_times]["#{key_origin}_#{key_destination}"]
           layover = layover_hash(current_itinerary, pricing)
           destination_layover = layover[:destination_layover]
@@ -128,7 +128,7 @@ module DocumentService
     end
 
     def location_and_aux_data(pricing, key1, key2)
-      stop_id = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][key1][key2]
+      stop_id = aux_data[:itineraries][pricing[:itinerary_id]].dig("stops", key1, key2)
       aux_data[:nexuses][stop_id] = stop(stop_id).hub.nexus unless aux_data[:nexuses][stop_id]
       { location: aux_data[:nexuses][stop_id], aux_data: aux_data }
     end

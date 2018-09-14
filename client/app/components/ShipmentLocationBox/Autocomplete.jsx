@@ -20,6 +20,43 @@ class Autocomplete extends PureComponent {
     this.setState({service})
   }
 
+  initKeyboardListener () {
+    document.addEventListener('keydown', this.handleKeyEvent)
+  }
+
+  handleKeyEvent (event) {
+    const keyName = event.key
+    debugger
+    switch (keyName) {
+      case 'ArrowDown':
+        this.deltaHighlightIndex(1)
+        break;
+      case 'ArrowUp':
+        this.deltaHighlightIndex(-1)
+        break;
+      case 'Enter':
+        this.handleSelectFromIndex()
+        break;
+    }
+
+  }
+
+  handleSelectFromIndex() {
+    const { results, highlightIndex } = this.state
+    this.handleSelect(results[highlightIndex])
+  }
+
+  deltaHighlightIndex(delta) {
+    const { results, highlightIndex } = this.state
+    let newIndex = highlightIndex + delta
+    if (newIndex > results.length - 1) {
+      newIndex = 0
+    } else if (newIndex < 0) {
+      newIndex = results.length -1
+    }
+    this.setState({ highlightIndex: newIndex })
+  }
+
   handleInputChange (event) {
     const {service} = this.state
     const input = event.target.value
