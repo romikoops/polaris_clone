@@ -15,7 +15,8 @@ import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 // eslint-disable-next-line no-named-as-default
 import Loading from '../../components/Loading/Loading'
 import BookingDetails from '../../components/BookingDetails/BookingDetails'
-import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
+import { BookingConfirmation } from '../../
+components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions, authenticationActions, userActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 // eslint-disable-next-line no-named-as-default
@@ -116,7 +117,7 @@ class Shop extends Component {
     })
   }
   determineForwardFunction (stage) {
-    const { bookingData, shipmentDispatch, tenant } = this.props
+    const { bookingData, shipmentDispatch } = this.props
     const { request } = bookingData
     const req = request[`stage${stage}`]
     switch (stage) {
