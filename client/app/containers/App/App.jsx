@@ -38,7 +38,6 @@ class App extends Component {
     this.isUserExpired()
   }
   componentDidUpdate (prevProps) {
-    // this.isUserExpired()
     if ((this.props.selectedSubdomain !== prevProps.selectedSubdomain ||
       (!this.props.tenant && !this.props.isFetching) ||
     (this.props.tenant && !this.props.tenant.data && !this.props.isFetching))) {
@@ -89,32 +88,29 @@ class App extends Component {
             ) : (
               ''
             )}
-          <Switch className="flex">
-            <GenericError theme={theme}>
+          <GenericError theme={theme}>
+            <Switch className="flex">
+
               <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <Route
                 exact
                 path="/terms_and_conditions"
                 render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <Route
                 exact
                 path="/insurance"
                 render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <Route
                 exact
                 path="/password_reset"
                 render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <PrivateRoute
                 path="/booking"
                 component={Shop}
@@ -122,8 +118,7 @@ class App extends Component {
                 loggedIn={loggedIn}
                 theme={theme}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <AdminPrivateRoute
                 path="/admin"
                 component={Admin}
@@ -131,18 +126,15 @@ class App extends Component {
                 loggedIn={loggedIn}
                 theme={theme}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <Route
                 exact
                 path="/redirects/shipments/:uuid"
                 render={props => <AdminShipmentAction theme={theme} {...props} />}
               />
-            </GenericError >
-            <GenericError theme={theme}>
+
               <PrivateRoute
                 path="/account"
                 component={UserAccount}
@@ -150,8 +142,9 @@ class App extends Component {
                 loggedIn={loggedIn}
                 theme={theme}
               />
-            </GenericError >
-          </Switch>
+
+            </Switch>
+          </GenericError >
         </div>
       </div>
     )
