@@ -13,7 +13,7 @@ import {
   humanizeSnakeCase
 } from '../../helpers'
 
-export class UserShipmentQuotationCard extends Component {
+export class ShipmentQuotationCard extends Component {
   constructor (props) {
     super(props)
 
@@ -123,16 +123,16 @@ export class UserShipmentQuotationCard extends Component {
   }
 }
 
-UserShipmentQuotationCard.propTypes = {
+ShipmentQuotationCard.propTypes = {
   shipment: PropTypes.objectOf(PropTypes.shipment),
   dispatches: PropTypes.objectOf(PropTypes.func),
   theme: PropTypes.theme
 }
 
-UserShipmentQuotationCard.defaultProps = {
+ShipmentQuotationCard.defaultProps = {
   shipment: {},
   dispatches: {},
   theme: {}
 }
 
-export default UserShipmentQuotationCard
+export default ShipmentQuotationCard
