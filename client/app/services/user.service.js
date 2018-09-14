@@ -235,9 +235,9 @@ function getShipments (pages, perPage) {
   }
   let query = ''
   Object.keys(pages).forEach((status) => {
-    query += `${status}_page=${pages[status] || 1}`
+    query += `${status}_page=${pages[status] || 1}&`
   })
-  if (perPage) query += `&per_page=${perPage}`
+  if (perPage) query += `per_page=${perPage}`
 
   return fetch(`${BASE_URL}/shipments?${query}`, requestOptions).then(handleResponse)
 }

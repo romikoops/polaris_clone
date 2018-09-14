@@ -112,7 +112,7 @@ export class LandingTop extends Component {
                   (
                     user &&
                   user.role &&
-                  isClosed &&
+                  !isClosed &&
                   ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
                   ) || (isClosed && !user)) &&
                   findRates}
@@ -129,7 +129,6 @@ export class LandingTop extends Component {
                   ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) &&
                   toAdmin}
               </div>
-              {console.log(tenant.data.scope.closed_quotation_tool)}
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
                   <div className="flex-none layout-row layout-align-start-center">
