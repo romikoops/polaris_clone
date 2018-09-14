@@ -165,27 +165,27 @@ function chooseOffer (data) {
   }
 }
 
-function chooseQuotes (data) {
+function sendQuotes (data) {
   function request (shipmentData) {
     return {
-      type: shipmentConstants.CHOOSE_QUOTES_REQUEST,
+      type: shipmentConstants.SEND_QUOTES_REQUEST,
       shipmentData
     }
   }
   function success (shipmentData) {
     return {
-      type: shipmentConstants.CHOOSE_QUOTES_SUCCESS,
+      type: shipmentConstants.SEND_QUOTES_SUCCESS,
       shipmentData
     }
   }
   function failure (error) {
-    return { type: shipmentConstants.CHOOSE_QUOTES_FAILURE, error }
+    return { type: shipmentConstants.SEND_QUOTES_FAILURE, error }
   }
 
   return (dispatch) => {
     dispatch(request(data))
 
-    shipmentService.chooseQuotes(data).then(
+    shipmentService.sendQuotes(data).then(
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
@@ -562,7 +562,7 @@ export const shipmentActions = {
   reuseShipment,
   newShipment,
   chooseOffer,
-  chooseQuotes,
+  sendQuotes,
   getOffers,
   setShipmentContacts,
   fetchShipment,

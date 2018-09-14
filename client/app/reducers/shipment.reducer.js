@@ -132,7 +132,6 @@ export default function shipment (state = {}, action) {
           schedules.push(sched)
         }
       })
-      // shipmentToEdit.selected_day = state.originalSelectedDay
       const adjustedShipmentData = {
         ...action.shipmentData,
         shipment: shipmentToEdit,
@@ -189,7 +188,7 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
-    case shipmentConstants.CHOOSE_QUOTES_REQUEST:
+    case shipmentConstants.SEND_QUOTES_REQUEST:
 
       return {
         ...state,
@@ -200,7 +199,7 @@ export default function shipment (state = {}, action) {
         },
         loading: true
       }
-    case shipmentConstants.CHOOSE_QUOTES_SUCCESS:
+    case shipmentConstants.SEND_QUOTES_SUCCESS:
       return {
         ...state,
         modal: true,
@@ -210,9 +209,8 @@ export default function shipment (state = {}, action) {
         },
         currentStage: 'stage4',
         loading: false
-        // activeShipment: action.shipmentData.shipment.id
       }
-    case shipmentConstants.CHOOSE_QUOTES_FAILURE:
+    case shipmentConstants.SEND_QUOTES_FAILURE:
       return {
         ...state,
         modal: false,

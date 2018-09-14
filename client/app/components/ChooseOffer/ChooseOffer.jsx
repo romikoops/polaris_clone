@@ -179,7 +179,7 @@ export class ChooseOffer extends Component {
       showModal: this.props.modal
     })
 
-    shipmentDispatch.chooseQuotes({ shipment, quotes, email })
+    shipmentDispatch.sendQuotes({ shipment, quotes, email })
   }
   render () {
     const {
@@ -294,7 +294,6 @@ export class ChooseOffer extends Component {
     const showLaterDepButton = Math.abs(moment(lastTripDate).diff(lastResultDate, 'days')) > 5
     const showEarlierDepButton = Math.abs(moment().diff(firstResultDate, 'days')) > 10
 
-    // const centralFlex = scope.open_quotation_tool || scope.closed_quotation_tool ? 'flex-50'
     return (
       <div
         className="flex-100 layout-row layout-align-center-start layout-wrap"
@@ -395,6 +394,7 @@ export class ChooseOffer extends Component {
                 <div className="flex-none">
                   {isQuotationTool ? (
                     <TextHeading
+
                       theme={theme}
                       size={3}
                       text="These are best quotations for the specific route"
