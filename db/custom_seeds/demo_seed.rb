@@ -3,12 +3,12 @@
 include ExcelTools
 include ShippingTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(speedtrans)
+subdomains = %w(greencarrier)
 subdomains.each do |sub|
   tenant = Tenant.find_by_subdomain(sub)
 
   shipper = tenant.users.shipper.first
-  DataValidator::SpeedtransPricingValidator.new(tenant: tenant.id, user: shipper).perform
+  DataValidator::PricingValidator.new(tenant: tenant.id, user: shipper, key: 'data/greencarrier/greencarrier_pricing_data.json').perform
   # tenant.itineraries.destroy_all
   # tenant.local_charges.destroy_all
   # tenant.customs_fees.destroy_all

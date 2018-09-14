@@ -15,7 +15,7 @@ class Container < ApplicationRecord
 
   belongs_to :shipment
 
-  before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class
+  before_validation :set_gross_weight, :set_weight_class, :sync_cargo_class, :set_tare_weight
 
   validates :size_class,    presence: true
   validates :weight_class,  presence: true
@@ -39,6 +39,12 @@ class Container < ApplicationRecord
 
   def set_gross_weight
     self.gross_weight = (payload_in_kg || 0) + (tare_weight || 0)
+  end
+
+  def set_tare_weight
+    unless self.size_class.nil?
+      self.tare_weight ||= TARE_WEIGHTS[size_class.to_sym]
+    end
   end
 
   def set_weight_class
