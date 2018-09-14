@@ -101,7 +101,8 @@ export const tenant = {
         air: {},
         truck: {},
         rail: {}
-      }
+      },
+      closed_quotation_tool: true
     },
     theme,
     subdomain: 'foosubdomain'

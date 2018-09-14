@@ -228,16 +228,16 @@ function newAlias (data) {
   return fetch(`${BASE_URL}/contacts/new_alias`, requestOptions).then(handleResponse)
 }
 
-function getShipments (requestedPage, openPage, finishedPage, perPage) {
+function getShipments (pages, perPage) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
   let query = ''
-  query += `open_page=${openPage || 1}`
-  query += `&requested_page=${requestedPage || 1}`
-  query += `&finished_page=${finishedPage || 1}`
-  if (perPage) query += `&per_page=${perPage}`
+  Object.keys(pages).forEach((status) => {
+    query += `${status}_page=${pages[status] || 1}&`
+  })
+  if (perPage) query += `per_page=${perPage}`
 
   return fetch(`${BASE_URL}/shipments?${query}`, requestOptions).then(handleResponse)
 }

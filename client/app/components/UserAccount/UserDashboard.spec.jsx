@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
-import { theme, identity, user, shipments, location } from '../../mocks'
+import { theme, identity, user, shipments, location, tenant } from '../../mocks'
 
 jest.mock('../../helpers', () => ({
   gradientTextGenerator: x => x
@@ -38,6 +38,7 @@ const propsBase = {
   match: { url: 'google.com' },
   seeAll: identity,
   user,
+  scope: tenant.data.scope,
   hubs: {},
   dashboard: {
     shipments,
