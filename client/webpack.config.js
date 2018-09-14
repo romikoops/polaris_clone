@@ -6,6 +6,7 @@ const DotenvWebpack = require('dotenv-webpack')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const NodeEnvPlugin = require('node-env-webpack-plugin')
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
   cacheDirectory: true,
@@ -20,7 +21,8 @@ module.exports = {
   },
   output: {
     publicPath: '/',
-    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js'
+    filename: NodeEnvPlugin.isProduction ? '[name]-[hash].min.js' : '[name].js',
+    sourceMapFilename: "[name].js.map"
   },
   module: {
     rules: [
@@ -98,7 +100,15 @@ module.exports = {
     ]),
     new DotenvWebpack({
       path: './.node-env'
+    }),
+    new webpack.EnvironmentPlugin(['RELEASE']),
+    NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
+    ? new SentryCliPlugin({
+      release: process.env.RELEASE,
+      include: 'dist/',
+      ignoreFile: '.sentrycliignore',
+      ignore: ['config.js']
     })
+    : false
   ].filter(Boolean)
 }
-
