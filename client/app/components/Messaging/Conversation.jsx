@@ -105,11 +105,11 @@ export class Conversation extends Component {
       closeInfo={this.toggleDetails}
     />)
     const messageView = (
-      <div className="flex-100 layout-column layout-align-start-start" ref>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start" ref>
         <div
           id="messageList"
           className={`${styles.message_scroll}
-          flex-70 layout-row layout-align-start-start layout-wrap `}
+          flex-100 layout-row layout-align-start-start layout-wrap `}
         >
           <div className="flex-70 layout-row layout-align-start-start layout-wrap" >
             { messages }
@@ -118,7 +118,7 @@ export class Conversation extends Component {
           <Element name="messagesEnd" />
         </div>
         <form
-          className={`${styles.msg_form} ${defStyles.border_divider} flex-30 width_100 layout-row layout-align-start-center`}
+          className={`${styles.msg_form} ${defStyles.border_divider} flex-100  layout-row layout-align-start-center`}
           onSubmit={this.reply}
         >
           <div
@@ -164,10 +164,10 @@ export class Conversation extends Component {
     //    : styles.detail_wrapper_closed
     // const detailStyle = showDetails ? menuStyles.open : menuStyles.closed
     return (
-      <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
+      <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.convo_wrapper}`}>
         <div
           className={`${styles.summary_wrapper}
-          flex-15 layout-row layout-wrap layout-align-start-center `}
+          flex-100 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >
           <div className="flex-70 layout-wrap layout-row layout-align-start-center">
@@ -192,7 +192,7 @@ export class Conversation extends Component {
         ${menuStyles.menu_content} ${detailStyle}`}>
           { detailView }
         </div> */}
-        <div className={`flex-90 layout-column layout-align-start-start ${styles.messageView}`}>
+        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.messageView}`}>
           { showDetails ? detailView : messageView }
         </div>
       </div>
