@@ -8,8 +8,8 @@ i18n
   .use(LngDetector)
   .use(reactI18nextModule)
   .init({
-    fallbackLng: 'en-US',
-    defaultLng: 'en-US',
+    fallbackLng: 'en',
+    defaultLng: 'en',
     defaultNS: 'common',
     ns: ['landing', 'common'],
     debug: true,
