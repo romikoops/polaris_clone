@@ -72,6 +72,12 @@ export class UserDashboard extends Component {
       userDispatch.goTo('/account/shipments')
     }
   }
+
+  handleViewShipments () {
+    const { userDispatch } = this.props
+    userDispatch.getShipments(1, 1, 1, 4, true)
+  }
+
   render () {
     const {
       theme,
