@@ -1320,6 +1320,7 @@ export class ShipmentLocationBox extends Component {
         border: 0.5px solid rgba(0, 0, 0, 0);
       }
     `
+
     const loadType = shipment.load_type
     const preCarriageTruckTypes = (
       <div className="flex-100 layout-row layout-align-center-center">

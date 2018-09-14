@@ -103,7 +103,7 @@ gem 'google-cloud-translate'
 gem 'googleauth'
 gem 'signet'
 # New email gem
-gem 'mjml-rails'
+gem 'mjml-rails', '~> 4.1'
 
 gem 'pry-rails'
 

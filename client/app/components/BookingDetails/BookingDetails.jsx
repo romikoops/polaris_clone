@@ -314,8 +314,7 @@ export class BookingDetails extends Component {
       currencies,
       user,
       t,
-      tenant,
-      contacts
+      tenant
     } = this.props
     if (!shipmentData) return ''
 
@@ -323,7 +322,8 @@ export class BookingDetails extends Component {
       hubs,
       locations,
       shipment,
-      userLocations
+      userLocations,
+      contacts
     } = shipmentData
     if (!shipment || !hubs) return ''
 

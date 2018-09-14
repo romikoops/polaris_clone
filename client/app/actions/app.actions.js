@@ -32,7 +32,6 @@ function fetchCurrencies (type) {
     appService.fetchCurrencies(type).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currency successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -59,7 +58,6 @@ function fetchCountries () {
     appService.fetchCountries().then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Countries successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -86,7 +84,6 @@ function refreshRates (type) {
     appService.refreshRates(type).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currency successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -114,7 +111,6 @@ function fetchCurrenciesForBase (base) {
     appService.fetchCurrenciesForBase(base).then(
       (resp) => {
         const currData = resp.data
-        dispatch(alertActions.success('Fetching Currencies successful'))
         dispatch(success(currData))
       },
       (error) => {
@@ -146,7 +142,6 @@ function setCurrency (type, req) {
         if (req) {
           dispatch(shipmentActions.getOffers(req, false))
         }
-        dispatch(alertActions.success('Fetching Currency successful'))
       },
       (error) => {
         error.then((data) => {
@@ -174,7 +169,6 @@ function toggleTenantCurrencyMode () {
         dispatch(success(resp.data.rates))
         dispatch(tenantActions
           .receiveTenant(resp.data.tenant.subdomain, resp.data.tenant))
-        dispatch(alertActions.success('Toggle Currency Mode successful'))
       },
       (error) => {
         error.then((data) => {

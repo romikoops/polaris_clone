@@ -19,8 +19,8 @@ export function configureStore () {
     compose(
       applyMiddleware(...[
         routerMiddleware(history),
-        createLogger(),
-        thunkMiddleware
+        thunkMiddleware,
+        createLogger()
       ].filter(Boolean)),
       DevTools.instrument()
     )
@@ -29,8 +29,8 @@ export function configureStore () {
       rootReducer,
       loadState(),
       compose(applyMiddleware(...[
-        routerMiddleware(history),
-        thunkMiddleware
+        thunkMiddleware,
+        routerMiddleware(history)
       ].filter(Boolean)))
     )
   store.subscribe(

@@ -176,7 +176,8 @@ class TenantSeeder
           about: 'https://freightservices.greencarrier.com/about-us/',
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: true,
@@ -298,7 +299,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -388,7 +390,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -470,7 +473,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -553,7 +557,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -631,7 +636,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -711,7 +717,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -789,7 +796,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -867,7 +875,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -948,7 +957,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1049,7 +1059,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: true,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1144,7 +1155,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1247,7 +1259,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1352,7 +1365,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1447,7 +1461,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1568,7 +1583,8 @@ class TenantSeeder
           about: 'http://www.speedtrans.com/ueberuns.php',
           legal: 'http://www.speedtrans.com/impressum.php'
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: true,
         customs_export_paper: true,
         fixed_currency: true,
@@ -1690,7 +1706,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1786,7 +1803,8 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1878,7 +1896,8 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -1927,8 +1946,8 @@ class TenantSeeder
         colors: {
           primary: "#e10f21",
           secondary: "#1d1d1b",
-          brightPrimary: "#ffffff",
-          brightSecondary: "#9d9d9c"
+          brightPrimary: "#e10f21",
+          brightSecondary: "#1d1d1b"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
         logoSmall: "https://assets.itsmycargo.com/assets/tenants/gateway/gateway_logo.png",
@@ -1973,8 +1992,14 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        quote_notes: "1) Prices subject to change 
+        2) All fees are converted at the time of quotation 
+        using that day's European Central bank exchange rates and are an approximation 
+        of the final amount ot be paid. The amount paid at the time of settlement 
+        will reflect the exchange rates of the day.",
         detailed_billing: false,
-        quotation_tool: true,
+        closed_quotation_tool: true,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,
@@ -2073,7 +2098,8 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
-        quotation_tool: false,
+        closed_quotation_tool: false,
+        open_quotation_tool: false,
         consolidate_cargo: false,
         customs_export_paper: false,
         fixed_currency: false,

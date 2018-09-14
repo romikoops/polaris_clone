@@ -1,0 +1,118 @@
+<div class="wrapper-quotations">
+  <% primary_color = tenant.theme["colors"]["primary"] %>
+  <% neutral_color = '#C4C4C4' %>
+  <% tenant_logo_asset = "logoLarge_" + tenant["subdomain"] + ".png" %>
+  <% tenant_logo_url = tenant.theme["logoLarge"] %>
+  <% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
+  <% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
+
+  <div class="col-xs-12 title" style="font-size: 150%; text-align: left;">
+    <h1>QUOTATIONS</h1>
+    <hr style="border-color: <%= primary_color %>">
+    <p><%= tenant.name %></p>
+  </div>
+
+    <% shipments.map do |s| %>
+      <% origin_fee_color = s.selected_offer["export"] ? primary_color : neutral_color %>
+      <% destination_fee_color = s.selected_offer["import"] ? primary_color : neutral_color %>
+      <div class="all-row">
+        <div class="main-container container-fluid">
+          <div class="info row">
+            <% if s.itinerary.mode_of_transport == "ocean" %>
+              <% mot = "anchor" %>
+            <% elsif s.itinerary.mode_of_transport == "air" %>
+              <% mot = "paper-plane" %>
+            <% else %>
+              <% mot = "truck" %>
+            <% end %>
+            <i class="fas fa-<%= mot %> col-xs-1" style="margin-top: 37px !important; color: <%= primary_color %>"></i>
+            <div class="col-xs-7">
+              <p>From:&nbsp;<span><%= s.origin_hub.name %></span></p>
+              <p>To:&nbsp;<span><%= s.destination_hub.name %></span></p>
+            </div>
+            <div class="col-xs-4">
+              <div class="row charge-icons">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck flip" style="color: <%= precarriage_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file-alt" style="color: <%= origin_fee_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-anchor" style="color: <%= primary_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-file" style="color: <%= destination_fee_color %>"></i>
+                </div>
+                <div class="col-xs-2">
+                  <i class="fa fa-truck" style="color: <%= oncarriage_color %>"></i>
+                </div>
+              </div>
+              <div class="row cargo-info">
+                <div class="col-xs-12">
+                  <p>
+                    <strong>Kg:</strong>
+                    <%= shipment.cargo_items.inject(0) {|sum, hash| sum + hash[:payload_in_kg].to_f} %>&nbsp;kg
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <% s.selected_offer.each do |k, v| %>
+          <div class="sub-prices row">
+            <% if k != "total" && k != "edited_total" %>
+              <div class="col-xs-12">
+                <div class="total-price-single row">
+                  <% if k == "trucking_pre" %>
+                    <h4 class="col-xs-6">Pick-up</h4>
+                  <% end %>
+                  <% if k == "trucking_on" %>
+                    <h4 class="col-xs-6">Delivery</h4>
+                  <% end %>
+                  <% if k != "trucking_on" && k != "trucking_pre" %>
+                    <h4 class="col-xs-6"><%= k %></h4>
+                  <% end %>
+                  <h3 class="col-xs-6"><%= v["total"]["value"].to_f.truncate(2) %>&nbsp;<%= v["total"]["currency"] %></h3>
+                </div>
+              </div>
+              <div class="oo">oo</div>
+              <% v.each do |a, b| %>
+                <% if a != "total" && a != "edited_total" %>
+                  <div class="subtotal-price-single row">
+                  <% if a == "trucking_lcl" %>
+                    <h4 class="col-xs-6">Lcl</h4>
+                  <% end %>
+                  <% if a == "trucking_fcl" %>
+                    <h4 class="col-xs-6">Fcl</h4>
+                  <% end %>
+                  <% if k == "cargo" %>
+                    <h4 class="col-xs-6">Cargo</h4>
+                  <% end %>
+                  <% if k != "cargo" && a != "trucking_lcl" && a != "trucking_fcl" %>
+                    <h4 class="col-xs-6"><%= a %></h4>
+                  <% end %>
+                    <h3 class="col-xs-6"> <%= b["value"] || b["total"]["value"].to_f.truncate(2).to_s %>&nbsp;<%= b["currency"] || b["total"]["currency"] %></h3>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="total-row row">
+          <h4 class="col-xs-6">Total</h4>
+          <p class="quote col-xs-6"><%= s.selected_offer["total"]["value"].to_f.truncate(2) %>
+            &nbsp;<%= s.selected_offer["total"]["currency"] %>
+          </p>
+        </div>
+        <p class="notes">
+          <%= tenant["quote_notes"] || "" %>
+        </p>
+      </div>
+      
+    <% end %>
+  
+</div>

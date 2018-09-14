@@ -8,6 +8,67 @@ module ShippingTools
   extend MongoTools
   extend NotificationTools
 
+  def self.create_shipments_from_quotation(shipment, schedules)
+    main_quote = Quotation.create(user_id: shipment.user_id)
+    schedules.each do |schedule|
+      trip = Trip.find(schedule['trip_id'])
+      on_carriage_hash = !!schedule['quote']['trucking_on'] ?
+      {
+        truck_type: '',
+        location_id: Location.geocoded_location(shipment.delivery_address).id
+      } : nil
+      pre_carriage_hash = !!schedule['quote']['trucking_pre'] ?
+      {
+        truck_type: '',
+        location_id: Location.geocoded_location(shipment.pickup_address).id
+      } : nil
+      new_shipment = main_quote.shipments.create!(
+        status: 'quoted',
+        user_id: shipment.user_id,
+        imc_reference: shipment.imc_reference,
+        origin_hub_id: schedule['origin_hub']['id'],
+        destination_hub_id: schedule['destination_hub']['id'],
+        quotation_id: schedule['id'],
+        trip_id: trip.id,
+        booking_placed_at: shipment.booking_placed_at,
+        closing_date: shipment.closing_date,
+        planned_eta: shipment.planned_eta,
+        planned_etd: shipment.planned_etd,
+        trucking: {
+          has_pre_carriage: pre_carriage_hash,
+          has_on_carriage: on_carriage_hash
+        },
+        load_type: shipment.load_type,
+        itinerary: trip.itinerary
+      )
+      new_shipment.cargo_items = shipment.cargo_items
+      shipment.charge_breakdowns.each do |charge_breakdown|
+        new_charge_breakdown = charge_breakdown.dup
+        new_charge_breakdown_grand_total = charge_breakdown.grand_total.dup
+        new_charge_breakdown.grand_total = new_charge_breakdown_grand_total
+        charges = charge_breakdown.grand_total.children.each_with_object([]) do |charge, arr|
+          new_charge = charge.dup
+          new_charge.update(parent: new_charge_breakdown_grand_total)
+          arr << new_charge
+          charge.children.each do |child|
+            new_child = child.dup
+            new_child.update(parent: new_charge)
+            arr << new_child
+            child.children.each do |grandchild|
+              new_grandchild = grandchild.dup
+              new_grandchild.update(parent: new_child)
+              arr << new_grandchild
+            end
+          end
+        end
+
+        new_charge_breakdown.charges += charges
+        new_shipment.charge_breakdowns << new_charge_breakdown
+      end
+    end
+    main_quote
+  end
+
   def self.create_shipment(details, current_user)
     tenant = current_user.tenant
     load_type = details['loadType'].underscore
@@ -25,7 +86,7 @@ module ShippingTools
       # TBD - Create custom errors (ApplicationError)
       shipment.save!
     end
-    if tenant.scope['quotation_tool']
+    if tenant.scope['closed_quotation_tool']
       user_pricing_id = current_user.agency.agency_manager_id
       itinerary_ids = current_user.tenant.itineraries.ids.reject do |id|
         Pricing.where(itinerary_id: id, user_id: user_pricing_id).for_load_type(load_type).empty?
@@ -117,7 +178,6 @@ module ShippingTools
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
-      
       contact_params = contact_params(resource, nil)
       contact = search_contacts(contact_params, current_user)
       shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
@@ -521,13 +581,6 @@ module ShippingTools
     shipment.aggregated_cargo.create!(aggregated_cargo_json)
   end
 
-  def get_shipment_pdf(params)
-    shipment = Shipment.find_by_id(params[:shipment_id])
-    pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
-    shipper_pdf = WickedPdf.new.pdf_from_string(pdf_string, margin: { top: 10, bottom: 5, left: 20, right: 20 })
-    send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
-  end
-
   def self.tenant_notification_email(user, shipment)
     ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
   end
@@ -543,6 +596,34 @@ module ShippingTools
         shipment
       ).deliver_later
     end
+  end
+
+  def get_shipment_pdf(params)
+    shipment = Shipment.find_by_id(params[:shipment_id])
+    pdf_string = render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment })
+    shipper_pdf = WickedPdf.new.pdf_from_string(pdf_string, margin: { top: 10, bottom: 5, left: 20, right: 20 })
+    send_data shipper_pdf, filename: 'Booking_' + shipment.imc_reference + '.pdf'
+  end
+
+  def self.save_pdf_quotes(shipment, tenant, schedules)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
+    @quotes = main_quote.shipments.map(&:selected_offer)
+
+    logo = Base64.encode64(HTTP.get(tenant.theme['logoLarge']).body)
+
+    quotation = PdfHandler.new(
+      layout:      'pdfs/simple.pdf.html.erb',
+      template:    'shipments/pdfs/quotations.pdf.erb',
+      margin:      { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:    shipment,
+      shipments:   main_quote.shipments,
+      quotes:      @quotes,
+      logo:        logo,
+      quotation:   main_quote,
+      name:        'quotation'
+    )
+    quotation.generate
+    quotation.upload_quotes
   end
 
   def self.last_trip(user)
@@ -566,7 +647,7 @@ module ShippingTools
     File.open('tmp/' + doc_name, 'wb') { |file| file.write(doc_string) }
     doc_pdf = File.open('tmp/' + doc_name)
 
-    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
+    doc = DocumentTools.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
     doc_url = doc.get_signed_url
 
     { name: doc_name, url: doc_url }
