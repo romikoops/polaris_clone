@@ -114,34 +114,6 @@ exports[`theme has truthy properties 1`] = `
               icon=""
               iconClass=""
               size="small"
-              text="Find Rates"
-              theme={
-                Object {
-                  "background": "green",
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                  "logoLarge": "FOO_LOGO_LARGE",
-                  "logoWhite": "FOO_LOGO_WHITE",
-                  "welcome_text": "FOO_WELCOME_TEXT",
-                }
-              }
-            />
-          </div>
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
               text="My Account"
               theme={
                 Object {
@@ -305,30 +277,6 @@ exports[`user.role_id is 1 1`] = `
               icon=""
               iconClass=""
               size="small"
-              text="Find Rates"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
               text="My Account"
               theme={
                 Object {
@@ -475,30 +423,6 @@ exports[`user.role_id is 2 1`] = `
         <div
           className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
-          <div
-            className="layout-row flex-50 flex-md-100 margin_bottom"
-          >
-            <SquareButton
-              active={true}
-              back={false}
-              border={false}
-              disabled={false}
-              handleDisabled={null}
-              handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size="small"
-              text="Find Rates"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
           <div
             className="layout-row flex-50 flex-md-100 margin_bottom"
           >
