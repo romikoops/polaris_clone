@@ -19,6 +19,7 @@ import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
 import ResetPasswordForm from '../../components/ResetPasswordForm'
 import CookieConsentBar from '../../components/CookieConsentBar'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class App extends Component {
   componentWillMount () {
@@ -89,50 +90,67 @@ class App extends Component {
               ''
             )}
           <Switch className="flex">
-            <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
-
-            <Route
-              exact
-              path="/terms_and_conditions"
-              render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
-            />
-            <Route
-              exact
-              path="/insurance"
-              render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
-            />
-            <Route
-              exact
-              path="/password_reset"
-              render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
-            />
-            <PrivateRoute
-              path="/booking"
-              component={Shop}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-            <AdminPrivateRoute
-              path="/admin"
-              component={Admin}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
-            <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
-            <Route
-              exact
-              path="/redirects/shipments/:uuid"
-              render={props => <AdminShipmentAction theme={theme} {...props} />}
-            />
-            <PrivateRoute
-              path="/account"
-              component={UserAccount}
-              user={user}
-              loggedIn={loggedIn}
-              theme={theme}
-            />
+            <GenericError theme={theme}>
+              <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+            </GenericError >
+            <GenericError theme={theme}>
+              <Route
+                exact
+                path="/terms_and_conditions"
+                render={() => <TermsAndConditions tenant={tenant} user={user} theme={theme} />}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <Route
+                exact
+                path="/insurance"
+                render={() => <InsuranceDetails tenant={tenant} user={user} theme={theme} />}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <Route
+                exact
+                path="/password_reset"
+                render={props => <ResetPasswordForm user={user} theme={theme} {...props} />}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <PrivateRoute
+                path="/booking"
+                component={Shop}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <AdminPrivateRoute
+                path="/admin"
+                component={Admin}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <Route path="/signout" render={props => <SignOut theme={theme} {...props} />} />
+            </GenericError >
+            <GenericError theme={theme}>
+              <Route
+                exact
+                path="/redirects/shipments/:uuid"
+                render={props => <AdminShipmentAction theme={theme} {...props} />}
+              />
+            </GenericError >
+            <GenericError theme={theme}>
+              <PrivateRoute
+                path="/account"
+                component={UserAccount}
+                user={user}
+                loggedIn={loggedIn}
+                theme={theme}
+              />
+            </GenericError >
           </Switch>
         </div>
       </div>
