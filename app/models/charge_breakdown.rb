@@ -36,6 +36,7 @@ class ChargeBreakdown < ApplicationRecord
     charge("grand_total")
   end
 
+  # This doesn't make sense... Why would you append value to charges when setting grand_total?
   def grand_total=(value)
     charges << value
   end

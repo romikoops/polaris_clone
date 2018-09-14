@@ -24,7 +24,6 @@ function newShipment (type, redirect) {
     shipmentService.newShipment(type).then(
       (resp) => {
         const shipmentData = resp.data
-        dispatch(alertActions.success('Fetching New Shipment successful'))
         dispatch(success(shipmentData))
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
@@ -53,7 +52,7 @@ function reuseShipment (shipment) {
   }
 }
 
-function getOffers (data, tenant, redirect) {
+function getOffers (data, redirect) {
   function request (shipmentData) {
     return {
       type: shipmentConstants.GET_OFFERS_REQUEST,
@@ -79,7 +78,6 @@ function getOffers (data, tenant, redirect) {
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
         }
-        dispatch(alertActions.success('Set Shipment Details successful'))
       },
       (error) => {
         error.then((newData) => {
@@ -119,7 +117,6 @@ function getOffersForNewDate (data, redirect) {
         if (redirect) {
           dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
         }
-        dispatch(alertActions.success('Set Shipment Details successful'))
       },
       (error) => {
         error.then((newData) => {
@@ -159,7 +156,6 @@ function chooseOffer (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/final_details`))
-        dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -193,7 +189,6 @@ function chooseQuotes (data) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -228,7 +223,6 @@ function setShipmentContacts (data) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
-        dispatch(alertActions.success('Set Shipment Contacts successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -262,7 +256,6 @@ function requestShipment (id) {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
         dispatch(push(`/booking/${id}/thank_you`))
-        dispatch(alertActions.success('Confirm Shipment successful'))
       },
       (error) => {
         dispatch(failure(error))
@@ -436,7 +429,6 @@ function uploadDocument (doc, type, url) {
 
     shipmentService.uploadDocument(doc, type, url).then(
       (data) => {
-        dispatch(alertActions.success('Uploading Document successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -464,7 +456,6 @@ function deleteDocument (id) {
 
     shipmentService.deleteDocument(id).then(
       () => {
-        dispatch(alertActions.success('Deleting Document successful'))
         dispatch(success(id))
       },
       (error) => {
@@ -491,7 +482,6 @@ function getNotes (noteIds) {
 
     shipmentService.getNotes(noteIds).then(
       (response) => {
-        dispatch(alertActions.success('Fetching Notes successful'))
         dispatch(success(response.data))
       },
       (error) => {
@@ -528,7 +518,6 @@ function updateContact (req) {
 
     shipmentService.updateContact(req).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Contact successful'))
         dispatch(success(data))
       },
       (error) => {

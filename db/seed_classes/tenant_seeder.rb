@@ -1992,6 +1992,11 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        quote_notes: "1) Prices subject to change 
+        2) All fees are converted at the time of quotation 
+        using that day's European Central bank exchange rates and are an approximation 
+        of the final amount ot be paid. The amount paid at the time of settlement 
+        will reflect the exchange rates of the day.",
         detailed_billing: false,
         closed_quotation_tool: true,
         open_quotation_tool: false,

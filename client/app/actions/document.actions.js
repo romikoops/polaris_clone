@@ -20,12 +20,10 @@ function uploadPricings (file, loadType, open) {
 
     documentService.uploadPricings(file, loadType, open).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getPricings(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -48,12 +46,10 @@ function uploadHubs (file) {
 
     documentService.uploadHubs(file).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getHubs(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -76,11 +72,9 @@ function downloadPricings (options) {
 
     documentService.downloadPricings(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -103,11 +97,9 @@ function downloadLocalCharges (options) {
 
     documentService.downloadLocalCharges(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -130,11 +122,9 @@ function downloadSchedules (options) {
 
     documentService.downloadSchedules(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -156,7 +146,6 @@ function downloadQuotations (options) {
     dispatch(request())
     documentService.downloadQuotations(options).then(
       (response) => {
-        dispatch(alertActions.success('Downloading successful'))
         dispatch(success(response))
       },
       (error) => {
@@ -182,11 +171,9 @@ function downloadTrucking (options) {
 
     documentService.downloadTrucking(options).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Trucking successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -213,7 +200,6 @@ function downloadHubs () {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -236,11 +222,9 @@ function downloadGdpr (options) {
 
     documentService.downloadGdpr(options.userId).then(
       (data) => {
-        dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -263,12 +247,10 @@ function uploadSchedules (file, target) {
 
     documentService.uploadSchedules(file, target).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getSchedules(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -291,12 +273,10 @@ function uploadItinerarySchedules (file, target) {
 
     documentService.uploadItinerarySchedules(file, target).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
         dispatch(adminActions.getSchedules(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -319,12 +299,9 @@ function uploadLocalCharges (file) {
 
     documentService.uploadLocalCharges(file).then(
       (data) => {
-        dispatch(alertActions.success('Uploading successful'))
         dispatch(success(data))
-        // dispatch(adminActions.getHubs(false))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
