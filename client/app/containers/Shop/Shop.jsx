@@ -14,7 +14,7 @@ import ShipmentDetails from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 // eslint-disable-next-line no-named-as-default
 import Loading from '../../components/Loading/Loading'
-import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
+import BookingDetails from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions, authenticationActions, userActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'

@@ -157,7 +157,7 @@ class AdminShipmentCard extends Component {
               className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
               style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
             />
-            <p>{t('shipment:onCarriageBase')}</p>
+            <p>{t('shipment:preCarriageBase')}</p>
           </div>
           <div className="layout-row layout-align-end-end">
             <i
@@ -176,7 +176,7 @@ class AdminShipmentCard extends Component {
               className={shipment.has_pre_carriage ? 'fa fa-check clip' : 'fa fa-times'}
               style={shipment.has_pre_carriage ? gradientFontStyle : { color: '#E0E0E0' }}
             />
-            <p>{t('shipment:onCarriageBase')}</p>
+            <p>{t('shipment:preCarriageBase')}</p>
           </div>
           <div className="layout-row flex-50 layout-align-center-center">
             <i
@@ -221,7 +221,7 @@ class AdminShipmentCard extends Component {
               <span className={`${styles.grey}`}>
                 {t('shipment:estimatedTransitTime')}
               </span>
-            </div> : '' }
+            </div>
           </div>
         </div>
         <div
