@@ -47,6 +47,9 @@ class DocumentsDownloader extends React.Component {
       case 'gdpr':
         documentDispatch.downloadGdpr(options)
         break
+      case 'quotations':
+        documentDispatch.downloadQuotations(options)
+        break
 
       default:
         break
@@ -133,7 +136,7 @@ class DocumentsDownloader extends React.Component {
 
 DocumentsDownloader.propTypes = {
   theme: PropTypes.theme,
-  documentDispatch: PropTypes.func.isRequired,
+  documentDispatch: PropTypes.func,
   downloadUrls: PropTypes.objectOf(PropTypes.any),
   tooltip: PropTypes.string,
   square: PropTypes.bool,
@@ -146,6 +149,7 @@ DocumentsDownloader.propTypes = {
 DocumentsDownloader.defaultProps = {
   square: false,
   downloadUrls: {},
+  documentDispatch: null,
   theme: null,
   tooltip: '',
   target: '',

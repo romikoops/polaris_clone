@@ -12,6 +12,7 @@ class Shipment < ApplicationRecord
     declined
     ignored
     finished
+    quoted
   ).freeze
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   DIRECTIONS = %w(import export).freeze
@@ -38,6 +39,7 @@ class Shipment < ApplicationRecord
 
   # ActiveRecord associations
   belongs_to :user
+  belongs_to :quotation, optional: true
   belongs_to :tenant
   has_many :documents
   has_many :shipment_contacts
@@ -88,6 +90,7 @@ class Shipment < ApplicationRecord
   scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
   scope :finished, -> { where(status: "finished") }
+  scope :quoted, -> { where(status: "quoted") }
 
   scope :user_name, lambda { |query| 
     user_ids = User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%").ids

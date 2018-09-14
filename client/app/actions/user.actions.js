@@ -74,7 +74,6 @@ function searchShipments (text, target, page, perPage) {
 
     userService.searchShipments(text, target, page, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -203,7 +202,7 @@ function makePrimary (userId, locationId, redirect) {
   }
 }
 
-function getShipments (requestedPage, openPage, finishedPage, perPage, redirect) {
+function getShipments (pages, perPage, redirect) {
   function request (shipmentData) {
     return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
@@ -217,9 +216,8 @@ function getShipments (requestedPage, openPage, finishedPage, perPage, redirect)
   return (dispatch) => {
     dispatch(request())
 
-    userService.getShipments(requestedPage, openPage, finishedPage, perPage).then(
+    userService.getShipments(pages, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/account/shipments'))
@@ -249,7 +247,6 @@ function deltaShipmentsPage (target, page, perPage) {
 
     userService.deltaShipmentsPage(target, page, perPage).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipments successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -276,8 +273,6 @@ function getHubs (id) {
 
     userService.getHubs(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Hubs successful'))
-
         dispatch(success(data))
       },
       (error) => {
@@ -304,7 +299,6 @@ function getShipment (id, redirect) {
 
     userService.getShipment(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Shipment successful'))
         if (redirect) {
           dispatch(push(`/account/shipments/view/${id}`))
         }
@@ -339,7 +333,6 @@ function getDashboard (id, redirect) {
 
     userService.getDashboard(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Dashboard successful'))
         if (redirect) {
           dispatch(push('/account'))
         }
@@ -369,7 +362,6 @@ function deleteDocument (id) {
 
     userService.deleteDocument(id).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Document successful'))
         dispatch(success(id))
       },
       (error) => {
@@ -396,7 +388,6 @@ function uploadDocument (doc, type, url) {
 
     userService.uploadDocument(doc, type, url).then(
       (data) => {
-        dispatch(alertActions.success('Uploading Document successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -423,7 +414,6 @@ function getContact (id, redirect) {
 
     userService.getContact(id).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Contact successful'))
         if (redirect) {
           dispatch(push(`/account/contacts/${id}`))
         }
@@ -453,7 +443,6 @@ function getContacts (redirect, page) {
 
     userService.getContacts(page).then(
       (data) => {
-        dispatch(alertActions.success('Fetching Contacts successful'))
         if (redirect) {
           dispatch(push(`/account/contacts`))
         }
@@ -483,7 +472,6 @@ function updateContact (data, redirect) {
 
     userService.updateContact(data).then(
       (newData) => {
-        dispatch(alertActions.success('Fetching Contact successful'))
         if (redirect) {
           dispatch(push(`/account/contacts/${newData.id}`))
         }
@@ -513,7 +501,6 @@ function newUserLocation (userId, data) {
 
     userService.newUserLocation(userId, data).then(
       (newData) => {
-        dispatch(alertActions.success('Saving User Location successful'))
         dispatch(success(newData.data))
       },
       (error) => {
@@ -539,7 +526,6 @@ function editUserLocation (userId, data) {
 
     userService.editUserLocation(userId, data).then(
       (newData) => {
-        dispatch(alertActions.success('Saving User Location successful'))
         dispatch(success(newData.data))
       },
       (error) => {
@@ -566,7 +552,6 @@ function newContact (data) {
 
     userService.newContact(data).then(
       (newData) => {
-        dispatch(alertActions.success('Saving New Contact successful'))
         dispatch(success(newData))
       },
       (error) => {
@@ -593,7 +578,6 @@ function newAlias (data) {
 
     userService.newAlias(data).then(
       (newData) => {
-        dispatch(alertActions.success('Saving New Alias successful'))
         dispatch(success(newData))
       },
       (error) => {
@@ -620,7 +604,6 @@ function deleteAlias (aliasId) {
 
     userService.deleteAlias(aliasId).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Alias successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -647,7 +630,6 @@ function deleteContactAddress (addressId) {
 
     userService.deleteContactAddress(addressId).then(
       (data) => {
-        dispatch(alertActions.success('Deleting Contact Address successful'))
         dispatch(success(data))
       },
       (error) => {
@@ -674,7 +656,6 @@ function saveAddressEdit (address) {
 
     userService.saveAddressEdit(address).then(
       (data) => {
-        dispatch(alertActions.success('Editing Address successful'))
         dispatch(success(data.data))
       },
       (error) => {

@@ -139,8 +139,9 @@ class Admin extends Component {
              layout-wrap layout-align-start-start hundred"
           >
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-              <Switch className="flex ">
-                <GenericError theme={theme}>
+              <GenericError theme={theme}>
+                <Switch className="flex ">
+
                   <Route
                     exact
                     path="/admin/dashboard"
@@ -160,8 +161,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/hubs"
                     render={props => (
@@ -176,8 +176,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/pricings"
                     render={props => (
@@ -190,16 +189,14 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/currencies"
                     render={props => (
                       <AdminCurrencyCenter theme={theme} setCurrentUrl={this.setCurrentUrl} />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <SuperAdminPrivateRoute
                     path="/admin/superadmin"
                     component={SuperAdminTenantCreator}
@@ -207,8 +204,7 @@ class Admin extends Component {
                     user={user}
                     theme={theme}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     exact
                     path="/admin/schedules"
@@ -224,8 +220,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     exact
                     path="/admin/schedules/:id"
@@ -240,8 +235,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/service_charges"
                     render={props => (
@@ -255,8 +249,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/shipments"
                     render={props => (
@@ -271,8 +264,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/clients"
                     render={props => (<AdminClients
@@ -284,8 +276,7 @@ class Admin extends Component {
                       hubHash={hubHash}
                     />)}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/routes"
                     render={props => (
@@ -300,8 +291,7 @@ class Admin extends Component {
                       />
                     )}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/wizard"
                     render={props => (<AdminWizard
@@ -311,8 +301,7 @@ class Admin extends Component {
                       hubHash={hubHash}
                     />)}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/trucking"
                     render={props => (<AdminTrucking
@@ -322,8 +311,7 @@ class Admin extends Component {
                       hubHash={hubHash}
                     />)}
                   />
-                </GenericError >
-                <GenericError theme={theme}>
+
                   <Route
                     path="/admin/super_admin/upload"
                     render={props => (<SuperAdmin
@@ -332,9 +320,9 @@ class Admin extends Component {
                       {...props}
                     />)}
                   />
-                </GenericError >
 
-              </Switch>
+                </Switch>
+              </GenericError >
             </div>
           </div>
           <GenericError theme={theme}>

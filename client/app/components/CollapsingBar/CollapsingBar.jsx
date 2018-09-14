@@ -7,14 +7,15 @@ export default function CollapsingBar ({
   collapsed,
   theme,
   handleCollapser,
+  headerWrapClasses,
   content,
   text,
   faClass,
   minHeight,
   contentHeader,
-  styleHeader,
-  optClassName,
+  mainWrapperStyle,
   showArrow,
+  contentStyle,
   hideContent
 }) {
   return (
@@ -22,16 +23,21 @@ export default function CollapsingBar ({
       <CollapsingHeading
         text={text}
         showArrow={showArrow}
-        optClassName={optClassName}
         contentHeader={contentHeader}
         collapsed={collapsed}
         theme={theme}
+        headerWrapClasses={headerWrapClasses}
         handleCollapser={handleCollapser}
         faClass={faClass}
-        styleHeader={styleHeader}
+        mainWrapperStyle={mainWrapperStyle}
       />
       {!hideContent ? (
-        <CollapsingContent collapsed={collapsed} content={content} minHeight={minHeight} />
+        <CollapsingContent
+          collapsed={collapsed}
+          content={content}
+          minHeight={minHeight}
+          contentStyle={contentStyle}
+        />
       ) : ''}
     </div>
   )
@@ -41,15 +47,16 @@ CollapsingBar.propTypes = {
   collapsed: PropTypes.bool,
   theme: PropTypes.theme,
   handleCollapser: PropTypes.func,
+  mainWrapperStyle: PropTypes.objectOf(PropTypes.any),
   content: PropTypes.node,
   contentHeader: PropTypes.node,
   hideContent: PropTypes.bool,
   text: PropTypes.string,
-  optClassName: PropTypes.string,
+  headerWrapClasses: PropTypes.string,
   faClass: PropTypes.string,
   minHeight: PropTypes.string,
   showArrow: PropTypes.bool,
-  styleHeader: PropTypes.objectOf(PropTypes.string)
+  contentStyle: PropTypes.objectOf(PropTypes.any)
 }
 
 CollapsingBar.defaultProps = {
@@ -58,11 +65,12 @@ CollapsingBar.defaultProps = {
   handleCollapser: null,
   content: '',
   contentHeader: '',
-  optClassName: '',
+  headerWrapClasses: '',
+  mainWrapperStyle: {},
   text: '',
   hideContent: false,
   faClass: '',
+  contentStyle: {},
   minHeight: '',
-  styleHeader: {},
   showArrow: false
 }

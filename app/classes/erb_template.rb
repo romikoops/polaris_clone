@@ -12,7 +12,7 @@ class ErbTemplate
 
     set_locals args[:locals] if args[:locals].is_a? Hash
 
-    raise ArgumentError, "Invalid template" if @template.nil?
+    raise ArgumentError, 'Invalid template' if @template.nil?
   end
 
   def render
@@ -34,7 +34,7 @@ class ErbTemplate
     end
   end
 
-  def find_file(arg_path, options={})
+  def find_file(arg_path, options = {})
     return nil if arg_path.nil?
 
     full_path = "#{BASE_PATH}#{'/layouts' if options[:layout]}/#{arg_path}"

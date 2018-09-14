@@ -36,6 +36,10 @@ class ChargeBreakdown < ApplicationRecord
     charge("grand_total")
   end
 
+  def grand_total=(value)
+    charges << value
+  end
+
   def to_nested_hash
     grand_total.deconstruct_tree_into_schedule_charge.deep_stringify_keys
   end

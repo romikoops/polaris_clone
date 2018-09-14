@@ -23,6 +23,7 @@ function uploadPricings (file, loadType, open) {
   const url = open
     ? `/admin/open_pricings/ocean_${loadType}_pricings/process_csv`
     : `/admin/pricings/ocean_${loadType}_pricings/process_csv`
+
   return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
 }
 
@@ -34,6 +35,7 @@ function uploadHubs (file) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
 function downloadPricings (options) {
@@ -42,6 +44,7 @@ function downloadPricings (options) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ options })
   }
+
   return fetch(`${BASE_URL}/admin/pricings/download`, requestOptions).then(handleResponse)
 }
 
@@ -53,6 +56,7 @@ function uploadSchedules (file, target) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
 }
 
@@ -64,6 +68,7 @@ function uploadItinerarySchedules (file, target) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
 }
 
@@ -75,6 +80,7 @@ function uploadLocalCharges (file) {
     headers: { ...authHeader() },
     body: formData
   }
+
   return fetch(`${BASE_URL}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
@@ -84,7 +90,18 @@ function downloadLocalCharges (options) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ options })
   }
+
   return fetch(`${BASE_URL}/admin/local_charges/download`, requestOptions).then(handleResponse)
+}
+
+function downloadQuotations (options) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ options })
+  }
+
+  return fetch(`${BASE_URL}/shipments/${options.shipment.id}/quotations/download`, requestOptions).then(handleResponse)
 }
 
 function downloadHubs () {
@@ -92,6 +109,7 @@ function downloadHubs () {
     method: 'GET',
     headers: { ...authHeader() }
   }
+
   return fetch(`${BASE_URL}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
 }
 function downloadGdpr (id) {
@@ -99,6 +117,7 @@ function downloadGdpr (id) {
     method: 'GET',
     headers: { ...authHeader() }
   }
+
   return fetch(`${BASE_URL}/users/${id}/gdpr/download`, requestOptions).then(handleResponse)
 }
 function downloadSchedules (options) {
@@ -117,6 +136,7 @@ function downloadTrucking (options) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ options })
   }
+
   return fetch(`${BASE_URL}/admin/trucking/download`, requestOptions).then(handleResponse)
 }
 
@@ -131,7 +151,8 @@ export const documentService = {
   downloadHubs,
   uploadItinerarySchedules,
   downloadTrucking,
-  downloadGdpr
+  downloadGdpr,
+  downloadQuotations
 }
 
 export default documentService

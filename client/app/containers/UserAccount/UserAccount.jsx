@@ -169,8 +169,8 @@ class UserAccount extends Component {
             } layout-row flex-none `}
           >
             <div className="layout-row flex-100 height_100">
-              <Switch className="flex">
-                <GenericError theme={theme}>
+              <GenericError theme={theme}>
+                <Switch className="flex">
                   <Route
                     exact
                     path="/account"
@@ -180,6 +180,7 @@ class UserAccount extends Component {
                         theme={theme}
                         {...props}
                         user={user}
+                        scope={tenant.data.scope}
                         setCurrentUrl={this.setCurrentUrl}
                         dashboard={dashboard}
                         hubs={hubHash}
@@ -187,8 +188,7 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/routesavailable"
                     render={props => (
@@ -203,8 +203,7 @@ class UserAccount extends Component {
                         makePrimary={this.makePrimary}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/locations"
                     render={props => (
@@ -220,8 +219,7 @@ class UserAccount extends Component {
                         makePrimary={this.makePrimary}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/profile"
                     render={props => (
@@ -240,8 +238,7 @@ class UserAccount extends Component {
                         authDispatch={authDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/contacts"
                     render={props => (
@@ -257,15 +254,13 @@ class UserAccount extends Component {
                         authDispatch={authDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/billing"
                     render={props => (
                       <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     exact
                     path="/account/shipments"
@@ -282,8 +277,7 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     path="/account/shipments/view/:id"
                     render={props => (
@@ -300,8 +294,7 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     exact
                     path="/account/shipments/open"
@@ -318,8 +311,7 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     exact
                     path="/account/shipments/requested"
@@ -336,8 +328,7 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-                <GenericError theme={theme}>
+                  />
                   <Route
                     exact
                     path="/account/shipments/finished"
@@ -354,9 +345,9 @@ class UserAccount extends Component {
                         userDispatch={userDispatch}
                       />
                     )}
-                  /></GenericError >
-
-              </Switch>
+                  />
+                </Switch>
+              </GenericError >
             </div>
           </div>
           <Footer isShop tenant={tenant} />
