@@ -125,7 +125,7 @@ export class AdminShipmentQuotationCard extends Component {
       </div>
     )
     const timeRow = plannedDate && shipment.planned_etd && shipment.planned_eta
-    ? (<div className={`layout-row flex-100 layout-align-start-center
+      ? (<div className={`layout-row flex-100 layout-align-start-center
     ${styles.middle_bottom_box} ${styles.smallText}`}
       >
         <div className="flex-20 layout-align-center-start">

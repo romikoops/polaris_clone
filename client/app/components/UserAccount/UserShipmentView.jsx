@@ -16,8 +16,8 @@ import {
 import '../../styles/select-css-custom.css'
 import DocumentsForm from '../Documents/Form'
 import GradientBorder from '../GradientBorder'
-import { UserShipmentViewContent } from './UserShipmentViewContent'
-import { UserShipmentViewQuotationContent } from './UserShipmentViewQuotationContent'
+import { UserShipmentContent } from './UserShipmentContent'
+import { ShipmentQuotationContent } from './ShipmentQuotationContent'
 
 export class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -373,7 +373,7 @@ export class UserShipmentView extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top">
           {shipment.status !== 'quoted' ? (
-            <UserShipmentViewContent
+            <UserShipmentContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
@@ -400,7 +400,7 @@ export class UserShipmentView extends Component {
               calcCargoLoad={UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
             />
           ) : (
-            <UserShipmentViewQuotationContent
+            <ShipmentQuotationContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
               gradientStyle={gradientStyle}
@@ -412,19 +412,8 @@ export class UserShipmentView extends Component {
               selectedStyle={selectedStyle}
               deselectedStyle={deselectedStyle}
               scope={scope}
-              contacts={contacts}
-              user={user}
-              upUrl={this.state.upUrl}
-              fileType={this.state.fileType}
-              setFileType={this.setFileType}
               feeHash={feeHash}
-              docOptions={docOptions}
-              userDispatch={userDispatch}
-              docView={docView}
-              cargoCount={cargoCount}
-              missingDocs={missingDocs}
               cargoView={cargoView}
-              calcCargoLoad={UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
             />
           )}
 

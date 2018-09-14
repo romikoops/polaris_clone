@@ -17,7 +17,7 @@ import {
 import GreyBox from '../GreyBox/GreyBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 
-export class UserShipmentViewQuotationContent extends Component {
+export class ShipmentQuotationContent extends Component {
   static determineSubKey (key) {
     switch (key) {
       case 'trucking_lcl' || 'trucking_fcl':
@@ -90,7 +90,7 @@ export class UserShipmentViewQuotationContent extends Component {
           .filter(value => value.length !== 1).map((price) => {
             const subPrices = (<div className={`flex-100 layout-row layout-align-start-center ${quoteStyles.sub_price_row}`}>
               <div className="flex-45 layout-row layout-align-start-center">
-                <span>{key === 'cargo' ? 'Freight rate' : UserShipmentViewQuotationContent.determineSubKey(price[0])}</span>
+                <span>{key === 'cargo' ? 'Freight rate' : ShipmentQuotationContent.determineSubKey(price[0])}</span>
               </div>
               <div className="flex-50 layout-row layout-align-end-center">
                 <p>{numberSpacing(price[1].value || price[1].total.value, 2)}&nbsp;{shipment.selected_offer.total.currency}</p>
@@ -120,6 +120,9 @@ export class UserShipmentViewQuotationContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       et={shipment.pickup_address ? etdJSX : null}
+                      text="ETD"
+                      shipment={shipment}
+                      theme={theme}
                       hub={shipment.origin_hub}
                       bg={bg1}
                     />
@@ -148,6 +151,9 @@ export class UserShipmentViewQuotationContent extends Component {
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
+                      text="ETA"
+                      shipment={shipment}
+                      theme={theme}
                       et={shipment.delivery_address ? etaJSX : null}
                       hub={shipment.destination_hub}
                       bg={bg2}
@@ -155,54 +161,6 @@ export class UserShipmentViewQuotationContent extends Component {
                   </div>
                 )}
               />
-            </div>
-
-            <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-              <div className="flex-60 layout-align-center-stretch">
-                <div className="layout-row flex-100 layout-align-start-center">
-                  <div className="flex-100 layout-row layout-align-start-center">
-                    <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle} />
-                    <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                      {shipment.pickup_address
-                        ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                          .format('DD/MM/YYYY')}`
-                        : ''}
-                    </h4>
-                  </div>
-                </div>
-                {shipment.pickup_address ? (
-                  <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                    <p>{shipment.pickup_address.street} &nbsp;
-                      {shipment.pickup_address.street_number},&nbsp;
-                      <strong>{shipment.pickup_address.city},&nbsp;
-                        {shipment.pickup_address.country.name} </strong>
-                    </p>
-                  </div>
-                ) : ''}
-              </div>
-
-              <div className="flex-40 layout-align-center-stretch">
-                <div className="layout-row flex-100 layout-align-start-center">
-                  <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle} />
-                  <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                    {shipment.delivery_address
-                      ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                        .format('DD/MM/YYYY')}`
-                      : ''}
-                  </h4>
-                </div>
-                {shipment.delivery_address ? (
-                  <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                    <p>{shipment.delivery_address.street}&nbsp;
-                      {shipment.delivery_address.street_number},&nbsp;
-                      <strong>{shipment.delivery_address.city},&nbsp;
-                        {shipment.delivery_address.country.name} </strong>
-
-                    </p>
-                  </div>
-                ) : ''}
-
-              </div>
             </div>
           </div>
         </Tab>
@@ -222,16 +180,6 @@ export class UserShipmentViewQuotationContent extends Component {
                           <i className="fa fa-truck clip flex-none layout-align-center-center" style={shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle} />
                           <p>Pickup</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_pre ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.trucking_pre ? feeHash.trucking_pre.total.currency : ''}
-                            { ' ' }
-                            {feeHash.trucking_pre.edited_total
-                              ? parseFloat(feeHash.trucking_pre.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}
-                          </p>
-                        </div>
-                          : '' }
                       </div>
                     </div>
                     <div className="flex-offset-10 flex-45 margin_bottom">
@@ -243,17 +191,6 @@ export class UserShipmentViewQuotationContent extends Component {
                           />
                           <p>Delivery</p>
                         </div>
-                        {scope.detailed_billing && feeHash.trucking_on ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.trucking_on ? feeHash.trucking_on.total.currency : ''}
-                            { ' ' }
-                            {feeHash.trucking_on.edited_total
-                              ? parseFloat(feeHash.trucking_on.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.trucking_on.total.value).toFixed(2)}
-                          </p>
-                        </div>
-                          : ''}
-
                       </div>
                     </div>
                     <div className="flex-45 margin_bottom">
@@ -268,16 +205,6 @@ export class UserShipmentViewQuotationContent extends Component {
                       Documentation
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.export ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.export ? feeHash.export.total.currency : ''}
-                            { ' ' }
-                            {feeHash.export.edited_total
-                              ? parseFloat(feeHash.export.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.export.total.value).toFixed(2)}
-                          </p>
-                        </div>
-                          : ''}
                       </div>
                     </div>
                     <div
@@ -294,16 +221,6 @@ export class UserShipmentViewQuotationContent extends Component {
                       Documentation
                           </p>
                         </div>
-                        {scope.detailed_billing && feeHash.import ? <div className="flex layout-row layout-align-end-center">
-                          <p>
-                            {feeHash.import ? feeHash.import.total.currency : ''}
-                            { ' ' }
-                            {feeHash.import.edited_total
-                              ? parseFloat(feeHash.import.edited_total.value).toFixed(2)
-                              : parseFloat(feeHash.import.total.value).toFixed(2)}
-                          </p>
-                        </div>
-                          : ''}
                       </div>
                     </div>
                     <div className="flex-45 margin_bottom">
@@ -315,17 +232,6 @@ export class UserShipmentViewQuotationContent extends Component {
                           />
                           <p>Freight</p>
                         </div>
-                        {scope.detailed_billing && feeHash.cargo
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.cargo ? feeHash.cargo.total.currency : ''}
-                              { ' ' }
-                              {feeHash.cargo.edited_total
-                                ? parseFloat(feeHash.cargo.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.cargo.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                          : ''}
                       </div>
 
                     </div>
@@ -342,17 +248,6 @@ export class UserShipmentViewQuotationContent extends Component {
                           <i className="fa fa-id-card clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                           <p>Customs</p>
                         </div>
-                        {scope.detailed_billing && feeHash.customs
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.customs ? feeHash.customs.total.currency : ''}
-                              { ' ' }
-                              {feeHash.customs.edited_total
-                                ? parseFloat(feeHash.customs.edited_total.value).toFixed(2)
-                                : parseFloat(feeHash.customs.total.value).toFixed(2)}
-                            </p>
-                          </div>
-                          : '' }
                       </div>
                     </div>
                     <div className="layout-column flex-100 margin_bottom">
@@ -361,20 +256,6 @@ export class UserShipmentViewQuotationContent extends Component {
                           <i className="fa fa-umbrella clip flex-none" style={feeHash.customs ? selectedStyle : deselectedStyle} />
                           <p>Insurance</p>
                         </div>
-                        {scope.detailed_billing && feeHash.insurance && (feeHash.insurance.value || feeHash.insurance.edited_total)
-                          ? <div className="flex layout-row layout-align-end-center">
-                            <p>
-                              {feeHash.insurance ? feeHash.insurance.currency : ''}
-                              { ' ' }
-                              {feeHash.insurance.edited_total
-                                ? parseFloat(feeHash.insurance.edited_total.value).toFixed(2)
-                                : ''}
-                              {feeHash.insurance.value
-                                ? parseFloat(feeHash.insurance.value).toFixed(2)
-                                : ''}
-                            </p>
-                          </div>
-                          : '' }
                         {scope.detailed_billing && feeHash.insurance && !feeHash.insurance.value && !feeHash.insurance.edited_total
                           ? <div className="flex layout-row layout-align-end-center">
                             <p>Requested  </p>
@@ -523,7 +404,7 @@ export class UserShipmentViewQuotationContent extends Component {
   }
 }
 
-UserShipmentViewQuotationContent.propTypes = {
+ShipmentQuotationContent.propTypes = {
   theme: PropTypes.theme,
   gradientBorderStyle: PropTypes.style,
   gradientStyle: PropTypes.style,
@@ -539,7 +420,7 @@ UserShipmentViewQuotationContent.propTypes = {
   cargoView: PropTypes.node
 }
 
-UserShipmentViewQuotationContent.defaultProps = {
+ShipmentQuotationContent.defaultProps = {
   theme: null,
   gradientBorderStyle: {},
   gradientStyle: {},
@@ -555,4 +436,4 @@ UserShipmentViewQuotationContent.defaultProps = {
   cargoView: null
 }
 
-export default UserShipmentViewQuotationContent
+export default ShipmentQuotationContent

@@ -19,7 +19,7 @@ import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
 import FileUploader from '../FileUploader/FileUploader'
 
-export function UserShipmentViewContent ({
+export function UserShipmentContent ({
   theme,
   user,
   gradientBorderStyle,
@@ -82,6 +82,8 @@ export function UserShipmentViewContent ({
                 <div className="layout-row flex-100">
                   <ShipmentOverviewShowCard
                     et={etdJSX}
+                    shipment={shipment}
+                    text="ETD"
                     hub={shipment.origin_hub}
                     bg={bg1}
                   />
@@ -106,60 +108,14 @@ export function UserShipmentViewContent ({
                 <div className="layout-row flex-100">
                   <ShipmentOverviewShowCard
                     et={etaJSX}
+                    shipment={shipment}
+                    text="ETA"
                     hub={shipment.destination_hub}
                     bg={bg2}
                   />
                 </div>
               )}
             />
-          </div>
-
-          <div className={`flex-100 layout-row layout-align-space-between-start ${styles.info_delivery} margin_bottom`}>
-            <div className="flex-60 layout-align-center-stretch">
-              <div className="layout-row flex-100 layout-align-start-center">
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.pickup_address ? selectedStyle : deselectedStyle} />
-                  <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                    {shipment.pickup_address
-                      ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                        .format('DD/MM/YYYY')}`
-                      : ''}
-                  </h4>
-                </div>
-              </div>
-              {shipment.pickup_address ? (
-                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
-                  <p>{shipment.pickup_address.street} &nbsp;
-                    {shipment.pickup_address.street_number},&nbsp;
-                    <strong>{shipment.pickup_address.city},&nbsp;
-                      {shipment.pickup_address.country.name} </strong>
-                  </p>
-                </div>
-              ) : ''}
-            </div>
-
-            <div className="flex-40 layout-align-center-stretch">
-              <div className="layout-row flex-100 layout-align-start-center">
-                <i className={`flex-none fa fa-check-square clip ${styles.check_square}`} style={shipment.delivery_address ? selectedStyle : deselectedStyle} />
-                <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                  {shipment.delivery_address
-                    ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                      .format('DD/MM/YYYY')}`
-                    : ''}
-                </h4>
-              </div>
-              {shipment.delivery_address ? (
-                <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
-                  <p>{shipment.delivery_address.street}&nbsp;
-                    {shipment.delivery_address.street_number},&nbsp;
-                    <strong>{shipment.delivery_address.city},&nbsp;
-                      {shipment.delivery_address.country.name} </strong>
-
-                  </p>
-                </div>
-              ) : ''}
-
-            </div>
           </div>
         </div>
       </Tab>
@@ -532,7 +488,7 @@ export function UserShipmentViewContent ({
   )
 }
 
-UserShipmentViewContent.propTypes = {
+UserShipmentContent.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   userDispatch: PropTypes.shape({
@@ -561,7 +517,7 @@ UserShipmentViewContent.propTypes = {
   calcCargoLoad: PropTypes.number
 }
 
-UserShipmentViewContent.defaultProps = {
+UserShipmentContent.defaultProps = {
   theme: null,
   user: null,
   gradientBorderStyle: {},
@@ -587,4 +543,4 @@ UserShipmentViewContent.defaultProps = {
   calcCargoLoad: 0
 }
 
-export default UserShipmentViewContent
+export default UserShipmentContent
