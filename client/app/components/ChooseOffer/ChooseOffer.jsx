@@ -188,7 +188,7 @@ export class ChooseOffer extends Component {
     if (!shipmentData) return ''
     const { scope } = tenant.data
     const { currentCurrency } = this.state
-    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool
+    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
       shipment, originHubs, destinationHubs, schedules, lastTripDate
     } = shipmentData

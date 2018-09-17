@@ -13,8 +13,11 @@
 ActiveRecord::Schema.define(version: 2018_09_13_133909) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
+  enable_extension "postgis_tiger_geocoder"
+  enable_extension "postgis_topology"
 
   create_table "addons", force: :cascade do |t|
     t.string "title"
@@ -331,6 +334,18 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.integer "tenant_id"
   end
 
+  create_table "layer", primary_key: ["topology_id", "layer_id"], force: :cascade do |t|
+    t.integer "topology_id", null: false
+    t.integer "layer_id", null: false
+    t.string "schema_name", null: false
+    t.string "table_name", null: false
+    t.string "feature_column", null: false
+    t.integer "feature_type", null: false
+    t.integer "level", default: 0, null: false
+    t.integer "child_id"
+    t.index ["schema_name", "table_name", "feature_column"], name: "layer_schema_name_table_name_feature_column_key", unique: true
+  end
+
   create_table "layovers", force: :cascade do |t|
     t.integer "stop_id"
     t.datetime "eta"
@@ -582,10 +597,10 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.integer "quotation_id"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
@@ -648,6 +663,14 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.string "currency", default: "EUR"
     t.jsonb "web"
     t.jsonb "email_links"
+  end
+
+  create_table "topology", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "srid", null: false
+    t.float "precision", null: false
+    t.boolean "hasz", default: false, null: false
+    t.index ["name"], name: "topology_name_key", unique: true
   end
 
   create_table "transport_categories", force: :cascade do |t|
@@ -766,6 +789,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.string "external_id"
     t.integer "agency_id"
@@ -783,6 +807,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "layer", "topology", name: "layer_topology_id_fkey"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
