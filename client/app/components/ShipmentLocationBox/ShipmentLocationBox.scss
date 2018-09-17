@@ -202,7 +202,7 @@
   .show_results {
     position: absolute;
     width: 100%;
-    top: 50px;
+    top: 45px;
     right: 0;
     left: 0;
     z-index: 20;
@@ -214,15 +214,22 @@
   }
   .autocomplete_container {
     position: relative;
+    background: #FFFFFF;
+
+  }
+  .autocomplete_inner {
+    position: relative;
+    background: #FFFFFF;
+    height: 100%;
   }
   .autocomplete_container .autocomplete_input{
     background: #FFFFFF;
-    font-size: 12px;
+    font-size: 16px;
   }
   .autocomplete_card {
     height: 50px;
     background: #FFFFFF;
-    padding: 5px 2px;
+    padding: 5px 8px;
     margin: 2px 0;
     border-bottom: 1px solid grey;
   }
@@ -230,6 +237,20 @@
     height: 50px;
     background: #FFFFFF;
     margin: 2px 0;
-    border-bottom: 1px solid rgb(15, 0, 219);
+    padding: 8px 10px;
+    font-size: 18px;
+    border-bottom: 3px solid rgb(0, 80, 146);
+  }
+  .results_section {
+    padding: 0px 2px;
+  }
+  .results_section_header {
+    position: relative;
+    background: rgb(124, 124, 124);
+    color: #fff;
+    padding: 5px 10px;
+    p {
+      font-size: 14px;
+    }
   }
 }
