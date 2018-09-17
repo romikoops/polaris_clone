@@ -22,7 +22,6 @@ class OfferCalculator
     @routes             = @route_filter.perform(@routes)
     if @user.tenant.scope["open_quotation_tool"] || @user.tenant.scope["closed_quotation_tool"] || @user.tenant.scope["quotation_tool"] || @isQuote
       @route_objs         = @quote_route_builder.perform(@routes)
-      binding.pry
       @detailed_schedules = @detailed_quote_builder.perform(@route_objs, @trucking_data, @user)
     else
       @schedules          = @schedule_finder.perform(@routes, @delay, @hubs)
