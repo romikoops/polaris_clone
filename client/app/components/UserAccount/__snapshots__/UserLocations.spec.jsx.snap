@@ -4,214 +4,76 @@ exports[`shallow render 1`] = `
 <div
   className="layout-row flex-100 layout-wrap layout-margin"
 >
-  <div
-    className="pointy flex-30 flex-md-45 margin_bottom layout-row layout-align-start-stretch tile_padding"
-    key="addLocationButton"
-    onClick={[Function]}
-  >
-    <div
-      className="location-box new-address layout-row layout-align-center-center layout-wrap"
-    >
-      <div
-        className="layout-row layout-align-center flex-100"
-      >
-        <div
-          className="plus-icon"
-        />
-      </div>
-      <div
-        className="layout-row layout-align-center flex-100"
-      >
-        <h3>
-          Add location
-        </h3>
-      </div>
-    </div>
-  </div>
-  <div
-    className="flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch loc_info"
-    key="RANDOM_KEY_0"
-  >
-    <div
-      className="location-box flex-100 layout-column"
-    >
-      <div
-        className="header layout-row layout-align-end-center"
-      >
-        <i
-          className="fa fa-star clip icon_primary"
-          style={
-            Object {
-              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-            }
-          }
-        />
-        <span
-          className="emulate_link"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-pencil"
-          />
-        </span>
-        <span
-          className="emulate_link"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-trash icon_trash"
-          />
-        </span>
-      </div>
-      <div
-        className="layout-row flex-100 location_address"
-      >
-        <i
-          className="flex-10 fa fa-map-marker clip"
-          style={
-            Object {
-              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-            }
-          }
-        />
-        <div
-          className="content flex layout-wrap layout-align-space-between"
-        >
-          <p
-            className="flex-100"
-          >
-            579
-             
-            FOO_STREET
-             
-          </p>
-          <p
-            className="flex-100"
-          >
-            <strong>
-              FOO_CITY
-            </strong>
-          </p>
-          <p
-            className="flex-100"
-          >
-            22456
-          </p>
-          <p
-            className="flex-100"
-          >
-             
-            <Truncate
-              ellipsis="…"
-              lines={2}
-              trimWhitespace={false}
-            >
-              Germany
-               
-            </Truncate>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    className="flex-30 flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch loc_info"
-    key="RANDOM_KEY_1"
-  >
-    <div
-      className="location-box flex-100 layout-column"
-    >
-      <div
-        className="header layout-row layout-align-end-center"
-      >
-        <div
-          className="layout-row icon_primary"
-        >
-          <div
-            className="layout-row"
-          >
-            <div
-              className="makePrimary pointy"
-              onClick={[Function]}
-            >
-              <i
-                className="fa fa-star-o clip"
-                style={
-                  Object {
-                    "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-                  }
-                }
-              />
-            </div>
-          </div>
-        </div>
-        <span
-          className="emulate_link"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-pencil"
-          />
-        </span>
-        <span
-          className="emulate_link"
-          onClick={[Function]}
-        >
-          <i
-            className="fa fa-trash icon_trash"
-          />
-        </span>
-      </div>
-      <div
-        className="layout-row flex-100 location_address"
-      >
-        <i
-          className="flex-10 fa fa-map-marker clip"
-          style={
-            Object {
-              "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
-            }
-          }
-        />
-        <div
-          className="content flex layout-wrap layout-align-space-between"
-        >
-          <p
-            className="flex-100"
-          >
-            579
-             
-            FOO_STREET
-             
-          </p>
-          <p
-            className="flex-100"
-          >
-            <strong>
-              FOO_CITY
-            </strong>
-          </p>
-          <p
-            className="flex-100"
-          >
-            22456
-          </p>
-          <p
-            className="flex-100"
-          >
-             
-            <Truncate
-              ellipsis="…"
-              lines={2}
-              trimWhitespace={false}
-            >
-              Germany
-               
-            </Truncate>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <UserLocationsBox
+    cols={3}
+    destroyLocation={[Function]}
+    editLocation={[Function]}
+    gradient={
+      Object {
+        "background": "-webkit-linear-gradient(-90deg, #333,#fafafa)",
+      }
+    }
+    locations={
+      Array [
+        Object {
+          "location": Object {
+            "city": "FOO_CITY",
+            "country": "Germany",
+            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+            "id": 246,
+            "primary": true,
+            "street": "FOO_STREET",
+            "streetNumber": 579,
+            "street_number": 579,
+            "zipCode": "22456",
+            "zip_code": "22456",
+          },
+          "user": Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "primary": false,
+            "role": Object {
+              "name": "shipper",
+            },
+          },
+        },
+        Object {
+          "location": Object {
+            "city": "FOO_CITY",
+            "country": "Germany",
+            "geocodedAddress": "FOO_GEOCODED_ADDRESS",
+            "id": 246,
+            "primary": true,
+            "street": "FOO_STREET",
+            "streetNumber": 579,
+            "street_number": 579,
+            "zipCode": "22456",
+            "zip_code": "22456",
+          },
+          "user": Object {
+            "company_name": "FOO_COMPANY",
+            "currency": "EUR",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+            "primary": true,
+            "role": Object {
+              "name": "shipper",
+            },
+          },
+        },
+      ]
+    }
+    makePrimary={[Function]}
+    t={[Function]}
+    toggleActiveView={[Function]}
+  />
 </div>
 `;
