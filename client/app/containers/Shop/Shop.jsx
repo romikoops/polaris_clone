@@ -237,7 +237,6 @@ class Shop extends Component {
                 {...props}
                 tenant={tenant}
                 user={user}
-                dashboard={dashboard}
                 shipmentData={shipmentData}
                 prevRequest={request && request.stage2 ? request.stage2 : {}}
                 req={request && request.stage1 ? request.stage1 : {}}
@@ -363,7 +362,6 @@ Shop.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   currencies: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
-  dashboard: PropTypes.any,
 
   history: PropTypes.history.isRequired,
   match: PropTypes.shape({
@@ -398,8 +396,7 @@ Shop.defaultProps = {
   tenant: null,
   user: null,
   nexusDispatch: null,
-  currencies: null,
-  dashboard: null
+  currencies: null
 }
 
 function mapStateToProps (state) {
