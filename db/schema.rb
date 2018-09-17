@@ -334,18 +334,6 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.integer "tenant_id"
   end
 
-  create_table "layer", primary_key: ["topology_id", "layer_id"], force: :cascade do |t|
-    t.integer "topology_id", null: false
-    t.integer "layer_id", null: false
-    t.string "schema_name", null: false
-    t.string "table_name", null: false
-    t.string "feature_column", null: false
-    t.integer "feature_type", null: false
-    t.integer "level", default: 0, null: false
-    t.integer "child_id"
-    t.index ["schema_name", "table_name", "feature_column"], name: "layer_schema_name_table_name_feature_column_key", unique: true
-  end
-
   create_table "layovers", force: :cascade do |t|
     t.integer "stop_id"
     t.datetime "eta"
@@ -606,6 +594,13 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
+  end
+
   create_table "stops", force: :cascade do |t|
     t.integer "hub_id"
     t.integer "itinerary_id"
@@ -807,7 +802,6 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "layer", "topology", name: "layer_topology_id_fkey"
   add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
