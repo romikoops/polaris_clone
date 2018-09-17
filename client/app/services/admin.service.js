@@ -221,7 +221,7 @@ function getShipments (pages, perPage) {
   queryKeys.forEach((status, i) => {
     query += `${status}_page=${pages[status] || 1}&`
   })
-  if (perPage) query += `&per_page=${perPage}`
+  if (perPage) query += `per_page=${perPage}`
 
   return fetch(`${BASE_URL}/admin/shipments?${query}`, requestOptions).then(handleResponse)
 }
