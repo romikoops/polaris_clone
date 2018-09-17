@@ -151,7 +151,7 @@ class ShipmentCargoItems extends Component {
               {inputs.width}
               {inputs.height}
               <div className="flex-10" />
-              {inputs.grossWeight}
+              {scope.consolidate_cargo ? inputs.collectiveWeight : inputs.grossWeight}
             </div>
             <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
               {t('common:additionalDetails')}

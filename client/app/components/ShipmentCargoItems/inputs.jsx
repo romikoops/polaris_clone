@@ -116,6 +116,47 @@ export default function getInputs (
       <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
     </div>
   )
+  inputs.collectiveWeight = (
+    <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
+      <div className={`flex-85 layout-row ${styles.input_box}`}>
+        <div className="flex-40 layout-row layout-align-center-center">
+          {t('common:grossWeight')}
+        </div>
+        {
+          cargoItem ? (
+            <ValidatedInput
+              wrapperClassName="flex-60"
+              name={`${i}-collectiveWeight`}
+              value={cargoItem.payload_in_kg * cargoItem.quantity || ''}
+              type="number"
+              onChange={handleDelta}
+              firstRenderInputs={firstRenderInputs}
+              setFirstRenderInputs={this.setFirstRenderInputs}
+              nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
+              validations={{
+                nonNegative: (values, value) => value > 0,
+                maxDimension: (values, value) => value <= +maxDimensionsToApply.payloadInKg
+              }}
+              validationErrors={{
+                isDefaultRequiredValue: t('common:greaterZero'),
+                nonNegative: t('common:greaterZero'),
+                maxDimension: `${t('errors:maxWeight')} ${maxDimensionsToApply.payloadInKg}`
+              }}
+              required
+            />
+          ) : placeholderInput
+        }
+        <div className="flex-20 layout-row layout-align-center-center">
+          kg
+        </div>
+      </div>
+      <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+    </div>
+  )
 
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">

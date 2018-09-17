@@ -45,9 +45,24 @@ export class ShipmentDetails extends Component {
       offset: -180
     })
   }
+
   static errorsAt (errorsObjects) {
     return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
+
+  static handleCollectiveWeightChange (cargoItem, suffixName, value) {
+    const cargo = cargoItem
+    const prevCollectiveWeight = cargo.payload_in_kg * cargo.quantity
+    if (suffixName === 'quantity') {
+      cargo.payload_in_kg = prevCollectiveWeight / value
+      cargo.quantity = value
+    } else {
+      cargo.payload_in_kg = value / cargo.quantity
+    }
+
+    return cargo
+  }
+  
   constructor (props) {
     super(props)
     this.state = {
@@ -521,10 +536,13 @@ export class ShipmentDetails extends Component {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
+    const { scope } = this.props.tenant.data
 
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
+    } else if (scope.consolidated_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
+      cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
