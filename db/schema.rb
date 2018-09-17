@@ -653,14 +653,6 @@ ActiveRecord::Schema.define(version: 2018_09_13_133909) do
     t.jsonb "email_links"
   end
 
-  create_table "topology", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "srid", null: false
-    t.float "precision", null: false
-    t.boolean "hasz", default: false, null: false
-    t.index ["name"], name: "topology_name_key", unique: true
-  end
-
   create_table "transport_categories", force: :cascade do |t|
     t.integer "vehicle_id"
     t.string "mode_of_transport"
