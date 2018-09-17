@@ -7,3 +7,4 @@ require_relative 'application'
 Rails.application.initialize!
 
 ActiveRecord::SchemaDumper.ignore_tables = ["layer"]
+ActiveRecord::SchemaDumper.ignore_tables = ["spatial_ref_sys"]
