@@ -479,8 +479,8 @@ export class ShipmentLocationBox extends Component {
   handlePlaceChange (place, target) {
     this.changeAddressFormVisibility(target, true)
 
-    this.infowindow.close()
-    this.marker.setVisible(false)
+    // this.infowindow.close()
+    // this.marker.setVisible(false)
     if (!place.geometry) {
       return
     }

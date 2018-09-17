@@ -1,17 +1,34 @@
 import React, { PureComponent } from 'react'
 import PropTypes from '../../prop-types'
+import styles from './ShipmentLocationBox.scss'
+
 class Autocomplete extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = { 
       input: props.input,
-      results: []
+      results: [],
+      highlightIndex: 0
      }
      this.handleInputChange = this.handleInputChange.bind(this)
      this.handleSelect = this.handleSelect.bind(this)
+     this.deltaHighlightIndex = this.deltaHighlightIndex.bind(this)
+     this.handleKeyEvent = this.handleKeyEvent.bind(this)
   }
+
   componentDidMount () {
     this.intializeAutocomplete()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.input !== this.state.input) {
+      debugger
+      this.setState({input: nextProps.input})
+    }
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.handleKeyEvent)
   }
 
   intializeAutocomplete () {
@@ -24,21 +41,24 @@ class Autocomplete extends PureComponent {
     document.addEventListener('keydown', this.handleKeyEvent)
   }
 
+  getPlace (placeId, callback) {
+    const service = new this.props.gMaps.places.PlacesService(this.props.map)
+    service.getDetails({ placeId }, place => callback(place))
+  }
+
   handleKeyEvent (event) {
     const keyName = event.key
-    debugger
     switch (keyName) {
       case 'ArrowDown':
         this.deltaHighlightIndex(1)
-        break;
+        break
       case 'ArrowUp':
         this.deltaHighlightIndex(-1)
-        break;
+        break
       case 'Enter':
         this.handleSelectFromIndex()
-        break;
+        break
     }
-
   }
 
   handleSelectFromIndex() {
@@ -46,7 +66,7 @@ class Autocomplete extends PureComponent {
     this.handleSelect(results[highlightIndex])
   }
 
-  deltaHighlightIndex(delta) {
+  deltaHighlightIndex (delta) {
     const { results, highlightIndex } = this.state
     let newIndex = highlightIndex + delta
     if (newIndex > results.length - 1) {
@@ -60,29 +80,30 @@ class Autocomplete extends PureComponent {
   handleInputChange (event) {
     const {service} = this.state
     const input = event.target.value
+    if (!input || input === '') return this.setState({input: ''})
     service.getPlacePredictions({ input }, (results) => {
-      if (results.length > 0) {
-        this.setState({ results, input })
+      if (results && results.length > 0) {
+        this.setState({ results, input, hideResults: false }, () => this.initKeyboardListener())
       }
     })
   }
   handleSelect (result) {
     const { handlePlaceSelect } = this.props
-    getPlace(result.place_id, place => handlePlaceSelect(place))
+    this.getPlace(result.place_id, place => handlePlaceSelect(place))
+    this.setState({ hideResults: true })
   }
 
-  getPlace (placeId, callback) {
-    const service = new this.props.gMaps.places.PlacesService(this.state.map)
-    service.getDetails({ placeId }, place => callback(place))
-  }
+
 
   render() {
-    const { results, input } = this.state
+    const { results, input, highlightIndex, hideResults } = this.state
     const hasResults = results.length > 0
-    const resultCards = hasResults ? results.map((result) => {
+    const resultCards = hasResults ? results.map((result, i) => {
       return (
       <div
-        className="flex-100 layout-row layout-align-center-center"
+        className={`flex-100 layout-row layout-align-center-center
+          ${styles.autocomplete_card} ${highlightIndex === i ? styles.highlighted : ''}
+        `}
         onClick={() => this.handleSelect(result)}
       >
         <p className="flex">{result.description}</p>
@@ -90,17 +111,17 @@ class Autocomplete extends PureComponent {
     }) : []
 
     return ( 
-      <div className={`flex-100 layout-row layout-align-center-center ${style.autocomplete_container}`}>
-        <div className={`flex-100 layout-row input_box_full ${style.autocomplete_input}`}>
+      <div className={`flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
+        <div className={`flex-100 layout-row input_box_full ${styles.autocomplete_input}`}>
           <input
             type="text"
             value={input}
             onChange={this.handleInputChange}
           />
         </div>
-        <div className={`flex-100 layout-row input_box_full
-          ${hasResults ? style.show_results : styles.hide_results}`}>
-         {resultCards}
+        <div className={`flex-100 layout-row layout-wrap input_box_full
+          ${hasResults && !hideResults ? styles.show_results : styles.hide_results}`}>
+          {resultCards}
         </div>
       </div>
      );
