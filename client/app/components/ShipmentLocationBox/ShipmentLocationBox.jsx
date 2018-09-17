@@ -50,7 +50,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-export class ShipmentLocationBox extends Component {
+class ShipmentLocationBox extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -678,7 +678,12 @@ export class ShipmentLocationBox extends Component {
   }
 
   loadPrevReq (props) {
-    const { prevRequest, shipmentData, shipmentDispatch } = props
+    const {
+      prevRequest,
+      shipmentData,
+      shipmentDispatch,
+      t
+    } = props
     const { routes } = shipmentData
     if (!prevRequest || (prevRequest && !prevRequest.shipment)) {
       return
@@ -726,10 +731,15 @@ export class ShipmentLocationBox extends Component {
       (!newState.oSelect || (newState.oSelect && !newState.oSelect.label)) ||
       (!newState.dSelect || (newState.dSelect && !newState.dSelect.label))
     ) {
+      if (this.state.swapStarted) {
+        this.setState({
+          swapStarted: false
+        }, () => this.props.handleSwap())
+      }
       const errors = [
         {
           type: 'error',
-          text: `No routes found between ${shipment.origin.nexus_name} and ${shipment.destination.nexus_name}`
+          text: `${t('errors:noRoutesBetween')} ${shipment.origin.nexus_name} ${t('common:and')} ${shipment.destination.nexus_name}`
         }
       ]
       shipmentDispatch.setError({ stage: 'stage2', errors })
@@ -820,15 +830,18 @@ export class ShipmentLocationBox extends Component {
         truckingHubs: newTruckingHubs,
         truckTypes: newTruckTypes,
         originTruckingAvailable: destinationTruckingAvailable,
-        destinationTruckingAvailable: originTruckingAvailable
-      }, this.props.handleSwap())
+        destinationTruckingAvailable: originTruckingAvailable,
+        swapStarted: true
+      }, () => this.props.handleSwap())
 
       // Address Fields Errors
       const originFieldsHaveErrors = this.state.destinationFieldsHaveErrors
       const destinationFieldsHaveErrors = this.state.originFieldsHaveErrors
       this.setState({ originFieldsHaveErrors, destinationFieldsHaveErrors })
     } else {
-      this.props.handleSwap()
+      this.setState({
+        swapStarted: true
+      }, () => this.props.handleSwap())
     }
 
     /* eslint-enable camelcase */
@@ -971,6 +984,16 @@ export class ShipmentLocationBox extends Component {
     })
   }
 
+  isSwitchable () {
+    const { oSelect, dSelect, autoText } = this.state
+
+    return (
+      (!!oSelect.label && autoText.destination !== '') ||
+      (!!dSelect.label && autoText.origin !== '') ||
+      (!!dSelect.label && !!oSelect.label) ||
+      (autoText.origin !== '' && autoText.destination !== '')
+    )
+  }
   render () {
     const {
       scope, shipmentData, nextStageAttempts, origin, destination, selectedTrucking, t
@@ -1346,6 +1369,7 @@ export class ShipmentLocationBox extends Component {
     if (this.props.hideMap) {
       mapStyle.display = 'none'
     }
+    const isSwitchable = this.isSwitchable()
 
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1397,7 +1421,7 @@ export class ShipmentLocationBox extends Component {
 
               <div
                 className="flex-5 layout-row layout-align-center-center"
-                onClick={this.handleSwap}
+                onClick={isSwitchable ? this.handleSwap : null}
                 style={{ height: '60px' }}
               >
                 <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
