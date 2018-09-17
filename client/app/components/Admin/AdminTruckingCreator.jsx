@@ -47,6 +47,7 @@ export class AdminTruckingCreator extends Component {
         result = ''
         break
     }
+
     return result
   }
   constructor (props) {
@@ -157,6 +158,7 @@ export class AdminTruckingCreator extends Component {
         Object.keys(feeSchema.variableFees).forEach((k) => {
           tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
         })
+
         return tmp
       })
       tmpCell.side_lifter.table = cellSteps.map((s) => {
@@ -165,6 +167,7 @@ export class AdminTruckingCreator extends Component {
         Object.keys(feeSchema.variableFees).forEach((k) => {
           tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
         })
+
         return tmp
       })
     } else {
@@ -175,6 +178,7 @@ export class AdminTruckingCreator extends Component {
         Object.keys(feeSchema.variableFees).forEach((k) => {
           tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
         })
+
         return tmp
       })
     }
@@ -279,6 +283,7 @@ export class AdminTruckingCreator extends Component {
     const adjCellTable = cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table.map((x) => {
       const tx = x
       tx.min_value = parseInt(value, 10)
+
       return tx
     })
     cells[parseInt(nameKeys[0], 10)][nameKeys[1]].min_value = parseInt(value, 10)
@@ -326,6 +331,7 @@ export class AdminTruckingCreator extends Component {
       const tc = Object.assign({}, c)
       delete tc.min_value
       tc.currency = currency.label
+
       return tc
     })
     const meta = {
@@ -583,6 +589,7 @@ export class AdminTruckingCreator extends Component {
     )
     const stepSetter = <TruckingStepSetter theme={theme} saveSteps={this.saveSteps} />
     const feeBuilder = <TruckingFeeSetter theme={theme} setFees={this.setFeeSchema} />
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className="flex-none content_width layout-row layout-wrap layout-align-center-start">
