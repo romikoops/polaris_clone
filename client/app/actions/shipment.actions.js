@@ -165,6 +165,39 @@ function chooseOffer (data) {
   }
 }
 
+function sendQuotes (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SEND_QUOTES_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SEND_QUOTES_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SEND_QUOTES_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request(data))
+
+    shipmentService.sendQuotes(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function setShipmentContacts (data) {
   function request (shipmentData) {
     return {
@@ -529,6 +562,7 @@ export const shipmentActions = {
   reuseShipment,
   newShipment,
   chooseOffer,
+  sendQuotes,
   getOffers,
   setShipmentContacts,
   fetchShipment,

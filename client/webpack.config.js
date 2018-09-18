@@ -95,6 +95,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: 'i18n/en/**/*', to: './en', flatten: true},
+      { from: 'app/config.js' },
     ]),
     NodeEnvPlugin.isProduction
       ? false
@@ -108,3 +109,4 @@ module.exports = {
     })
   ].filter(Boolean)
 }
+

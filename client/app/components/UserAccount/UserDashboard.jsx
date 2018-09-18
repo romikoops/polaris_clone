@@ -149,14 +149,14 @@ export class UserDashboard extends Component {
             </div>
           </div>
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
-          <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
-        </div>
+            <span><b>{isQuote ? 'Quoted Shipments' : 'Requested Shipments' }</b></span>
+          </div>
           <ShipmentOverviewCard
             dispatches={userDispatch}
             noTitle
             shipments={preppedShipments}
             theme={theme}
-          />  
+          />
           <div className={`layout-row flex-100 layout-align-center-center ${ustyles.space}`}>
             <span className="flex-15" onClick={() => this.handleViewShipments()}>
               <u><b>{t('shipment:seeMoreShipments')}</b></u>
@@ -214,7 +214,6 @@ UserDashboard.propTypes = {
   scope: PropTypes.objectOf(PropTypes.bool),
   setCurrentUrl: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
-  match: PropTypes.match.isRequired,
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func

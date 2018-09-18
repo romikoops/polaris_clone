@@ -20,6 +20,12 @@ class Shipments::BookingProcessController < ApplicationController
     response_handler(resp)
   end
 
+  def send_quotes
+    shipment = Shipment.find(params[:shipment_id])
+    ShippingTools.save_and_send_quotes(shipment, params[:quotes], params[:email])
+    response_handler(params)
+  end
+
   def update_shipment
     resp = ShippingTools.update_shipment(params, current_user)
     response_handler(resp)

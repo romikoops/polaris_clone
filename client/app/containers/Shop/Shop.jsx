@@ -15,13 +15,14 @@ import { ChooseOffer } from '../../components/ChooseOffer/ChooseOffer'
 // eslint-disable-next-line no-named-as-default
 import Loading from '../../components/Loading/Loading'
 import BookingDetails from '../../components/BookingDetails/BookingDetails'
-import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
+import BookingConfirmation from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions, authenticationActions, userActions } from '../../actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 // eslint-disable-next-line no-named-as-default
 import ShipmentThankYou from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import stageActions from './stageActions'
+import GenericError from '../../components/ErrorHandling/Generic'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -187,138 +188,156 @@ class Shop extends Component {
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
         {loadingScreen}
-        <Header
-          theme={this.props.theme}
-          component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
-          showMessages={this.toggleShowMessages}
-          showRegistration={this.state.showRegistration}
-          noMessages
-          scrollable
-          noRedirect
-        />
-        <ShopStageView
-          shopType={this.state.shopType}
-          theme={theme}
-          tenant={tenant}
-          currentStage={this.state.stageTracker.stage}
-          setStage={this.selectShipmentStageAndGo}
-          disabledClick={Shop.statusRequested(this.props)}
-          goForward={() => this.determineForwardFunction(stageTracker.stage)}
-          hasNextStage={stageActions.hasNextStage(response, stageTracker.stage)}
-        />
-        <Route
-          exact
-          path={match.url}
-          render={props => (
-            <ChooseShipment
-              {...props}
-              theme={theme}
-              scope={scope}
-              selectLoadType={this.selectLoadType}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage1 : []}
-              shipmentDispatch={shipmentDispatch}
-            />
-          )}
-        />
-        <Route
-          path={`${match.url}/:shipmentId/shipment_details`}
-          render={props => (
-            <ShipmentDetails
-              {...props}
-              tenant={tenant}
-              user={user}
-              shipmentData={shipmentData}
-              prevRequest={request && request.stage2 ? request.stage2 : {}}
-              req={request && request.stage1 ? request.stage1 : {}}
-              getOffers={data => shipmentDispatch.getOffers(data, true)}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage2 : []}
-              shipmentDispatch={shipmentDispatch}
-              bookingSummaryDispatch={bookingSummaryDispatch}
-              reusedShipment={reusedShipment}
-              showRegistration={showRegistration}
-              hideRegistration={() => this.hideRegistration()}
-            />
-          )}
-        />
-        <Route
-          path={`${match.url}/:shipmentId/choose_offer`}
-          render={props => (
-            <ChooseOffer
-              {...props}
-              chooseOffer={this.chooseOffer}
-              theme={theme}
-              goTo={userDispatch.goTo}
-              tenant={tenant}
-              contacts={contacts}
-              shipmentData={shipmentData}
-              prevRequest={request && request.stage3 ? request.stage3 : null}
-              req={request && request.stage2 ? request.stage2 : {}}
-              user={user}
-              modal={modal}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage3 : []}
-              shipmentDispatch={shipmentDispatch}
-              reusedShipment={reusedShipment}
-              originalSelectedDay={originalSelectedDay}
-            />
-          )}
-        />
-        {response && response.stage3 ? (
+        <GenericError theme={theme}>
+          <Header
+            theme={this.props.theme}
+            component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
+            showMessages={this.toggleShowMessages}
+            showRegistration={this.state.showRegistration}
+            noMessages
+            scrollable
+            noRedirect
+          />
+        </GenericError >
+        <GenericError theme={theme}>
+
+          <ShopStageView
+            shopType={this.state.shopType}
+            theme={theme}
+            tenant={tenant}
+            currentStage={this.state.stageTracker.stage}
+            setStage={this.selectShipmentStageAndGo}
+            disabledClick={Shop.statusRequested(this.props)}
+            goForward={() => this.determineForwardFunction(stageTracker.stage)}
+            hasNextStage={stageActions.hasNextStage(response, stageTracker.stage)}
+          />
+        </GenericError >
+        <GenericError theme={theme}>
           <Route
-            path={`${match.url}/:shipmentId/final_details`}
+            exact
+            path={match.url}
             render={props => (
-              <BookingDetails
+              <ChooseShipment
                 {...props}
-                nextStage={this.setShipmentContacts}
                 theme={theme}
-                shipmentData={shipmentData}
-                prevRequest={request && request.stage4 ? request.stage4 : null}
-                currencies={currencies}
+                scope={scope}
+                selectLoadType={this.selectLoadType}
                 setStage={this.selectShipmentStage}
-                messages={error ? error.stage4 : []}
+                messages={error ? error.stage1 : []}
+                shipmentDispatch={shipmentDispatch}
+              />
+            )}
+          />
+        </GenericError >
+        <GenericError theme={theme}>
+          <Route
+            path={`${match.url}/:shipmentId/shipment_details`}
+            render={props => (
+              <ShipmentDetails
+                {...props}
                 tenant={tenant}
                 user={user}
-                contacts={contacts}
+                shipmentData={shipmentData}
+                prevRequest={request && request.stage2 ? request.stage2 : {}}
+                req={request && request.stage1 ? request.stage1 : {}}
+                getOffers={data => shipmentDispatch.getOffers(data, true)}
+                setStage={this.selectShipmentStage}
+                messages={error ? error.stage2 : []}
                 shipmentDispatch={shipmentDispatch}
-                hideRegistration={this.hideRegistration}
+                bookingSummaryDispatch={bookingSummaryDispatch}
+                reusedShipment={reusedShipment}
+                showRegistration={showRegistration}
+                hideRegistration={() => this.hideRegistration()}
+              />
+            )}
+          />
+        </GenericError >
+        <GenericError theme={theme}>
+          <Route
+            path={`${match.url}/:shipmentId/choose_offer`}
+            render={props => (
+              <ChooseOffer
+                {...props}
+                chooseOffer={this.chooseOffer}
+                theme={theme}
+                tenant={tenant}
+                contacts={contacts}
+                shipmentData={shipmentData}
+                prevRequest={request && request.stage3 ? request.stage3 : null}
+                req={request && request.stage2 ? request.stage2 : {}}
+                user={user}
+                setStage={this.selectShipmentStage}
+                messages={error ? error.stage3 : []}
+                shipmentDispatch={shipmentDispatch}
+                reusedShipment={reusedShipment}
+                originalSelectedDay={originalSelectedDay}
+              />
+            )}
+          />
+        </GenericError >
+
+        {response && response.stage3 ? (
+          <GenericError theme={theme}>
+            <Route
+              path={`${match.url}/:shipmentId/final_details`}
+              render={props => (
+                <BookingDetails
+                  {...props}
+                  nextStage={this.setShipmentContacts}
+                  theme={theme}
+                  shipmentData={shipmentData}
+                  prevRequest={request && request.stage4 ? request.stage4 : null}
+                  currencies={currencies}
+                  setStage={this.selectShipmentStage}
+                  messages={error ? error.stage4 : []}
+                  tenant={tenant}
+                  user={user}
+                  contacts={contacts}
+                  shipmentDispatch={shipmentDispatch}
+                  hideRegistration={this.hideRegistration}
+                  reusedShipment={reusedShipment}
+                />
+              )}
+            />
+          </GenericError >
+
+        ) : (
+          ''
+        )}
+        <GenericError theme={theme}>
+          <Route
+            path={`${match.url}/:shipmentId/finish_booking`}
+            render={props => (
+              <BookingConfirmation
+                {...props}
+                theme={theme}
+                tenant={tenant.data}
+                user={user}
+                shipmentData={shipmentData}
+                setStage={this.selectShipmentStage}
+                shipmentDispatch={shipmentDispatch}
                 reusedShipment={reusedShipment}
               />
             )}
           />
-        ) : (
-          ''
-        )}
-        <Route
-          path={`${match.url}/:shipmentId/finish_booking`}
-          render={props => (
-            <BookingConfirmation
-              {...props}
-              theme={theme}
-              tenant={tenant.data}
-              user={user}
-              shipmentData={shipmentData}
-              setStage={this.selectShipmentStage}
-              shipmentDispatch={shipmentDispatch}
-              reusedShipment={reusedShipment}
-            />
-          )}
-        />
-        <Route
-          path={`${match.url}/:shipmentId/thank_you`}
-          render={props => (
-            <ShipmentThankYou
-              {...props}
-              theme={theme}
-              tenant={tenant.data}
-              user={user}
-              shipmentData={shipmentData}
-              setStage={this.selectShipmentStage}
-              shipmentDispatch={shipmentDispatch}
-            />
-          )}
-        />
+        </GenericError >
+        <GenericError theme={theme}>
+          <Route
+            path={`${match.url}/:shipmentId/thank_you`}
+            render={props => (
+              <ShipmentThankYou
+                {...props}
+                theme={theme}
+                tenant={tenant.data}
+                user={user}
+                shipmentData={shipmentData}
+                setStage={this.selectShipmentStage}
+                shipmentDispatch={shipmentDispatch}
+              />
+            )}
+          />
+        </GenericError >
+
         <div className={styles.pusher_bottom} />
       </div>
     )
@@ -343,7 +362,6 @@ Shop.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   currencies: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
-  dashboard: PropTypes.any,
 
   history: PropTypes.history.isRequired,
   match: PropTypes.shape({
@@ -357,6 +375,7 @@ Shop.propTypes = {
     updateContact: PropTypes.func,
     newShipment: PropTypes.func,
     getOffers: PropTypes.func,
+    sendQuotes: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   userDispatch: PropTypes.shape({
@@ -378,8 +397,7 @@ Shop.defaultProps = {
   tenant: null,
   user: null,
   nexusDispatch: null,
-  currencies: null,
-  dashboard: null
+  currencies: null
 }
 
 function mapStateToProps (state) {
