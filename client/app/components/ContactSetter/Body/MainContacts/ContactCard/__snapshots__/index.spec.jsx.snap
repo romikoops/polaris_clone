@@ -39,9 +39,15 @@ exports[`shallow render 1`] = `
     <h3
       className="contact_name"
     >
-      John
-       
-      Doe
+      <Truncate
+        ellipsis="…"
+        lines={1}
+        trimWhitespace={false}
+      >
+        John
+         
+        Doe
+      </Truncate>
        
       <br />
       <span

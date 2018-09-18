@@ -68,6 +68,9 @@ exports[`shallow render 1`] = `
           "value": 12,
         },
         "trucking": Object {
+          "on_carriage": Object {
+            "trucking_time_in_seconds": 55,
+          },
           "pre_carriage": Object {
             "trucking_time_in_seconds": 55,
           },
@@ -261,6 +264,9 @@ exports[`shallow render 1`] = `
               "value": 12,
             },
             "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
               "pre_carriage": Object {
                 "trucking_time_in_seconds": 55,
               },
@@ -582,6 +588,9 @@ exports[`theme is falsy 1`] = `
               "value": 12,
             },
             "trucking": Object {
+              "on_carriage": Object {
+                "trucking_time_in_seconds": 55,
+              },
               "pre_carriage": Object {
                 "trucking_time_in_seconds": 55,
               },
