@@ -167,4 +167,10 @@
   .deselected_text {
     opacity: 0.25;
   }
+  .view_switch {
+    cursor: pointer;
+    p {
+      font-size: 12px;
+    }
+  }
 }

@@ -124,7 +124,7 @@ module ShippingTools
     last_trip_date = last_trip(current_user)
     {
       shipment:        offer_calculator.shipment,
-      schedules:       offer_calculator.detailed_schedules,
+      results:         offer_calculator.detailed_schedules,
       originHubs:      offer_calculator.hubs[:origin],
       destinationHubs: offer_calculator.hubs[:destination],
       cargoUnits:      offer_calculator.shipment.cargo_units,
