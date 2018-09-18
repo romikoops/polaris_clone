@@ -179,6 +179,9 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -203,36 +206,64 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -1205,6 +1236,9 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -1229,36 +1263,64 @@ exports[`props.shipmentData.documents is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -2288,6 +2350,9 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -2312,36 +2377,64 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -3426,6 +3519,9 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -3450,42 +3546,56 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-center"
+                className="flex-100 layout-row layout-align-center-center buffer_10"
               >
                 <address
                   className="flex-none"
@@ -3498,10 +3608,23 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                   , 
                   <br />
                   845321
-                  , 
-                  <br />
-                  China
+                  ,
+                   China
                 </address>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  NO_TRANSLATION | key "bookconf:expectedDelivery":
+                </p>
+                <p
+                  className="flex-30 center"
+                >
+                  19
+                </p>
               </div>
             </div>
           </div>
@@ -4457,6 +4580,9 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -4481,54 +4607,80 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Collection:
+                  NO_TRANSLATION | key "bookconf:expectedPickup":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
               <div
-                className="flex-100 layout-row layout-align-center-center"
+                className="flex-100 layout-row layout-align-center-center buffer_10"
               >
                 <address
                   className="flex-none"
                 >
                   7 FOO_STREET
                   ,
-                  <br />
-                  FOO_CITY
+                   FOO_CITY
                   , 
                   <br />
                   21177
-                  , 
-                  <br />
-                  Germany
+                  ,
+                   Germany
                 </address>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
+                >
+                  19
+                </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -5487,6 +5639,9 @@ exports[`shallow render 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -5511,36 +5666,64 @@ exports[`shallow render 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -6499,6 +6682,9 @@ exports[`with cargo items 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -6523,36 +6709,64 @@ exports[`with cargo items 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -7068,6 +7282,9 @@ exports[`with cargo items 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
@@ -7237,6 +7454,9 @@ exports[`with cargo items 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
@@ -7824,6 +8044,9 @@ exports[`with containers 1`] = `
                   "value": 12,
                 },
                 "trucking": Object {
+                  "on_carriage": Object {
+                    "trucking_time_in_seconds": 55,
+                  },
                   "pre_carriage": Object {
                     "trucking_time_in_seconds": 55,
                   },
@@ -7848,36 +8071,64 @@ exports[`with containers 1`] = `
             }
           >
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
-                  Expected Time of Departure:
+                  NO_TRANSLATION | key "bookconf:expectedDropoff":
                 </p>
                 <p
-                  className="flex-90 offset-10  center"
+                  className="flex-30  center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Departure
+                </p>
+                <p
+                  className="flex-30  center"
                 >
                   19
                 </p>
               </div>
             </div>
             <div
-              className="flex-40 layout-row layout-wrap layout-align-center-center"
+              className="flex-40 layout-row layout-wrap layout-align-center-start"
             >
               <div
-                className="flex-80 layout-row layout-wrap layout-align-start-start"
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
               >
                 <p
-                  className="flex-100 letter_3"
+                  className="flex-70 "
                 >
                    Expected Time of Arrival:
                 </p>
                 <p
-                  className="flex-90 offset-10 center"
+                  className="flex-30 center"
+                >
+                  19
+                </p>
+              </div>
+              <div
+                className="flex-80 layout-row layout-wrap layout-align-start-start buffer_10"
+              >
+                <p
+                  className="flex-70 "
+                >
+                  Expected Time of Collection:
+                </p>
+                <p
+                  className="flex-30 center"
                 >
                   19
                 </p>
@@ -8375,6 +8626,9 @@ exports[`with containers 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },
@@ -8520,6 +8774,9 @@ exports[`with containers 1`] = `
                     "value": 12,
                   },
                   "trucking": Object {
+                    "on_carriage": Object {
+                      "trucking_time_in_seconds": 55,
+                    },
                     "pre_carriage": Object {
                       "trucking_time_in_seconds": 55,
                     },

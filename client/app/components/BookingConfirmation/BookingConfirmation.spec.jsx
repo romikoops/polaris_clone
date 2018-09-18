@@ -28,6 +28,7 @@ jest.mock('../../helpers', () => ({
 jest.mock('../../constants', () => {
   const format = () => 19
   const subtract = () => ({ format })
+  const add = () => ({ format })
 
   const moment = () => ({
     format,
