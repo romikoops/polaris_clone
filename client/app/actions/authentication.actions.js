@@ -2,7 +2,7 @@ import { push } from 'react-router-redux'
 import { authenticationConstants } from '../constants'
 import { authenticationService } from '../services'
 import { alertActions, shipmentActions, adminActions, userActions, tenantActions } from './'
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
 const subdomainKey = getSubdomain()

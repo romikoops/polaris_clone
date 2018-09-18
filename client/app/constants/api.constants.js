@@ -1,4 +1,4 @@
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 let url
 

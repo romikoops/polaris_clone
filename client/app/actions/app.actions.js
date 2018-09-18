@@ -11,7 +11,7 @@ import {
   documentActions,
   tenantActions
 } from './'
-import { getSubdomain } from '../helpers'
+import getSubdomain from '../helpers'
 // import { Promise } from 'es6-promise-promise';
 
 const { fetch } = window

@@ -1,5 +1,6 @@
 import { Promise } from 'es6-promise-promise'
-import { authHeader, getSubdomain } from '../helpers'
+import { authHeader } from '../helpers'
+import getSubdomain from '../helpers/subdomain'
 import { BASE_URL } from '../constants'
 
 const { fetch, FormData } = window

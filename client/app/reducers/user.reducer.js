@@ -1,6 +1,6 @@
 import merge from 'lodash/merge'
 import { userConstants } from '../constants'
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 const { localStorage } = window
 
