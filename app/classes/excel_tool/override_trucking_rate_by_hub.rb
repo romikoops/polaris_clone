@@ -278,7 +278,6 @@ module ExcelTool
         courier_id:  find_or_create_courier(meta[:courier]).id,
         truck_type:  !meta[:truck_type] || meta[:truck_type] == "" ? "default" : meta[:truck_type]
       )
-
       TruckingPricing.new(
         load_meterage:          {
           ratio:        meta[:load_meterage_ratio],

@@ -28,10 +28,12 @@ jest.mock('../../helpers', () => ({
 jest.mock('../../constants', () => {
   const format = () => 19
   const subtract = () => ({ format })
+  const add = () => ({ format })
 
   const moment = () => ({
     format,
-    subtract
+    subtract,
+    add
   })
   const shipmentStatii = {
     booking_process_started: 'Booking Process Started',

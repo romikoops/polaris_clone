@@ -35,7 +35,6 @@ class DocumentsForm extends React.Component {
     }
   }
   onChange (e) {
-    // this.setState({file: e.target.files[0]});
     this.fileUpload(e.target.files[0])
   }
   fileUpload (baseFile) {
@@ -55,6 +54,8 @@ class DocumentsForm extends React.Component {
       fileExt === 'jpg' ||
       fileExt === 'tiff' ||
       fileExt === 'png' ||
+      fileExt === 'xls' ||
+      fileExt === 'xlsx' ||
       fileExt === 'pdf'
     ) {
       if (dispatchFn) {
