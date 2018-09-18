@@ -109,7 +109,7 @@ export class AdminDashboard extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const isQuote = scope.closed_quotation_tool || scope.open_quotation_tool
+    const isQuote = scope && (scope.closed_quotation_tool || scope.open_quotation_tool)
     const shipmentsToDisplay = isQuote ? shipments.quoted : shipments.requested
     const preppedShipments = shipmentsToDisplay ? shipmentsToDisplay.slice(0, perPage)
       .map(s => AdminDashboard.prepShipment(s, clientHash, hubHash)) : []
@@ -234,7 +234,7 @@ AdminDashboard.propTypes = {
 
 AdminDashboard.defaultProps = {
   theme: null,
-  scope: null,
+  scope: {},
   confirmShipmentData: {},
   user: {},
   dashData: null,
