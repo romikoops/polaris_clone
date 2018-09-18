@@ -545,13 +545,16 @@ export class ShipmentDetails extends Component {
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
+    const adjustedSuffix = suffixName === 'collectiveWeight' ? 'payload_in_kg' : suffixName
 
-    this.updateAirMaxDimensionsTooltips(value, divRef, suffixName)
+    this.updateAirMaxDimensionsTooltips(value, divRef, adjustedSuffix)
 
     const excessChargeableWeightText =
       this.updatedExcessChargeableWeightText(cargoItems)
 
-    if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
+    if (hasError !== undefined) {
+      cargoItemsErrors[index][adjustedSuffix] = hasError
+    }
     this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
