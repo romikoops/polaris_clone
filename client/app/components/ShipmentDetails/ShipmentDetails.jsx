@@ -59,7 +59,6 @@ export class ShipmentDetails extends Component {
     } else {
       cargo.payload_in_kg = value / cargo.quantity
     }
-
     return cargo
   }
   
@@ -541,18 +540,21 @@ export class ShipmentDetails extends Component {
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
-    } else if (scope.consolidated_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
+    } else if (scope.consolidate_cargo && ['collectiveWeight', 'quantity'].includes(suffixName)) {
       cargoItems[index] = ShipmentDetails.handleCollectiveWeightChange(cargoItems[index], suffixName, value)
     } else {
       cargoItems[index][suffixName] = value ? +value : 0
     }
+    const adjustedSuffix = suffixName === 'collectiveWeight' ? 'payload_in_kg' : suffixName
 
-    this.updateAirMaxDimensionsTooltips(value, divRef, suffixName)
+    this.updateAirMaxDimensionsTooltips(value, divRef, adjustedSuffix)
 
     const excessChargeableWeightText =
       this.updatedExcessChargeableWeightText(cargoItems)
 
-    if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
+    if (hasError !== undefined) {
+      cargoItemsErrors[index][adjustedSuffix] = hasError
+    }
     this.setState({ cargoItems, cargoItemsErrors, excessChargeableWeightText })
   }
 
