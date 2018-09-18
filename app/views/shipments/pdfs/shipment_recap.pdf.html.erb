@@ -1,1 +1,65 @@
-<p>lmao</p>
+<% primary_color = shipment.tenant.theme["colors"]["primary"] %>
+<div class="wrapper-quotations wrapper wrapper-shipments">
+  <div class="row">
+    <div class="col-xs-6 title-shipments" style="font-size: 150%; text-align: left;">
+      <h1>Shipment recap</h1>
+      
+    </div>
+    <div class="col-xs-6 tenant-shipments" style="font-size: 60px; text-align: right;">
+      <h1><%= shipment.tenant.name %></h1>
+    </div>
+  </div>
+  <hr class="hr-shipment" style="border-color: <%= primary_color %>">
+  <div class="row">
+    <p class="ref col-xs-6">Ref:&nbsp;<span><%= shipment.imc_reference %></span></p>
+    <p class="ref col-xs-6" style="text-align: right;">Placed at:&nbsp;<span><%= shipment.updated_at %></span></p>
+  </div>
+  <div class="overview">
+    <div class="info border-none row">
+      <% if shipment.itinerary.mode_of_transport == "ocean" %>
+        <% mot = "anchor" %>
+      <% elsif shipment.itinerary.mode_of_transport == "air" %>
+        <% mot = "paper-plane" %>
+      <% else %>
+        <% mot = "truck" %>
+      <% end %>
+      <i class="fas fa-<%= mot %> col-xs-2" style="color: <%= primary_color %>"></i>
+      <div class="col-xs-7">
+        <p>From:&nbsp;<span><%= shipment.origin_hub.name %></span></p>
+        <p>To:&nbsp;<span><%= shipment.destination_hub.name %></span></p>
+      </div>
+    </div>
+  </div>
+  <div class="row dates">
+    <div class="col-xs-3">
+      <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pickup Date' : 'Closing Date' %></h4>
+      <p class="sched-elem">
+        <% if shipment.has_pre_carriage %>
+          <%= shipment.closing_date - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"] %>
+        <% else %>
+          <%= shipment.closing_date %>
+        <% end %>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <h4 class="date-title">ETD</h4>
+      <p class="sched-elem">
+        <%= shipment.etd %>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <h4 class="date-title">ETA</h4>
+      <p class="sched-elem">
+        <%= shipment.eta %>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <h4 class="date-title"> Estimated T/T <sup>*</sup></h4>
+      <p class="sched-elem">
+        <%= shipment.eta - shipment.etd %>
+        Days
+      </p>
+    </div>
+  </div>
+  
+</div>
