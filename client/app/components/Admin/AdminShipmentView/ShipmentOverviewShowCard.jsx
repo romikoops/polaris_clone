@@ -6,6 +6,7 @@ import { checkPreCarriage, gradientTextGenerator } from '../../../helpers'
 
 export default function ShipmentOverviewShowCard ({
   et,
+  dt,
   hub,
   bg,
   editTime,
@@ -70,10 +71,16 @@ export default function ShipmentOverviewShowCard ({
                 />
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <h4 className="flex-95 no_m layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
-                    {shipment.pickup_address
-                      ? `on ${moment(checkPreCarriage(shipment, 'Pick-up').date)
-                        .format('DD/MM/YYYY')}`
-                      : ''}
+                    {dt ? <div className="layout-row layout-align-start-center">
+                      <div className="flex-100 layout-align-center-start">
+                        <span>
+                          {text}
+                        </span>
+                        <div className="layout-row layout-align-start-center">
+                          {dt}
+                        </div>
+                      </div>
+                    </div> : '' }
                   </h4>
                   {shipment.pickup_address ? (
                     <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address}`}>
@@ -97,10 +104,16 @@ export default function ShipmentOverviewShowCard ({
               />
               <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                 <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
-                  {shipment.delivery_address
-                    ? `on ${moment(checkPreCarriage(shipment, 'Delivery').date)
-                      .format('DD/MM/YYYY')}`
-                    : ''}
+                  {dt ? <div className="layout-row layout-align-start-center">
+                    <div className="flex-100 layout-align-center-start">
+                      <span>
+                        {text}
+                      </span>
+                      <div className="layout-row layout-align-start-center">
+                        {dt}
+                      </div>
+                    </div>
+                  </div> : '' }
                 </h4>
                 {shipment.delivery_address ? (
                   <div className={`layout-row flex-95 layout-align-start-center ${styles.carriage_address} ${styles.margin_fixes}`}>
@@ -126,6 +139,7 @@ export default function ShipmentOverviewShowCard ({
 
 ShipmentOverviewShowCard.propTypes = {
   et: PropTypes.node.isRequired,
+  dt: PropTypes.node.isRequired,
   hub: PropTypes.hub.isRequired,
   bg: PropTypes.objectOf(PropTypes.string),
   shipment: PropTypes.objectOf(PropTypes.any),

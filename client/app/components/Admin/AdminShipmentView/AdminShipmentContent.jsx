@@ -60,6 +60,8 @@ export class AdminShipmentContent extends Component {
       bg2,
       switchIcon,
       dnrEditKeys,
+      pickupTime,
+      delivery,
       showEditTime,
       saveNewTime,
       toggleEditTime,
@@ -97,14 +99,15 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       et={etdJSX}
+                      dt={pickupTime}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
                       shipment={shipment}
                       bg={bg1}
-                      editTime={showEditTime}
-                      handleSaveTime={saveNewTime}
-                      toggleEditTime={toggleEditTime}
+                      editTime={this.state.showEditTime}
+                      handleSaveTime={this.saveNewTime}
+                      toggleEditTime={this.toggleEditTime}
                       isAdmin={!dnrEditKeys.includes(shipment.status)}
                     />
                   </div>
@@ -128,14 +131,15 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       et={etaJSX}
+                      dt={deliveryTime}
                       text="ETA"
                       theme={theme}
                       hub={shipment.destination_hub}
                       bg={bg2}
                       shipment={shipment}
-                      editTime={showEditTime}
-                      handleSaveTime={saveNewTime}
-                      toggleEditTime={toggleEditTime}
+                      editTime={this.state.showEditTime}
+                      handleSaveTime={this.saveNewTime}
+                      toggleEditTime={this.toggleEditTime}
                       isAdmin={!dnrEditKeys.includes(shipment.status)}
                     />
                   </div>

@@ -90,6 +90,12 @@ export class AdminShipmentView extends Component {
         },
         etd: {
           day: new Date(moment(shipment.planned_etd).format())
+        },
+        pickupTime: {
+          day: new Date(moment(shipment.planned_pickup_date).format())
+        },
+        deliveryTime: {
+          day: new Date(moment(shipment.planned_origin_drop_off_date).format())
         }
       },
       newPrices: {
@@ -294,11 +300,24 @@ export class AdminShipmentView extends Component {
     const newEtd = moment(newTimes.etd.day)
       .startOf('day')
       .format('lll')
+    const newPickupTime = moment(newTimes.pickupTime.day)
+      .startOf('day')
+      .format('lll')
+    const newDeliveryTime = moment(newTimes.deliveryTime.day)
+      .startOf('day')
+      .format('lll')
 
-    const timeObj = { newEta, newEtd }
+    const timeObj = {
+      newEta,
+      newEtd,
+      newPickupTime,
+      newDeliveryTime
+    }
+
     shipment.planned_eta = moment(newTimes.eta.day)
     shipment.planned_etd = moment(newTimes.etd.day)
-
+    shipment.planned_pickup_date = moment(newTimes.pickupTime.day)
+    shipment.planned_origin_drop_off_date = moment(newTimes.deliveryTime.day)
     adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
     this.toggleEditTime()
   }
@@ -506,6 +525,37 @@ export class AdminShipmentView extends Component {
       name: 'dayPicker'
     }
 
+    const dayPickerPropsPt = {
+      disabledDays: {
+        after: newTimes.eta.day,
+        before: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsDt = {
+      disabledDays: {
+        before: newTimes.eta.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
     const etdJSX = showEditTime ? (
       <div className="layout-row flex-100">
         <div className="flex-65 layout-row">
@@ -547,6 +597,49 @@ export class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
+
+    const pickupTime = showEditTime && shipment.planned_pickup_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.pickupTime.day}
+            onDayChange={e => this.handleDayChange(e, 'pickupTime')}
+            dayPickerProps={dayPickerPropsPt}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {shipment.planned_pickup_date ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}` : ''}
+      </p>
+    )
+
+    const deliveryTime = showEditTime && shipment.planned_origin_drop_off_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.deliveryTime.day}
+            onDayChange={e => this.handleDayChange(e, 'deliveryTime')}
+            dayPickerProps={dayPickerPropsDt}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {shipment.planned_origin_drop_off_date ? `${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}` : ''}
+      </p>
+    )
+
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
 
