@@ -114,7 +114,7 @@ export class LandingTop extends Component {
                   user.role &&
                   !isClosed &&
                   ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
-                  ) || (isClosed && !user)) &&
+                  ) || (!isClosed && !user)) &&
                   findRates}
                 {
                   user &&

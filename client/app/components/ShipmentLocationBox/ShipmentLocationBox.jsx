@@ -17,6 +17,7 @@ import routeFilters from './routeFilters'
 import routeHelpers from './routeHelpers'
 import TruckingTooltip from './TruckingTooltip'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
+import Autocomplete from './Autocomplete'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
@@ -399,21 +400,21 @@ class ShipmentLocationBox extends Component {
       map,
       directionsService,
       directionsDisplay
+    }, () => {
+      if (this.props.has_pre_carriage) {
+        this.initAutocomplete(this.state.map, 'origin')
+        setTimeout(() => {
+          this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
+        }, 1000)
+      }
+
+      if (this.props.has_on_carriage) {
+        this.initAutocomplete(this.state.map, 'destination')
+        setTimeout(() => {
+          this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
+        }, 1000)
+      }
     })
-
-    if (this.props.has_pre_carriage) {
-      this.initAutocomplete(map, 'origin')
-      setTimeout(() => {
-        this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
-      }, 750)
-    }
-
-    if (this.props.has_on_carriage) {
-      this.initAutocomplete(map, 'destination')
-      setTimeout(() => {
-        this.triggerPlaceChanged(this.state.autoText.destination, 'destination')
-      }, 750)
-    }
   }
 
   initAutocomplete (map, target) {
@@ -432,9 +433,9 @@ class ShipmentLocationBox extends Component {
 
   postToggleAutocomplete (target) {
     const { map } = this.state
-
-    if (target === 'origin' || target === 'destination') {
-      setTimeout(() => this.initAutocomplete(map, target), 1000)
+    if ( target === 'destination') {
+      const timeout = map ? 1000 : 2000
+      setTimeout(() => this.initAutocomplete(map, target), timeout)
     }
   }
 
@@ -478,8 +479,8 @@ class ShipmentLocationBox extends Component {
   handlePlaceChange (place, target) {
     this.changeAddressFormVisibility(target, true)
 
-    this.infowindow.close()
-    this.marker.setVisible(false)
+    // this.infowindow.close()
+    // this.marker.setVisible(false)
     if (!place.geometry) {
       return
     }
@@ -1015,7 +1016,7 @@ class ShipmentLocationBox extends Component {
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
-
+    const requireFullAddress = scope.require_full_address
     const showOriginError = !this.state.oSelect && nextStageAttempts > 0
     const originNexus = (
       <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
@@ -1080,7 +1081,7 @@ class ShipmentLocationBox extends Component {
             name="origin-street"
             className={
               `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.street ? styles.with_errors : ''}`
+              `${nextStageAttempts > 0 && !origin.street && requireFullAddress ? styles.with_errors : ''}`
             }
             type="string"
             onChange={this.handleAddressChange}
@@ -1095,7 +1096,7 @@ class ShipmentLocationBox extends Component {
             name="origin-number"
             className={
               `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !origin.number ? styles.with_errors : ''}`
+              `${nextStageAttempts > 0 && !origin.number && requireFullAddress ? styles.with_errors : ''}`
             }
             type="string"
             onChange={this.handleAddressChange}
@@ -1164,23 +1165,15 @@ class ShipmentLocationBox extends Component {
 
     const originAuto = (
       <div className="flex-100 layout-row layout-wrap">
-        <div className={styles.input_wrapper}>
-          <input
-            id="origin"
-            name="origin"
-            ref={input => (this.originAutoInput = input)}
-            className={`flex-none ${styles.input} ${
-              originFieldsHaveErrors ? styles.with_errors : ''
-            }`}
-            type="string"
-            onChange={this.handleAuto}
-            value={this.state.autoText.origin}
-            placeholder={t('nav:searchAddress')}
-          />
-          <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {originFieldsHaveErrors ? t('errors:noRoutes') : ''}
-          </span>
-        </div>
+        <Autocomplete
+          gMaps={this.props.gMaps}
+          theme={this.props.theme}
+          t={t}
+          map={this.state.map}
+          input={this.state.autoText.origin}
+          hasErrors={originFieldsHaveErrors}
+          handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
+        />
       </div>
     )
 
@@ -1210,7 +1203,7 @@ class ShipmentLocationBox extends Component {
             name="destination-street"
             className={
               `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.street ? styles.with_errors : ''}`
+              `${nextStageAttempts > 0 && !destination.street && requireFullAddress ? styles.with_errors : ''}`
             }
             onChange={this.handleAddressChange}
             onFocus={this.handleAddressFormFocus}
@@ -1223,7 +1216,7 @@ class ShipmentLocationBox extends Component {
             name="destination-number"
             className={
               `flex-90 ${styles.input} ` +
-              `${nextStageAttempts > 0 && !destination.number ? styles.with_errors : ''}`
+              `${nextStageAttempts > 0 && !destination.number && requireFullAddress ? styles.with_errors : ''}`
             }
             type="string"
             onChange={this.handleAddressChange}
@@ -1290,22 +1283,15 @@ class ShipmentLocationBox extends Component {
     const destAuto = (
       <div className="flex-100 layout-row layout-wrap">
         <div className={styles.input_wrapper}>
-          <input
-            id="destination"
-            name="destination"
-            ref={input => (this.destinationAutoInput = input)}
-            className={
-              `flex-none ${styles.input} ` +
-              `${destinationFieldsHaveErrors ? styles.with_errors : ''}`
-            }
-            type="string"
-            onChange={this.handleAuto}
-            value={this.state.autoText.destination}
-            placeholder={t('nav:searchAddress')}
+          <Autocomplete
+            gMaps={this.props.gMaps}
+            theme={this.props.theme}
+            t={t}
+            hasErrors={destinationFieldsHaveErrors}
+            map={this.state.map}
+            input={this.state.autoText.destination}
+            handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
           />
-          <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {destinationFieldsHaveErrors ? t('errors:noRoutes') : ''}
-          </span>
         </div>
       </div>
     )
@@ -1334,6 +1320,7 @@ class ShipmentLocationBox extends Component {
         border: 0.5px solid rgba(0, 0, 0, 0);
       }
     `
+
     const loadType = shipment.load_type
     const preCarriageTruckTypes = (
       <div className="flex-100 layout-row layout-align-center-center">

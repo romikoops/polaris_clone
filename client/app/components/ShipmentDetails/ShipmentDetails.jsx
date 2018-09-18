@@ -631,11 +631,13 @@ export class ShipmentDetails extends Component {
     const {
       origin, destination, selectedDay, incoterm
     } = this.state
+    const { scope } = this.props.tenant.data
+    const requiresFullAddress = scope.require_full_address
     if (
       (!origin.nexus_id && !this.state.has_pre_carriage) ||
       (!destination.nexus_id && !this.state.has_on_carriage) ||
-      (!addressFieldsAreValid(origin) && this.state.has_pre_carriage) ||
-      (!addressFieldsAreValid(destination) && this.state.has_on_carriage) ||
+      (!addressFieldsAreValid(origin, requiresFullAddress) && this.state.has_pre_carriage) ||
+      (!addressFieldsAreValid(destination, requiresFullAddress) && this.state.has_on_carriage) ||
       this.state.addressFormsHaveErrors
     ) {
       this.incrementNextStageAttemps()
