@@ -104,7 +104,7 @@ class Autocomplete extends PureComponent {
       if (hideResults) {
         const newTimeout = setTimeout(() => {
           this.setState({ hideResults: true })
-        }, 1000)
+        }, 5000)
 
         return {
           hideResults: false,
@@ -140,7 +140,9 @@ class Autocomplete extends PureComponent {
   }
 
   shouldTriggerInputChange (event) {
-    const { searchTimeout } = this.state
+    const { value } = event.target
+    const { searchTimeout, input } = this.state
+    if (value === input) return null
     if (searchTimeout) {
       clearTimeout(searchTimeout)
     }
@@ -195,7 +197,7 @@ class Autocomplete extends PureComponent {
     const highlightStyle = {
       borderBottom: `5px solid ${theme.colors.primary}`
     }
-    const areaResultCards = hasResults
+    const areaResultCards = hasAreaResults
       ? areaResults
         .slice(0, numResults)
         .map((result, i) => {
@@ -211,7 +213,7 @@ class Autocomplete extends PureComponent {
               <p className="flex"><Truncate lines={1} >{result.description}</Truncate></p>
             </div>)
         }) : []
-    const addressResultCards = hasResults
+    const addressResultCards = hasAddressResults
       ? addressResults
         .filter(result => !areaResults.some(element => element.description === result.description))
         .slice(0, numResults)
