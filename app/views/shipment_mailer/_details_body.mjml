@@ -1,4 +1,4 @@
-<% primary_color = @user.tenant.theme["colors"]["primary"] %>
+<% primary_color = @shipment.tenant.theme["colors"]["primary"] %>
 
 <mj-wrapper full-width="full-width"  padding="0px">
   <mj-section padding="0 5%">

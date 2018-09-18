@@ -626,6 +626,28 @@ module ShippingTools
     quotation.upload_quotes
   end
 
+  def self.save_and_send_quotes(shipment, schedules, email)
+    main_quote = ShippingTools.create_shipments_from_quotation(shipment, schedules)
+    QuoteMailer.quotation_email(shipment, main_quote.shipments, email, main_quote).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+  end
+
+  def self.tenant_notification_email(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+  end
+
+  def self.shipper_notification_email(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later if Rails.env.production? && ENV['BETA'] != 'true'
+  end
+
+  def self.shipper_confirmation_email(user, shipment)
+    if Rails.env.production? && ENV['BETA'] != 'true'
+      ShipmentMailer.shipper_confirmation(
+        user,
+        shipment
+      ).deliver_later
+    end
+  end
+
   def self.last_trip(user)
     user.tenant.trips.order(:start_date)&.last&.start_date
   end

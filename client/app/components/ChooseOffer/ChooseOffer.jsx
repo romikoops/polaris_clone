@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 import { RouteResult } from '../RouteResult/RouteResult'
@@ -12,6 +13,8 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import QuoteCard from '../Quote/Card'
+import FormsyInput from '../FormsyInput/FormsyInput'
+import { Modal } from '../Modal/Modal'
 
 export class ChooseOffer extends Component {
   static dynamicSort (property) {
@@ -47,12 +50,16 @@ export class ChooseOffer extends Component {
       },
       outerLimit: 20,
       selectedOffers: [],
-      isChecked: false
+      isChecked: false,
+      email: '',
+      showModal: false
     }
     this.chooseResult = this.chooseResult.bind(this)
+    this.selectQuotes = this.selectQuotes.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
+    this.emailValue = this.emailValue.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
@@ -67,6 +74,11 @@ export class ChooseOffer extends Component {
 
   shouldComponentUpdate () {
     return !!(this.props.shipmentData && this.props.shipmentData.shipment)
+  }
+  componentWillUnmount () {
+    this.setState({
+      showModal: false
+    })
   }
 
   setDuration (val) {
@@ -130,6 +142,11 @@ export class ChooseOffer extends Component {
     shipmentDispatch.getOffers(req, false)
     this.setState({ outerLimit: req.delay })
   }
+  emailValue (e) {
+    this.setState({
+      email: e.target.value
+    })
+  }
   downloadQuotations () {
     const { shipmentDispatch } = this.props
     shipmentDispatch.downloadQuotations()
@@ -153,6 +170,17 @@ export class ChooseOffer extends Component {
   chooseResult (obj) {
     this.props.chooseOffer(obj)
   }
+  selectQuotes (shipment, quotes, email) {
+    const {
+      shipmentDispatch
+    } = this.props
+
+    this.setState({
+      showModal: this.props.modal
+    })
+
+    shipmentDispatch.sendQuotes({ shipment, quotes, email })
+  }
   render () {
     const {
       shipmentData, user, shipmentDispatch, theme, tenant, originalSelectedDay
@@ -160,7 +188,7 @@ export class ChooseOffer extends Component {
     if (!shipmentData) return ''
     const { scope } = tenant.data
     const { currentCurrency } = this.state
-    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool
+    const isQuotationTool = scope.closed_quotation_tool || scope.open_quotation_tool || scope.quotation_tool
     const {
       shipment, originHubs, destinationHubs, schedules, lastTripDate
     } = shipmentData
@@ -271,6 +299,43 @@ export class ChooseOffer extends Component {
         className="flex-100 layout-row layout-align-center-start layout-wrap"
         style={{ marginTop: '62px', marginBottom: '166px' }}
       >
+        {this.state.showModal ? (
+          <Modal
+            component={(
+              <div className={styles.mail_modal}>
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" className={styles.main_svg}>
+                  <circle className={`${styles.svg_path} ${styles.svg_circle}`} fill="none" stroke="#73AF55" strokeWidth="6" strokeMiterlimit="10" cx="65.1" cy="65.1" r="62.1" />
+                  <polyline className={`${styles.svg_path} ${styles.svg_check}`} fill="none" stroke="#73AF55" strokeWidth="6" strokeLinecap="round" strokeMiterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                </svg>
+                <h4>Your email has been successfully sent.</h4>
+                <p className={styles.thanks}>Thank you for using our service.</p>
+                <div className="layout-row flex-100 layout-align-center-center">
+                  <div className="layout-row flex-50" style={{ marginRight: '10px' }}>
+                    <RoundButton
+                      theme={theme}
+                      size="small"
+                      active
+                      text="find rates"
+                      handleNext={() => this.bookNow()}
+                    />
+                  </div>
+                  <div className="layout-row flex-50">
+                    <RoundButton
+                      theme={theme}
+                      size="small"
+                      active
+                      text="dashboard"
+                      handleNext={() => this.toAccount()}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            verticalPadding="30px"
+            horizontalPadding="40px"
+            parentToggle={this.toggleNewHub}
+          />
+        ) : ''}
         <div className={`flex-none ${defs.content_width} layout-row`}>
           <div className="flex-20 layout-row layout-wrap">
             <RouteFilterBox
@@ -329,6 +394,7 @@ export class ChooseOffer extends Component {
                 <div className="flex-none">
                   {isQuotationTool ? (
                     <TextHeading
+
                       theme={theme}
                       size={3}
                       text="These are best quotations for the specific route"
@@ -403,6 +469,24 @@ export class ChooseOffer extends Component {
                     shipment={shipment}
                     shipmentDispatch={shipmentDispatch}
                   />
+                  <div className={styles.send_email}>
+                    <Formsy>
+                      <FormsyInput
+                        type="email"
+                        name="quotation_email"
+                        value={this.state.email}
+                        onChange={this.emailValue}
+                        placeholder="bob@gateway.com"
+                      />
+                      <RoundButton
+                        theme={theme}
+                        size="full"
+                        active
+                        text="Send via email"
+                        handleNext={() => this.selectQuotes(shipment, this.state.selectedOffers, this.state.email)}
+                      />
+                    </Formsy>
+                  </div>
                 </div>
               </div>
             </div>
@@ -435,6 +519,7 @@ ChooseOffer.propTypes = {
   user: PropTypes.user.isRequired,
   shipmentData: PropTypes.shipmentData.isRequired,
   chooseOffer: PropTypes.func,
+  modal: PropTypes.bool,
   req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   goTo: PropTypes.func.isRequired,
@@ -454,6 +539,7 @@ ChooseOffer.defaultProps = {
   prevRequest: null,
   req: {},
   tenant: {},
+  modal: false,
   originalSelectedDay: false
 }
 
