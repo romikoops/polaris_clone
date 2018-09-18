@@ -26,6 +26,8 @@ class Shipment < ApplicationRecord
   validates_with HubNexusMatchValidator
 
   validate :planned_pickup_date_is_a_datetime?
+  validate :planned_delivery_date_is_a_datetime?
+
   validate :user_tenant_match
   validate :itinerary_trip_match
 
@@ -440,9 +442,9 @@ class Shipment < ApplicationRecord
     errors.add(:planned_pickup_date, "must be a DateTime") unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
-  def planned_origin_date_is_a_datetime?
-    return if planned_origin_date.nil?
-    errors.add(:planned_origin_date, "must be a DateTime") unless planned_origin_date.is_a?(ActiveSupport::TimeWithZone)
+  def planned_delivery_date_is_a_datetime?
+    return if planned_delivery_date.nil?
+    errors.add(:planned_delivery_date, "must be a DateTime") unless planned_delivery_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def set_default_trucking

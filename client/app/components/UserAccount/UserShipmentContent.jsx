@@ -28,9 +28,9 @@ export function UserShipmentContent ({
   shipment,
   bg1,
   bg2,
-  pickupTime,
-  deliveryTime,
-  originDropOffTime,
+  pickupDate,
+  deliveryDate,
+  originDropOffDate,
   destinationCollectionDate,
   selectedStyle,
   deselectedStyle,
@@ -87,8 +87,8 @@ export function UserShipmentContent ({
                     estimatedTime={etdJSX}
                     text="ETD"
                     theme={theme}
-                    carriage={pickupTime}
-                    noCarriage={originDropOffTime}
+                    carriage={pickupDate}
+                    noCarriage={originDropOffDate}
                     shipment={shipment}
                     hub={shipment.origin_hub}
                     bg={bg1}
@@ -114,7 +114,7 @@ export function UserShipmentContent ({
                 <div className="layout-row flex-100">
                   <ShipmentOverviewShowCard
                     estimatedTime={etaJSX}
-                    carriage={deliveryTime}
+                    carriage={deliveryDate}
                     shipment={shipment}
                     text="ETA"
                     theme={theme}

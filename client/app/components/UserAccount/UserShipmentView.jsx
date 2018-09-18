@@ -356,17 +356,17 @@ export class UserShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const pickupTime = (
+    const pickupDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const deliveryTime = (
+    const deliveryDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
-    const originDropOffTime = (
+    const originDropOffDate = (
       <p className={`flex-none letter_3 ${styles.date}`}>
         {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
@@ -397,9 +397,9 @@ export class UserShipmentView extends Component {
               gradientStyle={gradientStyle}
               etdJSX={etdJSX}
               etaJSX={etaJSX}
-              pickupTime={pickupTime}
-              deliveryTime={deliveryTime}
-              originDropOffTime={originDropOffTime}
+              pickupDate={pickupDate}
+              deliveryDate={deliveryDate}
+              originDropOffDate={originDropOffDate}
               destinationCollectionDate={destinationCollectionDate}
               shipment={shipment}
               bg1={bg1}

@@ -23,8 +23,7 @@ module OfferCalculatorService
       google_directions = GoogleDirections.new(
         @shipment.pickup_address.lat_lng_string,
         @shipment.pickup_address.furthest_hub(hubs[:origin]).lat_lng_string,
-        @shipment.planned_pickup_date.to_i,
-        @shipment.planned_origin_date.to_i
+        @shipment.planned_pickup_date.to_i
       )
 
       driving_time = google_directions.driving_time_in_seconds

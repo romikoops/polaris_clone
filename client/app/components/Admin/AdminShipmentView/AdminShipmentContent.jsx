@@ -60,9 +60,9 @@ export class AdminShipmentContent extends Component {
       bg2,
       switchIcon,
       dnrEditKeys,
-      pickupTime,
-      deliveryTime,
-      originDropOffTime,
+      pickupDate,
+      deliveryDate,
+      originDropOffDate,
       destinationCollectionDate,
       showEditTime,
       saveNewTime,
@@ -101,8 +101,8 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       estimatedTime={etdJSX}
-                      carriage={pickupTime}
-                      noCarriage={originDropOffTime}
+                      carriage={pickupDate}
+                      noCarriage={originDropOffDate}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
@@ -134,7 +134,7 @@ export class AdminShipmentContent extends Component {
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
                       estimatedTime={etaJSX}
-                      carriage={deliveryTime}
+                      carriage={deliveryDate}
                       noCarriage={destinationCollectionDate}
                       text="ETA"
                       theme={theme}

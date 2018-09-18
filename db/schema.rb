@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_13_232620) do
+ActiveRecord::Schema.define(version: 2018_09_17_101705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "fuzzystrmatch"
@@ -545,18 +545,6 @@ ActiveRecord::Schema.define(version: 2018_09_13_232620) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "schema_migration_details", force: :cascade do |t|
-    t.string "version", null: false
-    t.string "name"
-    t.string "hostname"
-    t.string "git_version"
-    t.string "rails_version"
-    t.integer "duration"
-    t.string "direction"
-    t.datetime "created_at", null: false
-    t.index ["version"], name: "index_schema_migration_details_on_version"
   end
 
   create_table "shipment_contacts", force: :cascade do |t|
