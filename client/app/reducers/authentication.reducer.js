@@ -1,5 +1,5 @@
 import { authenticationConstants } from '../constants'
-import { getSubdomain } from '../helpers/subdomain'
+import getSubdomain from '../helpers/subdomain'
 
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
