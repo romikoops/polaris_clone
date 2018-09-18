@@ -5,6 +5,7 @@
   .searchable {
     width: 100%;
     margin: 15px 0;
+    min-height: 550px;
     position: relative;
   }
   .card_link {
@@ -33,6 +34,9 @@
       }
     }
   }
+  .searchable_section {
+    min-height: 440px;
+  }
   .position_fixed_right {
     width: 100%;
   }
@@ -48,6 +52,13 @@
     h4 {
       font-weight: normal;
     }
+  }
+  .pagination_buttons {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    margin: 10px 0;
   }
   .searchable_header{
     padding: 0;
@@ -186,7 +197,6 @@
   .btn_sec{
     height: 227px;
     padding-top: 48px;
-    // border-top: 1px solid #EDEDED;
   }
   .input_box {
     height: 38px;
@@ -231,8 +241,6 @@
   .content {
     width: 100%;
     height: 100%;
-    // position: absolute;
-    // background: rgba(0,0,0,0.25);
     z-index: 4;
   }
   .content i, .content h3, .content p {
@@ -248,7 +256,6 @@
     margin: 0;
   }
   .charge_panel {
-    // background: whitesmoke;
     height: max-content;
   }
   .sched_selector i, .sched_selector p {
@@ -261,7 +268,6 @@
     width: 240px;
     height: 200px;
     margin: 5px;
-    // background: rgba(10,1,12,0.75);
     color: #FFFFFF;
     position: relative;
     background-size: cover;
@@ -407,7 +413,6 @@
     height: 100%;
     width: 100%;
     z-index: 50;
-    // background: rgba(0,0,0,0.25);
   }
   .editor_fade{
     position: absolute;
@@ -431,7 +436,6 @@
     position: relative;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
-    // overflow-y: scroll;
   }
   .editor_input input{
     height: 34px !important;
@@ -462,11 +466,6 @@
   }
   .trucking_cell {
     padding: 4px;
-    // background: lightgrey;
-    // p {
-    //   margin: 0;
-    //   font-size: 12px;
-    // }
   }
   .fee_subtitle {
     font-size: 10px;
@@ -508,7 +507,6 @@
   }
   .route_form {
     width: 600px;
-    // height: 500px;
     padding: 25px;
     z-index: 52;
     background: #FFFFFF;
@@ -541,11 +539,9 @@
     }
   }
   .input_50 {
-    // width: 250px;
     width: calc(48% - 20px);
   }
   .input_100 {
-    // width: 5 20px;
     width: calc(100% - 20px);
   }
   .input_60 {
@@ -555,19 +551,15 @@
     width: 33%;
   }
   .input_zip {
-    // width: 141px;
     width: calc(28% - 20px);
   }
   .input_cc{
-    // width: 174px;
     width: calc(33% - 20px);
   }
   .input_no {
-    // width: 115px;
     width: calc(18% - 20px);
   }
   .input_street {
-    // width: 385px;
     width: calc(78% - 20px);
   }
   .overflow_hidden {
@@ -641,7 +633,6 @@
   }
   .add_price_cell{
     padding: 5px;
-    // border-radius: 10px;
     width: 32%;
     box-shadow: 1px 1px 1px rgba(black, 0.3);
   }
@@ -667,10 +658,6 @@
     &:focus {
       outline: none;
     }
-    // &:hover {
-    //   // margin: -1px 1px 1px -1px;
-    //   box-shadow: 1px 1px 1px rgba(black, 0.7);
-    // }
     &:active {
       margin: 0;
       box-shadow: none;
@@ -690,8 +677,6 @@
     box-shadow: 2px 2px 5px 2px rgba(black, 0.3);
   }
   .trucking_fee_header {
-    // border-radius: 5px;
-    // background: lightgray;
     color: white;
     box-shadow: 1px 1px 1px rgba(black, 0.3);
   }
@@ -866,7 +851,6 @@
     p,
     i {
       font-size: 14px;
-      // color: white;
       margin: 5px;
       text-align: center;
     }
@@ -956,7 +940,6 @@
    .title_grey_with_button {
     background: #E0E0E0;
     color: #4F4F4F;
-    // height: 38px;
     &:first-child {
      padding-left: 15px;
      margin-top: 0;
@@ -973,7 +956,6 @@
    }
    .margin_box_right {
      > * {
-      //  margin-right: 25px;
        &:last-child {
         margin-right: 0 !important;
       }

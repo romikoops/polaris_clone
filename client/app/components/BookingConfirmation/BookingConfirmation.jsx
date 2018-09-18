@@ -238,14 +238,24 @@ class BookingConfirmation extends Component {
     const status = shipmentStatii[shipment.status]
 
     const expectedTime = shipment.has_pre_carriage
-      ? `${t('bookconf:expectedCollection')}:`
-      : `${t('bookconf:expectedDeparture')}:`
+      ? `${t('bookconf:expectedPickup')}:`
+      : `${t('bookconf:expectedDropoff')}:`
+    const expectedEnd = shipment.has_on_carriage
+      ? `${t('bookconf:expectedDelivery')}:`
+      : `${t('bookconf:expectedCollection')}:`
 
     const plannedTime = shipment.has_pre_carriage
       ? `${moment(shipment.closing_date)
         .subtract(shipment.trucking.pre_carriage.trucking_time_in_seconds, 'seconds')
         .format('DD/MM/YYYY')}`
       : `${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY')}`
+
+
+    const collectionTime = shipment.has_on_carriage
+      ? `${moment(shipment.planned_eta)
+        .subtract(shipment.trucking.on_carriage.trucking_time_in_seconds, 'seconds')
+        .format('DD/MM/YYYY')}`
+      : `${moment(shipment.planned_eta).add(2, 'days').format('DD/MM/YYYY')}`
 
     const ShipmentCard = (
       <div className={SHIPMENT_CARD_CONTAINER}>
@@ -300,24 +310,38 @@ class BookingConfirmation extends Component {
               className={`${ROW(100)} ${ALIGN_BETWEEN_CENTER}`}
               style={{ position: 'relative' }}
             >
-              <div className={`flex-40 ${WRAP_ROW()} ${ALIGN_CENTER}`}>
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
-                  <p className="flex-100 letter_3">
+              <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER_START}`}>
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
+                  <p className="flex-70 ">
                     {expectedTime}
                   </p>
-                  <p className="flex-90 offset-10  center">
+                  <p className="flex-30  center">
                     {plannedTime}
                   </p>
                 </div>
                 {LocationsOrigin}
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
+                  <p className="flex-70 ">
+                    {t('bookconf:expectedDeparture')}
+                  </p>
+                  <p className="flex-30  center">
+                    {`${moment(shipment.planned_etd).format('DD/MM/YYYY')}`}
+                  </p>
+                </div>
+                
               </div>
 
-              <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER}`}>
-                <div className={`${WRAP_ROW(80)} ${ALIGN_START}`}>
-                  <p className="flex-100 letter_3">{` ${t('bookconf:expectedArrival')}:`}</p>
-                  <p className="flex-90 offset-10 center">{arrivalTime}</p>
+              <div className={`${WRAP_ROW(40)} ${ALIGN_CENTER_START}`}>
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
+                  <p className="flex-70 ">{` ${t('bookconf:expectedArrival')}:`}</p>
+                  <p className="flex-30 center">{arrivalTime}</p>
                 </div>
                 {LocationsDestination}
+                <div className={`${WRAP_ROW(80)} ${ALIGN_START} buffer_10`}>
+                  <p className="flex-70 ">{expectedEnd}</p>
+                  <p className="flex-30 center">{collectionTime}</p>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -870,13 +894,13 @@ function getTerms ({ theme, terms, t }) {
 
 function getLocationsDestination ({ shipment, locations }) {
   return shipment.has_on_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
       <address className="flex-none">
         {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
         , <br />
         {`${locations.destination.city}`}, <br />
-        {`${locations.destination.zip_code}`}, <br />
-        {`${locations.destination.country}`}
+        {`${locations.destination.zip_code}`}, 
+        {` ${locations.destination.country}`}
       </address>
     </div>
   ) : (
@@ -886,12 +910,12 @@ function getLocationsDestination ({ shipment, locations }) {
 
 function getLocationsOrigin ({ shipment, locations }) {
   return shipment.has_pre_carriage ? (
-    <div className={`${ROW(100)} ${ALIGN_CENTER}`}>
+    <div className={`${ROW(100)} ${ALIGN_CENTER} buffer_10`}>
       <address className="flex-none">
-        {`${locations.origin.street_number} ${locations.origin.street}`},<br />
-        {`${locations.origin.city}`}, <br />
-        {`${locations.origin.zip_code}`}, <br />
-        {`${locations.origin.country}`}
+        {`${locations.origin.street_number} ${locations.origin.street}`},
+        {` ${locations.origin.city}`}, <br />
+        {`${locations.origin.zip_code}`},
+        {` ${locations.origin.country}`}
       </address>
     </div>
   ) : (
@@ -910,7 +934,7 @@ function getPanelStyle (flag) {
 }
 
 function getArrivalTime (shipment) {
-  const format = 'DD/MM/YYYY | HH:mm'
+  const format = 'DD/MM/YYYY'
 
   return `${moment(shipment.planned_eta).format(format)}`
 }
