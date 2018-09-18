@@ -35,7 +35,7 @@ class Shipment < ApplicationRecord
   before_validation :assign_uuid, :generate_imc_reference,
     :set_default_trucking, :set_tenant,
     on: :create
-  before_validation :update_carriage_properties!, :sync_nexuses
+  before_validation :update_carriage_properties!, :sync_nexuses, :set_default_destination_dates
 
   # ActiveRecord associations
   belongs_to :user
@@ -388,6 +388,21 @@ class Shipment < ApplicationRecord
     end
   end
 
+  def set_default_destination_dates
+    return unless planned_eta && planned_etd && closing_date
+
+    set_default_planned_destination_collection_date unless has_on_carriage?
+    set_default_planned_delivery_date if has_on_carriage?
+  end
+
+  def set_default_planned_destination_collection_date
+    self.planned_destination_collection_date ||= planned_eta + 1.week
+  end
+
+  def set_default_planned_delivery_date
+    self.planned_delivery_date ||= planned_eta + 10.days
+  end
+
   def generate_imc_reference
     now = DateTime.now
     day_of_the_year = now.strftime("%d%m")
@@ -423,6 +438,11 @@ class Shipment < ApplicationRecord
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
     errors.add(:planned_pickup_date, "must be a DateTime") unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone)
+  end
+
+  def planned_origin_date_is_a_datetime?
+    return if planned_origin_date.nil?
+    errors.add(:planned_origin_date, "must be a DateTime") unless planned_origin_date.is_a?(ActiveSupport::TimeWithZone)
   end
 
   def set_default_trucking

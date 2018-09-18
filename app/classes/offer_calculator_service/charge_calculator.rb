@@ -117,6 +117,7 @@ module OfferCalculatorService
           @user,
           total_units,
           @shipment.planned_pickup_date,
+          @shipment.planned_origin_date,
           @schedule.mode_of_transport)
 
         next if charge_result.nil?

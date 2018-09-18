@@ -376,7 +376,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def shipment_params
-    params.require(:shipment).permit(:total_price, :planned_pickup_date, :origin_id, :destination_id)
+    params.require(:shipment).permit(:total_price, :planned_pickup_date, :planned_origin_date, :origin_id, :destination_id)
   end
 
   def price_params

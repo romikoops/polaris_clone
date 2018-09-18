@@ -603,6 +603,8 @@ ActiveRecord::Schema.define(version: 2018_09_13_232620) do
     t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.integer "quotation_id"
+    t.datetime "planned_delivery_date"
+    t.datetime "planned_destination_collection_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
