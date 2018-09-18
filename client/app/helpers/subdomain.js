@@ -1,4 +1,4 @@
-function getSubdomain () {
+export default function getSubdomain () {
   const { host } = window.location
 
   if (host.includes('localhost')) {
@@ -18,5 +18,3 @@ function getSubdomain () {
 
   return host.split('.')[0]
 }
-
-export default getSubdomain

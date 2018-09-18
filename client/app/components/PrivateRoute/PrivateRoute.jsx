@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import getSubdomain from '../../helpers'
+import getSubdomain from '../../helpers/subdomain'
 
 const subdomainKey = getSubdomain()
 const cookieKey = `${subdomainKey}_user`
