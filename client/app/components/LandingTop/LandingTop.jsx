@@ -33,6 +33,27 @@ export class LandingTop extends Component {
     const { authDispatch } = this.props
     authDispatch.showLogin()
   }
+  buttonsToDisplay (components) {
+    const { user, tenant } = this.props
+    const isClosed = tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool
+    if (!user) {
+      if (!isClosed) {
+        return [components.rates, components.login]
+      }
+      return [components.login]
+    }
+    if (['shipper', 'agent', 'agency_manager'].includes(user.role.name)) {
+      if (!isClosed) {
+        return [components.rates, components.account]
+      }
+      return [components.account]
+    }
+    if (['admin', 'sub_admin', 'super_admin'].includes(user.role.name)) {
+      return [components.admin]
+    }
+
+    return []
+  }
   render () {
     const {
       theme, user, tenant, bookNow
@@ -64,7 +85,7 @@ export class LandingTop extends Component {
         <SquareButton text="Find Rates" theme={theme} handleNext={bookNow} size="small" active />
       </div>
     )
-    const isClosed = tenant && tenant.data && tenant.data.scope && tenant.data.scope.closed_quotation_tool
+
     const backgroundImage =
       theme && theme.background
         ? theme.background
@@ -108,26 +129,8 @@ export class LandingTop extends Component {
                   `layout-row layout-align-start-center ${styles.wrapper_btns} flex-70 `
                 }
               >
-                {(
-                  (
-                    user &&
-                  user.role &&
-                  !isClosed &&
-                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name)
-                  ) || (isClosed && !user)) &&
-                  findRates}
-                {
-                  user &&
-                  !user.guest &&
-                  user.role &&
-                  ['shipper', 'agent', 'agency_manager'].includes(user.role.name) &&
-                  myAccount
-                }
-                {
-                  user &&
-                  user.role &&
-                  ['admin', 'sub_admin', 'super_admin'].includes(user.role.name) &&
-                  toAdmin}
+                {this.buttonsToDisplay({ admin: toAdmin, account: myAccount, rates: findRates })}
+
               </div>
               <div className={`flex-70 ${styles.banner_text}`}>
                 <div className={`flex layout-row flex-100 ${styles.banner_text}`}>
