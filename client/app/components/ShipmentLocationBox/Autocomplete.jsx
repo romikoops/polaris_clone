@@ -99,14 +99,12 @@ class Autocomplete extends PureComponent {
     this.setState((prevState) => {
       const { resultsTimeout, hideResults } = prevState
       if (resultsTimeout) {
-        debugger // eslint-disable-line
         clearTimeout(resultsTimeout)
       }
       if (hideResults) {
         const newTimeout = setTimeout(() => {
           this.setState({ hideResults: true })
         }, 1000)
-
 
         return {
           hideResults: false,
