@@ -31,7 +31,8 @@ jest.mock('../../constants', () => {
 
   const moment = () => ({
     format,
-    subtract
+    subtract,
+    add
   })
   const shipmentStatii = {
     booking_process_started: 'Booking Process Started',
