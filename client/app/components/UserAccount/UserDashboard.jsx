@@ -8,6 +8,7 @@ import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import ShipmentOverviewCard from '../ShipmentCard/ShipmentOverviewCard'
 import { gradientTextGenerator } from '../../helpers'
 import SquareButton from '../SquareButton'
+import Loading from '../Loading/Loading'
 
 export class UserDashboard extends Component {
   static prepShipment (baseShipment, user) {
@@ -21,6 +22,7 @@ export class UserDashboard extends Component {
   static limitArray (shipments, limit) {
     return limit ? shipments.slice(0, limit) : shipments
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -33,6 +35,7 @@ export class UserDashboard extends Component {
     this.determinePerPage = this.determinePerPage.bind(this)
     this.seeAll = this.seeAll.bind(this)
   }
+
   componentDidMount () {
     this.props.setNav('dashboard')
     window.scrollTo(0, 0)
@@ -40,17 +43,21 @@ export class UserDashboard extends Component {
     window.addEventListener('resize', this.determinePerPage)
     this.props.setCurrentUrl(this.props.match.url)
   }
+
   componentWillUnmount () {
     window.removeEventListener('resize', this.determinePerPage)
   }
+
   viewShipment (shipment) {
     const { userDispatch } = this.props
     userDispatch.getShipment(shipment.id, true)
   }
+
   viewClient (client) {
     const { userDispatch } = this.props
     userDispatch.getContact(client.id, true)
   }
+
   determinePerPage () {
     const width = window.innerWidth
     const perPage = width >= 1920 ? 3 : 2
@@ -60,10 +67,12 @@ export class UserDashboard extends Component {
   startBooking () {
     this.props.userDispatch.goTo('/booking')
   }
+
   makePrimary (locationId) {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, locationId)
   }
+  
   seeAll () {
     const { userDispatch, seeAll } = this.props
     if (seeAll) {
@@ -75,7 +84,7 @@ export class UserDashboard extends Component {
 
   handleViewShipments () {
     const { userDispatch } = this.props
-    userDispatch.getShipments(1, 1, 1, 4, true)
+    userDispatch.getShipments({}, 4, true)
   }
 
   render () {
@@ -88,7 +97,7 @@ export class UserDashboard extends Component {
       t
     } = this.props
     if (!user || !dashboard) {
-      return <h1>{t('common:noData')}</h1>
+      return <Loading theme={theme} text="loading..." />
     }
     const { perPage } = this.state
     const {

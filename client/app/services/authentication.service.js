@@ -1,6 +1,7 @@
 import { Promise } from 'es6-promise-promise'
 import { BASE_URL } from '../constants'
-import { authHeader, getSubdomain } from '../helpers'
+import { authHeader } from '../helpers'
+import getSubdomain from '../helpers/subdomain'
 
 const { fetch, localStorage } = window
 
