@@ -215,6 +215,7 @@
   .autocomplete_container {
     position: relative;
     background: #FFFFFF;
+    z-index: 21;
 
   }
   .autocomplete_inner {
@@ -239,7 +240,6 @@
     margin: 2px 0;
     padding: 8px 10px;
     font-size: 18px;
-    border-bottom: 3px solid rgb(0, 80, 146);
   }
   .results_section {
     padding: 0px 2px;
@@ -252,5 +252,24 @@
     p {
       font-size: 14px;
     }
+  }
+  .autocomplete_input.with_errors {
+    input { 
+      background-color: #FAD1CA;
+      color: rgb(211, 104, 80);
+      &::placeholder {
+        color: rgb(211, 104, 80);
+      }}
+  }
+  .exit_click {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+  }
+  .hidden {
+    display: none;
   }
 }

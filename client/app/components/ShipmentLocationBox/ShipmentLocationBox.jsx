@@ -1171,11 +1171,9 @@ class ShipmentLocationBox extends Component {
           t={t}
           map={this.state.map}
           input={this.state.autoText.origin}
+          hasErrors={originFieldsHaveErrors}
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
         />
-        <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {originFieldsHaveErrors ? t('errors:noRoutes') : ''}
-        </span>
       </div>
     )
 
@@ -1289,13 +1287,11 @@ class ShipmentLocationBox extends Component {
             gMaps={this.props.gMaps}
             theme={this.props.theme}
             t={t}
+            hasErrors={destinationFieldsHaveErrors}
             map={this.state.map}
             input={this.state.autoText.destination}
             handlePlaceSelect={place => this.handlePlaceChange(place, 'destination')}
           />
-          <span className={errorStyles.error_message} style={{ color: 'white' }}>
-            {destinationFieldsHaveErrors ? t('errors:noRoutes') : ''}
-          </span>
         </div>
       </div>
     )
