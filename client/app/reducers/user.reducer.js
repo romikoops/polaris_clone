@@ -277,7 +277,7 @@ export default function users (state = initialState, action) {
       return state
     }
     case userConstants.GET_CONTACTS_SUCCESS: {
-      const cData = action.payload.data.contacts
+      const cData = action.payload.data
       return {
         ...state,
         contactsData: cData,

@@ -6,8 +6,8 @@ class ContactsController < ApplicationController
 
   def index
     contacts = current_user.contacts
-    paginated_contacts = current_user.contacts.paginate(page: params[:page]).map(&:as_options_json)
-    response_handler(contacts: paginated_contacts)
+    paginated_contacts = contacts.paginate(page: params[:page]).map(&:as_options_json)
+    response_handler(contacts: paginated_contacts, numContactPages: (contacts.length / (params[:per_page] || 6).to_f).ceil)
   end
 
   def show
