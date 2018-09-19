@@ -69,42 +69,13 @@ export class UserContactsIndex extends Component {
           <div className="layout-row layout-wrap flex-100">
             <ContactsIndex
               theme={theme}
-              hideFilters
-              clients={contacts}
-              handleClick={viewContact}
-              seeAll={false}
               placeholder="Search Contacts"
             />
-            {/* <div className="flex-95 layout-row layout-align-center-center margin_bottom">
-              <div
-                className={`
-              flex-15 layout-row layout-align-center-center pointy
-              ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
-            `}
-                onClick={this.state.page > 1 ? this.prevPage : null}
-              >
-        
-                <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
-              </div>
-              {}
-              <p>{this.state.page}</p>
-              <div
-                className={`
-              flex-15 layout-row layout-align-center-center pointy
-              ${styles.navigation_button} ${this.state.page < numPages ? '' : styles.disabled}
-            `}
-                onClick={this.state.page < numPages ? this.nextPage : null}
-              >
-                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                <i className="fa fa-chevron-right" />
-              </div>
-            </div> */}
           </div>
           {newContactBox}
         </div>
         <div className="layout-column flex-20 hide-xs hide-sm layout-align-end-end relative" >
-          <div className={`layout-column  hide-xs layout-align-end-end ${styles.side_box_style}`}>
+          <div className={`layout-column  width_100 hide-xs layout-align-end-end ${styles.side_box_style}`}>
             <SideOptionsBox
               header="Data Manager"
               content={

@@ -83,6 +83,31 @@ function searchShipments (text, target, page, perPage) {
     )
   }
 }
+function searchContacts (text, page, perPage) {
+  function request (contactData) {
+    return { type: userConstants.GET_CONTACTS_PAGE_REQUEST, payload: contactData }
+  }
+  function success (contactData) {
+    return { type: userConstants.GET_CONTACTS_PAGE_SUCCESS, payload: contactData }
+  }
+  function failure (error) {
+    return { type: userConstants.GET_CONTACTS_PAGE_FAILURE, error }
+  }
+
+  return (dispatch) => {
+    dispatch(request())
+
+    userService.searchContacts(text, page, perPage).then(
+      (data) => {
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function getLocations (user, redirect) {
   function request () {
@@ -713,6 +738,7 @@ export const userActions = {
   optOut,
   reuseShipment,
   searchShipments,
+  searchContacts,
   deltaShipmentsPage
 
 }

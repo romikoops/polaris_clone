@@ -96,6 +96,12 @@ export class ContactsIndex extends Component {
     this.setState({ page: realPage }, () => this.getContactsFromPage(realPage))
   }
 
+  searchContactsFromPage (text, target) {
+    const { perPage, page } = this.state
+    const { userDispatch } = this.props
+    userDispatch.searchContacts(text, page, perPage)
+  }
+
   handleSearchChange (event) {
     if (event.target.value === '') {
       this.setState({
@@ -137,15 +143,12 @@ export class ContactsIndex extends Component {
     } = this.props
     const { contacts, numContactPages } = contactsData
     const {
-      page, perPage
+      page
     } = this.state
     let contactsArr
-    const startIndex = Math.abs(0 + ((page -1) * perPage) -1)
-    const endIndex = startIndex + perPage
     if (contacts) {
       contactsArr = contacts
         .sort((a, b) => b.primary - a.primary)
-        .slice(startIndex, endIndex)
         .map(client => (
           <AdminClientTile
             key={v4()}

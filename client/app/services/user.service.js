@@ -46,6 +46,19 @@ function searchShipments (text, target, page, perPage) {
   return fetch(`${BASE_URL}/search/shipments/${target}?${query}`, requestOptions)
     .then(handleResponse)
 }
+function searchContacts (text, page, perPage) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+  let query = ''
+
+  query += `query=${text}&page=${page || 1}`
+  if (perPage) query += `&per_page=${perPage}`
+
+  return fetch(`${BASE_URL}/search/contacts?${query}`, requestOptions)
+    .then(handleResponse)
+}
 
 function makePrimary (userId, locationId) {
   const requestOptions = {
@@ -319,6 +332,7 @@ export const userService = {
   optOut,
   reuseShipment,
   searchShipments,
-  deltaShipmentsPage
+  deltaShipmentsPage,
+  searchContacts
 }
 export default userService
