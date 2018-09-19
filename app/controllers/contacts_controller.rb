@@ -6,8 +6,8 @@ class ContactsController < ApplicationController
 
   def index
     contacts = current_user.contacts
-    paginated_contacts = current_user.contacts.paginate(page: params[:page]).map(&:as_options_json)
-    response_handler(contacts: paginated_contacts)
+    paginated_contacts = contacts.paginate(page: params[:page]).map(&:as_options_json)
+    response_handler(contacts: paginated_contacts, numContactPages: (contacts.length / (params[:per_page] || 6).to_f).ceil)
   end
 
   def show
@@ -57,6 +57,29 @@ class ContactsController < ApplicationController
     contact.update_attributes(edited_contact_data)
     contact.save!
     response_handler(contact.as_options_json)
+  end
+
+  def search_contacts
+    filterific_params = {
+      contacts_query: params[:query]
+    }
+
+    (filterrific = initialize_filterrific(
+      current_user.contacts,
+      filterific_params,
+      available_filters: [
+        :contacts_query
+      ],
+      sanitize_params:   true
+    )) || return
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    contacts_results = filterrific.find
+    contacts = contacts_results.paginate(page: params[:page], per_page: per_page).map(&:as_options_json)
+    response_handler(
+      contacts:          contacts,
+      numContactPages: (contacts_results.count / per_page).ceil,
+      page:               params[:page]
+    )
   end
 
   def update_contact_address

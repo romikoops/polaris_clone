@@ -99,6 +99,7 @@ Rails.application.routes.draw do
       get 'hubs', to: 'hubs#index'
       get 'search/hubs', to: 'hubs#search'
       get 'search/pricings', to: 'pricings#search'
+      get 'search/contacts', to: 'contacts#search'
       get 'dashboard', to: 'dashboard#index'
     end
 
@@ -136,7 +137,7 @@ Rails.application.routes.draw do
     get 'currencies/refresh/:currency', to: 'currencies#refresh_for_base'
     resources :contacts, only: %i[index show create update]
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
-
+    get 'search/contacts', to: 'contacts#search_contacts'
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     get 'contacts/validations/form', to: 'contacts#is_valid'

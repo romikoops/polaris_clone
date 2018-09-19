@@ -21,6 +21,7 @@ class Contact < ApplicationRecord
               available_filters:     %w(
                 sorted_by
                 search_query
+                contacts_query
               )
 
   self.per_page = 6 # default for will_paginate
@@ -49,6 +50,15 @@ class Contact < ApplicationRecord
     where(
       terms.map { "(#{or_clauses})" }.join(" AND "),
       *terms.map { |e| [e] * num_or_conditions }.flatten
+    )
+  }
+  scope :contacts_query, lambda { |query|
+    str_query = "%#{query}%"
+
+    return nil if query.blank?
+    where(
+      "first_name ILIKE ? OR last_name ILIKE ? OR company_name ILIKE ? OR email ILIKE ?",
+      str_query, str_query, str_query, str_query
     )
   }
 
