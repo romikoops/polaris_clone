@@ -32,3 +32,7 @@ export function areEqual (obj1, obj2) {
 
   return null
 }
+
+export function isDefined (obj) {
+  return typeof obj !== 'undefined'
+}
