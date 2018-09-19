@@ -57,15 +57,6 @@ export class ShipmentThankYou extends Component {
                   }
                   {t('bookconf:contactUs')}
                 </p>
-                <DocumentsDownloader
-                  theme={theme}
-                  target="shipment_recap"
-                  options={{ shipment }}
-                  size="full"
-                  shipment={shipment}
-                  shipmentDispatch={shipmentDispatch}
-                />
-              </div>
             </div>
 
             <hr className={`${styles.sec_break} flex-100`} />

@@ -15,6 +15,7 @@ import {
   gradientBorderGenerator
 } from '../../helpers'
 import '../../styles/select-css-custom.css'
+import DocumentsDownloader from '../Documents/Downloader'
 import DocumentsForm from '../Documents/Form'
 import GradientBorder from '../GradientBorder'
 import { UserShipmentContent } from './UserShipmentContent'
@@ -437,6 +438,25 @@ export class UserShipmentView extends Component {
               cargoView={cargoView}
             />
           )}
+          {shipment.status !== 'quoted' ? (
+            <div className="flex-100 layout-row layout-wrap">
+              <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
+                <p
+                  className="flex-100 layout-row layout-align-center-center"
+                  style={{ paddingRight: '15px', paddingBottom: '14px', textAlign: 'center' }}
+                >
+                Download shipment pdf
+                </p>
+                <DocumentsDownloader
+                  theme={theme}
+                  target="shipment_recap"
+                  options={{ shipment }}
+                  size="full"
+                  shipment={shipment}
+                />
+              </div>
+            </div>
+          ) : ''}
 
         </div>
       </div>

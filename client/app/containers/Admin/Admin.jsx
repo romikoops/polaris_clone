@@ -151,6 +151,7 @@ class Admin extends Component {
                         theme={theme}
                         setCurrentUrl={this.setCurrentUrl}
                         {...props}
+                        scope={tenant.data.scope}
                         clients={clients}
                         confirmShipmentData={confirmShipmentData}
                         shipments={shipments}

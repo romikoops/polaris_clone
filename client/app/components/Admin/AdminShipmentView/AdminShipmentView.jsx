@@ -12,6 +12,7 @@ import adminStyles from '../Admin.scss'
 import styles from '../AdminShipments.scss'
 import DocumentsForm from '../../Documents/Form'
 import GradientBorder from '../../GradientBorder'
+import DocumentsDownloader from '../../Documents/Downloader'
 import {
   gradientTextGenerator,
   gradientGenerator,
@@ -403,8 +404,7 @@ class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
-      aggregatedCargo,
-      accountHolder
+      aggregatedCargo
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -831,6 +831,7 @@ class AdminShipmentView extends Component {
               deselectedStyle={deselectedStyle}
               cargoCount={cargoCount}
               cargoView={cargoView}
+              totalPrice={totalPrice}
               calcCargoLoad={AdminShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
               contacts={contacts}
               missingDocs={missingDocs}
@@ -858,10 +859,23 @@ class AdminShipmentView extends Component {
 
         </div>
 
-        {isRequested(shipment.status) ? (
-          <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>{t('common:accept')}</button>
-            <button onClick={this.handleDeny}>{t('common:refuse')}</button>
+        {shipment.status !== 'quoted' ? (
+          <div className="flex-100 layout-row layout-wrap">
+            <div className="layout-row flex-100 layout-wrap layout-align-center-center" style={{ paddingTop: '30px' }}>
+              <p
+                className="flex-100 layout-row layout-align-center-center"
+                style={{ paddingRight: '15px', paddingBottom: '14px', textAlign: 'center' }}
+              >
+                Download shipment pdf
+              </p>
+              <DocumentsDownloader
+                theme={theme}
+                target="shipment_recap"
+                options={{ shipment }}
+                size="full"
+                shipment={shipment}
+              />
+            </div>
           </div>
         ) : (
           ''
