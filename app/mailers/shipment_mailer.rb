@@ -20,6 +20,7 @@ class ShipmentMailer < ApplicationMailer
 
     @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
+    create_pdf_attachment(@shipment)
     attachments.inline["logo.png"] = URI.open(tenant.theme["logoLarge"]).read
 
     mail(
@@ -37,6 +38,7 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
+    create_pdf_attachment(@shipment)
     attachments.inline["logo.png"]       = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline["logo_small.png"] = URI.try(:open, tenant.theme["logoSmall"]).try(:read)
 
@@ -55,13 +57,9 @@ class ShipmentMailer < ApplicationMailer
     tenant = user.tenant
     @shipment = shipment
 
+    create_pdf_attachment(@shipment)
     attachments.inline["logo.png"]       = URI.open(tenant.theme["logoLarge"]).read
     attachments.inline["logo_small.png"] = try(:open, tenant.theme["logoSmall"]).try(:read)
-
-    # bill_of_lading = generate_and_upload_bill_of_lading
-    # attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read
-
-    # FileUtils.rm(bill_of_lading.path)
 
     mail(
       to:      user.email.blank? ? "itsmycargodev@gmail.com" : user.email,
@@ -112,5 +110,11 @@ class ShipmentMailer < ApplicationMailer
 
     shipment_recap.generate
     shipment_recap.upload
+  end
+
+  def create_pdf_attachment(shipment)
+    self.class.generate_and_upload_shipment_pdf(shipment)
+    pdf_name = "shipment_recap_#{shipment.imc_reference}.pdf"
+    attachments.inline[pdf_name] = File.read('tmp/' + pdf_name)
   end
 end
