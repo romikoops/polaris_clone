@@ -28,10 +28,15 @@ function findAvailability (lat, lng, tenantId, loadType, carriage, availableHubI
     }
   ).then((promise) => {
     promise.json().then((response) => {
-      const {
-        truckingAvailable, nexusIds, hubIds, truckTypeObject
-      } = response.data
-      callback(truckingAvailable, nexusIds, hubIds, truckTypeObject)
+      if (response.data) {
+        const {
+          truckingAvailable, nexusIds, hubIds, truckTypeObject
+        } = response.data
+        callback(truckingAvailable, nexusIds, hubIds, truckTypeObject)
+      } else {
+        callback(false, [], [], {})
+      }
+      
     })
   })
 }
