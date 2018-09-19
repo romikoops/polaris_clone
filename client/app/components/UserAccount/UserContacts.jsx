@@ -67,7 +67,7 @@ class UserContacts extends Component {
   }
   viewContacts () {
     const { userDispatch } = this.props
-    userDispatch.getContacts(true, 1)
+    userDispatch.getContacts(false, 1)
   }
 
   handleValidSubmit (contact, reset, invalidate) {

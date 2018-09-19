@@ -16,7 +16,7 @@ export default function ContactDetailsRow ({
   let consigneeContact = ''
   let isAccountHolder = ''
   if (contacts.length > 0) {
-    contacts.forEach((n) => {
+    contacts.filter(c => !!c).forEach((n) => {
       if (n.type === 'notifyee') {
         nArray.push(<div className={`${styles.contact_box} ${styles.notifyee_box} flex-100 layout-wrap`}>
           <div className="flex">

@@ -29,6 +29,7 @@ export default function shipment (state = {}, action) {
           stage1: action.shipmentData
         },
         loading: true,
+        reusedShipment: false,
         currentStage: 'stage1',
         error: {}
       }
