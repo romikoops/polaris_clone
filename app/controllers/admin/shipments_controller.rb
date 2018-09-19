@@ -238,6 +238,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment = Shipment.find(params[:id])
       shipment.planned_eta = new_eta
       shipment.planned_etd = new_etd
+      shipment.planned_origin_drop_off_date = planned_origin_drop_off_date
+      shipment.planned_destination_collection_date = planned_destination_collection_date
+      shipment.planned_delivery_date = planned_delivery_date
+      shipment.planned_pickup_date = planned_pickup_date
       shipment.save!
       @shipment = shipment
     end

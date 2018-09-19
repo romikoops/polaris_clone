@@ -94,8 +94,14 @@ export class AdminShipmentView extends Component {
         pickupTime: {
           day: new Date(moment(shipment.planned_pickup_date).format())
         },
-        deliveryTime: {
+        originDropOffDate: {
           day: new Date(moment(shipment.planned_origin_drop_off_date).format())
+        },
+        deliveryTime: {
+          day: new Date(moment(shipment.planned_delivery_date).format())
+        },
+        destinationCollectionDate: {
+          day: new Date(moment(shipment.planned_destination_collection_date).format())
         }
       },
       newPrices: {
@@ -303,7 +309,13 @@ export class AdminShipmentView extends Component {
     const newPickupTime = moment(newTimes.pickupTime.day)
       .startOf('day')
       .format('lll')
+    const newOriginDropOffDate = moment(newTimes.originDropOffDate.day)
+      .startOf('day')
+      .format('lll')
     const newDeliveryTime = moment(newTimes.deliveryTime.day)
+      .startOf('day')
+      .format('lll')
+    const newDestinationCollectionDate = moment(newTimes.destinationCollectionDate.day)
       .startOf('day')
       .format('lll')
 
@@ -311,13 +323,18 @@ export class AdminShipmentView extends Component {
       newEta,
       newEtd,
       newPickupTime,
-      newDeliveryTime
+      newOriginDropOffDate,
+      newDeliveryTime,
+      newDestinationCollectionDate
+
     }
 
     shipment.planned_eta = moment(newTimes.eta.day)
     shipment.planned_etd = moment(newTimes.etd.day)
     shipment.planned_pickup_date = moment(newTimes.pickupTime.day)
-    shipment.planned_origin_drop_off_date = moment(newTimes.deliveryTime.day)
+    shipment.planned_origin_drop_off_date = moment(newTimes.originDropOffDate.day)
+    shipment.planned_delivery_date = moment(newTimes.deliveryTime.day)
+    shipment.planned_destination_collection_date = moment(newTimes.destinationCollectionDate.day)
     adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
     this.toggleEditTime()
   }
@@ -377,7 +394,6 @@ export class AdminShipmentView extends Component {
       cargoItems,
       containers,
       aggregatedCargo,
-      accountHolder
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -494,10 +510,40 @@ export class AdminShipmentView extends Component {
     })
     const feeHash = shipment.selected_offer
 
+    const dayPickerPropsPt = {
+      disabledDays: {
+        after: newTimes.etd
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsOdod = {
+      disabledDays: {
+        after: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
     const dayPickerPropsEtd = {
       disabledDays: {
         after: newTimes.eta.day,
-        before: new Date()
+        before: (newTimes.originDropOffDate.day || newTimes.pickupTime.day)
       },
       month: new Date(
         moment()
@@ -512,7 +558,8 @@ export class AdminShipmentView extends Component {
 
     const dayPickerPropsEta = {
       disabledDays: {
-        before: newTimes.etd.day < new Date() ? new Date() : newTimes.etd.day
+        before: newTimes.etd.day,
+        after: (newTimes.destinationCollectionDate.day || newTimes.deliveryTime.day)
       },
       month: new Date(
         moment()
@@ -525,10 +572,9 @@ export class AdminShipmentView extends Component {
       name: 'dayPicker'
     }
 
-    const dayPickerPropsPt = {
+    const dayPickerPropsDcd = {
       disabledDays: {
-        after: newTimes.eta.day,
-        before: newTimes.etd.day
+        before: newTimes.eta.day
       },
       month: new Date(
         moment()
@@ -555,6 +601,48 @@ export class AdminShipmentView extends Component {
       ),
       name: 'dayPicker'
     }
+
+    const pickupTime = showEditTime && shipment.planned_pickup_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.pickupTime.day}
+            onDayChange={e => this.handleDayChange(e, 'pickupTime')}
+            dayPickerProps={dayPickerPropsPt}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const originDropOffTime = showEditTime && shipment.planned_origin_drop_off_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.originDropOffDate.day}
+            onDayChange={e => this.handleDayChange(e, 'originDropOffDate')}
+            dayPickerProps={dayPickerPropsOdod}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
 
     const etdJSX = showEditTime ? (
       <div className="layout-row flex-100">
@@ -598,7 +686,7 @@ export class AdminShipmentView extends Component {
       </p>
     )
 
-    const pickupTime = showEditTime && shipment.planned_pickup_date ? (
+    const destinationCollectionDate = showEditTime && shipment.planned_destination_collection_date ? (
       <div className="layout-row flex-100">
         <div className="flex-65 layout-row">
           <DayPickerInput
@@ -607,19 +695,19 @@ export class AdminShipmentView extends Component {
             format="DD/MM/YYYY"
             formatDate={formatDate}
             parseDate={parseDate}
-            value={newTimes.pickupTime.day}
-            onDayChange={e => this.handleDayChange(e, 'pickupTime')}
-            dayPickerProps={dayPickerPropsPt}
+            value={newTimes.destinationCollectionDate.day}
+            onDayChange={e => this.handleDayChange(e, 'destinationCollectionDate')}
+            dayPickerProps={dayPickerPropsDcd}
           />
         </div>
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {shipment.planned_pickup_date ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}` : ''}
+        {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
-    const deliveryTime = showEditTime && shipment.planned_origin_drop_off_date ? (
+    const deliveryTime = showEditTime && shipment.planned_delivery_date ? (
       <div className="layout-row flex-100">
         <div className="flex-65 layout-row">
           <DayPickerInput
@@ -636,7 +724,7 @@ export class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className={`flex-none letter_3 ${styles.date}`}>
-        {shipment.planned_origin_drop_off_date ? `${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}` : ''}
+        {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
@@ -676,6 +764,11 @@ export class AdminShipmentView extends Component {
               switchIcon={switchIcon}
               etdJSX={etdJSX}
               etaJSX={etaJSX}
+              pickupTime={pickupTime}
+              deliveryTime={deliveryTime}
+              originDropOffTime={originDropOffTime}
+              destinationCollectionDate={destinationCollectionDate}
+              totalPrice={totalPrice}
               shipment={shipment}
               bg1={bg1}
               bg2={bg2}
@@ -750,7 +843,6 @@ AdminShipmentView.defaultProps = {
   clients: [],
   shipmentData: null,
   loading: false
-  // tenant: {}
 }
 
 export default AdminShipmentView

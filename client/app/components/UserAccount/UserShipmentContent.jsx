@@ -28,6 +28,10 @@ export function UserShipmentContent ({
   shipment,
   bg1,
   bg2,
+  pickupTime,
+  deliveryTime,
+  originDropOffTime,
+  destinationCollectionDate,
   selectedStyle,
   deselectedStyle,
   scope,
@@ -72,25 +76,27 @@ export function UserShipmentContent ({
         theme={theme}
       >
         <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-          <div className="layout-row flex-100 margin_bottom">
+          <div className="layout-row layout-wrap flex-100 margin_bottom">
             <GradientBorder
-              wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+              wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
               gradient={gradientBorderStyle}
               className="layout-row flex"
               content={(
                 <div className="layout-row flex-100">
                   <ShipmentOverviewShowCard
-                    et={etdJSX}
-                    shipment={shipment}
+                    estimatedTime={etdJSX}
                     text="ETD"
                     theme={theme}
+                    carriage={pickupTime}
+                    noCarriage={originDropOffTime}
+                    shipment={shipment}
                     hub={shipment.origin_hub}
                     bg={bg1}
                   />
                 </div>
               )}
             />
-            <div className="layout-row flex-20 layout-align-center-center">
+            <div className="layout-row flex-md-100 flex-lg-20 layout-align-center-center padd_20">
               <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
                 <div className="layout-align-center-center layout-row" style={gradientStyle}>
                   {switchIcon(shipment)}
@@ -101,16 +107,18 @@ export function UserShipmentContent ({
             </div>
 
             <GradientBorder
-              wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+              wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
               gradient={gradientBorderStyle}
               className="layout-row flex"
               content={(
                 <div className="layout-row flex-100">
                   <ShipmentOverviewShowCard
-                    et={etaJSX}
+                    estimatedTime={etaJSX}
+                    carriage={deliveryTime}
                     shipment={shipment}
                     text="ETA"
                     theme={theme}
+                    noCarriage={destinationCollectionDate}
                     hub={shipment.destination_hub}
                     bg={bg2}
                   />
@@ -499,6 +507,10 @@ UserShipmentContent.propTypes = {
   gradientStyle: PropTypes.style,
   etdJSX: PropTypes.node,
   etaJSX: PropTypes.node,
+  pickupTime: PropTypes.node,
+  deliveryTime: PropTypes.node,
+  originDropOffTime: PropTypes.node,
+  destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
   bg1: PropTypes.style,
   bg2: PropTypes.style,
@@ -525,6 +537,10 @@ UserShipmentContent.defaultProps = {
   gradientStyle: {},
   etdJSX: null,
   etaJSX: null,
+  pickupTime: null,
+  deliveryTime: null,
+  originDropOffTime: null,
+  destinationCollectionDate: null,
   shipment: {},
   bg1: {},
   bg2: {},

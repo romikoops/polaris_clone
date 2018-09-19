@@ -61,7 +61,9 @@ export class AdminShipmentContent extends Component {
       switchIcon,
       dnrEditKeys,
       pickupTime,
-      delivery,
+      deliveryTime,
+      originDropOffTime,
+      destinationCollectionDate,
       showEditTime,
       saveNewTime,
       toggleEditTime,
@@ -89,31 +91,32 @@ export class AdminShipmentContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-            <div className="layout-row flex-100 margin_bottom">
+            <div className="layout-row layout-wrap flex-100 margin_bottom">
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      et={etdJSX}
-                      dt={pickupTime}
+                      estimatedTime={etdJSX}
+                      carriage={pickupTime}
+                      noCarriage={originDropOffTime}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
                       shipment={shipment}
                       bg={bg1}
-                      editTime={this.state.showEditTime}
-                      handleSaveTime={this.saveNewTime}
-                      toggleEditTime={this.toggleEditTime}
+                      editTime={showEditTime}
+                      handleSaveTime={saveNewTime}
+                      toggleEditTime={toggleEditTime}
                       isAdmin={!dnrEditKeys.includes(shipment.status)}
                     />
                   </div>
                 )}
               />
-              <div className="layout-row flex-20 layout-align-center-center">
+              <div className="layout-row flex-md-100 flex-lg-20 layout-align-center-center padd_20">
                 <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
                   <div className="layout-align-center-center layout-row" style={gradientStyle}>
                     {switchIcon()}
@@ -124,22 +127,23 @@ export class AdminShipmentContent extends Component {
               </div>
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      et={etaJSX}
-                      dt={deliveryTime}
+                      estimatedTime={etaJSX}
+                      carriage={deliveryTime}
+                      noCarriage={destinationCollectionDate}
                       text="ETA"
                       theme={theme}
                       hub={shipment.destination_hub}
                       bg={bg2}
                       shipment={shipment}
-                      editTime={this.state.showEditTime}
-                      handleSaveTime={this.saveNewTime}
-                      toggleEditTime={this.toggleEditTime}
+                      editTime={showEditTime}
+                      handleSaveTime={saveNewTime}
+                      toggleEditTime={toggleEditTime}
                       isAdmin={!dnrEditKeys.includes(shipment.status)}
                     />
                   </div>
@@ -633,6 +637,10 @@ AdminShipmentContent.propTypes = {
   gradientStyle: PropTypes.style,
   etdJSX: PropTypes.node,
   etaJSX: PropTypes.node,
+  pickupTime: PropTypes.node,
+  deliveryTime: PropTypes.node,
+  originDropOffTime: PropTypes.node,
+  destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
   bg1: PropTypes.style,
   bg2: PropTypes.style,
@@ -664,6 +672,10 @@ AdminShipmentContent.defaultProps = {
   gradientStyle: {},
   etdJSX: null,
   etaJSX: null,
+  pickupTime: null,
+  deliveryTime: null,
+  originDropOffTime: null,
+  destinationCollectionDate: null,
   toggleEditServicePrice: null,
   handlePriceChangeOn: null,
   handlePriceChangePre: null,
