@@ -13,12 +13,15 @@ code_quality:
   retry: 1
   tags:
     - itsmycargo
+
+  script:
+    - scripts/pronto
+
   except:
     refs:
       - master
       - dev
-  script:
-    - scripts/pronto
+
 
 danger-review:
   stage: test
@@ -30,6 +33,10 @@ danger-review:
   cache: {}
   dependencies: []
   before_script: []
+
+  script:
+    - danger --fail-on-errors=true
+
   only:
     variables:
       - $DANGER_GITLAB_API_TOKEN
@@ -37,8 +44,6 @@ danger-review:
     refs:
       - master
       - dev
-  script:
-    - danger --fail-on-errors=true
 
 api:
   stage: test
@@ -46,11 +51,12 @@ api:
   retry: 1
   tags:
     - itsmycargo
-  services:
-    - mdillon/postgis
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
+  services:
+    - mdillon/postgis
+
   script:
     - scripts/test
 
@@ -71,6 +77,7 @@ client:
   retry: 1
   tags:
     - itsmycargo
+  retry: 1
 
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -105,10 +112,12 @@ docker:
     DOCKER_DRIVER: overlay2
   services:
     - docker:dind
+
   before_script:
     - apk add --no-cache --update git
     - wget -q -O /usr/bin/habitus 'https://github.com/cloud66-oss/habitus/releases/download/1.0.3/habitus_linux_amd64'
     - chmod +x /usr/bin/habitus
+
   script: |
     docker login -u _json_key --password-stdin ${GCP_REGISTRY} <${GOOGLE_APPLICATION_CREDENTIALS}
     /usr/bin/habitus -env REGISTRY=${GCP_REGISTRY} -env TAG=${CI_COMMIT_SHA}
@@ -153,11 +162,11 @@ review:
 
 stop_review:
   stage: cleanup
-  variables:
-    GIT_STRATEGY: none
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
+  variables:
+    GIT_STRATEGY: none
 
   script: |
     helm delete --purge "$CI_ENVIRONMENT_SLUG"
