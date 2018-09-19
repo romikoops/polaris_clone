@@ -29,7 +29,8 @@ export default function shipment (state = {}, action) {
           stage1: action.shipmentData
         },
         loading: true,
-        currentStage: 'stage1'
+        currentStage: 'stage1',
+        error: {}
       }
     case shipmentConstants.NEW_SHIPMENT_SUCCESS:
       return {

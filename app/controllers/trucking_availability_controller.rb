@@ -6,7 +6,6 @@ class TruckingAvailabilityController < ApplicationController
 
   def index
     trucking_pricings = find_trucking_pricings
-
     truck_type_object = Hash.new { |h, k| h[k] = [] }
     hub_ids = []
 
