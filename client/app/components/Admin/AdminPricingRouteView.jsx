@@ -199,7 +199,7 @@ export class AdminPricingRouteView extends Component {
       <div
         className="flex-100 layout-row layout-wrap layout-align-center-start extra_padding"
       >
-        <div className="layout-row flex-95 margin_bottom">
+        <div className="layout-row flex-95 margin_bottom padding_top">
           <GradientBorder
             wrapperClassName={`layout-row flex-40 ${shipmentStyles.hub_box_shipment}`}
             gradient={gradientBorderStyle}

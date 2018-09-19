@@ -5,7 +5,7 @@ module ShippingTools
   include MongoTools
   include NotificationTools
   extend PricingTools
-  extend MongoTools
+  extend DocumentTools
   extend NotificationTools
 
   def self.create_shipments_from_quotation(shipment, schedules)
@@ -138,10 +138,10 @@ module ShippingTools
       if existing_document
         existing_document.update_file(file, shipment, type, user)
       else
-        Document.new_upload(file, shipment, type, user)
+        DocumentTools.new_upload(file, shipment, type, user)
       end
     else
-      Document.new_upload(file, shipment, type, user)
+      DocumentTools.new_upload(file, shipment, type, user)
     end
   end
 

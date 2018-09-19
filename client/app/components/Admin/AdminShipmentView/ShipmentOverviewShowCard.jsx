@@ -66,7 +66,7 @@ export default function ShipmentOverviewShowCard ({
               <div className="flex-100 layout-row layout-align-start-center">
                 <i
                   className={`flex-none fa fa-check-square clip ${styles.check_square}`}
-                  style={shipment.pickup_address || shipment.trucking.has_pre_carriage ? selectedStyle : deselectedStyle}
+                  style={shipment.pickup_address || (shipment.trucking && shipment.trucking.has_pre_carriage) ? selectedStyle : deselectedStyle}
                 />
                 <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                   <h4 className="flex-95 no_m layout-row">{checkPreCarriage(shipment, 'Pick-up').type}&nbsp;
@@ -93,7 +93,7 @@ export default function ShipmentOverviewShowCard ({
             <div className="layout-row flex-100 layout-align-start-center">
               <i
                 className={`flex-none fa fa-check-square clip ${styles.check_square}`}
-                style={shipment.delivery_address || shipment.trucking.has_on_carriage ? selectedStyle : deselectedStyle}
+                style={shipment.delivery_address || (shipment.trucking && shipment.trucking.has_on_carriage) ? selectedStyle : deselectedStyle}
               />
               <div className={`flex layout-row layout-wrap layout-align-start-start ${styles.carriage_row}`}>
                 <h4 className="flex-95 layout-row">{checkPreCarriage(shipment, 'Delivery').type}&nbsp;
