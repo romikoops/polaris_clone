@@ -85,13 +85,13 @@ function searchShipments (text, target, page, perPage) {
 }
 function searchContacts (text, page, perPage) {
   function request (contactData) {
-    return { type: userConstants.GET_CONTACTS_PAGE_REQUEST, payload: contactData }
+    return { type: userConstants.GET_CONTACTS_REQUEST, payload: contactData }
   }
   function success (contactData) {
-    return { type: userConstants.GET_CONTACTS_PAGE_SUCCESS, payload: contactData }
+    return { type: userConstants.GET_CONTACTS_SUCCESS, payload: contactData }
   }
   function failure (error) {
-    return { type: userConstants.GET_CONTACTS_PAGE_FAILURE, error }
+    return { type: userConstants.GET_CONTACTS_FAILURE, error }
   }
 
   return (dispatch) => {

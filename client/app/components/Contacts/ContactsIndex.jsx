@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Fuse from 'fuse.js'
 import PropTypes from '../../prop-types'
 import styles from '../Admin/Admin.scss'
 import { AdminClientTile } from '../Admin'
@@ -79,7 +78,7 @@ export class ContactsIndex extends Component {
   doNothing () {
     console.log(this.state.page)
   }
-  
+
   handlePage (delta) {
     const { contactsData } = this.props
     const { numContactPages } = contactsData
@@ -96,13 +95,14 @@ export class ContactsIndex extends Component {
     this.setState({ page: realPage }, () => this.getContactsFromPage(realPage))
   }
 
-  searchContactsFromPage (text, target) {
+  searchContactsFromPage (text) {
     const { perPage, page } = this.state
     const { userDispatch } = this.props
     userDispatch.searchContacts(text, page, perPage)
   }
 
   handleSearchChange (event) {
+    const { searchTimeout } = this.state
     if (event.target.value === '') {
       this.setState({
         contacts: this.props.contactsData.contacts
@@ -110,26 +110,11 @@ export class ContactsIndex extends Component {
 
       return
     }
-    const search = (keys) => {
-      const options = {
-        shouldSort: true,
-        tokenize: true,
-        threshold: 0.2,
-        location: 0,
-        distance: 50,
-        maxPatternLength: 32,
-        minMatchCharLength: 5,
-        keys
-      }
-      const fuse = new Fuse(this.props.contactsData.contacts, options)
-
-      return fuse.search(event.target.value)
+    if (searchTimeout) {
+      clearTimeout(searchTimeout)
     }
-    const filteredClients = search(['first_name', 'last_name', 'company_name', 'phone', 'email'])
-
-    this.setState({
-      contacts: filteredClients
-    })
+    const newSearchTimeout = setTimeout(this.searchContactsFromPage(event.target.value), 750)
+    this.setState({ searchTimeout: newSearchTimeout })
   }
   render () {
     const {
@@ -161,7 +146,7 @@ export class ContactsIndex extends Component {
           />
         ))
     }
-    
+
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-start ${styles.searchable}`}>
         {title ? (
@@ -234,7 +219,7 @@ ContactsIndex.propTypes = {
 
 ContactsIndex.defaultProps = {
   handleClick: null,
-  contactsData: {contacts:[], numContactPages: 1},
+  contactsData: { contacts: [], numContactPages: 1 },
   seeAll: null,
   theme: null,
   showTooltip: false,

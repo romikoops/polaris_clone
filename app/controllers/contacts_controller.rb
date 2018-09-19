@@ -61,23 +61,23 @@ class ContactsController < ApplicationController
 
   def search_contacts
     filterific_params = {
-      search_query: params[:query]
+      contacts_query: params[:query]
     }
 
     (filterrific = initialize_filterrific(
-      Contact,
+      current_user.contacts,
       filterific_params,
       available_filters: [
-        :search_query
+        :contacts_query
       ],
       sanitize_params:   true
     )) || return
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:as_options_json)
+    contacts_results = filterrific.find
+    contacts = contacts_results.paginate(page: params[:page], per_page: per_page).map(&:as_options_json)
     response_handler(
-      shipments:          shipments,
-      num_shipment_pages: (filterrific.find.count / per_page).ceil,
-      target:             params[:target],
+      contacts:          contacts,
+      numContactPages: (contacts_results.count / per_page).ceil,
       page:               params[:page]
     )
   end
