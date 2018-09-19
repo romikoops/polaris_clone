@@ -5,7 +5,7 @@ class Document < ApplicationRecord
   belongs_to :shipment
   belongs_to :user
   belongs_to :tenant
-  belongs_to :quotation
+  belongs_to :quotation, optional: true
 
   def self.upload_doc(options)
     upload(options)

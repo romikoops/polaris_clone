@@ -8,7 +8,6 @@ class UsersController < ApplicationController
 
   def home
     @shipper = current_user
-    @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false).map do |contact|
       contact.as_json(
         include: { location: { include: { country: { only: :name } },
@@ -24,7 +23,6 @@ class UsersController < ApplicationController
 
     resp = {
       shipments:         shipments_hash,
-      pricings:          @pricings,
       contacts:          @contacts,
       num_contact_pages: (@shipper.contacts.count.to_f / 6).to_f.ceil,
       aliases:           @aliases,

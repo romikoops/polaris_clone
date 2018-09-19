@@ -6,7 +6,7 @@ import styles from '../AdminShipments.scss'
 import adminStyles from '../Admin.scss'
 import GradientBorder from '../../GradientBorder'
 import { moment } from '../../../constants'
-import { formattedPriceValue } from '../../../helpers'
+import { formattedPriceValue, totalPrice } from '../../../helpers'
 import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
 import ContactDetailsRow from './ContactDetailsRow'
 import GreyBox from '../../GreyBox/GreyBox'
@@ -66,7 +66,6 @@ export class AdminShipmentContent extends Component {
       showEditServicePrice,
       toggleEditServicePrice,
       newPrices,
-      totalPrice,
       accountHolder,
       feeHash,
       selectedStyle,
@@ -649,7 +648,6 @@ AdminShipmentContent.propTypes = {
   toggleEditTime: PropTypes.func,
   showEditServicePrice: PropTypes.bool,
   newPrices: PropTypes.objectOf(PropTypes.any),
-  totalPrice: PropTypes.func,
   toggleEditServicePrice: PropTypes.func,
   handlePriceChangePre: PropTypes.func,
   handlePriceChangeOn: PropTypes.func,
@@ -684,7 +682,6 @@ AdminShipmentContent.defaultProps = {
   toggleEditTime: null,
   showEditServicePrice: false,
   newPrices: {},
-  totalPrice: null,
   accountHolder: {}
 }
 
