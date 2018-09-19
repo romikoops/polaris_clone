@@ -118,9 +118,9 @@ class UsersController < ApplicationController
   def shipments_hash
     current_user.tenant.quotation_tool ?
     {
-      quoted:   quoted_shipments.limit(3)&.map(&:as_options_json)
+      quoted:   quoted_shipments.order(:booking_placed_at).limit(3)&.map(&:as_options_json)
     } : {
-      requested: requested_shipments.limit(3)&.map(&:as_options_json)
+      requested: requested_shipments.order(:booking_placed_at).limit(3)&.map(&:as_options_json)
     }
   end
 

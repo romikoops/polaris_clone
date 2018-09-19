@@ -389,7 +389,7 @@ module ShippingTools
   def self.choose_offer(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
 
-    shipment.user_id =        params[:user_id]
+    shipment.user_id =        current_user.id
     shipment.customs_credit = params[:customs_credit]
 
     shipment.trip_id =      params[:schedule]['trip_id']
