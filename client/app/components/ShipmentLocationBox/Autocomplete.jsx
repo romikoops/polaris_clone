@@ -299,4 +299,4 @@ Autocomplete.defaultProps = {
   hasErrors: false
 }
 
-export default translate(['common'])(Autocomplete)
+export default translate(['common', 'errors'])(Autocomplete)
