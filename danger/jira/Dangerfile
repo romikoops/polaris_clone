@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+# Support multiple JIRA projects
+jira_keys = 'IMC'
+jira_keys_regexp = Regexp.new(/((?:#{jira_keys})-[0-9]+)/)
+
+jira_issues = []
+
+# Search MR Title
+jira_issues << gitlab.mr_title.scan(jira_keys_regexp)
+
+jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
+
+if jira_issues.flatten.uniq.empty?
+  warn 'This Merge Request does not contain any JIRA issue keys in the MR title or in commit messages (e.g. IMC-42).'
+end
+
+if gitlab.mr_title.scan(jira_keys_regexp).empty?
+  warn 'This Merge Request does not refer any JIRA Tickets in its title. Consider adding JIRA ticket to MR title.'
+end
