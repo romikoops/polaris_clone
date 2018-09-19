@@ -20,6 +20,8 @@
         "pending": "Pending",
         "decline": "decline",
         "learnMore": "Learn more",
+        "areaPostalCodes": "Area/ Postal Codes",
+        "addresses": "Addresses",
         "useCookies": "This website uses cookies to enhance your user experience. ",
         "cookiesPolicy":"cookies pgitolicy",
         "ok": "ok, accept",
@@ -364,6 +366,9 @@
         "maxWeight": "Maximum weight is",
         "maxHeight": "Maximum height is",
         "maxLength": "Maximum length is",
+        "noRoutesFrom": "No routes found from",
+        "noRoutesFound": "No routes found",
+        "noRoutesTo": "No routes found to",
         "maxWidth": "Maximum width is"
       },
       "trucking": {
