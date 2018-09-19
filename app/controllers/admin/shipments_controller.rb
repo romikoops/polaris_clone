@@ -360,7 +360,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def quoted_shipments
-    @quoted_shipments ||= current_user.shipments.quoted
+    @quoted_shipments ||= tenant_shipment.quoted
   end
 
   def finished_shipments

@@ -8,7 +8,7 @@ import '../../styles/react-toggle.scss'
 import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
-import { colorSVG, determineSpecialism } from '../../helpers'
+import { colorSVG, determineSpecialism, isDefined } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
@@ -433,7 +433,7 @@ class ShipmentLocationBox extends Component {
 
   postToggleAutocomplete (target) {
     const { map } = this.state
-    if ( target === 'destination') {
+    if (target === 'destination') {
       const timeout = map ? 1000 : 2000
       setTimeout(() => this.initAutocomplete(map, target), timeout)
     }
@@ -479,8 +479,6 @@ class ShipmentLocationBox extends Component {
   handlePlaceChange (place, target) {
     this.changeAddressFormVisibility(target, true)
 
-    // this.infowindow.close()
-    // this.marker.setVisible(false)
     if (!place.geometry) {
       return
     }
@@ -562,90 +560,93 @@ class ShipmentLocationBox extends Component {
   }
 
   selectLocation (place, target) {
-    const counterpart = target === 'origin' ? 'destination' : 'origin'
+    this.setState({ fetchingtruckingAvailability: true }, () => {
+      const counterpart = target === 'origin' ? 'destination' : 'origin'
 
-    setTimeout(() => {
-      if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
-    }, 6000)
+      setTimeout(() => {
+        if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
+      }, 6000)
 
-    const { shipmentData, filteredRouteIndexes } = this.props
-    const { lookupTablesForRoutes, routes, shipment } = shipmentData
-    const lat = place.geometry.location.lat()
-    const lng = place.geometry.location.lng()
+      const { shipmentData, filteredRouteIndexes } = this.props
+      const { lookupTablesForRoutes, routes, shipment } = shipmentData
+      const lat = place.geometry.location.lat()
+      const lng = place.geometry.location.lng()
 
-    const tenantId = shipment.tenant_id
-    const loadType = shipment.load_type
+      const tenantId = shipment.tenant_id
+      const loadType = shipment.load_type
 
-    const prefix = target === 'origin' ? 'pre' : 'on'
+      const prefix = target === 'origin' ? 'pre' : 'on'
 
-    const availableHubIds = routeFilters.getHubIds(filteredRouteIndexes, lookupTablesForRoutes, routes, target)
-    getRequests.findAvailability(
-      lat,
-      lng,
-      tenantId,
-      loadType,
-      prefix,
-      availableHubIds,
-      (truckingAvailable, nexusIds, hubIds) => {
-        if (!truckingAvailable) {
-          getRequests.findNexus(lat, lng, (nexus) => {
-            const { direction } = this.props.shipmentData.shipment
-            const { scope } = this.props
-            const carriageOptionScope = scope.carriage_options[`${prefix}_carriage`][direction]
-            let nexusOption
-            if (nexus && carriageOptionScope === 'optional') {
-              nexusOption = routeFilters.getNexusOption(nexus.id, lookupTablesForRoutes, routes, target)
-            }
+      const availableHubIds = routeFilters.getHubIds(filteredRouteIndexes, lookupTablesForRoutes, routes, target)
+      getRequests.findAvailability(
+        lat,
+        lng,
+        tenantId,
+        loadType,
+        prefix,
+        availableHubIds,
+        (truckingAvailable, nexusIds, hubIds) => {
+          if (!truckingAvailable) {
+            getRequests.findNexus(lat, lng, (nexus) => {
+              const { direction } = this.props.shipmentData.shipment
+              const { scope } = this.props
+              const carriageOptionScope = scope.carriage_options[`${prefix}_carriage`][direction]
+              let nexusOption
+              if (nexus && carriageOptionScope === 'optional') {
+                nexusOption = routeFilters.getNexusOption(nexus.id, lookupTablesForRoutes, routes, target)
+              }
 
-            if (nexusOption) {
-              this.handleTrucking({
-                target: {
-                  name: `has_${prefix}_carriage`,
-                  checked: false
-                }
-              })
-              this.setState({
-                autoText: {
-                  ...this.state.autoText,
-                  [target]: ''
-                }
-              })
-            }
-            target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
+              if (nexusOption) {
+                this.handleTrucking({
+                  target: {
+                    name: `has_${prefix}_carriage`,
+                    checked: false
+                  }
+                })
+                this.setState({
+                  autoText: {
+                    ...this.state.autoText,
+                    [target]: ''
+                  }
+                })
+              }
+              target === 'origin' ? this.setOriginNexus(nexusOption) : this.setDestNexus(nexusOption)
 
-            const fieldsHaveErrors = !nexusOption
-            this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
-            const addressFormsHaveErrors =
-              fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
-            this.props.handleSelectLocation(addressFormsHaveErrors)
-          })
-        } else {
+              const fieldsHaveErrors = !nexusOption
+              this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
+              const addressFormsHaveErrors =
+                fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
+              this.props.handleSelectLocation(addressFormsHaveErrors)
+            })
+          } else {
+            this.setState({
+              [`${target}FieldsHaveErrors`]: false,
+              truckingHubs: {
+                ...this.state.truckingHubs,
+                [target]: hubIds
+              }
+            }, () => this.prepForSelect(target))
+            this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
+            this.props.setNotesIds(nexusIds, target)
+
+            addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
+              this.props.setTargetAddress(target, { ...address, nexusIds })
+            })
+          }
+
           this.setState({
-            [`${target}FieldsHaveErrors`]: false,
-            truckingHubs: {
-              ...this.state.truckingHubs,
-              [target]: hubIds
+            fetchingtruckingAvailability: false,
+            truckingOptions: {
+              ...this.state.truckingOptions,
+              [`${prefix}Carriage`]: truckingAvailable
             }
-          }, () => this.prepForSelect(target))
-          this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
-          this.props.setNotesIds(nexusIds, target)
-
-          addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
-            this.props.setTargetAddress(target, { ...address, nexusIds })
           })
         }
+      )
 
-        this.setState({
-          truckingOptions: {
-            ...this.state.truckingOptions,
-            [`${prefix}Carriage`]: truckingAvailable
-          }
-        })
-      }
-    )
-
-    this.setState({
-      autoText: { ...this.state.autoText, [target]: place.formatted_address }
+      this.setState({
+        autoText: { ...this.state.autoText, [target]: place.formatted_address }
+      })
     })
   }
 
@@ -681,9 +682,7 @@ class ShipmentLocationBox extends Component {
   loadPrevReq (props) {
     const {
       prevRequest,
-      shipmentData,
-      shipmentDispatch,
-      t
+      shipmentData
     } = props
     const { routes } = shipmentData
     if (!prevRequest || (prevRequest && !prevRequest.shipment)) {
@@ -736,20 +735,40 @@ class ShipmentLocationBox extends Component {
         this.setState({
           swapStarted: false
         }, () => this.props.handleSwap())
+        this.setRouteError(shipment.origin.nexus_name, shipment.destination.nexus_name)
       }
-      const errors = [
-        {
-          type: 'error',
-          text: `${t('errors:noRoutesBetween')} ${shipment.origin.nexus_name} ${t('common:and')} ${shipment.destination.nexus_name}`
-        }
-      ]
-      shipmentDispatch.setError({ stage: 'stage2', errors })
     }
 
     this.setState(newState, () => {
       this.prepForSelect('destination')
       this.prepForSelect('origin')
     })
+  }
+  setRouteError (origin, destination) {
+    const { shipmentDispatch, t } = this.props
+    const errors = []
+    if (isDefined(origin) && isDefined(destination)) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesBetween')} ${origin} ${t('common:and')} ${destination}`
+      })
+    } else if (isDefined(origin) && !isDefined(destination)) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesFrom')} ${origin}`
+      })
+    } else if (!origin && destination) {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesTo')} ${destination}`
+      })
+    } else {
+      errors.push({
+        type: 'error',
+        text: `${t('errors:noRoutesFound')}`
+      })
+    }
+    shipmentDispatch.setError({ stage: 'stage2', errors })
   }
   loadReusedShipment () {
     const { reusedShipment, shipmentData } = this.props
@@ -885,9 +904,9 @@ class ShipmentLocationBox extends Component {
   prepForSelect (target) {
     this.setState((prevState) => {
       const {
-        truckingHubs, oSelect, dSelect, t
+        truckingHubs, oSelect, dSelect
       } = prevState
-      const { filteredRouteIndexes, shipmentDispatch } = this.props
+      const { filteredRouteIndexes } = this.props
       const { lookupTablesForRoutes, routes } = this.props.shipmentData
       const targetLocation = target === 'origin' ? oSelect : dSelect
       const targetTrucking = truckingHubs[target]
@@ -941,13 +960,7 @@ class ShipmentLocationBox extends Component {
 
       if (targetTrucking) this.prepTruckTypes(newFilteredRoutes, target)
       if (newFilteredRouteIndexes.length === 0) {
-        const errors = [
-          {
-            type: 'error',
-            text: `${t('errors:noRoutesBetween')} ${counterpartLocation.label} ${t('common:and')} ${targetLocation.label}`
-          }
-        ]
-        shipmentDispatch.setError({ stage: 'stage2', errors })
+        this.setRouteError(counterpartLocation.label, targetLocation.label)
       }
       this.props.updateFilteredRouteIndexes(newFilteredRouteIndexes)
 
@@ -1012,7 +1025,8 @@ class ShipmentLocationBox extends Component {
       speciality,
       truckTypes,
       originTruckingAvailable,
-      destinationTruckingAvailable
+      destinationTruckingAvailable,
+      fetchingtruckingAvailability
     } = this.state
     if (availableDestinationNexuses) destinationOptions = availableDestinationNexuses
     if (availableOriginNexuses) originOptions = availableOriginNexuses
@@ -1026,6 +1040,7 @@ class ShipmentLocationBox extends Component {
           value={this.state.oSelect}
           placeholder={t('shipment:origin')}
           options={originOptions}
+          disabled={fetchingtruckingAvailability}
           onChange={this.setOriginNexus}
           nextStageAttempt={nextStageAttempts > 0}
         />
@@ -1042,6 +1057,7 @@ class ShipmentLocationBox extends Component {
           name="destination-hub"
           className={styles.select}
           value={this.state.dSelect}
+          disabled={fetchingtruckingAvailability}
           placeholder={t('shipment:destination')}
           options={destinationOptions}
           onChange={this.setDestNexus}
@@ -1170,6 +1186,7 @@ class ShipmentLocationBox extends Component {
           theme={this.props.theme}
           t={t}
           map={this.state.map}
+
           input={this.state.autoText.origin}
           hasErrors={originFieldsHaveErrors}
           handlePlaceSelect={place => this.handlePlaceChange(place, 'origin')}
@@ -1370,12 +1387,12 @@ class ShipmentLocationBox extends Component {
               } ${truckTypesStyle} ${errorClass}`}
             >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
-                { speciality !== 'truck'
+                {speciality !== 'truck'
                   ? <div
                     className={
                       'flex-45 layout-row layout-align-start layout-wrap ' +
-                    `${styles.toggle_box} ` +
-                    `${!truckingOptions.preCarriage ? styles.not_available : ''}`
+                      `${styles.toggle_box} ` +
+                      `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                     }
                   >
                     <TruckingTooltip
@@ -1398,7 +1415,7 @@ class ShipmentLocationBox extends Component {
                       {t('shipment:pickUp')}
                     </label>
                     {loadType === 'container' && this.props.has_pre_carriage ? preCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:pickUp')}:</p></div> }
+                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:pickUp')}:</p></div>}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
@@ -1415,12 +1432,12 @@ class ShipmentLocationBox extends Component {
               </div>
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
-                { speciality !== 'truck'
+                {speciality !== 'truck'
                   ? <div
                     className={
                       'flex-45 layout-row layout-align-start layout-wrap ' +
-                    `${styles.toggle_box} ` +
-                    `${!truckingOptions.onCarriage ? styles.not_available : ''}`
+                      `${styles.toggle_box} ` +
+                      `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                     }
                   >
                     <TruckingTooltip
@@ -1443,7 +1460,7 @@ class ShipmentLocationBox extends Component {
                       onChange={this.handleTrucking}
                     />
                     {loadType === 'container' && this.props.has_on_carriage ? onCarriageTruckTypes : ''}
-                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div> }
+                  </div> : <div className={`flex-20 layout-row layout-align-end-center ${styles.trucking_text}`}><p className="flex-none">{t('shipment:delivery')}:</p></div>}
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
