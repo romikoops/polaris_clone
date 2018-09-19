@@ -16,6 +16,7 @@ class PdfHandler
     @quotes     = args[:quotes]
     @quotation  = args[:quotation]
     @logo       = args[:logo]
+    @load_type  = args[:load_type]
 
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
   end
@@ -26,13 +27,14 @@ class PdfHandler
       template: @template,
       show_as_html: true,
       locals:   {
-        shipment: @shipment,
+        shipment:  @shipment,
         shipments: @shipments,
-        quotes: @quotes,
-        logo: @logo,
-        tenant: @shipment.tenant
+        quotes:    @quotes,
+        logo:      @logo,
+        load_type: @load_type,
+        tenant:    @shipment.tenant
       }
-      )
+    )
     @raw_pdf_string = WickedPdf.new.pdf_from_string(
       doc_erb.render,
       margin: @margin

@@ -88,13 +88,26 @@ class ShipmentMailer < ApplicationMailer
     bill_of_lading.upload
   end
 
-  def self.generate_and_upload_shipment_pdf(shipment)
+  def self.generate_and_upload_shipment_pdf(shipment)    
+    cargo_count = shipment.selected_offer["cargo"].count
+    load_type = ''
+    if shipment.load_type == 'cargo_item' && cargo_count > 3
+      load_type = 'Cargo Items'
+    elsif shipment.load_type == 'cargo_item' && cargo_count == 3
+      load_type = 'Cargo Item'
+    elsif shipment.load_type == 'container' && cargo_count > 3
+      load_type = 'Containers'
+    elsif shipment.load_type == 'container' && cargo_count === 3
+      load_type = 'Container'
+    end
+
     shipment_recap = PdfHandler.new(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/shipment_recap.pdf.html.erb",
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      name:     "shipment_recap"
+      layout:    "pdfs/simple.pdf.html.erb",
+      template:  "shipments/pdfs/shipment_recap.pdf.html.erb",
+      margin:    { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment:  shipment,
+      load_type: load_type,
+      name:      "shipment_recap"
     )
 
     shipment_recap.generate
