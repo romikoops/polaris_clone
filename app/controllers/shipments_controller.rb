@@ -13,11 +13,13 @@ class ShipmentsController < ApplicationController
   def delta_page_handler
     case params[:target]
     when "requested"
-      shipment_association = current_user.shipments.requested
+      shipment_association = current_user.shipments.requested.order(:booking_placed_at)
     when "open"
-      shipment_association = current_user.shipments.open
+      shipment_association = current_user.shipments.open.order(:booking_placed_at)
     when "finished"
-      shipment_association = current_user.shipments.finished
+      shipment_association = current_user.shipments.finished.order(:booking_placed_at)
+    when "quoted"
+      shipment_association = current_user.shipments.quoted.order(:booking_placed_at)
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association
@@ -47,13 +49,13 @@ class ShipmentsController < ApplicationController
     ]
     case params[:target]
     when "requested"
-      shipment_association = current_user.shipments.requested
+      shipment_association = current_user.shipments.requested.order(:booking_placed_at)
     when "open"
-      shipment_association = current_user.shipments.open
+      shipment_association = current_user.shipments.open.order(:booking_placed_at)
     when "finished"
-      shipment_association = current_user.shipments.finished
+      shipment_association = current_user.shipments.finished.order(:booking_placed_at)
     when "quoted"
-      shipment_association = current_user.shipments.quoted
+      shipment_association = current_user.shipments.quoted.order(:booking_placed_at)
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
 
