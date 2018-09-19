@@ -59,6 +59,29 @@ class ContactsController < ApplicationController
     response_handler(contact.as_options_json)
   end
 
+  def search_contacts
+    filterific_params = {
+      search_query: params[:query]
+    }
+
+    (filterrific = initialize_filterrific(
+      Contact,
+      filterific_params,
+      available_filters: [
+        :search_query
+      ],
+      sanitize_params:   true
+    )) || return
+    per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
+    shipments = filterrific.find.paginate(page: params[:page], per_page: per_page).map(&:as_options_json)
+    response_handler(
+      shipments:          shipments,
+      num_shipment_pages: (filterrific.find.count / per_page).ceil,
+      target:             params[:target],
+      page:               params[:page]
+    )
+  end
+
   def update_contact_address
     data = JSON.parse(params[:address])
     loc = Location.find(data['id'])
