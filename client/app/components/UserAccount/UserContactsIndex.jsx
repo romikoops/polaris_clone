@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
-import { AdminSearchableClients } from '../Admin/AdminSearchables'
 import { RoundButton } from '../RoundButton/RoundButton'
 import SideOptionsBox from '../Admin/SideOptions/SideOptionsBox'
 import styles from '../Admin/Admin.scss'
+import ContactsIndex from '../Contacts/ContactsIndex';
 
 export class UserContactsIndex extends Component {
   constructor (props) {
@@ -67,44 +67,15 @@ export class UserContactsIndex extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-start extra_padding_left">
         <div className="flex-80 flex-sm-95 flex-xs-95 layout-row layout-align-start-start">
           <div className="layout-row layout-wrap flex-100">
-            <AdminSearchableClients
+            <ContactsIndex
               theme={theme}
-              hideFilters
-              clients={contacts}
-              handleClick={viewContact}
-              seeAll={false}
               placeholder="Search Contacts"
             />
-            <div className="flex-95 layout-row layout-align-center-center margin_bottom">
-              <div
-                className={`
-              flex-15 layout-row layout-align-center-center pointy
-              ${styles.navigation_button} ${this.state.page === 1 ? styles.disabled : ''}
-            `}
-                onClick={this.state.page > 1 ? this.prevPage : null}
-              >
-                {/* style={this.state.page === 1 ? { display: 'none' } : {}} */}
-                <i className="fa fa-chevron-left" />
-                <p>&nbsp;&nbsp;&nbsp;&nbsp;{t('common:basicBack')}</p>
-              </div>
-              {}
-              <p>{this.state.page}</p>
-              <div
-                className={`
-              flex-15 layout-row layout-align-center-center pointy
-              ${styles.navigation_button} ${this.state.page < numPages ? '' : styles.disabled}
-            `}
-                onClick={this.state.page < numPages ? this.nextPage : null}
-              >
-                <p>{t('common:next')}&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                <i className="fa fa-chevron-right" />
-              </div>
-            </div>
           </div>
           {newContactBox}
         </div>
         <div className="layout-column flex-20 hide-xs hide-sm layout-align-end-end relative" >
-          <div className={`layout-column  hide-xs layout-align-end-end ${styles.side_box_style}`}>
+          <div className={`layout-column  width_100 hide-xs layout-align-end-end ${styles.side_box_style}`}>
             <SideOptionsBox
               header="Data Manager"
               content={
