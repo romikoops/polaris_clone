@@ -6,17 +6,40 @@ stages:
 
 code_quality:
   stage: test
+  image: eu.gcr.io/itsmycargo-main/pronto:stable
   tags:
     - itsmycargo
-  image: eu.gcr.io/itsmycargo-main/pronto:stable
+  except:
+    refs:
+      - master
+      - dev
   script:
     - scripts/pronto
 
-api:
+danger-review:
   stage: test
+  image: eu.gcr.io/itsmycargo-main/danger:latest
   tags:
     - itsmycargo
+  allow_failure: true
+  cache: {}
+  dependencies: []
+  before_script: []
+  only:
+    variables:
+      - $DANGER_GITLAB_API_TOKEN
+  except:
+    refs:
+      - master
+      - dev
+  script:
+    - danger --fail-on-errors=true
+
+api:
+  stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
+  tags:
+    - itsmycargo
   services:
     - mdillon/postgis
   variables:
