@@ -11,22 +11,16 @@ import adminStyles from '../Admin.scss'
 import styles from '../AdminShipments.scss'
 import DocumentsForm from '../../Documents/Form'
 import GradientBorder from '../../GradientBorder'
-import ShipmentOverviewShowCard from './ShipmentOverviewShowCard'
-import ContactDetailsRow from './ContactDetailsRow'
-import GreyBox from '../../GreyBox/GreyBox'
 import {
   gradientTextGenerator,
   gradientGenerator,
   gradientBorderGenerator,
   switchIcon,
-  totalPrice,
-  formattedPriceValue
+  totalPrice
 } from '../../../helpers'
 import { CargoContainerGroup } from '../../Cargo/Container/Group'
-import Tabs from '../../Tabs/Tabs'
-import Tab from '../../Tabs/Tab'
 import { AdminShipmentContent } from './AdminShipmentContent'
-import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent';
+import { ShipmentQuotationContent } from '../../UserAccount/ShipmentQuotationContent'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -449,14 +443,6 @@ export class AdminShipmentView extends Component {
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
-      // ,
-      // customs_declaration: false,
-      // customs_value_declaration: false,
-      // eori: false,
-      // certificate_of_origin: false,
-      // dangerous_goods: false,
-      // bill_of_lading: false,
-      // invoice: false
     }
     const missingDocs = []
     if (documents) {
