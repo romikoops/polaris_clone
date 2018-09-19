@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+labels = gitlab.mr_labels
+new_labels = []
+
+all_files = git.added_files + git.modified_files
+
+## Migrations
+if all_files.include? 'db/migrate/*'
+  new_labels << 'migrations'
+end
+
+## Translations
+rails_translations = all_files.include? 'config/locales/*'
+js_translations = all_files.include? 'client/i18n/**/*'
+new_labels << 'translations' if rails_translations || js_translations
+
+unless (new_labels - labels).empty?
+  gitlab.api.update_merge_request(
+    gitlab.mr_json['project_id'],
+    gitlab.mr_json['iid'],
+    labels: (new_labels + labels).uniq.join(',')
+  )
+end
