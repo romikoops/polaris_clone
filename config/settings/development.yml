@@ -6,5 +6,5 @@ aws:
 fixer:
   api_key: <%= ENV['FIXER_API_KEY'] %>
 
-  google:
-    api_key: <%= ENV['GOOGLE_MAPS_SERVER_API_KEY'] %>
+google:
+  api_key: <%= ENV['GOOGLE_MAPS_SERVER_API_KEY'] %>
