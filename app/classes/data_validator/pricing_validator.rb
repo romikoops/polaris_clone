@@ -9,8 +9,8 @@ module DataValidator
       # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
       # @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       # @json_array = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_data.json").read).deep_symbolize_keys!
-      # signed_url = get_file_url(params['key'], "assets.itsmycargo.com")
-      signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test.xlsx")
+      # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test_approved.xlsx")
       @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
@@ -27,13 +27,18 @@ module DataValidator
       @xlsx.sheets.each do |sheet|
         @sheet = @xlsx.sheet(sheet).dup()
         @sheet_name = sheet
-        create_sheet_rows
-        create_cargo_key_hash
-        create_fees_key_hash('import')
-        create_fees_key_hash('export')
-        create_fees_key_hash('freight')
-        create_example_results
-        calculate
+        begin
+          create_sheet_rows
+          create_cargo_key_hash
+          create_fees_key_hash('import')
+          create_fees_key_hash('export')
+          create_fees_key_hash('freight')
+          create_example_results
+          calculate
+        rescue
+          binding.pry
+          next
+        end
       end
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       print_results
@@ -55,6 +60,7 @@ module DataValidator
     end
 
     def create_sheet_rows
+      # binding.pry
       start = @sheet.first_row
       @sheet_rows = []
       while start <= @sheet.last_row
@@ -67,6 +73,7 @@ module DataValidator
 
     def create_cargo_key_hash
       units_index = @row_keys['UNITS']
+      @cargo_unit_keys = []
       current_index = units_index + 2
       all_units = false
       while !all_units
@@ -106,7 +113,7 @@ module DataValidator
       
       all_columns = false
       while !all_columns
-        column = @sheet.column(column_index)
+        column = @sheet.column(column_index).dup()
         if column.first.blank?
           all_columns = true
         else
@@ -148,7 +155,7 @@ module DataValidator
     end
 
     def string_to_currency_value(str)
-      return {value: 0, currency: 'USD'} if !str
+      return nil if !str
       currency, value = str.split(' ')
       return {value: value, currency: currency}
     end
@@ -164,15 +171,19 @@ module DataValidator
           cargos << new_cargo
         end
       end
+      # binding.pry
       cargos
     end
 
     def get_top_value_currency(column, key)
       str = column[@row_keys[key]]
-      if key == 'TOTAL'
-        return string_to_currency_value(str)
+      to_display = string_to_currency_value(str)
+      if to_display.nil?
+        return nil
+      elsif key == 'TOTAL'
+        return to_display
       else
-        return {total: string_to_currency_value(str)}
+        return {total: to_display}
       end
     end
 
@@ -183,6 +194,7 @@ module DataValidator
         user: @user,
         tenant: @tenant,
         load_type: example[:data][:load_type],
+        planned_pickup_date: DateTime.now + 2.weeks,
         origin_hub: @origin_hub,
         destination_hub: @destination_hub,
         trucking: determine_trucking_hash(example)
@@ -198,7 +210,8 @@ module DataValidator
       @data_for_price_checker[:has_pre_carriage] = example[:data][:pickup_address]
       @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
         name: example[:data][:service_level],
-        carrier: Carrier.find_by_name(example[:data][:carrier])
+        carrier: Carrier.find_by_name(example[:data][:carrier]),
+        mode_of_transport: @example[:data][:mode_of_transport]
       )
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
       validate_prices(example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
@@ -210,7 +223,11 @@ module DataValidator
           cu[:cargo_item_type_id] = CargoItemType.find_by_description("Pallet").id
           cu
         end : example[:data][:cargo_units]
-      example[:data][:load_type].camelize.constantize.extract(data_to_extract)
+        begin
+        example[:data][:load_type].camelize.constantize.extract(data_to_extract)
+        rescue
+          binding.pry
+        end
     end
 
     def determine_itineraries
@@ -239,16 +256,16 @@ module DataValidator
 
     def get_diff_value(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
-      expected_value = expected_result.dig(*keys, :value).to_d
-      return 'N/A'  if (value.blank?  || expected_value.blank?)
-      return ((value - expected_value).abs).round(3)
+      expected_value = expected_result.dig(*keys, :value).try(:to_d)
+      return nil  if (value.blank?  || expected_value.blank?)
+      return ((value - expected_value).abs).try(:round, 3)
     end
 
     def get_diff_percentage(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
-      expected_value = expected_result.dig(*keys, :value).to_d
-      return 100 if ((value.blank? || value == 0) || (expected_value.blank? || expected_value == 0))
-      return (((value - expected_value)/expected_value) * 100).round(3)
+      expected_value = expected_result.dig(*keys, :value).try(:to_d)
+      return nil if ((value.blank? || value == 0) || (expected_value.blank? || expected_value == 0))
+      return (((value - expected_value)/expected_value) * 100).try(:round, 3)
     end
 
     def get_currency(result, keys)
@@ -270,6 +287,7 @@ module DataValidator
       diff_percent =  get_diff_percentage(result, keys, expected_result)
       diff_val =  get_diff_value(result, keys, expected_result)
       currency = get_currency(result, keys)
+      return nil if diff_val.nil?
       return "#{currency} #{diff_val} (#{diff_percent}%)"
     end
 
@@ -277,13 +295,18 @@ module DataValidator
       result.deep_symbolize_keys!
       result_for_printing = {}
       expected_result.each do |key1, value1|
-        if value1[:value]
+        if value1 && value1[:value]
           result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
         elsif key1 == 'cargo'
-
-        else
+          value1[:cargo_item].each do |key2, value2|
+            if key2.to_s != 'edited_total' || key2.to_s != 'total'
+              result_for_printing[key1] = {} unless result_for_printing[key1]
+              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+            end 
+          end
+        elsif value1 && value1[:total]
           value1.each do |key2, value2|
-            if key2.to_s != 'edited_total'
+            if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
             end 
