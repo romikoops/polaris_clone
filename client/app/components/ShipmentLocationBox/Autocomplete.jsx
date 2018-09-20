@@ -178,11 +178,14 @@ class Autocomplete extends PureComponent {
     return ''
   }
   handleSelect (result) {
+    listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
+
     const { handlePlaceSelect } = this.props
     this.getPlace(result.place_id, place => handlePlaceSelect(place))
-    this.setState({ hideResults: true })
+    this.setState({ hideResults: true, listenerSet: false })
   }
   shouldExpandResults () {
+    listenerTools.addHandler(document, 'keydown', this.handleKeyEvent)
     this.setState({ hideResults: false })
   }
   render () {
@@ -236,7 +239,10 @@ class Autocomplete extends PureComponent {
       <div className={`flex-100 layout-row layout-align-center-center ${styles.autocomplete_container}`}>
         <div
           className={`flex-none ${!hideResults && hasResults ? styles.exit_click : styles.hidden}`}
-          onClick={() => this.setState({ hideResults: true })}
+          onClick={() => {
+            this.setState({ hideResults: true, listenerSet: false })
+            listenerTools.removeHandler(document, 'keydown', this.handleKeyEvent)
+          }}
         />
         <div
           className={`flex-100 layout-row input_box_full ${styles.autocomplete_input} ${inputErrorStyle}`}
