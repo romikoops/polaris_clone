@@ -20,6 +20,7 @@ module DocumentService
       
       @data.each do |page, column_hash|
         @row = 0
+        next if column_hash.values.empty?
         header_data = build_header_rows(column_hash)
         new_worksheet_hash = add_worksheet_to_workbook(@workbook, [], page)
         @worksheet = new_worksheet_hash[:worksheet]
@@ -54,13 +55,13 @@ module DocumentService
       top_row = [target.upcase]
       sym_key = target == 'freight' ? :cargo : target.to_sym
       column_hash.values.each do |c_hash|
-        top_row << "#{c_hash.dig(:expected, sym_key, :total, :currency)} #{c_hash.dig(:expected, sym_key, :total, :value).round(3)}"
+        top_row << "#{c_hash.dig(:expected, sym_key, :total, :currency)} #{c_hash.dig(:expected, sym_key, :total, :value).try(:to_d).try(:round, 3)}"
         top_row << "#{c_hash.dig(:result, :quote, sym_key, :total, :currency)} #{c_hash.dig(:result, :quote, sym_key, :total, :value)}"
         top_row << c_hash.dig(:diff, sym_key, :total)
       end
       @worksheet = write_to_sheet(@worksheet, @row, 0, top_row)
       @row += 1
-      default_fees = column_hash.values.first[:diff][sym_key]
+      default_fees = column_hash.values.first[:expected][sym_key]
       default_fees.keys.each do |fee_key|
         if fee_key.to_sym != :total && sym_key != :cargo
           fee_row = ["-#{fee_key.to_s}"]
@@ -94,14 +95,22 @@ module DocumentService
         cargo_units[column_id] = column_hash[column_id][:data][:cargo_units]
       end
       max_unit_count = cargo_units.values.map(&:count).max
+      begin
       example_unit = cargo_units.values.first.first
+      rescue
+        binding.pry
+      end
       current_unit = 1
       while current_unit <= max_unit_count
         example_unit.keys.each do |example_key|
           unit_row = ["##{current_unit}-#{example_key}"]
           column_hash.keys.each do |c_key|
             3.times do 
-              unit_row << cargo_units[c_key][current_unit - 1][example_key]
+              if example_key == 'cargo_item_type_id'
+                unit_row << CargoItemType.find(cargo_units[c_key][current_unit - 1][example_key]).name
+              else
+                unit_row << cargo_units[c_key][current_unit - 1][example_key]
+              end
             end if cargo_units[c_key][current_unit - 1]
           end
           @worksheet = write_to_sheet(@worksheet, @row, 0, unit_row)
@@ -156,8 +165,8 @@ module DocumentService
             row << data[:service_level].try(:name)
           end
         when 'TOTAL'
-          result_total = result.dig(:total, :value).nil? ? nil : result.dig(:total, :value).round(3)
-          expected_total = expected.dig(:total, :value).nil? ? nil : expected.dig(:total, :value).round(3)
+          result_total = result.dig(:total, :value).nil? ? nil : result.dig(:total, :value).to_d.round(3)
+          expected_total = expected.dig(:total, :value).nil? ? nil : expected.dig(:total, :value).to_d.round(3)
           row << "#{expected.dig(:total, :currency)} #{expected_total}"
           row << "#{result.dig(:total, :currency)} #{result_total}"
           row << diff.dig(:total)
@@ -179,9 +188,9 @@ module DocumentService
     def build_header_rows(data)
       header_values = ['']
       data.keys.each do |number|
-        header_values << "No: #{number} - EXPECTED"
-        header_values << "No: #{number} - ACTUAL"
-        header_values << "No: #{number} - DIFF"
+        header_values << "No: #{number.to_i - 1} - EXPECTED"
+        header_values << "No: #{number.to_i - 1} - ACTUAL"
+        header_values << "No: #{number.to_i - 1} - DIFF"
       end
       header_values
     end
