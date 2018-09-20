@@ -345,7 +345,8 @@
         "addLocation": "Add location",
         "userEmails": "UserEmails",
         "company": "Company",
-        "addressDetails": "Address Details"
+        "addressDetails": "Address Details",
+        "gdprYourData": "GDPR - Your Data"
       },
       "imc": {
         "imcTerms": "ItsMyCargo GMBH Terms and Conditions",
