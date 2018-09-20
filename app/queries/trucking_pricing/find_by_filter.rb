@@ -24,6 +24,9 @@ module Queries
         @nexus_ids   = args[:nexus_ids]
         @hub_ids     = args[:hub_ids]
         @distance    = args[:distance]
+
+        @zipcode      = '42677'
+        @country_code = 'SE'
       end
 
       def perform

@@ -232,15 +232,15 @@ class Location < ApplicationRecord
   end
 
   def closest_location_with_distance
-    locations = Location.where(location_type: "nexus")
-    distances = locations.map do |location|
+    nexuses = Nexus.all
+    distances = nexuses.map do |nexus|
       Geocoder::Calculations.distance_between(
         [latitude, longitude],
-        [location.latitude, location.longitude]
+        [nexus.latitude, nexus.longitude]
       )
     end
     lowest_distance = distances.reject(&:nan?).min
-    [locations[distances.find_index(lowest_distance)], lowest_distance]
+    [nexuses[distances.find_index(lowest_distance)], lowest_distance]
   end
 
   def closest_hubs
