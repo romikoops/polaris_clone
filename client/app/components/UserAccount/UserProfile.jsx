@@ -499,7 +499,7 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {t('imc:imcCookes')}
+                        {t('imc:imcCookies')}
                       </p>
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
