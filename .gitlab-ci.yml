@@ -22,7 +22,6 @@ code_quality:
       - master
       - dev
 
-
 danger-review:
   stage: test
   image: eu.gcr.io/itsmycargo-main/danger:latest
@@ -167,10 +166,11 @@ stop_review:
     - itsmycargo
   variables:
     GIT_STRATEGY: none
+    REVIEW_NAMESPACE: default
 
   script: |
     helm delete --purge "$CI_ENVIRONMENT_SLUG"
-    kubectl delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql"
+    kubectl --namespace=$REVIEW_NAMESPACE delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql"
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
