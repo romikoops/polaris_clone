@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import styles from './index.scss'
-import collapsedStyles from '../../CollapsingBar/Content/CollapsingContent.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
 import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
