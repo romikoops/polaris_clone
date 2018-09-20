@@ -168,7 +168,18 @@
     opacity: 0.25;
   }
   .view_switch {
-    cursor: pointer;
+    &:focus {
+      .container_info_prices {
+        transform: translateY(-300px)
+      }
+    }
+    opacity: 1;
+    transition: 0.5s opacity ease-in, 0.8s transform ease;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    transform: translateY(0px);
+    text-shadow: 0 0 0;
     p {
       font-size: 12px;
     }

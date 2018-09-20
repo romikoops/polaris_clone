@@ -243,22 +243,22 @@ export class ChooseOffer extends Component {
             truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
           />
         </div>
-      ) )
+      ))
     const closestRoutestoRender = closestRoutes.map(s => (
 
-        <div className="margin_bottom flex-100">
-          <QuoteCard
-            theme={theme}
-            tenant={tenant}
-            pickup={shipment.has_pre_carriage}
-            result={s}
-            handleClick={e => this.handleClick(e, s)}
-            selectResult={this.chooseResult}
-            cargo={shipmentData.cargoUnits}
-            truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
-          />
-        </div>
-      ) )
+      <div className="margin_bottom flex-100">
+        <QuoteCard
+          theme={theme}
+          tenant={tenant}
+          pickup={shipment.has_pre_carriage}
+          result={s}
+          handleClick={e => this.handleClick(e, s)}
+          selectResult={this.chooseResult}
+          cargo={shipmentData.cargoUnits}
+          truckingTime={shipment.trucking.pre_carriage.trucking_time_in_seconds}
+        />
+      </div>
+    ))
 
     const lastResultDate = results[results.length - 1].etd
     const firstResultDate = results[0].etd

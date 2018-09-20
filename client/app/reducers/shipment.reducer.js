@@ -166,7 +166,7 @@ export default function shipment (state = {}, action) {
         loading: true
       }
     case shipmentConstants.CHOOSE_OFFER_SUCCESS:
-
+      debugger // eslint-disable-line no-debugger
       return {
         ...state,
         response: {

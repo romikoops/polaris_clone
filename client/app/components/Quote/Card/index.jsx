@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react'
 import styles from './index.scss'
+import collapsedStyles from '../../CollapsingBar/Content/CollapsingContent.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
 import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
 import { ChargeIcons } from './ChargeIcons'
 import CollapsingBar from '../../CollapsingBar/CollapsingBar'
 import { RoundButton } from '../../RoundButton/RoundButton'
+import CollapsingContent from '../../CollapsingBar/Content'
 
 class QuoteCard extends PureComponent {
   static returnHubType (hub) {
@@ -43,7 +45,8 @@ class QuoteCard extends PureComponent {
     this.state = {
       expander: {},
       isChecked: false,
-      showSchedules: true
+      showSchedules: true,
+      panelHeight: ''
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
@@ -63,8 +66,18 @@ class QuoteCard extends PureComponent {
 
     return handleClick(e, value)
   }
-  toggleShowSchedules () {
-    this.setState(prevState => ({ showSchedules: !prevState.showSchedules }))
+  updateHeight () {
+    const panelHeight = this.panel.clientHeight
+    if (panelHeight > this.state.panelHeight || !this.state.panelHeight) {
+      this.setState({ panelHeight })
+    }
+  }
+  toggleShowSchedules (key) {
+    this.setState(prevState => (
+      {
+        showSchedules: !prevState.showSchedules
+      }
+    ), () => this.toggleExpander(key))
   }
 
   selectSchedule (schedule) {
@@ -91,7 +104,6 @@ class QuoteCard extends PureComponent {
     } = this.state
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
-    const hasDates = result.schedules && result.schedules.length > 0
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
@@ -200,22 +212,22 @@ class QuoteCard extends PureComponent {
 
     const showPriceBreakdownBtn = (
       <div
-        className={`flex layout-row layout-align-center-center ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules()}
+        className={`flex layout-row layout-align-center-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('prices')}
       >
         <p className="flex-none">View Price Breakdown</p>
       </div>
     )
     const showSchedulesBtn = schedulesArr.length > 0 ? (
       <div
-        className={`flex layout-row layout-align-center-center ${styles.view_switch}`}
-        onClick={() => this.toggleShowSchedules()}
+        className={`flex layout-row layout-align-center-center pointy ${styles.view_switch}`}
+        onClick={() => this.toggleShowSchedules('schedules')}
       >
         <p className="flex-none">View Schedules</p>
       </div>
     ) : (<div
       className="flex layout-row layout-align-center-center"
-     />)
+    />)
 
     return (
       <div
@@ -265,7 +277,15 @@ class QuoteCard extends PureComponent {
             <p className="layout-row layout-align-end-center margin_5">{`Service: ${capitalize(result.meta.service_level)}`}</p>
           </div> : '' }
         </div>
-        {showSchedules ? schedulesArr : pricesArr}
+
+        <CollapsingContent
+          collapsed={showSchedules}
+          content={schedulesArr}
+        />
+        <CollapsingContent
+          collapsed={!showSchedules}
+          content={pricesArr}
+        />
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-start-stretch ${styles.total_row}`}>
             <div className="flex-25 layout-row layout-align-start-center">
