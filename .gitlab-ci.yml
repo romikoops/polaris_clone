@@ -3,28 +3,40 @@ variables:
 
 stages:
   - test
+  - build
+  - review
+  - cleanup
 
 code_quality:
   stage: test
   image: eu.gcr.io/itsmycargo-main/pronto:stable
+  retry: 1
   tags:
     - itsmycargo
+
+  script:
+    - scripts/pronto
+
   except:
     refs:
       - master
       - dev
-  script:
-    - scripts/pronto
+
 
 danger-review:
   stage: test
   image: eu.gcr.io/itsmycargo-main/danger:latest
+  retry: 1
   tags:
     - itsmycargo
   allow_failure: true
   cache: {}
   dependencies: []
   before_script: []
+
+  script:
+    - danger --fail-on-errors=true
+
   only:
     variables:
       - $DANGER_GITLAB_API_TOKEN
@@ -32,19 +44,19 @@ danger-review:
     refs:
       - master
       - dev
-  script:
-    - danger --fail-on-errors=true
 
 api:
   stage: test
   image: eu.gcr.io/itsmycargo-main/base:stable
+  retry: 1
   tags:
     - itsmycargo
-  services:
-    - mdillon/postgis
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
+  services:
+    - mdillon/postgis
+
   script:
     - scripts/test
 
@@ -62,8 +74,10 @@ api:
 client:
   stage: test
   image: node:10-alpine
+  retry: 1
   tags:
     - itsmycargo
+  retry: 1
 
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -86,3 +100,84 @@ client:
     reports:
       junit:
         - client/junit.xml
+
+docker:
+  stage: build
+  image: docker:stable
+  retry: 1
+  tags:
+    - itsmycargo
+  variables:
+    DOCKER_HOST: tcp://localhost:2375/
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache --update git
+    - wget -q -O /usr/bin/habitus 'https://github.com/cloud66-oss/habitus/releases/download/1.0.3/habitus_linux_amd64'
+    - chmod +x /usr/bin/habitus
+
+  script: |
+    docker login -u _json_key --password-stdin ${GCP_REGISTRY} <${GOOGLE_APPLICATION_CREDENTIALS}
+    /usr/bin/habitus -env REGISTRY=${GCP_REGISTRY} -env TAG=${CI_COMMIT_SHA}
+    /usr/bin/habitus -env REGISTRY=${GCP_REGISTRY} -env TAG=${CI_COMMIT_SHA} \
+      -build RELEASE=${CI_COMMIT_SHA} \
+      -build SENTRY_AUTH_TOKEN=99d1e01c60204a9ea79d8d69e89cb92c378870f30bd642d4b77117cf25461c64 \
+      -d client/
+    docker push ${GCP_REGISTRY}/imc/api:${CI_COMMIT_SHA}
+    docker push ${GCP_REGISTRY}/imc/client:${CI_COMMIT_SHA}
+  only:
+    - branches
+  except:
+    - master
+    - dev
+
+review:
+  stage: review
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  tags:
+    - itsmycargo
+
+  script: |
+    helm upgrade --install \
+      --wait \
+      --set backend.image.tag="$CI_COMMIT_SHA" \
+      --set frontend.image.tag="$CI_COMMIT_SHA" \
+      --set service.url="$CI_ENVIRONMENT_URL" \
+      --namespace=default \
+      --version="$CI_PIPELINE_ID-$CI_JOB_ID" \
+      "$CI_ENVIRONMENT_SLUG" \
+      chart/
+
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://$CI_ENVIRONMENT_SLUG.itsmycargo.tech
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+    - dev
+
+stop_review:
+  stage: cleanup
+  image: eu.gcr.io/itsmycargo-main/deploy:latest
+  tags:
+    - itsmycargo
+  variables:
+    GIT_STRATEGY: none
+
+  script: |
+    helm delete --purge "$CI_ENVIRONMENT_SLUG"
+    kubectl delete persistentvolumeclaims "${CI_ENVIRONMENT_SLUG}-postgresql"
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  allow_failure: true
+  only:
+    - branches
+  except:
+    - master
+    - dev

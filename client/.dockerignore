@@ -1,0 +1,6 @@
+.hooks
+.node-env
+.vscode
+Dockerfile
+e2e
+node_modules/

@@ -5,7 +5,7 @@ import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './ResetPasswordForm.scss'
 import FormsyInput from '../FormsyInput/FormsyInput'
-import { BASE_URL } from '../../constants'
+import getApiHost from '../../constants/api.constants'
 import { queryStringToObj } from '../../helpers'
 import Header from '../Header/Header'
 
@@ -39,7 +39,7 @@ export default class ResetPasswordForm extends React.PureComponent {
 
     this.setState({ settingPassword: true })
 
-    fetch(`${BASE_URL}/auth/password`, {
+    fetch(`${getApiHost()}/auth/password`, {
       method: 'PUT',
       headers: buildHeaders(queryStringData),
       body: JSON.stringify(model)

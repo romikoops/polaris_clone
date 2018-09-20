@@ -10,7 +10,9 @@ import Root from './containers/Root'
 import './index.scss'
 
 Raven
-  .config(window.keel.sentryUrl)
+  .config(window.keel.sentryUrl, {
+    release: process.env.RELEASE
+  })
   .install()
 const store = configureStore()
 

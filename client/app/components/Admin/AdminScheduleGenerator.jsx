@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import 'react-day-picker/lib/style.css'
 import ReactTooltip from 'react-tooltip'
 import '../../styles/select-css-custom.css'
-import { moment, BASE_URL, adminSchedules as schedTip } from '../../constants'
+import { moment, getApiHost, adminSchedules as schedTip } from '../../constants'
 import { adminActions } from '../../actions'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -83,7 +83,7 @@ class AdminScheduleGenerator extends Component {
   }
   getStopsForItinerary (itineraryId) {
     window
-      .fetch(`${BASE_URL}/admin/itineraries/${itineraryId}/stops`, {
+      .fetch(`${getApiHost()}/admin/itineraries/${itineraryId}/stops`, {
         method: 'GET',
         headers: authHeader()
       })

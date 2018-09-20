@@ -5,17 +5,17 @@ module AwsConfig
   module ClassMethods
     def aws_signer
       Aws::S3::Presigner.new(
-        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-        region:            ENV["AWS_REGION"]
+        access_key_id:     Settings.aws.access_key_id,
+        secret_access_key: Settings.aws.secret_access_key,
+        region:            Settings.aws.region
       )
     end
 
     def aws_client
       Aws::S3::Client.new(
-        access_key_id:     ENV["AWS_ACCESS_KEY_ID"],
-        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"],
-        region:            ENV["AWS_REGION"]
+        access_key_id:     Settings.aws.access_key_id,
+        secret_access_key: Settings.aws.secret_access_key,
+        region:            Settings.aws.region
       )
     end
 
@@ -30,11 +30,11 @@ module AwsConfig
     def create_on_aws(file, shipment)
       obj_key = self.path(shipment) + "/" + file.name
       public_awsurl = self.awsurl + obj_key
-      self.aws_signer.put_object(bucket: ENV["AWS_BUCKET"], key: obj_key, body: file, content_type: file.content_type, acl: "private")
+      self.aws_signer.put_object(bucket: Settings.aws.bucket, key: obj_key, body: file, content_type: file.content_type, acl: "private")
       shipment.documents.create(url: public_awsurl, shipment_id: shipment["uuid"], text: file.name)
     end
 
-    def get_file_url(key, bucket=ENV["AWS_BUCKET"])
+    def get_file_url(key, bucket=Settings.aws.bucket)
       self.aws_signer.presigned_url(:get_object, bucket: bucket, key: key)
     end
 
@@ -61,7 +61,7 @@ module AwsConfig
 
     def save_asset(file, obj_key)
     aws_client.put_object(
-      bucket: ENV["AWS_BUCKET"], key: obj_key, body: file,
+      bucket: Settings.aws.bucket, key: obj_key, body: file,
       content_type: file.content_type, acl: "public-read")
     end
   end
@@ -97,7 +97,7 @@ module AwsConfig
       self.class.create_on_aws(file, shipment)
     end
 
-    def get_file_url(key, bucket=ENV["AWS_BUCKET"])
+    def get_file_url(key, bucket=Settings.aws.bucket)
       self.aws_signer.presigned_url(:get_object, bucket: bucket, key: key)
     end
 
