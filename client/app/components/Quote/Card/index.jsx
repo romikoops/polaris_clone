@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import styles from './index.scss'
-import collapsedStyles from '../../CollapsingBar/Content/CollapsingContent.scss'
 import PropTypes from '../../../prop-types'
 import { moment } from '../../../constants'
 import { switchIcon, gradientTextGenerator, numberSpacing, capitalize } from '../../../helpers'
@@ -66,12 +65,6 @@ class QuoteCard extends PureComponent {
 
     return handleClick(e, value)
   }
-  updateHeight () {
-    const panelHeight = this.panel.clientHeight
-    if (panelHeight > this.state.panelHeight || !this.state.panelHeight) {
-      this.setState({ panelHeight })
-    }
-  }
   toggleShowSchedules (key) {
     this.setState(prevState => (
       {
@@ -93,7 +86,8 @@ class QuoteCard extends PureComponent {
       cargo,
       handleInputChange,
       pickup,
-      truckingTime
+      truckingTime,
+      isQuotationTool
     } = this.props
     const {
       quote,
@@ -154,9 +148,6 @@ class QuoteCard extends PureComponent {
       <div className={`flex-75 layout-row ${styles.dates_row}`}>
         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
           <div className="flex-100 layout-row">
-            <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
-          </div>
-          <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
               {pickup
@@ -166,9 +157,7 @@ class QuoteCard extends PureComponent {
           </div>
         </div>
         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <h4 className={styles.date_title}>{`ETD ${QuoteCard.returnHubType(originHub)}`}</h4>
-          </div>
+
           <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
@@ -178,9 +167,6 @@ class QuoteCard extends PureComponent {
         </div>
         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
           <div className="flex-100 layout-row">
-            <h4 className={styles.date_title}>{`ETA ${QuoteCard.returnHubType(destinationHub)} `}</h4>
-          </div>
-          <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
               {moment(schedule.eta).format('DD-MM-YYYY')}{' '}
@@ -188,9 +174,6 @@ class QuoteCard extends PureComponent {
           </div>
         </div>
         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-          <div className="flex-100 layout-row">
-            <h4 className={styles.date_title}> Estimated T/T </h4>
-          </div>
           <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
@@ -212,7 +195,7 @@ class QuoteCard extends PureComponent {
 
     const showPriceBreakdownBtn = (
       <div
-        className={`flex layout-row layout-align-center-center pointy ${styles.view_switch}`}
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
         onClick={() => this.toggleShowSchedules('prices')}
       >
         <p className="flex-none">View Price Breakdown</p>
@@ -220,7 +203,7 @@ class QuoteCard extends PureComponent {
     )
     const showSchedulesBtn = schedulesArr.length > 0 ? (
       <div
-        className={`flex layout-row layout-align-center-center pointy ${styles.view_switch}`}
+        className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
         onClick={() => this.toggleShowSchedules('schedules')}
       >
         <p className="flex-none">View Schedules</p>
@@ -266,7 +249,7 @@ class QuoteCard extends PureComponent {
             </div>
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-space-around-center">
+        <div className="flex-100 layout-row layout-align-space-around-center" style={{ paddingBottom: '18px' }}>
 
           { result.meta.carrier_name ? <div className="flex-50 layout-row layout-align-center-center">
             <i className="flex-none fa fa-ship" style={{ paddingRight: '7px' }} />
@@ -279,30 +262,55 @@ class QuoteCard extends PureComponent {
         </div>
 
         <CollapsingContent
-          collapsed={showSchedules}
-          content={schedulesArr}
+          collapsed={!showSchedules}
+          content={(
+            <div className="flex-100 layout-wrap layout-row">
+              <div className={`flex-100 layout-row ${styles.dates_row} ${styles.dates_container} ${styles.dates_header}`}>
+                <div className="flex-75 layout-row">
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{`ETD ${QuoteCard.returnHubType(originHub)}`}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}>{`ETA ${QuoteCard.returnHubType(destinationHub)} `}</h4>
+                  </div>
+                  <div className="flex-25 layout-row">
+                    <h4 className={styles.date_title}> Estimated T/T </h4>
+                  </div>
+                </div>
+                <div className="flex-25 layout-row" />
+              </div>
+
+              {schedulesArr}
+            </div>
+          )}
         />
         <CollapsingContent
-          collapsed={!showSchedules}
+          collapsed={showSchedules}
           content={pricesArr}
         />
         <div className="flex-100 layout-wrap layout-align-start-stretch">
-          <div className={`flex-100 layout-row layout-align-start-stretch ${styles.total_row}`}>
-            <div className="flex-25 layout-row layout-align-start-center">
-              <span>Total</span>
-            </div>
-            <div className="flex-25 layout-row layout-align-center-center">
+          <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
+            <div className="flex-60 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
               {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
             </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
-              <input
-                className="pointy"
-                name="checked"
-                type="checkbox"
-                onClick={e => this.handleClickChecked(e, result)}
-                onChange={handleInputChange}
-              />
+            <div className="flex-10 layout-row layout-align-start-center">
+              <span style={{ textAlign: 'right' }}>Total</span>
+            </div>
+            <div className="flex-35 layout-row layout-align-end-center">
+              <p style={!isQuotationTool ? { paddingRight: '18px' } : {}}>{numberSpacing(quote.total.value, 2)}&nbsp;{quote.total.currency}</p>
+              {isQuotationTool ? (
+                <input
+                  className="pointy"
+                  name="checked"
+                  type="checkbox"
+                  onClick={e => this.handleClickChecked(e, result)}
+                  onChange={handleInputChange}
+                />
+              ) : ''}
+
             </div>
           </div>
         </div>
@@ -320,7 +328,8 @@ QuoteCard.propTypes = {
   handleInputChange: PropTypes.func,
   handleClick: PropTypes.func,
   selectResult: PropTypes.func,
-  pickup: PropTypes.bool
+  pickup: PropTypes.bool,
+  isQuotationTool: PropTypes.bool
 }
 
 QuoteCard.defaultProps = {
@@ -332,7 +341,8 @@ QuoteCard.defaultProps = {
   handleInputChange: null,
   selectResult: null,
   handleClick: null,
-  pickup: false
+  pickup: false,
+  isQuotationTool: false
 }
 
 export default QuoteCard

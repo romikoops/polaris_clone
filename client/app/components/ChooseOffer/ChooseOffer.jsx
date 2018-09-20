@@ -235,6 +235,7 @@ export class ChooseOffer extends Component {
           <QuoteCard
             theme={theme}
             tenant={tenant}
+            isQuotationTool={isQuotationTool}
             pickup={shipment.has_pre_carriage}
             result={s}
             handleClick={e => this.handleClick(e, s)}
@@ -250,6 +251,7 @@ export class ChooseOffer extends Component {
         <QuoteCard
           theme={theme}
           tenant={tenant}
+          isQuotationTool={isQuotationTool}
           pickup={shipment.has_pre_carriage}
           result={s}
           handleClick={e => this.handleClick(e, s)}
