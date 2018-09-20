@@ -1,3 +1,4 @@
+export * from './config.constants'
 export * from './alert.constants'
 export * from './user.constants'
 export { default as authenticationConstants } from './authentication.constants'

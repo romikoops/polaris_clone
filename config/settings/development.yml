@@ -1,0 +1,10 @@
+aws:
+  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  bucket: imcdev
+
+fixer:
+  api_key: <%= ENV['FIXER_API_KEY'] %>
+
+  google:
+    api_key: <%= ENV['GOOGLE_MAPS_SERVER_API_KEY'] %>

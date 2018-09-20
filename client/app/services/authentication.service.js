@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise-promise'
-import { BASE_URL } from '../constants'
-import { authHeader } from '../helpers'
+import getApiHost from '../constants/api.constants'
+import authHeader from '../helpers'
 import getSubdomain from '../helpers/subdomain'
 
 const { fetch, localStorage } = window
@@ -19,7 +19,8 @@ function login (data) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: data.email, password: data.password })
   }
-  return fetch(`${BASE_URL}/auth/sign_in`, requestOptions)
+
+  return fetch(`${getApiHost()}/auth/sign_in`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.json())
@@ -65,7 +66,7 @@ function register (user) {
     body: JSON.stringify(user)
   }
 
-  return fetch(`${BASE_URL}/auth/`, requestOptions)
+  return fetch(`${getApiHost()}/auth/`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.statusText)
@@ -106,7 +107,7 @@ function updateUser (user, req) {
     body: JSON.stringify({ update: req })
   }
 
-  return fetch(`${BASE_URL}/users/${user.id}/update`, requestOptions)
+  return fetch(`${getApiHost()}/users/${user.id}/update`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.statusText)

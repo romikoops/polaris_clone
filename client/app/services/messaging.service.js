@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import { BASE_URL } from '../constants'
+import getApiHost from '../constants/api.constants'
 import { authHeader } from '../helpers'
 
 const { fetch } = window
@@ -19,7 +19,8 @@ function getUserConversations () {
     method: 'GET',
     headers: authHeader()
   }
-  return fetch(`${BASE_URL}/messaging/get`, requestOptions).then(handleResponse)
+
+  return fetch(`${getApiHost()}/messaging/get`, requestOptions).then(handleResponse)
 }
 
 function getAdminConversations () {
@@ -27,7 +28,8 @@ function getAdminConversations () {
     method: 'GET',
     headers: authHeader()
   }
-  return fetch(`${BASE_URL}/messaging/get_admin`, requestOptions).then(handleResponse)
+
+  return fetch(`${getApiHost()}/messaging/get_admin`, requestOptions).then(handleResponse)
 }
 
 function sendUserMessage (message) {
@@ -36,7 +38,8 @@ function sendUserMessage (message) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ message })
   }
-  const url = `${BASE_URL}/messaging/send`
+  const url = `${getApiHost()}/messaging/send`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -46,7 +49,8 @@ function getShipmentData (ref) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ ref })
   }
-  const url = `${BASE_URL}/messaging/data`
+  const url = `${getApiHost()}/messaging/data`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 function getShipmentsData (keys) {
@@ -55,7 +59,8 @@ function getShipmentsData (keys) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ keys })
   }
-  const url = `${BASE_URL}/messaging/shipments`
+  const url = `${getApiHost()}/messaging/shipments`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -65,7 +70,8 @@ function markAsRead (shipmentRef) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ shipmentRef })
   }
-  const url = `${BASE_URL}/messaging/mark`
+  const url = `${getApiHost()}/messaging/mark`
+
   return fetch(url, requestOptions).then(handleResponse)
 }
 

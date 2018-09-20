@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
 import {
-  BASE_URL,
   tenantConstants
 } from '../constants'
+import getApiHost from '../constants/api.constants'
 
 function requestTenant (subdomain) {
   return {
@@ -44,7 +44,8 @@ function fetchTenant (subdomain) {
 
   return (dispatch) => {
     dispatch(requestTenant(subdomain))
-    return fetch(`${BASE_URL}/tenants/${subdomain}`)
+
+    return fetch(`${getApiHost()}/tenants/${subdomain}`)
       .then(response => response.json())
       .then(
         json => dispatch(receiveTenant(subdomain, json)),

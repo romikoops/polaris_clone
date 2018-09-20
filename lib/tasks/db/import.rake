@@ -34,9 +34,9 @@ namespace :db do
 
       bucket = storage.bucket('itsmycargo-main-engineering-resources')
       file = bucket.file('db/full_anon.sqlc')
+      puts "  Created: #{file.created_at}"
       file.download(SEED_FILE.to_s)
-
-      puts 'Done.'
+      puts '  Done.'
     end
 
     task :restore do

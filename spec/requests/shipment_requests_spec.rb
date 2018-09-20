@@ -103,7 +103,7 @@ describe 'Shipment requests', type: :request do
             headers: {}
           )
 
-        stub_request(:get, "http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=EUR")
+        stub_request(:get, "http://data.fixer.io/latest?access_key=#{Settings.fixer.api_key}&base=EUR")
           .with(
             headers: {
               'Connection'=>'close',

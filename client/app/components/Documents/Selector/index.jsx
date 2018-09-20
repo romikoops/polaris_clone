@@ -4,7 +4,7 @@ import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'uuid'
 import PropTypes from '../../../prop-types'
-import { BASE_URL } from '../../../constants'
+import getApiHost from '../../../constants/api.constants'
 import { authHeader } from '../../../helpers'
 import { RoundButton } from '../../RoundButton/RoundButton'
 import styles from './index.scss'
@@ -85,7 +85,7 @@ class DocumentsSelector extends React.Component {
         headers: { ...authHeader() },
         body: formData
       }
-      const uploadUrl = BASE_URL + url
+      const uploadUrl = getApiHost() + url
       fetch(uploadUrl, requestOptions).then(DocumentsSelector.handleResponse)
       if (this.uploaderInput.files.length) {
         this.uploaderInput.value = ''

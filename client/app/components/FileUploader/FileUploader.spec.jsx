@@ -22,9 +22,9 @@ jest.mock('../../helpers', () => ({
   authHeader: x => x
 }))
 jest.mock('../../constants', () => {
-  const BASE_URL = 'BASE_URL'
+  const getApiHost = () => 'getApiHost'
 
-  return { BASE_URL }
+  return { getApiHost }
 })
 // eslint-disable-next-line
 import FileUploader from './FileUploader'

@@ -1,0 +1,30 @@
+{{- if .Values.ingress.enabled -}}
+{{- $serviceName := include "app.fullname" . -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: {{ template "app.name" . }}
+    chart: {{ template "app.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "app.fullname" . }}-backend
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    certmanager.k8s.io/cluster-issuer: letsencrypt
+spec:
+  rules:
+  - host: "api.{{ include "hostname" .Values.service.url }}"
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: {{ $serviceName }}
+            servicePort: http-backend
+  tls:
+  - secretName: {{ $serviceName }}-backend-tls
+    hosts:
+      - "api.{{ include "hostname" .Values.service.url }}"
+{{- end }}

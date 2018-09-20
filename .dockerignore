@@ -1,0 +1,12 @@
+.bundle/
+.ebextensions/
+.git/
+.vscode/
+chart/
+client/
+docker-compose.test.yaml
+Dockerfile*
+dump/
+log/*
+node_modules/
+tmp/*
