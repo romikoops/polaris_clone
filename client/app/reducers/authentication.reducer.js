@@ -63,6 +63,7 @@ export default function (state = initialState, action) {
       }
     case authenticationConstants.UPDATE_USER_SUCCESS:
       return {
+        ...state,
         loggedIn: true,
         registered: true,
         user: action.user
@@ -75,11 +76,13 @@ export default function (state = initialState, action) {
       }
     case authenticationConstants.REGISTRATION_REQUEST:
       return {
+        ...state,
         loading: !!action.target,
         registering: !action.user.guest
       }
     case authenticationConstants.REGISTRATION_SUCCESS:
       return {
+        ...state,
         loggedIn: true,
         registered: true,
         user: action.user
