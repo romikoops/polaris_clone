@@ -40,12 +40,16 @@ export class LandingTop extends Component {
       if (!isClosed) {
         return [components.rates, components.login]
       }
+
       return [components.login]
     }
     if (['shipper', 'agent', 'agency_manager'].includes(user.role.name)) {
-      if (!isClosed) {
+      if (user.guest) {
+        return [components.rates]
+      } else if (!isClosed) {
         return [components.rates, components.account]
       }
+
       return [components.account]
     }
     if (['admin', 'sub_admin', 'super_admin'].includes(user.role.name)) {
