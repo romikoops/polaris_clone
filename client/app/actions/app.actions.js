@@ -12,7 +12,7 @@ import {
   documentActions,
   tenantActions
 } from './'
-import getSubdomain from '../helpers'
+import getSubdomain from '../helpers/subdomain'
 
 const { fetch } = window
 
