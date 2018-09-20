@@ -8,59 +8,209 @@ module DataValidator
     def post_initialize(args)
       # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
       # @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
-      @json_array = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_data.json").read).deep_symbolize_keys!
+      # @json_array = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_data.json").read).deep_symbolize_keys!
+      # signed_url = get_file_url(params['key'], "assets.itsmycargo.com")
+      signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test.xlsx")
+      @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
       @dummy_data = args[:data]
       @validation_results = {}
+      @row_keys = {}
+      @cargo_unit_keys = []
+      @fee_keys = {}
+      @examples = []
+      @sheet_rows = []
     end
 
     def perform
-      @json_array.each do |origin, json_data|
-        @json_data = json_data
-        @load_type = @json_data[:metadata][:load_type]
-        @origin_hub = @tenant.hubs.find_by_name(@json_data[:metadata][:origin_hub])
-        @json_data[:expected_values].each do |destination_key, results|
-          results.each_with_index do |expected_result, i|
-            price_check(destination_key, expected_result, i)
-          end
-        end
+      @xlsx.sheets.each do |sheet|
+        @sheet = @xlsx.sheet(sheet).dup()
+        @sheet_name = sheet
+        create_sheet_rows
+        create_cargo_key_hash
+        create_fees_key_hash('import')
+        create_fees_key_hash('export')
+        create_fees_key_hash('freight')
+        create_example_results
+        calculate
       end
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       print_results
     end
+    def calculate
+      @examples.each do |example|
+        @example = example
+        @load_type = @example[:data][:load_type]
+        price_check(@example)
+      end
+      # Shipment.where(id: @shipment_ids_to_destroy).destroy_all
+      # print_results
+    end
 
     private
 
-    def price_check(destination_key, expected_result, example_index)
-      example_data = @json_data[:examples][example_index]
-      @destination_hub = @tenant.hubs.find_by_name("#{destination_key} Port")
+    def open_file(file)
+      Roo::Spreadsheet.open(file)
+    end
+
+    def create_sheet_rows
+      start = @sheet.first_row
+      @sheet_rows = []
+      while start <= @sheet.last_row
+        row = @sheet.row(start)
+        @sheet_rows << row
+        @row_keys[row.first] = start - 1
+        start += 1
+      end
+    end
+
+    def create_cargo_key_hash
+      units_index = @row_keys['UNITS']
+      current_index = units_index + 2
+      all_units = false
+      while !all_units
+        row = @sheet.row(current_index)
+        if row.first.include?('#')
+          str = row.first.sub('#', '')
+          str_index, attribute = str.split('-')
+          cargo_index = str_index.to_i
+          @cargo_unit_keys[cargo_index] = {} unless @cargo_unit_keys[cargo_index]
+          @cargo_unit_keys[cargo_index][attribute] = current_index - 1
+          current_index += 1
+        else
+          all_units = true
+        end
+      end
+    end
+
+    def create_fees_key_hash(target)
+      units_index = @row_keys[target.upcase]
+      current_index = units_index + 2
+      all_keys = false
+      while !all_keys
+        row = @sheet.row(current_index)
+        if row.first && row.first.include?('-')
+          attribute = row.first.sub('-', '').strip
+          @fee_keys[target] = {} unless @fee_keys[target]
+          @fee_keys[target][attribute] = current_index - 1
+          current_index += 1
+        else
+          all_keys = true
+        end
+      end
+    end
+
+    def create_example_results
+      column_index = 2
+      
+      all_columns = false
+      while !all_columns
+        column = @sheet.column(column_index)
+        if column.first.blank?
+          all_columns = true
+        else
+          result = {
+            expected: {
+              total: get_top_value_currency(column, 'TOTAL'),
+              trucking_pre: get_top_value_currency(column, 'PRECARRIAGE'),
+              trucking_on: get_top_value_currency(column, 'ONCARRIAGE'),
+              cargo: get_top_value_currency(column, 'FREIGHT'),
+              export: get_top_value_currency(column, 'EXPORT'),
+              import: get_top_value_currency(column, 'IMPORT'),
+            },
+            data: {
+              cargo_units: extract_cargo_units_from_column(column),
+              pickup_address: column[@row_keys['PICKUP_ADDRESS']],
+              delivery_address: column[@row_keys['DELIVERY_ADDRESS']],
+              load_type: column[@row_keys['LOAD_TYPE']],
+              origin_truck_type: column[@row_keys['ORIGIN_TRUCK_TYPE']],
+              destination_truck_type: column[@row_keys['DESTINATION_TRUCK_TYPE']],
+              mode_of_transport: column[@row_keys['MOT']],
+              service_level: column[@row_keys['SERVICE_LEVEL']],
+              carrier: column[@row_keys['CARRIER']],
+              itinerary: @tenant.itineraries.find_by(name: column[@row_keys['ITINERARY']], mode_of_transport: column[@row_keys['MOT']])
+            },
+            result_index: column_index
+          }
+          @fee_keys.deep_symbolize_keys!
+          @fee_keys.each do |direction, fees|
+            target_key = direction == :freight ? :cargo : direction
+            fees.each do |fee_key, row_index|
+              result[:expected][target_key] = {} unless result[:expected][target_key]
+              result[:expected][target_key][fee_key.to_sym] = string_to_currency_value(column[row_index])
+            end
+          end
+          @examples << result
+          column_index += 1
+        end
+      end
+    end
+
+    def string_to_currency_value(str)
+      return {value: 0, currency: 'USD'} if !str
+      currency, value = str.split(' ')
+      return {value: value, currency: currency}
+    end
+
+    def extract_cargo_units_from_column(column)
+      cargos = []
+      @cargo_unit_keys.compact.each do |key_hash|
+        if column[key_hash.values.first]
+          new_cargo = {}
+          key_hash.each do |key, value|
+            new_cargo[key] = column[value]
+          end
+          cargos << new_cargo
+        end
+      end
+      cargos
+    end
+
+    def get_top_value_currency(column, key)
+      str = column[@row_keys[key]]
+      if key == 'TOTAL'
+        return string_to_currency_value(str)
+      else
+        return {total: string_to_currency_value(str)}
+      end
+    end
+
+    def price_check(example)
+      @destination_hub = example[:data][:itinerary].last_stop.hub
+      @origin_hub = example[:data][:itinerary].first_stop.hub
       @shipment = Shipment.create!(
         user: @user,
         tenant: @tenant,
-        load_type: @load_type,
+        load_type: example[:data][:load_type],
+        origin_hub: @origin_hub,
         destination_hub: @destination_hub,
-        trucking: determine_trucking_hash(example_data)
+        trucking: determine_trucking_hash(example)
       )
       @shipment_ids_to_destroy << @shipment.id
-      @shipment.cargo_units = prep_cargo_units(example_data)
+      @shipment.cargo_units = prep_cargo_units(example)
       @hubs = {origin: [@origin_hub], destination: [@destination_hub]}
       @trucking_data_builder      = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
       @trucking_data      = @trucking_data_builder.perform(@hubs)
-      @itineraries = determine_itineraries
-      @data_for_price_checker = @json_data[:metadata]
+      @data_for_price_checker = @example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
-      @data_for_price_checker[:cargo_units] = example_data[:cargo_units]
-      validate_prices(@itineraries, @data_for_price_checker, expected_result, example_index)
+      @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
+      @data_for_price_checker[:has_pre_carriage] = example[:data][:pickup_address]
+      @data_for_price_checker[:service_level] = @tenant.tenant_vehicles.find_by(
+        name: example[:data][:service_level],
+        carrier: Carrier.find_by_name(example[:data][:carrier])
+      )
+      @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
+      validate_prices(example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
     end
 
-    def prep_cargo_units(example_data)
-      data_to_extract = @load_type == 'cargo_item' ? 
-        example_data[:cargo_units].map do |cu|
+    def prep_cargo_units(example)
+      data_to_extract = example[:data][:load_type] == 'cargo_item' ? 
+        example[:data][:cargo_units].map do |cu|
           cu[:cargo_item_type_id] = CargoItemType.find_by_description("Pallet").id
           cu
-        end : example_data[:cargo_units]
-      @load_type.camelize.constantize.extract(data_to_extract)
+        end : example[:data][:cargo_units]
+      example[:data][:load_type].camelize.constantize.extract(data_to_extract)
     end
 
     def determine_itineraries
@@ -70,33 +220,42 @@ module DataValidator
       @tenant.itineraries.where(id: itinerary_ids)
     end
 
-    def determine_trucking_hash(example_data)
+    def determine_trucking_hash(example)
       trucking = { pre_carriage: {truck_type: ''}, on_carriage: {truck_type: ''}}
-      if @json_data[:metadata][:has_pre_carriage]
+      if example[:data][:pickup_address]
         trucking[:pre_carriage] = {
-          truck_type: @load_type === 'cargo_item' ? 'default' : 'chassis',
-          location_id: Location.geocoded_location(example_data[:pickup_address]).id
+          truck_type: example[:data][:origin_truck_type] || 'default',
+          location_id: Location.geocoded_location(example[:data][:pickup_address]).id
         }
       end
-      if @json_data[:metadata][:has_on_carriage]
+      if example[:data][:delivery_address]
         trucking[:on_carriage] = {
-          truck_type: @load_type === 'cargo_item' ? 'default' : 'chassis',
-          location_id: Location.geocoded_location(example_data[:delivery_address]).id
+          truck_type: example[:data][:destination_truck_type] || 'default',
+          location_id: Location.geocoded_location(example[:data][:delivery_address]).id
         }
       end
       trucking
     end
 
-    def get_diff_value(result, key, expected_result)
-      value = result.dig(:quote, key.to_sym, :total, :value)
-      return nil if (value.nil? || expected_result[key.to_sym] < 1)
-      return (value - expected_result[key.to_sym]).abs
+    def get_diff_value(result, keys, expected_result)
+      value = result.dig(:quote, *keys, :value)
+      expected_value = expected_result.dig(*keys, :value).to_d
+      return 'N/A'  if (value.blank?  || expected_value.blank?)
+      return ((value - expected_value).abs).round(3)
     end
 
-    def get_diff_percentage(result, key, expected_result)
-      value = result.dig(:quote, key.to_sym, :total, :value)
-      return nil if (value.nil? || expected_result[key.to_sym] < 1)
-      return ((value - expected_result[key.to_sym])/expected_result[key.to_sym]) * 100
+    def get_diff_percentage(result, keys, expected_result)
+      value = result.dig(:quote, *keys, :value)
+      expected_value = expected_result.dig(*keys, :value).to_d
+      return 100 if ((value.blank? || value == 0) || (expected_value.blank? || expected_value == 0))
+      return (((value - expected_value)/expected_value) * 100).round(3)
+    end
+
+    def get_currency(result, keys)
+      currency = result.dig(:quote, *keys, :currency)
+     
+      return '' if currency.blank?
+      return currency
     end
 
     def print_results
@@ -107,49 +266,44 @@ module DataValidator
       ).perform
     end
 
-    def validate_result(results, expected_result, example_index)
-      result_comparisons = {
-        exact: [],
-        close: [],
-        all: []
-      }
-      results.each do |result|
-        result.deep_symbolize_keys!
-        result_comparisons[:all] << {
-          example_number: example_index + 1,
-          itinerary: result[:itinerary],
-          diff_val:  get_diff_value(result, :total, expected_result),
-          diff_percent:  get_diff_percentage(result, :total, expected_result),
-          trucking_pre_diff_val:  get_diff_value(result, :trucking_pre, expected_result),
-          trucking_pre_diff_percent:  get_diff_percentage(result, :trucking_pre, expected_result),
-          trucking_on_diff_val:  get_diff_value(result, :trucking_on, expected_result),
-          trucking_on_diff_percent:  get_diff_percentage(result, :trucking_on, expected_result),
-          service_level: result[:service_level],
-          expected_total: expected_result[:total],
-          expected_import: expected_result[:import],
-          expected_export: expected_result[:export],
-          import: result.dig(:quote, :import, :total, :value),
-          export: result.dig(:quote, :export, :total, :value),
-          import_diff_val:  get_diff_value(result, :import, expected_result),
-          import_diff_percent:  get_diff_percentage(result, :import, expected_result),
-          export_diff_val:  get_diff_value(result, :export, expected_result),
-          export_diff_percent:  get_diff_percentage(result, :export, expected_result),
-          expected_trucking_pre: expected_result[:trucking_pre],
-          expected_trucking_on: expected_result[:trucking_on],
-          total: result.dig(:quote, :total, :value),
-          trucking_pre: result.dig(:quote, :trucking_pre, :total, :value),
-          trucking_on: result.dig(:quote, :trucking_on, :total, :value)
-        }
-      end
-      result_comparisons
+    def diff_result_string(result, keys, expected_result)
+      diff_percent =  get_diff_percentage(result, keys, expected_result)
+      diff_val =  get_diff_value(result, keys, expected_result)
+      currency = get_currency(result, keys)
+      return "#{currency} #{diff_val} (#{diff_percent}%)"
     end
 
-    def validate_prices(itineraries, data_for_price_checker, expected_results, example_index)
-      itineraries.each do |itinerary|
-        results = itinerary.test_pricings(data_for_price_checker, @user)
-        @validation_results[itinerary.id] = {} unless @validation_results[itinerary.id]
-        @validation_results[itinerary.id][example_index] = validate_result(results, expected_results, example_index)
+    def validate_result(result, expected_result, example_index, data)
+      result.deep_symbolize_keys!
+      result_for_printing = {}
+      expected_result.each do |key1, value1|
+        if value1[:value]
+          result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
+        elsif key1 == 'cargo'
+
+        else
+          value1.each do |key2, value2|
+            if key2.to_s != 'edited_total'
+              result_for_printing[key1] = {} unless result_for_printing[key1]
+              result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
+            end 
+          end
+        end
       end
+      
+      final_result = {
+        result: result,
+        expected: expected_result,
+        number: example_index,
+        diff: result_for_printing,
+        data: data
+      }
+    end
+
+    def validate_prices(itinerary, data_for_price_checker, expected_results, example_index, data)
+      results = itinerary.test_pricings(data_for_price_checker, @user)
+      @validation_results[@sheet_name] = {} unless @validation_results[@sheet_name]
+      @validation_results[@sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
     end
   end
 end

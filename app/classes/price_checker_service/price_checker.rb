@@ -11,6 +11,7 @@ module PriceCheckerService
       @shipment_data = shipment_data
       @user          = user
       @trucking_data = shipment_data[:trucking] || {}
+      @service_level = shipment_data[:service_level]
       @cargo_units = cargo_unit_const.extract(@shipment_data[:cargo_units])
     end
 
@@ -36,13 +37,17 @@ module PriceCheckerService
     private
     
     def prep_faux_schedules
-      tv_ids = {}
-      unique_trips = @itinerary.trips.select { |trip| 
-        if !tv_ids[trip.tenant_vehicle_id]
-          tv_ids[trip.tenant_vehicle_id] = true
-          trip
-        end
-      }
+      if !@service_level
+        tv_ids = {}
+        unique_trips = @itinerary.trips.select { |trip| 
+          if !tv_ids[trip.tenant_vehicle_id]
+            tv_ids[trip.tenant_vehicle_id] = true
+            trip
+          end
+        }
+      else
+        unique_trips = [@itinerary.trips.find_by(tenant_vehicle_id: @service_level.id)]
+      end
       @schedules = unique_trips.map do |trip|
         attributes = {
           origin_hub_id: @origin_hub.id,
