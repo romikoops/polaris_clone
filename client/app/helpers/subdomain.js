@@ -1,7 +1,5 @@
 import getConfig from '../constants/config.constants'
 
-export function getSubdomain () {
+export default function getSubdomain () {
   return getConfig().tenant
 }
-
-export default getSubdomain

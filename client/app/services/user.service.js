@@ -1,5 +1,5 @@
 import { Promise } from 'es6-promise-promise'
-import authHeader from '../helpers'
+import authHeader from '../helpers/auth-header'
 import getSubdomain from '../helpers/subdomain'
 import getApiHost from '../constants/api.constants'
 
