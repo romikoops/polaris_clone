@@ -61,13 +61,14 @@ class Landing extends Component {
 
   render () {
     const {
-      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch, loggingIn
+      loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch
     } = this.props
     const textStyle1 =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const loadingScreen = this.props.loading || loggingIn ? <Loading theme={theme} /> : ''
+
+    const loadingScreen = this.props.loading ? <Loading theme={theme} /> : ''
 
     const minHeightForFooter = window.innerHeight - 350
     const footerStyle = { minHeight: `${minHeightForFooter}px`, position: 'relative', paddingBottom: '230px' }

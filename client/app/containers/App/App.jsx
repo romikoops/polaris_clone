@@ -89,7 +89,7 @@ class App extends Component {
         />
         <div className="flex-100 mc layout-row  layout-align-start">
           {showMessages || sending ? <MessageCenter /> : ''}
-          {isFetching || loading || loggingIn ? <Loading theme={theme} text="loading..." /> : ''}
+          {isFetching || loading ? <Loading theme={theme} text="loading..." /> : ''}
           {user &&
           user.id &&
           tenant &&
