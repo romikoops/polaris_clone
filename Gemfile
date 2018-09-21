@@ -116,7 +116,8 @@ gem 'mjml-rails', '~> 4.1'
 gem 'pry-rails'
 
 group :development, :test do
-  gem 'dotenv-rails' # set environment variables
+  # set environment variables - enforce loading environment right away
+  gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails'
   gem 'fuubar'
   gem 'rails-erd'
