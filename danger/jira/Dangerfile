@@ -6,15 +6,29 @@ jira_keys_regexp = Regexp.new(/((?:#{jira_keys})-[0-9]+)/)
 
 jira_issues = []
 
-# Search MR Title
-jira_issues << gitlab.mr_title.scan(jira_keys_regexp)
-
+# Search Commits
 jira_issues << git.commits.map { |commit| commit.message.scan(jira_keys_regexp) }.compact
 
+message = ''
 if jira_issues.flatten.uniq.empty?
-  warn 'This Merge Request does not contain any JIRA issue keys in the MR title or in commit messages (e.g. IMC-42).'
+  message += <<~MESSAGE
+    This Merge Request does not mention any JIRA tickets in any of its commit messages.
+
+    Please consider to rebase and rewording your commit messages to start with JIRA Ticket, as
+    it helps to pinpoint reasoning for any changes in the future, especially if there is regression.
+  MESSAGE
 end
 
 if gitlab.mr_title.scan(jira_keys_regexp).empty?
-  warn 'This Merge Request does not refer any JIRA Tickets in its title. Consider adding JIRA ticket to MR title.'
+  message += <<~MESSAGE
+    This Merge Request does not mention JIRA Ticket in its title.
+
+    Please consider to editing Merge Request and adding JIRA Ticket to its title
+    as this makes it easy to track open merge requests and keep JIRA Board in sync,
+    as well to make sure we always deploy most important code to production at right time.
+  MESSAGE
+end
+
+unless message.empty?
+  warn message
 end
