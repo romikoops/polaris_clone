@@ -176,6 +176,7 @@ class ShipmentLocationBox extends Component {
       this.setMarker({ lat, lng }, destination.nexus_name, 'destination')
 
       this.setState({ dSelect }, () => this.prepForSelect('destination'))
+      this.props.handleSelectLocation('destination', false)
     } else {
       this.setState({
         truckingOptions: {
@@ -268,6 +269,7 @@ class ShipmentLocationBox extends Component {
       this.setMarker({ lat, lng }, origin.nexus_name, 'origin')
       this.setState({ oSelect }, () => this.prepForSelect('origin'))
       this.props.setNotesIds([event.value.id], 'origin')
+      this.props.handleSelectLocation('origin', false)
     } else {
       this.setState({
         truckingOptions: {
@@ -506,7 +508,7 @@ class ShipmentLocationBox extends Component {
     const fieldsHaveErrors = !this.state[target].fullAddress
     this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
     const addressFormsHaveErrors = fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
-    this.props.handleSelectLocation(addressFormsHaveErrors)
+    this.props.handleSelectLocation(target, addressFormsHaveErrors)
   }
 
   handleTrucking (event) {
@@ -616,7 +618,7 @@ class ShipmentLocationBox extends Component {
               this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
               const addressFormsHaveErrors =
                 fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
-              this.props.handleSelectLocation(addressFormsHaveErrors)
+              this.props.handleSelectLocation(target, addressFormsHaveErrors)
             })
           } else {
             this.setState({
@@ -626,7 +628,7 @@ class ShipmentLocationBox extends Component {
                 [target]: hubIds
               }
             }, () => this.prepForSelect(target))
-            this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
+            this.props.handleSelectLocation(counterpart, this.state[`${counterpart}FieldsHaveErrors`])
             this.props.setNotesIds(nexusIds, target)
 
             addressFromPlace(place, this.props.gMaps, this.state.map, (address) => {
@@ -941,7 +943,7 @@ class ShipmentLocationBox extends Component {
         fieldsHaveErrors = true
         const addressFormsHaveErrors =
           fieldsHaveErrors || prevState[`${counterpart}FieldsHaveErrors`]
-        this.props.handleSelectLocation(addressFormsHaveErrors)
+        this.props.handleSelectLocation(target, addressFormsHaveErrors)
       }
       const newFilteredRoutes = []
       const selectOptions = []
