@@ -49,7 +49,6 @@ export default function users (state = initialState, action) {
           if (newUserData.id === action.id) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = newUserData
-            console.log(deleting)
 
             // return copy of user with 'deleteError:[error]' property
             return { ...userCopy, deleteError: action.error }

@@ -18,7 +18,7 @@ class UserLocationsController < ApplicationController
     resp = []
     user_locs = user.user_locations
     user_locs.each do |ul|
-      resp.push(user: ul, location: ul.location)
+      resp.push(user: ul, location: ul.location.to_custom_hash)
     end
     response_handler(resp)
   end

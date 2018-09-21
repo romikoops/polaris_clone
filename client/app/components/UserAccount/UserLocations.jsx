@@ -35,7 +35,7 @@ class UserLocations extends Component {
   saveLocationEdit (location) {
     const { userDispatch, user } = this.props
     userDispatch.editUserLocation(user.id, location)
-    this.setState({ activeView: 'allLocations' })
+    this.toggleActiveView()
   }
 
   editLocation (location) {
