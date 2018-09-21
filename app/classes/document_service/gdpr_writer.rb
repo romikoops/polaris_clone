@@ -117,31 +117,30 @@ module DocumentService
          customs)
     end
 
-    def write_shipement_headers
+    def write_shipment_headers
       shipment_headers.each_with_index do |header, i|
         shipment_sheet.write(0, i, header.humanize)
       end
     end
 
     def write_shipment_data
-      write_shipement_headers
+      write_shipment_headers
       row = 1
       user_shipments.each do |shipment|
-        if shipment.status != 'booking_process_started'
-          shipment_sheet.write(row, 0, shipment.origin_hub.location.geocoded_address)
-          shipment_sheet.write(row, 1, shipment.destination_hub.location.geocoded_address)
-          shipment_sheet.write(row, 2, shipment.imc_reference)
-          shipment_sheet.write(row, 3, shipment.status)
-          shipment_sheet.write(row, 4, shipment.load_type.humanize)
-          shipment_sheet.write(row, 5, shipment.has_pre_carriage.to_s)
-          shipment_sheet.write(row, 6, shipment.has_on_carriage.to_s)
-          shipment_sheet.write(row, 7, shipment.planned_etd)
-          shipment_sheet.write(row, 8, shipment.planned_eta)
-          shipment_sheet.write(row, 9, "#{shipment.total_price['currency']} #{shipment.total_price['value'].to_d.round(2)}")
-          shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance['val'] ? "#{shipment.insurance['currency']} #{shipment.insurance['val'].to_d.round(2)}" : 'N/A')
-          shipment_sheet.write(row, 11, shipment.customs && shipment.customs['val'] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : 'N/A')
-          row += 1
-        end
+        next unless shipment.status != 'booking_process_started'
+        shipment_sheet.write(row, 0, shipment.origin_hub.location.geocoded_address)
+        shipment_sheet.write(row, 1, shipment.destination_hub.location.geocoded_address)
+        shipment_sheet.write(row, 2, shipment.imc_reference)
+        shipment_sheet.write(row, 3, shipment.status)
+        shipment_sheet.write(row, 4, shipment.load_type.humanize)
+        shipment_sheet.write(row, 5, shipment.has_pre_carriage.to_s)
+        shipment_sheet.write(row, 6, shipment.has_on_carriage.to_s)
+        shipment_sheet.write(row, 7, shipment.planned_etd)
+        shipment_sheet.write(row, 8, shipment.planned_eta)
+        shipment_sheet.write(row, 9, "#{shipment.total_price['currency']} #{shipment.total_price['value'].to_d.round(2)}")
+        shipment_sheet.write(row, 10, shipment.insurance && shipment.insurance['val'] ? "#{shipment.insurance['currency']} #{shipment.insurance['val'].to_d.round(2)}" : 'N/A')
+        shipment_sheet.write(row, 11, shipment.customs && shipment.customs['val'] ? "#{shipment.customs['currency']} #{shipment.customs['val'].to_d.round(2)}" : 'N/A')
+        row += 1
       end
     end
   end
