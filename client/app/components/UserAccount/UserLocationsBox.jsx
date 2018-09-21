@@ -6,6 +6,14 @@ import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { filters } from '../../helpers'
 
+function determinePerPage (locations) {
+  const width = window.innerWidth
+  const perPage = width >= 1920 ? 5 : 3
+  const pages = Math.ceil(locations.length / perPage)
+
+  return { perPage, locations, pages }
+}
+
 class UserLocationsBox extends PureComponent {
   constructor (props) {
     super(props)
@@ -19,18 +27,23 @@ class UserLocationsBox extends PureComponent {
     this.nextPage = this.nextPage.bind(this)
     this.prevPage = this.prevPage.bind(this)
     this.handlePage = this.handlePage.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
-  componentDidMount () {
-    this.determinePerPage()
+  componentWillMount () {
+    this.setState(determinePerPage(this.props.locations))
   }
 
-  determinePerPage () {
-    const { locations } = this.props
-    const width = window.innerWidth
-    const newPerPage = width >= 1920 ? 6 : 4
-    const pages = Math.ceil(locations.length / newPerPage)
-    this.setState({ perPage: newPerPage, locations, pages })
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.locations === this.props.locations) return
+
+    this.setState((prevState) => {
+      if (!this.prevPage.searchText) {
+        return { locations: nextProps.locations }
+      }
+
+      return { locations: this.filterLocations(prevState.searchText) }
+    })
   }
 
   nextPage () {
@@ -39,34 +52,30 @@ class UserLocationsBox extends PureComponent {
   prevPage () {
     this.handlePage(-1)
   }
-  doNothing () {
-    console.log(this.state.page)
-  }
   handlePage (delta) {
-    const { pages, page } = this.state
-    const nextPage = +page + (1 * delta)
-    let realPage
-    if (nextPage > 0 && nextPage <= pages) {
-      realPage = nextPage
-    } else if (nextPage > 0 && nextPage > pages) {
-      realPage = 1
-    } else if (nextPage < 0) {
-      realPage = pages
-    }
-    this.setState({ page: realPage })
+    this.setState(prevState => ({ page: prevState.page + (1 * delta) }))
   }
-  handleSearchChange (event) {
+
+  filterLocations (value) {
     const { locations } = this.props
-    const results = filters.handleSearchChange(
-      event.target.value,
+
+    return filters.handleSearchChange(
+      value,
       [
-        'country',
-        'city',
-        'geocoded_address',
-        'street'
-      ], locations
+        'location.country',
+        'location.city',
+        'location.geocoded_address',
+        'location.street',
+        'location.street_number'
+      ],
+      locations
     )
-    this.setState({ searchText: event.target.value, locations: results, page: 1 })
+  }
+
+  handleSearchChange (e) {
+    const locations = this.filterLocations(e.target.value)
+
+    this.setState({ searchText: e.target.value, locations, page: 1 })
   }
 
   render () {
@@ -104,8 +113,8 @@ class UserLocationsBox extends PureComponent {
         </div>
       </div>
     </div>]
-    const startIndex = 0 + (page * perPage) - 1
-    const endIndex = startIndex + perPage - 1
+    const startIndex = (page - 1) * perPage
+    const endIndex = page * perPage
 
     if (locations.length) {
       locations.sort((a, b) => b.user.primary - a.user.primary).slice(startIndex, endIndex).forEach((op) => {
@@ -122,7 +131,10 @@ class UserLocationsBox extends PureComponent {
                   <div className="layout-row">
                     <div
                       className={`${styles.makePrimary} pointy`}
-                      onClick={() => makePrimary(op.location.id)}
+                      onClick={() => {
+                        makePrimary(op.location.id)
+                        this.setState({ page: 1 })
+                      }}
                     >
                       <i className="fa fa-star-o clip" style={gradient} />
                     </div>
@@ -181,7 +193,7 @@ class UserLocationsBox extends PureComponent {
               name="search"
               value={searchText}
               placeholder="Search Shipments"
-              onChange={e => this.handleSearchChange(e)}
+              onChange={this.handleSearchChange}
             />
           </div>
         </div>
@@ -203,9 +215,9 @@ class UserLocationsBox extends PureComponent {
           <p>{page} / {pages} </p>
           <div
             className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) < pages ? '' : styles.disabled}
-                    `}
+              flex-15 layout-row layout-align-center-center pointy
+              ${styles.navigation_button} ${parseInt(page, 10) < pages ? '' : styles.disabled}
+            `}
             onClick={parseInt(page, 10) < pages ? this.nextPage : null}
           >
             <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
