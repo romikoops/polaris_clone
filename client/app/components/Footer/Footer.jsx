@@ -21,6 +21,10 @@ export function Footer ({
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact'
   }
+
+  let termsLink = ''
+  tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = `https://${tenant.data.subdomain}.itsmycargo.com/terms_and_conditions`
+
   const widthStyle = width ? { width } : {}
 
   return (
@@ -93,7 +97,7 @@ export function Footer ({
             <div className="flex-15 layout-row layout-align-center-center">
               <a
                 target="_blank"
-                href={`https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions`}
+                href={termsLink}
               >
                 Terms and Conditions
               </a>
