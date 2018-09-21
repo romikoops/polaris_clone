@@ -16,8 +16,6 @@ module DocumentService
     end
 
     def perform
-     
-      
       @data.each do |page, column_hash|
         @row = 0
         next if column_hash.values.empty?
@@ -27,7 +25,7 @@ module DocumentService
         @workbook = new_worksheet_hash[:workbook]
         @worksheet = write_to_sheet(@worksheet, @row, 0, header_data)
         @row += 1
-        
+
         vertical_headers.each do |header|
           case header
           when 'UNITS'
@@ -46,7 +44,7 @@ module DocumentService
         end
       end
       workbook.close
-      write_to_aws(dir, tenant, filename, "pricings_sheet")
+      write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
 
     private
@@ -64,7 +62,7 @@ module DocumentService
       default_fees = column_hash.values.first[:expected][sym_key]
       default_fees.keys.each do |fee_key|
         if fee_key.to_sym != :total && sym_key != :cargo
-          fee_row = ["-#{fee_key.to_s}"]
+          fee_row = ["-#{fee_key}"]
           column_hash.values.each do |c_hash|
             fee_row << "#{c_hash.dig(:expected, sym_key, fee_key, :currency)} #{c_hash.dig(:expected, sym_key, fee_key, :value)}"
             fee_row << "#{c_hash.dig(:result, :quote, sym_key, fee_key, :currency)} #{c_hash.dig(:result, :quote, sym_key, fee_key, :value)}"
@@ -73,7 +71,7 @@ module DocumentService
           @worksheet = write_to_sheet(@worksheet, @row, 0, fee_row)
           @row += 1
         elsif fee_key.to_sym != :total
-          fee_row = ["-#{fee_key.to_s}"]
+          fee_row = ["-#{fee_key}"]
           column_hash.values.each do |c_hash|
             fee_row << "#{c_hash.dig(:expected, sym_key, fee_key, :currency)} #{c_hash.dig(:expected, sym_key, fee_key, :value)}"
             fee_row << "#{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key, :currency)} #{c_hash.dig(:result, :quote, sym_key, :cargo_item, fee_key, :value)}"
@@ -83,12 +81,11 @@ module DocumentService
           @row += 1
         end
       end
-
     end
 
     def write_cargo_units(column_hash)
       cargo_units = {}
-      
+
       @worksheet = write_to_sheet(@worksheet, @row, 0, ['UNITS'])
       @row += 1
       column_hash.keys.each do |column_id|
@@ -96,8 +93,8 @@ module DocumentService
       end
       max_unit_count = cargo_units.values.map(&:count).max
       begin
-      example_unit = cargo_units.values.first.first
-      rescue
+        example_unit = cargo_units.values.first.first
+      rescue StandardError
         binding.pry
       end
       current_unit = 1
@@ -105,13 +102,14 @@ module DocumentService
         example_unit.keys.each do |example_key|
           unit_row = ["##{current_unit}-#{example_key}"]
           column_hash.keys.each do |c_key|
-            3.times do 
-              if example_key == 'cargo_item_type_id'
-                unit_row << CargoItemType.find(cargo_units[c_key][current_unit - 1][example_key]).name
-              else
-                unit_row << cargo_units[c_key][current_unit - 1][example_key]
-              end
-            end if cargo_units[c_key][current_unit - 1]
+            next unless cargo_units[c_key][current_unit - 1]
+            3.times do
+              unit_row << if example_key == 'cargo_item_type_id'
+                            CargoItemType.find(cargo_units[c_key][current_unit - 1][example_key]).name
+                          else
+                            cargo_units[c_key][current_unit - 1][example_key]
+                          end
+            end
           end
           @worksheet = write_to_sheet(@worksheet, @row, 0, unit_row)
           @row += 1
@@ -129,39 +127,39 @@ module DocumentService
         data = column_hash[column_id][:data]
         case header
         when 'ITINERARY'
-          3.times do 
+          3.times do
             row << data[:itinerary][:name]
           end
         when 'MOT'
-          3.times do 
+          3.times do
             row << data[:mode_of_transport]
           end
         when 'LOAD_TYPE'
-          3.times do 
+          3.times do
             row << data[:load_type]
           end
         when 'ORIGIN_TRUCK_TYPE'
-          3.times do 
+          3.times do
             row << data[:origin_truck_type]
           end
         when 'DESTINATION_TRUCK_TYPE'
-          3.times do 
+          3.times do
             row << data[:destination_truck_type]
           end
         when 'PICKUP_ADDRESS'
-          3.times do 
+          3.times do
             row << data[:pickup_address]
           end
         when 'DELIVERY_ADDRESS'
-          3.times do 
+          3.times do
             row << data[:delivery_address]
           end
         when 'CARRIER'
-          3.times do 
+          3.times do
             row << data[:carrier]
           end
         when 'SERVICE_LEVEL'
-          3.times do 
+          3.times do
             row << data[:service_level].try(:name)
           end
         when 'TOTAL'
@@ -170,19 +168,18 @@ module DocumentService
           row << "#{expected.dig(:total, :currency)} #{expected_total}"
           row << "#{result.dig(:total, :currency)} #{result_total}"
           row << diff.dig(:total)
-       
+
         end
-        
       end
-      return row
+      row
     end
 
     def vertical_headers
       %w(
         ITINERARY MOT LOAD_TYPE ORIGIN_TRUCK_TYPE DESTINATION_TRUCK_TYPE
-        UNITS PICKUP_ADDRESS DELIVERY_ADDRESS CARRIER SERVICE_LEVEL FREIGHT 
+        UNITS PICKUP_ADDRESS DELIVERY_ADDRESS CARRIER SERVICE_LEVEL FREIGHT
         PRECARRIAGE ONCARRIAGE IMPORT EXPORT TOTAL
-        )
+      )
     end
 
     def build_header_rows(data)
@@ -195,20 +192,18 @@ module DocumentService
       header_values
     end
 
-
     def pricing_sheet_header_text
       %w(ITINERARY EXAMPLE_NO SERVICE_LEVEL TOTAL_EXPECTED TOTAL_ACTUAL TOTAL_DIFF TOTAL_%
-        PRECARRIAGE_EXPECTED PRECARRIAGE_ACTUAL PRECARRIAGE_DIFF PRECARRIAGE_%
-        ONCARRIAGE_EXPECTED ONCARRIAGE_ACTUAL ONCARRIAGE_DIFF ONCARRIAGE_%
-        IMPORT_EXPECTED IMPORT_ACTUAL IMPORT_DIFF IMPORT_%
-        EXPORT_EXPECTED EXPORT_ACTUAL EXPORT_DIFF EXPORT_%
-        )
+         PRECARRIAGE_EXPECTED PRECARRIAGE_ACTUAL PRECARRIAGE_DIFF PRECARRIAGE_%
+         ONCARRIAGE_EXPECTED ONCARRIAGE_ACTUAL ONCARRIAGE_DIFF ONCARRIAGE_%
+         IMPORT_EXPECTED IMPORT_ACTUAL IMPORT_DIFF IMPORT_%
+         EXPORT_EXPECTED EXPORT_ACTUAL EXPORT_DIFF EXPORT_%)
     end
 
     def layover_hash(current_itinerary, pricing)
       tmp_trip = current_itinerary.trips.last
-      key_origin = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][0]["id"]
-      key_destination = aux_data[:itineraries][pricing[:itinerary_id]]["stops"][1]["id"]
+      key_origin = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][0]['id']
+      key_destination = aux_data[:itineraries][pricing[:itinerary_id]]['stops'][1]['id']
       if tmp_trip
         destination_layover = nil
         origin_layover = nil
@@ -220,7 +215,7 @@ module DocumentService
         diff = ((tmp_trip.end_date - tmp_trip.start_date) / 86_400).to_i
         aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = diff
       else
-        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ""
+        aux_data[:transit_times]["#{key_origin}_#{key_destination}"] = ''
       end
 
       {

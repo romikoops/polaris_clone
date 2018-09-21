@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DataValidator
   class PricingValidator < DataValidator::BaseValidator
     attr_reader :path, :user, :port_object
@@ -24,9 +26,8 @@ module DataValidator
     end
 
     def perform
-      @xlsx.sheets.each do |sheet|
-        @sheet = @xlsx.sheet(sheet).dup()
-        @sheet_name = sheet
+      @xlsx.each_with_pagename do |sheet_name, sheet|
+        @sheet = sheet
         begin
           create_sheet_rows
           create_cargo_key_hash
@@ -34,20 +35,25 @@ module DataValidator
           create_fees_key_hash('export')
           create_fees_key_hash('freight')
           create_example_results
-          calculate
-        rescue
+          calculate(sheet_name)
+        rescue Exception => e # bad code.....
           binding.pry
-          next
         end
+        # puts '----------'
+        # puts sheet_name
+        # puts '----------'
+        # binding.pry
       end
+
       Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       print_results
     end
-    def calculate
+
+    def calculate(sheet_name)
       @examples.each do |example|
         @example = example
         @load_type = @example[:data][:load_type]
-        price_check(@example)
+        price_check(@example, sheet_name)
       end
       # Shipment.where(id: @shipment_ids_to_destroy).destroy_all
       # print_results
@@ -76,7 +82,7 @@ module DataValidator
       @cargo_unit_keys = []
       current_index = units_index + 2
       all_units = false
-      while !all_units
+      until all_units
         row = @sheet.row(current_index)
         if row.first.include?('#')
           str = row.first.sub('#', '')
@@ -95,9 +101,9 @@ module DataValidator
       units_index = @row_keys[target.upcase]
       current_index = units_index + 2
       all_keys = false
-      while !all_keys
+      until all_keys
         row = @sheet.row(current_index)
-        if row.first && row.first.include?('-')
+        if row.first&.include?('-')
           attribute = row.first.sub('-', '').strip
           @fee_keys[target] = {} unless @fee_keys[target]
           @fee_keys[target][attribute] = current_index - 1
@@ -110,10 +116,10 @@ module DataValidator
 
     def create_example_results
       column_index = 2
-      
+
       all_columns = false
-      while !all_columns
-        column = @sheet.column(column_index).dup()
+      until all_columns
+        column = @sheet.column(column_index).dup
         if column.first.blank?
           all_columns = true
         else
@@ -124,7 +130,7 @@ module DataValidator
               trucking_on: get_top_value_currency(column, 'ONCARRIAGE'),
               cargo: get_top_value_currency(column, 'FREIGHT'),
               export: get_top_value_currency(column, 'EXPORT'),
-              import: get_top_value_currency(column, 'IMPORT'),
+              import: get_top_value_currency(column, 'IMPORT')
             },
             data: {
               cargo_units: extract_cargo_units_from_column(column),
@@ -155,21 +161,20 @@ module DataValidator
     end
 
     def string_to_currency_value(str)
-      return nil if !str
+      return nil unless str
       currency, value = str.split(' ')
-      return {value: value, currency: currency}
+      { value: value, currency: currency }
     end
 
     def extract_cargo_units_from_column(column)
       cargos = []
       @cargo_unit_keys.compact.each do |key_hash|
-        if column[key_hash.values.first]
-          new_cargo = {}
-          key_hash.each do |key, value|
-            new_cargo[key] = column[value]
-          end
-          cargos << new_cargo
+        next unless column[key_hash.values.first]
+        new_cargo = {}
+        key_hash.each do |key, value|
+          new_cargo[key] = column[value]
         end
+        cargos << new_cargo
       end
       # binding.pry
       cargos
@@ -183,11 +188,11 @@ module DataValidator
       elsif key == 'TOTAL'
         return to_display
       else
-        return {total: to_display}
+        return { total: to_display }
       end
     end
 
-    def price_check(example)
+    def price_check(example, sheet_name)
       @destination_hub = example[:data][:itinerary].last_stop.hub
       @origin_hub = example[:data][:itinerary].first_stop.hub
       @shipment = Shipment.create!(
@@ -201,9 +206,9 @@ module DataValidator
       )
       @shipment_ids_to_destroy << @shipment.id
       @shipment.cargo_units = prep_cargo_units(example)
-      @hubs = {origin: [@origin_hub], destination: [@destination_hub]}
-      @trucking_data_builder      = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
-      @trucking_data      = @trucking_data_builder.perform(@hubs)
+      @hubs = { origin: [@origin_hub], destination: [@destination_hub] }
+      @trucking_data_builder = OfferCalculatorService::TruckingDataBuilder.new(@shipment)
+      @trucking_data = @trucking_data_builder.perform(@hubs)
       @data_for_price_checker = @example[:data]
       @data_for_price_checker[:trucking] = @trucking_data
       @data_for_price_checker[:has_on_carriage] = example[:data][:delivery_address]
@@ -214,20 +219,20 @@ module DataValidator
         mode_of_transport: @example[:data][:mode_of_transport]
       )
       @data_for_price_checker[:cargo_units] = example[:data][:cargo_units]
-      validate_prices(example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
+      validate_prices(sheet_name, example[:data][:itinerary], @data_for_price_checker, example[:expected], example[:result_index], example[:data])
     end
 
     def prep_cargo_units(example)
-      data_to_extract = example[:data][:load_type] == 'cargo_item' ? 
+      data_to_extract = example[:data][:load_type] == 'cargo_item' ?
         example[:data][:cargo_units].map do |cu|
-          cu[:cargo_item_type_id] = CargoItemType.find_by_description("Pallet").id
+          cu[:cargo_item_type_id] = CargoItemType.find_by_description('Pallet').id
           cu
         end : example[:data][:cargo_units]
-        begin
+      begin
         example[:data][:load_type].camelize.constantize.extract(data_to_extract)
-        rescue
-          binding.pry
-        end
+      rescue Exception => e # bad code.....
+        binding.pry
+      end
     end
 
     def determine_itineraries
@@ -238,7 +243,7 @@ module DataValidator
     end
 
     def determine_trucking_hash(example)
-      trucking = { pre_carriage: {truck_type: ''}, on_carriage: {truck_type: ''}}
+      trucking = { pre_carriage: { truck_type: '' }, on_carriage: { truck_type: '' } }
       if example[:data][:pickup_address]
         trucking[:pre_carriage] = {
           truck_type: example[:data][:origin_truck_type] || 'default',
@@ -257,38 +262,38 @@ module DataValidator
     def get_diff_value(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
-      return nil  if (value.blank?  || expected_value.blank?)
-      return ((value - expected_value).abs).try(:round, 3)
+      return nil if value.blank? || expected_value.blank?
+      (value - expected_value).abs.try(:round, 3)
     end
 
     def get_diff_percentage(result, keys, expected_result)
       value = result.dig(:quote, *keys, :value)
       expected_value = expected_result.dig(*keys, :value).try(:to_d)
-      return nil if ((value.blank? || value == 0) || (expected_value.blank? || expected_value == 0))
-      return (((value - expected_value)/expected_value) * 100).try(:round, 3)
+      return nil if (value.blank? || value == 0) || (expected_value.blank? || expected_value == 0)
+      (((value - expected_value) / expected_value) * 100).try(:round, 3)
     end
 
     def get_currency(result, keys)
       currency = result.dig(:quote, *keys, :currency)
-     
+
       return '' if currency.blank?
-      return currency
+      currency
     end
 
     def print_results
       DocumentService::PricingValidationWriter.new(
         data: @validation_results,
         filename: "#{@tenant.subdomain}_pricing_validations",
-        tenant_id: @tenant.id,
+        tenant_id: @tenant.id
       ).perform
     end
 
     def diff_result_string(result, keys, expected_result)
-      diff_percent =  get_diff_percentage(result, keys, expected_result)
-      diff_val =  get_diff_value(result, keys, expected_result)
+      diff_percent = get_diff_percentage(result, keys, expected_result)
+      diff_val = get_diff_value(result, keys, expected_result)
       currency = get_currency(result, keys)
       return nil if diff_val.nil?
-      return "#{currency} #{diff_val} (#{diff_percent}%)"
+      "#{currency} #{diff_val} (#{diff_percent}%)"
     end
 
     def validate_result(result, expected_result, example_index, data)
@@ -298,22 +303,22 @@ module DataValidator
         if value1 && value1[:value]
           result_for_printing[key1] = diff_result_string(result, [key1], expected_result)
         elsif key1 == 'cargo'
-          value1[:cargo_item].each do |key2, value2|
+          value1[:cargo_item].each do |key2, _value2|
             if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
-            end 
+            end
           end
         elsif value1 && value1[:total]
-          value1.each do |key2, value2|
+          value1.each do |key2, _value2|
             if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
-            end 
+            end
           end
         end
       end
-      
+
       final_result = {
         result: result,
         expected: expected_result,
@@ -323,10 +328,10 @@ module DataValidator
       }
     end
 
-    def validate_prices(itinerary, data_for_price_checker, expected_results, example_index, data)
+    def validate_prices(sheet_name, itinerary, data_for_price_checker, expected_results, example_index, data)
       results = itinerary.test_pricings(data_for_price_checker, @user)
-      @validation_results[@sheet_name] = {} unless @validation_results[@sheet_name]
-      @validation_results[@sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
+      @validation_results[sheet_name] = {} unless @validation_results[sheet_name]
+      @validation_results[sheet_name][example_index] = validate_result(results.first, expected_results, example_index, data)
     end
   end
 end
