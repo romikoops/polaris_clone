@@ -344,7 +344,7 @@ class UserAccount extends Component {
               </GenericError >
             </div>
           </div>
-          <Footer isShop tenant={tenant} />
+          <Footer isShop tenant={tenant.data} />
         </div>
       </div>
     )
