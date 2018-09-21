@@ -162,7 +162,7 @@ class DocumentsForm extends React.Component {
       ? (<AdminPromptConfirm
         theme={theme}
         heading="Delete this document?"
-        text="Are you sure you wish to delete this docuemnt? It cannot be undone."
+        text="Are you sure you wish to delete this document? It cannot be undone."
         confirm={() => this.deleteFile()}
         deny={() => this.toggleShowConfim()}
       />) : ''
