@@ -125,7 +125,3 @@ CookieConsentBar.defaultProps = {
   loggedIn: false,
   theme: {}
 }
-
-// buttonText = {< i className = {`${styles.cookie_exit_icon} fa fa-times`} />}
-// buttonStyle = {{ color: 'white', background: 'unset' }}
-//
