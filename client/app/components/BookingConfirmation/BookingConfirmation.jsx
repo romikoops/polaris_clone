@@ -632,13 +632,9 @@ class BookingConfirmation extends Component {
 
 function prepContainerGroups (cargos, props) {
   const { hsCodes, shipment } = props.shipmentData
-  const uniqCargos = uniqWith(
-    cargos,
-    (x, y) => x.id === y.id
-  )
-  const cargoGroups = {}
+  const uniqCargos = uniqWith(cargos, (x, y) => x.id === y.id)
 
-  uniqCargos.forEach((singleCargo, i) => {
+  return uniqCargos.map((singleCargo, i) => {
     const parsedPayload = parseFloat(singleCargo.payload_in_kg)
     const parsedQuantity = parseInt(singleCargo.quantity, 10)
     const payload = parsedPayload * parsedQuantity
@@ -654,7 +650,7 @@ function prepContainerGroups (cargos, props) {
       ['size_class', 'quantity']
     )
 
-    cargoGroups[singleCargo.id] = {
+    const group = {
       ...base,
       cargo_group_id: singleCargo.id,
       gross_weight: gross,
@@ -665,27 +661,24 @@ function prepContainerGroups (cargos, props) {
       payload_in_kg: payload,
       tare_weight: tare
     }
-  })
 
-  return Object.keys(cargoGroups).map(prop =>
-    (<CargoContainerGroup
-      key={v4()}
-      group={cargoGroups[prop]}
-      theme={props.theme}
-      hsCodes={hsCodes}
-      shipment={shipment}
-    />))
+    return (
+      <CargoContainerGroup
+        key={v4()}
+        group={group}
+        theme={props.theme}
+        hsCodes={hsCodes}
+        shipment={shipment}
+      />
+    )
+  })
 }
 
 function prepCargoItemGroups (cargos, props) {
   const { cargoItemTypes, hsCodes, shipment } = props.shipmentData
-  const uniqCargos = uniqWith(
-    cargos,
-    (x, y) => x.id === y.id
-  )
-  const cargoGroups = {}
+  const uniqCargos = uniqWith(cargos, (x, y) => x.id === y.id)
 
-  uniqCargos.forEach((singleCargo, i) => {
+  return uniqCargos.map((singleCargo, i) => {
     const parsedQuantity = parseInt(singleCargo.quantity, 10)
     const parsedX = parseFloat(singleCargo.dimension_x)
     const parsedY = parseFloat(singleCargo.dimension_y)
@@ -703,7 +696,7 @@ function prepCargoItemGroups (cargos, props) {
     const cargoType = cargoItemTypes[singleCargo.cargo_item_type_id]
     const items = Array(parsedQuantity).fill(singleCargo)
 
-    cargoGroups[singleCargo.id] = {
+    const group = {
       cargoType,
       cargo_group_id: singleCargo.id,
       chargeable_weight: chargable,
@@ -718,16 +711,17 @@ function prepCargoItemGroups (cargos, props) {
       quantity: singleCargo.quantity,
       volume
     }
-  })
 
-  return Object.keys(cargoGroups).map(prop =>
-    (<CargoItemGroup
-      key={v4()}
-      group={cargoGroups[prop]}
-      theme={props.theme}
-      hsCodes={hsCodes}
-      shipment={shipment}
-    />))
+    return (
+      <CargoItemGroup
+        key={v4()}
+        group={group}
+        theme={props.theme}
+        hsCodes={hsCodes}
+        shipment={shipment}
+      />
+    )
+  })
 }
 
 function getDocs ({
