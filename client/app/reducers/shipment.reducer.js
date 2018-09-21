@@ -22,17 +22,21 @@ export default function shipment (state = {}, action) {
         loading: true,
         currentStage: 'stage1'
       }
-    case shipmentConstants.NEW_SHIPMENT_REQUEST:
-      return {
+    case shipmentConstants.NEW_SHIPMENT_REQUEST: {
+      const newState = {
         ...state,
         request: {
           stage1: action.shipmentData
         },
         loading: true,
-        reusedShipment: false,
         currentStage: 'stage1',
         error: {}
       }
+      if (!action.isReused) {
+        newState.reusedShipment = false
+      }
+      return newState
+    }
     case shipmentConstants.NEW_SHIPMENT_SUCCESS:
       return {
         ...state,

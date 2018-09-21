@@ -8,9 +8,9 @@ import { alertActions, userActions, appActions } from './'
 // const subdomainKey = getSubdomain()
 // const cookieKey = `${subdomainKey}_user`
 // const userData = JSON.parse(window.localStorage.getItem(cookieKey))
-function newShipment (type, redirect) {
-  function request (shipmentData) {
-    return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
+function newShipment (type, redirect, reused) {
+  function request (shipmentData, isReused) {
+    return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData, isReused }
   }
   function success (shipmentData) {
     return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }
@@ -20,7 +20,7 @@ function newShipment (type, redirect) {
   }
 
   return (dispatch) => {
-    dispatch(request(type))
+    dispatch(request(type, reused))
     shipmentService.newShipment(type).then(
       (resp) => {
         const shipmentData = resp.data
@@ -48,7 +48,7 @@ function reuseShipment (shipment) {
 
   return (dispatch) => {
     dispatch(request(shipment))
-    dispatch(newShipment(newShipmentRequest, true))
+    dispatch(newShipment(newShipmentRequest, true, true))
   }
 }
 
