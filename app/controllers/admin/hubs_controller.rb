@@ -165,7 +165,7 @@ class Admin::HubsController < Admin::AdminBaseController
   end
 
   def create_hub
-    hub[:mandatory_charge_id] = MandatoryCharge.falsified unless hub_hash[:mandatory_charge_id]
+    hub_hash[:mandatory_charge_id] = MandatoryCharge.falsified unless hub_hash[:mandatory_charge_id]
     Hub.create!(hub_hash)
   end
 
