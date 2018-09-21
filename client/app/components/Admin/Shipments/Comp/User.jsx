@@ -166,11 +166,13 @@ export class ShipmentsCompUser extends Component {
       mergedShipments[status] = filters.sortByDate(shipments[status], 'booking_placed_at')
         .map(sh => ShipmentsCompUser.prepShipment(sh, user))
     })
+    const keysToRender = statusKeys.includes('quoted')
+      ? statusKeys : ['requested', 'open', 'finsihed']
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>
-          {statusKeys.map(status => (<Tab
+          {keysToRender.map(status => (<Tab
             tabTitle={capitalize(status)}
             theme={theme}
           >
