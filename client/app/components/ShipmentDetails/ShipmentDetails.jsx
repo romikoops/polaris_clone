@@ -139,14 +139,14 @@ export class ShipmentDetails extends Component {
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
       /* eslint-disable camelcase */
       const {
-        planned_pickup_date, planned_origin_drop_off_date, has_on_carriage, has_pre_carriage
+        desired_start_date, has_on_carriage, has_pre_carriage
       } = this.props.shipmentData.shipment
-      this.state.selectedDay = planned_pickup_date
+      this.state.selectedDay = desired_start_date
       this.state = {
         ...this.state,
         has_on_carriage,
         has_pre_carriage,
-        selectedDay: has_pre_carriage ? planned_pickup_date : planned_origin_drop_off_date
+        selectedDay: desired_start_date
       }
       /* eslint-enable camelcase */
     }

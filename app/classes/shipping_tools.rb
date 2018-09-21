@@ -410,7 +410,11 @@ module ShippingTools
     end
     @origin_hub      = Hub.find(@schedule['origin_hub']['id'])
     @destination_hub = Hub.find(@schedule['destination_hub']['id'])
-
+    if shipment.has_pre_carriage 
+      shipment.planned_pickup_date = shipment.trip.closing_date - 1.day - shipment.trucking["pre_carriage"]["trucking_time_in_seconds"].seconds
+    else
+      shipment.planned_origin_drop_off_date = shipment.trip.closing_date - 1.day
+    end
     shipment.origin_hub        = @origin_hub
     shipment.destination_hub   = @destination_hub
     shipment.origin_nexus      = @origin_hub.nexus
