@@ -19,7 +19,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment_association = tenant_shipment.finished
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
-    shipments = shipment_association.order(:booking_placed_at).paginate(page: params[:page], per_page: per_page)
+    shipments = shipment_association.order(booking_placed_at: :desc).paginate(page: params[:page], per_page: per_page)
       .map(&:with_address_options_json)
     response_handler(
       shipments:          shipments,
@@ -157,11 +157,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       open:      (o_shipments.count / per_page).ceil
     }
     response_handler(
-      requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
+      requested:          requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
         .map(&:with_address_options_json),
-      open:               open_shipments.order(:booking_placed_at).paginate(page: params[:open_page], per_page: per_page)
+      open:               open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
         .map(&:with_address_options_json),
-      finished:           finished_shipments.order(:booking_placed_at).paginate(page: params[:finished_page], per_page: per_page)
+      finished:           finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
         .map(&:with_address_options_json),
       pages:              {
         open:      params[:open_page],

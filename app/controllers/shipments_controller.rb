@@ -13,13 +13,13 @@ class ShipmentsController < ApplicationController
   def delta_page_handler
     case params[:target]
     when "requested"
-      shipment_association = current_user.shipments.requested.order(:booking_placed_at)
+      shipment_association = current_user.shipments.requested.order(booking_placed_at: :desc)
     when "open"
-      shipment_association = current_user.shipments.open.order(:booking_placed_at)
+      shipment_association = current_user.shipments.open.order(booking_placed_at: :desc)
     when "finished"
-      shipment_association = current_user.shipments.finished.order(:booking_placed_at)
+      shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
     when "quoted"
-      shipment_association = current_user.shipments.quoted.order(:booking_placed_at)
+      shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     shipments = shipment_association
@@ -49,13 +49,13 @@ class ShipmentsController < ApplicationController
     ]
     case params[:target]
     when "requested"
-      shipment_association = current_user.shipments.requested.order(:booking_placed_at)
+      shipment_association = current_user.shipments.requested.order(booking_placed_at: :desc)
     when "open"
-      shipment_association = current_user.shipments.open.order(:booking_placed_at)
+      shipment_association = current_user.shipments.open.order(booking_placed_at: :desc)
     when "finished"
-      shipment_association = current_user.shipments.finished.order(:booking_placed_at)
+      shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
     when "quoted"
-      shipment_association = current_user.shipments.quoted.order(:booking_placed_at)
+      shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
     end
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
 
@@ -134,11 +134,11 @@ class ShipmentsController < ApplicationController
     }
 
     response_handler(
-      requested:          requested_shipments.order(:booking_placed_at).paginate(page: params[:requested_page], per_page: per_page)
+      requested:          requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
         .map(&:with_address_options_json),
-      open:               open_shipments.order(:booking_placed_at).paginate(page: params[:open_page], per_page: per_page)
+      open:               open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
         .map(&:with_address_options_json),
-      finished:           finished_shipments.order(:booking_placed_at).paginate(page: params[:finished_page], per_page: per_page)
+      finished:           finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
         .map(&:with_address_options_json),
       pages:              {
         open:      params[:open_page],
