@@ -11,10 +11,7 @@ module MultiTenantTools
       favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
       # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
       indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
-      # Replace API Host and tenantName
-      indexHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
-      indexHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
-
+      
       titles = indexHtml.xpath("//title")
       titles[0].content = title
       links = indexHtml.xpath("//link")
@@ -32,6 +29,9 @@ module MultiTenantTools
       )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
+      # Replace API Host and tenantName
+      newHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
       s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
@@ -63,6 +63,9 @@ module MultiTenantTools
       )
       objKey = tenant["subdomain"] + ".html"
       newHtml = indexHtml.to_html
+      # Replace API Host and tenantName
+      newHtml.gsub!('__API_URL__', 'https://gamma.itsmycargo.com')
+      newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
       File.open("blank.html", "w") { |file| file.write(newHtml) }
       upFile = open("blank.html")
       s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: "text/html", acl: "public-read")
