@@ -221,7 +221,7 @@ class UserContacts extends Component {
                         type="text"
                         value={newContact.companyName}
                         name="companyName"
-                        placeholder={t('user:comapanyName')}
+                        placeholder={t('user:companyName')}
                         validations="minLength:2"
                         validationErrors={{
                           isDefaultRequiredValue: t('errors:notBlank'),

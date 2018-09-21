@@ -275,6 +275,12 @@
       outline: none;
     }
   }
+
+  input::-webkit-input-placeholder {
+    color: black;
+    opacity: 0.54;
+  }
+
   .input_box_label input {
     height: 34px;
     border: 1px solid #F2F2F2;
