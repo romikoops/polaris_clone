@@ -230,7 +230,7 @@ class AdminShipmentCard extends Component {
           <div className="layout-row flex-35 layout-align-center-center">
             <div className="flex-100">
               <b className={styles.ref_row_card}>{t('common:ref')}:&nbsp;{shipment.imc_reference}</b>
-              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - hh:mm')}</p>
+              <p>{t('shipment:placedAt')}&nbsp;{moment(shipment.booking_placed_at).format('DD/MM/YYYY - HH:mm')}</p>
             </div>
           </div>
 
@@ -286,14 +286,14 @@ class AdminShipmentCard extends Component {
             <span className="flex-25 layout-row">
               <i
                 className="fa fa-check-square clip"
-                style={shipment.pickup_address ? gradientFontStyle : deselectedStyle}
+                style={shipment.has_pre_carriage ? gradientFontStyle : deselectedStyle}
               />
               <p>{t('shipment:pickUp')}</p>
             </span>
             <span className="flex-25 layout row">
               <i
                 className="fa fa-check-square clip"
-                style={shipment.delivery_address ? gradientFontStyle : deselectedStyle}
+                style={shipment.has_on_carriage ? gradientFontStyle : deselectedStyle}
               />
               <p>{t('shipment:delivery')}</p>
             </span>
