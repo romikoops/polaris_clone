@@ -2,11 +2,13 @@ import React from 'react'
 import styles from './Footer.scss'
 import defs from '../../styles/default_classes.scss'
 import PropTypes from '../../prop-types'
-import { moment } from '../../constants'
 
 export function Footer ({
   theme, tenant, isShop, width
 }) {
+  if (!tenant) {
+    return ''
+  }
   const primaryColor = {
     color: theme && theme.colors ? theme.colors.primary : 'black'
   }
@@ -21,9 +23,8 @@ export function Footer ({
     about: 'https://www.itsmycargo.com/en/ourstory',
     legal: 'https://www.itsmycargo.com/en/contact'
   }
-
   let termsLink = ''
-  tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = `https://${tenant.data.subdomain}.itsmycargo.com/terms_and_conditions`
+  tenant.subdomain ? termsLink = `https://${tenant.subdomain}.itsmycargo.com/terms_and_conditions` : termsLink = ''
 
   const widthStyle = width ? { width } : {}
 
