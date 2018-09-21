@@ -5,6 +5,7 @@ AllCops:
     - 'client/**/*'
     - 'db/schema.rb'
     - 'lib/*/bin/*'
+    - 'qa/bin/*'
     - Rakefile
 
 Metrics/AbcSize:

@@ -7,6 +7,7 @@ stages:
   - build
   - review
   - review_cleanup
+  - QA
 
 code_quality:
   stage: test
@@ -56,7 +57,7 @@ api:
     - itsmycargo
   cache:
     paths:
-      - vendor/ruby
+      - vendor/bundle
   variables:
     POSTGRES_DB: imcr_test
     DATABASE_URL: postgis://postgres:@localhost/imcr_test
@@ -70,6 +71,7 @@ api:
   artifacts:
     paths:
       - coverage/
+    when: always
     expire_in: 1 week
     reports:
       junit:
@@ -101,6 +103,7 @@ client:
   artifacts:
     paths:
       - client/coverage/lcov-report
+    when: always
     expire_in: 1 week
     reports:
       junit:
@@ -140,6 +143,7 @@ deploy:
   image: eu.gcr.io/itsmycargo-main/deploy:latest
   tags:
     - itsmycargo
+  retry: 1
 
   script:
     - deploy
@@ -158,6 +162,40 @@ deploy:
   except:
     - master
     - dev
+
+cucumber:
+  stage: QA
+  image: ruby:2.5
+  tags:
+    - itsmycargo
+  retry: 1
+  cache:
+    paths:
+      - qa/vendor/bundle
+  variables:
+    SELENIUM_URL: http://localhost:4444/wd/hub
+    DRIVER: remote_chrome
+  services:
+    - selenium/standalone-chrome:3
+
+  before_script:
+    - export CI_ENVIRONMENT_SLUG=$(cat ci_environment_slug.txt)
+    - export TARGET_URL=https://imcqa:shipmetimbers@demo.$CI_ENVIRONMENT_SLUG.$AUTO_DEVOPS_DOMAIN
+
+  script: |
+    cd qa/
+    bundle check --path vendor/bundle || bundle install --path vendor/bundle --jobs $(nproc)
+    echo "Target URL: $TARGET_URL"
+    bin/cucumber --format progress --format junit --out report/
+
+  artifacts:
+    paths:
+      - qa/report/*.png
+    when: on_failure
+    expire_in: 1 week
+    reports:
+      junit:
+        - qa/report/*.xml
 
 reset_database:
   stage: review_cleanup
