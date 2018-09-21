@@ -157,7 +157,8 @@ module ShippingTools
       cargo_notes:       shipment_data[:cargoNotes]
     )
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
-
+    shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
+    
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
@@ -313,6 +314,8 @@ module ShippingTools
       tmp['signed_url'] = doc.get_signed_url
       tmp
     end
+
+    shipment.eori = params[:shipment][:eori]
 
     shipment.save!
 

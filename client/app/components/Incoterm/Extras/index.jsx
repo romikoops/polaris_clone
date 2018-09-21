@@ -144,6 +144,7 @@ export function IncotermExtras ({
         {scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? exportPaperFeesValue : ''}
         {!scope.detailed_billing && feeHash.addons && feeHash.addons.customs_export_paper ? requested : ''}
         {!feeHash || (feeHash && feeHash.addons && !feeHash.addons.customs_export_paper) ? none : ''}
+        {shipment.eori || ''}
       </div>
     </div>
   )
