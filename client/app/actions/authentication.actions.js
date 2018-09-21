@@ -120,8 +120,8 @@ function setUser (user) {
 }
 
 function updateUser (user, req, shipmentReq) {
-  function request (userRequest) {
-    return { type: authenticationConstants.UPDATE_USER_REQUEST, user: userRequest }
+  function request (payload) {
+    return { type: authenticationConstants.UPDATE_USER_REQUEST, payload }
   }
   function success (response) {
     return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data.user }
@@ -131,7 +131,7 @@ function updateUser (user, req, shipmentReq) {
   }
 
   return (dispatch) => {
-    dispatch(request(user))
+    dispatch(request(!req))
 
     authenticationService.updateUser(user, req).then(
       (response) => {

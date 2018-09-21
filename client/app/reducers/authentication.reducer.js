@@ -53,12 +53,13 @@ export default function (state = initialState, action) {
         loggingIn: false,
         showModal: true
       }
-    case authenticationConstants.UPDATE_USER_REQUEST:
+    case authenticationConstants.UPDATE_USER_REQUEST: {
       return {
         ...state,
-        registering: true,
+        registering: action.payload,
         loggedIn: true
       }
+    }
     case authenticationConstants.UPDATE_USER_SUCCESS:
       return {
         ...state,
