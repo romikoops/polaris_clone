@@ -158,19 +158,6 @@ exports[`shallow render 1`] = `
             }
           }
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="all_read flex-none"
-          >
-            0
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -253,19 +240,6 @@ exports[`showModal is true 1`] = `
             }
           }
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="all_read flex-none"
-          >
-            0
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -348,19 +322,6 @@ exports[`showRegistration is true 1`] = `
             }
           }
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="all_read flex-none"
-          >
-            0
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -443,19 +404,6 @@ exports[`unread > 0 1`] = `
             }
           }
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="unread flex-none"
-          >
-            1
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -525,19 +473,6 @@ exports[`user is falsy 1`] = `
           toggleShowLogin={[Function]}
           user={null}
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="all_read flex-none"
-          >
-            0
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -621,19 +556,6 @@ exports[`user.role_id === 2 1`] = `
             }
           }
         />
-        <div
-          className="flex-none layout-row layout-align-center-center mail_box"
-          onClick={[Function]}
-        >
-          <span
-            className="all_read flex-none"
-          >
-            0
-          </span>
-          <i
-            className="fa fa-envelope-o"
-          />
-        </div>
       </div>
     </div>
   </div>

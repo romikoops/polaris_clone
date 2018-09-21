@@ -161,7 +161,7 @@ class Header extends Component {
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
-        {!noMessages ? mail : ''}
+        {/* {!noMessages ? mail : ''} */}
       </div>
     )
 
