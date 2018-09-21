@@ -86,7 +86,7 @@ export default class CookieConsentBar extends React.PureComponent {
 
     return (
       <div
-        className={`${styles.cookie_flex} ${user && user.optin_status && user.optin_status.cookies ? styles.hidden : ''} COOKIES`}
+        className={`${styles.cookie_flex} ${user && user.optin_status && user.optin_status.cookies ? styles.hidden : ''}`}
         style={{ background: cookieBackground, filter: 'grayscale(60%)' }}
       >
         { this.state.showModal && modal}
@@ -125,7 +125,3 @@ CookieConsentBar.defaultProps = {
   loggedIn: false,
   theme: {}
 }
-
-// buttonText = {< i className = {`${styles.cookie_exit_icon} fa fa-times`} />}
-// buttonStyle = {{ color: 'white', background: 'unset' }}
-//

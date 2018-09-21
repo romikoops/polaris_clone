@@ -28,7 +28,7 @@ test('shallow render', () => {
 
 test('state.showModal is true', () => {
   const wrapper = shallow(<CookieConsentBar {...propsBase} />)
-  wrapper.setState({showModal: true})
+  wrapper.setState({ showModal: true })
 
   expect(wrapper).toMatchSnapshot()
 })
