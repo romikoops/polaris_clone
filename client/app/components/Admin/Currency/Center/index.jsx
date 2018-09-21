@@ -137,8 +137,8 @@ class AdminCurrencyCenter extends Component {
       const baseCurrency = nextProps.currencies.filter(currency => currency.rate === 1)[0]
       this.setState({ currentBase: { value: baseCurrency.key, label: baseCurrency.key } })
     }
-    if (this.state.rateBool !== nextProps.tenant.data.scope.fixed_currency) {
-      this.setState({ rateBool: nextProps.tenant.data.scope.fixed_currency })
+    if (this.state.rateBool !== nextProps.tenant.data.scope.fixed_exchange_rates) {
+      this.setState({ rateBool: nextProps.tenant.data.scope.fixed_exchange_rates })
     }
     if (nextProps.currencies !== this.props.currencies) {
       this.setDefaultValues()

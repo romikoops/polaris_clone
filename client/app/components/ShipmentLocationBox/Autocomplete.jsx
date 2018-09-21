@@ -208,7 +208,7 @@ class Autocomplete extends PureComponent {
 
           return (
             <div
-              className={`flex-100 layout-row layout-align-center-center
+              className={`flex-100 layout-row layout-align-center-center pointy
                 ${styles.autocomplete_card}`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
@@ -226,7 +226,7 @@ class Autocomplete extends PureComponent {
           return (
             <div
               className={`flex-100 layout-row layout-align-center-center
-          ${styles.autocomplete_card}`}
+          ${styles.autocomplete_card} pointy`}
               style={isHighlighted ? highlightStyle : {}}
               onClick={() => this.handleSelect(result)}
             >

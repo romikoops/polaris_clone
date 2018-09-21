@@ -2,8 +2,9 @@
 
 class ScopeValidator < ActiveModel::EachValidator
   SCOPES = %w[
-    cargo_info_level consolidate_cargo customs_export_paper dangerous_goods detailed_billing fixed_currency has_customs has_insurance
-    incoterm_info_level modes_of_transport terms carriage_options closed_quotation_tool open_quotation_tool require_full_address
+    cargo_info_level consolidate_cargo customs_export_paper dangerous_goods detailed_billing fixed_currency 
+    has_customs has_insurance incoterm_info_level modes_of_transport terms carriage_options
+    closed_quotation_tool open_quotation_tool require_full_address fixed_exchange_rates
   ].freeze
   LOAD_TYPES         = %w[cargo_item container].freeze
   DIRECTIONS         = %w[import export].freeze
