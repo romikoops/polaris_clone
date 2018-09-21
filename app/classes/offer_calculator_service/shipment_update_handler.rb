@@ -35,11 +35,9 @@ module OfferCalculatorService
     def update_cargo_units
       destroy_previous_cargo_units
       if aggregated_cargo_shipment?
-        @shipment.aggregated_cargo.try(:destroy)
         @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params)
         @shipment.aggregated_cargo.set_chargeable_weight!
       else
-
         @shipment.cargo_units = cargo_unit_const.extract(cargo_units_params)
       end
     end
@@ -97,6 +95,7 @@ module OfferCalculatorService
 
     def destroy_previous_cargo_units
       @shipment.aggregated_cargo.try(:destroy)
+      @shipment.aggregated_cargo = nil
       @shipment.cargo_items.destroy_all
       @shipment.containers.destroy_all
     end
