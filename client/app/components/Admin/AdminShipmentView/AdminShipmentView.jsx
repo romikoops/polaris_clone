@@ -602,6 +602,7 @@ export class AdminShipmentView extends Component {
               contacts={contacts}
               missingDocs={missingDocs}
               docView={docView}
+              accountHolder={accountHolder}
             />
           ) : (
             <ShipmentQuotationContent
