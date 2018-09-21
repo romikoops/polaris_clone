@@ -29,6 +29,7 @@ FactoryBot.define do
         cargo_info_level: 'text',
         has_insurance: true,
         has_customs: true,
+        fixed_exchange_rates: true,
         terms: [
           'You verify that all the information provided above is true',
           'You agree to the presented terms and conditions.',
