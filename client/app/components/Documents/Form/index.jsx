@@ -100,7 +100,8 @@ class DocumentsForm extends React.Component {
   toggleShowConfim () {
     this.setState(prevState => ({ showConfirm: !prevState.showConfirm }))
   }
-  deleteFile () {
+  deleteFile (e) {
+    e.preventDefault()
     const { deleteFn } = this.props
     const { docToDelete } = this.state
     if (this.uploaderInput.files.length) {
@@ -108,6 +109,7 @@ class DocumentsForm extends React.Component {
     }
     this.setState({ file: null })
     deleteFn(docToDelete)
+    this.toggleShowConfim()
   }
   render () {
     const {
@@ -163,7 +165,7 @@ class DocumentsForm extends React.Component {
         theme={theme}
         heading="Delete this document?"
         text="Are you sure you wish to delete this document? It cannot be undone."
-        confirm={() => this.deleteFile()}
+        confirm={e => this.deleteFile(e)}
         deny={() => this.toggleShowConfim()}
       />) : ''
 

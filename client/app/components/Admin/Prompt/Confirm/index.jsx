@@ -11,7 +11,7 @@ export default function AdminPromptConfirm ({
     <div className={`${styles.confirm_backdrop} flex-none layout-row layout-align-center-center`}>
       <div
         className={`${styles.confirm_fade} flex-none layout-row layout-align-center-center`}
-        onClick={() => deny()}
+        onClick={e => deny(e)}
       />
       <div
         className={`${
@@ -30,7 +30,7 @@ export default function AdminPromptConfirm ({
               theme={theme}
               size="small"
               text="Cancel"
-              handleNext={() => deny()}
+              handleNext={e => deny(e)}
               iconClass="fa-ban"
             />
           </div>
@@ -40,7 +40,7 @@ export default function AdminPromptConfirm ({
               size="small"
               active
               text="Yes, I'm sure"
-              handleNext={() => confirm()}
+              handleNext={e => confirm(e)}
               iconClass="fa-check"
             />
           </div>
