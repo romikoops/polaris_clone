@@ -64,7 +64,6 @@ class App extends Component {
       loggedIn,
       showMessages,
       sending,
-      authDispatch,
       loading,
       loggingIn
     } = this.props
@@ -83,7 +82,6 @@ class App extends Component {
         <CookieConsentBar
           user={user}
           theme={theme}
-          authDispatch={authDispatch}
           tenant={tenant}
           loggedIn={loggedIn}
         />

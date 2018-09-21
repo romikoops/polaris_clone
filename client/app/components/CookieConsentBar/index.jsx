@@ -1,4 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { authenticationActions } from '../../actions'
 import PropTypes from '../../prop-types'
 import styles from './CookieConsentBar.scss'
 import ConsentButton from './ConsentButton'
@@ -27,7 +30,7 @@ function handleAccept (user, tenant, loggedIn, authDispatch) {
   }
 }
 
-export default class CookieConsentBar extends React.PureComponent {
+class CookieConsentBar extends React.PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -125,3 +128,11 @@ CookieConsentBar.defaultProps = {
   loggedIn: false,
   theme: {}
 }
+
+function mapDispatchToProps (dispatch) {
+  return {
+    authDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CookieConsentBar)
