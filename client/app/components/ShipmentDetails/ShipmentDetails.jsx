@@ -450,9 +450,12 @@ export class ShipmentDetails extends Component {
     this.setState({ [target]: cargoArr })
     this.setState({ [`${target}Errors`]: errorsArr })
   }
-  handleSelectLocation (bool) {
+  handleSelectLocation (target, bool) {
     this.setState({
-      addressFormsHaveErrors: bool
+      addressFormsHaveErrors: {
+        ...this.state.addressFormsHaveErrors,
+        [target]: bool
+      }
     })
   }
   handleAddressChange (event) {
@@ -638,7 +641,8 @@ export class ShipmentDetails extends Component {
       (!destination.nexus_id && !this.state.has_on_carriage) ||
       (!addressFieldsAreValid(origin, requiresFullAddress) && this.state.has_pre_carriage) ||
       (!addressFieldsAreValid(destination, requiresFullAddress) && this.state.has_on_carriage) ||
-      this.state.addressFormsHaveErrors
+      (this.state.addressFormsHaveErrors.origin && this.state.has_pre_carriage) ||
+      (this.state.addressFormsHaveErrors.destination && this.state.has_on_carriage)
     ) {
       this.incrementNextStageAttemps()
       ShipmentDetails.scrollTo('map')
