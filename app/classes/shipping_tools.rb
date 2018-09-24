@@ -157,7 +157,6 @@ module ShippingTools
       cargo_notes:       shipment_data[:cargoNotes]
     )
     shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
-    shipment.incoterm_text = shipment_data[:incotermText] if shipment_data[:incotermText]
     
     # Shipper
     resource = shipment_data.require(:shipper)
