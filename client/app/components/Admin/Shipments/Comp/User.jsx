@@ -167,7 +167,7 @@ export class ShipmentsCompUser extends Component {
         .map(sh => ShipmentsCompUser.prepShipment(sh, user))
     })
     const keysToRender = statusKeys.includes('quoted')
-      ? statusKeys : ['requested', 'open', 'finsihed']
+      ? statusKeys : ['requested', 'open', 'finished']
 
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
