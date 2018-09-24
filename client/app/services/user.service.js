@@ -56,7 +56,7 @@ function searchContacts (text, page, perPage) {
   query += `query=${text}&page=${page || 1}`
   if (perPage) query += `&per_page=${perPage}`
 
-  return fetch(`${BASE_URL}/search/contacts?${query}`, requestOptions)
+  return fetch(`${getApiHost()}/search/contacts?${query}`, requestOptions)
     .then(handleResponse)
 }
 
