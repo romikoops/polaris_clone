@@ -171,7 +171,7 @@ export class ShipmentsCompAdmin extends Component {
         .map(sh => ShipmentsCompAdmin.prepShipment(sh, clientHash, hubHash))
     })
     const keysToRender = statusKeys.includes('quoted')
-      ? statusKeys : ['requested', 'open', 'finished']
+      ? statusKeys : ['requested', 'open', 'finsihed']
     const listView = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <Tabs>

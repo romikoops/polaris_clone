@@ -186,7 +186,6 @@ export class CargoDetails extends Component {
       documents,
       shipment
     } = shipmentData
-
     const insuranceBoxText = `${t('cargo:insuranceHead')} ${tenant.data.name} ${t('cargo:insuranceTail')}`
 
     const insuranceBox = (
@@ -293,6 +292,7 @@ export class CargoDetails extends Component {
               <div className="flex-33 layout-row layout-wrap">
                 <div className="flex-100">
                   <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
+                  
                 </div>
                 <div className="flex-100 input_box">
                   <input

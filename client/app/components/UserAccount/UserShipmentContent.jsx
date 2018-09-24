@@ -12,8 +12,7 @@ import { moment } from '../../constants'
 import {
   switchIcon,
   formattedPriceValue,
-  totalPrice,
-  checkPreCarriage
+  totalPrice
 } from '../../helpers'
 import ContactDetailsRow from '../Admin/AdminShipmentView/ContactDetailsRow'
 import GreyBox from '../GreyBox/GreyBox'
@@ -84,6 +83,7 @@ export function UserShipmentContent ({
                     et={etdJSX}
                     shipment={shipment}
                     text="ETD"
+                    theme={theme}
                     hub={shipment.origin_hub}
                     bg={bg1}
                   />
@@ -110,6 +110,7 @@ export function UserShipmentContent ({
                     et={etaJSX}
                     shipment={shipment}
                     text="ETA"
+                    theme={theme}
                     hub={shipment.destination_hub}
                     bg={bg2}
                   />

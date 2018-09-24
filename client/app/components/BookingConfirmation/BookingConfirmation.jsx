@@ -165,7 +165,6 @@ class BookingConfirmation extends Component {
     } = this.props
 
     if (!shipmentData) return <h1>Loading</h1>
-
     const {
       aggregatedCargo,
       cargoItemTypes,
@@ -415,6 +414,7 @@ class BookingConfirmation extends Component {
                 <IncotermExtras
                   theme={theme}
                   feeHash={feeHash}
+                  shipment={shipment}
                   tenant={{ data: tenant }}
                 />
               </div>
