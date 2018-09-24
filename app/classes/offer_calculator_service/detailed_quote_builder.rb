@@ -30,22 +30,6 @@ module OfferCalculatorService
         next if result[:quote].dig(:total, :value).blank?
         
         detailed_schedules << result
-      # detailed_schedules = route_objs.map do |schedule|
-        
-      #   grand_total_charge =
-      #     QuoteCalculator.new(
-      #       schedule:      schedule,
-      #       trucking_data: trucking_data,
-      #       shipment:      @shipment,
-      #       user:          user
-      #     ).perform
-
-      #   schedule.total_price = grand_total_charge.price.as_json(only: %i(value currency))
-      #   detailed_schedule = schedule.to_detailed_hash
-      #   detailed_schedule[:quote] = grand_total_charge.deconstruct_tree_into_schedule_charge
-      #   next if detailed_schedule.dig(:total_price, "value").zero?
-
-      #   detailed_schedule
       end
 
       compacted_detailed_schedules = detailed_schedules.compact
