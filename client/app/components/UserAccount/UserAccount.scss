@@ -153,6 +153,9 @@
   }
   .content_details {
     padding: 18px 18px 18px 4vw;
+    > div {
+      padding: 12px;
+    }
   }
   .edit_icon {
     cursor: pointer;
@@ -228,7 +231,10 @@
     box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.5);
   }
   .conditions_box {
-    padding: 2px 20px;
+    padding: 20px;
+    > div {
+      padding-bottom: 2%;
+    }
     p {
       font-size: 12px !important;
     }

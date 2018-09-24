@@ -13,12 +13,14 @@ import {
   authHeader
 } from '../../helpers'
 import getApiHost from '../../constants/api.constants'
+import { currencyOptions } from '../../constants'
 import DocumentsDownloader from '../Documents/Downloader'
 import { Modal } from '../Modal/Modal'
 import GreyBox from '../GreyBox/GreyBox'
 import OptOutCookies from '../OptOut/Cookies'
 import OptOutTenant from '../OptOut/Tenant'
 import OptOutItsMyCargo from '../OptOut/ItsMyCargo'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 const { fetch } = window
 
@@ -36,10 +38,7 @@ class UserProfile extends Component {
       newAliasBool: false,
       passwordResetSent: false,
       passwordResetRequested: false,
-      currencySelect: {
-        label: this.props.user ? this.props.user.currency : 'EUR',
-        value: this.props.user ? this.props.user.currency : 'EUR'
-      }
+      currentCurrency: {}
     }
     this.makePrimary = this.makePrimary.bind(this)
     this.editProfile = this.editProfile.bind(this)
@@ -65,6 +64,13 @@ class UserProfile extends Component {
   saveCurrency () {
     const { appDispatch } = this.props
     appDispatch.setCurrency(this.state.currencySelect.value)
+  }
+
+  handleCurrencyUpdate (e) {
+    const { value } = e
+    const { appDispatch } = this.props
+    this.setState({ currentCurrency: e })
+    appDispatch.setCurrency(value)
   }
 
   makePrimary (locationId) {
@@ -202,6 +208,35 @@ class UserProfile extends Component {
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
+
+    const currencySection = (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
+            <p className="flex-none">{t('common:currency')}:</p>
+            <span><strong>{user.currency}</strong></span>
+          </div>
+        </div>
+        <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
+      </div>
+    )
+
+    const toggleEditCurrency = !tenant.data.scope.fixed_currency ? (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-center-center ">
+            <p className="flex-none">{t('common:currency')}:</p>
+            <NamedSelect
+              className="flex-100"
+              options={currencyOptions}
+              value={this.state.currentCurrency}
+              placeholder="Select Currency"
+              onChange={e => this.handleCurrencyUpdate(e)}
+            />
+          </div>
+        </div>
+      </div>
+    ) : currencySection
 
     const newAliasBox = (
       <div
@@ -431,15 +466,7 @@ class UserProfile extends Component {
                     passwordResetRequested={passwordResetRequested}
                   />
                   <ProfileBox hide={editBool} user={user} style={textStyle} theme={theme} edit={this.editProfile} />
-                  <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-                    <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                      <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-                        <p className="flex-none">{t('common:currency')}:</p>
-                        <span><strong>{user.currency}</strong></span>
-                      </div>
-                    </div>
-                    <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
-                  </div>
+                  {!editBool ? currencySection : toggleEditCurrency}
                 </div>
               )}
             />
