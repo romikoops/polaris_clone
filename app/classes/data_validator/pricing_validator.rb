@@ -11,8 +11,8 @@ module DataValidator
       # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
       # @json_array = JSON.parse(open(signed_url).read).deep_symbolize_keys!
       # @json_array = JSON.parse(File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_data.json").read).deep_symbolize_keys!
-      # signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
-      signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test_approved.xlsx")
+      signed_url = get_file_url(args[:key], "assets.itsmycargo.com")
+      # signed_url = File.open("#{Rails.root}/app/classes/data_validator/greencarrier_pricing_test_approved.xlsx")
       @xlsx = open_file(signed_url)
       @shipment_ids_to_destroy = []
       @user = args[:user] ||= @tenant.users.shipper.first
@@ -37,7 +37,6 @@ module DataValidator
           create_example_results
           calculate(sheet_name)
         rescue Exception => e # bad code.....
-          binding.pry
         end
         # puts '----------'
         # puts sheet_name
@@ -184,7 +183,7 @@ module DataValidator
       str = column[@row_keys[key]]
       to_display = string_to_currency_value(str)
       if to_display.nil?
-        return nil
+        return {}
       elsif key == 'TOTAL'
         return to_display
       else
@@ -309,7 +308,7 @@ module DataValidator
               result_for_printing[key1][key2] = diff_result_string(result, [key1, key2], expected_result)
             end
           end
-        elsif value1 && value1[:total]
+        elsif value1 && value1.keys.length > 0
           value1.each do |key2, _value2|
             if key2.to_s != 'edited_total' || key2.to_s != 'total'
               result_for_printing[key1] = {} unless result_for_printing[key1]
