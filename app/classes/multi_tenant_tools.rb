@@ -572,7 +572,7 @@ module MultiTenantTools
       secret_access_key: Settings.aws.secret_access_key,
       region:            Settings.aws.region
     )
-    invalArray = ["/#{subdomain}.html"]
+    invalArray = ["/#{subdomain}.html", "/config.js"]
     invalStr = Time.now.to_i.to_s + "_subdomain"
     resp = cloudfront.create_invalidation(
       distribution_id:    cfId, # required
