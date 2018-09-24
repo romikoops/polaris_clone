@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import Truncate from 'react-truncate'
 import { v4 } from 'uuid'
+import { sortBy } from 'lodash'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
@@ -117,7 +118,13 @@ class UserLocationsBox extends PureComponent {
     const endIndex = page * perPage
 
     if (locations.length) {
-      locations.sort((a, b) => b.user.primary - a.user.primary).slice(startIndex, endIndex).forEach((op) => {
+      locations.sort((a, b) => {
+        if (a.user.primary !== b.user.primary) {
+          return a.user.primary ? -1 : 1
+        }
+
+        return a.location.id - b.location.id
+      }).slice(startIndex, endIndex).forEach((op) => {
         locationCards.push(<div
           key={v4()}
           className={`${cols === 2 ? 'flex-45' : 'flex-30'} flex-md-45 margin_bottom tile_padding layout-row layout-align-start-stretch ${styles.loc_info}`}
