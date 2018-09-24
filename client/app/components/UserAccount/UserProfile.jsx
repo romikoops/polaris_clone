@@ -209,6 +209,35 @@ class UserProfile extends Component {
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
 
+    const currencySection = (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
+            <p className="flex-none">{t('common:currency')}:</p>
+            <span><strong>{user.currency}</strong></span>
+          </div>
+        </div>
+        <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
+      </div>
+    )
+
+    const toggleEditCurrency = !tenant.data.scope.fixed_currency ? (
+      <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
+        <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-center-center ">
+            <p className="flex-none">{t('common:currency')}:</p>
+            <NamedSelect
+              className="flex-100"
+              options={currencyOptions}
+              value={this.state.currentCurrency}
+              placeholder="Select Currency"
+              onChange={e => this.handleCurrencyUpdate(e)}
+            />
+          </div>
+        </div>
+      </div>
+    ) : currencySection
+
     const newAliasBox = (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -437,33 +466,7 @@ class UserProfile extends Component {
                     passwordResetRequested={passwordResetRequested}
                   />
                   <ProfileBox hide={editBool} user={user} style={textStyle} theme={theme} edit={this.editProfile} />
-                  {!editBool ? (
-                    <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-                      <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                        <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.currency_grey}`}>
-                          <p className="flex-none">{t('common:currency')}:</p>
-                          <span><strong>{user.currency}</strong></span>
-                        </div>
-                      </div>
-                      <div className="flex-75 layout-row layout-align-space-around-center layout-wrap" />
-                    </div>
-                  ) : (
-                    <div className={`flex-40 layout-row layout-align-center-center layout-wrap ${styles.currency_box}`}>
-                      <div className="flex-75 layout-row layout-align-end-center layout-wrap">
-                        <div className="flex-100 layout-row layout-align-center-center ">
-                          <p className="flex-none">{t('common:currency')}:</p>
-                          <NamedSelect
-                            className="flex-100"
-                            options={currencyOptions}
-                            value={this.state.currentCurrency}
-                            placeholder="Select Currency"
-                            onChange={e => this.handleCurrencyUpdate(e)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
+                  {!editBool ? currencySection : toggleEditCurrency}
                 </div>
               )}
             />
