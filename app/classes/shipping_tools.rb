@@ -8,16 +8,18 @@ module ShippingTools
   extend DocumentTools
   extend NotificationTools
 
-  def self.create_shipments_from_quotation(shipment, schedules)
+  def self.create_shipments_from_quotation(shipment, results)
     main_quote = Quotation.create(user_id: shipment.user_id)
-    schedules.each do |schedule|
+    binding.pry
+    results.each do |result|
+      schedule = result['schedules'].first
       trip = Trip.find(schedule['trip_id'])
-      on_carriage_hash = !!schedule['quote']['trucking_on'] ?
+      on_carriage_hash = !!result['quote']['trucking_on'] ?
       {
         truck_type: '',
         location_id: Location.geocoded_location(shipment.delivery_address).id
       } : nil
-      pre_carriage_hash = !!schedule['quote']['trucking_pre'] ?
+      pre_carriage_hash = !!result['quote']['trucking_pre'] ?
       {
         truck_type: '',
         location_id: Location.geocoded_location(shipment.pickup_address).id

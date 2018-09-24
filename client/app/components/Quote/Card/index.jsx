@@ -44,8 +44,7 @@ class QuoteCard extends PureComponent {
     this.state = {
       expander: {},
       isChecked: false,
-      showSchedules: true,
-      panelHeight: ''
+      showSchedules: true
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
@@ -98,6 +97,7 @@ class QuoteCard extends PureComponent {
     } = this.state
     const originHub = result.meta.origin_hub
     const destinationHub = result.meta.destination_hub
+    const hasDates = result.schedules && result.schedules.length > 0 && result.schedules[0].etd !== null
     const gradientStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const calcPayload = cargo.reduce((a, b) => ({ total: a.payload_in_kg + b.payload_in_kg }))
     const pricesArr = Object.keys(quote).splice(2).length !== 0 ? (
@@ -157,7 +157,6 @@ class QuoteCard extends PureComponent {
           </div>
         </div>
         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
-
           <div className="flex-100 layout-row">
             <p className={`flex-none ${styles.sched_elem}`}>
               {' '}
@@ -201,7 +200,7 @@ class QuoteCard extends PureComponent {
         <p className="flex-none">View Price Breakdown</p>
       </div>
     )
-    const showSchedulesBtn = schedulesArr.length > 0 ? (
+    const showSchedulesBtn = hasDates ? (
       <div
         className={`flex layout-row layout-align-start-center pointy ${styles.view_switch}`}
         onClick={() => this.toggleShowSchedules('schedules')}

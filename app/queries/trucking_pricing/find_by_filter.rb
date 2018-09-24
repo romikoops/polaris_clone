@@ -16,17 +16,14 @@ module Queries
         @city_name    = args[:city_name]    || args[:location].try(:city)
         @country_code = args[:country_code] || args[:location].try(:country).try(:code)
 
-        @tenant_id   = args[:tenant_id]
-        @load_type   = args[:load_type]
-        @carriage    = args[:carriage]
-        @truck_type  = args[:truck_type]
-        @cargo_class = args[:cargo_class]
-        @nexus_ids   = args[:nexus_ids]
-        @hub_ids     = args[:hub_ids]
-        @distance    = args[:distance]
-
-        @zipcode      = '42677'
-        @country_code = 'SE'
+        @tenant_id    = args[:tenant_id]
+        @load_type    = args[:load_type]
+        @carriage     = args[:carriage]
+        @truck_type   = args[:truck_type]
+        @cargo_class  = args[:cargo_class]
+        @nexus_ids    = args[:nexus_ids]
+        @hub_ids      = args[:hub_ids]
+        @distance     = args[:distance]
       end
 
       def perform
