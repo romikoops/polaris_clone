@@ -638,7 +638,6 @@ module ShippingTools
   end
 
   def self.save_pdf_shipment(shipment)
-    logo = Base64.encode64(HTTP.get(shipment.tenant.theme['logoLarge']).body)
     ShipmentMailer.generate_and_upload_shipment_pdf(shipment)
   end
 

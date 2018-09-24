@@ -2,7 +2,7 @@
 
 class Shipments::BookingProcessController < ApplicationController
   skip_before_action :require_non_guest_authentication!,
-    except: %i[update_shipment request_shipment]
+                     except: %i(update_shipment request_shipment)
   def create_shipment
     resp = ShippingTools.create_shipment(params[:details], current_user)
     response_handler(resp)
@@ -16,7 +16,7 @@ class Shipments::BookingProcessController < ApplicationController
   def choose_offer
     shipment = Shipment.find(params[:shipment_id])
     resp = ShippingTools.choose_offer(params, current_user)
-    
+
     response_handler(resp)
   end
 
@@ -34,13 +34,13 @@ class Shipments::BookingProcessController < ApplicationController
   def download_quotations
     shipment = Shipment.find(params[:shipment_id])
     url = ShippingTools.save_pdf_quotes(shipment, current_user.tenant, params[:options][:quotes])
-    response_handler({key: 'quotations', url: url})
+    response_handler(key: 'quotations', url: url)
   end
 
   def download_shipment
     shipment = Shipment.find(params[:shipment_id])
     url = ShippingTools.save_pdf_shipment(shipment)
-    response_handler({key: 'shipment_recap', url: url})
+    response_handler(key: 'shipment_recap', url: url)
   end
 
   def request_shipment

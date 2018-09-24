@@ -25,7 +25,6 @@ class PdfHandler
     doc_erb = ErbTemplate.new(
       layout:   @layout,
       template: @template,
-      show_as_html: true,
       locals:   {
         shipment:  @shipment,
         shipments: @shipments,
