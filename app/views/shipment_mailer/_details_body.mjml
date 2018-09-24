@@ -102,7 +102,7 @@
         <% cargo_type = @shipment.load_type == 'cargo_item' ? 'Cargo Items' : 'Containers'%>
           <td style="padding: 0 15px 0 0;"> <%= cargo_type %>:</td>
           <td style="padding: 0 15px;">
-            <%= @shipment.cargo_items.count %> 
+            <%= @shipment.cargo_units.count %> 
           </td>
         </tr>
         <tr>
