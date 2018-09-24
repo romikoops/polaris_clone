@@ -188,7 +188,9 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
           <h4
             className="date_title"
           >
-             ETD
+             
+            ETD
+             
           </h4>
         </div>
         <div
@@ -219,7 +221,9 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
           <h4
             className="date_title"
           >
-             ETA 
+             
+            ETA
+             
           </h4>
         </div>
         <div
@@ -248,7 +252,9 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
           <h4
             className="date_title"
           >
-             Estimated Transit Time 
+             
+            Estimated Transit Time
+             
           </h4>
         </div>
         <div
@@ -258,7 +264,8 @@ exports[`props.shipment.schedule_set.length < 1 1`] = `
             className="flex-none sched_elem"
           >
              
-              Days
+              
+            Days
           </p>
         </div>
       </div>
@@ -455,7 +462,9 @@ exports[`shallow render 1`] = `
           <h4
             className="date_title"
           >
-             ETD
+             
+            ETD
+             
           </h4>
         </div>
         <div
@@ -486,7 +495,9 @@ exports[`shallow render 1`] = `
           <h4
             className="date_title"
           >
-             ETA 
+             
+            ETA
+             
           </h4>
         </div>
         <div
@@ -515,7 +526,9 @@ exports[`shallow render 1`] = `
           <h4
             className="date_title"
           >
-             Estimated Transit Time 
+             
+            Estimated Transit Time
+             
           </h4>
         </div>
         <div
@@ -525,7 +538,8 @@ exports[`shallow render 1`] = `
             className="flex-none sched_elem"
           >
              
-              Days
+              
+            Days
           </p>
         </div>
       </div>

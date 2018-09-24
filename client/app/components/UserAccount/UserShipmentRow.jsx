@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import { v4 } from 'uuid'
 import PropTypes from '../../prop-types'
 import styles from './UserShipmentRow.scss'
@@ -69,7 +70,7 @@ export class UserShipmentRow extends Component {
   }
   render () {
     const {
-      theme, shipment, hubs, user
+      theme, shipment, hubs, user, t
     } = this.props
     const schedule = {}
     const originHub = hubs[shipment.origin_hub_id].data
@@ -92,39 +93,7 @@ export class UserShipmentRow extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
-    // const pendingRow = (
-    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-    //     <div className="flex-none layout-row layout-align-start-end">
-    //       <p className="flex-none">Status: </p>
-    //     </div>
-    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.pending}`}>
-    //       <i className="flex-none fa fa-clock-o" />
-    //       <p className="flex-none">Pending</p>
-    //     </div>
-    //   </div>
-    // )
-    // const acceptedRow = (
-    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-    //     <div className="flex-none layout-row layout-align-start-end">
-    //       <p className="flex-none">Status: </p>
-    //     </div>
-    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.grant}`}>
-    //       <i className="flex-none fa fa-check" />
-    //       <p className="flex-none">Accepted</p>
-    //     </div>
-    //   </div>
-    // )
-    // const deniedRow = (
-    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-    //     <div className="flex-none layout-row layout-align-start-end">
-    //       <p className="flex-none">Status: </p>
-    //     </div>
-    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.deny}`}>
-    //       <i className="flex-none fa fa-trash" />
-    //       <p className="flex-none">Denied</p>
-    //     </div>
-    //   </div>
-    // )
+
     const feeHash = shipment.selected_offer
 
     return (
@@ -199,7 +168,7 @@ export class UserShipmentRow extends Component {
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title}>
-                  {shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date'}
+                  {shipment.has_pre_carriage ? t('common:pickUpDate') : t('common:closingDate')}
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -215,7 +184,7 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> ETD</h4>
+                <h4 className={styles.date_title}> {t('common:etd')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -230,7 +199,7 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> ETA </h4>
+                <h4 className={styles.date_title}> {t('common:eta')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -245,13 +214,13 @@ export class UserShipmentRow extends Component {
             </div>
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> Estimated Transit Time </h4>
+                <h4 className={styles.date_title}> {t('shipment:estimatedTransitTime')} </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}
-                  {'  Days'}
+                  {moment(shipment.planned_eta).diff(shipment.planned_etd, t('common:days'))}
+                  {'  '}{t('common:capitalDays')}
                 </p>
               </div>
             </div>
@@ -263,6 +232,7 @@ export class UserShipmentRow extends Component {
 }
 UserShipmentRow.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   handleSelect: PropTypes.func.isRequired,
   handleAction: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
@@ -275,4 +245,4 @@ UserShipmentRow.defaultProps = {
   hubs: []
 }
 
-export default UserShipmentRow
+export default translate(['common', 'shipment'])(UserShipmentRow)
