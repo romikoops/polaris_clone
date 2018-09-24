@@ -461,6 +461,58 @@ exports[`props.shipmentData.aggregatedCargo is truthy 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
                 tenant={
                   Object {
                     "data": Object {
@@ -1515,6 +1567,58 @@ exports[`props.shipmentData.documents is truthy 1`] = `
                     },
                     "total": Object {
                       "value": 87,
+                    },
+                  }
+                }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
                     },
                   }
                 }
@@ -2629,6 +2733,58 @@ exports[`props.shipmentData.notifyees is truthy 1`] = `
                     },
                     "total": Object {
                       "value": 87,
+                    },
+                  }
+                }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
                     },
                   }
                 }
@@ -3819,6 +3975,58 @@ exports[`props.shipmentData.shipment.has_on_carriage is true 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": true,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
                 tenant={
                   Object {
                     "data": Object {
@@ -4878,6 +5086,58 @@ exports[`props.shipmentData.shipment.has_pre_carriage is true 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": true,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
                 tenant={
                   Object {
                     "data": Object {
@@ -5921,6 +6181,58 @@ exports[`shallow render 1`] = `
                     },
                   }
                 }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                    },
+                  }
+                }
                 tenant={
                   Object {
                     "data": Object {
@@ -6961,6 +7273,58 @@ exports[`with cargo items 1`] = `
                     },
                     "total": Object {
                       "value": 87,
+                    },
+                  }
+                }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
                     },
                   }
                 }
@@ -8323,6 +8687,58 @@ exports[`with containers 1`] = `
                     },
                     "total": Object {
                       "value": 87,
+                    },
+                  }
+                }
+                shipment={
+                  Object {
+                    "cargo_notes": "FOO_CARGO_NOTES",
+                    "eori": 1234,
+                    "has_on_carriage": false,
+                    "has_pre_carriage": false,
+                    "incoterm_text": "FOO_INCOTERM_TEXT",
+                    "load_type": "OCEAN_LOAD_TYPE",
+                    "notes": "FOO_NOTES",
+                    "schedules_charges": Object {
+                      "AIR_HUB_ROUTE_KEY": Object {
+                        "total": 200,
+                      },
+                      "OCEAN_HUB_ROUTE_KEY": Object {
+                        "total": 40,
+                      },
+                      "RAIL_HUB_ROUTE_KEY": Object {
+                        "total": 125,
+                      },
+                      "TRUCK_HUB_ROUTE_KEY": Object {
+                        "total": 75,
+                      },
+                    },
+                    "selected_offer": Object {
+                      "customs": Object {
+                        "val": 12,
+                      },
+                      "insurance": Object {
+                        "val": 5,
+                      },
+                      "total": Object {
+                        "value": 87,
+                      },
+                    },
+                    "total_goods_value": Object {
+                      "currency": "USD",
+                      "value": 15,
+                    },
+                    "total_price": Object {
+                      "currency": "USD",
+                      "value": 12,
+                    },
+                    "trucking": Object {
+                      "on_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
+                      "pre_carriage": Object {
+                        "trucking_time_in_seconds": 55,
+                      },
                     },
                   }
                 }
