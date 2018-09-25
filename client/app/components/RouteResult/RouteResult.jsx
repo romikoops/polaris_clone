@@ -43,6 +43,7 @@ export class RouteResult extends Component {
     const {
       theme, schedule, pickup, truckingTime
     } = this.props
+    const adjustedTruckingTime = truckingTime + 86400
 
     const originHub = schedule.origin_hub
     const destinationHub = schedule.destination_hub
@@ -107,7 +108,7 @@ export class RouteResult extends Component {
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
                   {pickup
-                    ? moment(schedule.closing_date).subtract(truckingTime, 'seconds').format('DD-MM-YYYY')
+                    ? moment(schedule.closing_date).subtract(adjustedTruckingTime, 'seconds').format('DD-MM-YYYY')
                     : moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
                 </p>
               </div>
