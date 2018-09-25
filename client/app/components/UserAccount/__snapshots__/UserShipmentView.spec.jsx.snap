@@ -60,6 +60,14 @@ exports[`loading is true 1`] = `
       cargoCount={-2}
       cargoView={Array []}
       contacts={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -70,6 +78,13 @@ exports[`loading is true 1`] = `
           "5": "D",
           "6": "C",
         }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
       }
       docOptions={
         Array [
@@ -178,6 +193,22 @@ exports[`loading is true 1`] = `
           </div>,
         ]
       }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      originDropOffTime={null}
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -331,6 +362,14 @@ exports[`shallow render 1`] = `
       cargoCount={-2}
       cargoView={Array []}
       contacts={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -341,6 +380,13 @@ exports[`shallow render 1`] = `
           "5": "D",
           "6": "C",
         }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
       }
       docOptions={
         Array [
@@ -449,6 +495,22 @@ exports[`shallow render 1`] = `
           </div>,
         ]
       }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      originDropOffTime={null}
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -661,6 +723,14 @@ exports[`shipmentData.cargoItems is present 1`] = `
         ]
       }
       contacts={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -671,6 +741,13 @@ exports[`shipmentData.cargoItems is present 1`] = `
           "5": "D",
           "6": "C",
         }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
       }
       docOptions={
         Array [
@@ -779,6 +856,22 @@ exports[`shipmentData.cargoItems is present 1`] = `
           </div>,
         ]
       }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      originDropOffTime={null}
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -980,6 +1073,14 @@ exports[`shipmentData.contacts is present 1`] = `
           },
         ]
       }
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -990,6 +1091,13 @@ exports[`shipmentData.contacts is present 1`] = `
           "5": "D",
           "6": "C",
         }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
       }
       docOptions={
         Array [
@@ -1098,6 +1206,22 @@ exports[`shipmentData.contacts is present 1`] = `
           </div>,
         ]
       }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      originDropOffTime={null}
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
@@ -1251,6 +1375,14 @@ exports[`shipmentData.documents is present 1`] = `
       cargoCount={-2}
       cargoView={Array []}
       contacts={Array []}
+      deliveryDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      deliveryTime={null}
       deselectedStyle={
         Object {
           "0": "#",
@@ -1261,6 +1393,13 @@ exports[`shipmentData.documents is present 1`] = `
           "5": "D",
           "6": "C",
         }
+      }
+      destinationCollectionDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
       }
       docOptions={
         Array [
@@ -1442,6 +1581,22 @@ exports[`shipmentData.documents is present 1`] = `
           </div>,
         ]
       }
+      originDropOffDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      originDropOffTime={null}
+      pickupDate={
+        <p
+          className="flex-none letter_3 date"
+        >
+          19
+        </p>
+      }
+      pickupTime={null}
       scope={
         Object {
           "closed_quotation_tool": true,
