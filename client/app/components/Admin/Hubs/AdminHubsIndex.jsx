@@ -31,7 +31,7 @@ export class AdminHubsIndex extends Component {
   render () {
     const { expander } = this.state
     const {
-      theme, viewHub, toggleNewHub, documentDispatch
+      theme, viewHub, toggleNewHub, documentDispatch, scope
     } = this.props
     const hubUrl = '/admin/hubs/process_csv'
     const scUrl = '/admin/service_charges/process_csv'
@@ -142,7 +142,7 @@ export class AdminHubsIndex extends Component {
               </div>
             )}
           />
-          <CollapsingBar
+          { scope.show_beta_features ? <CollapsingBar
             showArrow
             collapsed={!expander.new}
             theme={theme}
@@ -159,7 +159,7 @@ export class AdminHubsIndex extends Component {
                 {newButton}
               </div>
             )}
-          />
+          /> : '' }
         </div>
       )}
     />]
@@ -179,6 +179,7 @@ export class AdminHubsIndex extends Component {
 AdminHubsIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
+  scope: PropTypes.objectOf(PropTypes.bool),
   viewHub: PropTypes.func.isRequired,
   toggleNewHub: PropTypes.func.isRequired,
   documentDispatch: PropTypes.shape({
@@ -189,7 +190,8 @@ AdminHubsIndex.propTypes = {
 
 AdminHubsIndex.defaultProps = {
   theme: null,
-  hubs: []
+  hubs: [],
+  scope: {}
 }
 
 export default AdminHubsIndex

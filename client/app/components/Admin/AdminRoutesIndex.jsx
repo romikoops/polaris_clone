@@ -61,7 +61,7 @@ export class AdminRoutesIndex extends Component {
 
   render () {
     const {
-      theme, itineraries, adminDispatch, tenant, toggleNewRoute, mapData
+      theme, itineraries, adminDispatch, tenant, toggleNewRoute
     } = this.props
 
     if (!itineraries) {
@@ -77,7 +77,7 @@ export class AdminRoutesIndex extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: '#E0E0E0' }
-    const mapIcon = <i className="fa fa-map clip flex-none" style={gradientFontStyle} />
+
 
     const motTabs = modeOfTransportNames.sort().map(mot => (<Tab
       tabTitle={capitalize(mot)}
@@ -95,20 +95,6 @@ export class AdminRoutesIndex extends Component {
         handleClick={id => adminDispatch.getItinerary(id, true)}
       />
     </Tab>))
-    motTabs.push(<Tab
-      tabTitle="Map"
-      theme={theme}
-      icon={mapIcon}
-    >
-      <div className="flex-100 layout-row layout-align-center-start header_buffer">
-        <WorldMap
-          itineraries={itineraries}
-          theme={theme}
-          mapData={mapData}
-
-        />
-      </div>
-    </Tab>)
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-space-around-start extra_padding_left">
@@ -133,15 +119,13 @@ AdminRoutesIndex.propTypes = {
   }).isRequired,
   toggleNewRoute: PropTypes.func.isRequired,
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
-  mapData: PropTypes.arrayOf(PropTypes.object),
   tenant: PropTypes.tenant
 }
 
 AdminRoutesIndex.defaultProps = {
   theme: null,
   loading: false,
-  tenant: { data: {} },
-  mapData: []
+  tenant: { data: {} }
 }
 
 export default AdminRoutesIndex

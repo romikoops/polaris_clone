@@ -302,6 +302,7 @@ class TenantSeeder
           legal: ''
         },
         closed_quotation_tool: false,
+        show_beta_features: true,
         open_quotation_tool: false,
         require_full_address: true,
         consolidate_cargo: false,
