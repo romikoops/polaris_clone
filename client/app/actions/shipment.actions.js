@@ -541,10 +541,6 @@ function setError (payload) {
   return { type: shipmentConstants.SET_ERROR, payload }
 }
 
-function clearErrors (stage) {
-  return { type: shipmentConstants.CLEAR_ERRORS, payload: stage }
-}
-
 function logOut () {
   return {
     type: shipmentConstants.CLEAR_SHIPMENTS,
@@ -583,7 +579,6 @@ export const shipmentActions = {
   getOffersForNewDate,
   updateContact,
   delete: _delete,
-  clearErrors,
   setError
 }
 

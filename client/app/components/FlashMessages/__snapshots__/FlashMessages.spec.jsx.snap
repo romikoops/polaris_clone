@@ -10,7 +10,7 @@ exports[`shallow render 1`] = `
 >
   <CSSTransition
     transitionEnter={false}
-    transitionLeaveTimeout={500}
+    transitionLeaveTimeout={1000}
     transitionName="alerts"
   >
     <div>
