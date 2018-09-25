@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
 import { pick, uniqWith } from 'lodash'
+import { translate } from 'react-i18next'
 import PropTypes from '../../prop-types'
 import adminStyles from '../Admin/Admin.scss'
 import styles from '../Admin/AdminShipments.scss'
@@ -200,7 +201,7 @@ export class UserShipmentView extends Component {
 
   render () {
     const {
-      theme, hubs, shipmentData, user, userDispatch, tenant
+      theme, hubs, shipmentData, user, userDispatch, tenant, t
     } = this.props
 
     if (!shipmentData || !hubs || !user) {
@@ -276,14 +277,18 @@ export class UserShipmentView extends Component {
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
-        <p className="layout-align-center-center layout-row"> In process </p>
+        <p className="layout-align-center-center layout-row">
+          {t('common:inProcess')}
+        </p>
       </div>
     ) : (
       ''
     )
     const reuseShipment = (
       <div style={gradientStyle} onClick={() => this.reuseShipment()} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center pointy ${adminStyles.shipment_view_margin_buffer}  ${styles.reuse_shipment_box}`}>
-        <p className="layout-align-center-center layout-row">Reuse Shipment </p>
+        <p className="layout-align-center-center layout-row">
+          {t('shipment:reuseShipment')}
+        </p>
       </div>
     )
 
@@ -309,13 +314,6 @@ export class UserShipmentView extends Component {
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
-      // , customs_declaration: false,
-      // customs_value_declaration: false,
-      // eori: false,
-      // certificate_of_origin: false,
-      // dangerous_goods: false,
-      // bill_of_lading: false,
-      // invoice: false
     }
 
     if (documents) {
@@ -363,8 +361,8 @@ export class UserShipmentView extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start padding_top extra_padding">
         <div className={`${adminStyles.margin_box_right} layout-row flex-100 layout-align-center-stretch margin_bottom`}>
           <div className={`layout-row flex layout-align-space-between-center ${adminStyles.title_shipment_grey}`}>
-            <p className="layout-align-start-center layout-row">Ref:&nbsp; <span>{shipment.imc_reference}</span></p>
-            <p className="layout-row layout-align-end-end"><strong>Placed at:&nbsp;</strong> {createdDate}</p>
+            <p className="layout-align-start-center layout-row">{t('common:ref')}:&nbsp; <span>{shipment.imc_reference}</span></p>
+            <p className="layout-row layout-align-end-end"><strong>{t('shipment:placedAt')}:&nbsp;</strong> {createdDate}</p>
           </div>
           {reuseShipment}
           {statusRequested}
@@ -398,8 +396,7 @@ export class UserShipmentView extends Component {
               missingDocs={missingDocs}
               cargoView={cargoView}
               calcCargoLoad={UserShipmentView.calcCargoLoad(feeHash, shipment.load_type)}
-            />
-          ) : (
+            />) : (
             <ShipmentQuotationContent
               theme={theme}
               gradientBorderStyle={gradientBorderStyle}
@@ -425,6 +422,7 @@ export class UserShipmentView extends Component {
 
 UserShipmentView.propTypes = {
   theme: PropTypes.theme,
+  t: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
   shipmentData: PropTypes.shipmentData.isRequired,
@@ -446,4 +444,4 @@ UserShipmentView.defaultProps = {
   tenant: {}
 }
 
-export default UserShipmentView
+export default translate(['common', 'shipment', 'bookconf', 'cargo'])(UserShipmentView)

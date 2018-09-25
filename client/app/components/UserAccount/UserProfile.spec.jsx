@@ -28,7 +28,7 @@ jest.mock('../Admin', () => ({
 }))
 
 // eslint-disable-next-line import/first
-import { UserProfile } from './UserProfileDone'
+import { UserProfile } from './UserProfile'
 
 const propsBase = {
   theme,
