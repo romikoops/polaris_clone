@@ -279,7 +279,7 @@ class AdminSchedules extends Component {
                 </div>
               )}
             />
-            <CollapsingBar
+            { scope.show_beta_features ? <CollapsingBar
               showArrow
               collapsed={!expander.new}
               theme={theme}
@@ -295,7 +295,7 @@ class AdminSchedules extends Component {
                   {newButton}
                 </div>
               )}
-            />
+            /> : '' }
           </div>
         )}
       />)
