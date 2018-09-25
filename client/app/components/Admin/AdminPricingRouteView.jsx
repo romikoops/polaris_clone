@@ -100,7 +100,7 @@ export class AdminPricingRouteView extends Component {
   }
   render () {
     const {
-      theme, pricingData, itineraryPricings, clients, adminActions
+      theme, pricingData, itineraryPricings, clients, adminActions, scope
     } = this.props
     const {
       editorBool,
@@ -254,7 +254,7 @@ export class AdminPricingRouteView extends Component {
           </div>
         </div>
 
-        <div
+       {scope.show_beta_features ? <div
           className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
         >
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
@@ -296,7 +296,7 @@ export class AdminPricingRouteView extends Component {
               }
             />
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
             <AdminPricingDedicated
               theme={theme}
               serviceLevels={serviceLevels}
@@ -307,12 +307,12 @@ export class AdminPricingRouteView extends Component {
               clients={clients}
               initialEdit={showPricingAdder}
             />
-          </div>
+          </div> 
           <div className="flex-100 layout-row layout-wrap layout-align-start-center" >
             {/* <AdminPricingTest itinerary={itinerary} /> */}
           </div>
 
-        </div>
+        </div> : '' }
 
         {confimPrompt}
         {editorBool ? (
@@ -350,6 +350,9 @@ AdminPricingRouteView.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.client),
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,
+  scope: PropTypes.shape({
+    show_beta_features: PropTypes.bool
+  }),
   itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
@@ -358,7 +361,8 @@ AdminPricingRouteView.defaultProps = {
   loading: false,
   routePricings: null,
   pricingData: null,
-  clients: []
+  clients: [],
+  scope: {}
 }
 
 export default AdminPricingRouteView
