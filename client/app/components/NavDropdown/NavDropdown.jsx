@@ -16,7 +16,7 @@ function profileIconJSX (src, hide) {
 }
 
 export function NavDropdown ({
-  linkOptions, dropDownText, invert, user, toggleShowLogin, isLanding
+  linkOptions, dropDownText, invert, user, toggleShowLogin, isLanding, loginText
 }) {
   const whiteProfileIconJSX = profileIconJSX(iconColorer('white'), !invert) || ''
   const blackProfileIconJSX = profileIconJSX(iconColorer('black'), invert) || ''
@@ -57,7 +57,7 @@ export function NavDropdown ({
         </div>
       ) : (
         <div className={`pointy layout-row layout-align-center-center ${styles.dropbtn}`}>
-          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#4F4F4F' }}>Log In / Register</a>
+          <a onClick={toggleShowLogin} style={isLanding ? {} : { color: '#4F4F4F' }}> {loginText} </a>
         </div>
       )}
     </div>
@@ -73,15 +73,17 @@ NavDropdown.propTypes = {
     text: PropTypes.string,
     fontAwesomeIcon: PropTypes.string
   })).isRequired,
-  invert: PropTypes.bool
+  invert: PropTypes.bool,
+  loginText: PropTypes.string
 }
 
 NavDropdown.defaultProps = {
-  dropDownText: PropTypes.string,
+  dropDownText: '',
   invert: false,
   isLanding: false,
   user: null,
-  toggleShowLogin: null
+  toggleShowLogin: null,
+  loginText: 'Log In / Register'
 }
 
 export default NavDropdown

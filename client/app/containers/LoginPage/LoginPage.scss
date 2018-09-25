@@ -9,7 +9,8 @@
 		font-weight: 900;
 	}
 	form.login_form {
-		width: 317px;
+    width: 317px;
+    color: black;
 
 		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 			color: $grey;

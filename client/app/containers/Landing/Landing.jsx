@@ -13,13 +13,6 @@ import { gradientTextGenerator } from '../../helpers'
 import { Footer } from '../../components/Footer/Footer'
 
 class Landing extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      showLogin: false
-    }
-  }
-
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
 
@@ -27,10 +20,12 @@ class Landing extends Component {
   }
   bookNow () {
     const {
-      tenant, loggedIn, authDispatch, userDispatch
+      tenant, loggedIn, authDispatch, userDispatch, user
     } = this.props
 
-    if (loggedIn) {
+    if (tenant.data.scope.closed_shop && (!user || user.guest || !loggedIn)) {
+      authDispatch.showLogin()
+    } else if (loggedIn) {
       userDispatch.goTo('/booking')
     } else {
       const unixTimeStamp = moment().unix().toString()
@@ -51,12 +46,6 @@ class Landing extends Component {
         '/booking'
       )
     }
-  }
-
-  toggleShowLogin () {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
   }
 
   render () {
@@ -83,9 +72,7 @@ class Landing extends Component {
             theme={theme}
             goTo={userDispatch.goTo}
             toAdmin={adminDispatch.getDashboard}
-            loggedIn={loggedIn}
             tenant={tenant}
-            toggleShowLogin={() => this.toggleShowLogin()}
             authDispatch={authDispatch}
             bookNow={() => this.bookNow()}
           />

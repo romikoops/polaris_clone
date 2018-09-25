@@ -1,7 +1,8 @@
 @import "../../styles/defaults";
 :local {
 	form.registration_form {
-		width: 700px;
+    width: 700px;
+    color: black;
 
 		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 			color: $grey;

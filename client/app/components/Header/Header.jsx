@@ -6,6 +6,7 @@ import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
+import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
   appActions,
@@ -121,17 +122,6 @@ class Header extends Component {
       }
     ]
 
-    const alertStyle = unread > 0 ? styles.unread : styles.all_read
-    const mail = (
-      <div
-        className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`}
-        onClick={this.toggleShowMessages}
-      >
-        <span className={`${alertStyle} flex-none`}>{unread}</span>
-        <i className="fa fa-envelope-o" />
-      </div>
-    )
-
     let logoUrl = ''
     const logoDisplay = {
       display: `${isTop && invert ? 'none' : 'block'}`
@@ -154,6 +144,7 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
+        loginText={tenant.data.scope.closed_registration ? 'Log In' : 'Log In / Register'}
       />
     )
     const hasErrors = error && error[currentStage] && error[currentStage].length > 0
@@ -161,24 +152,30 @@ class Header extends Component {
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
-        {/* {!noMessages ? mail : ''} */}
       </div>
+    )
+
+    const loginComponent = tenant.data.scope.closed_registration ? (
+      <LoginPage
+        theme={theme}
+        req={req}
+      />
+    ) : (
+      <LoginRegistrationWrapper
+        LoginPageProps={{ theme, req }}
+        RegistrationPageProps={{
+          theme,
+          tenant,
+          req,
+          user
+        }}
+        initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
+      />
     )
 
     const loginModal = (
       <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{ theme, req }}
-            RegistrationPageProps={{
-              theme,
-              tenant,
-              req,
-              user
-            }}
-            initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
-          />
-        }
+        component={loginComponent}
         verticalPadding="30px"
         horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}

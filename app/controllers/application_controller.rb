@@ -23,13 +23,19 @@ class ApplicationController < ActionController::API
 
   def require_authentication!
     raise ApplicationError::NotAuthenticated unless user_signed_in?
+
+    require_non_guest_authentication! if current_tenant.scope['closed_shop']
   end
 
   def require_non_guest_authentication!
-    raise ApplicationError::NotAuthenticated if current_user.guest
+    raise ApplicationError::NotAuthenticated if current_user.guest?
   end
 
   private
+
+  def current_tenant
+    @current_tenant ||= Tenant.find_by(subdomain: params[:subdomain_id])
+  end
 
   def set_raven_context
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
