@@ -102,7 +102,8 @@ module.exports = {
       path: './.node-env'
     }),
     new webpack.EnvironmentPlugin(['RELEASE'])
-    // ,  NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
+    // ,
+    // NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
     // ? new SentryCliPlugin({
     //   release: process.env.RELEASE,
     //   include: 'dist/',
