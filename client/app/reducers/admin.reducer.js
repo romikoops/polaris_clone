@@ -255,7 +255,6 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
-
       return {
         ...state,
         loading: true
@@ -383,6 +382,13 @@ export default function admin (state = {}, action) {
           : []
       open.push(action.payload)
       dashOpen.push(action.payload)
+      const rejected = state.shipments && state.shipments.rejected ? state.shipments.rejected : []
+      const dashRejected =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shioments.rejected
+          ? state.dashboard.shipments.rejected
+          : []
+      rejected.push(action.payload)
+      dashRejected.push(action.payload)
       const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
       if (shipment) {
         shipment.status = 'confirmed'
@@ -392,7 +398,8 @@ export default function admin (state = {}, action) {
         shipments: {
           ...state.dashboard.shipments,
           open: dashOpen,
-          requested: dashReq
+          requested: dashReq,
+          rejected: dashRejected
         }
       } : {
         shipments: {
@@ -404,11 +411,13 @@ export default function admin (state = {}, action) {
         ? {
           ...state.shipments,
           open,
-          requested: req
+          requested: req,
+          rejected
         }
         : {
           open,
-          requested: req
+          requested: req,
+          rejected
         }
       const newShipment = state.shipment
         ? {
@@ -455,6 +464,14 @@ export default function admin (state = {}, action) {
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open
           ? state.dashboard.shipments.open.filter(x => x.id !== action.payload.id)
           : []
+      const rejected =
+        state.shipments && state.shipments.rejected
+          ? state.shipments.rejected.filter(x => x.id !== action.payload.id)
+          : []
+      const dashRejected =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
+          ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
+          : []
       const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
       const dashFinished =
         state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
@@ -474,13 +491,15 @@ export default function admin (state = {}, action) {
           shipments: {
             ...state.dashboard.shipments,
             finished: dashFinished,
-            open: dashReq
+            open: dashReq,
+            rejected: dashRejected
           }
         },
         shipments: {
           ...state.shipments,
           finished,
-          open: req
+          open: req,
+          rejected
         },
         shipment: {
           ...state.shipment,
@@ -496,12 +515,12 @@ export default function admin (state = {}, action) {
       }
     case adminConstants.DENY_SHIPMENT_SUCCESS: {
       const denReq =
-        state.shipments && state.shipments.requested
-          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.shipments && state.shipments.rejected
+          ? state.shipments.rejected.filter(x => x.id !== action.payload.id)
           : []
       const denDashReq =
-        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
-          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.rejected
+          ? state.dashboard.shipments.rejected.filter(x => x.id !== action.payload.id)
           : []
 
       return {

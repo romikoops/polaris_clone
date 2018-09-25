@@ -79,6 +79,7 @@ class Shipment < ApplicationRecord
       :requested,
       :open,
       :finished,
+      :rejected,
       :for_tenant
     ]
   )
@@ -89,6 +90,7 @@ class Shipment < ApplicationRecord
   scope :requested, -> { where(status: %w(requested requested_by_unconfirmed_account)) }
   scope :requested_by_unconfirmed_account, -> { where(status: "requested_by_unconfirmed_account") }
   scope :open, -> { where(status: %w(in_progress confirmed)) }
+  scope :rejected, -> { where(status: %w(ignored declined)) }
   scope :finished, -> { where(status: "finished") }
   scope :quoted, -> { where(status: "quoted") }
 

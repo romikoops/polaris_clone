@@ -186,7 +186,8 @@ export const shipments = {
   direction: 'export',
   finished: [],
   open: [],
-  requested: []
+  requested: [],
+  rejected: []
 }
 
 export const shipment = {

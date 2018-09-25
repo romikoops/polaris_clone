@@ -16,6 +16,8 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.requested.order(booking_placed_at: :desc)
     when "open"
       shipment_association = current_user.shipments.open.order(booking_placed_at: :desc)
+    when "rejected"
+      shipment_association = current_user.shipments.rejected.order(booking_placed_at: :desc)
     when "finished"
       shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
     when "quoted"
@@ -54,6 +56,8 @@ class ShipmentsController < ApplicationController
       shipment_association = current_user.shipments.open.order(booking_placed_at: :desc)
     when "finished"
       shipment_association = current_user.shipments.finished.order(booking_placed_at: :desc)
+    when "rejected"
+      shipment_association = current_user.shipments.rejected.order(booking_placed_at: :desc)
     when "quoted"
       shipment_association = current_user.shipments.quoted.order(booking_placed_at: :desc)
     end
@@ -126,24 +130,28 @@ class ShipmentsController < ApplicationController
     r_shipments = requested_shipments
     o_shipments = open_shipments
     f_shipments = finished_shipments
+    rj_shipments = rejected_shipments
     per_page = params[:per_page] ? params[:per_page].to_f : 4.to_f
     num_pages = {
       finished:  (f_shipments.count / per_page).ceil,
       requested: (r_shipments.count / per_page).ceil,
-      open:      (o_shipments.count / per_page).ceil
+      open:      (o_shipments.count / per_page).ceil,
+      rejected:  (rj_shipments.count / per_page).ceil
     }
-
     response_handler(
       requested:          requested_shipments.order(booking_placed_at: :desc).paginate(page: params[:requested_page], per_page: per_page)
         .map(&:with_address_options_json),
       open:               open_shipments.order(booking_placed_at: :desc).paginate(page: params[:open_page], per_page: per_page)
+        .map(&:with_address_options_json),
+      rejected:           rejected_shipments.order(booking_placed_at: :desc).paginate(page: params[:rejected_page], per_page: per_page)
         .map(&:with_address_options_json),
       finished:           finished_shipments.order(booking_placed_at: :desc).paginate(page: params[:finished_page], per_page: per_page)
         .map(&:with_address_options_json),
       pages:              {
         open:      params[:open_page],
         finished:  params[:finished_page],
-        requested: params[:requested_page]
+        requested: params[:requested_page],
+        rejected: params[:rejected_page]
       },
       num_shipment_pages: num_pages
     )
@@ -178,6 +186,10 @@ class ShipmentsController < ApplicationController
 
   def open_shipments
     @open_shipments ||= current_user.shipments.open
+  end
+
+  def rejected_shipments
+    @rejected_shipments ||= current_user.shipments.rejected
   end
 
   def finished_shipments

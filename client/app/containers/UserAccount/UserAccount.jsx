@@ -340,6 +340,23 @@ class UserAccount extends Component {
                       />
                     )}
                   />
+                  <Route
+                    exact
+                    path="/account/shipments/rejected"
+                    render={props => (
+                      <UserShipmentsGroup
+                        setNav={this.setNavLink}
+                        theme={theme}
+                        hubHash={hubHash}
+                        user={user}
+                        target="rejected"
+                        title="Rejected"
+                        {...props}
+                        shipments={dashboard.shipments}
+                        userDispatch={userDispatch}
+                      />
+                    )}
+                  />
                 </Switch>
               </GenericError >
             </div>

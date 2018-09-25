@@ -440,6 +440,20 @@ export class AdminShipmentView extends Component {
       ''
     )
 
+    const statusRejected = (shipment.status === 'ignored') ? (
+      <GradientBorder
+        wrapperClassName={`
+          layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
+          ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
+        gradient={gradientBorderStyle}
+        className="layout-row flex-100 layout-align-center-center"
+        content={(
+          <p className="layout-align-center-center layout-row"> Rejected </p>
+        )}
+      />
+    ) : (
+      ''
+    )
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false
@@ -560,6 +574,7 @@ export class AdminShipmentView extends Component {
           {statusRequested}
           {statusInProcess}
           {statusFinished}
+          {statusRejected}
           <div className={`layout-row flex-none layout-align-space-around-center ${adminStyles.border_box} ${adminStyles.action_icons}`}>
             {shipment.status === 'requested' ? (
               <i className={`fa fa-check ${styles.light_green}`} onClick={this.handleAccept} />

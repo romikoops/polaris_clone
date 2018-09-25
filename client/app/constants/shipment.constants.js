@@ -85,6 +85,7 @@ export const shipmentStatii = {
   booking_process_started: 'Booking Process Started',
   finished: 'Finished',
   open: 'Open',
+  rejected: 'Rejected',
   requested: 'Requested'
 }
 
