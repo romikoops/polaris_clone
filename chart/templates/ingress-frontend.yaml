@@ -35,7 +35,7 @@ spec:
             serviceName: {{ $serviceName }}
             servicePort: http-frontend
   tls:
-  - secretName: {{ $serviceName }}-frontend-tls
+  - secretName: {{ $serviceName }}-tls
     hosts:
       - "*.{{ include "hostname" .Values.service.url }}"
 {{- end }}
