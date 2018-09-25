@@ -76,7 +76,7 @@ function sendQuotes (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/send_quotes`
+  const url = `${getApiHost()}/shipments/${data.shipment.id}/send_quotes`
 
   return fetch(url, requestOptions).then(handleResponse)
 }
