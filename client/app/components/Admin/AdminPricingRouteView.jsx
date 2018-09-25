@@ -16,7 +16,6 @@ import GradientBorder from '../GradientBorder'
 import ShipmentOverviewShowCard from './AdminShipmentView/ShipmentOverviewShowCard'
 import { AdminPricingDedicated } from './Pricing/Dedicated'
 import { AdminPricingBox } from './Pricing/Box'
-// import AdminPricingTest from './Pricing/Test'
 import CollapsingContent from '../CollapsingBar/Content'
 
 export class AdminPricingRouteView extends Component {
@@ -254,9 +253,9 @@ export class AdminPricingRouteView extends Component {
           </div>
         </div>
 
-       {scope.show_beta_features ? <div
-          className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
-        >
+        {scope.show_beta_features ? <div
+         className="flex-95 layout-row layout-wrap layout-align-center-center buffer_10"
+       >
           <div className="layout-padding flex-100 layout-align-start-center greyBg">
             <span><b>Dedicated Pricings</b></span>
           </div>
@@ -296,7 +295,7 @@ export class AdminPricingRouteView extends Component {
               }
             />
           </div>
-           <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={showPricingAdder ? {} : { display: 'none' }}>
             <AdminPricingDedicated
               theme={theme}
               serviceLevels={serviceLevels}
@@ -307,9 +306,6 @@ export class AdminPricingRouteView extends Component {
               clients={clients}
               initialEdit={showPricingAdder}
             />
-          </div> 
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center" >
-            {/* <AdminPricingTest itinerary={itinerary} /> */}
           </div>
 
         </div> : '' }
