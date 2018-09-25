@@ -183,7 +183,7 @@ export class UserDashboard extends Component {
               placeholder="Search Contacts"
               title="Most used Contacts"
               handleClick={this.viewClient}
-              seeAll={() => userDispatch.getContacts(true, 1)}
+              seeAll={() => userDispatch.getContacts({ page: 1 }, true)}
             />
           </div>
         </div>

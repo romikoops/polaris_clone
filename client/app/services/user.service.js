@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import authHeader from '../helpers/auth-header'
 import getSubdomain from '../helpers/subdomain'
 import getApiHost from '../constants/api.constants'
+import { toQueryString } from '../helpers'
 
 const { fetch, FormData } = window
 const subdomainKey = getSubdomain()
@@ -154,13 +155,14 @@ function getDashboard (userId) {
   return fetch(`${getApiHost()}/users/${userId}/home`, requestOptions).then(handleResponse)
 }
 
-function getContacts (page) {
+function getContacts (params) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
   }
+  const url = `${getApiHost()}/contacts?${toQueryString(params)}`
 
-  return fetch(`${getApiHost()}/contacts?page=${page || 1}`, requestOptions).then(handleResponse)
+  return fetch(url, requestOptions).then(handleResponse)
 }
 
 function deleteDocument (documentId) {

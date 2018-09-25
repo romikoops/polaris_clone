@@ -7,46 +7,25 @@ import styles from '../Admin/Admin.scss'
 import { AdminClientTile } from '../Admin'
 import { userActions, appActions } from '../../actions'
 
-export class ContactsIndex extends Component {
+function determinePerPage () {
+  // 960px refers to the gt-sm AngularJS Material breakpoint
+
+  return window.innerWidth >= 960 ? 6 : 4
+}
+
+class ContactsIndex extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      contacts: props.contactsData.contacts,
-      page: 1,
-      pages: props.contactsData.numContactPages,
-      perPage: 6
-    }
+    this.state = {}
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.seeAll = this.seeAll.bind(this)
     this.nextPage = this.nextPage.bind(this)
     this.prevPage = this.prevPage.bind(this)
     this.handlePage = this.handlePage.bind(this)
-    this.getContactsFromPage = this.getContactsFromPage.bind(this)
-  }
 
-  componentDidMount () {
-    this.determinePerPage()
-    // if (this.props.contacts.length < 1) {
-    //   this.props.userDispatch.getContacts(false, 1)
-    // }
-  }
-
-  componentDidUpdate (prevProps) {
-    // if (prevProps.contactsData !== this.props.contactsData) {
-    //   this.handleSearchChange({ target: { value: '' } })
-    // }
-  }
-
-  getContactsFromPage (page) {
-    const { userDispatch } = this.props
-    userDispatch.getContacts(false, page)
-  }
-
-  determinePerPage () {
-    const width = window.innerWidth
-    const newPerPage = width >= 1920 ? 6 : 4
-    this.setState({ perPage: newPerPage })
+    this.perPage = determinePerPage()
+    props.userDispatch.getContacts({ page: 1, per_page: this.perPage })
   }
 
   handleClick (client) {
@@ -75,38 +54,29 @@ export class ContactsIndex extends Component {
     this.handlePage(-1)
   }
 
-  doNothing () {
-    console.log(this.state.page)
-  }
-
   handlePage (delta) {
-    const { contactsData } = this.props
-    const { numContactPages } = contactsData
-    const { page } = this.state
-    const nextPage = +page + (1 * delta)
-    let realPage
-    if (nextPage > 0 && nextPage <= numContactPages) {
-      realPage = nextPage
-    } else if (nextPage > 0 && nextPage > numContactPages) {
-      realPage = 1
-    } else if (nextPage < 0) {
-      realPage = numContactPages
+    const { userDispatch, contactsData } = this.props
+    const { searchText } = this.state
+
+    const page = contactsData.page + (1 * delta)
+    if (searchText) {
+      this.searchContactsFromPage(searchText, page)
+    } else {
+      userDispatch.getContacts({ page, per_page: this.perPage })
     }
-    this.setState({ page: realPage }, () => this.getContactsFromPage(realPage))
   }
 
-  searchContactsFromPage (text) {
-    const { perPage, page } = this.state
-    const { userDispatch } = this.props
-    userDispatch.searchContacts(text, page, perPage)
+  searchContactsFromPage (text, page) {
+    const { userDispatch, contactsData } = this.props
+    userDispatch.searchContacts(text, page || contactsData.page, this.perPage)
   }
 
   handleSearchChange (event) {
     const { searchTimeout } = this.state
+    const { userDispatch } = this.props
     if (event.target.value === '') {
-      this.setState({
-        contacts: this.props.contactsData.contacts
-      })
+      userDispatch.getContacts({ page: 1, per_page: this.perPage })
+      this.setState({ searchText: null })
 
       return
     }
@@ -114,60 +84,43 @@ export class ContactsIndex extends Component {
       clearTimeout(searchTimeout)
     }
     const newSearchTimeout = setTimeout(this.searchContactsFromPage(event.target.value), 750)
-    this.setState({ searchTimeout: newSearchTimeout })
+    this.setState({ searchTimeout: newSearchTimeout, searchText: event.target.value })
   }
   render () {
     const {
       theme,
-      title,
       placeholder,
       tooltip,
       showTooltip,
-      hideFilters,
       contactsData
     } = this.props
-    const { contacts, numContactPages } = contactsData
-    const {
-      page
-    } = this.state
-    let contactsArr
-    if (contacts) {
-      contactsArr = contacts
-        .sort((a, b) => b.primary - a.primary)
-        .map(client => (
-          <AdminClientTile
-            key={v4()}
-            client={client}
-            theme={theme}
-            flexClasses="flex-45 flex-gt-sm-33"
-            handleClick={this.handleClick}
-            tooltip={tooltip}
-            showTooltip={showTooltip}
-          />
-        ))
-    }
+    const { contacts, numContactPages, page } = contactsData
+
+    const contactsArr = contacts && contacts
+      .sort((a, b) => b.primary - a.primary)
+      .map(client => (
+        <AdminClientTile
+          key={v4()}
+          client={client}
+          theme={theme}
+          flexClasses="flex-45 flex-gt-sm-33"
+          handleClick={this.handleClick}
+          tooltip={tooltip}
+          showTooltip={showTooltip}
+        />
+      ))
 
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start-start ${styles.searchable}`}>
-        {title ? (
-          <div className="flex-100 layout-row layout-align-space-between-center">
-            <div
-              className="flex-100 layout-align-start-center greyBg"
-            >
-              <span><b>{title}</b></span>
-            </div>
-          </div>
-        ) : ''}
         <div className={`searchables flex-100 layout-row layout-align-end-center ${styles.searchable_header}`}>
-          { !hideFilters
-            ? <div className="input_box_full flex-40 layout-row layout-align-end-center">
-              <input
-                type="text"
-                name="search"
-                placeholder={placeholder || 'Search contacts'}
-                onChange={this.handleSearchChange}
-              />
-            </div> : '' }
+          <div className="input_box_full flex-40 layout-row layout-align-end-center">
+            <input
+              type="text"
+              name="search"
+              placeholder={placeholder || 'Search contacts'}
+              onChange={this.handleSearchChange}
+            />
+          </div>
         </div>
         <div className={`flex-100 layout-wrap layout-row layout-align-start-start ${styles.searchable_section}`}>
           {contactsArr}
@@ -175,21 +128,20 @@ export class ContactsIndex extends Component {
         <div className={`flex-95 layout-row layout-align-center-center ${styles.pagination_buttons}`}>
           <div
             className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
-                    `}
+              flex-15 layout-row layout-align-center-center pointy
+              ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
+            `}
             onClick={parseInt(page, 10) > 1 ? this.prevPage : null}
           >
             <i className="fa fa-chevron-left" />
             <p>&nbsp;&nbsp;&nbsp;&nbsp;Back</p>
           </div>
-          {}
           <p>{page} / {numContactPages} </p>
           <div
             className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) < numContactPages ? '' : styles.disabled}
-                    `}
+              flex-15 layout-row layout-align-center-center pointy
+              ${styles.navigation_button} ${parseInt(page, 10) < numContactPages ? '' : styles.disabled}
+            `}
             onClick={parseInt(page, 10) < numContactPages ? this.nextPage : null}
           >
             <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>

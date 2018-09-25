@@ -36,3 +36,7 @@ export function areEqual (obj1, obj2) {
 export function isDefined (obj) {
   return typeof obj !== 'undefined'
 }
+
+export function toQueryString (obj) {
+  return Object.keys(obj).map(key => `${key}=${obj[key]}`).join('&')
+}
