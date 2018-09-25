@@ -247,6 +247,10 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       shipment = Shipment.find(params[:id])
       shipment.planned_eta = new_eta
       shipment.planned_etd = new_etd
+      shipment.planned_origin_drop_off_date = new_planned_origin_drop_off_date
+      shipment.planned_destination_collection_date = new_planned_destination_collection_date
+      shipment.planned_delivery_date = new_planned_delivery_date
+      shipment.planned_pickup_date = new_planned_pickup_date
       shipment.save!
       @shipment = shipment
     end
@@ -258,6 +262,26 @@ class Admin::ShipmentsController < Admin::AdminBaseController
 
   def new_eta
     DateTime.parse(params[:timeObj]['newEta'])
+  end
+
+  def new_planned_origin_drop_off_date
+    return if params[:timeObj]['newOriginDropOffDate'] == "Invalid date"
+    DateTime.parse(params[:timeObj]['newOriginDropOffDate'])
+  end
+
+  def new_planned_destination_collection_date
+    return if params[:timeObj]['newDestinationCollectionDate'] == "Invalid date"
+    DateTime.parse(params[:timeObj]['newDestinationCollectionDate'])
+  end
+
+  def new_planned_delivery_date
+    return if params[:timeObj]['newDeliveryDate'] == "Invalid date"
+    DateTime.parse(params[:timeObj]['newDeliveryDate'])
+  end
+
+  def new_planned_pickup_date
+    return if params[:timeObj]['newPickupDate'] == "Invalid date"
+    DateTime.parse(params[:timeObj]['newPickupDate'])
   end
 
   def update_shipment
@@ -390,7 +414,7 @@ class Admin::ShipmentsController < Admin::AdminBaseController
   end
 
   def shipment_params
-    params.require(:shipment).permit(:total_price, :planned_pickup_date, :origin_id, :destination_id)
+    params.require(:shipment).permit(:total_price, :planned_pickup_date, :planned_delivery_date, :planned_origin_drop_off_date, :planned_destination_collection_date, :origin_id, :destination_id)
   end
 
   def price_params

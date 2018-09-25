@@ -1,3 +1,5 @@
+import { shipmentConstants } from "../constants";
+
 export function totalPrice (shipment) {
   const selectedOffer = shipment.selected_offer
 
@@ -27,5 +29,19 @@ export function checkPreCarriage (shipment, action) {
   return {
     type: action,
     date: shipment.planned_origin_drop_off_date
+  }
+}
+
+export function checkOnCarriage (shipment, action) {
+  if (shipmentConstants.has_on_carriage && action === 'Delivery') {
+    return {
+      type: action,
+      date: shipment.planned_delivery_date
+    }
+  }
+
+  return {
+    type: action,
+    date: shipment.planned_destination_collection_date
   }
 }

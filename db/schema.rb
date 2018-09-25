@@ -10,22 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_13_232620) do
+ActiveRecord::Schema.define(version: 2018_09_17_101705) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
   enable_extension "postgis"
-
-  create_table "addon_charges", force: :cascade do |t|
-    t.string "title"
-    t.string "text"
-    t.jsonb "rate"
-    t.string "input_type"
-    t.jsonb "conditions"
-    t.integer "addon_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
+  enable_extension "postgis_tiger_geocoder"
+  enable_extension "postgis_topology"
 
   create_table "addons", force: :cascade do |t|
     t.string "title"
@@ -555,18 +547,6 @@ ActiveRecord::Schema.define(version: 2018_09_13_232620) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "schema_migration_details", force: :cascade do |t|
-    t.string "version", null: false
-    t.string "name"
-    t.string "hostname"
-    t.string "git_version"
-    t.string "rails_version"
-    t.integer "duration"
-    t.string "direction"
-    t.datetime "created_at", null: false
-    t.index ["version"], name: "index_schema_migration_details_on_version"
-  end
-
   create_table "shipment_contacts", force: :cascade do |t|
     t.integer "shipment_id"
     t.integer "contact_id"
@@ -605,12 +585,14 @@ ActiveRecord::Schema.define(version: 2018_09_13_232620) do
     t.jsonb "customs"
     t.bigint "transport_category_id"
     t.integer "incoterm_id"
-    t.integer "origin_nexus_id"
-    t.integer "destination_nexus_id"
     t.datetime "closing_date"
     t.string "incoterm_text"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
     t.datetime "planned_origin_drop_off_date"
     t.integer "quotation_id"
+    t.datetime "planned_delivery_date"
+    t.datetime "planned_destination_collection_date"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
@@ -789,6 +771,7 @@ ActiveRecord::Schema.define(version: 2018_09_13_232620) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.boolean "allow_password_change", default: false, null: false
+    t.jsonb "optin_status", default: {}
     t.integer "optin_status_id"
     t.string "external_id"
     t.integer "agency_id"
