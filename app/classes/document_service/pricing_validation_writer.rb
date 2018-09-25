@@ -18,11 +18,17 @@ module DocumentService
     def perform
       @data.each do |page, column_hash|
         @row = 0
+        # binding.pry
         next if column_hash.values.empty?
         header_data = build_header_rows(column_hash)
         new_worksheet_hash = add_worksheet_to_workbook(@workbook, [], page)
         @worksheet = new_worksheet_hash[:worksheet]
         @workbook = new_worksheet_hash[:workbook]
+        # begin
+        #   set_formatting(column_hash)
+        # rescue
+        #   binding.pry
+        # end
         @worksheet = write_to_sheet(@worksheet, @row, 0, header_data)
         @row += 1
 
@@ -43,11 +49,35 @@ module DocumentService
           @row += 1
         end
       end
-      workbook.close
+      begin
+        @workbook.close
+      rescue
+        binding.pry
+      end
       write_to_aws(dir, tenant, filename, 'pricings_sheet')
     end
 
     private
+
+    def set_formatting(column_hash)
+      col = 1
+      count = 1
+      odd_format = @workbook.add_format
+      odd_format.set_bg_color("#14FAFA")
+      odd_format.set_shrink()
+      even_format = @workbook.add_format
+      even_format.set_bg_color("#87FA14")
+      even_format.set_shrink()
+      column_hash.keys.count.times do
+        active_format = count.even? ? even_format : odd_format
+        3.times do
+          @worksheet.set_column(0, col, active_format)
+          col += 1
+        end
+        count += 1
+      end
+
+    end
 
     def write_fees(target, column_hash)
       top_row = [target.upcase]
@@ -163,12 +193,27 @@ module DocumentService
             row << data[:service_level].try(:name)
           end
         when 'TOTAL'
-          result_total = result.dig(:total, :value).nil? ? nil : result.dig(:total, :value).to_d.round(3)
-          expected_total = expected.dig(:total, :value).nil? ? nil : expected.dig(:total, :value).to_d.round(3)
+          result_total = result.dig(:total, :value)
+          expected_total = expected.dig(:total, :value)
           row << "#{expected.dig(:total, :currency)} #{expected_total}"
           row << "#{result.dig(:total, :currency)} #{result_total}"
           row << diff.dig(:total)
-
+        when 'PRECARRIAGE'
+          if expected[:trucking_pre]
+            result_total = result.dig(:trucking_pre, :total, :value)
+            expected_total = expected.dig(:trucking_pre, :total, :value)
+            row << "#{expected.dig(:trucking_pre, :total, :currency)} #{expected_total}"
+            row << "#{result.dig(:trucking_pre, :total, :currency)} #{result_total}"
+            row << diff.dig(:trucking_pre, :total)
+          end
+        when 'ONCARRIAGE'
+          if expected[:trucking_on]
+            result_total = result.dig(:trucking_on, :total, :value)
+            expected_total = expected.dig(:trucking_on, :total, :value)
+            row << "#{expected.dig(:trucking_on, :total, :currency)} #{expected_total}"
+            row << "#{result.dig(:trucking_on, :total, :currency)} #{result_total}"
+            row << diff.dig(:trucking_on, :total)
+          end
         end
       end
       row

@@ -49,6 +49,9 @@ module PriceCheckerService
         # binding.pry
         unique_trips = [@itinerary.trips.find_by(tenant_vehicle_id: @service_level.id)]
       end
+      if unique_trips.compact.empty?
+        binding.pry
+      end
       @schedules = unique_trips.map do |trip|
         attributes = {
           origin_hub_id: @origin_hub.id,

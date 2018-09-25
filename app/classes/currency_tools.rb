@@ -41,6 +41,17 @@ module CurrencyTools
 
     round_value(base_value, tenant_id)
   end
+  def convert(value, from, to, tenant_id)
+    rates = get_rates(to, tenant_id)
+    base_value = 0
+    if rates[:today][from]
+      base_value += value * (1 / rates[:today][from])
+    elsif from == to
+      base_value += value
+    end
+
+    base_value
+  end
 
   def sum_and_convert_cargo(hash_obj, base, tenant_id)
     rates = get_rates(base, tenant_id)
