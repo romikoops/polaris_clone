@@ -97,7 +97,9 @@ export class AdminShipmentView extends Component {
         trucking_on: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_on),
         cargo: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.cargo),
         insurance: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.insurance),
-        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs)
+        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
+        import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
+        export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
@@ -113,6 +115,7 @@ export class AdminShipmentView extends Component {
     this.handleCurrencySelect = this.handleCurrencySelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.handleTimeChange = this.handleTimeChange.bind(this)
+    this.handlePriceChange = this.handlePriceChange.bind(this)
   }
   componentDidMount () {
     const {
@@ -618,6 +621,8 @@ export class AdminShipmentView extends Component {
               missingDocs={missingDocs}
               docView={docView}
               accountHolder={accountHolder}
+              handlePriceChange={this.handlePriceChange}
+              saveNewEditedPrice={this.saveNewEditedPrice}
             />
           ) : (
             <ShipmentQuotationContent
