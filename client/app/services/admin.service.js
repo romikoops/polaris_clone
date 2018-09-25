@@ -51,7 +51,7 @@ function uploadDocument (doc, type, url) {
     body: formData
   }
 
-  return fetch(BASE_URL + url, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}${url}`, requestOptions).then(handleResponse)
 }
 
 function searchHubs (text, page, hubType, countryId, status) {
@@ -459,7 +459,7 @@ function deleteDocument (documentId) {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/admin/documents/${documentId}`, requestOptions).then(handleResponse)
 }
 
 function saveNewHub (hub, location) {
