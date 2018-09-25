@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import {
   truckingRateBasises,
@@ -21,6 +22,7 @@ export class TruckingFeeSetter extends Component {
         result = op
       }
     })
+
     return result || options[0]
   }
   constructor (props) {
@@ -231,7 +233,7 @@ export class TruckingFeeSetter extends Component {
   }
   render () {
     const { variableFees, globalFees, selectOptions } = this.state
-    const { theme } = this.props
+    const { theme, t } = this.props
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -277,6 +279,7 @@ export class TruckingFeeSetter extends Component {
             </div>)
           }
         })
+
         return (
           <div
             key={key}
@@ -360,6 +363,7 @@ export class TruckingFeeSetter extends Component {
             </div>)
           }
         })
+
         return (
           <div
             key={key}
@@ -389,6 +393,7 @@ export class TruckingFeeSetter extends Component {
       if (globalFees[tfk.key] || variableFees[tfk.key]) {
         return ''
       }
+
       return (
         <div
           className={`flex-none layout-row layout-align-center-center layout-wrap ${
@@ -408,7 +413,7 @@ export class TruckingFeeSetter extends Component {
                 }`}
                 onClick={() => this.addFee(tfk, true)}
               >
-                <p className="flex-none ">Add To Global</p>
+                <p className="flex-none ">{t('admin:addGlobal')}</p>
               </div>
             </div>
             <div className="flex-50 layout-row layout-align-center-center">
@@ -418,13 +423,14 @@ export class TruckingFeeSetter extends Component {
                 }`}
                 onClick={() => this.addFee(tfk, false)}
               >
-                <p className="flex-none ">Add To Variable</p>
+                <p className="flex-none ">{t('admin:addVariable')}</p>
               </div>
             </div>
           </div>
         </div>
       )
     })
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-space-between">
@@ -432,13 +438,13 @@ export class TruckingFeeSetter extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-            <p className="flex-none">Global Fees</p>
+            <p className="flex-none">{t('admin:globalFees')}</p>
           </div>
           {globalPanel}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-            <p className="flex-none">Variable Fees</p>
+            <p className="flex-none">{t('admin:variableFees')}</p>
           </div>
           {variablePanel}
         </div>
@@ -447,7 +453,7 @@ export class TruckingFeeSetter extends Component {
             <RoundButton
               theme={theme}
               size="small"
-              text="Save Fees"
+              text={t('admin:saveFees')}
               iconClass="fa-plus-square-o"
               handleNext={this.setFees}
             />
@@ -460,9 +466,10 @@ export class TruckingFeeSetter extends Component {
 
 TruckingFeeSetter.propTypes = {
   theme: PropTypes.theme,
-  setFees: PropTypes.func.isRequired
+  setFees: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 TruckingFeeSetter.defaultProps = {
   theme: {}
 }
-export default TruckingFeeSetter
+export default translate('admin')(TruckingFeeSetter)
