@@ -19,6 +19,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     @shipments = Shipment.where(tenant_id: current_user.tenant_id)
     @requested_shipments = requested_shipments
     @open_shipments = open_shipments
+    @rejected_shipments = rejected_shipments
     @quoted_shipments = quoted_shipments
     @finished_shipments = finished_shipments
     @detailed_itineraries = detailed_itin_json
@@ -37,6 +38,7 @@ class Admin::DashboardController < Admin::AdminBaseController
     } : {
       requested: @requested_shipments,
       open:      @open_shipments,
+      rejected:  @rejected_shipments,
       finished:  @finished_shipments
     }
   end
@@ -47,6 +49,10 @@ class Admin::DashboardController < Admin::AdminBaseController
 
   def open_shipments
     @shipments.open.order_booking_desc.map(&:with_address_options_json)
+  end
+
+  def rejected_shipments
+    @shipments.rejected.order_booking_desc.map(&:with_address_options_json)
   end
 
   def quoted_shipments

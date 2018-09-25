@@ -136,6 +136,10 @@ class UsersController < ApplicationController
     @open_shipments ||= current_user.shipments.open
   end
 
+  def rejected_shipments
+    @rejected_shipments ||= current_user.shipments.rejected
+  end
+
   def finished_shipments
     @finished_shipments ||= current_user.shipments.finished
   end

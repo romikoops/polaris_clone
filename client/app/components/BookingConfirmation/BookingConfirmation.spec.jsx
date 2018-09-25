@@ -39,7 +39,8 @@ jest.mock('../../constants', () => {
     booking_process_started: 'Booking Process Started',
     finished: 'Finished',
     open: 'Open',
-    requested: 'Requested'
+    requested: 'Requested',
+    rejected: 'Rejected'
   }
   const documentTypes = {
     packing_sheet: 'Packing Sheet',
