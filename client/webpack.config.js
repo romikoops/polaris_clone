@@ -101,14 +101,15 @@ module.exports = {
     new DotenvWebpack({
       path: './.node-env'
     }),
-    new webpack.EnvironmentPlugin(['RELEASE']),
-    NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
-    ? new SentryCliPlugin({
-      release: process.env.RELEASE,
-      include: 'dist/',
-      ignoreFile: '.sentrycliignore',
-      ignore: ['config.js']
-    })
-    : false
+    new webpack.EnvironmentPlugin(['RELEASE'])
+    // ,
+    // NodeEnvPlugin.isProduction && process.env.SENTRY_AUTH_TOKEN
+    // ? new SentryCliPlugin({
+    //   release: process.env.RELEASE,
+    //   include: 'dist/',
+    //   ignoreFile: '.sentrycliignore',
+    //   ignore: ['config.js']
+    // })
+    // : false
   ].filter(Boolean)
 }
