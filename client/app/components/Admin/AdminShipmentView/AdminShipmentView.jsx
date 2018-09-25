@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
@@ -384,7 +385,7 @@ export class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients
+      theme, hubs, shipmentData, clients, t
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -396,7 +397,8 @@ export class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
-      aggregatedCargo
+      aggregatedCargo,
+      accountHolder
     } = shipmentData
     const {
       showEditTime, showEditServicePrice, newTimes, newPrices
@@ -455,7 +457,7 @@ export class AdminShipmentView extends Component {
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
-          <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
         )}
       />
     ) : (
@@ -464,7 +466,7 @@ export class AdminShipmentView extends Component {
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
-        <p className="layout-align-center-center layout-row"> In process </p>
+        <p className="layout-align-center-center layout-row"> {t('common:inProcess')} </p>
       </div>
     ) : (
       ''
@@ -472,7 +474,7 @@ export class AdminShipmentView extends Component {
 
     const statusFinished = (shipment.status === 'finished') ? (
       <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
-        <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+        <p className="layout-align-center-center layout-row"> {t('common:finished')} </p>
       </div>
     ) : (
       ''
@@ -486,7 +488,7 @@ export class AdminShipmentView extends Component {
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
-          <p className="layout-align-center-center layout-row"> Rejected </p>
+          <p className="layout-align-center-center layout-row"> {t('common:rejected')} </p>
         )}
       />
     ) : (
@@ -831,8 +833,8 @@ export class AdminShipmentView extends Component {
 
         {shipment.status === 'requested' ? (
           <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-            <button onClick={this.handleDeny}>Refuse</button>
+            <button style={gradientStyle} onClick={this.handleAccept}>{t('common:accept')}</button>
+            <button onClick={this.handleDeny}>{t('common:refuse')}</button>
           </div>
         ) : (
           ''
@@ -853,7 +855,8 @@ AdminShipmentView.propTypes = {
   adminDispatch: PropTypes.shape({
     getShipment: PropTypes.func
   }).isRequired,
-  match: PropTypes.match.isRequired
+  match: PropTypes.match.isRequired,
+  t: PropTypes.func
   // tenant: PropTypes.tenant
 }
 
@@ -862,7 +865,8 @@ AdminShipmentView.defaultProps = {
   hubs: [],
   clients: [],
   shipmentData: null,
-  loading: false
+  loading: false,
+  t: null
 }
 
-export default AdminShipmentView
+export default translate('common')(AdminShipmentView)
