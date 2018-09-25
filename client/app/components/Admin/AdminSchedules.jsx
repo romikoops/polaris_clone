@@ -13,10 +13,9 @@ import '../../styles/select-css-custom.css'
 import SideOptionsBox from './SideOptions/SideOptionsBox'
 import CollapsingBar from '../CollapsingBar/CollapsingBar'
 import CardRoutesIndex from './CardRouteIndex'
-import { WorldMap } from './DashboardMap/WorldMap'
 import Tab from '../Tabs/Tab'
 import Tabs from '../Tabs/Tabs'
-import { RoundButton } from '../RoundButton/RoundButton';
+import { RoundButton } from '../RoundButton/RoundButton'
 
 class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -150,7 +149,7 @@ class AdminSchedules extends Component {
     if (!scheduleData || !hubs) {
       return ''
     }
-    const { itineraries, mapData } = scheduleData
+    const { itineraries } = scheduleData
     const {
       showList, expander
     } = this.state
@@ -315,20 +314,6 @@ class AdminSchedules extends Component {
         handleClick={id => adminDispatch.loadItinerarySchedules(id, true)}
       />
     </Tab>))
-    motTabs.push(<Tab
-      tabTitle="Map"
-      theme={theme}
-      icon="fa fa-map flex-none"
-    >
-      <div className="flex-100 layout-row layout-align-center-start header_buffer">
-        <WorldMap
-          itineraries={itineraries}
-          theme={theme}
-          mapData={mapData}
-
-        />
-      </div>
-    </Tab>)
     const listView = (
       <div className="flex-100 layout-row layout-align-center-start">
         <Tabs
@@ -367,7 +352,10 @@ AdminSchedules.propTypes = {
   adminDispatch: PropTypes.func.isRequired,
   setCurrentUrl: PropTypes.func.isRequired,
   documentDispatch: PropTypes.objectOf(PropTypes.func),
-  scope: PropTypes.objectOf(PropTypes.any)
+  scope: PropTypes.objectOf(PropTypes.any),
+  match: PropTypes.shape({
+    url: PropTypes.string
+  })
 }
 
 AdminSchedules.defaultProps = {
@@ -376,7 +364,10 @@ AdminSchedules.defaultProps = {
   scheduleData: null,
   document: {},
   documentDispatch: {},
-  scope: {}
+  scope: {},
+  match: {
+    url: '/admin/schedules'
+  }
 }
 function mapStateToProps (state) {
   const { document } = state
