@@ -896,6 +896,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function successArchive (shipmentData) {
+    return {
+      type: adminConstants.ARCHIVE_SHIPMENT_SUCCESS,
+      payload: shipmentData
+    }
+  }
   function failure (error) {
     return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error, payload: { id } }
   }
@@ -909,9 +915,10 @@ function confirmShipment (id, action, redirect) {
           dispatch(successAccept(shipmentData))
         } else if (action === 'finished') {
           dispatch(successFinished(shipmentData))
-        } else {
+        } else if (action === 'decline') {
           dispatch(successDeny(shipmentData))
-          dispatch(getShipments(1, 1, 1, true))
+        } else {
+          dispatch(successArchive(shipmentData))
         }
 
         if (redirect) {

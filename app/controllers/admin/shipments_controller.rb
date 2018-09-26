@@ -231,7 +231,11 @@ class Admin::ShipmentsController < Admin::AdminBaseController
       response_handler(@shipment.with_address_options_json)
     when 'ignore'
       @shipment.ignore!
-      response_handler({})
+      add_message_to_convo(@shipment.user, booking_declined_message, true)
+      response_handler(@shipment.with_address_options_json)
+    when 'archive'
+      @shipment.archive!
+      response_handler(@shipment.with_address_options_json)
     when 'finished'
       @shipment.finish!
       response_handler(@shipment.with_address_options_json)

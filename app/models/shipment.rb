@@ -13,6 +13,7 @@ class Shipment < ApplicationRecord
     ignored
     finished
     quoted
+    archived
   ).freeze
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   DIRECTIONS = %w(import export).freeze
@@ -299,6 +300,10 @@ class Shipment < ApplicationRecord
 
   def ignore!
     update!(status: "ignored")
+  end
+
+  def archive!
+    update!(status: "archived")
   end
 
   def etd
