@@ -118,5 +118,9 @@
   "selectColliType": "Select your colli type",
   "areYouSure": "Are you sure?",
   "areaPostalCodes": "Area/ Postal Codes",
-  "addresses": "Addresses"
+  "addresses": "Addresses",
+  "open": "Open",
+  "finished": "Finished",
+  "requested": "Requested",
+  "refuse": "Refuse"
 }

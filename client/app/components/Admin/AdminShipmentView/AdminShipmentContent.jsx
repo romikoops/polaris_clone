@@ -30,22 +30,11 @@ export class AdminShipmentContent extends Component {
         trucking_on: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.trucking_on),
         cargo: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.cargo),
         insurance: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.insurance),
-        customs: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.customs)
+        customs: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.customs),
+        import: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.import),
+        export: AdminShipmentContent.checkSelectedOffer(this.props.shipment.selected_offer.export)
       }
     }
-  }
-
-  handlePriceChange (key, value) {
-    const { newPrices } = this.state
-    this.setState({
-      newPrices: {
-        ...newPrices,
-        [key]: {
-          ...newPrices[key],
-          value
-        }
-      }
-    })
   }
 
   render () {
@@ -60,6 +49,10 @@ export class AdminShipmentContent extends Component {
       bg2,
       switchIcon,
       dnrEditKeys,
+      pickupDate,
+      deliveryDate,
+      originDropOffDate,
+      destinationCollectionDate,
       showEditTime,
       saveNewTime,
       toggleEditTime,
@@ -75,7 +68,9 @@ export class AdminShipmentContent extends Component {
       calcCargoLoad,
       contacts,
       missingDocs,
-      docView
+      docView,
+      saveNewEditedPrice,
+      handlePriceChange
     } = this.props
 
     return (
@@ -87,16 +82,18 @@ export class AdminShipmentContent extends Component {
           theme={theme}
         >
           <div className="flex-100 layout-row layout-wrap layout-align-center-center  padding_top">
-            <div className="layout-row flex-100 margin_bottom">
+            <div className="layout-row layout-wrap flex-100 margin_bottom">
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      et={etdJSX}
+                      estimatedTime={etdJSX}
+                      carriage={pickupDate}
+                      noCarriage={originDropOffDate}
                       text="ETD"
                       theme={theme}
                       hub={shipment.origin_hub}
@@ -110,7 +107,7 @@ export class AdminShipmentContent extends Component {
                   </div>
                 )}
               />
-              <div className="layout-row flex-20 layout-align-center-center">
+              <div className="layout-row flex-md-100 flex-lg-20 layout-align-center-center padd_20">
                 <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
                   <div className="layout-align-center-center layout-row" style={gradientStyle}>
                     {switchIcon()}
@@ -121,13 +118,15 @@ export class AdminShipmentContent extends Component {
               </div>
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-40 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
                   <div className="layout-row flex-100">
                     <ShipmentOverviewShowCard
-                      et={etaJSX}
+                      estimatedTime={etaJSX}
+                      carriage={deliveryDate}
+                      noCarriage={destinationCollectionDate}
                       text="ETA"
                       theme={theme}
                       hub={shipment.destination_hub}
@@ -183,7 +182,7 @@ export class AdminShipmentContent extends Component {
                               </span>
                               <input
                                 type="number"
-                                onChange={e => this.handlePriceChange('trucking_pre', e.target.value)}
+                                onChange={e => handlePriceChange('trucking_pre', e.target.value)}
                                 value={Number(newPrices.trucking_pre.value).toFixed(2)}
                                 className="layout-padding flex-70 layout-row flex-initial"
                               />
@@ -227,7 +226,7 @@ export class AdminShipmentContent extends Component {
                               </span>
                               <input
                                 type="number"
-                                onChange={e => this.handlePriceChange('trucking_on', e.target.value)}
+                                onChange={e => handlePriceChange('trucking_on', e.target.value)}
                                 value={Number(newPrices.trucking_on.value).toFixed(2)}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
@@ -263,6 +262,26 @@ export class AdminShipmentContent extends Component {
                             </p>
                           </div>
                             : ''}
+                            {showEditServicePrice && shipment.selected_offer.export ? (
+                            <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
+                              <span
+                                className={
+                                  `layout-row flex-100 layout-padding
+                            layout-align-center-center ${styles.greybg}`
+                                }
+                              >
+                                {newPrices.export.currency}
+                              </span>
+                              <input
+                                type="number"
+                                onChange={e => handlePriceChange('export', e.target.value)}
+                                value={Number(newPrices.export.value).toFixed(2)}
+                                className="layout-padding layout-row flex-70 flex-initial"
+                              />
+                            </div>
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </div>
                     </div>
@@ -291,6 +310,26 @@ export class AdminShipmentContent extends Component {
                             </p>
                           </div>
                             : ''}
+                            {showEditServicePrice && shipment.selected_offer.import ? (
+                            <div className={`layout-row flex-100 layout-align-end-stretch ${styles.greyborder}`}>
+                              <span
+                                className={
+                                  `layout-row flex-100 layout-padding
+                            layout-align-center-center ${styles.greybg}`
+                                }
+                              >
+                                {newPrices.import.currency}
+                              </span>
+                              <input
+                                type="number"
+                                onChange={e => handlePriceChange('import', e.target.value)}
+                                value={Number(newPrices.import.value).toFixed(2)}
+                                className="layout-padding layout-row flex-70 flex-initial"
+                              />
+                            </div>
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </div>
                     </div>
@@ -327,7 +366,7 @@ export class AdminShipmentContent extends Component {
                               </span>
                               <input
                                 type="number"
-                                onChange={e => this.handlePriceChange('cargo', e.target.value)}
+                                onChange={e => handlePriceChange('cargo', e.target.value)}
                                 value={Number(newPrices.cargo.value).toFixed(2)}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
@@ -407,7 +446,7 @@ export class AdminShipmentContent extends Component {
                               </span>
                               <input
                                 type="number"
-                                onChange={e => this.handlePriceChange('insurance', e.target.value)}
+                                onChange={e => handlePriceChange('insurance', e.target.value)}
                                 value={Number(newPrices.insurance.value).toFixed(2)}
                                 className="layout-padding layout-row flex-70 flex-initial"
                               />
@@ -426,14 +465,14 @@ export class AdminShipmentContent extends Component {
                   {showEditServicePrice ? (
                     <div className="layout-column layout-align-center-center">
                       <div className={`layout-row layout-align-center-center ${styles.save}`}>
-                        <i onClick={this.saveNewEditedPrice} className="fa fa-check" />
+                        <i onClick={saveNewEditedPrice} className="fa fa-check" />
                       </div>
                       <div className={`layout-row layout-align-center-center ${styles.cancel}`}>
                         <i onClick={toggleEditServicePrice} className="fa fa-trash" />
                       </div>
                     </div>
                   ) : (
-                    <i onClick={this.toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
+                    <i onClick={toggleEditServicePrice} className={`fa fa-edit ${styles.editIcon}`} />
                   )}
                 </div>
               </div>
@@ -629,6 +668,10 @@ AdminShipmentContent.propTypes = {
   gradientStyle: PropTypes.style,
   etdJSX: PropTypes.node,
   etaJSX: PropTypes.node,
+  pickupTime: PropTypes.node,
+  deliveryTime: PropTypes.node,
+  originDropOffTime: PropTypes.node,
+  destinationCollectionDate: PropTypes.node,
   shipment: PropTypes.shipment,
   bg1: PropTypes.style,
   bg2: PropTypes.style,
@@ -660,6 +703,10 @@ AdminShipmentContent.defaultProps = {
   gradientStyle: {},
   etdJSX: null,
   etaJSX: null,
+  pickupTime: null,
+  deliveryTime: null,
+  originDropOffTime: null,
+  destinationCollectionDate: null,
   toggleEditServicePrice: null,
   handlePriceChangeOn: null,
   handlePriceChangePre: null,

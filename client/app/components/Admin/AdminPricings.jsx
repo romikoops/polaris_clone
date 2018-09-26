@@ -178,6 +178,7 @@ class AdminPricings extends Component {
                 clientPricings={clientPricings}
                 theme={theme}
                 hubs={hubs}
+                scope={tenant.data.scope}
                 hubHash={hubHash}
                 pricingData={pricingData}
                 clients={filteredClients}

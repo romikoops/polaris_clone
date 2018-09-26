@@ -48,6 +48,7 @@ class ShipmentSeeder
         
         @shipment.planned_origin_drop_off_date = random_origin_drop_off_date
         @shipment.booking_placed_at            = random_booking_placed_at
+        @shipment.planned_destination_collection_date = random_origin_drop_off_date
         @shipment.cargo_units                  = random_cargo_units
 
         @shipment.save
@@ -125,6 +126,10 @@ class ShipmentSeeder
 
   def random_booking_placed_at
     @shipment.planned_origin_drop_off_date - rand(400..1500).hours
+  end
+  
+  def random_destination_collection_date
+    @shipment.destination_layover.eta + rand(5..500).hours
   end
 
   def create_shipment_contacts(user)

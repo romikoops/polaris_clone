@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'uuid'
+import { translate } from 'react-i18next'
 import { pick, uniqWith } from 'lodash'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
@@ -90,6 +91,18 @@ export class AdminShipmentView extends Component {
         },
         etd: {
           day: new Date(moment(shipment.planned_etd).format())
+        },
+        pickupDate: {
+          day: new Date(moment(shipment.planned_pickup_date).format())
+        },
+        originDropOffDate: {
+          day: new Date(moment(shipment.planned_origin_drop_off_date).format())
+        },
+        deliveryDate: {
+          day: new Date(moment(shipment.planned_delivery_date).format())
+        },
+        destinationCollectionDate: {
+          day: new Date(moment(shipment.planned_destination_collection_date).format())
         }
       },
       newPrices: {
@@ -97,7 +110,9 @@ export class AdminShipmentView extends Component {
         trucking_on: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.trucking_on),
         cargo: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.cargo),
         insurance: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.insurance),
-        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs)
+        customs: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.customs),
+        import: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.import),
+        export: AdminShipmentView.checkSelectedOffer(shipment.selected_offer.export)
       }
     }
     this.handleDeny = this.handleDeny.bind(this)
@@ -113,6 +128,7 @@ export class AdminShipmentView extends Component {
     this.handleCurrencySelect = this.handleCurrencySelect.bind(this)
     this.handleDayChange = this.handleDayChange.bind(this)
     this.handleTimeChange = this.handleTimeChange.bind(this)
+    this.handlePriceChange = this.handlePriceChange.bind(this)
   }
   componentDidMount () {
     const {
@@ -294,11 +310,35 @@ export class AdminShipmentView extends Component {
     const newEtd = moment(newTimes.etd.day)
       .startOf('day')
       .format('lll')
+    const newPickupDate = moment(newTimes.pickupDate.day)
+      .startOf('day')
+      .format('lll')
+    const newOriginDropOffDate = moment(newTimes.originDropOffDate.day)
+      .startOf('day')
+      .format('lll')
+    const newDeliveryDate = moment(newTimes.deliveryDate.day)
+      .startOf('day')
+      .format('lll')
+    const newDestinationCollectionDate = moment(newTimes.destinationCollectionDate.day)
+      .startOf('day')
+      .format('lll')
 
-    const timeObj = { newEta, newEtd }
+    const timeObj = {
+      newEta,
+      newEtd,
+      newPickupDate,
+      newOriginDropOffDate,
+      newDeliveryDate,
+      newDestinationCollectionDate
+
+    }
+
     shipment.planned_eta = moment(newTimes.eta.day)
     shipment.planned_etd = moment(newTimes.etd.day)
-
+    shipment.planned_pickup_date = moment(newTimes.pickupDate.day)
+    shipment.planned_origin_drop_off_date = moment(newTimes.originDropOffDate.day)
+    shipment.planned_delivery_date = moment(newTimes.deliveryDate.day)
+    shipment.planned_destination_collection_date = moment(newTimes.destinationCollectionDate.day)
     adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
     this.toggleEditTime()
   }
@@ -345,7 +385,7 @@ export class AdminShipmentView extends Component {
   }
   render () {
     const {
-      theme, hubs, shipmentData, clients
+      theme, hubs, shipmentData, clients, t
     } = this.props
 
     if (!shipmentData || !hubs || !clients) {
@@ -415,19 +455,19 @@ export class AdminShipmentView extends Component {
           wrapperClassName={`
           layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25
           ${adminStyles.header_margin_buffer} ${styles.status_box_requested}`}
-          gradient={gradientBorderStyle}
-          className="layout-row flex-100 layout-align-center-center"
-          content={(
-            <p className="layout-align-center-center layout-row"> Requested </p>
-          )}
-        />
-      ) : (
-        ''
-      )
+        gradient={gradientBorderStyle}
+        className="layout-row flex-100 layout-align-center-center"
+        content={(
+          <p className="layout-align-center-center layout-row"> {t('common:requested')} </p>
+        )}
+      />
+    ) : (
+      ''
+    )
 
     const statusInProcess = (shipment.status === 'confirmed') ? (
       <div style={gradientStyle} className={`layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box_process}`}>
-        <p className="layout-align-center-center layout-row"> In process </p>
+        <p className="layout-align-center-center layout-row"> {t('common:inProcess')} </p>
       </div>
     ) : (
       ''
@@ -435,7 +475,7 @@ export class AdminShipmentView extends Component {
 
     const statusFinished = (shipment.status === 'finished') ? (
       <div className={`${adminStyles.border_box} layout-row flex-10 flex-md-15 flex-sm-20 flex-xs-25 layout-align-center-center ${adminStyles.header_margin_buffer}  ${styles.status_box}`}>
-        <p className="layout-align-center-center layout-row"> {shipment.status} </p>
+        <p className="layout-align-center-center layout-row"> {t('common:finished')} </p>
       </div>
     ) : (
       ''
@@ -449,7 +489,7 @@ export class AdminShipmentView extends Component {
         gradient={gradientBorderStyle}
         className="layout-row flex-100 layout-align-center-center"
         content={(
-          <p className="layout-align-center-center layout-row"> Rejected </p>
+          <p className="layout-align-center-center layout-row"> {t('common:rejected')} </p>
         )}
       />
     ) : (
@@ -490,10 +530,40 @@ export class AdminShipmentView extends Component {
     })
     const feeHash = shipment.selected_offer
 
+    const dayPickerPropsPickupDate = {
+      disabledDays: {
+        after: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsOriginDropOffDate = {
+      disabledDays: {
+        after: newTimes.etd.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
     const dayPickerPropsEtd = {
       disabledDays: {
         after: newTimes.eta.day,
-        before: new Date()
+        before: (newTimes.originDropOffDate.day || newTimes.pickupDate.day)
       },
       month: new Date(
         moment()
@@ -508,7 +578,8 @@ export class AdminShipmentView extends Component {
 
     const dayPickerPropsEta = {
       disabledDays: {
-        before: newTimes.etd.day < new Date() ? new Date() : newTimes.etd.day
+        before: newTimes.etd.day,
+        after: (newTimes.destinationCollectionDate.day || newTimes.deliveryDate.day)
       },
       month: new Date(
         moment()
@@ -520,6 +591,78 @@ export class AdminShipmentView extends Component {
       ),
       name: 'dayPicker'
     }
+
+    const dayPickerPropsDestinationCollectionDate = {
+      disabledDays: {
+        before: newTimes.eta.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const dayPickerPropsDeliveryDate = {
+      disabledDays: {
+        before: newTimes.eta.day
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
+    const pickupDate = showEditTime && shipment.planned_pickup_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.pickupDate.day}
+            onDayChange={e => this.handleDayChange(e, 'pickupDate')}
+            dayPickerProps={dayPickerPropsPickupDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const originDropOffDate = showEditTime && shipment.planned_origin_drop_off_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.originDropOffDate.day}
+            onDayChange={e => this.handleDayChange(e, 'originDropOffDate')}
+            dayPickerProps={dayPickerPropsOriginDropOffDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_origin_drop_off_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
 
     const etdJSX = showEditTime ? (
       <div className="layout-row flex-100">
@@ -562,6 +705,49 @@ export class AdminShipmentView extends Component {
         {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
+
+    const destinationCollectionDate = showEditTime && shipment.planned_destination_collection_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.destinationCollectionDate.day}
+            onDayChange={e => this.handleDayChange(e, 'destinationCollectionDate')}
+            dayPickerProps={dayPickerPropsDestinationCollectionDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_destination_collection_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const deliveryDate = showEditTime && shipment.planned_delivery_date ? (
+      <div className="layout-row flex-100">
+        <div className="flex-65 layout-row">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.deliveryTime.day}
+            onDayChange={e => this.handleDayChange(e, 'deliveryTime')}
+            dayPickerProps={dayPickerPropsDeliveryDate}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className={`flex-none letter_3 ${styles.date}`}>
+        {`${moment(shipment.planned_delivery_date).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
     const cargoCount = Object.keys(feeHash.cargo).length - 2
     const dnrEditKeys = ['in_process', 'finished', 'confirmed']
 
@@ -599,6 +785,11 @@ export class AdminShipmentView extends Component {
               switchIcon={switchIcon}
               etdJSX={etdJSX}
               etaJSX={etaJSX}
+              pickupDate={pickupDate}
+              deliveryDate={deliveryDate}
+              originDropOffDate={originDropOffDate}
+              destinationCollectionDate={destinationCollectionDate}
+              totalPrice={totalPrice}
               shipment={shipment}
               bg1={bg1}
               bg2={bg2}
@@ -619,6 +810,8 @@ export class AdminShipmentView extends Component {
               missingDocs={missingDocs}
               docView={docView}
               accountHolder={accountHolder}
+              handlePriceChange={this.handlePriceChange}
+              saveNewEditedPrice={this.saveNewEditedPrice}
             />
           ) : (
             <ShipmentQuotationContent
@@ -641,8 +834,8 @@ export class AdminShipmentView extends Component {
 
         {['requested', 'requested_by_unconfirmed_account'].includes(shipment.status) ? (
           <div className={`flex-100 layout-row layout-align-center-center ${adminStyles.button_row}`}>
-            <button style={gradientStyle} onClick={this.handleAccept}>Accept</button>
-            <button onClick={this.handleDeny}>Refuse</button>
+            <button style={gradientStyle} onClick={this.handleAccept}>{t('common:accept')}</button>
+            <button onClick={this.handleDeny}>{t('common:refuse')}</button>
           </div>
         ) : (
           ''
@@ -663,7 +856,8 @@ AdminShipmentView.propTypes = {
   adminDispatch: PropTypes.shape({
     getShipment: PropTypes.func
   }).isRequired,
-  match: PropTypes.match.isRequired
+  match: PropTypes.match.isRequired,
+  t: PropTypes.func
   // tenant: PropTypes.tenant
 }
 
@@ -672,8 +866,8 @@ AdminShipmentView.defaultProps = {
   hubs: [],
   clients: [],
   shipmentData: null,
-  loading: false
-  // tenant: {}
+  loading: false,
+  t: null
 }
 
-export default AdminShipmentView
+export default translate('common')(AdminShipmentView)

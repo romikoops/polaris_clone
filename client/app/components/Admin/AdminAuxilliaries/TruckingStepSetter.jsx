@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { translate } from 'react-i18next'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
 import styles from '../Admin.scss'
@@ -84,7 +85,7 @@ export class TruckingStepSetter extends Component {
     const {
       steps, stepBasis, lowerKey, upperKey, step2, newStep
     } = this.state
-    const { theme } = this.props
+    const { theme, t } = this.props
     const basisOptions = [
       { label: 'Weight', value: 'weight' },
       { label: 'CBM', value: 'cbm' },
@@ -111,7 +112,7 @@ export class TruckingStepSetter extends Component {
       <div
         className={`flex-100 layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
       >
-        <p className="flex-100"> How will you differentiate your different trucking pricings? </p>
+        <p className="flex-100"> {t('admin:howTruckingPricings')} </p>
         <NamedSelect
           classes={`${styles.select}`}
           value={stepBasis}
@@ -121,12 +122,13 @@ export class TruckingStepSetter extends Component {
         />
       </div>
     )
+
     const stepForm = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
         <div className="flex-100 layout-row layout-align-start-center">
-          <p className="flex-none">{`Set pricing weight steps. Values ${
+          <p className="flex-none">{`${t('admin:setPricingHead')} ${
             stepBasis.label
-          } and inclusive`}</p>
+          } ${t('admin:setPricingTail')}`}</p>
         </div>
         <Formsy
           onValidSubmit={this.addStep}
@@ -145,7 +147,7 @@ export class TruckingStepSetter extends Component {
               name={lowerKey}
               value={newStep[lowerKey]}
               validations="isNumeric"
-              placeholder="Lower Limit"
+              placeholder={t('admin:lowerLimit')}
             />
           </div>
           <div className="
@@ -161,14 +163,14 @@ export class TruckingStepSetter extends Component {
               name={upperKey}
               value={newStep[upperKey]}
               validations="isNumeric"
-              placeholder="Upper Limit"
+              placeholder={t('admin:upperLimit')}
             />
           </div>
           <div className="flex-33 layout-row layout-align-center-center">
             <RoundButton
               theme={theme}
               size="small"
-              text="Add another"
+              placeholder={t('admin:addAnother')}
               iconClass="fa-plus-square-o"
             />
           </div>
@@ -178,7 +180,7 @@ export class TruckingStepSetter extends Component {
           <RoundButton
             theme={theme}
             size="small"
-            text="Next"
+            text={t('common:next')}
             active
             handleNext={this.saveSteps}
             iconClass="fa-chevron-right"
@@ -186,6 +188,7 @@ export class TruckingStepSetter extends Component {
         </div>
       </div>
     )
+
     return (
       <div className="flex-100 layout-row layout-align-start-center">
         {step2 ? stepForm : basisSelector}
@@ -195,9 +198,10 @@ export class TruckingStepSetter extends Component {
 }
 TruckingStepSetter.propTypes = {
   theme: PropTypes.theme,
-  saveSteps: PropTypes.func.isRequired
+  saveSteps: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 }
 TruckingStepSetter.defaultProps = {
   theme: {}
 }
-export default TruckingStepSetter
+export default translate(['common', 'admin'])(TruckingStepSetter)
