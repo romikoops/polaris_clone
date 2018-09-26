@@ -281,7 +281,6 @@ module PricingTools
   end
 
   def fee_value(fee, cargo_hash)
-    
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
@@ -319,6 +318,7 @@ module PricingTools
     when /RANGE/
       handle_range_fare(fee, cargo_hash)
     end
+
   end
 
   def get_cargo_hash(cargo, mot)

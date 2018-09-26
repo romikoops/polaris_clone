@@ -278,6 +278,9 @@ module MultiTenantTools
     )
     objKey = tenant.subdomain + ".html"
     newHtml = indexHtml.to_html
+    # Replace API Host and tenantName
+    newHtml.gsub!('__API_URL__', 'https://api2.itsmycargo.com')
+    newHtml.gsub!('__TENANT_SUBDOMAIN__', tenant.subdomain)
     File.open("blank.html", "w") do |file|
       file.write(newHtml)
     end
