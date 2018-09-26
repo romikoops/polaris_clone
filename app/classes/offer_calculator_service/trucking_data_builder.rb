@@ -36,7 +36,7 @@ module OfferCalculatorService
       GoogleDirections.new(
         address.lat_lng_string,
         hub.lat_lng_string,
-        @shipment.planned_pickup_date.to_i
+        @shipment.desired_start_date.to_i
       ).distance_in_km
     end
 
