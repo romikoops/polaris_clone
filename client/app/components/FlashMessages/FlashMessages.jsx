@@ -21,11 +21,7 @@ export class FlashMessages extends Component {
     const { messages } = this.state
     const index = messages.indexOf(message)
     messages.splice(index, 1)
-    this.setState({ messages }, () => {
-      if (this.state.messages.length === 0) {
-        this.props.onClose()
-      }
-    })
+    this.setState({ messages })
   }
 
   render () {
@@ -33,12 +29,13 @@ export class FlashMessages extends Component {
       // eslint-disable-next-line react/no-array-index-key
       <Alert key={i} message={message} onClose={this.removeMessage} timeout={10000} />
     ))
+
     return (
       <div style={{ zIndex: 9999 }} >
         <CSSTransition
           transitionName="alerts"
           transitionEnter={false}
-          transitionLeaveTimeout={500}
+          transitionLeaveTimeout={1000}
         >
           <div>{alerts}</div>
         </CSSTransition>
@@ -48,8 +45,7 @@ export class FlashMessages extends Component {
 }
 
 FlashMessages.propTypes = {
-  messages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClose: PropTypes.func.isRequired
+  messages: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 export default FlashMessages

@@ -7,15 +7,6 @@ export default function shipment (state = {}, action) {
         ...state,
         loading: false
       }
-    case shipmentConstants.CLEAR_ERRORS: {
-      const { error } = state
-      delete error[action.payload]
-
-      return {
-        ...state,
-        error
-      }
-    }
     case shipmentConstants.REUSE_SHIPMENT_REQUEST:
       return {
         reusedShipment: action.payload,
@@ -35,6 +26,7 @@ export default function shipment (state = {}, action) {
       if (!action.isReused) {
         newState.reusedShipment = false
       }
+
       return newState
     }
     case shipmentConstants.NEW_SHIPMENT_SUCCESS:
@@ -454,6 +446,12 @@ export default function shipment (state = {}, action) {
         loading: false,
         error: { hubs: action.error }
       }
+    case '@@router/LOCATION_CHANGE': {
+      return {
+        ...state,
+        error: null
+      }
+    }
     default:
       return state
   }

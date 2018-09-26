@@ -25,7 +25,6 @@ class Header extends Component {
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
-    this.clearErrors = this.clearErrors.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
     this.checkIsTop = this.checkIsTop.bind(this)
   }
@@ -77,10 +76,6 @@ class Header extends Component {
     const { messageDispatch } = this.props
     messageDispatch.showMessageCenter()
   }
-  clearErrors () {
-    const { shipmentDispatch, currentStage } = this.props
-    shipmentDispatch.clearErrors(currentStage)
-  }
   render () {
     const {
       component,
@@ -88,13 +83,11 @@ class Header extends Component {
       error,
       invert,
       isLanding,
-      noMessages,
       req,
       scrollable,
       t,
       tenant,
       theme,
-      unread,
       user
     } = this.props
     const { isTop } = this.state
@@ -120,17 +113,6 @@ class Header extends Component {
         key: 'signOut'
       }
     ]
-
-    const alertStyle = unread > 0 ? styles.unread : styles.all_read
-    const mail = (
-      <div
-        className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`}
-        onClick={this.toggleShowMessages}
-      >
-        <span className={`${alertStyle} flex-none`}>{unread}</span>
-        <i className="fa fa-envelope-o" />
-      </div>
-    )
 
     let logoUrl = ''
     const logoDisplay = {
@@ -218,7 +200,7 @@ class Header extends Component {
         </div>
         { hasErrors
           ? <div className={`flex-none layout-row ${styles.error_messages}`}>
-            <FlashMessages messages={error[currentStage]} onClose={this.clearErrors} />
+            <FlashMessages messages={error[currentStage]} />
           </div> : '' }
       </div>
     )
@@ -241,13 +223,10 @@ Header.propTypes = {
   }).isRequired,
   messages: PropTypes.arrayOf(PropTypes.object),
   showRegistration: PropTypes.bool,
-  unread: PropTypes.number,
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
   authenticationDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  shipmentDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  noMessages: PropTypes.bool,
   component: PropTypes.node,
   showModal: PropTypes.bool,
   error: PropTypes.objectOf(PropTypes.any),
@@ -266,10 +245,8 @@ Header.defaultProps = {
   loginAttempt: false,
   messages: null,
   showRegistration: false,
-  unread: 0,
   req: null,
   scrollable: false,
-  noMessages: false,
   component: null,
   showModal: false,
   error: null,
