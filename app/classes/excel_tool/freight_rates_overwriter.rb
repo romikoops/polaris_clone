@@ -158,8 +158,8 @@ module ExcelTool
     end
 
     def find_nexus(string, tenant_id)
-      nexus = Nexus.find_by(name: string, tenant_id: tenant_id)
-      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string}%", tenant_id).first
+      nexus = Nexus.find_by(name: string.strip, tenant_id: tenant_id)
+      nexus || Nexus.where("name ILIKE ? AND tenant_id = ?", "%#{string.strip}%", tenant_id).first
     end
 
     def tenant_vehicle(row)
@@ -191,6 +191,10 @@ module ExcelTool
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= find_nexus(row[:origin], user.tenant_id)
       aux_data[pricing_key][:destination] ||= find_nexus(row[:destination], user.tenant_id)
+      if (aux_data[pricing_key][:origin].nil? || aux_data[pricing_key][:destination].nil?) ||
+        (aux_data[pricing_key][:origin] == aux_data[pricing_key][:destination])
+        binding.pry
+      end
       aux_data[pricing_key][:origin_hub_ids] ||= aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       aux_data[pricing_key][:destination_hub_ids] ||= aux_data[pricing_key][:destination].hubs_by_type(row[:mot], user.tenant_id).ids
 

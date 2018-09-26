@@ -295,7 +295,9 @@ module ExcelTool
       when "PER_X_KG_FLAT"
         charge = { currency: row[:currency], value: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee], base: row[:base] }
       end
-
+      if charge.nil?
+        binding.pry
+      end
       charge[:expiration_date] = row[:expiration_date]
       charge[:effective_date] = row[:effective_date]
       charge
