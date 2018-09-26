@@ -176,6 +176,8 @@ class TenantSeeder
           about: 'https://freightservices.greencarrier.com/about-us/',
           legal: 'https://freightservices.greencarrier.com/contact/'
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -301,6 +303,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         show_beta_features: true,
         open_quotation_tool: false,
@@ -395,6 +399,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -480,6 +486,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -566,6 +574,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -647,6 +657,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -730,6 +742,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -811,6 +825,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -892,6 +908,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -976,6 +994,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1080,6 +1100,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: true,
         require_full_address: true,
@@ -1178,6 +1200,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1284,6 +1308,8 @@ class TenantSeeder
             cargo_item: true
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1392,6 +1418,8 @@ class TenantSeeder
           about: '',
           legal: ''
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1490,6 +1518,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1614,6 +1644,8 @@ class TenantSeeder
           about: 'http://www.speedtrans.com/ueberuns.php',
           legal: 'http://www.speedtrans.com/impressum.php'
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: false,
@@ -1739,6 +1771,8 @@ class TenantSeeder
             cargo_item: false
           }
         },
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: false,
@@ -1838,6 +1872,8 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -1933,6 +1969,8 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,
@@ -2037,6 +2075,8 @@ class TenantSeeder
         of the final amount ot be paid. The amount paid at the time of settlement
         will reflect the exchange rates of the day.",
         detailed_billing: false,
+        closed_shop: false,
+        closed_registration: false,
         closed_quotation_tool: true,
         open_quotation_tool: false,
         require_full_address: true,
@@ -2139,6 +2179,8 @@ class TenantSeeder
         },
         dangerous_goods: false,
         detailed_billing: false,
+        closed_shop: true,
+        closed_registration: true,
         closed_quotation_tool: false,
         open_quotation_tool: false,
         require_full_address: true,

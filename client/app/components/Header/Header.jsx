@@ -6,6 +6,7 @@ import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
+import { LoginPage } from '../../containers/LoginPage/LoginPage'
 import { Modal } from '../Modal/Modal'
 import {
   appActions,
@@ -136,6 +137,7 @@ class Header extends Component {
         user={user}
         isLanding={isLanding}
         toggleShowLogin={this.toggleShowLogin}
+        loginText={tenant.data.scope.closed_registration ? 'Log In' : 'Log In / Register'}
       />
     )
     const hasErrors = error && error[currentStage] && error[currentStage].length > 0
@@ -143,24 +145,30 @@ class Header extends Component {
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
-        {/* {!noMessages ? mail : ''} */}
       </div>
+    )
+
+    const loginComponent = tenant.data.scope.closed_registration ? (
+      <LoginPage
+        theme={theme}
+        req={req}
+      />
+    ) : (
+      <LoginRegistrationWrapper
+        LoginPageProps={{ theme, req }}
+        RegistrationPageProps={{
+          theme,
+          tenant,
+          req,
+          user
+        }}
+        initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
+      />
     )
 
     const loginModal = (
       <Modal
-        component={
-          <LoginRegistrationWrapper
-            LoginPageProps={{ theme, req }}
-            RegistrationPageProps={{
-              theme,
-              tenant,
-              req,
-              user
-            }}
-            initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
-          />
-        }
+        component={loginComponent}
         verticalPadding="30px"
         horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}
