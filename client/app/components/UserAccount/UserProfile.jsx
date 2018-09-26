@@ -471,11 +471,18 @@ class UserProfile extends Component {
               )}
             />
             <GreyBox
-              title={t('user:gdprYourData')}
-              wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-start-start"
+              title={t('user:yourData')}
+              wrapperClassName="flex-gt-sm-35 flex-100 layout-row layout-align-stretch"
               contentClassName="layout-column flex"
               content={(
-                <div className={`layout-row layout-wrap ${styles.conditions_box}`}>
+                <div className={`flex layout-row layout-wrap ${styles.conditions_box}`}>
+                  <div className="flex-100">
+                    <p
+                      className="emulate_link blue_link"
+                      onClick={() => window.open('https://gdpr-info.eu/', '_blank')}
+                    >
+                      {t('common:moreInfo')}</p>
+                  </div>
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
@@ -494,7 +501,14 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {`${tenant && tenant.data ? tenant.data.name : ''}`} {t('footer:terms')}
+                        { tenant && tenant.data && tenant.data.name }
+                        {' '}
+                        <span
+                          onClick={() => window.open('/terms_and_conditions', '_blank')}
+                          className="emulate_link blue_link"
+                        >
+                          { t('footer:terms') }
+                        </span>
                       </p>
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
@@ -510,7 +524,14 @@ class UserProfile extends Component {
                   <div className="flex-gt-sm-100 flex-50 layout-row layout-align-space-between-center">
                     <div className="flex-66 layout-row layout-align-start-center">
                       <p className="flex-none">
-                        {t('imc:imcTerms')}
+                        ItsMyCargo
+                        {' '}
+                        <span
+                          onClick={() => window.open('https://www.itsmycargo.com/en/terms', '_blank')}
+                          className="emulate_link blue_link"
+                        >
+                          { t('footer:terms') }
+                        </span>
                       </p>
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center ">
