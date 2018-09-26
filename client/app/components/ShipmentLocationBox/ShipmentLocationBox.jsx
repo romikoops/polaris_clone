@@ -336,7 +336,7 @@ class ShipmentLocationBox extends Component {
     ) {
       map.setCenter(bounds.getCenter())
     } else {
-      map.fitBounds(bounds, { top: 20 })
+      map.fitBounds(bounds, { top: 100, bottom: 20 })
     }
     if (this.state.speciality === 'truck' && markers.origin.title && markers.destination.title) {
       directionsDisplay.setMap(map)
