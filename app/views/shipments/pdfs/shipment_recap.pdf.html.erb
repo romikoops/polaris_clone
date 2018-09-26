@@ -2,6 +2,10 @@
 <% shipper = shipment.contacts[0] %>
 <% consignee = shipment.contacts[1] %>
 <% notifyees = shipment.contacts[2..-1] %>
+<% primary_color = tenant.theme["colors"]["primary"] %>
+<% neutral_color = '#C4C4C4' %>
+<% precarriage_color = shipment.has_pre_carriage ? primary_color : neutral_color %>
+<% oncarriage_color = shipment.has_on_carriage ? primary_color : neutral_color %>
 <div class="wrapper-quotations wrapper wrapper-shipments">
   <div class="row">
     <div class="col-xs-6 title-shipments" style="font-size: 150%; text-align: left;">
@@ -34,6 +38,56 @@
     </div>
   </div>
 
+  <% if shipment.has_on_carriage || shipment.has_pre_carriage && (shipment.pickup_address || shipment.delivery_address) %>
+    <div class="carriage-row row border-bottom">
+
+      <% if shipment.pickup_address && shipment.has_pre_carriage %>
+        <div class="col-xs-6">
+          <div class="row">
+            <i class="col-xs-1 fa fa-check check-square" style="color: <%= precarriage_color %>"></i>
+            <h4 class="col-xs-11">
+              Pick-up on <%= shipment.planned_pickup_date.strftime("%m/%d/%Y at %I:%M%p") %>
+            </h4>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-1"></div>
+            <% if shipment.pickup_address %>
+              <p class="col-xs-11">
+                <%= shipment.pickup_address.street %> 
+                <%= shipment.pickup_address.street_number %>
+                <%= shipment.pickup_address.city %>
+                <%= shipment.pickup_address.country.name %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <% if shipment.delivery_address && shipment.has_on_carriage %>
+        <div class="col-xs-6">
+          <div class="row">
+            <i class="col-xs-1 fa fa-check check-square" style="color: <%= oncarriage_color %>"></i>
+            <h4 class="col-xs-11">
+              Delivery on <%= shipment.planned_pickup_date.strftime("%m/%d/%Y at %I:%M%p") %>
+            </h4>
+          </div>
+          <div class="row">
+            <div class="col-xs-1"></div>
+              <% if shipment.delivery_address %>
+                <p class="col-xs-11">
+                  <%= shipment.delivery_address.street %> 
+                  <%= shipment.delivery_address.street_number %>,
+                  <%= shipment.delivery_address.city %>,
+                  <%= shipment.delivery_address.country.name %>
+                </p>
+              <% end %>
+            </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+          
   <div class="row dates margin-bottom">
     <div class="col-xs-3">
       <h4 class="date-title"><%= shipment.has_pre_carriage ? 'Pick-up Date' : 'Closing Date' %></h4>
@@ -86,12 +140,12 @@
               </div>
             </div>
             
-            <div class="contact-info row">
-              <div class="col-xs-6 row">
+            <div class="contact-info">
+              <div class="row">
                 <i class="fa fa-envelope col-xs-1" style="color: <%= primary_color%>"></i>
                 <h3 class="col-xs-11"><%= shipper.email %></h3>
               </div>
-              <div class="col-xs-6 row">
+              <div class="row">
                 <i class="fa fa-phone col-xs-1" style="color: <%= primary_color%>"></i>
                 <h3 class="col-xs-11"><%= shipper.phone %></h3>
               </div>
@@ -108,6 +162,7 @@
     <div class="col-xs-2 text-center arrow-circle">
       <i class="fa fa-arrow-right"></i>
     </div>
+    
 
     <div class="col-xs-5">
       <div class="row">
@@ -128,12 +183,12 @@
               </div>
             </div>
             
-            <div class="contact-info row">
-              <div class="col-xs-6 row">
+            <div class="contact-info">
+              <div class="row">
                 <i class="fa fa-envelope col-xs-1" style="color: <%= primary_color%>"></i>
                 <h3 class="col-xs-11"><%= consignee.email %></h3>
               </div>
-              <div class="col-xs-6 row">
+              <div class="row">
                 <i class="fa fa-phone col-xs-1" style="color: <%= primary_color%>"></i>
                 <h3 class="col-xs-11"><%= consignee.phone %></h3>
               </div>
@@ -309,92 +364,65 @@
       <div class="notes-row">
         <div class="column-info border-bottom notes-upper row">
           <div class="col-xs-4">
-            <% if shipment.total_goods_value %>
+            
               <div class="">
                 <span class="">Total Value of Goods:</span>
                 <p class="info-values">
-                  <%= shipment.total_goods_value["value"] %>
-                  <%= shipment.total_goods_value["currency"] %>
+                    <%= shipment.total_goods_value["value"] %>
+                    <%= shipment.total_goods_value["currency"] %>
                 </p>
               </div>
-            <% else %>
-              <div class="">
-                <span class="">Total Value of Goods:</span>
-                <p class="info-values">
-                -
-                </p>
-              </div>
-            <% end %>
           </div>
           <div class="col-xs-4">
-            <% if shipment.eori %>
+            
               <div class="">
                 <span class="">EORI number:</span>
                 <p class="info-values">
-                  <%= shipment.eori %>
+                  <% if shipment.eori %>
+                    <%= shipment.eori %>
+                  <% else %>
+                    -
+                  <% end %>
                 </p>
               </div>
-            <% else %>
-              <div class="">
-                <span class="">EORI number:</span>
-                <p class="info-values">
-                -
-                </p>
-              </div>
-            <% end %>
           </div>
           <div class="col-xs-4">
-            <% if shipment.incoterm_text %>
+            
               <div class="">
                 <span class="">Incoterm:</span>
                 <p class="">
                   <%= shipment.incoterm_text %>
+                  <% if shipment.incoterm_text %>
+                    <%= shipment.incoterm_text %>
+                  <% else %>
+                    -
+                  <% end %>
                 </p>
               </div>
-            <% else %>
-              <div class="">
-                <span class="">Incoterm:</span>
-                <p class="">
-                -
-                </p>
-              </div>
-            <% end %>
           </div>
         </div>
         <div class="column-info notes-lower">
           <div class="border-bottom">
-            <% if shipment.cargo_notes %>
+            
               <div class="">
                 <span class="">Description of Goods:</span>
                 <p class="">
                   <%= shipment.cargo_notes %>
                 </p>
               </div>
-            <% else %>
-              <div class="">
-                <span class="">Description of Goods:</span>
-                <p class="">
-                -
-                </p>
-              </div>
-            <% end %>
           </div>
           <div class="">
-            <% if shipment.notes %>
+            
               <div class="">
                 <span class="">Notes:</span>
                 <p class="">
-                  <%= shipment.notes %>
+                  <% if shipment.notes %>
+                    <%= shipment.notes %>
+                  <% else %>
+                    -
+                  <% end %>
                 </p>
               </div>
-            <% else %>
-              <div class="">
-                <span class="">Notes:</span>
-                <p class="">
-                -
-                </p>
-              </div>
-            <% end %>
           </div>
         </div>
       </div>

@@ -113,7 +113,7 @@ function downloadShipment (options) {
     body: JSON.stringify({ options })
   }
 
-  return fetch(`${BASE_URL}/shipments/${options.shipment.id}/shipment/download`, requestOptions).then(handleResponse)
+  return fetch(`${getApiHost()}/shipments/${options.shipment.id}/shipment/download`, requestOptions).then(handleResponse)
 }
 
 function downloadHubs () {
