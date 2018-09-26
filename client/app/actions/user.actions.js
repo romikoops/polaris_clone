@@ -452,7 +452,7 @@ function getContact (id, redirect) {
     )
   }
 }
-function getContacts (redirect, page) {
+function getContacts (params, redirect) {
   function request () {
     return { type: userConstants.GET_CONTACTS_REQUEST }
   }
@@ -466,7 +466,7 @@ function getContacts (redirect, page) {
   return (dispatch) => {
     dispatch(request())
 
-    userService.getContacts(page).then(
+    userService.getContacts(params).then(
       (data) => {
         if (redirect) {
           dispatch(push(`/account/contacts`))

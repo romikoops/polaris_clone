@@ -225,7 +225,7 @@ class SideNav extends Component {
         userDispatch.getShipments(shipPages, this.perPage, true)
         break }
       case 'contacts':
-        userDispatch.getContacts(true, 1)
+        userDispatch.getContacts({ page: 1 }, true)
         break
       case 'dashboard':
         userDispatch.getDashboard(user.id, true)

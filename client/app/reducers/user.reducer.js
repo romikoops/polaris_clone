@@ -276,10 +276,9 @@ export default function users (state = initialState, action) {
       return state
     }
     case userConstants.GET_CONTACTS_SUCCESS: {
-      const cData = action.payload.data
       return {
         ...state,
-        contactsData: cData,
+        contactsData: action.payload.data,
         num_contact_pages: state.dashboard.num_contact_pages,
         loading: false
       }
@@ -294,23 +293,14 @@ export default function users (state = initialState, action) {
     }
 
     case userConstants.NEW_CONTACT_REQUEST: {
-      const reqNewContact = merge({}, state, {
-        loading: true
-      })
-
-      return reqNewContact
-    }
-    case userConstants.NEW_CONTACT_SUCCESS: {
-      const contacts = state.dashboard.contacts.filter(c => c.id !== action.payload.data.id)
-      contacts.push(action.payload.data)
-
       return {
         ...state,
-        dashboard: {
-          ...state.dashboard,
-          contacts
-        },
-        contactData: action.payload.data,
+        loading: true
+      }
+    }
+    case userConstants.NEW_CONTACT_SUCCESS: {
+      return {
+        ...state,
         loading: false
       }
     }

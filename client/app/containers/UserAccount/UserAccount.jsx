@@ -84,7 +84,7 @@ class UserAccount extends Component {
         userDispatch.getShipments(true)
         break
       case 'contacts':
-        userDispatch.getContacts(true, 1)
+        userDispatch.getContacts({ page: 1 }, true)
         break
       case 'dashboard':
         userDispatch.getDashboard(user.id, true)

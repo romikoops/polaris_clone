@@ -58,21 +58,8 @@ export class AdminSearchableClients extends Component {
   prevPage () {
     this.handlePage(-1)
   }
-  doNothing () {
-    console.log(this.state.page)
-  }
   handlePage (delta) {
-    const { pages, page } = this.state
-    const nextPage = +page + (1 * delta)
-    let realPage
-    if (nextPage > 0 && nextPage <= pages) {
-      realPage = nextPage
-    } else if (nextPage > 0 && nextPage > pages) {
-      realPage = 1
-    } else if (nextPage < 0) {
-      realPage = pages
-    }
-    this.setState({ page: realPage })
+    this.setState(prevState => ({ page: prevState.page + (1 * delta) }))
   }
   handleSearchChange (event) {
     if (event.target.value === '') {
@@ -116,8 +103,9 @@ export class AdminSearchableClients extends Component {
       page, pages, perPage, clients
     } = this.state
     let clientsArr
-    const startIndex = 0 + (page * perPage) - 1
-    const endIndex = startIndex + perPage
+    const startIndex = (page - 1) * perPage
+    const endIndex = page * perPage
+
     if (clients) {
       clientsArr = clients
         .sort((a, b) => b.primary - a.primary)
@@ -163,9 +151,9 @@ export class AdminSearchableClients extends Component {
         <div className={`flex-95 layout-row layout-align-center-center ${styles.pagination_buttons}`}>
           <div
             className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
-                    `}
+              flex-15 layout-row layout-align-center-center pointy
+              ${styles.navigation_button} ${parseInt(page, 10) === 1 ? styles.disabled : ''}
+            `}
             onClick={parseInt(page, 10) > 1 ? this.prevPage : null}
           >
             <i className="fa fa-chevron-left" />
@@ -175,9 +163,9 @@ export class AdminSearchableClients extends Component {
           <p>{page} / {pages} </p>
           <div
             className={`
-                      flex-15 layout-row layout-align-center-center pointy
-                      ${styles.navigation_button} ${parseInt(page, 10) < pages ? '' : styles.disabled}
-                    `}
+              flex-15 layout-row layout-align-center-center pointy
+              ${styles.navigation_button} ${parseInt(page, 10) < pages ? '' : styles.disabled}
+            `}
             onClick={parseInt(page, 10) < pages ? this.nextPage : null}
           >
             <p>Next&nbsp;&nbsp;&nbsp;&nbsp;</p>
