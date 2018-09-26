@@ -91,7 +91,7 @@ export class AdminShipmentContent extends Component {
             <div className="layout-row layout-wrap flex-100 margin_bottom">
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-gt-sm-40 flex-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
@@ -113,7 +113,7 @@ export class AdminShipmentContent extends Component {
                   </div>
                 )}
               />
-              <div className="layout-row flex-md-100 flex-lg-20 layout-align-center-center padd_20">
+              <div className="layout-row flex-100 flex-gt-sm-20 layout-align-center-center padd_20">
                 <div className={`layout-column flex layout-align-center-center ${styles.font_adjustaments}`}>
                   <div className="layout-align-center-center layout-row" style={gradientStyle}>
                     {switchIcon()}
@@ -124,7 +124,7 @@ export class AdminShipmentContent extends Component {
               </div>
 
               <GradientBorder
-                wrapperClassName={`layout-row flex-lg-40 flex-md-100 ${styles.hub_box_shipment}`}
+                wrapperClassName={`layout-row flex-gt-sm-40 flex-100 ${styles.hub_box_shipment}`}
                 gradient={gradientBorderStyle}
                 className="layout-row flex"
                 content={(
