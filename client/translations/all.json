@@ -120,7 +120,11 @@
         "unavailable": "Unavailable",
         "nonStackable": "Non Stackable",
         "selectColliType": "Select your colli type",
-        "areYouSure": "Are you sure?"
+        "areYouSure": "Are you sure?",
+        "open": "Open",
+        "finished": "Finished",
+        "requested": "Requested",
+        "refuse": "Refuse"
       },
       "admin": {
         "lowerLimit": "Lower Limit",
