@@ -48,6 +48,14 @@ class QuoteCard extends PureComponent {
     }
     this.handleClickChecked = this.handleClickChecked.bind(this)
   }
+  componentWillMount () {
+    const { isQuotationTool } = this.props
+    if (isQuotationTool) {
+      this.setState({
+        showSchedules: false
+      })
+    }
+  }
   toggleExpander (key) {
     this.setState({
       expander: {
@@ -65,10 +73,9 @@ class QuoteCard extends PureComponent {
     return handleClick(e, value)
   }
   toggleShowSchedules (key) {
-    this.setState(prevState => (
-      {
-        showSchedules: !prevState.showSchedules
-      }
+    this.setState(prevState => ({
+      showSchedules: !prevState.showSchedules
+    }
     ), () => this.toggleExpander(key))
   }
 
@@ -292,10 +299,12 @@ class QuoteCard extends PureComponent {
         />
         <div className="flex-100 layout-wrap layout-align-start-stretch">
           <div className={`flex-100 layout-row layout-align-space-between-stretch ${styles.total_row}`}>
-            <div className="flex-60 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
-              {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
-            </div>
-            <div className="flex-10 layout-row layout-align-start-center">
+            {!isQuotationTool ? (
+              <div className="flex-50 layout-row layout-align-start-center" style={{ textAlign: 'left' }}>
+                {showSchedules ? showPriceBreakdownBtn : showSchedulesBtn}
+              </div>
+            ) : ''}
+            <div className={`${isQuotationTool ? 'flex' : 'flex-10'} layout-row layout-align-start-center`}>
               <span style={{ textAlign: 'right' }}>Total</span>
             </div>
             <div className="flex-35 layout-row layout-align-end-center">
