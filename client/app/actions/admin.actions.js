@@ -905,7 +905,6 @@ function confirmShipment (id, action, redirect) {
     adminService.confirmShipment(id, action).then(
       (resp) => {
         const shipmentData = resp.data
-
         if (action === 'accept') {
           dispatch(successAccept(shipmentData))
         } else if (action === 'finished') {
