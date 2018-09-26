@@ -7,7 +7,7 @@ class MaxDimensionsBundle < ApplicationRecord
     message: lambda do |obj, _|
       max_dimensions_name = "max#{aggregate ? '_aggregate' : ''}_dimensions"
 
-      "'#{obj.mode_of_transport}' already exists in" \
+      "'#{obj.mode_of_transport}' already exists in " \
       "#{max_dimensions_name} from tenant '#{obj.tenant.subdomain}'"
     end
   }
@@ -20,37 +20,37 @@ class MaxDimensionsBundle < ApplicationRecord
 
   CARGO_ITEM_DEFAULTS = {
     general: {
-      dimension_x:       '590.0',
-      dimension_y:       '234.2',
-      dimension_z:       '228.0',
-      payload_in_kg:     '21_770.0',
-      chargeable_weight: '21_770.0'
+      dimension_x:       590.0,
+      dimension_y:       234.2,
+      dimension_z:       228.0,
+      payload_in_kg:     21_770.0,
+      chargeable_weight: 21_770.0
     },
     air:     {
-      dimension_x:       '120.0',
-      dimension_y:       '80.0',
-      dimension_z:       '158.0',
-      payload_in_kg:     '1_500.0',
-      chargeable_weight: '1_500.0'
+      dimension_x:       120.0,
+      dimension_y:       100.0,
+      dimension_z:       150.0,
+      payload_in_kg:     1_000.0,
+      chargeable_weight: 1_000.0
     }
-  }.map_deep_values { |v| BigDecimal(v) }
+  }.freeze
 
   CARGO_ITEM_AGGREGATE_DEFAULTS = {
     general: {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '0',
-      chargeable_weight: '0'
+      dimension_x:       0,
+      dimension_y:       0,
+      dimension_z:       0,
+      payload_in_kg:     0,
+      chargeable_weight: 0
     },
     air:     {
-      dimension_x:       '0',
-      dimension_y:       '0',
-      dimension_z:       '0',
-      payload_in_kg:     '1_500.0',
-      chargeable_weight: '1_500.0'
+      dimension_x:       0,
+      dimension_y:       0,
+      dimension_z:       0,
+      payload_in_kg:     1_500.0,
+      chargeable_weight: 1_500.0
     }
-  }.map_deep_values { |v| BigDecimal(v) }
+  }.freeze
 
   def self.to_max_dimensions_hash
     all.reduce({}) do |return_h, max_dimensions_bundle|
@@ -67,11 +67,9 @@ class MaxDimensionsBundle < ApplicationRecord
     defaults.map do |mode_of_transport, max_dimensions_hash|
       next if excluded_in_options?(options, mode_of_transport)
 
-      create(
-        max_dimensions_hash.merge(
-          tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
-        )
-      )
+      find_or_initialize_by(
+        tenant: tenant, mode_of_transport: mode_of_transport, aggregate: aggregate
+      ).update(max_dimensions_hash)
     end.compact
   end
 
