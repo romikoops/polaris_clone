@@ -60,6 +60,7 @@ exports[`noMessages is true 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {
@@ -142,6 +143,7 @@ exports[`shallow render 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {
@@ -224,6 +226,7 @@ exports[`showModal is true 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {
@@ -306,6 +309,7 @@ exports[`showRegistration is true 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {
@@ -388,6 +392,7 @@ exports[`unread > 0 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {
@@ -470,6 +475,7 @@ exports[`user is falsy 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={null}
         />
@@ -539,6 +545,7 @@ exports[`user.role_id === 2 1`] = `
               },
             ]
           }
+          loginText="Log In / Register"
           toggleShowLogin={[Function]}
           user={
             Object {

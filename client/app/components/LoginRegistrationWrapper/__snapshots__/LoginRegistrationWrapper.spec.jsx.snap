@@ -1,13 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`shallow render 1`] = `
-<div
-  style={
-    Object {
-      "color": "black",
-    }
-  }
->
+<div>
   <div>
     <LoginPage />
   </div>
@@ -15,7 +9,7 @@ exports[`shallow render 1`] = `
     className="toggle_prompt_separator"
   />
   <div
-    className="layout-row layout-align-space-between"
+    className="toggle_prompt layout-row layout-align-space-between"
   >
     <div>
       New account?
